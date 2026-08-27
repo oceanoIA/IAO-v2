@@ -1,181 +1,1291 @@
-export default {
-    async fetch(request, env) {
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS</title>
 
-        const corsHeaders = {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type"
-        };
+<style>
+*{box-sizing:border-box}
 
-        // CORS
-        if (request.method === "OPTIONS") {
-            return new Response(null, {
-                status: 204,
-                headers: corsHeaders
-            });
-        }
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    color:#ffd000;
+    font-family:Arial,Helvetica,sans-serif;
+}
 
-        // Test Worker
-        if (request.method !== "POST") {
-            return new Response("JARVIS AI ONLINE 🧠", {
-                status: 200,
-                headers: corsHeaders
-            });
-        }
+#canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+}
 
-        try {
+.title{
+    position:fixed;
+    top:25px;
+    left:0;
+    right:0;
+    text-align:center;
+    z-index:10;
+    pointer-events:none;
+}
 
-            const data = await request.json();
+.title h1{
+    margin:0;
+    color:white;
+    font-size:25px;
+    font-weight:300;
+    letter-spacing:12px;
+    text-shadow:0 0 15px #ffd000;
+}
 
-            const message = data.message;
+.status{
+    margin-top:6px;
+    font-family:monospace;
+    font-size:9px;
+    letter-spacing:3px;
+    color:#d9aa00;
+}
 
-            const memory = Array.isArray(data.memory)
-                ? data.memory
-                : [];
+.hud{
+    position:fixed;
+    top:25px;
+    z-index:10;
+    font-family:monospace;
+    font-size:9px;
+    line-height:1.8;
+    letter-spacing:2px;
+    color:rgba(255,210,0,.55);
+}
 
-            if (!message || typeof message !== "string") {
+.left{
+    left:25px;
+    border-left:2px solid #b58b00;
+    padding-left:10px;
+}
 
-                return new Response(
-                    JSON.stringify({
-                        error: "Messaggio mancante"
-                    }),
-                    {
-                        status: 400,
-                        headers: {
-                            ...corsHeaders,
-                            "Content-Type": "application/json"
-                        }
-                    }
-                );
+.right{
+    right:25px;
+    text-align:right;
+    border-right:2px solid #b58b00;
+    padding-right:10px;
+}
 
-            }
+#core{
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    z-index:5;
+    text-align:center;
+    pointer-events:none;
+    font-family:monospace;
+    color:rgba(255,210,0,.5);
+    font-size:8px;
+    letter-spacing:3px;
+}
 
-            /*
-             * =====================================================
-             * MEMORIA
-             * =====================================================
-             */
+#core small{
+    display:block;
+    margin-top:6px;
+    font-size:7px;
+    letter-spacing:2px;
+}
 
-            let memoryText = "";
+#chat{
+    position:fixed;
+    left:50%;
+    bottom:105px;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:720px;
+    max-height:27vh;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding:0 20px;
+    z-index:20;
+    scrollbar-width:none;
+}
 
-            if (memory.length > 0) {
+#chat::-webkit-scrollbar{
+    display:none;
+}
 
-                memoryText = `
-MEMORIA DI JARVIS:
+.message{
+    max-width:82%;
+    padding:11px 15px;
+    border-radius:4px;
+    font-size:13px;
+    line-height:1.5;
+    word-break:break-word;
+    white-space:pre-wrap;
+}
 
-${memory
-    .slice(-30)
-    .map(item => {
+.user{
+    align-self:flex-end;
+    color:white;
+    background:rgba(255,190,0,.08);
+    border:1px solid rgba(255,200,0,.3);
+    border-right:3px solid #ffd000;
+}
 
-        if (item.role === "user") {
-            return `UTENTE: ${item.content}`;
-        }
+.jarvis{
+    align-self:flex-start;
+    color:#ffe8a0;
+    background:rgba(15,10,0,.85);
+    border:1px solid rgba(255,200,0,.2);
+    border-left:3px solid #ffd000;
+}
 
-        if (item.role === "assistant") {
-            return `JARVIS: ${item.content}`;
-        }
+.input-container{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:720px;
+    padding:0 20px;
+    z-index:30;
+}
 
-        return "";
+.input-box{
+    display:flex;
+    gap:7px;
+    padding:5px;
+    background:rgba(8,6,0,.94);
+    border:1px solid rgba(255,200,0,.4);
+    border-radius:6px;
+}
 
-    })
-    .filter(Boolean)
-    .join("\n")}
+#input{
+    flex:1;
+    min-width:0;
+    height:44px;
+    padding:0 14px;
+    background:transparent;
+    border:0;
+    outline:0;
+    color:white;
+    font-size:14px;
+}
 
-FINE MEMORIA.
-`;
-            }
+#input::placeholder{
+    color:rgba(255,220,130,.35);
+}
 
-            /*
-             * =====================================================
-             * ISTRUZIONI JARVIS
-             * =====================================================
-             */
+button{
+    height:44px;
+    border:1px solid rgba(255,200,0,.55);
+    border-radius:4px;
+    background:rgba(255,190,0,.1);
+    color:#ffd000;
+    font-family:monospace;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-            const systemPrompt = `
-Sei JARVIS, un'intelligenza artificiale personale.
+#mic{
+    width:48px;
+    font-size:18px;
+}
 
-Rispondi sempre in italiano.
+#send{
+    width:75px;
+}
 
-Sei naturale, intelligente, diretto e utile.
+button:hover{
+    background:#ffd000;
+    color:#000;
+}
 
-Puoi usare la memoria fornita dall'utente per mantenere
-continuità nella conversazione.
+button:disabled{
+    opacity:.35;
+}
 
-Non inventare informazioni che non sono presenti nella memoria.
+.listening{
+    background:#ffd000 !important;
+    color:#000 !important;
+    box-shadow:0 0 20px #ffd000;
+}
 
-Se l'utente ti chiede cosa ricordi, usa esclusivamente
-le informazioni presenti nella memoria.
+@media(max-width:600px){
 
-${memoryText}
-`;
+    .hud{
+        display:none;
+    }
 
-            /*
-             * =====================================================
-             * MODELLO IA
-             * =====================================================
-             */
+    .title h1{
+        font-size:19px;
+        letter-spacing:7px;
+    }
 
-            const result = await env.AI.run(
-                "@cf/meta/llama-3.1-8b-instruct-fast",
-                {
-                    messages: [
+    .message{
+        max-width:90%;
+    }
+}
+</style>
+</head>
 
-                        {
-                            role: "system",
-                            content: systemPrompt
-                        },
+<body>
 
-                        {
-                            role: "user",
-                            content: message
-                        }
+<canvas id="canvas"></canvas>
 
-                    ]
-                }
-            );
+<div class="title">
+    <h1>J.A.R.V.I.S.</h1>
+    <div class="status">● NEURAL MATRIX ONLINE</div>
+</div>
 
-            /*
-             * =====================================================
-             * RISPOSTA
-             * =====================================================
-             */
+<div class="hud left">
+    JARVIS_CORE<br>
+    SYSTEM: ONLINE<br>
+    NEURAL ENGINE: ACTIVE
+</div>
 
-            return new Response(
-                JSON.stringify({
-                    reply:
-                        result.response ||
-                        "JARVIS non ha prodotto una risposta."
-                }),
-                {
-                    status: 200,
-                    headers: {
-                        ...corsHeaders,
-                        "Content-Type":
-                            "application/json"
-                    }
-                }
-            );
+<div class="hud right">
+    MEMORY: <span id="memoryCount">0</span><br>
+    CORE: ACTIVE
+</div>
 
-        } catch (error) {
+<div id="core">
+    NEURAL CORE
+    <small id="coreStatus">SYSTEM READY</small>
+</div>
 
-            console.error(error);
+<div id="chat">
+    <div class="message jarvis">
+        JARVIS online. In attesa di istruzioni.
+    </div>
+</div>
 
-            return new Response(
-                JSON.stringify({
-                    error: "Errore nel modello IA",
-                    details: error.message
-                }),
-                {
-                    status: 500,
-                    headers: {
-                        ...corsHeaders,
-                        "Content-Type":
-                            "application/json"
-                    }
-                }
-            );
+<div class="input-container">
+    <div class="input-box">
+
+        <input
+            id="input"
+            type="text"
+            placeholder="Comunica con JARVIS..."
+            autocomplete="off"
+        >
+
+        <button id="mic" type="button">🎙️</button>
+
+        <button id="send" type="button">EXEC</button>
+
+    </div>
+</div>
+
+<script>
+
+/* =====================================================
+   CONFIGURAZIONE
+===================================================== */
+
+const API_URL =
+"https://iao-ai-v3.oceano-masoud.workers.dev/";
+
+const MEMORY_KEY =
+"jarvis_memory_v2";
+
+const MAX_MEMORY =
+20;
+
+
+/* =====================================================
+   ELEMENTI
+===================================================== */
+
+const input =
+document.getElementById("input");
+
+const send =
+document.getElementById("send");
+
+const mic =
+document.getElementById("mic");
+
+const chat =
+document.getElementById("chat");
+
+const memoryCount =
+document.getElementById("memoryCount");
+
+const coreStatus =
+document.getElementById("coreStatus");
+
+
+/* =====================================================
+   MEMORIA
+===================================================== */
+
+let memory = [];
+
+try{
+
+    const saved =
+    localStorage.getItem(MEMORY_KEY);
+
+    if(saved){
+        memory = JSON.parse(saved);
+    }
+
+}catch(e){
+
+    memory = [];
+
+}
+
+
+function saveMemory(){
+
+    memory =
+    memory.slice(-MAX_MEMORY);
+
+    try{
+
+        localStorage.setItem(
+            MEMORY_KEY,
+            JSON.stringify(memory)
+        );
+
+    }catch(e){
+
+        console.log(
+            "Memoria non disponibile"
+        );
+
+    }
+
+    memoryCount.textContent =
+    memory.length;
+}
+
+
+function addMemory(role,content){
+
+    memory.push({
+        role:role,
+        content:content
+    });
+
+    saveMemory();
+}
+
+
+saveMemory();
+
+
+/* =====================================================
+   CHAT
+===================================================== */
+
+function addMessage(type,text){
+
+    const element =
+    document.createElement("div");
+
+    element.className =
+    "message " + type;
+
+    element.textContent =
+    text;
+
+    chat.appendChild(element);
+
+    chat.scrollTop =
+    chat.scrollHeight;
+
+    return element;
+}
+
+
+/* =====================================================
+   INVIO
+===================================================== */
+
+send.onclick =
+sendMessage;
+
+
+input.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            event.preventDefault();
+
+            sendMessage();
 
         }
 
     }
-};
+);
+
+
+async function sendMessage(){
+
+    const text =
+    input.value.trim();
+
+    if(!text){
+        return;
+    }
+
+    if(
+        input.disabled
+    ){
+        return;
+    }
+
+
+    /* Mostra messaggio */
+
+    addMessage(
+        "user",
+        text
+    );
+
+
+    input.value = "";
+
+    input.disabled = true;
+    send.disabled = true;
+    mic.disabled = true;
+
+
+    /* Stato */
+
+    coreStatus.textContent =
+    "PROCESSING";
+
+
+    /* Comando memoria */
+
+    const lower =
+    text.toLowerCase();
+
+
+    if(
+        lower.startsWith("ricorda che ") ||
+        lower.startsWith("ricordati che ")
+    ){
+
+        addMemory(
+            "memory",
+            text
+        );
+
+
+        const reply =
+        "Informazione salvata nella mia memoria.";
+
+        addMessage(
+            "jarvis",
+            reply
+        );
+
+        speak(reply);
+
+        finish();
+
+        return;
+    }
+
+
+    if(
+        lower === "dimentica tutto" ||
+        lower === "cancella memoria"
+    ){
+
+        memory = [];
+
+        saveMemory();
+
+
+        const reply =
+        "Memoria cancellata.";
+
+        addMessage(
+            "jarvis",
+            reply
+        );
+
+        speak(reply);
+
+        finish();
+
+        return;
+    }
+
+
+    /* Salva domanda */
+
+    addMemory(
+        "user",
+        text
+    );
+
+
+    const jarvisMessage =
+    addMessage(
+        "jarvis",
+        "JARVIS // elaborazione..."
+    );
+
+
+    try{
+
+        const response =
+        await fetch(
+            API_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                JSON.stringify({
+
+                    message:text,
+
+                    memory:
+                    memory.slice(-MAX_MEMORY)
+
+                })
+
+            }
+        );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+        await response.json();
+
+
+        if(data.error){
+
+            throw new Error(
+                data.error
+            );
+
+        }
+
+
+        const reply =
+        data.reply ||
+        "Non ho ricevuto una risposta.";
+
+
+        jarvisMessage.textContent =
+        reply;
+
+
+        addMemory(
+            "assistant",
+            reply
+        );
+
+
+        speak(reply);
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        jarvisMessage.textContent =
+        "Errore di connessione con il Neural Core.";
+
+
+    }
+
+
+    finish();
+
+}
+
+
+function finish(){
+
+    input.disabled = false;
+    send.disabled = false;
+    mic.disabled = false;
+
+    coreStatus.textContent =
+    "SYSTEM READY";
+
+    input.focus();
+
+}
+
+
+/* =====================================================
+   VOCE
+===================================================== */
+
+function speak(text){
+
+    if(
+        !window.speechSynthesis
+    ){
+        return;
+    }
+
+
+    speechSynthesis.cancel();
+
+
+    const speech =
+    new SpeechSynthesisUtterance(
+        text
+    );
+
+
+    speech.lang =
+    "it-IT";
+
+    speech.rate =
+    0.92;
+
+    speech.pitch =
+    0.8;
+
+    speech.volume =
+    1;
+
+
+    speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+/* =====================================================
+   RICONOSCIMENTO VOCALE
+===================================================== */
+
+const SpeechRecognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+
+let recognition = null;
+
+let listening = false;
+
+
+if(SpeechRecognition){
+
+    recognition =
+    new SpeechRecognition();
+
+
+    recognition.lang =
+    "it-IT";
+
+    recognition.continuous =
+    false;
+
+    recognition.interimResults =
+    false;
+
+
+    recognition.onstart =
+    function(){
+
+        listening = true;
+
+        mic.classList.add(
+            "listening"
+        );
+
+        mic.textContent =
+        "🔴";
+
+        input.placeholder =
+        "Sto ascoltando...";
+
+        coreStatus.textContent =
+        "LISTENING";
+
+    };
+
+
+    recognition.onresult =
+    function(event){
+
+        const result =
+        event.results[0][0]
+        .transcript;
+
+
+        input.value =
+        result;
+
+
+        listening =
+        false;
+
+        mic.classList.remove(
+            "listening"
+        );
+
+        mic.textContent =
+        "🎙️";
+
+        input.placeholder =
+        "Comunica con JARVIS...";
+
+
+        /* Invia automaticamente */
+
+        sendMessage();
+
+    };
+
+
+    recognition.onerror =
+    function(event){
+
+        console.log(
+            "Microfono:",
+            event.error
+        );
+
+
+        listening =
+        false;
+
+        mic.classList.remove(
+            "listening"
+        );
+
+        mic.textContent =
+        "🎙️";
+
+        input.placeholder =
+        "Comunica con JARVIS...";
+
+        coreStatus.textContent =
+        "SYSTEM READY";
+
+    };
+
+
+    recognition.onend =
+    function(){
+
+        listening =
+        false;
+
+        mic.classList.remove(
+            "listening"
+        );
+
+        mic.textContent =
+        "🎙️";
+
+        input.placeholder =
+        "Comunica con JARVIS...";
+
+    };
+
+
+    mic.onclick =
+    function(){
+
+        if(listening){
+
+            recognition.stop();
+
+            return;
+        }
+
+
+        try{
+
+            recognition.start();
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    };
+
+
+}else{
+
+    mic.disabled =
+    true;
+
+    mic.title =
+    "Il browser non supporta il riconoscimento vocale.";
+
+}
+
+
+/* =====================================================
+   SFERA NEURALE
+===================================================== */
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+
+let width;
+let height;
+let dpr;
+
+let centerX;
+let centerY;
+let radius;
+
+let nodes = [];
+
+let rotation = 0;
+
+
+function resize(){
+
+    width =
+    window.innerWidth;
+
+    height =
+    window.innerHeight;
+
+    dpr =
+    Math.min(
+        window.devicePixelRatio || 1,
+        2
+    );
+
+
+    canvas.width =
+    width * dpr;
+
+    canvas.height =
+    height * dpr;
+
+    canvas.style.width =
+    width + "px";
+
+    canvas.style.height =
+    height + "px";
+
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+
+    centerX =
+    width / 2;
+
+    centerY =
+    height / 2;
+
+
+    radius =
+    Math.min(
+        width,
+        height
+    ) * .23;
+
+
+    createNodes();
+
+}
+
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+function createNodes(){
+
+    nodes = [];
+
+    for(
+        let i=0;
+        i<180;
+        i++
+    ){
+
+        nodes.push({
+
+            theta:
+            Math.random() *
+            Math.PI * 2,
+
+            phi:
+            Math.acos(
+                2 *
+                Math.random() -
+                1
+            ),
+
+            r:
+            radius *
+            (
+                .65 +
+                Math.random() * .55
+            ),
+
+            speed:
+            .001 +
+            Math.random() * .004,
+
+            size:
+            .7 +
+            Math.random() * 1.5,
+
+            phase:
+            Math.random() *
+            Math.PI * 2
+
+        });
+
+    }
+
+}
+
+
+let active =
+false;
+
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    const time =
+    performance.now() / 1000;
+
+
+    ctx.fillStyle =
+    "rgba(0,0,0,.25)";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    rotation +=
+    active
+    ? .015
+    : .004;
+
+
+    /* Glow */
+
+    const glow =
+    ctx.createRadialGradient(
+        centerX,
+        centerY,
+        0,
+        centerX,
+        centerY,
+        radius * 1.8
+    );
+
+
+    glow.addColorStop(
+        0,
+        "rgba(255,230,100,.5)"
+    );
+
+    glow.addColorStop(
+        .25,
+        "rgba(255,180,0,.18)"
+    );
+
+    glow.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+    glow;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        centerX,
+        centerY,
+        radius * 1.8,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    const projected = [];
+
+
+    nodes.forEach(
+    n => {
+
+        n.theta +=
+        n.speed *
+        (
+            active
+            ? 3
+            : 1
+        );
+
+
+        let x =
+        n.r *
+        Math.sin(n.phi) *
+        Math.cos(n.theta);
+
+
+        let y =
+        n.r *
+        Math.cos(n.phi);
+
+
+        let z =
+        n.r *
+        Math.sin(n.phi) *
+        Math.sin(n.theta);
+
+
+        const c =
+        Math.cos(rotation);
+
+        const s =
+        Math.sin(rotation);
+
+
+        const rx =
+        x*c + z*s;
+
+        const rz =
+        -x*s + z*c;
+
+
+        const perspective =
+        400 /
+        (400 + rz);
+
+
+        projected.push({
+
+            x:
+            centerX +
+            rx *
+            perspective,
+
+            y:
+            centerY +
+            y *
+            perspective,
+
+            z:rz,
+
+            alpha:
+            Math.max(
+                .1,
+                Math.min(
+                    1,
+                    (rz + radius) /
+                    (radius * 2)
+                )
+            ),
+
+            size:
+            n.size *
+            perspective,
+
+            pulse:
+            (
+                Math.sin(
+                    time*4 +
+                    n.phase
+                )+1
+            )/2
+
+        });
+
+    });
+
+
+    /* Connessioni */
+
+    for(
+        let i=0;
+        i<projected.length;
+        i++
+    ){
+
+        for(
+            let j=i+1;
+            j<projected.length;
+            j++
+        ){
+
+            const a =
+            projected[i];
+
+            const b =
+            projected[j];
+
+
+            const dx =
+            a.x-b.x;
+
+            const dy =
+            a.y-b.y;
+
+
+            const dist =
+            Math.sqrt(
+                dx*dx +
+                dy*dy
+            );
+
+
+            if(dist < 78){
+
+                const alpha =
+                (
+                    1 -
+                    dist/78
+                ) *
+                .25 *
+                a.alpha;
+
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    a.x,
+                    a.y
+                );
+
+                ctx.lineTo(
+                    b.x,
+                    b.y
+                );
+
+
+                ctx.strokeStyle =
+                `rgba(
+                    255,
+                    205,
+                    35,
+                    ${alpha}
+                )`;
+
+                ctx.lineWidth =
+                .6;
+
+                ctx.stroke();
+
+            }
+
+        }
+
+    }
+
+
+    /* Nodi */
+
+    projected.forEach(
+    n => {
+
+        ctx.fillStyle =
+        `rgba(
+            255,
+            170,
+            0,
+            ${n.alpha*.2}
+        )`;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            n.x,
+            n.y,
+            n.size*4,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+        `rgba(
+            255,
+            245,
+            190,
+            ${n.alpha}
+        )`;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            n.x,
+            n.y,
+            n.size,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    });
+
+}
+
+
+resize();
+animate();
+
+</script>
+
+</body>
+</html>

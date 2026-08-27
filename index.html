@@ -4,31 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>JARVIS // NEURAL CORE</title>
+<title>JARVIS — Neural Interface</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
     background: #000;
     color: #ffd000;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
 }
 
-body {
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(80,55,0,.12),
-            #000 55%
-        );
-}
 
 /* =====================================================
    CANVAS
@@ -37,51 +37,11 @@ body {
 #canvas {
     position: fixed;
     inset: 0;
+
     width: 100%;
     height: 100%;
+
     z-index: 1;
-}
-
-
-/* =====================================================
-   VIGNETTE
-===================================================== */
-
-.vignette {
-    position: fixed;
-    inset: 0;
-    z-index: 3;
-    pointer-events: none;
-
-    background:
-        radial-gradient(
-            ellipse at center,
-            transparent 35%,
-            rgba(0,0,0,.35) 75%,
-            rgba(0,0,0,.85) 100%
-        );
-}
-
-
-/* =====================================================
-   SCANLINES
-===================================================== */
-
-.scanlines {
-    position: fixed;
-    inset: 0;
-    z-index: 4;
-    pointer-events: none;
-
-    opacity: .08;
-
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0px,
-            transparent 3px,
-            rgba(255,210,0,.15) 4px
-        );
 }
 
 
@@ -91,15 +51,20 @@ body {
 
 .hud {
     position: fixed;
-    z-index: 10;
-    pointer-events: none;
+
+    z-index: 5;
 
     font-family: monospace;
-    font-size: 9px;
+
+    font-size: 10px;
+
     letter-spacing: 2px;
+
     line-height: 1.8;
 
-    color: rgba(255,215,0,.58);
+    color: rgba(255, 210, 0, .55);
+
+    pointer-events: none;
 }
 
 .hud-left {
@@ -107,9 +72,10 @@ body {
     left: 24px;
 
     border-left:
-        2px solid rgba(255,200,0,.75);
+        2px solid
+        rgba(255, 200, 0, .7);
 
-    padding-left: 12px;
+    padding-left: 10px;
 }
 
 .hud-right {
@@ -119,37 +85,10 @@ body {
     text-align: right;
 
     border-right:
-        2px solid rgba(255,200,0,.75);
+        2px solid
+        rgba(255, 200, 0, .7);
 
-    padding-right: 12px;
-}
-
-.hud-bottom-left {
-    position: fixed;
-    left: 24px;
-    bottom: 25px;
-
-    z-index: 10;
-
-    font-family: monospace;
-    font-size: 9px;
-    letter-spacing: 2px;
-
-    color: rgba(255,215,0,.45);
-}
-
-.hud-bottom-right {
-    position: fixed;
-    right: 24px;
-    bottom: 25px;
-
-    z-index: 10;
-
-    font-family: monospace;
-    font-size: 9px;
-    letter-spacing: 2px;
-
-    color: rgba(255,215,0,.45);
+    padding-right: 10px;
 }
 
 
@@ -158,13 +97,15 @@ body {
 ===================================================== */
 
 .title {
+
     position: fixed;
 
     top: 22px;
+
     left: 0;
     right: 0;
 
-    z-index: 11;
+    z-index: 6;
 
     text-align: center;
 
@@ -172,94 +113,44 @@ body {
 }
 
 .title h1 {
+
     margin: 0;
 
     color: white;
 
-    font-size: 25px;
+    font-size: 24px;
+
     font-weight: 300;
 
-    letter-spacing: 12px;
+    letter-spacing: 11px;
 
     text-shadow:
-        0 0 8px rgba(255,220,100,.95),
-        0 0 22px rgba(255,180,0,.75),
-        0 0 50px rgba(255,120,0,.35);
+        0 0 8px rgba(255, 210, 0, .9),
+        0 0 20px rgba(255, 170, 0, .6),
+        0 0 40px rgba(255, 120, 0, .3);
 }
 
 .status {
+
     margin-top: 6px;
 
     font-family: monospace;
 
     font-size: 9px;
 
-    letter-spacing: 4px;
+    letter-spacing: 3px;
 
-    color: rgba(255,210,0,.75);
+    color:
+        rgba(255, 210, 0, .7);
 }
 
-.status-dot {
-    display: inline-block;
+.status span {
 
     color: #ffd000;
 
     text-shadow:
-        0 0 6px #ffd000,
-        0 0 15px #ff9d00;
-
-    animation:
-        statusPulse 1.5s infinite;
-}
-
-@keyframes statusPulse {
-
-    0%, 100% {
-        opacity: .4;
-    }
-
-    50% {
-        opacity: 1;
-    }
-}
-
-
-/* =====================================================
-   CORE STATUS
-===================================================== */
-
-.core-status {
-    position: fixed;
-
-    top: 50%;
-    left: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
-    z-index: 8;
-
-    pointer-events: none;
-
-    text-align: center;
-
-    font-family: monospace;
-
-    opacity: .65;
-}
-
-.core-status .main {
-    font-size: 8px;
-    letter-spacing: 4px;
-}
-
-.core-status .sub {
-    margin-top: 5px;
-
-    font-size: 7px;
-    letter-spacing: 2px;
-
-    opacity: .6;
+        0 0 5px #ffd000,
+        0 0 15px #ffae00;
 }
 
 
@@ -268,32 +159,36 @@ body {
 ===================================================== */
 
 #chat {
+
     position: fixed;
 
     left: 50%;
-    bottom: 105px;
+
+    bottom: 92px;
 
     transform:
         translateX(-50%);
 
     width: 100%;
-    max-width: 720px;
 
-    max-height: 24vh;
+    max-width: 700px;
+
+    max-height: 27vh;
 
     padding:
         0 20px;
 
     display: flex;
+
     flex-direction: column;
 
-    gap: 9px;
+    gap: 10px;
 
     overflow-y: auto;
 
     scrollbar-width: none;
 
-    z-index: 20;
+    z-index: 10;
 }
 
 #chat::-webkit-scrollbar {
@@ -301,72 +196,57 @@ body {
 }
 
 .message {
-    max-width: 82%;
+
+    max-width: 80%;
 
     padding:
-        10px 15px;
+        11px 16px;
 
-    border-radius: 3px;
+    border-radius: 4px;
 
-    font-size: 13px;
+    font-size: 14px;
+
     line-height: 1.5;
 
     backdrop-filter:
-        blur(18px);
+        blur(15px);
 
     word-break: break-word;
-
-    animation:
-        messageIn .3s ease;
-}
-
-@keyframes messageIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .user {
+
     align-self: flex-end;
 
     color: white;
 
     background:
-        rgba(255,200,0,.055);
+        rgba(255, 200, 0, .07);
 
     border:
-        1px solid rgba(255,205,0,.28);
+        1px solid
+        rgba(255, 200, 0, .3);
 
     border-right:
         3px solid #ffd000;
-
-    box-shadow:
-        0 0 20px rgba(255,180,0,.04);
 }
 
 .jarvis {
+
     align-self: flex-start;
 
-    color: #ffe9a8;
+    color:
+        #ffe9a0;
 
     background:
-        rgba(12,9,2,.82);
+        rgba(15, 10, 0, .78);
 
     border:
-        1px solid rgba(255,200,0,.2);
+        1px solid
+        rgba(255, 190, 0, .2);
 
     border-left:
         3px solid #ffd000;
-
-    box-shadow:
-        0 0 25px rgba(255,170,0,.04);
 }
 
 
@@ -375,99 +255,110 @@ body {
 ===================================================== */
 
 .input-container {
+
     position: fixed;
 
     left: 50%;
-    bottom: 25px;
+
+    bottom: 24px;
 
     transform:
         translateX(-50%);
 
     width: 100%;
-    max-width: 720px;
+
+    max-width: 700px;
 
     padding:
         0 20px;
 
-    z-index: 30;
+    z-index: 20;
 }
 
 .input-box {
+
     display: flex;
 
-    gap: 7px;
+    gap: 9px;
 
-    padding: 5px;
+    padding: 4px;
 
     background:
-        rgba(7,6,2,.9);
+        rgba(10, 7, 0, .9);
 
     border:
-        1px solid rgba(255,205,0,.38);
+        1px solid
+        rgba(255, 195, 0, .4);
 
-    border-radius: 5px;
+    border-radius: 6px;
 
     backdrop-filter:
-        blur(20px);
+        blur(18px);
 
-    box-shadow:
-        0 0 30px rgba(255,180,0,.06);
-
-    transition: .3s;
+    transition:
+        .3s;
 }
 
 .input-box:focus-within {
 
     border-color:
-        rgba(255,220,80,.9);
+        rgba(255, 215, 0, .9);
 
     box-shadow:
-        0 0 20px rgba(255,200,0,.18),
-        0 0 45px rgba(255,160,0,.08);
+        0 0 15px
+        rgba(255, 200, 0, .2),
+
+        0 0 35px
+        rgba(255, 160, 0, .1);
 }
 
 input {
+
     flex: 1;
 
-    min-width: 0;
-
-    height: 43px;
+    height: 44px;
 
     padding:
-        0 14px;
+        0 15px;
 
     background:
         transparent;
 
     border: none;
+
     outline: none;
 
     color: white;
 
-    font-size: 13px;
+    font-size: 14px;
 }
 
 input::placeholder {
+
     color:
-        rgba(255,220,140,.32);
+        rgba(255, 220, 130, .35);
 }
 
 button {
-    height: 43px;
 
-    border-radius: 3px;
+    width: 78px;
+
+    height: 44px;
+
+    border-radius: 4px;
 
     border:
-        1px solid rgba(255,205,0,.5);
+        1px solid
+        rgba(255, 200, 0, .55);
 
     background:
-        rgba(255,190,0,.1);
+        rgba(255, 190, 0, .13);
 
     color: #ffd000;
 
     font-family: monospace;
 
-    font-size: 10px;
+    font-size: 11px;
 
     font-weight: bold;
 
@@ -478,18 +369,6 @@ button {
     transition: .2s;
 }
 
-#mic {
-    width: 48px;
-
-    padding: 0;
-
-    font-size: 17px;
-}
-
-#send {
-    width: 75px;
-}
-
 button:hover:not(:disabled) {
 
     background:
@@ -498,41 +377,16 @@ button:hover:not(:disabled) {
     color: #000;
 
     box-shadow:
-        0 0 15px #ffd000,
-        0 0 35px rgba(255,190,0,.5);
+        0 0 12px #ffd000,
+        0 0 30px
+        rgba(255, 180, 0, .5);
 }
 
 button:disabled {
 
-    opacity: .25;
+    opacity: .3;
 
     cursor: not-allowed;
-}
-
-#mic.listening {
-
-    background:
-        #ffd000;
-
-    color: #000;
-
-    box-shadow:
-        0 0 12px #ffd000,
-        0 0 35px rgba(255,190,0,.8);
-
-    animation:
-        microphonePulse .8s infinite;
-}
-
-@keyframes microphonePulse {
-
-    0%, 100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.08);
-    }
 }
 
 
@@ -540,11 +394,9 @@ button:disabled {
    MOBILE
 ===================================================== */
 
-@media(max-width:600px) {
+@media (max-width: 600px) {
 
-    .hud,
-    .hud-bottom-left,
-    .hud-bottom-right {
+    .hud {
         display: none;
     }
 
@@ -557,55 +409,36 @@ button:disabled {
 
     .message {
 
-        max-width: 91%;
-    }
-
-    #chat {
-
-        bottom: 100px;
-
-        max-height: 26vh;
-    }
-
-    .core-status {
-
-        transform:
-            translate(-50%, -50%)
-            scale(.8);
+        max-width: 90%;
     }
 }
 
 </style>
 </head>
 
+
 <body>
 
 
-<canvas id="canvas"></canvas>
-
-<div class="vignette"></div>
-
-<div class="scanlines"></div>
-
-
 <!-- =====================================================
-     HUD SUPERIORE
+     HUD
 ===================================================== -->
 
 <div class="hud hud-left">
 
-    JARVIS_CORE // V5.0<br>
-    NEURAL ENGINE: ACTIVE<br>
-    SYSTEM: <span id="systemState">ONLINE</span>
+    JARVIS_CORE // V4.0<br>
+
+    NEURAL SYSTEM: ONLINE
 
 </div>
 
 
 <div class="hud hud-right">
 
-    NODE DENSITY: <span id="nodeCounter">240</span><br>
-    FREQUENCY: <span id="frequency">520 THz</span><br>
-    CORE POWER: <span id="power">87%</span>
+    NETWORK: ACTIVE<br>
+
+    NODES:
+    <span id="nodeCount">200</span>
 
 </div>
 
@@ -620,8 +453,7 @@ button:disabled {
 
     <div class="status">
 
-        <span class="status-dot">●</span>
-
+        <span>●</span>
         NEURAL MATRIX ONLINE
 
     </div>
@@ -630,46 +462,10 @@ button:disabled {
 
 
 <!-- =====================================================
-     CORE STATUS
+     RETE NEURALE
 ===================================================== -->
 
-<div class="core-status">
-
-    <div
-        class="main"
-        id="coreState"
-    >
-        NEURAL CORE
-    </div>
-
-    <div
-        class="sub"
-        id="coreSub"
-    >
-        SYSTEM READY
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     HUD INFERIORE
-===================================================== -->
-
-<div class="hud-bottom-left">
-
-    MATRIX LINK // STABLE<br>
-    ENCRYPTION // ACTIVE
-
-</div>
-
-
-<div class="hud-bottom-right">
-
-    JARVIS AI<br>
-    VOICE INTERFACE READY
-
-</div>
+<canvas id="canvas"></canvas>
 
 
 <!-- =====================================================
@@ -681,7 +477,7 @@ button:disabled {
     <div class="message jarvis">
 
         JARVIS online.
-        Tutti i sistemi neurali sono operativi.
+        Matrice neurale inizializzata.
         In attesa di istruzioni.
 
     </div>
@@ -704,18 +500,7 @@ button:disabled {
             autocomplete="off"
         >
 
-        <button
-            id="mic"
-            type="button"
-            title="Parla con JARVIS"
-        >
-            🎙️
-        </button>
-
-        <button
-            id="send"
-            type="button"
-        >
+        <button id="send">
             EXEC
         </button>
 
@@ -727,7 +512,7 @@ button:disabled {
 <script>
 
 /* =====================================================
-   ELEMENTI
+   JARVIS NEURAL ENGINE
 ===================================================== */
 
 const canvas =
@@ -742,29 +527,11 @@ const input =
 const send =
     document.getElementById("send");
 
-const mic =
-    document.getElementById("mic");
-
 const chat =
     document.getElementById("chat");
 
-const nodeCounter =
-    document.getElementById("nodeCounter");
-
-const frequency =
-    document.getElementById("frequency");
-
-const power =
-    document.getElementById("power");
-
-const systemState =
-    document.getElementById("systemState");
-
-const coreState =
-    document.getElementById("coreState");
-
-const coreSub =
-    document.getElementById("coreSub");
+const nodeCount =
+    document.getElementById("nodeCount");
 
 
 /* =====================================================
@@ -778,17 +545,14 @@ let centerX;
 let centerY;
 
 let dpr;
+
 let radius;
 
 let thinking = false;
 
-let listening = false;
-
 let nodes = [];
 
 let pulses = [];
-
-let rings = [];
 
 let rotationY = 0;
 
@@ -799,9 +563,10 @@ let rotationX = 0;
    CONFIGURAZIONE
 ===================================================== */
 
-const NODE_COUNT = 240;
+const NODE_TOTAL = 200;
 
-const CONNECTION_DISTANCE = 88;
+const MAX_CONNECTION =
+    95;
 
 
 /* =====================================================
@@ -815,7 +580,6 @@ function resize() {
 
     height =
         window.innerHeight;
-
 
     dpr =
         Math.min(
@@ -852,19 +616,17 @@ function resize() {
         width / 2;
 
     centerY =
-        height / 2 - 18;
+        height / 2 - 20;
 
 
     radius =
         Math.min(
             width,
             height
-        ) * .225;
+        ) * .23;
 
 
     createNodes();
-
-    createRings();
 }
 
 
@@ -875,17 +637,16 @@ window.addEventListener(
 
 
 /* =====================================================
-   NODI
+   CREAZIONE NODI
 ===================================================== */
 
 function createNodes() {
 
     nodes = [];
 
-
     for (
         let i = 0;
-        i < NODE_COUNT;
+        i < NODE_TOTAL;
         i++
     ) {
 
@@ -897,30 +658,32 @@ function createNodes() {
         const phi =
             Math.acos(
                 2 *
-                Math.random() -
-                1
+                Math.random()
+                - 1
             );
 
 
         const r =
             radius *
             (
-                .66 +
-                Math.random() * .58
+                .70 +
+                Math.random() *
+                .55
             );
 
 
         nodes.push({
 
-            theta,
+            theta: theta,
 
-            phi,
+            phi: phi,
 
-            r,
+            r: r,
 
             speed:
-                .0015 +
-                Math.random() * .005,
+                .002 +
+                Math.random() *
+                .005,
 
             direction:
                 Math.random() < .5
@@ -928,76 +691,22 @@ function createNodes() {
                     : 1,
 
             size:
-                .65 +
-                Math.random() * 1.8,
+                .7 +
+                Math.random() *
+                1.7,
 
             phase:
                 Math.random() *
-                Math.PI * 2
+                Math.PI *
+                2
 
         });
 
     }
 
 
-    nodeCounter.textContent =
-        NODE_COUNT;
-}
-
-
-/* =====================================================
-   ANELLI
-===================================================== */
-
-function createRings() {
-
-    rings = [
-
-        {
-            radius:
-                radius * 1.05,
-
-            rotation: 0,
-
-            speed: .002,
-
-            tilt: .45
-        },
-
-        {
-            radius:
-                radius * 1.18,
-
-            rotation: 1,
-
-            speed: -.0015,
-
-            tilt: -.35
-        },
-
-        {
-            radius:
-                radius * 1.32,
-
-            rotation: 2,
-
-            speed: .001,
-
-            tilt: .7
-        },
-
-        {
-            radius:
-                radius * 1.43,
-
-            rotation: .5,
-
-            speed: -.0007,
-
-            tilt: -.6
-        }
-
-    ];
+    nodeCount.textContent =
+        NODE_TOTAL;
 }
 
 
@@ -1008,8 +717,10 @@ function createRings() {
 function createPulse() {
 
     if (
-        !nodes.length
-    ) return;
+        nodes.length === 0
+    ) {
+        return;
+    }
 
 
     const node =
@@ -1029,8 +740,9 @@ function createPulse() {
         progress: 0,
 
         speed:
-            .009 +
-            Math.random() * .018
+            .012 +
+            Math.random() *
+            .02
 
     });
 
@@ -1038,136 +750,7 @@ function createPulse() {
 
 
 /* =====================================================
-   DISEGNA ANELLI
-===================================================== */
-
-function drawRings(time) {
-
-    rings.forEach(
-        ring => {
-
-            ring.rotation +=
-                ring.speed *
-                (
-                    thinking
-                        ? 3
-                        : 1
-                );
-
-
-            ctx.save();
-
-            ctx.translate(
-                centerX,
-                centerY
-            );
-
-            ctx.rotate(
-                ring.rotation
-            );
-
-            ctx.scale(
-                1,
-                ring.tilt
-            );
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                0,
-                0,
-                ring.radius,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.strokeStyle =
-                thinking
-                    ? "rgba(255,215,50,.28)"
-                    : "rgba(255,190,20,.13)";
-
-
-            ctx.lineWidth =
-                thinking
-                    ? 1
-                    : .6;
-
-
-            ctx.stroke();
-
-
-            /* Segmenti HUD */
-
-            for (
-                let i = 0;
-                i < 12;
-                i++
-            ) {
-
-                const angle =
-                    (
-                        Math.PI * 2 /
-                        12
-                    ) *
-                    i;
-
-
-                const inner =
-                    ring.radius -
-                    3;
-
-
-                const outer =
-                    ring.radius +
-                    (
-                        i % 3 === 0
-                            ? 9
-                            : 4
-                    );
-
-
-                ctx.beginPath();
-
-                ctx.moveTo(
-                    Math.cos(angle) *
-                    inner,
-
-                    Math.sin(angle) *
-                    inner
-                );
-
-                ctx.lineTo(
-                    Math.cos(angle) *
-                    outer,
-
-                    Math.sin(angle) *
-                    outer
-                );
-
-
-                ctx.strokeStyle =
-                    "rgba(255,210,50,.35)";
-
-                ctx.lineWidth =
-                    .8;
-
-                ctx.stroke();
-
-            }
-
-
-            ctx.restore();
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   ANIMAZIONE PRINCIPALE
+   DISEGNO
 ===================================================== */
 
 function animate() {
@@ -1184,14 +767,14 @@ function animate() {
 
     const speed =
         thinking
-            ? 3.5
+            ? 3.2
             : 1;
 
 
-    /* SFONDO */
+    /* TRAIL */
 
     ctx.fillStyle =
-        "rgba(0,0,0,.22)";
+        "rgba(0,0,0,.24)";
 
     ctx.fillRect(
         0,
@@ -1204,7 +787,7 @@ function animate() {
     /* ROTAZIONE */
 
     rotationY +=
-        .0038 *
+        .004 *
         speed;
 
     rotationX +=
@@ -1213,58 +796,57 @@ function animate() {
 
 
     /* =================================================
-       GLOW CORE
+       GLOW CENTRALE
     ================================================= */
 
-    const glowSize =
+    const glowRadius =
         radius *
         (
             thinking
-                ? 1.9
-                : 1.35
+                ? 1.7
+                : 1.25
         );
 
 
-    const glow =
+    const gradient =
         ctx.createRadialGradient(
             centerX,
             centerY,
             0,
-
             centerX,
             centerY,
-            glowSize
+            glowRadius
         );
 
 
-    glow.addColorStop(
+    gradient.addColorStop(
         0,
         thinking
             ? "rgba(255,250,190,.95)"
-            : "rgba(255,235,150,.7)"
+            : "rgba(255,235,150,.65)"
     );
 
 
-    glow.addColorStop(
-        .12,
-        "rgba(255,210,30,.48)"
+    gradient.addColorStop(
+        .18,
+        "rgba(255,200,0,.38)"
     );
 
 
-    glow.addColorStop(
-        .35,
-        "rgba(255,150,0,.14)"
+    gradient.addColorStop(
+        .5,
+        "rgba(255,150,0,.08)"
     );
 
 
-    glow.addColorStop(
+    gradient.addColorStop(
         1,
         "rgba(0,0,0,0)"
     );
 
 
     ctx.fillStyle =
-        glow;
+        gradient;
 
 
     ctx.beginPath();
@@ -1272,7 +854,7 @@ function animate() {
     ctx.arc(
         centerX,
         centerY,
-        glowSize,
+        glowRadius,
         0,
         Math.PI * 2
     );
@@ -1280,16 +862,12 @@ function animate() {
     ctx.fill();
 
 
-    /* ANELLI */
-
-    drawRings(time);
-
-
     /* =================================================
-       PROIEZIONE
+       PROIEZIONE 3D
     ================================================= */
 
-    const projected = [];
+    const projected =
+        [];
 
 
     nodes.forEach(
@@ -1306,7 +884,7 @@ function animate() {
                     time +
                     n.phase
                 ) *
-                .0005 *
+                .0007 *
                 speed;
 
 
@@ -1329,5 +907,414 @@ function animate() {
 
             /* ROTAZIONE Y */
 
-            const cy =
-          
+            const cosY =
+                Math.cos(
+                    rotationY
+                );
+
+            const sinY =
+                Math.sin(
+                    rotationY
+                );
+
+
+            const rx =
+                x * cosY +
+                z * sinY;
+
+
+            const rz =
+                -x * sinY +
+                z * cosY;
+
+
+            /* ROTAZIONE X */
+
+            const cosX =
+                Math.cos(
+                    rotationX
+                );
+
+            const sinX =
+                Math.sin(
+                    rotationX
+                );
+
+
+            const ry =
+                y * cosX -
+                rz * sinX;
+
+
+            const finalZ =
+                y * sinX +
+                rz * cosX;
+
+
+            /* PROSPETTIVA */
+
+            const perspective =
+                420 /
+                (
+                    420 +
+                    finalZ
+                );
+
+
+            const px =
+                centerX +
+                rx *
+                perspective;
+
+
+            const py =
+                centerY +
+                ry *
+                perspective;
+
+
+            const alpha =
+                Math.max(
+                    .08,
+                    Math.min(
+                        1,
+                        (
+                            finalZ +
+                            radius
+                        ) /
+                        (
+                            radius * 2
+                        )
+                    )
+                );
+
+
+            projected.push({
+
+                x: px,
+
+                y: py,
+
+                z: finalZ,
+
+                alpha: alpha,
+
+                size:
+                    n.size *
+                    perspective,
+
+                pulse:
+                    (
+                        Math.sin(
+                            time * 5 +
+                            n.phase
+                        ) + 1
+                    ) / 2
+
+            });
+
+        }
+    );
+
+
+    /* PROFONDITÀ */
+
+    projected.sort(
+        (a, b) =>
+            a.z - b.z
+    );
+
+
+    /* =================================================
+       CONNESSIONI
+    ================================================= */
+
+    for (
+        let i = 0;
+        i < projected.length;
+        i++
+    ) {
+
+        const a =
+            projected[i];
+
+
+        for (
+            let j = i + 1;
+            j < projected.length;
+            j++
+        ) {
+
+            const b =
+                projected[j];
+
+
+            const dx =
+                a.x - b.x;
+
+
+            const dy =
+                a.y - b.y;
+
+
+            const distance =
+                Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                );
+
+
+            if (
+                distance <
+                MAX_CONNECTION
+            ) {
+
+                const opacity =
+                    (
+                        1 -
+                        distance /
+                        MAX_CONNECTION
+                    ) *
+                    .30 *
+                    a.alpha;
+
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    a.x,
+                    a.y
+                );
+
+                ctx.lineTo(
+                    b.x,
+                    b.y
+                );
+
+
+                ctx.strokeStyle =
+                    `rgba(
+                        255,
+                        195,
+                        20,
+                        ${opacity}
+                    )`;
+
+
+                ctx.lineWidth =
+                    thinking
+                        ? 1
+                        : .65;
+
+
+                ctx.stroke();
+
+            }
+
+        }
+
+    }
+
+
+    /* =================================================
+       IMPULSI
+    ================================================= */
+
+    if (
+        Math.random() <
+        (
+            thinking
+                ? .16
+                : .025
+        )
+    ) {
+
+        createPulse();
+
+    }
+
+
+    pulses.forEach(
+        pulse => {
+
+            pulse.progress +=
+                pulse.speed *
+                speed;
+
+        }
+    );
+
+
+    pulses =
+        pulses.filter(
+            pulse =>
+                pulse.progress < 1
+        );
+
+
+    /* =================================================
+       NODI
+    ================================================= */
+
+    projected.forEach(
+        n => {
+
+            const glow =
+                ctx.createRadialGradient(
+                    n.x,
+                    n.y,
+                    0,
+                    n.x,
+                    n.y,
+                    n.size * 5
+                );
+
+
+            glow.addColorStop(
+                0,
+                `rgba(
+                    255,
+                    215,
+                    70,
+                    ${.45 * n.alpha}
+                )`
+            );
+
+
+            glow.addColorStop(
+                1,
+                "rgba(255,150,0,0)"
+            );
+
+
+            ctx.fillStyle =
+                glow;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                n.x,
+                n.y,
+                n.size * 5,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            /* PUNTO */
+
+            const brightness =
+                .65 +
+                n.pulse *
+                .35;
+
+
+            ctx.fillStyle =
+                `rgba(
+                    255,
+                    245,
+                    180,
+                    ${brightness * n.alpha}
+                )`;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                n.x,
+                n.y,
+                n.size,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+    );
+
+
+    /* =================================================
+       IMPULSI LUMINOSI
+    ================================================= */
+
+    pulses.forEach(
+        pulse => {
+
+            const angle =
+                pulse.angle +
+                pulse.progress *
+                Math.PI *
+                4;
+
+
+            const distance =
+                radius *
+                (
+                    .2 +
+                    pulse.progress *
+                    .8
+                );
+
+
+            const x =
+                centerX +
+                Math.cos(angle) *
+                distance;
+
+
+            const y =
+                centerY +
+                Math.sin(
+                    angle * 1.7
+                ) *
+                distance *
+                .5;
+
+
+            ctx.shadowBlur =
+                18;
+
+
+            ctx.shadowColor =
+                "#ffd000";
+
+
+            ctx.fillStyle =
+                `rgba(
+                    255,
+                    245,
+                    160,
+                    ${1 - pulse.progress}
+                )`;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                thinking
+                    ? 2.8
+                    : 2,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            ctx.shadowBlur = 0;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   AVVIO
+====================================

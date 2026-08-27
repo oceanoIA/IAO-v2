@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAO</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0b0f;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0 5px;
+        }
+
+        p {
+            text-align: center;
+            color: #999;
+        }
+
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 12px;
+        }
+
+        .user {
+            margin-left: auto;
+            background: #3b3bff;
+        }
+
+        .iao {
+            background: #202027;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+        }
+
+        input {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #18181f;
+            color: white;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 0 18px;
+            border: none;
+            border-radius: 10px;
+            background: #3b3bff;
+            color: white;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>IAO 🤖</h1>
+<p>La tua intelligenza artificiale personale</p>
+
+<div id="chat">
+    <div class="message iao">
+        Ciao! Sono IAO. 👋
+    </div>
+</div>
+
+<div class="input-area">
+    <input id="input" type="text" placeholder="Scrivi a IAO...">
+    <button onclick="sendMessage()">Invia</button>
+</div>
+
+<script>
+
+async function sendMessage() {
+
+    const input = document.getElementById("input");
+    const chat = document.getElementById("chat");
+
+    const text = input.value.trim();
+
+    if (text === "") return;
+
+    const userMessage = document.createElement("div");
+    userMessage.className = "message user";
+    userMessage.textContent = text;
+
+    chat.appendChild(userMessage);
+
+    input.value = "";
+
+    const iaoMessage = document.createElement("div");
+    iaoMessage.className = "message iao";
+    iaoMessage.textContent = "Sto pensando... 🧠";
+
+    chat.appendChild(iaoMessage);
+
+    try {
+
+        const response = await fetch(
+            "https://iao-backend-v2.oceano-masoud.workers.dev",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    message: text
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        iaoMessage.textContent =
+            data.reply || "Non ho ricevuto una risposta.";
+
+    } catch (error) {
+
+        iaoMessage.textContent =
+            "Errore di collegamento.";
+
+    }
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+</script>
+
+</body>
+</html>

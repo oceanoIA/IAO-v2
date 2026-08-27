@@ -1,1380 +1,181 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS // NEURAL CORE</title>
-
-<style>
-*{box-sizing:border-box}
-
-html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    color:#ffd000;
-    font-family:Arial,Helvetica,sans-serif;
-}
-
-#canvas{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    z-index:1;
-}
-
-.vignette{
-    position:fixed;
-    inset:0;
-    z-index:3;
-    pointer-events:none;
-    background:radial-gradient(
-        ellipse at center,
-        transparent 30%,
-        rgba(0,0,0,.35) 70%,
-        rgba(0,0,0,.9) 100%
-    );
-}
-
-.scanlines{
-    position:fixed;
-    inset:0;
-    z-index:4;
-    pointer-events:none;
-    opacity:.07;
-    background:repeating-linear-gradient(
-        to bottom,
-        transparent 0,
-        transparent 3px,
-        rgba(255,210,0,.15) 4px
-    );
-}
-
-.hud{
-    position:fixed;
-    z-index:10;
-    pointer-events:none;
-    font-family:monospace;
-    font-size:9px;
-    letter-spacing:2px;
-    line-height:1.8;
-    color:rgba(255,215,0,.58);
-}
-
-.hud-left{
-    top:24px;
-    left:24px;
-    border-left:2px solid rgba(255,200,0,.75);
-    padding-left:12px;
-}
-
-.hud-right{
-    top:24px;
-    right:24px;
-    text-align:right;
-    border-right:2px solid rgba(255,200,0,.75);
-    padding-right:12px;
-}
-
-.title{
-    position:fixed;
-    top:22px;
-    left:0;
-    right:0;
-    z-index:11;
-    text-align:center;
-    pointer-events:none;
-}
-
-.title h1{
-    margin:0;
-    color:white;
-    font-size:25px;
-    font-weight:300;
-    letter-spacing:12px;
-    text-shadow:
-        0 0 8px rgba(255,220,100,.95),
-        0 0 22px rgba(255,180,0,.75),
-        0 0 50px rgba(255,120,0,.35);
-}
-
-.status{
-    margin-top:6px;
-    font-family:monospace;
-    font-size:9px;
-    letter-spacing:4px;
-    color:rgba(255,210,0,.75);
-}
-
-.status-dot{
-    color:#ffd000;
-    text-shadow:0 0 6px #ffd000,0 0 15px #ff9d00;
-}
-
-.core-status{
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    z-index:8;
-    pointer-events:none;
-    text-align:center;
-    font-family:monospace;
-    opacity:.6;
-}
-
-.core-status .main{
-    font-size:8px;
-    letter-spacing:4px;
-}
-
-.core-status .sub{
-    margin-top:5px;
-    font-size:7px;
-    letter-spacing:2px;
-}
-
-#memoryButton{
-    position:fixed;
-    right:24px;
-    bottom:70px;
-    z-index:31;
-    width:auto;
-    height:30px;
-    padding:0 12px;
-    font-size:8px;
-}
-
-#chat{
-    position:fixed;
-    left:50%;
-    bottom:105px;
-    transform:translateX(-50%);
-    width:100%;
-    max-width:720px;
-    max-height:24vh;
-    padding:0 20px;
-    display:flex;
-    flex-direction:column;
-    gap:9px;
-    overflow-y:auto;
-    scrollbar-width:none;
-    z-index:20;
-}
-
-#chat::-webkit-scrollbar{
-    display:none;
-}
-
-.message{
-    max-width:82%;
-    padding:10px 15px;
-    border-radius:3px;
-    font-size:13px;
-    line-height:1.5;
-    backdrop-filter:blur(18px);
-    word-break:break-word;
-}
-
-.user{
-    align-self:flex-end;
-    color:white;
-    background:rgba(255,200,0,.055);
-    border:1px solid rgba(255,205,0,.28);
-    border-right:3px solid #ffd000;
-}
-
-.jarvis{
-    align-self:flex-start;
-    color:#ffe9a8;
-    background:rgba(12,9,2,.82);
-    border:1px solid rgba(255,200,0,.2);
-    border-left:3px solid #ffd000;
-}
-
-.input-container{
-    position:fixed;
-    left:50%;
-    bottom:25px;
-    transform:translateX(-50%);
-    width:100%;
-    max-width:720px;
-    padding:0 20px;
-    z-index:30;
-}
-
-.input-box{
-    display:flex;
-    gap:7px;
-    padding:5px;
-    background:rgba(7,6,2,.9);
-    border:1px solid rgba(255,205,0,.38);
-    border-radius:5px;
-    backdrop-filter:blur(20px);
-}
-
-input{
-    flex:1;
-    min-width:0;
-    height:43px;
-    padding:0 14px;
-    background:transparent;
-    border:none;
-    outline:none;
-    color:white;
-    font-size:13px;
-}
-
-input::placeholder{
-    color:rgba(255,220,140,.32);
-}
-
-button{
-    height:43px;
-    border-radius:3px;
-    border:1px solid rgba(255,205,0,.5);
-    background:rgba(255,190,0,.1);
-    color:#ffd000;
-    font-family:monospace;
-    font-size:10px;
-    font-weight:bold;
-    letter-spacing:1px;
-    cursor:pointer;
-}
-
-button:hover:not(:disabled){
-    background:#ffd000;
-    color:#000;
-    box-shadow:0 0 15px #ffd000;
-}
-
-button:disabled{
-    opacity:.25;
-}
-
-#mic{
-    width:48px;
-    padding:0;
-    font-size:17px;
-}
-
-#send{
-    width:75px;
-}
-
-#mic.listening{
-    background:#ffd000;
-    color:#000;
-    box-shadow:0 0 15px #ffd000,0 0 35px rgba(255,190,0,.8);
-}
-
-@media(max-width:600px){
-    .hud{display:none}
-
-    .title h1{
-        font-size:19px;
-        letter-spacing:7px;
-    }
-
-    .message{
-        max-width:91%;
-    }
-
-    #chat{
-        max-height:27vh;
-    }
-
-    #memoryButton{
-        right:10px;
-        bottom:72px;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<canvas id="canvas"></canvas>
-
-<div class="vignette"></div>
-<div class="scanlines"></div>
-
-<div class="hud hud-left">
-JARVIS_CORE // V5.0<br>
-NEURAL ENGINE: ACTIVE<br>
-SYSTEM: <span id="systemState">ONLINE</span>
-</div>
-
-<div class="hud hud-right">
-MEMORY: <span id="memoryCount">0</span><br>
-NODE DENSITY: 240<br>
-CORE POWER: <span id="power">87%</span>
-</div>
-
-<div class="title">
-<h1>J.A.R.V.I.S.</h1>
-<div class="status">
-<span class="status-dot">●</span>
-NEURAL MATRIX ONLINE
-</div>
-</div>
-
-<div class="core-status">
-<div class="main" id="coreState">NEURAL CORE</div>
-<div class="sub" id="coreSub">SYSTEM READY</div>
-</div>
-
-<button id="memoryButton">MEMORY</button>
-
-<div id="chat">
-<div class="message jarvis">
-JARVIS online. Memoria neurale inizializzata.
-In attesa di istruzioni.
-</div>
-</div>
-
-<div class="input-container">
-<div class="input-box">
-
-<input
-id="input"
-type="text"
-placeholder="Comunica con JARVIS..."
-autocomplete="off"
->
-
-<button id="mic" type="button">🎙️</button>
-
-<button id="send" type="button">EXEC</button>
-
-</div>
-</div>
-
-<script>
-
-/* =====================================================
-   CONFIGURAZIONE
-===================================================== */
-
-const API_URL =
-"https://iao-ai-v3.oceano-masoud.workers.dev/";
-
-const MEMORY_KEY =
-"jarvis_neural_memory_v1";
-
-const MAX_MEMORY =
-30;
-
-
-/* =====================================================
-   ELEMENTI
-===================================================== */
-
-const canvas =
-document.getElementById("canvas");
-
-const ctx =
-canvas.getContext("2d");
-
-const input =
-document.getElementById("input");
-
-const send =
-document.getElementById("send");
-
-const mic =
-document.getElementById("mic");
-
-const chat =
-document.getElementById("chat");
-
-const memoryButton =
-document.getElementById("memoryButton");
-
-const memoryCount =
-document.getElementById("memoryCount");
-
-const systemState =
-document.getElementById("systemState");
-
-const coreState =
-document.getElementById("coreState");
-
-const coreSub =
-document.getElementById("coreSub");
-
-const power =
-document.getElementById("power");
-
-
-/* =====================================================
-   MEMORIA
-===================================================== */
-
-let memory = [];
-
-try{
-
-    const saved =
-    localStorage.getItem(MEMORY_KEY);
-
-    if(saved){
-        memory =
-        JSON.parse(saved);
-    }
-
-}catch(error){
-
-    console.log(
-        "Memoria non disponibile"
-    );
-
-    memory = [];
-
-}
-
-
-function saveMemory(){
-
-    try{
-
-        memory =
-        memory.slice(-MAX_MEMORY);
-
-        localStorage.setItem(
-            MEMORY_KEY,
-            JSON.stringify(memory)
-        );
-
-    }catch(error){
-
-        console.log(
-            "Impossibile salvare memoria"
-        );
-
-    }
-
-    updateMemoryCounter();
-}
-
-
-function addMemory(role,content){
-
-    if(
-        !content ||
-        typeof content !== "string"
-    ){
-        return;
-    }
-
-    memory.push({
-        role:role,
-        content:content,
-        time:Date.now()
-    });
-
-    saveMemory();
-}
-
-
-function updateMemoryCounter(){
-
-    memoryCount.textContent =
-    memory.length;
-
-}
-
-
-updateMemoryCounter();
-
-
-/* =====================================================
-   COMANDO MEMORIA
-===================================================== */
-
-function isMemoryCommand(text){
-
-    const lower =
-    text.toLowerCase();
-
-    return (
-        lower.includes("ricorda che") ||
-        lower.startsWith("ricorda ") ||
-        lower.includes("ricordati che")
-    );
-
-}
-
-
-function isForgetCommand(text){
-
-    const lower =
-    text.toLowerCase();
-
-    return (
-        lower.includes("dimentica tutto") ||
-        lower.includes("cancella memoria") ||
-        lower.includes("dimentica la memoria")
-    );
-
-}
-
-
-function handleLocalMemoryCommand(text){
-
-    if(
-        isForgetCommand(text)
-    ){
-
-        memory = [];
-
-        saveMemory();
-
-        return {
-            handled:true,
-            reply:
-            "Memoria cancellata. Il Neural Core è stato azzerato."
+export default {
+    async fetch(request, env) {
+
+        const corsHeaders = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type"
         };
 
-    }
-
-    if(
-        isMemoryCommand(text)
-    ){
-
-        addMemory(
-            "user_memory",
-            text
-        );
-
-        return {
-            handled:true,
-            reply:
-            "Informazione salvata nella mia memoria."
-        };
-
-    }
-
-    return {
-        handled:false
-    };
-
-}
-
-
-/* =====================================================
-   MOSTRA MEMORIA
-===================================================== */
-
-memoryButton.addEventListener(
-"click",
-function(){
-
-    if(memory.length === 0){
-
-        addJarvisMessage(
-            "La mia memoria è attualmente vuota."
-        );
-
-        return;
-    }
-
-    const recent =
-    memory.slice(-10);
-
-    let text =
-    "MEMORIA JARVIS — ultime informazioni:\n\n";
-
-    recent.forEach(
-    item => {
-
-        if(
-            item.role === "user_memory"
-        ){
-
-            text +=
-            "• " +
-            item.content +
-            "\n";
-
+        // CORS
+        if (request.method === "OPTIONS") {
+            return new Response(null, {
+                status: 204,
+                headers: corsHeaders
+            });
         }
 
-    });
+        // Test Worker
+        if (request.method !== "POST") {
+            return new Response("JARVIS AI ONLINE 🧠", {
+                status: 200,
+                headers: corsHeaders
+            });
+        }
+
+        try {
+
+            const data = await request.json();
+
+            const message = data.message;
+
+            const memory = Array.isArray(data.memory)
+                ? data.memory
+                : [];
+
+            if (!message || typeof message !== "string") {
+
+                return new Response(
+                    JSON.stringify({
+                        error: "Messaggio mancante"
+                    }),
+                    {
+                        status: 400,
+                        headers: {
+                            ...corsHeaders,
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
 
-    if(
-        text.trim() ===
-        "MEMORIA JARVIS — ultime informazioni:"
-    ){
-
-        text +=
-        "Nessuna memoria personale salvata.";
-
-    }
-
-    addJarvisMessage(text);
-
-});
-
-
-/* =====================================================
-   CHAT
-===================================================== */
-
-function addUserMessage(text){
-
-    const msg =
-    document.createElement("div");
-
-    msg.className =
-    "message user";
-
-    msg.textContent =
-    text;
-
-    chat.appendChild(msg);
-
-    chat.scrollTop =
-    chat.scrollHeight;
-}
-
-
-function addJarvisMessage(text){
-
-    const msg =
-    document.createElement("div");
-
-    msg.className =
-    "message jarvis";
-
-    msg.textContent =
-    text;
-
-    chat.appendChild(msg);
-
-    chat.scrollTop =
-    chat.scrollHeight;
-
-    return msg;
-}
-
-
-/* =====================================================
-   STATO
-===================================================== */
-
-function setThinking(active){
-
-    if(active){
-
-        systemState.textContent =
-        "PROCESSING";
-
-        coreState.textContent =
-        "NEURAL PROCESSING";
-
-        coreSub.textContent =
-        "ANALYZING INPUT";
-
-    }else{
-
-        systemState.textContent =
-        "ONLINE";
-
-        coreState.textContent =
-        "NEURAL CORE";
-
-        coreSub.textContent =
-        "SYSTEM READY";
-
-    }
-
-}
-
-
-/* =====================================================
-   INVIO MESSAGGIO
-===================================================== */
-
-send.addEventListener(
-"click",
-sendMessage
-);
-
-
-input.addEventListener(
-"keydown",
-event => {
-
-    if(event.key === "Enter"){
-        sendMessage();
-    }
-
-});
-
-
-async function sendMessage(){
-
-    const text =
-    input.value.trim();
-
-    if(
-        !text ||
-        input.disabled
-    ){
-        return;
-    }
-
-
-    input.disabled =
-    true;
-
-    send.disabled =
-    true;
-
-    mic.disabled =
-    true;
-
-
-    addUserMessage(text);
-
-    input.value = "";
-
-
-    /* COMANDI LOCALI */
-
-    const local =
-    handleLocalMemoryCommand(text);
-
-
-    if(local.handled){
-
-        addJarvisMessage(
-            local.reply
-        );
-
-        speakJarvis(
-            local.reply
-        );
-
-        input.disabled =
-        false;
-
-        send.disabled =
-        false;
-
-        mic.disabled =
-        false;
-
-        input.focus();
-
-        return;
-    }
-
-
-    /* SALVA DOMANDA */
-
-    addMemory(
-        "user",
-        text
-    );
-
-
-    const jarvisMessage =
-    addJarvisMessage(
-        "JARVIS // elaborazione neurale..."
-    );
-
-
-    setThinking(true);
-
-
-    try{
-
-        const response =
-        await fetch(
-            API_URL,
-            {
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body:
-                JSON.stringify({
-
-                    message:text,
-
-                    memory:
-                    memory.slice(
-                        -MAX_MEMORY
-                    )
-
-                })
             }
-        );
 
+            /*
+             * =====================================================
+             * MEMORIA
+             * =====================================================
+             */
 
-        if(
-            !response.ok
-        ){
-            throw new Error(
-                "API ERROR"
+            let memoryText = "";
+
+            if (memory.length > 0) {
+
+                memoryText = `
+MEMORIA DI JARVIS:
+
+${memory
+    .slice(-30)
+    .map(item => {
+
+        if (item.role === "user") {
+            return `UTENTE: ${item.content}`;
+        }
+
+        if (item.role === "assistant") {
+            return `JARVIS: ${item.content}`;
+        }
+
+        return "";
+
+    })
+    .filter(Boolean)
+    .join("\n")}
+
+FINE MEMORIA.
+`;
+            }
+
+            /*
+             * =====================================================
+             * ISTRUZIONI JARVIS
+             * =====================================================
+             */
+
+            const systemPrompt = `
+Sei JARVIS, un'intelligenza artificiale personale.
+
+Rispondi sempre in italiano.
+
+Sei naturale, intelligente, diretto e utile.
+
+Puoi usare la memoria fornita dall'utente per mantenere
+continuità nella conversazione.
+
+Non inventare informazioni che non sono presenti nella memoria.
+
+Se l'utente ti chiede cosa ricordi, usa esclusivamente
+le informazioni presenti nella memoria.
+
+${memoryText}
+`;
+
+            /*
+             * =====================================================
+             * MODELLO IA
+             * =====================================================
+             */
+
+            const result = await env.AI.run(
+                "@cf/meta/llama-3.1-8b-instruct-fast",
+                {
+                    messages: [
+
+                        {
+                            role: "system",
+                            content: systemPrompt
+                        },
+
+                        {
+                            role: "user",
+                            content: message
+                        }
+
+                    ]
+                }
             );
-        }
 
-
-        const data =
-        await response.json();
-
-
-        const reply =
-        data.reply ||
-        "JARVIS non ha prodotto una risposta.";
-
-
-        jarvisMessage.textContent =
-        reply;
-
-
-        /* SALVA RISPOSTA */
-
-        addMemory(
-            "assistant",
-            reply
-        );
-
-
-        speakJarvis(reply);
-
-
-    }catch(error){
-
-        console.error(error);
-
-
-        jarvisMessage.textContent =
-        "JARVIS // connessione al Neural Core non disponibile.";
-
-    }
-
-
-    setThinking(false);
-
-
-    input.disabled =
-    false;
-
-    send.disabled =
-    false;
-
-    mic.disabled =
-    false;
-
-    input.focus();
-
-
-    chat.scrollTop =
-    chat.scrollHeight;
-
-}
-
-
-/* =====================================================
-   VOCE
-===================================================== */
-
-function speakJarvis(text){
-
-    if(
-        !("speechSynthesis" in window)
-    ){
-        return;
-    }
-
-
-    speechSynthesis.cancel();
-
-
-    const clean =
-    text
-    .replace(/[*#_`]/g,"")
-    .trim();
-
-
-    if(!clean){
-        return;
-    }
-
-
-    const speech =
-    new SpeechSynthesisUtterance(
-        clean
-    );
-
-
-    speech.lang =
-    "it-IT";
-
-    speech.rate =
-    .92;
-
-    speech.pitch =
-    .78;
-
-    speech.volume =
-    1;
-
-
-    speechSynthesis.speak(
-        speech
-    );
-
-}
-
-
-/* =====================================================
-   MICROFONO
-===================================================== */
-
-const SpeechRecognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
-
-let recognition = null;
-
-let listening = false;
-
-
-if(SpeechRecognition){
-
-    recognition =
-    new SpeechRecognition();
-
-    recognition.lang =
-    "it-IT";
-
-    recognition.continuous =
-    false;
-
-    recognition.interimResults =
-    false;
-
-
-    recognition.onstart =
-    function(){
-
-        listening =
-        true;
-
-        mic.classList.add(
-            "listening"
-        );
-
-        mic.textContent =
-        "🔴";
-
-        input.placeholder =
-        "JARVIS sta ascoltando...";
-
-        systemState.textContent =
-        "LISTENING";
-
-        coreState.textContent =
-        "VOICE INPUT";
-
-        coreSub.textContent =
-        "LISTENING...";
-
-    };
-
-
-    recognition.onresult =
-    function(event){
-
-        const transcript =
-        event.results[0][0]
-        .transcript;
-
-        input.value =
-        transcript;
-
-        listening =
-        false;
-
-        mic.classList.remove(
-            "listening"
-        );
-
-        mic.textContent =
-        "🎙️";
-
-        input.placeholder =
-        "Comunica con JARVIS...";
-
-        sendMessage();
-
-    };
-
-
-    recognition.onerror =
-    function(){
-
-        listening =
-        false;
-
-        mic.classList.remove(
-            "listening"
-        );
-
-        mic.textContent =
-        "🎙️";
-
-        input.placeholder =
-        "Comunica con JARVIS...";
-
-        setThinking(false);
-
-    };
-
-
-    recognition.onend =
-    function(){
-
-        listening =
-        false;
-
-        mic.classList.remove(
-            "listening"
-        );
-
-        mic.textContent =
-        "🎙️";
-
-        input.placeholder =
-        "Comunica con JARVIS...";
-
-    };
-
-
-    mic.addEventListener(
-    "click",
-    function(){
-
-        if(listening){
-
-            recognition.stop();
-
-            return;
-        }
-
-        try{
-
-            recognition.start();
-
-        }catch(error){
-
-            console.log(error);
+            /*
+             * =====================================================
+             * RISPOSTA
+             * =====================================================
+             */
+
+            return new Response(
+                JSON.stringify({
+                    reply:
+                        result.response ||
+                        "JARVIS non ha prodotto una risposta."
+                }),
+                {
+                    status: 200,
+                    headers: {
+                        ...corsHeaders,
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            return new Response(
+                JSON.stringify({
+                    error: "Errore nel modello IA",
+                    details: error.message
+                }),
+                {
+                    status: 500,
+                    headers: {
+                        ...corsHeaders,
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
 
         }
 
-    });
-
-}else{
-
-    mic.disabled =
-    true;
-
-}
-
-
-/* =====================================================
-   NEURAL SPHERE
-===================================================== */
-
-let width;
-let height;
-let dpr;
-let centerX;
-let centerY;
-let radius;
-
-let nodes = [];
-let rings = [];
-let pulses = [];
-
-let rotationY = 0;
-let rotationX = 0;
-
-const NODE_COUNT = 240;
-
-
-function resize(){
-
-    width =
-    window.innerWidth;
-
-    height =
-    window.innerHeight;
-
-    dpr =
-    Math.min(
-        window.devicePixelRatio || 1,
-        2
-    );
-
-
-    canvas.width =
-    width * dpr;
-
-    canvas.height =
-    height * dpr;
-
-    canvas.style.width =
-    width + "px";
-
-    canvas.style.height =
-    height + "px";
-
-
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
-
-
-    centerX =
-    width / 2;
-
-    centerY =
-    height / 2 - 18;
-
-
-    radius =
-    Math.min(
-        width,
-        height
-    ) * .225;
-
-
-    createNodes();
-    createRings();
-
-}
-
-
-window.addEventListener(
-"resize",
-resize
-);
-
-
-function createNodes(){
-
-    nodes = [];
-
-    for(
-        let i=0;
-        i<NODE_COUNT;
-        i++
-    ){
-
-        nodes.push({
-
-            theta:
-            Math.random() *
-            Math.PI * 2,
-
-            phi:
-            Math.acos(
-                2 *
-                Math.random() -
-                1
-            ),
-
-            r:
-            radius *
-            (
-                .66 +
-                Math.random() *
-                .58
-            ),
-
-            speed:
-            .0015 +
-            Math.random() *
-            .005,
-
-            direction:
-            Math.random() < .5
-            ? -1
-            : 1,
-
-            size:
-            .7 +
-            Math.random() *
-            1.8,
-
-            phase:
-            Math.random() *
-            Math.PI * 2
-
-        });
-
     }
-
-}
-
-
-function createRings(){
-
-    rings = [
-
-        {
-            radius:
-            radius * 1.05,
-
-            rotation:0,
-
-            speed:.002,
-
-            tilt:.45
-        },
-
-        {
-            radius:
-            radius * 1.18,
-
-            rotation:1,
-
-            speed:-.0015,
-
-            tilt:-.35
-        },
-
-        {
-            radius:
-            radius * 1.32,
-
-            rotation:2,
-
-            speed:.001,
-
-            tilt:.7
-        }
-
-    ];
-
-}
-
-
-function drawRings(){
-
-    rings.forEach(
-    ring => {
-
-        ring.rotation +=
-        ring.speed *
-        (
-            thinkingMode
-            ? 3
-            : 1
-        );
-
-
-        ctx.save();
-
-        ctx.translate(
-            centerX,
-            centerY
-        );
-
-        ctx.rotate(
-            ring.rotation
-        );
-
-        ctx.scale(
-            1,
-            ring.tilt
-        );
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-            0,
-            0,
-            ring.radius,
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.strokeStyle =
-        thinkingMode
-        ? "rgba(255,215,50,.3)"
-        : "rgba(255,190,20,.13)";
-
-        ctx.lineWidth =
-        thinkingMode ? 1 : .6;
-
-        ctx.stroke();
-
-
-        ctx.restore();
-
-    });
-
-}
-
-
-let thinkingMode = false;
-
-
-function animate(){
-
-    requestAnimationFrame(
-        animate
-    );
-
-
-    const time =
-    performance.now() / 1000;
-
-
-    const speed =
-    thinkingMode ? 3.5 : 1;
-
-
-    ctx.fillStyle =
-    "rgba(0,0,0,.22)";
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    rotationY +=
-    .0038 * speed;
-
-    rotationX +=
-    .001 * speed;
-
-
-    const glowSize =
-    radius *
-    (
-        thinkingMode
-        ? 1.9
-       
+};

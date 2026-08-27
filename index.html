@@ -628,127 +628,373 @@ speechSynthesis.speak(u);
 
 
 /* MICROFONO */
+   /* =====================================================
+   JARVIS WAKE WORD
+   "JARVIS" -> attivazione automatica
+===================================================== */
 
-const Recognition=
-window.SpeechRecognition||
-window.webkitSpeechRecognition;
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-let recognition=null;
+let recognition = null;
+let wakeRecognition = null;
 
-if(Recognition){
-
-recognition=new Recognition();
-
-recognition.lang="it-IT";
-recognition.continuous=false;
-recognition.interimResults=true;
-
-recognition.onstart=()=>{
-
-listening=true;
-
-mic.classList.add("active");
-mic.textContent="■";
-
-input.placeholder="JARVIS sta ascoltando...";
-
-setState("listening");
-
-};
+let listening = false;
+let wakeMode = true;
 
 
-recognition.onresult=event=>{
+/* -----------------------------------------------------
+   RICONOSCIMENTO PRINCIPALE
+----------------------------------------------------- */
 
-let text="";
+if (Recognition) {
 
-for(
-let i=event.resultIndex;
-i<event.results.length;
-i++
-){
+    recognition = new Recognition();
 
-text+=
-event.results[i][0].transcript;
+    recognition.lang = "it-IT";
+    recognition.continuous = false;
+    recognition.interimResults = true;
+
+
+    recognition.onstart = () => {
+
+        listening = true;
+
+        mic.classList.add("active");
+        mic.textContent = "■";
+
+        input.placeholder =
+            "JARVIS ti sta ascoltando...";
+
+        setState("listening");
+    };
+
+
+    recognition.onresult = event => {
+
+        let transcript = "";
+
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
+
+            transcript +=
+                event.results[i][0].transcript;
+
+        }
+
+        input.value = transcript;
+
+
+        const last =
+            event.results[
+                event.results.length - 1
+            ];
+
+
+        if (last.isFinal) {
+
+            setTimeout(() => {
+
+                if (input.value.trim()) {
+                    sendMessage();
+                }
+
+            }, 250);
+
+        }
+
+    };
+
+
+    recognition.onerror = event => {
+
+        console.log(
+            "JARVIS microphone:",
+            event.error
+        );
+
+    };
+
+
+    recognition.onend = () => {
+
+        listening = false;
+
+        mic.classList.remove("active");
+        mic.textContent = "🎙";
+
+        input.placeholder =
+            "Comunica con JARVIS...";
+
+        if (state === "listening") {
+            setState("idle");
+        }
+
+        /*
+           Riattiva il rilevamento della
+           parola JARVIS dopo la domanda.
+        */
+
+        if (
+            wakeMode &&
+            !busy
+        ) {
+
+            setTimeout(
+                startWakeWord,
+                500
+            );
+
+        }
+
+    };
+
+
+    mic.onclick = () => {
+
+        if (busy) return;
+
+        if (listening) {
+
+            recognition.stop();
+
+            return;
+        }
+
+        try {
+
+            recognition.start();
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    };
+
+
+    /* -------------------------------------------------
+       WAKE WORD
+       Riconosce "Jarvis"
+    ------------------------------------------------- */
+
+    wakeRecognition = new Recognition();
+
+    wakeRecognition.lang = "it-IT";
+
+    wakeRecognition.continuous = true;
+
+    wakeRecognition.interimResults = true;
+
+
+    wakeRecognition.onresult = event => {
+
+        if (busy || listening) return;
+
+
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
+
+            const text =
+                event.results[i][0]
+                    .transcript
+                    .toLowerCase()
+                    .trim();
+
+
+            /*
+               Controlliamo se nella frase
+               compare la parola JARVIS.
+            */
+
+            if (
+                text.includes("jarvis") ||
+                text.includes("jarvis,") ||
+                text.includes("jarvis.")
+            ) {
+
+                activateJarvis();
+
+                return;
+
+            }
+
+        }
+
+    };
+
+
+    wakeRecognition.onerror = event => {
+
+        console.log(
+            "Wake word:",
+            event.error
+        );
+
+        /*
+           Alcuni browser interrompono
+           automaticamente il riconoscimento.
+        */
+
+        if (
+            wakeMode &&
+            !busy &&
+            !listening
+        ) {
+
+            setTimeout(
+                startWakeWord,
+                1000
+            );
+
+        }
+
+    };
+
+
+    wakeRecognition.onend = () => {
+
+        if (
+            wakeMode &&
+            !busy &&
+            !listening
+        ) {
+
+            setTimeout(
+                startWakeWord,
+                500
+            );
+
+        }
+
+    };
+
+
+    /*
+       ATTIVAZIONE
+    */
+
+    function activateJarvis() {
+
+        if (busy || listening) return;
+
+
+        try {
+
+            wakeRecognition.stop();
+
+        } catch (e) {}
+
+
+        setState("listening");
+
+        input.placeholder =
+            "JARVIS ti ascolta...";
+
+        input.value = "";
+
+        /*
+           Piccola pausa per dare
+           l'effetto di attivazione.
+        */
+
+        setTimeout(() => {
+
+            try {
+
+                recognition.start();
+
+            } catch (error) {
+
+                console.log(error);
+
+            }
+
+        }, 250);
+
+    }
+
+
+    /*
+       AVVIA WAKE WORD
+    */
+
+    function startWakeWord() {
+
+        if (
+            !wakeMode ||
+            busy ||
+            listening
+        ) return;
+
+
+        try {
+
+            wakeRecognition.start();
+
+            console.log(
+                "JARVIS wake word attiva"
+            );
+
+        } catch (error) {
+
+            console.log(
+                "Wake word già attiva."
+            );
+
+        }
+
+    }
+
+
+    /*
+       Avvio iniziale.
+       
+       IMPORTANTE:
+       il browser potrebbe richiedere
+       una prima interazione dell'utente
+       per concedere il microfono.
+    */
+
+    mic.addEventListener(
+        "click",
+        () => {
+
+            setTimeout(() => {
+
+                if (
+                    wakeMode &&
+                    !busy &&
+                    !listening
+                ) {
+
+                    startWakeWord();
+
+                }
+
+            }, 1000);
+
+        },
+        { once: true }
+    );
+
+
+} else {
+
+    mic.disabled = true;
+
+    mic.title =
+        "Il browser non supporta il riconoscimento vocale.";
 
 }
-
-input.value=text;
-
-if(
-event.results[event.results.length-1]
-.isFinal
-){
-
-setTimeout(()=>{
-
-if(input.value.trim()){
-sendMessage();
-}
-
-},250);
-
-}
-
-};
-
-
-recognition.onerror=event=>{
-
-console.log(
-"Speech recognition:",
-event.error
-);
-
-};
-
-
-recognition.onend=()=>{
-
-listening=false;
-
-mic.classList.remove("active");
-mic.textContent="🎙";
-
-input.placeholder=
-"Comunica con JARVIS...";
-
-if(state==="listening"){
-setState("idle");
-}
-
-};
-
-
-mic.onclick=()=>{
-
-if(busy)return;
-
-if(listening){
-
-recognition.stop();
-
-}else{
-
-try{
-recognition.start();
-}catch(e){
-console.log(e);
-}
-
-}
-
-};
-
-}else{
-
-mic.disabled=true;
-
-mic.title=
-"Il browser non supporta il riconoscimento vocale.";
-
-}
-
-
 /* SFERA */
 
 let width=innerWidth;

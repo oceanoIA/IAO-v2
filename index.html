@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>JARVIS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS HUD System</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -20,16 +15,23 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #000;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
+    background: #020813;
+    color: #00f0ff;
+    font-family: 'Consolas', 'Courier New', monospace;
 }
 
-/* =====================================================
-   RETE
-===================================================== */
+/* GRIGLIA DI SFONDO HUD */
+.bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image: 
+        radial-gradient(rgba(0, 240, 255, 0.08) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 0;
+    pointer-events: none;
+}
 
-#network {
+#hud {
     position: fixed;
     inset: 0;
     width: 100%;
@@ -37,1312 +39,352 @@ html, body {
     z-index: 1;
 }
 
-/* =====================================================
-   TITOLO
-===================================================== */
+/* CORNICI ED ELEMENTI TATTICI AI LATI */
+.hud-corner {
+    position: fixed;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(0, 240, 255, 0.5);
+    z-index: 5;
+    pointer-events: none;
+    text-transform: uppercase;
+}
 
+.top-left { top: 20px; left: 20px; border-left: 2px solid #00f0ff; padding-left: 8px; }
+.top-right { top: 20px; right: 20px; border-right: 2px solid #00f0ff; padding-right: 8px; text-align: right; }
+.bottom-left { bottom: 85px; left: 20px; }
+
+/* TITOLO E STATO */
 .title {
     position: fixed;
     top: 25px;
     left: 0;
     right: 0;
-
     text-align: center;
-
     z-index: 5;
-
-    font-size: 31px;
-    font-weight: 300;
-
-    letter-spacing: 12px;
-
-    color: #f4ffff;
-
-    text-shadow:
-        0 0 8px rgba(0,234,255,.9),
-        0 0 30px rgba(0,234,255,.3);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 14px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0,240,255,0.8), 0 0 30px rgba(0,240,255,0.4);
+    user-select: none;
 }
 
 .status {
-    margin-top: 8px;
-
-    font-size: 8px;
+    margin-top: 6px;
+    font-size: 9px;
     letter-spacing: 4px;
-
-    color: rgba(255,255,255,.4);
+    color: rgba(0,240,255,0.6);
 }
 
 .status b {
-    color: #00eaff;
-
-    text-shadow:
-        0 0 12px #00eaff;
+    color: #00f0ff;
+    text-shadow: 0 0 8px #00f0ff;
 }
 
-/* =====================================================
-   CHAT
-===================================================== */
-
+/* CHAT STILE TERMINALE TATTICO */
 #chat {
     position: fixed;
-
-    left: 15px;
-    right: 15px;
-
-    bottom: 90px;
-
-    max-height: 25vh;
-
+    left: 20px;
+    right: 20px;
+    bottom: 85px;
+    max-height: 30vh;
     overflow-y: auto;
-
     display: flex;
     flex-direction: column;
-
-    gap: 8px;
-
+    gap: 10px;
     z-index: 10;
+    scrollbar-width: none;
 }
 
 .message {
-    max-width: 82%;
-
-    padding: 11px 14px;
-
-    border-radius: 13px;
-
-    font-size: 14px;
-    line-height: 1.4;
-
-    backdrop-filter: blur(15px);
+    max-width: 75%;
+    padding: 10px 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    backdrop-filter: blur(8px);
+    word-break: break-word;
 }
 
 .user {
     align-self: flex-end;
-
-    background:
-        rgba(0,220,255,.055);
-
-    border:
-        1px solid
-        rgba(0,220,255,.25);
+    background: rgba(0, 240, 255, 0.08);
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    border-radius: 10px 0px 10px 10px;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
 }
 
 .jarvis {
     align-self: flex-start;
-
-    background:
-        rgba(255,255,255,.035);
-
-    border:
-        1px solid
-        rgba(0,220,255,.13);
+    background: rgba(2, 20, 40, 0.6);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    border-left: 3px solid #00f0ff;
+    border-radius: 0px 10px 10px 10px;
+    color: #d0f8ff;
 }
 
-/* =====================================================
-   INPUT
-===================================================== */
-
+/* CAMPO DI INPUT */
 .input-area {
     position: fixed;
-
-    left: 15px;
-    right: 15px;
-
-    bottom: 16px;
-
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
     display: flex;
-
-    gap: 9px;
-
+    gap: 10px;
     z-index: 20;
 }
 
 input {
     flex: 1;
-
-    height: 52px;
-
-    padding: 0 18px;
-
-    border-radius: 28px;
-
+    height: 48px;
+    padding: 0 20px;
+    border-radius: 4px;
     outline: none;
-
-    border:
-        1px solid
-        rgba(0,234,255,.25);
-
-    background:
-        rgba(0,0,0,.85);
-
-    color: white;
-
-    font-size: 15px;
-
-    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    background: rgba(2, 12, 27, 0.85);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: 1px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
 }
 
 input:focus {
-    border-color:
-        rgba(0,234,255,.7);
-
-    box-shadow:
-        0 0 25px
-        rgba(0,234,255,.12);
+    border-color: #00f0ff;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
 }
 
 button {
-    width: 52px;
-    height: 52px;
-
-    border: none;
-    border-radius: 50%;
-
-    background: #00eaff;
-
-    color: #001015;
-
-    font-size: 19px;
-
+    width: 60px;
+    height: 48px;
+    border: 1px solid #00f0ff;
+    border-radius: 4px;
+    background: rgba(0, 240, 255, 0.15);
+    color: #00f0ff;
+    font-size: 16px;
     cursor: pointer;
-
-    box-shadow:
-        0 0 18px
-        rgba(0,234,255,.6),
-
-        0 0 45px
-        rgba(0,234,255,.18);
+    transition: all 0.2s;
 }
 
-button:active {
-    transform: scale(.9);
+button:hover:not(:disabled) {
+    background: #00f0ff;
+    color: #020813;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
 }
 
-@media (max-width: 500px) {
-
-    .title {
-        font-size: 28px;
-        letter-spacing: 9px;
-    }
+button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
-
 </style>
 </head>
 
-
 <body>
 
+<div class="bg-grid"></div>
 
-<!-- =====================================================
-     TITOLO
-===================================================== -->
+<!-- ELEMENTI GRAFICI CORNICE HUD -->
+<div class="hud-corner top-left">
+    SYS.DIAG // V3.08<br>
+    CORE: ONLINE
+</div>
+<div class="hud-corner top-right">
+    LOC: STARK TOWER<br>
+    SEC: ENCRYPTED
+</div>
+<div class="hud-corner bottom-left">
+    AUDIO: ACTIVE<br>
+    FREQ: 432.00 MHz
+</div>
 
 <div class="title">
-
-    JARVIS
-
+    J.A.R.V.I.S.
     <div class="status">
-
-        <b>●</b>
-        NEURAL NETWORK ONLINE
-
+        <b>●</b> MARK VII PROTOCOL ACTIVE
     </div>
-
 </div>
 
-
-<!-- =====================================================
-     RETE NEURALE
-===================================================== -->
-
-<canvas id="network"></canvas>
-
-
-<!-- =====================================================
-     CHAT
-===================================================== -->
+<canvas id="hud"></canvas>
 
 <div id="chat">
-
     <div class="message jarvis">
-
-        Sistema online.
-        Sono JARVIS.
-
+        Al tuo servizio, Signore. Sistemi operativi.
     </div>
-
 </div>
-
-
-<!-- =====================================================
-     INPUT
-===================================================== -->
 
 <div class="input-area">
-
-    <input
-        id="input"
-        type="text"
-        placeholder="Parla con JARVIS..."
-    >
-
-    <button id="send">
-        ➤
-    </button>
-
+    <input id="input" type="text" placeholder="Inserisci un comando..." autocomplete="off">
+    <button id="send">EXEC</button>
 </div>
 
-
 <script>
+const canvas = document.getElementById("hud");
+const ctx = canvas.getContext("2d");
 
-/* =====================================================
-   CANVAS
-===================================================== */
-
-const canvas =
-    document.getElementById("network");
-
-const ctx =
-    canvas.getContext("2d");
-
-let width;
-let height;
-let dpr;
-
-let centerX;
-let centerY;
-
-
-/* =====================================================
-   RESIZE
-===================================================== */
-
-function resize() {
-
-    width =
-        window.innerWidth;
-
-    height =
-        window.innerHeight;
-
-    dpr =
-        Math.min(
-            window.devicePixelRatio || 1,
-            2
-        );
-
-    canvas.width =
-        width * dpr;
-
-    canvas.height =
-        height * dpr;
-
-    canvas.style.width =
-        width + "px";
-
-    canvas.style.height =
-        height + "px";
-
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
-
-    centerX =
-        width / 2;
-
-    centerY =
-        height / 2 - 20;
-
-    createNetwork();
-}
-
-window.addEventListener(
-    "resize",
-    resize
-);
-
-
-/* =====================================================
-   NODI
-===================================================== */
-
-/*
-   Prima erano 145.
-
-   Ora sono molti meno,
-   per dare un aspetto più pulito.
-*/
-
-const NODE_COUNT = 65;
-
-const nodes = [];
-
-
-function createNetwork() {
-
-    nodes.length = 0;
-
-    const radiusX =
-        Math.min(
-            width * .35,
-            330
-        );
-
-    const radiusY =
-        Math.min(
-            height * .30,
-            240
-        );
-
-
-    for (
-        let i = 0;
-        i < NODE_COUNT;
-        i++
-    ) {
-
-        const angle =
-            Math.random()
-            *
-            Math.PI
-            *
-            2;
-
-
-        const distance =
-            Math.pow(
-                Math.random(),
-                .60
-            );
-
-
-        const baseX =
-            centerX
-            +
-            Math.cos(angle)
-            *
-            radiusX
-            *
-            distance;
-
-
-        const baseY =
-            centerY
-            +
-            Math.sin(angle)
-            *
-            radiusY
-            *
-            distance;
-
-
-        nodes.push({
-
-            x: baseX,
-            y: baseY,
-
-            baseX: baseX,
-            baseY: baseY,
-
-            angle:
-                Math.random()
-                *
-                Math.PI
-                *
-                2,
-
-            radius:
-                Math.random()
-                * 22
-                + 6,
-
-            speed:
-                Math.random()
-                * .0008
-                + .0003,
-
-            phase:
-                Math.random()
-                *
-                Math.PI
-                *
-                2,
-
-            size:
-                Math.random()
-                * 2.1
-                + 1.5,
-
-            energy:
-                Math.random()
-
-        });
-    }
-}
-
-
-/* =====================================================
-   IMPULSI
-===================================================== */
-
-const pulses = [];
-
+let width, height, dpr, centerX, centerY;
+let rotationAngle = 0;
 let thinking = false;
 
+function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-function createPulse() {
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
 
-    if (
-        nodes.length < 2
-    ) {
-        return;
-    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-
-    const start =
-        Math.floor(
-            Math.random()
-            *
-            nodes.length
-        );
-
-
-    let end =
-        Math.floor(
-            Math.random()
-            *
-            nodes.length
-        );
-
-
-    while (
-        start === end
-    ) {
-
-        end =
-            Math.floor(
-                Math.random()
-                *
-                nodes.length
-            );
-    }
-
-
-    pulses.push({
-
-        start:
-            nodes[start],
-
-        end:
-            nodes[end],
-
-        progress:
-            0,
-
-        speed:
-            thinking
-            ? .025
-            : .011
-    });
+    centerX = width / 2;
+    centerY = height / 2 - 20;
 }
 
+window.addEventListener("resize", resize);
 
-/* =====================================================
-   GENERAZIONE IMPULSI
-===================================================== */
-
-setInterval(
-    () => {
-
-        const amount =
-            thinking
-            ? 4
-            : 1;
-
-
-        for (
-            let i = 0;
-            i < amount;
-            i++
-        ) {
-
-            createPulse();
-        }
-
-    },
-    210
-);
-
-
-/* =====================================================
-   ANELLI
-===================================================== */
-
-let ringRotation = 0;
-
-
-function drawRing(
-    radius,
-    speed,
-    opacity,
-    vertical
-) {
-
-    ringRotation += speed;
-
-
+/* DISEGNO ANELLO SEGMENTATO (ARC REACTOR STYLE) */
+function drawSegmentedRing(radius, segments, widthAngle, speed, color, lineWidth) {
     ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(rotationAngle * speed);
 
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
 
-    ctx.translate(
-        centerX,
-        centerY
-    );
-
-
-    ctx.rotate(
-        ringRotation
-    );
-
-
-    ctx.scale(
-        1,
-        vertical
-    );
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        0,
-        radius,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.strokeStyle =
-        `rgba(
-            0,
-            220,
-            255,
-            ${opacity}
-        )`;
-
-
-    ctx.lineWidth =
-        .7;
-
-
-    ctx.stroke();
-
-
+    const step = (Math.PI * 2) / segments;
+    for (let i = 0; i < segments; i++) {
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, i * step, i * step + widthAngle);
+        ctx.stroke();
+    }
     ctx.restore();
 }
 
-
-/* =====================================================
-   ANIMAZIONE PRINCIPALE
-===================================================== */
-
-function animate() {
-
-    requestAnimationFrame(
-        animate
-    );
-
-
-    const time =
-        performance.now();
-
-
-    /*
-       Sfondo.
-    */
-
-    ctx.fillStyle =
-        "rgba(0,0,0,.20)";
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    /* =================================================
-       MOVIMENTO DEI NODI
-    ================================================= */
-
-    nodes.forEach(
-        node => {
-
-            /*
-               Movimento orbitale.
-            */
-
-            node.angle +=
-                node.speed *
-                (
-                    thinking
-                    ? 2.5
-                    : 1
-                );
-
-
-            /*
-               Movimento principale.
-            */
-
-            node.x =
-                node.baseX
-                +
-                Math.cos(
-                    node.angle +
-                    node.phase
-                )
-                *
-                node.radius;
-
-
-            node.y =
-                node.baseY
-                +
-                Math.sin(
-                    node.angle +
-                    node.phase
-                )
-                *
-                node.radius;
-
-
-            /*
-               Movimento secondario.
-
-               Questo rende la rete
-               più organica.
-            */
-
-            node.x +=
-                Math.sin(
-                    time * .001 +
-                    node.phase
-                )
-                *
-                (
-                    thinking
-                    ? 12
-                    : 6
-                );
-
-
-            node.y +=
-                Math.cos(
-                    time * .0013 +
-                    node.phase
-                )
-                *
-                (
-                    thinking
-                    ? 12
-                    : 6
-                );
-
-
-            /*
-               Pulsazione.
-            */
-
-            node.energy =
-                (
-                    Math.sin(
-                        time * .0025 +
-                        node.phase
-                    )
-                    +
-                    1
-                )
-                / 2;
-        }
-    );
-
-
-    /* =================================================
-       CONNESSIONI CIANO
-    ================================================= */
-
-    for (
-        let i = 0;
-        i < nodes.length;
-        i++
-    ) {
-
-        for (
-            let j = i + 1;
-            j < nodes.length;
-            j++
-        ) {
-
-            const a =
-                nodes[i];
-
-            const b =
-                nodes[j];
-
-
-            const dx =
-                a.x - b.x;
-
-            const dy =
-                a.y - b.y;
-
-
-            const distance =
-                Math.sqrt(
-                    dx * dx +
-                    dy * dy
-                );
-
-
-            if (
-                distance < 125
-            ) {
-
-                const opacity =
-                    (
-                        1 -
-                        distance / 125
-                    )
-                    *
-                    (
-                        thinking
-                        ? .42
-                        : .22
-                    );
-
-
-                ctx.beginPath();
-
-
-                ctx.moveTo(
-                    a.x,
-                    a.y
-                );
-
-
-                ctx.lineTo(
-                    b.x,
-                    b.y
-                );
-
-
-                ctx.strokeStyle =
-                    `rgba(
-                        0,
-                        225,
-                        255,
-                        ${opacity}
-                    )`;
-
-
-                ctx.lineWidth =
-                    thinking
-                    ? .9
-                    : .5;
-
-
-                ctx.stroke();
-            }
-        }
-    }
-
-
-    /* =================================================
-       IMPULSI CIANO
-    ================================================= */
-
-    for (
-        let i =
-            pulses.length - 1;
-
-        i >= 0;
-
-        i--
-    ) {
-
-        const pulse =
-            pulses[i];
-
-
-        pulse.progress +=
-            pulse.speed;
-
-
-        if (
-            pulse.progress >= 1
-        ) {
-
-            pulses.splice(
-                i,
-                1
-            );
-
-            continue;
-        }
-
-
-        const x =
-            pulse.start.x
-            +
-            (
-                pulse.end.x -
-                pulse.start.x
-            )
-            *
-            pulse.progress;
-
-
-        const y =
-            pulse.start.y
-            +
-            (
-                pulse.end.y -
-                pulse.start.y
-            )
-            *
-            pulse.progress;
-
-
-        /*
-           Grande alone ciano.
-        */
-
-        const glow =
-            ctx.createRadialGradient(
-                x,
-                y,
-                0,
-                x,
-                y,
-                thinking
-                ? 22
-                : 15
-            );
-
-
-        glow.addColorStop(
-            0,
-            "rgba(255,255,255,.95)"
-        );
-
-
-        glow.addColorStop(
-            .18,
-            "rgba(0,240,255,.95)"
-        );
-
-
-        glow.addColorStop(
-            1,
-            "rgba(0,200,255,0)"
-        );
-
-
-        ctx.fillStyle =
-            glow;
-
+/* DISEGNO TACCHE DIREZIONALI */
+function drawTicks(radius, count, length, color) {
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(-rotationAngle * 0.2);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+
+    for (let i = 0; i < count; i++) {
+        const angle = (i * Math.PI * 2) / count;
+        const x1 = Math.cos(angle) * radius;
+        const y1 = Math.sin(angle) * radius;
+        const x2 = Math.cos(angle) * (radius - length);
+        const y2 = Math.sin(angle) * (radius - length);
 
         ctx.beginPath();
-
-
-        ctx.arc(
-            x,
-            y,
-            thinking
-            ? 22
-            : 15,
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.fillStyle =
-            "#ffffff";
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            x,
-            y,
-            thinking
-            ? 3
-            : 2,
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fill();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
     }
-
-
-    /* =================================================
-       NODI GIALLI
-    ================================================= */
-
-    nodes.forEach(
-        node => {
-
-            const energy =
-                node.energy;
-
-
-            const size =
-                node.size
-                +
-                energy *
-                (
-                    thinking
-                    ? 2.5
-                    : 1
-                );
-
-
-            /*
-               Glow giallo/oro.
-            */
-
-            const glow =
-                ctx.createRadialGradient(
-                    node.x,
-                    node.y,
-                    0,
-                    node.x,
-                    node.y,
-                    size * 10
-                );
-
-
-            glow.addColorStop(
-                0,
-                "rgba(255,255,255,.98)"
-            );
-
-
-            glow.addColorStop(
-                .15,
-                "rgba(255,230,80,.95)"
-            );
-
-
-            glow.addColorStop(
-                .40,
-                "rgba(255,190,0,.55)"
-            );
-
-
-            glow.addColorStop(
-                1,
-                "rgba(255,150,0,0)"
-            );
-
-
-            ctx.fillStyle =
-                glow;
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                node.x,
-                node.y,
-                size * 10,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fill();
-
-
-            /*
-               Centro del nodo.
-            */
-
-            ctx.fillStyle =
-                "#ffe66b";
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                node.x,
-                node.y,
-                size,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fill();
-        }
-    );
-
-
-    /* =================================================
-       ANELLI LENTI
-    ================================================= */
-
-    const speed =
-        thinking
-        ? 1.25
-        : 1;
-
-
-    const smallest =
-        Math.min(
-            width,
-            height
-        );
-
-
-    drawRing(
-        smallest * .27,
-        .00008 * speed,
-        .18,
-        .30
-    );
-
-
-    drawRing(
-        smallest * .34,
-        -.000055 * speed,
-        .12,
-        .25
-    );
-
-
-    drawRing(
-        smallest * .41,
-        .000035 * speed,
-        .07,
-        .20
-    );
+    ctx.restore();
 }
 
+function animate() {
+    requestAnimationFrame(animate);
+    
+    const speedMult = thinking ? 2.5 : 1.0;
+    rotationAngle += 0.005 * speedMult;
 
+    ctx.clearRect(0, 0, width, height);
+
+    const baseRadius = Math.min(width, height) * 0.22;
+
+    // Glow Centrale (Core Glow)
+    const glowRadius = thinking ? baseRadius * 0.8 : baseRadius * 0.5;
+    const coreGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowRadius);
+    coreGlow.addColorStop(0, "rgba(255, 255, 255, 0.9)");
+    coreGlow.addColorStop(0.3, "rgba(0, 240, 255, 0.5)");
+    coreGlow.addColorStop(1, "rgba(0, 240, 255, 0)");
+
+    ctx.fillStyle = coreGlow;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Anelli Concentrici Esterni
+    drawSegmentedRing(baseRadius * 1.4, 12, 0.2, 0.5, "rgba(0, 240, 255, 0.3)", 1);
+    drawSegmentedRing(baseRadius * 1.25, 4, Math.PI / 3, -0.8, "rgba(0, 240, 255, 0.6)", 2);
+    
+    // Tacche Tattiche
+    drawTicks(baseRadius * 1.1, 36, 8, "rgba(0, 240, 255, 0.4)");
+
+    // Anello Centrale Reattivo
+    const innerColor = thinking ? "#ffffff" : "rgba(0, 240, 255, 0.8)";
+    drawSegmentedRing(baseRadius * 0.85, 8, 0.5, 1.5, innerColor, 3);
+    drawSegmentedRing(baseRadius * 0.6, 3, Math.PI / 2, -1.2, "rgba(0, 240, 255, 0.7)", 1.5);
+    
+    // Cerchio Esterno Sottile
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, baseRadius * 1.5, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(0, 240, 255, 0.15)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+}
+
+resize();
 animate();
 
+/* GESTIONE CHAT */
+const input = document.getElementById("input");
+const send = document.getElementById("send");
+const chat = document.getElementById("chat");
 
-/* =====================================================
-   CHAT
-===================================================== */
-
-const input =
-    document.getElementById(
-        "input"
-    );
-
-
-const send =
-    document.getElementById(
-        "send"
-    );
-
-
-const chat =
-    document.getElementById(
-        "chat"
-    );
-
-
-send.addEventListener(
-    "click",
-    sendMessage
-);
-
-
-input.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            sendMessage();
-        }
-    }
-);
-
-
-/* =====================================================
-   INVIO A JARVIS
-===================================================== */
+send.addEventListener("click", sendMessage);
+input.addEventListener("keydown", event => {
+    if (event.key === "Enter") sendMessage();
+});
 
 async function sendMessage() {
+    const text = input.value.trim();
+    if (!text || input.disabled) return;
 
-    const text =
-        input.value.trim();
+    input.disabled = true;
+    send.disabled = true;
 
-
-    if (
-        !text
-    ) {
-        return;
-    }
-
-
-    /*
-       Messaggio utente.
-    */
-
-    const userMessage =
-        document.createElement(
-            "div"
-        );
-
-
-    userMessage.className =
-        "message user";
-
-
-    userMessage.textContent =
-        text;
-
-
-    chat.appendChild(
-        userMessage
-    );
-
+    const userMsg = document.createElement("div");
+    userMsg.className = "message user";
+    userMsg.textContent = text;
+    chat.appendChild(userMsg);
 
     input.value = "";
 
-
-    /*
-       Messaggio JARVIS.
-    */
-
-    const jarvisMessage =
-        document.createElement(
-            "div"
-        );
-
-
-    jarvisMessage.className =
-        "message jarvis";
-
-
-    jarvisMessage.textContent =
-        "Elaborazione...";
-
-
-    chat.appendChild(
-        jarvisMessage
-    );
-
-
-    /*
-       ACCENDIAMO LA RETE.
-    */
+    const jarvisMsg = document.createElement("div");
+    jarvisMsg.className = "message jarvis";
+    jarvisMsg.textContent = "Elaborazione dati in corso...";
+    chat.appendChild(jarvisMsg);
 
     thinking = true;
-
-
-    chat.scrollTop =
-        chat.scrollHeight;
-
+    chat.scrollTop = chat.scrollHeight;
 
     try {
+        const response = await fetch("https://iao-ai-v3.oceano-masoud.workers.dev/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text })
+        });
 
-        const response =
-            await fetch(
+        if (!response.ok) throw new Error("Errore API");
 
-                "https://iao-ai-v3.oceano-masoud.workers.dev/",
-
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            message:
-                                text
-
-                        })
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        jarvisMessage.textContent =
-            data.reply
-            ||
-            "Non ho ricevuto una risposta.";
-
-
+        const data = await response.json();
+        jarvisMsg.textContent = data.reply || "Nessun dato ricevuto.";
+    } catch (error) {
+        jarvisMsg.textContent = "Sistemi offline. Impossibile stabilire una connessione.";
+    } finally {
+        setTimeout(() => { thinking = false; }, 400);
+        input.disabled = false;
+        send.disabled = false;
+        input.focus();
+        chat.scrollTop = chat.scrollHeight;
     }
-
-    catch (
-        error
-    ) {
-
-        console.error(
-            error
-        );
-
-
-        jarvisMessage.textContent =
-            "Errore di collegamento.";
-    }
-
-
-    /*
-       Lasciamo l'animazione
-       intensa ancora un attimo.
-    */
-
-    setTimeout(
-        () => {
-
-            thinking = false;
-
-        },
-        900
-    );
-
-
-    chat.scrollTop =
-        chat.scrollHeight;
 }
-
 </script>
 
 </body>

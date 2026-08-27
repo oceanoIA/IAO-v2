@@ -3,68 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>JARVIS</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #000;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #06151a 0%,
+            #020708 35%,
+            #000 75%
+        );
+
     color: white;
     font-family: Arial, sans-serif;
 }
 
-#scene {
+canvas {
     position: fixed;
     inset: 0;
+
     width: 100%;
     height: 100%;
+
+    z-index: 1;
 }
 
 /* =========================
-   HUD
+   JARVIS
 ========================= */
 
-.hud {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10;
-}
-
 .title {
-    position: absolute;
+    position: fixed;
+
     top: 25px;
-    width: 100%;
+    left: 0;
+    right: 0;
+
     text-align: center;
 
-    font-size: 32px;
+    z-index: 5;
+
+    font-size: 31px;
     font-weight: 300;
+
     letter-spacing: 12px;
 
-    color: #eaffff;
+    color: #e9fdff;
 
     text-shadow:
-        0 0 10px rgba(0,234,255,.8),
-        0 0 35px rgba(0,234,255,.25);
+        0 0 8px rgba(0,234,255,.8),
+        0 0 30px rgba(0,234,255,.35);
 }
 
 .status {
+
     margin-top: 8px;
 
     font-size: 8px;
+
     letter-spacing: 4px;
 
-    color: rgba(255,255,255,.45);
+    color: rgba(255,255,255,.42);
 }
 
-.status span {
+.status b {
+
     color: #00eaff;
 
     text-shadow:
@@ -76,91 +92,103 @@ html, body {
 ========================= */
 
 #chat {
+
     position: fixed;
 
-    left: 14px;
-    right: 14px;
-    bottom: 90px;
+    left: 15px;
+    right: 15px;
 
-    max-height: 27vh;
+    bottom: 88px;
+
+    max-height: 25vh;
 
     overflow-y: auto;
 
     display: flex;
-    flex-direction: column;
-    gap: 7px;
 
-    z-index: 20;
+    flex-direction: column;
+
+    gap: 8px;
+
+    z-index: 10;
 }
 
 .message {
+
     max-width: 82%;
 
-    padding: 10px 14px;
+    padding: 11px 14px;
 
     border-radius: 13px;
 
     font-size: 14px;
+
     line-height: 1.4;
 
     backdrop-filter: blur(15px);
 }
 
 .user {
+
     align-self: flex-end;
 
-    background:
-        rgba(0,220,255,.06);
-
     border:
-        1px solid rgba(0,220,255,.25);
+        1px solid rgba(0,234,255,.25);
+
+    background:
+        rgba(0,234,255,.055);
 }
 
 .jarvis {
+
     align-self: flex-start;
+
+    border:
+        1px solid rgba(0,234,255,.13);
 
     background:
         rgba(255,255,255,.035);
-
-    border:
-        1px solid rgba(0,220,255,.12);
 }
 
 /* =========================
    INPUT
 ========================= */
 
-.input-area {
+.input {
+
     position: fixed;
 
-    left: 14px;
-    right: 14px;
+    left: 15px;
+    right: 15px;
+
     bottom: 16px;
 
     display: flex;
+
     gap: 9px;
 
-    z-index: 30;
+    z-index: 20;
 }
 
 input {
+
     flex: 1;
 
     height: 52px;
 
+    border-radius: 28px;
+
     padding: 0 18px;
 
-    border-radius: 28px;
+    outline: none;
 
     border:
         1px solid rgba(0,234,255,.25);
 
     background:
-        rgba(0,0,0,.9);
+        rgba(0,0,0,.8);
 
     color: white;
-
-    outline: none;
 
     font-size: 15px;
 
@@ -168,6 +196,7 @@ input {
 }
 
 input:focus {
+
     border-color:
         rgba(0,234,255,.7);
 
@@ -176,56 +205,49 @@ input:focus {
 }
 
 button {
+
     width: 52px;
     height: 52px;
 
     border: none;
+
     border-radius: 50%;
 
     background: #00eaff;
 
-    color: #001015;
+    color: #001014;
 
     font-size: 19px;
 
     cursor: pointer;
 
     box-shadow:
-        0 0 15px rgba(0,234,255,.6),
-        0 0 40px rgba(0,234,255,.18);
+        0 0 18px rgba(0,234,255,.55),
+        0 0 45px rgba(0,234,255,.15);
 }
 
 button:active {
+
     transform: scale(.9);
 }
 
-@media (max-width: 500px) {
-
-    .title {
-        font-size: 28px;
-        letter-spacing: 9px;
-    }
-}
 </style>
 </head>
 
 <body>
 
-<canvas id="scene"></canvas>
+<div class="title">
 
-<div class="hud">
+    JARVIS
 
-    <div class="title">
-
-        JARVIS
-
-        <div class="status">
-            <span>●</span> NEURAL CORE ONLINE
-        </div>
-
+    <div class="status">
+        <b>●</b> NEURAL NETWORK ONLINE
     </div>
 
 </div>
+
+<canvas id="network"></canvas>
+
 
 <div id="chat">
 
@@ -235,864 +257,826 @@ button:active {
 
 </div>
 
-<div class="input-area">
+
+<div class="input">
 
     <input
         id="input"
         type="text"
         placeholder="Parla con JARVIS..."
-        onkeydown="if(event.key === 'Enter') sendMessage()"
     >
 
-    <button onclick="sendMessage()">➤</button>
+    <button id="send">
+        ➤
+    </button>
 
 </div>
 
-<script type="importmap">
-{
-    "imports": {
-        "three":
-        "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
-    }
-}
-</script>
 
-<script type="module">
-
-import * as THREE from "three";
+<script>
 
 /* =====================================================
-   SCENA
+   CONFIGURAZIONE
 ===================================================== */
 
 const canvas =
-    document.getElementById("scene");
+    document.getElementById("network");
 
-const scene =
-    new THREE.Scene();
+const ctx =
+    canvas.getContext("2d");
 
-const camera =
-    new THREE.PerspectiveCamera(
-        42,
-        innerWidth / innerHeight,
-        .1,
-        100
-    );
+let width;
+let height;
 
-camera.position.z = 6.5;
+let dpr;
 
-const renderer =
-    new THREE.WebGLRenderer({
-        canvas,
-        antialias: true,
-        alpha: true
-    });
-
-renderer.setPixelRatio(
-    Math.min(devicePixelRatio, 2)
-);
-
-renderer.setSize(
-    innerWidth,
-    innerHeight
-);
 
 /* =====================================================
-   LUCI
+   DIMENSIONI
 ===================================================== */
 
-scene.add(
-    new THREE.AmbientLight(
-        0x061820,
-        1.4
-    )
-);
+function resize() {
 
-const cyanLight =
-    new THREE.PointLight(
-        0x00eaff,
-        7,
-        9
-    );
-
-scene.add(cyanLight);
-
-const goldLight =
-    new THREE.PointLight(
-        0xffb400,
-        3,
-        5
-    );
-
-scene.add(goldLight);
-
-/* =====================================================
-   CERVELLO
-===================================================== */
-
-const brain =
-    new THREE.Group();
-
-scene.add(brain);
-
-/*
-    Dimensioni principali
-*/
-
-const WIDTH = 2.4;
-const HEIGHT = 1.65;
-const DEPTH = 1.35;
-
-/* =====================================================
-   FUNZIONE FORMA CERVELLO
-===================================================== */
-
-function brainPoint(t, side) {
-
-    /*
-       t = posizione lungo il cervello
-       side = emisfero
-    */
-
-    const x =
-        side *
-        (
-            .15 +
-            .95 *
-            Math.sin(t)
+    dpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
         );
 
-    const y =
-        .25 *
-        Math.cos(t * 2) +
-        .35;
+    width =
+        window.innerWidth;
 
-    const z =
-        .7 *
-        Math.sin(t * 1.5);
+    height =
+        window.innerHeight;
 
-    return new THREE.Vector3(
-        x,
-        y,
-        z
+    canvas.width =
+        width * dpr;
+
+    canvas.height =
+        height * dpr;
+
+    canvas.style.width =
+        width + "px";
+
+    canvas.style.height =
+        height + "px";
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
     );
 }
 
-/* =====================================================
-   FILAMENTI CEREBRALI
-===================================================== */
+resize();
 
-const filamentGroup =
-    new THREE.Group();
-
-brain.add(
-    filamentGroup
+window.addEventListener(
+    "resize",
+    resize
 );
 
-const filamentMaterials = [
-    new THREE.LineBasicMaterial({
-        color: 0x00eaff,
-        transparent: true,
-        opacity: .65,
-        blending: THREE.AdditiveBlending
-    }),
-
-    new THREE.LineBasicMaterial({
-        color: 0x52f3ff,
-        transparent: true,
-        opacity: .32,
-        blending: THREE.AdditiveBlending
-    })
-];
-
-/*
-    Creiamo molte "circonvoluzioni"
-*/
-
-for (
-    let row = 0;
-    row < 30;
-    row++
-) {
-
-    const points = [];
-
-    const side =
-        row % 2 === 0
-        ? 1
-        : -1;
-
-    const offset =
-        (row / 30) * Math.PI * 2;
-
-    for (
-        let i = 0;
-        i < 70;
-        i++
-    ) {
-
-        const t =
-            (i / 69) *
-            Math.PI *
-            2;
-
-        const x =
-            side *
-            (
-                .25 +
-                .72 *
-                Math.cos(t)
-            );
-
-        const y =
-            .15 +
-            .55 *
-            Math.sin(t * 2 + offset)
-            +
-            (
-                row / 30 -
-                .5
-            ) *
-            .45;
-
-        const z =
-            .62 *
-            Math.sin(
-                t +
-                offset
-            );
-
-        points.push(
-            new THREE.Vector3(
-                x,
-                y,
-                z
-            )
-        );
-    }
-
-    const geometry =
-        new THREE.BufferGeometry()
-            .setFromPoints(points);
-
-    const line =
-        new THREE.Line(
-            geometry,
-            filamentMaterials[
-                row % 2
-            ]
-        );
-
-    filamentGroup.add(
-        line
-    );
-}
 
 /* =====================================================
-   NODI NEURALI
+   RETE NEURALE
 ===================================================== */
 
 const nodes = [];
 
-for (
-    let i = 0;
-    i < 260;
-    i++
-) {
+const NODE_COUNT = 135;
 
-    const side =
-        Math.random() > .5
-        ? 1
-        : -1;
+let centerX;
+let centerY;
 
-    const x =
-        side *
-        (
-            .15 +
-            Math.random() *
-            .95
+
+/*
+    Creiamo una rete concentrata
+    al centro dello schermo.
+*/
+
+function createNetwork() {
+
+    nodes.length = 0;
+
+    centerX =
+        width / 2;
+
+    centerY =
+        height / 2 - 20;
+
+    const radiusX =
+        Math.min(
+            width * .32,
+            300
         );
 
-    const y =
-        (
-            Math.random() -
-            .5
-        ) *
-        1.25;
-
-    const z =
-        (
-            Math.random() -
-            .5
-        ) *
-        1.25;
-
-    /*
-       Eliminiamo alcuni punti
-       fuori dalla forma.
-    */
-
-    const normalized =
-        (
-            x * x
-        ) / 1.1 +
-        (
-            y * y
-        ) / 1.0 +
-        (
-            z * z
-        ) / 1.0;
-
-    if (
-        normalized <
-        1.35
-    ) {
-
-        nodes.push(
-            new THREE.Vector3(
-                x,
-                y,
-                z
-            )
+    const radiusY =
+        Math.min(
+            height * .30,
+            230
         );
-    }
-}
-
-/* =====================================================
-   PUNTI
-===================================================== */
-
-const nodePositions =
-    new Float32Array(
-        nodes.length * 3
-    );
-
-for (
-    let i = 0;
-    i < nodes.length;
-    i++
-) {
-
-    nodePositions[
-        i * 3
-    ] =
-        nodes[i].x;
-
-    nodePositions[
-        i * 3 + 1
-    ] =
-        nodes[i].y;
-
-    nodePositions[
-        i * 3 + 2
-    ] =
-        nodes[i].z;
-}
-
-const nodeGeometry =
-    new THREE.BufferGeometry();
-
-nodeGeometry.setAttribute(
-    "position",
-
-    new THREE.BufferAttribute(
-        nodePositions,
-        3
-    )
-);
-
-const nodeMaterial =
-    new THREE.PointsMaterial({
-
-        color: 0x9dfaff,
-
-        size: .025,
-
-        transparent: true,
-
-        opacity: .95,
-
-        blending:
-            THREE.AdditiveBlending
-    });
-
-const nodePoints =
-    new THREE.Points(
-        nodeGeometry,
-        nodeMaterial
-    );
-
-brain.add(
-    nodePoints
-);
-
-/* =====================================================
-   CONNESSIONI
-===================================================== */
-
-const connections = [];
-
-for (
-    let i = 0;
-    i < nodes.length;
-    i++
-) {
 
     for (
-        let j = i + 1;
-        j < nodes.length;
-        j++
+        let i = 0;
+        i < NODE_COUNT;
+        i++
     ) {
 
+        /*
+            Distribuzione casuale,
+            ma più densa verso il centro.
+        */
+
+        const angle =
+            Math.random() *
+            Math.PI * 2;
+
         const distance =
-            nodes[i].distanceTo(
-                nodes[j]
+            Math.pow(
+                Math.random(),
+                .55
             );
 
-        if (
-            distance <
-            .28
-        ) {
+        const x =
+            centerX +
+            Math.cos(angle) *
+            radiusX *
+            distance;
 
-            connections.push(
-                nodes[i].x,
-                nodes[i].y,
-                nodes[i].z,
+        const y =
+            centerY +
+            Math.sin(angle) *
+            radiusY *
+            distance;
 
-                nodes[j].x,
-                nodes[j].y,
-                nodes[j].z
-            );
-        }
+        nodes.push({
+
+            x: x,
+            y: y,
+
+            baseX: x,
+            baseY: y,
+
+            vx:
+                (Math.random() - .5)
+                * .08,
+
+            vy:
+                (Math.random() - .5)
+                * .08,
+
+            pulse:
+                Math.random() *
+                Math.PI * 2,
+
+            size:
+                Math.random() *
+                1.8 +
+                1.2,
+
+            energy:
+                Math.random()
+        });
     }
 }
 
-const connectionGeometry =
-    new THREE.BufferGeometry();
+createNetwork();
 
-connectionGeometry.setAttribute(
-    "position",
 
-    new THREE.Float32BufferAttribute(
-        connections,
-        3
+/* =====================================================
+   IMPULSI
+===================================================== */
+
+const pulses = [];
+
+let thinking = false;
+
+
+/*
+    Un impulso passa da un nodo
+    a un altro.
+*/
+
+function createPulse() {
+
+    if (
+        nodes.length < 2
     )
-);
+        return;
 
-const connectionMaterial =
-    new THREE.LineBasicMaterial({
+    const start =
+        Math.floor(
+            Math.random() *
+            nodes.length
+        );
 
-        color: 0x00dff5,
+    let end =
+        Math.floor(
+            Math.random() *
+            nodes.length
+        );
 
-        transparent: true,
+    let attempts = 0;
 
-        opacity: .13,
+    while (
+        start === end &&
+        attempts < 10
+    ) {
 
-        blending:
-            THREE.AdditiveBlending
+        end =
+            Math.floor(
+                Math.random() *
+                nodes.length
+            );
+
+        attempts++;
+    }
+
+    pulses.push({
+
+        start:
+            nodes[start],
+
+        end:
+            nodes[end],
+
+        progress: 0,
+
+        speed:
+            thinking
+            ? .018
+            : .009
     });
+}
 
-const connectionMesh =
-    new THREE.LineSegments(
-        connectionGeometry,
-        connectionMaterial
-    );
 
-brain.add(
-    connectionMesh
+/*
+    Impulsi continui.
+*/
+
+setInterval(
+    () => {
+
+        const amount =
+            thinking
+            ? 4
+            : 1;
+
+        for (
+            let i = 0;
+            i < amount;
+            i++
+        ) {
+
+            createPulse();
+        }
+
+    },
+    220
 );
+
 
 /* =====================================================
-   DIVISIONE TRA EMISFERI
+   DISEGNO
 ===================================================== */
 
-const divisionGeometry =
-    new THREE.BoxGeometry(
-        .025,
-        1.3,
-        1.1
+function draw() {
+
+    requestAnimationFrame(
+        draw
     );
 
-const divisionMaterial =
-    new THREE.MeshBasicMaterial({
-        color: 0x00eaff,
-        transparent: true,
-        opacity: .15,
-        blending: THREE.AdditiveBlending
-    });
+    /*
+        Sfondo leggermente trasparente.
+        Questo crea una piccola scia
+        cinematografica.
+    */
 
-const division =
-    new THREE.Mesh(
-        divisionGeometry,
-        divisionMaterial
+    ctx.fillStyle =
+        "rgba(0,0,0,.18)";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
     );
 
-brain.add(
-    division
-);
 
-/* =====================================================
-   NUCLEO
-===================================================== */
+    const time =
+        performance.now();
 
-const coreGeometry =
-    new THREE.SphereGeometry(
-        .20,
-        32,
-        32
+
+    /* ================================================
+       MOVIMENTO NODI
+    ================================================ */
+
+    nodes.forEach(
+        node => {
+
+            node.x =
+                node.baseX +
+                Math.sin(
+                    time * .0004 +
+                    node.pulse
+                ) * 5;
+
+            node.y =
+                node.baseY +
+                Math.cos(
+                    time * .00035 +
+                    node.pulse
+                ) * 5;
+
+            /*
+                Energia che pulsa.
+            */
+
+            node.energy =
+                (
+                    Math.sin(
+                        time * .002 +
+                        node.pulse
+                    ) + 1
+                ) / 2;
+        }
     );
 
-const coreMaterial =
-    new THREE.MeshBasicMaterial({
-        color: 0xffffff
-    });
 
-const coreLight =
-    new THREE.Mesh(
-        coreGeometry,
-        coreMaterial
+    /* ================================================
+       CONNESSIONI
+    ================================================ */
+
+    for (
+        let i = 0;
+        i < nodes.length;
+        i++
+    ) {
+
+        for (
+            let j = i + 1;
+            j < nodes.length;
+            j++
+        ) {
+
+            const a =
+                nodes[i];
+
+            const b =
+                nodes[j];
+
+            const dx =
+                a.x - b.x;
+
+            const dy =
+                a.y - b.y;
+
+            const distance =
+                Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                );
+
+            /*
+                Solo i nodi vicini
+                vengono collegati.
+            */
+
+            if (
+                distance < 105
+            ) {
+
+                const opacity =
+                    (
+                        1 -
+                        distance / 105
+                    ) *
+                    (
+                        thinking
+                        ? .32
+                        : .20
+                    );
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    a.x,
+                    a.y
+                );
+
+                ctx.lineTo(
+                    b.x,
+                    b.y
+                );
+
+                ctx.strokeStyle =
+                    `rgba(
+                        0,
+                        225,
+                        255,
+                        ${opacity}
+                    )`;
+
+                ctx.lineWidth =
+                    thinking
+                    ? .75
+                    : .45;
+
+                ctx.stroke();
+            }
+        }
+    }
+
+
+    /* ================================================
+       IMPULSI
+    ================================================ */
+
+    for (
+        let i = pulses.length - 1;
+        i >= 0;
+        i--
+    ) {
+
+        const pulse =
+            pulses[i];
+
+        pulse.progress +=
+            pulse.speed;
+
+        if (
+            pulse.progress >= 1
+        ) {
+
+            pulses.splice(
+                i,
+                1
+            );
+
+            continue;
+        }
+
+        const x =
+            pulse.start.x +
+            (
+                pulse.end.x -
+                pulse.start.x
+            ) *
+            pulse.progress;
+
+        const y =
+            pulse.start.y +
+            (
+                pulse.end.y -
+                pulse.start.y
+            ) *
+            pulse.progress;
+
+
+        /*
+            Alone luminoso
+        */
+
+        const glow =
+            ctx.createRadialGradient(
+                x,
+                y,
+                0,
+                x,
+                y,
+                thinking
+                ? 18
+                : 12
+            );
+
+        glow.addColorStop(
+            0,
+            "rgba(255,255,255,.95)"
+        );
+
+        glow.addColorStop(
+            .2,
+            "rgba(0,240,255,.9)"
+        );
+
+        glow.addColorStop(
+            1,
+            "rgba(0,200,255,0)"
+        );
+
+        ctx.fillStyle =
+            glow;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            thinking
+            ? 18
+            : 12,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+
+        /*
+            Punto centrale
+        */
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            thinking
+            ? 2.8
+            : 2,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+
+
+    /* ================================================
+       NODI
+    ================================================ */
+
+    nodes.forEach(
+        node => {
+
+            const size =
+                node.size +
+                node.energy *
+                (
+                    thinking
+                    ? 2
+                    : .8
+                );
+
+            const glow =
+                ctx.createRadialGradient(
+                    node.x,
+                    node.y,
+                    0,
+                    node.x,
+                    node.y,
+                    size * 7
+                );
+
+            glow.addColorStop(
+                0,
+                "rgba(255,255,255,.9)"
+            );
+
+            glow.addColorStop(
+                .15,
+                "rgba(0,235,255,.8)"
+            );
+
+            glow.addColorStop(
+                1,
+                "rgba(0,200,255,0)"
+            );
+
+            ctx.fillStyle =
+                glow;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                node.x,
+                node.y,
+                size * 7,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            ctx.fillStyle =
+                "#bfffff";
+
+            ctx.beginPath();
+
+            ctx.arc(
+                node.x,
+                node.y,
+                size,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+        }
     );
 
-brain.add(
-    coreLight
-);
+
+    /* ================================================
+       ANELLI ESTERNI
+    ================================================ */
+
+    drawRing(
+        1,
+        0.00018
+    );
+
+    drawRing(
+        2,
+        -0.00012
+    );
+
+    drawRing(
+        3,
+        0.00008
+    );
+}
+
 
 /* =====================================================
    ANELLI
 ===================================================== */
 
-const rings = [];
+let ringRotation = 0;
 
-function createRing(
-    radius,
-    rotation,
+function drawRing(
+    index,
     speed
 ) {
 
-    const geometry =
-        new THREE.TorusGeometry(
-            radius,
-            .004,
-            8,
-            260
-        );
-
-    const material =
-        new THREE.MeshBasicMaterial({
-
-            color: 0x00eaff,
-
-            transparent: true,
-
-            opacity: .28,
-
-            blending:
-                THREE.AdditiveBlending
-        });
-
-    const ring =
-        new THREE.Mesh(
-            geometry,
-            material
-        );
-
-    ring.rotation.set(
-        rotation.x,
-        rotation.y,
-        rotation.z
-    );
-
-    ring.userData.speed =
+    ringRotation +=
         speed;
 
-    brain.add(
-        ring
-    );
-
-    rings.push(
-        ring
-    );
-}
-
-createRing(
-    1.45,
-    {x: .9, y: .2, z: .2},
-    .00035
-);
-
-createRing(
-    1.65,
-    {x: 1.3, y: -.4, z: .8},
-    -.00025
-);
-
-createRing(
-    1.85,
-    {x: .3, y: 1.1, z: -.5},
-    .00018
-);
-
-/* =====================================================
-   PARTICELLE
-===================================================== */
-
-const particleCount = 300;
-
-const particlePositions =
-    new Float32Array(
-        particleCount * 3
-    );
-
-for (
-    let i = 0;
-    i < particleCount;
-    i++
-) {
-
     const radius =
-        1.4 +
-        Math.random() * 2.5;
-
-    const angle =
-        Math.random() *
-        Math.PI * 2;
-
-    particlePositions[
-        i * 3
-    ] =
-        Math.cos(angle) *
-        radius;
-
-    particlePositions[
-        i * 3 + 1
-    ] =
+        Math.min(
+            width,
+            height
+        ) *
         (
-            Math.random() -
-            .5
-        ) * 2.7;
-
-    particlePositions[
-        i * 3 + 2
-    ] =
-        Math.sin(angle) *
-        radius;
-}
-
-const particleGeometry =
-    new THREE.BufferGeometry();
-
-particleGeometry.setAttribute(
-    "position",
-
-    new THREE.BufferAttribute(
-        particlePositions,
-        3
-    )
-);
-
-const particleMaterial =
-    new THREE.PointsMaterial({
-
-        color: 0x42eaff,
-
-        size: .012,
-
-        transparent: true,
-
-        opacity: .25,
-
-        blending:
-            THREE.AdditiveBlending
-    });
-
-const particles =
-    new THREE.Points(
-        particleGeometry,
-        particleMaterial
-    );
-
-brain.add(
-    particles
-);
-
-/* =====================================================
-   ANIMAZIONE
-===================================================== */
-
-let thinking = false;
-
-const clock =
-    new THREE.Clock();
-
-function animate() {
-
-    requestAnimationFrame(
-        animate
-    );
-
-    const t =
-        clock.getElapsedTime();
-
-    /* movimento cervello */
-
-    brain.rotation.y =
-        Math.sin(
-            t * .08
-        ) * .10;
-
-    brain.rotation.x =
-        Math.sin(
-            t * .11
-        ) * .025;
-
-    /* filamenti */
-
-    filamentGroup.rotation.y =
-        t * .012;
-
-    /* rete */
-
-    nodePoints.rotation.y =
-        -t * .018;
-
-    connectionMesh.rotation.y =
-        -t * .018;
-
-    /* anelli */
-
-    rings.forEach(
-        ring => {
-
-            ring.rotation.z +=
-                ring.userData.speed *
-                (
-                    thinking
-                    ? 1.5
-                    : 1
-                );
-
-            ring.rotation.x +=
-                ring.userData.speed *
-                .03;
-        }
-    );
-
-    /* particelle */
-
-    particles.rotation.y =
-        t * .008;
-
-    /* nucleo */
-
-    coreLight.scale.setScalar(
-        thinking
-        ? 1.25 +
-          Math.sin(t * 7) * .08
-        : 1 +
-          Math.sin(t * 2) * .03
-    );
-
-    /* luce */
-
-    cyanLight.intensity =
-        thinking
-        ? 11
-        : 6 +
-          Math.sin(t * 1.5) * .6;
-
-    goldLight.intensity =
-        thinking
-        ? 5
-        : 2.5;
-
-    renderer.render(
-        scene,
-        camera
-    );
-}
-
-animate();
-
-/* =====================================================
-   RESIZE
-===================================================== */
-
-window.addEventListener(
-    "resize",
-    () => {
-
-        camera.aspect =
-            innerWidth /
-            innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            innerWidth,
-            innerHeight
+            .28 +
+            index * .055
         );
-    }
-);
+
+    ctx.save();
+
+    ctx.translate(
+        centerX,
+        centerY
+    );
+
+    ctx.rotate(
+        ringRotation *
+        (
+            index % 2
+            ? -1
+            : 1
+        )
+    );
+
+    ctx.scale(
+        1,
+        .32
+    );
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        radius,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.strokeStyle =
+        `rgba(
+            0,
+            220,
+            255,
+            ${.16 / index}
+        )`;
+
+    ctx.lineWidth =
+        .6;
+
+    ctx.stroke();
+
+    ctx.restore();
+}
+
+
+/* =====================================================
+   AVVIO
+===================================================== */
+
+draw();
+
 
 /* =====================================================
    CHAT
 ===================================================== */
 
-window.sendMessage =
-async function() {
+const input =
+    document.getElementById(
+        "input"
+    );
 
-    const input =
-        document.getElementById(
-            "input"
-        );
+const send =
+    document.getElementById(
+        "send"
+    );
 
-    const chat =
-        document.getElementById(
-            "chat"
-        );
+const chat =
+    document.getElementById(
+        "chat"
+    );
+
+
+send.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+input.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            sendMessage();
+        }
+    }
+);
+
+
+async function sendMessage() {
 
     const text =
         input.value.trim();
 
-    if (!text)
+    if (
+        !text
+    )
         return;
 
-    const userMessage =
+
+    /* messaggio utente */
+
+    const user =
         document.createElement(
             "div"
         );
 
-    userMessage.className =
+    user.className =
         "message user";
 
-    userMessage.textContent =
+    user.textContent =
         text;
 
     chat.appendChild(
-        userMessage
+        user
     );
 
     input.value = "";
 
-    const jarvisMessage =
+
+    /* risposta */
+
+    const reply =
         document.createElement(
             "div"
         );
 
-    jarvisMessage.className =
+    reply.className =
         "message jarvis";
 
-    jarvisMessage.textContent =
+    reply.textContent =
         "Elaborazione...";
 
     chat.appendChild(
-        jarvisMessage
+        reply
     );
+
+
+    /*
+        Attiviamo la rete.
+    */
 
     thinking = true;
 
-    chat.scrollTop =
-        chat.scrollHeight;
 
     try {
 
@@ -1100,6 +1084,7 @@ async function() {
             await fetch(
                 "https://iao-ai-v3.oceano-masoud.workers.dev/",
                 {
+
                     method: "POST",
 
                     headers: {
@@ -1107,32 +1092,52 @@ async function() {
                             "application/json"
                     },
 
-                    body: JSON.stringify({
-                        message: text
-                    })
+                    body:
+                        JSON.stringify({
+                            message: text
+                        })
                 }
             );
+
 
         const data =
             await response.json();
 
-        jarvisMessage.textContent =
+
+        reply.textContent =
             data.reply ||
             "Non ho ricevuto una risposta.";
 
-    } catch (error) {
 
-        console.error(error);
+    } catch (
+        error
+    ) {
 
-        jarvisMessage.textContent =
+        console.error(
+            error
+        );
+
+        reply.textContent =
             "Errore di collegamento.";
     }
 
-    thinking = false;
+
+    /*
+        Torniamo lentamente
+        allo stato normale.
+    */
+
+    setTimeout(
+        () => {
+            thinking = false;
+        },
+        700
+    );
+
 
     chat.scrollTop =
         chat.scrollHeight;
-};
+}
 
 </script>
 

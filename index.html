@@ -3,23 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS — Neural Interface</title>
+
+<title>JARVIS // NEURAL CORE</title>
 
 <style>
 * {
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
     background: #000;
     color: #ffd000;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
+body {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(80,55,0,.12),
+            #000 55%
+        );
+}
+
+/* =====================================================
+   CANVAS
+===================================================== */
 
 #canvas {
     position: fixed;
@@ -29,29 +42,74 @@ body {
     z-index: 1;
 }
 
-/* =========================
+
+/* =====================================================
+   VIGNETTE
+===================================================== */
+
+.vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 35%,
+            rgba(0,0,0,.35) 75%,
+            rgba(0,0,0,.85) 100%
+        );
+}
+
+
+/* =====================================================
+   SCANLINES
+===================================================== */
+
+.scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+
+    opacity: .08;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 3px,
+            rgba(255,210,0,.15) 4px
+        );
+}
+
+
+/* =====================================================
    HUD
-========================= */
+===================================================== */
 
 .hud {
     position: fixed;
-    z-index: 5;
+    z-index: 10;
     pointer-events: none;
 
     font-family: monospace;
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 2px;
     line-height: 1.8;
 
-    color: rgba(255, 210, 0, .55);
+    color: rgba(255,215,0,.58);
 }
 
 .hud-left {
     top: 24px;
     left: 24px;
 
-    border-left: 2px solid rgba(255, 200, 0, .7);
-    padding-left: 10px;
+    border-left:
+        2px solid rgba(255,200,0,.75);
+
+    padding-left: 12px;
 }
 
 .hud-right {
@@ -60,13 +118,44 @@ body {
 
     text-align: right;
 
-    border-right: 2px solid rgba(255, 200, 0, .7);
-    padding-right: 10px;
+    border-right:
+        2px solid rgba(255,200,0,.75);
+
+    padding-right: 12px;
 }
 
-/* =========================
+.hud-bottom-left {
+    position: fixed;
+    left: 24px;
+    bottom: 25px;
+
+    z-index: 10;
+
+    font-family: monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+
+    color: rgba(255,215,0,.45);
+}
+
+.hud-bottom-right {
+    position: fixed;
+    right: 24px;
+    bottom: 25px;
+
+    z-index: 10;
+
+    font-family: monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+
+    color: rgba(255,215,0,.45);
+}
+
+
+/* =====================================================
    TITOLO
-========================= */
+===================================================== */
 
 .title {
     position: fixed;
@@ -75,75 +164,136 @@ body {
     left: 0;
     right: 0;
 
-    z-index: 6;
+    z-index: 11;
 
     text-align: center;
+
     pointer-events: none;
 }
 
 .title h1 {
     margin: 0;
 
-    color: #fff;
+    color: white;
 
-    font-size: 24px;
+    font-size: 25px;
     font-weight: 300;
 
-    letter-spacing: 11px;
+    letter-spacing: 12px;
 
     text-shadow:
-        0 0 8px rgba(255, 210, 0, .9),
-        0 0 20px rgba(255, 170, 0, .6),
-        0 0 40px rgba(255, 120, 0, .3);
+        0 0 8px rgba(255,220,100,.95),
+        0 0 22px rgba(255,180,0,.75),
+        0 0 50px rgba(255,120,0,.35);
 }
 
 .status {
     margin-top: 6px;
 
     font-family: monospace;
-    font-size: 9px;
-    letter-spacing: 3px;
 
-    color: rgba(255, 210, 0, .7);
+    font-size: 9px;
+
+    letter-spacing: 4px;
+
+    color: rgba(255,210,0,.75);
 }
 
-.status span {
+.status-dot {
+    display: inline-block;
+
     color: #ffd000;
 
     text-shadow:
-        0 0 5px #ffd000,
-        0 0 15px #ffae00;
+        0 0 6px #ffd000,
+        0 0 15px #ff9d00;
+
+    animation:
+        statusPulse 1.5s infinite;
 }
 
-/* =========================
+@keyframes statusPulse {
+
+    0%, 100% {
+        opacity: .4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =====================================================
+   CORE STATUS
+===================================================== */
+
+.core-status {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 8;
+
+    pointer-events: none;
+
+    text-align: center;
+
+    font-family: monospace;
+
+    opacity: .65;
+}
+
+.core-status .main {
+    font-size: 8px;
+    letter-spacing: 4px;
+}
+
+.core-status .sub {
+    margin-top: 5px;
+
+    font-size: 7px;
+    letter-spacing: 2px;
+
+    opacity: .6;
+}
+
+
+/* =====================================================
    CHAT
-========================= */
+===================================================== */
 
 #chat {
     position: fixed;
 
     left: 50%;
-    bottom: 92px;
+    bottom: 105px;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     width: 100%;
-    max-width: 700px;
+    max-width: 720px;
 
-    max-height: 27vh;
+    max-height: 24vh;
 
-    padding: 0 20px;
+    padding:
+        0 20px;
 
     display: flex;
     flex-direction: column;
 
-    gap: 10px;
+    gap: 9px;
 
     overflow-y: auto;
 
     scrollbar-width: none;
 
-    z-index: 10;
+    z-index: 20;
 }
 
 #chat::-webkit-scrollbar {
@@ -151,18 +301,36 @@ body {
 }
 
 .message {
-    max-width: 80%;
+    max-width: 82%;
 
-    padding: 11px 16px;
+    padding:
+        10px 15px;
 
-    border-radius: 4px;
+    border-radius: 3px;
 
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.5;
 
-    backdrop-filter: blur(15px);
+    backdrop-filter:
+        blur(18px);
 
     word-break: break-word;
+
+    animation:
+        messageIn .3s ease;
+}
+
+@keyframes messageIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .user {
@@ -170,69 +338,92 @@ body {
 
     color: white;
 
-    background: rgba(255, 200, 0, .07);
+    background:
+        rgba(255,200,0,.055);
 
-    border: 1px solid rgba(255, 200, 0, .3);
+    border:
+        1px solid rgba(255,205,0,.28);
 
-    border-right: 3px solid #ffd000;
+    border-right:
+        3px solid #ffd000;
+
+    box-shadow:
+        0 0 20px rgba(255,180,0,.04);
 }
 
 .jarvis {
     align-self: flex-start;
 
-    color: #ffe9a0;
+    color: #ffe9a8;
 
-    background: rgba(15, 10, 0, .78);
+    background:
+        rgba(12,9,2,.82);
 
-    border: 1px solid rgba(255, 190, 0, .2);
+    border:
+        1px solid rgba(255,200,0,.2);
 
-    border-left: 3px solid #ffd000;
+    border-left:
+        3px solid #ffd000;
+
+    box-shadow:
+        0 0 25px rgba(255,170,0,.04);
 }
 
-/* =========================
+
+/* =====================================================
    INPUT
-========================= */
+===================================================== */
 
 .input-container {
     position: fixed;
 
     left: 50%;
-    bottom: 24px;
+    bottom: 25px;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     width: 100%;
-    max-width: 700px;
+    max-width: 720px;
 
-    padding: 0 20px;
+    padding:
+        0 20px;
 
-    z-index: 20;
+    z-index: 30;
 }
 
 .input-box {
     display: flex;
 
-    gap: 8px;
+    gap: 7px;
 
-    padding: 4px;
+    padding: 5px;
 
-    background: rgba(10, 7, 0, .92);
+    background:
+        rgba(7,6,2,.9);
 
-    border: 1px solid rgba(255, 195, 0, .4);
+    border:
+        1px solid rgba(255,205,0,.38);
 
-    border-radius: 6px;
+    border-radius: 5px;
 
-    backdrop-filter: blur(18px);
+    backdrop-filter:
+        blur(20px);
+
+    box-shadow:
+        0 0 30px rgba(255,180,0,.06);
 
     transition: .3s;
 }
 
 .input-box:focus-within {
-    border-color: rgba(255, 215, 0, .9);
+
+    border-color:
+        rgba(255,220,80,.9);
 
     box-shadow:
-        0 0 15px rgba(255, 200, 0, .2),
-        0 0 35px rgba(255, 160, 0, .1);
+        0 0 20px rgba(255,200,0,.18),
+        0 0 45px rgba(255,160,0,.08);
 }
 
 input {
@@ -240,38 +431,43 @@ input {
 
     min-width: 0;
 
-    height: 44px;
+    height: 43px;
 
-    padding: 0 15px;
+    padding:
+        0 14px;
 
-    background: transparent;
+    background:
+        transparent;
 
     border: none;
     outline: none;
 
     color: white;
 
-    font-size: 14px;
+    font-size: 13px;
 }
 
 input::placeholder {
-    color: rgba(255, 220, 130, .35);
+    color:
+        rgba(255,220,140,.32);
 }
 
 button {
-    height: 44px;
+    height: 43px;
 
-    border-radius: 4px;
+    border-radius: 3px;
 
-    border: 1px solid rgba(255, 200, 0, .55);
+    border:
+        1px solid rgba(255,205,0,.5);
 
-    background: rgba(255, 190, 0, .13);
+    background:
+        rgba(255,190,0,.1);
 
     color: #ffd000;
 
     font-family: monospace;
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: bold;
 
@@ -284,41 +480,52 @@ button {
 
 #mic {
     width: 48px;
+
     padding: 0;
+
     font-size: 17px;
 }
 
 #send {
-    width: 78px;
+    width: 75px;
 }
 
 button:hover:not(:disabled) {
-    background: #ffd000;
+
+    background:
+        #ffd000;
+
+    color: #000;
+
+    box-shadow:
+        0 0 15px #ffd000,
+        0 0 35px rgba(255,190,0,.5);
+}
+
+button:disabled {
+
+    opacity: .25;
+
+    cursor: not-allowed;
+}
+
+#mic.listening {
+
+    background:
+        #ffd000;
 
     color: #000;
 
     box-shadow:
         0 0 12px #ffd000,
-        0 0 30px rgba(255, 180, 0, .5);
+        0 0 35px rgba(255,190,0,.8);
+
+    animation:
+        microphonePulse .8s infinite;
 }
 
-button:disabled {
-    opacity: .3;
-    cursor: not-allowed;
-}
+@keyframes microphonePulse {
 
-#mic.listening {
-    background: #ffd000;
-    color: #000;
-
-    box-shadow:
-        0 0 10px #ffd000,
-        0 0 25px rgba(255, 190, 0, .8);
-
-    animation: micPulse 1s infinite;
-}
-
-@keyframes micPulse {
     0%, 100% {
         transform: scale(1);
     }
@@ -328,62 +535,163 @@ button:disabled {
     }
 }
 
-/* =========================
+
+/* =====================================================
    MOBILE
-========================= */
+===================================================== */
 
-@media (max-width: 600px) {
+@media(max-width:600px) {
 
-    .hud {
+    .hud,
+    .hud-bottom-left,
+    .hud-bottom-right {
         display: none;
     }
 
     .title h1 {
+
         font-size: 19px;
+
         letter-spacing: 7px;
     }
 
     .message {
-        max-width: 90%;
+
+        max-width: 91%;
     }
 
-    .input-container {
-        bottom: 16px;
+    #chat {
+
+        bottom: 100px;
+
+        max-height: 26vh;
+    }
+
+    .core-status {
+
+        transform:
+            translate(-50%, -50%)
+            scale(.8);
     }
 }
+
 </style>
 </head>
 
 <body>
 
+
+<canvas id="canvas"></canvas>
+
+<div class="vignette"></div>
+
+<div class="scanlines"></div>
+
+
+<!-- =====================================================
+     HUD SUPERIORE
+===================================================== -->
+
 <div class="hud hud-left">
-    JARVIS_CORE // V4.0<br>
-    NEURAL SYSTEM: ONLINE
+
+    JARVIS_CORE // V5.0<br>
+    NEURAL ENGINE: ACTIVE<br>
+    SYSTEM: <span id="systemState">ONLINE</span>
+
 </div>
+
 
 <div class="hud hud-right">
-    NETWORK: ACTIVE<br>
-    NODES: <span id="nodeCount">200</span>
+
+    NODE DENSITY: <span id="nodeCounter">240</span><br>
+    FREQUENCY: <span id="frequency">520 THz</span><br>
+    CORE POWER: <span id="power">87%</span>
+
 </div>
 
+
+<!-- =====================================================
+     TITOLO
+===================================================== -->
+
 <div class="title">
+
     <h1>J.A.R.V.I.S.</h1>
 
     <div class="status">
-        <span>●</span>
+
+        <span class="status-dot">●</span>
+
         NEURAL MATRIX ONLINE
+
     </div>
+
 </div>
 
-<canvas id="canvas"></canvas>
+
+<!-- =====================================================
+     CORE STATUS
+===================================================== -->
+
+<div class="core-status">
+
+    <div
+        class="main"
+        id="coreState"
+    >
+        NEURAL CORE
+    </div>
+
+    <div
+        class="sub"
+        id="coreSub"
+    >
+        SYSTEM READY
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     HUD INFERIORE
+===================================================== -->
+
+<div class="hud-bottom-left">
+
+    MATRIX LINK // STABLE<br>
+    ENCRYPTION // ACTIVE
+
+</div>
+
+
+<div class="hud-bottom-right">
+
+    JARVIS AI<br>
+    VOICE INTERFACE READY
+
+</div>
+
+
+<!-- =====================================================
+     CHAT
+===================================================== -->
 
 <div id="chat">
 
     <div class="message jarvis">
-        JARVIS online. Matrice neurale inizializzata. In attesa di istruzioni.
+
+        JARVIS online.
+        Tutti i sistemi neurali sono operativi.
+        In attesa di istruzioni.
+
     </div>
 
 </div>
+
+
+<!-- =====================================================
+     INPUT
+===================================================== -->
 
 <div class="input-container">
 
@@ -415,10 +723,11 @@ button:disabled {
 
 </div>
 
+
 <script>
 
 /* =====================================================
-   JARVIS NEURAL ENGINE
+   ELEMENTI
 ===================================================== */
 
 const canvas =
@@ -439,9 +748,28 @@ const mic =
 const chat =
     document.getElementById("chat");
 
-const nodeCount =
-    document.getElementById("nodeCount");
+const nodeCounter =
+    document.getElementById("nodeCounter");
 
+const frequency =
+    document.getElementById("frequency");
+
+const power =
+    document.getElementById("power");
+
+const systemState =
+    document.getElementById("systemState");
+
+const coreState =
+    document.getElementById("coreState");
+
+const coreSub =
+    document.getElementById("coreSub");
+
+
+/* =====================================================
+   VARIABILI
+===================================================== */
 
 let width;
 let height;
@@ -454,11 +782,16 @@ let radius;
 
 let thinking = false;
 
+let listening = false;
+
 let nodes = [];
 
 let pulses = [];
 
+let rings = [];
+
 let rotationY = 0;
+
 let rotationX = 0;
 
 
@@ -466,9 +799,9 @@ let rotationX = 0;
    CONFIGURAZIONE
 ===================================================== */
 
-const NODE_TOTAL = 200;
+const NODE_COUNT = 240;
 
-const MAX_CONNECTION = 95;
+const CONNECTION_DISTANCE = 88;
 
 
 /* =====================================================
@@ -482,6 +815,7 @@ function resize() {
 
     height =
         window.innerHeight;
+
 
     dpr =
         Math.min(
@@ -518,17 +852,19 @@ function resize() {
         width / 2;
 
     centerY =
-        height / 2 - 20;
+        height / 2 - 18;
 
 
     radius =
         Math.min(
             width,
             height
-        ) * .23;
+        ) * .225;
 
 
     createNodes();
+
+    createRings();
 }
 
 
@@ -539,16 +875,17 @@ window.addEventListener(
 
 
 /* =====================================================
-   CREA NODI
+   NODI
 ===================================================== */
 
 function createNodes() {
 
     nodes = [];
 
+
     for (
         let i = 0;
-        i < NODE_TOTAL;
+        i < NODE_COUNT;
         i++
     ) {
 
@@ -560,16 +897,16 @@ function createNodes() {
         const phi =
             Math.acos(
                 2 *
-                Math.random()
-                - 1
+                Math.random() -
+                1
             );
 
 
         const r =
             radius *
             (
-                .70 +
-                Math.random() * .55
+                .66 +
+                Math.random() * .58
             );
 
 
@@ -582,7 +919,7 @@ function createNodes() {
             r,
 
             speed:
-                .002 +
+                .0015 +
                 Math.random() * .005,
 
             direction:
@@ -591,8 +928,8 @@ function createNodes() {
                     : 1,
 
             size:
-                .7 +
-                Math.random() * 1.7,
+                .65 +
+                Math.random() * 1.8,
 
             phase:
                 Math.random() *
@@ -603,19 +940,76 @@ function createNodes() {
     }
 
 
-    nodeCount.textContent =
-        NODE_TOTAL;
+    nodeCounter.textContent =
+        NODE_COUNT;
 }
 
 
 /* =====================================================
-   IMPULSI
+   ANELLI
+===================================================== */
+
+function createRings() {
+
+    rings = [
+
+        {
+            radius:
+                radius * 1.05,
+
+            rotation: 0,
+
+            speed: .002,
+
+            tilt: .45
+        },
+
+        {
+            radius:
+                radius * 1.18,
+
+            rotation: 1,
+
+            speed: -.0015,
+
+            tilt: -.35
+        },
+
+        {
+            radius:
+                radius * 1.32,
+
+            rotation: 2,
+
+            speed: .001,
+
+            tilt: .7
+        },
+
+        {
+            radius:
+                radius * 1.43,
+
+            rotation: .5,
+
+            speed: -.0007,
+
+            tilt: -.6
+        }
+
+    ];
+}
+
+
+/* =====================================================
+   IMPULSO
 ===================================================== */
 
 function createPulse() {
 
-    if (!nodes.length)
-        return;
+    if (
+        !nodes.length
+    ) return;
 
 
     const node =
@@ -635,8 +1029,8 @@ function createPulse() {
         progress: 0,
 
         speed:
-            .012 +
-            Math.random() * .02
+            .009 +
+            Math.random() * .018
 
     });
 
@@ -644,7 +1038,136 @@ function createPulse() {
 
 
 /* =====================================================
-   ANIMAZIONE
+   DISEGNA ANELLI
+===================================================== */
+
+function drawRings(time) {
+
+    rings.forEach(
+        ring => {
+
+            ring.rotation +=
+                ring.speed *
+                (
+                    thinking
+                        ? 3
+                        : 1
+                );
+
+
+            ctx.save();
+
+            ctx.translate(
+                centerX,
+                centerY
+            );
+
+            ctx.rotate(
+                ring.rotation
+            );
+
+            ctx.scale(
+                1,
+                ring.tilt
+            );
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+                0,
+                0,
+                ring.radius,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.strokeStyle =
+                thinking
+                    ? "rgba(255,215,50,.28)"
+                    : "rgba(255,190,20,.13)";
+
+
+            ctx.lineWidth =
+                thinking
+                    ? 1
+                    : .6;
+
+
+            ctx.stroke();
+
+
+            /* Segmenti HUD */
+
+            for (
+                let i = 0;
+                i < 12;
+                i++
+            ) {
+
+                const angle =
+                    (
+                        Math.PI * 2 /
+                        12
+                    ) *
+                    i;
+
+
+                const inner =
+                    ring.radius -
+                    3;
+
+
+                const outer =
+                    ring.radius +
+                    (
+                        i % 3 === 0
+                            ? 9
+                            : 4
+                    );
+
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    Math.cos(angle) *
+                    inner,
+
+                    Math.sin(angle) *
+                    inner
+                );
+
+                ctx.lineTo(
+                    Math.cos(angle) *
+                    outer,
+
+                    Math.sin(angle) *
+                    outer
+                );
+
+
+                ctx.strokeStyle =
+                    "rgba(255,210,50,.35)";
+
+                ctx.lineWidth =
+                    .8;
+
+                ctx.stroke();
+
+            }
+
+
+            ctx.restore();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ANIMAZIONE PRINCIPALE
 ===================================================== */
 
 function animate() {
@@ -661,14 +1184,14 @@ function animate() {
 
     const speed =
         thinking
-            ? 3.2
+            ? 3.5
             : 1;
 
 
-    /* TRAIL */
+    /* SFONDO */
 
     ctx.fillStyle =
-        "rgba(0,0,0,.24)";
+        "rgba(0,0,0,.22)";
 
     ctx.fillRect(
         0,
@@ -681,7 +1204,7 @@ function animate() {
     /* ROTAZIONE */
 
     rotationY +=
-        .004 *
+        .0038 *
         speed;
 
     rotationX +=
@@ -690,57 +1213,58 @@ function animate() {
 
 
     /* =================================================
-       GLOW CENTRALE
+       GLOW CORE
     ================================================= */
 
-    const glowRadius =
+    const glowSize =
         radius *
         (
             thinking
-                ? 1.7
-                : 1.25
+                ? 1.9
+                : 1.35
         );
 
 
-    const gradient =
+    const glow =
         ctx.createRadialGradient(
             centerX,
             centerY,
             0,
+
             centerX,
             centerY,
-            glowRadius
+            glowSize
         );
 
 
-    gradient.addColorStop(
+    glow.addColorStop(
         0,
         thinking
             ? "rgba(255,250,190,.95)"
-            : "rgba(255,235,150,.65)"
+            : "rgba(255,235,150,.7)"
     );
 
 
-    gradient.addColorStop(
-        .18,
-        "rgba(255,200,0,.38)"
+    glow.addColorStop(
+        .12,
+        "rgba(255,210,30,.48)"
     );
 
 
-    gradient.addColorStop(
-        .5,
-        "rgba(255,150,0,.08)"
+    glow.addColorStop(
+        .35,
+        "rgba(255,150,0,.14)"
     );
 
 
-    gradient.addColorStop(
+    glow.addColorStop(
         1,
         "rgba(0,0,0,0)"
     );
 
 
     ctx.fillStyle =
-        gradient;
+        glow;
 
 
     ctx.beginPath();
@@ -748,7 +1272,7 @@ function animate() {
     ctx.arc(
         centerX,
         centerY,
-        glowRadius,
+        glowSize,
         0,
         Math.PI * 2
     );
@@ -756,8 +1280,13 @@ function animate() {
     ctx.fill();
 
 
+    /* ANELLI */
+
+    drawRings(time);
+
+
     /* =================================================
-       PROIEZIONE 3D
+       PROIEZIONE
     ================================================= */
 
     const projected = [];
@@ -777,7 +1306,7 @@ function animate() {
                     time +
                     n.phase
                 ) *
-                .0007 *
+                .0005 *
                 speed;
 
 
@@ -800,485 +1329,5 @@ function animate() {
 
             /* ROTAZIONE Y */
 
-            const cosY =
-                Math.cos(
-                    rotationY
-                );
-
-            const sinY =
-                Math.sin(
-                    rotationY
-                );
-
-
-            const rx =
-                x * cosY +
-                z * sinY;
-
-
-            const rz =
-                -x * sinY +
-                z * cosY;
-
-
-            /* ROTAZIONE X */
-
-            const cosX =
-                Math.cos(
-                    rotationX
-                );
-
-            const sinX =
-                Math.sin(
-                    rotationX
-                );
-
-
-            const ry =
-                y * cosX -
-                rz * sinX;
-
-
-            const finalZ =
-                y * sinX +
-                rz * cosX;
-
-
-            /* PROSPETTIVA */
-
-            const perspective =
-                420 /
-                (
-                    420 +
-                    finalZ
-                );
-
-
-            const px =
-                centerX +
-                rx *
-                perspective;
-
-
-            const py =
-                centerY +
-                ry *
-                perspective;
-
-
-            const alpha =
-                Math.max(
-                    .08,
-                    Math.min(
-                        1,
-                        (
-                            finalZ +
-                            radius
-                        ) /
-                        (
-                            radius * 2
-                        )
-                    )
-                );
-
-
-            projected.push({
-
-                x: px,
-
-                y: py,
-
-                z: finalZ,
-
-                alpha,
-
-                size:
-                    n.size *
-                    perspective,
-
-                pulse:
-                    (
-                        Math.sin(
-                            time * 5 +
-                            n.phase
-                        ) + 1
-                    ) / 2
-
-            });
-
-        }
-    );
-
-
-    projected.sort(
-        (a, b) =>
-            a.z - b.z
-    );
-
-
-    /* =================================================
-       CONNESSIONI
-    ================================================= */
-
-    for (
-        let i = 0;
-        i < projected.length;
-        i++
-    ) {
-
-        const a =
-            projected[i];
-
-
-        for (
-            let j = i + 1;
-            j < projected.length;
-            j++
-        ) {
-
-            const b =
-                projected[j];
-
-
-            const dx =
-                a.x - b.x;
-
-
-            const dy =
-                a.y - b.y;
-
-
-            const distance =
-                Math.sqrt(
-                    dx * dx +
-                    dy * dy
-                );
-
-
-            if (
-                distance <
-                MAX_CONNECTION
-            ) {
-
-                const opacity =
-                    (
-                        1 -
-                        distance /
-                        MAX_CONNECTION
-                    ) *
-                    .30 *
-                    a.alpha;
-
-
-                ctx.beginPath();
-
-                ctx.moveTo(
-                    a.x,
-                    a.y
-                );
-
-                ctx.lineTo(
-                    b.x,
-                    b.y
-                );
-
-
-                ctx.strokeStyle =
-                    `rgba(
-                        255,
-                        195,
-                        20,
-                        ${opacity}
-                    )`;
-
-
-                ctx.lineWidth =
-                    thinking
-                        ? 1
-                        : .65;
-
-
-                ctx.stroke();
-
-            }
-
-        }
-
-    }
-
-
-    /* =================================================
-       CREAZIONE IMPULSI
-    ================================================= */
-
-    if (
-        Math.random() <
-        (
-            thinking
-                ? .16
-                : .025
-        )
-    ) {
-
-        createPulse();
-
-    }
-
-
-    /* =================================================
-       AGGIORNA IMPULSI
-    ================================================= */
-
-    pulses.forEach(
-        pulse => {
-
-            pulse.progress +=
-                pulse.speed *
-                speed;
-
-        }
-    );
-
-
-    pulses =
-        pulses.filter(
-            pulse =>
-                pulse.progress < 1
-        );
-
-
-    /* =================================================
-       NODI
-    ================================================= */
-
-    projected.forEach(
-        n => {
-
-            const glow =
-                ctx.createRadialGradient(
-                    n.x,
-                    n.y,
-                    0,
-                    n.x,
-                    n.y,
-                    n.size * 5
-                );
-
-
-            glow.addColorStop(
-                0,
-                `rgba(
-                    255,
-                    215,
-                    70,
-                    ${.45 * n.alpha}
-                )`
-            );
-
-
-            glow.addColorStop(
-                1,
-                "rgba(255,150,0,0)"
-            );
-
-
-            ctx.fillStyle =
-                glow;
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                n.x,
-                n.y,
-                n.size * 5,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-
-            const brightness =
-                .65 +
-                n.pulse * .35;
-
-
-            ctx.fillStyle =
-                `rgba(
-                    255,
-                    245,
-                    180,
-                    ${brightness * n.alpha}
-                )`;
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                n.x,
-                n.y,
-                n.size,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-        }
-    );
-
-
-    /* =================================================
-       IMPULSI LUMINOSI
-    ================================================= */
-
-    pulses.forEach(
-        pulse => {
-
-            const angle =
-                pulse.angle +
-                pulse.progress *
-                Math.PI *
-                4;
-
-
-            const distance =
-                radius *
-                (
-                    .2 +
-                    pulse.progress *
-                    .8
-                );
-
-
-            const x =
-                centerX +
-                Math.cos(angle) *
-                distance;
-
-
-            const y =
-                centerY +
-                Math.sin(
-                    angle * 1.7
-                ) *
-                distance *
-                .5;
-
-
-            ctx.shadowBlur =
-                18;
-
-            ctx.shadowColor =
-                "#ffd000";
-
-
-            ctx.fillStyle =
-                `rgba(
-                    255,
-                    245,
-                    160,
-                    ${1 - pulse.progress}
-                )`;
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                x,
-                y,
-                thinking
-                    ? 2.8
-                    : 2,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-
-            ctx.shadowBlur =
-                0;
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   AVVIO
-===================================================== */
-
-resize();
-
-animate();
-
-
-/* =====================================================
-   CHAT
-===================================================== */
-
-send.addEventListener(
-    "click",
-    sendMessage
-);
-
-
-input.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            sendMessage();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   INVIO MESSAGGIO
-===================================================== */
-
-async function sendMessage() {
-
-    const text =
-        input.value.trim();
-
-
-    if (
-        !text ||
-        input.disabled
-    ) {
-
-        return;
-
-    }
-
-
-    input.disabled =
-        true;
-
-    send.disabled =
-        true;
-
-    mic.disabled =
-        true;
-
-
-    /* MESSAGGIO UTENTE */
-
-    const userMessage =
-        document.createElement(
-            "div"
-        );
-
-
-    userMessage.className =
-        "message user
+            const cy =
+          

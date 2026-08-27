@@ -85,7 +85,7 @@ html, body {
     width: 100%;
     max-width: 700px;
     bottom: 90px;
-    max-height: 28vh;
+    max-height: 25vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -257,7 +257,7 @@ function resize() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     centerX = width / 2;
-    centerY = height / 2 - 20;
+    centerY = height / 2 - 30;
 
     initNeuralSphere();
 }
@@ -268,30 +268,29 @@ window.addEventListener("resize", resize);
    MATRICE SFERICA 3D - EFFETTO JARVIS (ORANGE/GOLD)
 ===================================================== */
 
-const NODE_COUNT = 150;
+const NODE_COUNT = 180;
 const nodes = [];
 
 function initNeuralSphere() {
     nodes.length = 0;
-    const baseRadius = Math.min(width, height) * 0.22;
+    // Raggio sferico aumentato a 0.34
+    const baseRadius = Math.min(width, height) * 0.34;
 
     for (let i = 0; i < NODE_COUNT; i++) {
-        // Distribuizione sferica uniforme in 3D
         const u = Math.random();
         const v = Math.random();
         const theta = u * 2.0 * Math.PI;
         const phi = Math.acos(2.0 * v - 1.0);
         
-        // Variazione del raggio per creare spessore alla sfera
         const r = baseRadius * (0.65 + Math.random() * 0.55);
 
         nodes.push({
             r: r,
             theta: theta,
             phi: phi,
-            speedTheta: (Math.random() * 0.006 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
-            speedPhi: (Math.random() * 0.004 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
-            size: Math.random() * 1.8 + 1.0,
+            speedTheta: (Math.random() * 0.005 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
+            speedPhi: (Math.random() * 0.003 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
+            size: Math.random() * 2.0 + 1.2,
             pulsePhase: Math.random() * Math.PI * 2
         });
     }
@@ -309,17 +308,18 @@ function animate() {
     const time = performance.now() * 0.001;
     const speedMult = thinking ? 3.0 : 1.0;
 
-    rotY += 0.005 * speedMult;
-    rotX += 0.0015 * speedMult;
+    rotY += 0.004 * speedMult;
+    rotX += 0.0012 * speedMult;
 
-    const currentRadius = Math.min(width, height) * 0.22;
+    // Raggio sferico aumentato
+    const currentRadius = Math.min(width, height) * 0.34;
 
-    // 1. ALONE DORATO CENTRALE
-    const glowRadius = thinking ? currentRadius * 1.6 : currentRadius * 1.2;
+    // 1. ALONE DORATO CENTRALE ESPANSO
+    const glowRadius = thinking ? currentRadius * 1.5 : currentRadius * 1.25;
     const coreGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowRadius);
-    coreGlow.addColorStop(0, "rgba(255, 230, 150, 0.9)");
-    coreGlow.addColorStop(0.2, "rgba(255, 170, 0, 0.5)");
-    coreGlow.addColorStop(0.6, "rgba(200, 80, 0, 0.12)");
+    coreGlow.addColorStop(0, "rgba(255, 230, 150, 0.95)");
+    coreGlow.addColorStop(0.25, "rgba(255, 170, 0, 0.55)");
+    coreGlow.addColorStop(0.65, "rgba(200, 80, 0, 0.15)");
     coreGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
 
     ctx.fillStyle = coreGlow;
@@ -334,21 +334,18 @@ function animate() {
         n.theta += n.speedTheta * speedMult;
         n.phi += n.speedPhi * speedMult;
 
-        // Coordinate sferiche 3D
         let x = n.r * Math.sin(n.phi) * Math.cos(n.theta);
         let y = n.r * Math.cos(n.phi);
         let z = n.r * Math.sin(n.phi) * Math.sin(n.theta);
 
-        // Rotazione attorno all'asse Y
         let rx1 = x * Math.cos(rotY) + z * Math.sin(rotY);
         let rz1 = -x * Math.sin(rotY) + z * Math.cos(rotY);
 
-        // Rotazione attorno all'asse X
         let ry2 = y * Math.cos(rotX) - rz1 * Math.sin(rotX);
         let rz2 = y * Math.sin(rotX) + rz1 * Math.cos(rotX);
 
-        // Proiezione prospettica
-        const perspective = 350 / (350 + rz2);
+        // Adattamento della prospettiva per il raggio maggiore
+        const perspective = 450 / (450 + rz2);
         const projX = centerX + rx1 * perspective;
         const projY = centerY + ry2 * perspective;
         const alpha = Math.max(0.12, Math.min(1, (rz2 + currentRadius) / (currentRadius * 2)));
@@ -360,10 +357,9 @@ function animate() {
         });
     });
 
-    // Ordinamento per profondità Z
     projectedNodes.sort((a, b) => a.rz2 - b.rz2);
 
-    // 3. RETE SINAPTICA DORATA (LINEE DI CONNESSIONE)
+    // 3. RETE SINAPTICA DORATA (SOGLIA DISTANZA PIÙ AMPIA)
     for (let i = 0; i < projectedNodes.length; i++) {
         for (let j = i + 1; j < projectedNodes.length; j++) {
             const n1 = projectedNodes[i];
@@ -373,8 +369,8 @@ function animate() {
             const dy = n1.projY - n2.projY;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (dist < 75) {
-                const lineAlpha = (1 - dist / 75) * 0.3 * n1.alpha;
+            if (dist < 90) {
+                const lineAlpha = (1 - dist / 90) * 0.35 * n1.alpha;
                 ctx.beginPath();
                 ctx.moveTo(n1.projX, n1.projY);
                 ctx.lineTo(n2.projX, n2.projY);
@@ -387,8 +383,7 @@ function animate() {
 
     // 4. NODI LUMINOSI ED IMPULSI
     projectedNodes.forEach(n => {
-        // Raggio centrale casuale
-        if (Math.random() < 0.012) {
+        if (Math.random() < 0.015) {
             ctx.beginPath();
             ctx.moveTo(n.projX, n.projY);
             ctx.lineTo(centerX, centerY);
@@ -397,13 +392,11 @@ function animate() {
             ctx.stroke();
         }
 
-        // Punti d'oro luminosi
         ctx.fillStyle = `rgba(255, 245, 200, ${n.alpha})`;
         ctx.beginPath();
         ctx.arc(n.projX, n.projY, n.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Glow esterno per i nodi
         ctx.fillStyle = `rgba(255, 160, 0, ${n.alpha * 0.4 * n.pulse})`;
         ctx.beginPath();
         ctx.arc(n.projX, n.projY, n.size * 3.5, 0, Math.PI * 2);
@@ -434,7 +427,6 @@ async function sendMessage() {
     input.disabled = true;
     send.disabled = true;
 
-    // Messaggio Utente
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
     userMsg.textContent = text;
@@ -442,7 +434,6 @@ async function sendMessage() {
 
     input.value = "";
 
-    // Messaggio JARVIS
     const jarvisMsg = document.createElement("div");
     jarvisMsg.className = "message jarvis";
     jarvisMsg.textContent = "Elaborazione matrice in corso...";

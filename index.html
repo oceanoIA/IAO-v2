@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS Core System</title>
+<title>JARVIS Neural Sphere</title>
 
 <style>
 * {
@@ -15,8 +15,8 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #03070d;
-    color: #e0f7fc;
+    background: #000000;
+    color: #ffcc00;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -29,22 +29,22 @@ html, body {
     z-index: 1;
 }
 
-/* CORNICI TATTICHE E METADATI HUD */
+/* METADATI HUD SULLE CORNICI */
 .hud-meta {
     position: fixed;
     font-size: 11px;
     letter-spacing: 2px;
-    color: rgba(0, 212, 255, 0.45);
+    color: rgba(255, 170, 0, 0.5);
     z-index: 5;
     pointer-events: none;
     font-family: monospace;
     text-transform: uppercase;
 }
 
-.top-left { top: 25px; left: 25px; border-left: 2px solid rgba(0, 212, 255, 0.4); padding-left: 10px; }
-.top-right { top: 25px; right: 25px; border-right: 2px solid rgba(0, 212, 255, 0.4); padding-right: 10px; text-align: right; }
+.top-left { top: 25px; left: 25px; border-left: 2px solid rgba(255, 170, 0, 0.6); padding-left: 10px; }
+.top-right { top: 25px; right: 25px; border-right: 2px solid rgba(255, 170, 0, 0.6); padding-right: 10px; text-align: right; }
 
-/* TITOLO PRINCIPALE */
+/* TITOLO E STATO */
 .header-title {
     position: fixed;
     top: 25px;
@@ -61,23 +61,23 @@ html, body {
     font-weight: 300;
     letter-spacing: 12px;
     color: #ffffff;
-    text-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+    text-shadow: 0 0 12px rgba(255, 180, 0, 0.8), 0 0 24px rgba(255, 120, 0, 0.4);
 }
 
 .header-title .status {
     margin-top: 5px;
     font-size: 10px;
     letter-spacing: 3px;
-    color: rgba(0, 212, 255, 0.5);
+    color: rgba(255, 180, 0, 0.7);
     font-family: monospace;
 }
 
 .header-title .status b {
-    color: #00d4ff;
-    text-shadow: 0 0 8px #00d4ff;
+    color: #ffaa00;
+    text-shadow: 0 0 8px #ffaa00;
 }
 
-/* CHAT TERMINALE MINIMALISTA */
+/* CHAT TERMINALE */
 #chat {
     position: fixed;
     left: 50%;
@@ -85,7 +85,7 @@ html, body {
     width: 100%;
     max-width: 700px;
     bottom: 90px;
-    max-height: 32vh;
+    max-height: 28vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -111,21 +111,21 @@ html, body {
 
 .user {
     align-self: flex-end;
-    background: rgba(0, 212, 255, 0.06);
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-right: 3px solid #00d4ff;
+    background: rgba(255, 170, 0, 0.08);
+    border: 1px solid rgba(255, 170, 0, 0.35);
+    border-right: 3px solid #ffaa00;
     color: #ffffff;
 }
 
 .jarvis {
     align-self: flex-start;
-    background: rgba(4, 16, 30, 0.7);
-    border: 1px solid rgba(0, 212, 255, 0.15);
-    border-left: 3px solid #00d4ff;
-    color: #d8f4fc;
+    background: rgba(20, 10, 0, 0.75);
+    border: 1px solid rgba(255, 170, 0, 0.2);
+    border-left: 3px solid #ffaa00;
+    color: #ffe8b3;
 }
 
-/* AREA INPUT */
+/* CONTENITORE INPUT */
 .input-container {
     position: fixed;
     left: 50%;
@@ -140,8 +140,8 @@ html, body {
 .input-box {
     display: flex;
     gap: 10px;
-    background: rgba(3, 12, 24, 0.85);
-    border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(12, 6, 0, 0.85);
+    border: 1px solid rgba(255, 170, 0, 0.35);
     border-radius: 6px;
     padding: 4px;
     backdrop-filter: blur(16px);
@@ -149,8 +149,8 @@ html, body {
 }
 
 .input-box:focus-within {
-    border-color: rgba(0, 212, 255, 0.8);
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    border-color: rgba(255, 170, 0, 0.9);
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.25);
 }
 
 input {
@@ -166,16 +166,16 @@ input {
 }
 
 input::placeholder {
-    color: rgba(220, 245, 255, 0.35);
+    color: rgba(255, 220, 150, 0.35);
 }
 
 button {
     width: 80px;
     height: 44px;
-    background: rgba(0, 212, 255, 0.12);
-    border: 1px solid rgba(0, 212, 255, 0.4);
+    background: rgba(255, 170, 0, 0.15);
+    border: 1px solid rgba(255, 170, 0, 0.5);
     border-radius: 4px;
-    color: #00d4ff;
+    color: #ffaa00;
     font-family: monospace;
     font-size: 12px;
     font-weight: 600;
@@ -185,9 +185,9 @@ button {
 }
 
 button:hover:not(:disabled) {
-    background: #00d4ff;
-    color: #03070d;
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+    background: #ffaa00;
+    color: #000000;
+    box-shadow: 0 0 15px rgba(255, 170, 0, 0.6);
 }
 
 button:disabled {
@@ -206,19 +206,19 @@ button:disabled {
 <body>
 
 <div class="hud-meta top-left">
-    CORE: NEURAL MATRIX<br>
-    STATUS: NOMINAL
+    MATRIX: JARVIS_CORE_V2<br>
+    STATUS: ACTIVE NEURAL SPHERE
 </div>
 
 <div class="hud-meta top-right">
-    ENCRYPTION: 4096-BIT<br>
-    INTERFACE: MARK VIII
+    NODE DENSITY: HIGH<br>
+    FREQ: 520 THz
 </div>
 
 <div class="header-title">
     <h1>J.A.R.V.I.S.</h1>
     <div class="status">
-        <b>●</b> NEURAL CORE ACTIVE
+        <b>●</b> NEURAL MATRIX ONLINE
     </div>
 </div>
 
@@ -226,14 +226,14 @@ button:disabled {
 
 <div id="chat">
     <div class="message jarvis">
-        Sistemi di calcolo centrali attivi. In attesa di istruzioni.
+        Inizializzazione matrice completata. In attesa di istruzioni.
     </div>
 </div>
 
 <div class="input-container">
     <div class="input-box">
-        <input id="input" type="text" placeholder="Invia un comando al sistema..." autocomplete="off">
-        <button id="send">SEND</button>
+        <input id="input" type="text" placeholder="Comunica con la matrice..." autocomplete="off">
+        <button id="send">EXEC</button>
     </div>
 </div>
 
@@ -257,165 +257,156 @@ function resize() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     centerX = width / 2;
-    centerY = height / 2 - 30;
+    centerY = height / 2 - 20;
 
-    initNeurons();
+    initNeuralSphere();
 }
 
 window.addEventListener("resize", resize);
 
 /* =====================================================
-   STRUTTURA NEURONI ED ORBITE 3D
+   MATRICE SFERICA 3D - EFFETTO JARVIS (ORANGE/GOLD)
 ===================================================== */
 
-const NEURON_COUNT = 80;
-const neurons = [];
+const NODE_COUNT = 150;
+const nodes = [];
 
-function initNeurons() {
-    neurons.length = 0;
-    for (let i = 0; i < NEURON_COUNT; i++) {
-        // Distribuizione sferica 3D
-        const radius = 110 + Math.random() * 140;
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos((Math.random() * 2) - 1);
+function initNeuralSphere() {
+    nodes.length = 0;
+    const baseRadius = Math.min(width, height) * 0.22;
 
-        neurons.push({
-            x: 0, y: 0, z: 0,
-            baseRadius: radius,
+    for (let i = 0; i < NODE_COUNT; i++) {
+        // Distribuizione sferica uniforme in 3D
+        const u = Math.random();
+        const v = Math.random();
+        const theta = u * 2.0 * Math.PI;
+        const phi = Math.acos(2.0 * v - 1.0);
+        
+        // Variazione del raggio per creare spessore alla sfera
+        const r = baseRadius * (0.65 + Math.random() * 0.55);
+
+        nodes.push({
+            r: r,
             theta: theta,
             phi: phi,
-            speed: (Math.random() * 0.008 + 0.003) * (Math.random() < 0.5 ? 1 : -1),
-            pulsePhase: Math.random() * Math.PI * 2,
-            size: Math.random() * 1.8 + 1.2
+            speedTheta: (Math.random() * 0.006 + 0.002) * (Math.random() < 0.5 ? 1 : -1),
+            speedPhi: (Math.random() * 0.004 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
+            size: Math.random() * 1.8 + 1.0,
+            pulsePhase: Math.random() * Math.PI * 2
         });
     }
 }
 
-let globeAngleY = 0;
-let globeAngleX = 0;
-
-/* =====================================================
-   RENDERING CANVAS
-===================================================== */
+let rotY = 0;
+let rotX = 0;
 
 function animate() {
     requestAnimationFrame(animate);
 
-    ctx.fillStyle = "rgba(3, 7, 13, 0.25)";
+    ctx.fillStyle = "rgba(0, 0, 0, 0.28)";
     ctx.fillRect(0, 0, width, height);
 
     const time = performance.now() * 0.001;
-    const speedMult = thinking ? 2.8 : 1.0;
+    const speedMult = thinking ? 3.0 : 1.0;
 
-    globeAngleY += 0.004 * speedMult;
-    globeAngleX += 0.001 * speedMult;
+    rotY += 0.005 * speedMult;
+    rotX += 0.0015 * speedMult;
 
-    // 1. SFERA CENTRALE (CORE REACTOR)
-    const coreRadius = thinking ? 45 : 38;
-    
-    // Core Glow Esterno
-    const outerGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, coreRadius * 2.5);
-    outerGlow.addColorStop(0, "rgba(0, 212, 255, 0.4)");
-    outerGlow.addColorStop(0.5, "rgba(0, 150, 255, 0.08)");
-    outerGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
-    
-    ctx.fillStyle = outerGlow;
+    const currentRadius = Math.min(width, height) * 0.22;
+
+    // 1. ALONE DORATO CENTRALE
+    const glowRadius = thinking ? currentRadius * 1.6 : currentRadius * 1.2;
+    const coreGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowRadius);
+    coreGlow.addColorStop(0, "rgba(255, 230, 150, 0.9)");
+    coreGlow.addColorStop(0.2, "rgba(255, 170, 0, 0.5)");
+    coreGlow.addColorStop(0.6, "rgba(200, 80, 0, 0.12)");
+    coreGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+    ctx.fillStyle = coreGlow;
     ctx.beginPath();
-    ctx.arc(centerX, centerY, coreRadius * 2.5, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, glowRadius, 0, Math.PI * 2);
     ctx.fill();
 
-    // Sfera Centrale Brillante
-    const coreGradient = ctx.createRadialGradient(centerX - 10, centerY - 10, 0, centerX, centerY, coreRadius);
-    coreGradient.addColorStop(0, "#ffffff");
-    coreGradient.addColorStop(0.3, "#a6f2ff");
-    coreGradient.addColorStop(0.7, "#00a2ff");
-    coreGradient.addColorStop(1, "rgba(0, 50, 100, 0.8)");
+    // 2. CALCOLO E PROIEZIONE 3D DEI NODI
+    const projectedNodes = [];
 
-    ctx.fillStyle = coreGradient;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, coreRadius, 0, Math.PI * 2);
-    ctx.fill();
+    nodes.forEach(n => {
+        n.theta += n.speedTheta * speedMult;
+        n.phi += n.speedPhi * speedMult;
 
-    // 2. CALCOLO POSIZIONE NEURONI 3D E PROIEZIONE 2D
-    const projectedNeurons = [];
+        // Coordinate sferiche 3D
+        let x = n.r * Math.sin(n.phi) * Math.cos(n.theta);
+        let y = n.r * Math.cos(n.phi);
+        let z = n.r * Math.sin(n.phi) * Math.sin(n.theta);
 
-    neurons.forEach(n => {
-        n.theta += n.speed * speedMult;
+        // Rotazione attorno all'asse Y
+        let rx1 = x * Math.cos(rotY) + z * Math.sin(rotY);
+        let rz1 = -x * Math.sin(rotY) + z * Math.cos(rotY);
 
-        // Coordinate sferiche originali
-        let x = n.baseRadius * Math.sin(n.phi) * Math.cos(n.theta);
-        let y = n.baseRadius * Math.cos(n.phi);
-        let z = n.baseRadius * Math.sin(n.phi) * Math.sin(n.theta);
-
-        // Rotazione Y
-        let rx1 = x * Math.cos(globeAngleY) + z * Math.sin(globeAngleY);
-        let rz1 = -x * Math.sin(globeAngleY) + z * Math.cos(globeAngleY);
-
-        // Rotazione X
-        let ry2 = y * Math.cos(globeAngleX) - rz1 * Math.sin(globeAngleX);
-        let rz2 = y * Math.sin(globeAngleX) + rz1 * Math.cos(globeAngleX);
+        // Rotazione attorno all'asse X
+        let ry2 = y * Math.cos(rotX) - rz1 * Math.sin(rotX);
+        let rz2 = y * Math.sin(rotX) + rz1 * Math.cos(rotX);
 
         // Proiezione prospettica
-        const perspective = 400 / (400 + rz2);
+        const perspective = 350 / (350 + rz2);
         const projX = centerX + rx1 * perspective;
         const projY = centerY + ry2 * perspective;
-        const alpha = Math.max(0.15, Math.min(1, (rz2 + 200) / 400));
+        const alpha = Math.max(0.12, Math.min(1, (rz2 + currentRadius) / (currentRadius * 2)));
 
-        projectedNeurons.push({
+        projectedNodes.push({
             projX, projY, rz2, alpha, perspective,
             size: n.size * perspective,
-            pulse: (Math.sin(time * 3 + n.pulsePhase) + 1) / 2
+            pulse: (Math.sin(time * 4 + n.pulsePhase) + 1) / 2
         });
     });
 
-    // Ordinamento per profondità (Z-Index)
-    projectedNeurons.sort((a, b) => a.rz2 - b.rz2);
+    // Ordinamento per profondità Z
+    projectedNodes.sort((a, b) => a.rz2 - b.rz2);
 
-    // 3. SINAPSI / CONNESSIONI NEURALI
-    for (let i = 0; i < projectedNeurons.length; i++) {
-        for (let j = i + 1; j < projectedNeurons.length; j++) {
-            const n1 = projectedNeurons[i];
-            const n2 = projectedNeurons[j];
+    // 3. RETE SINAPTICA DORATA (LINEE DI CONNESSIONE)
+    for (let i = 0; i < projectedNodes.length; i++) {
+        for (let j = i + 1; j < projectedNodes.length; j++) {
+            const n1 = projectedNodes[i];
+            const n2 = projectedNodes[j];
 
             const dx = n1.projX - n2.projX;
             const dy = n1.projY - n2.projY;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (dist < 85) {
-                const lineAlpha = (1 - dist / 85) * 0.25 * n1.alpha;
+            if (dist < 75) {
+                const lineAlpha = (1 - dist / 75) * 0.3 * n1.alpha;
                 ctx.beginPath();
                 ctx.moveTo(n1.projX, n1.projY);
                 ctx.lineTo(n2.projX, n2.projY);
-                ctx.strokeStyle = `rgba(0, 212, 255, ${lineAlpha})`;
-                ctx.lineWidth = 0.6;
+                ctx.strokeStyle = `rgba(255, 180, 20, ${lineAlpha})`;
+                ctx.lineWidth = 0.7;
                 ctx.stroke();
             }
         }
     }
 
-    // 4. DISEGNO NEURONI E ALONI
-    projectedNeurons.forEach(n => {
-        // Connessione al Core centrale se abbastanza vicino
-        const distToCenter = Math.sqrt(Math.pow(n.projX - centerX, 2) + Math.pow(n.projY - centerY, 2));
-        if (distToCenter < 160 && Math.random() < 0.03) {
+    // 4. NODI LUMINOSI ED IMPULSI
+    projectedNodes.forEach(n => {
+        // Raggio centrale casuale
+        if (Math.random() < 0.012) {
             ctx.beginPath();
             ctx.moveTo(n.projX, n.projY);
             ctx.lineTo(centerX, centerY);
-            ctx.strokeStyle = `rgba(0, 212, 255, ${0.15 * n.alpha})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `rgba(255, 220, 100, ${0.25 * n.alpha})`;
+            ctx.lineWidth = 0.6;
             ctx.stroke();
         }
 
-        // Nodo Neuronale
-        ctx.fillStyle = `rgba(225, 250, 255, ${n.alpha})`;
+        // Punti d'oro luminosi
+        ctx.fillStyle = `rgba(255, 245, 200, ${n.alpha})`;
         ctx.beginPath();
         ctx.arc(n.projX, n.projY, n.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Alone luminoso
-        ctx.fillStyle = `rgba(0, 212, 255, ${n.alpha * 0.3 * n.pulse})`;
+        // Glow esterno per i nodi
+        ctx.fillStyle = `rgba(255, 160, 0, ${n.alpha * 0.4 * n.pulse})`;
         ctx.beginPath();
-        ctx.arc(n.projX, n.projY, n.size * 3, 0, Math.PI * 2);
+        ctx.arc(n.projX, n.projY, n.size * 3.5, 0, Math.PI * 2);
         ctx.fill();
     });
 }
@@ -454,7 +445,7 @@ async function sendMessage() {
     // Messaggio JARVIS
     const jarvisMsg = document.createElement("div");
     jarvisMsg.className = "message jarvis";
-    jarvisMsg.textContent = "Elaborazione in corso...";
+    jarvisMsg.textContent = "Elaborazione matrice in corso...";
     chat.appendChild(jarvisMsg);
 
     thinking = true;
@@ -472,7 +463,7 @@ async function sendMessage() {
         const data = await response.json();
         jarvisMsg.textContent = data.reply || "Nessun dato di risposta disponibile.";
     } catch (error) {
-        jarvisMsg.textContent = "Impossibile contattare il nucleo centrale. Rete non disponibile.";
+        jarvisMsg.textContent = "Sistemi offline. Impossibile contattare la matrice JARVIS.";
     } finally {
         setTimeout(() => { thinking = false; }, 500);
         input.disabled = false;
@@ -485,4 +476,3 @@ async function sendMessage() {
 
 </body>
 </html>
-

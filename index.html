@@ -4,71 +4,46 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>JARVIS</title>
 
 <style>
 
-/* =====================================================
-   BASE
-===================================================== */
-
 * {
     box-sizing: border-box;
 }
 
-html,
-body {
-
+html, body {
     margin: 0;
-
     width: 100%;
     height: 100%;
-
     overflow: hidden;
-
     background: #000;
-
     color: white;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-
 /* =====================================================
-   CANVAS
+   RETE
 ===================================================== */
 
 #network {
-
     position: fixed;
-
     inset: 0;
-
     width: 100%;
     height: 100%;
-
     z-index: 1;
 }
-
 
 /* =====================================================
    TITOLO
 ===================================================== */
 
 .title {
-
     position: fixed;
-
     top: 25px;
-
     left: 0;
     right: 0;
 
@@ -77,51 +52,38 @@ body {
     z-index: 5;
 
     font-size: 31px;
-
     font-weight: 300;
 
     letter-spacing: 12px;
 
-    color: #ecffff;
+    color: #f4ffff;
 
     text-shadow:
-
-        0 0 8px
-        rgba(0,234,255,.9),
-
-        0 0 30px
-        rgba(0,234,255,.3);
+        0 0 8px rgba(0,234,255,.9),
+        0 0 30px rgba(0,234,255,.3);
 }
 
-
 .status {
-
     margin-top: 8px;
 
     font-size: 8px;
-
     letter-spacing: 4px;
 
-    color:
-        rgba(255,255,255,.4);
+    color: rgba(255,255,255,.4);
 }
 
-
 .status b {
-
     color: #00eaff;
 
     text-shadow:
         0 0 12px #00eaff;
 }
 
-
 /* =====================================================
    CHAT
 ===================================================== */
 
 #chat {
-
     position: fixed;
 
     left: 15px;
@@ -134,7 +96,6 @@ body {
     overflow-y: auto;
 
     display: flex;
-
     flex-direction: column;
 
     gap: 8px;
@@ -142,28 +103,20 @@ body {
     z-index: 10;
 }
 
-
 .message {
-
     max-width: 82%;
 
-    padding:
-        11px
-        14px;
+    padding: 11px 14px;
 
     border-radius: 13px;
 
     font-size: 14px;
-
     line-height: 1.4;
 
-    backdrop-filter:
-        blur(15px);
+    backdrop-filter: blur(15px);
 }
 
-
 .user {
-
     align-self: flex-end;
 
     background:
@@ -174,9 +127,7 @@ body {
         rgba(0,220,255,.25);
 }
 
-
 .jarvis {
-
     align-self: flex-start;
 
     background:
@@ -187,13 +138,11 @@ body {
         rgba(0,220,255,.13);
 }
 
-
 /* =====================================================
    INPUT
 ===================================================== */
 
 .input-area {
-
     position: fixed;
 
     left: 15px;
@@ -208,16 +157,12 @@ body {
     z-index: 20;
 }
 
-
 input {
-
     flex: 1;
 
     height: 52px;
 
-    padding:
-        0
-        18px;
+    padding: 0 18px;
 
     border-radius: 28px;
 
@@ -234,13 +179,10 @@ input {
 
     font-size: 15px;
 
-    backdrop-filter:
-        blur(20px);
+    backdrop-filter: blur(20px);
 }
 
-
 input:focus {
-
     border-color:
         rgba(0,234,255,.7);
 
@@ -249,29 +191,22 @@ input:focus {
         rgba(0,234,255,.12);
 }
 
-
 button {
-
     width: 52px;
-
     height: 52px;
 
     border: none;
-
     border-radius: 50%;
 
-    background:
-        #00eaff;
+    background: #00eaff;
 
-    color:
-        #001015;
+    color: #001015;
 
     font-size: 19px;
 
     cursor: pointer;
 
     box-shadow:
-
         0 0 18px
         rgba(0,234,255,.6),
 
@@ -279,35 +214,28 @@ button {
         rgba(0,234,255,.18);
 }
 
-
 button:active {
-
-    transform:
-        scale(.9);
+    transform: scale(.9);
 }
-
 
 @media (max-width: 500px) {
 
     .title {
-
         font-size: 28px;
-
         letter-spacing: 9px;
     }
 }
 
 </style>
-
 </head>
 
 
 <body>
 
 
-<!-- ===================================================
+<!-- =====================================================
      TITOLO
-=================================================== -->
+===================================================== -->
 
 <div class="title">
 
@@ -316,7 +244,6 @@ button:active {
     <div class="status">
 
         <b>●</b>
-
         NEURAL NETWORK ONLINE
 
     </div>
@@ -324,16 +251,16 @@ button:active {
 </div>
 
 
-<!-- ===================================================
-     RETE
-=================================================== -->
+<!-- =====================================================
+     RETE NEURALE
+===================================================== -->
 
 <canvas id="network"></canvas>
 
 
-<!-- ===================================================
+<!-- =====================================================
      CHAT
-=================================================== -->
+===================================================== -->
 
 <div id="chat">
 
@@ -347,9 +274,9 @@ button:active {
 </div>
 
 
-<!-- ===================================================
+<!-- =====================================================
      INPUT
-=================================================== -->
+===================================================== -->
 
 <div class="input-area">
 
@@ -368,25 +295,18 @@ button:active {
 
 <script>
 
-
 /* =====================================================
    CANVAS
 ===================================================== */
 
 const canvas =
-    document.getElementById(
-        "network"
-    );
+    document.getElementById("network");
 
 const ctx =
-    canvas.getContext(
-        "2d"
-    );
-
+    canvas.getContext("2d");
 
 let width;
 let height;
-
 let dpr;
 
 let centerX;
@@ -436,11 +356,10 @@ function resize() {
         width / 2;
 
     centerY =
-        height / 2 - 10;
+        height / 2 - 20;
 
     createNetwork();
 }
-
 
 window.addEventListener(
     "resize",
@@ -452,10 +371,16 @@ window.addEventListener(
    NODI
 ===================================================== */
 
-const nodes = [];
+/*
+   Prima erano 145.
 
-const NODE_COUNT =
-    145;
+   Ora sono molti meno,
+   per dare un aspetto più pulito.
+*/
+
+const NODE_COUNT = 65;
+
+const nodes = [];
 
 
 function createNetwork() {
@@ -464,14 +389,14 @@ function createNetwork() {
 
     const radiusX =
         Math.min(
-            width * .38,
-            360
+            width * .35,
+            330
         );
 
     const radiusY =
         Math.min(
-            height * .32,
-            260
+            height * .30,
+            240
         );
 
 
@@ -489,19 +414,16 @@ function createNetwork() {
             2;
 
 
-        /*
-           Distribuzione più organica.
-        */
-
         const distance =
             Math.pow(
                 Math.random(),
-                .55
+                .60
             );
 
 
         const baseX =
-            centerX +
+            centerX
+            +
             Math.cos(angle)
             *
             radiusX
@@ -510,7 +432,8 @@ function createNetwork() {
 
 
         const baseY =
-            centerY +
+            centerY
+            +
             Math.sin(angle)
             *
             radiusY
@@ -520,17 +443,11 @@ function createNetwork() {
 
         nodes.push({
 
-            x:
-                baseX,
+            x: baseX,
+            y: baseY,
 
-            y:
-                baseY,
-
-            baseX:
-                baseX,
-
-            baseY:
-                baseY,
+            baseX: baseX,
+            baseY: baseY,
 
             angle:
                 Math.random()
@@ -541,17 +458,13 @@ function createNetwork() {
 
             radius:
                 Math.random()
-                *
-                25
-                +
-                8,
+                * 22
+                + 6,
 
             speed:
                 Math.random()
-                *
-                .0007
-                +
-                .00025,
+                * .0008
+                + .0003,
 
             phase:
                 Math.random()
@@ -562,10 +475,8 @@ function createNetwork() {
 
             size:
                 Math.random()
-                *
-                1.8
-                +
-                1.3,
+                * 2.1
+                + 1.5,
 
             energy:
                 Math.random()
@@ -575,28 +486,25 @@ function createNetwork() {
 }
 
 
-resize();
-
-
 /* =====================================================
    IMPULSI
 ===================================================== */
 
 const pulses = [];
 
-let thinking =
-    false;
+let thinking = false;
 
 
 function createPulse() {
 
     if (
         nodes.length < 2
-    )
+    ) {
         return;
+    }
 
 
-    const startIndex =
+    const start =
         Math.floor(
             Math.random()
             *
@@ -604,46 +512,34 @@ function createPulse() {
         );
 
 
-    let endIndex =
+    let end =
         Math.floor(
             Math.random()
             *
             nodes.length
         );
-
-
-    let attempts = 0;
 
 
     while (
-
-        startIndex ===
-        endIndex
-
-        &&
-
-        attempts < 10
-
+        start === end
     ) {
 
-        endIndex =
+        end =
             Math.floor(
                 Math.random()
                 *
                 nodes.length
             );
-
-        attempts++;
     }
 
 
     pulses.push({
 
         start:
-            nodes[startIndex],
+            nodes[start],
 
         end:
-            nodes[endIndex],
+            nodes[end],
 
         progress:
             0,
@@ -651,23 +547,22 @@ function createPulse() {
         speed:
             thinking
             ? .025
-            : .012
-
+            : .011
     });
 }
 
 
-/*
-   Nuovi impulsi.
-*/
+/* =====================================================
+   GENERAZIONE IMPULSI
+===================================================== */
 
 setInterval(
     () => {
 
         const amount =
             thinking
-            ? 5
-            : 2;
+            ? 4
+            : 1;
 
 
         for (
@@ -680,7 +575,7 @@ setInterval(
         }
 
     },
-    180
+    210
 );
 
 
@@ -688,8 +583,7 @@ setInterval(
    ANELLI
 ===================================================== */
 
-let ringRotation =
-    0;
+let ringRotation = 0;
 
 
 function drawRing(
@@ -699,8 +593,7 @@ function drawRing(
     vertical
 ) {
 
-    ringRotation +=
-        speed;
+    ringRotation += speed;
 
 
     ctx.save();
@@ -756,7 +649,7 @@ function drawRing(
 
 
 /* =====================================================
-   ANIMAZIONE
+   ANIMAZIONE PRINCIPALE
 ===================================================== */
 
 function animate() {
@@ -771,7 +664,7 @@ function animate() {
 
 
     /*
-       Sfondo con scia.
+       Sfondo.
     */
 
     ctx.fillStyle =
@@ -792,28 +685,28 @@ function animate() {
     nodes.forEach(
         node => {
 
-            const t =
-                time
-                *
-                node.speed;
-
-
             /*
                Movimento orbitale.
             */
 
             node.angle +=
-                node.speed
-                *
-                2;
+                node.speed *
+                (
+                    thinking
+                    ? 2.5
+                    : 1
+                );
 
+
+            /*
+               Movimento principale.
+            */
 
             node.x =
                 node.baseX
                 +
                 Math.cos(
-                    node.angle
-                    +
+                    node.angle +
                     node.phase
                 )
                 *
@@ -824,8 +717,7 @@ function animate() {
                 node.baseY
                 +
                 Math.sin(
-                    node.angle
-                    +
+                    node.angle +
                     node.phase
                 )
                 *
@@ -833,53 +725,58 @@ function animate() {
 
 
             /*
-               Movimento extra.
+               Movimento secondario.
+
+               Questo rende la rete
+               più organica.
             */
 
             node.x +=
                 Math.sin(
-                    t
-                    +
+                    time * .001 +
                     node.phase
                 )
                 *
-                7;
+                (
+                    thinking
+                    ? 12
+                    : 6
+                );
 
 
             node.y +=
                 Math.cos(
-                    t * 1.3
-                    +
+                    time * .0013 +
                     node.phase
                 )
                 *
-                7;
+                (
+                    thinking
+                    ? 12
+                    : 6
+                );
 
 
             /*
-               Energia.
+               Pulsazione.
             */
 
             node.energy =
                 (
                     Math.sin(
-                        time
-                        *
-                        .0025
-                        +
+                        time * .0025 +
                         node.phase
                     )
                     +
                     1
                 )
-                /
-                2;
+                / 2;
         }
     );
 
 
     /* =================================================
-       CONNESSIONI
+       CONNESSIONI CIANO
     ================================================= */
 
     for (
@@ -916,19 +813,19 @@ function animate() {
 
 
             if (
-                distance < 115
+                distance < 125
             ) {
 
                 const opacity =
                     (
                         1 -
-                        distance / 115
+                        distance / 125
                     )
                     *
                     (
                         thinking
-                        ? .38
-                        : .20
+                        ? .42
+                        : .22
                     );
 
 
@@ -947,10 +844,6 @@ function animate() {
                 );
 
 
-                /*
-                   CIANO.
-                */
-
                 ctx.strokeStyle =
                     `rgba(
                         0,
@@ -962,7 +855,7 @@ function animate() {
 
                 ctx.lineWidth =
                     thinking
-                    ? .8
+                    ? .9
                     : .5;
 
 
@@ -973,7 +866,7 @@ function animate() {
 
 
     /* =================================================
-       IMPULSI
+       IMPULSI CIANO
     ================================================= */
 
     for (
@@ -1010,8 +903,7 @@ function animate() {
             pulse.start.x
             +
             (
-                pulse.end.x
-                -
+                pulse.end.x -
                 pulse.start.x
             )
             *
@@ -1022,8 +914,7 @@ function animate() {
             pulse.start.y
             +
             (
-                pulse.end.y
-                -
+                pulse.end.y -
                 pulse.start.y
             )
             *
@@ -1031,7 +922,7 @@ function animate() {
 
 
         /*
-           Glow.
+           Grande alone ciano.
         */
 
         const glow =
@@ -1042,8 +933,8 @@ function animate() {
                 x,
                 y,
                 thinking
-                ? 20
-                : 14
+                ? 22
+                : 15
             );
 
 
@@ -1076,8 +967,8 @@ function animate() {
             x,
             y,
             thinking
-            ? 20
-            : 14,
+            ? 22
+            : 15,
             0,
             Math.PI * 2
         );
@@ -1085,10 +976,6 @@ function animate() {
 
         ctx.fill();
 
-
-        /*
-           Punto.
-        */
 
         ctx.fillStyle =
             "#ffffff";
@@ -1113,21 +1000,20 @@ function animate() {
 
 
     /* =================================================
-       NODI VIOLA / FUCSIA
+       NODI GIALLI
     ================================================= */
 
     nodes.forEach(
         node => {
 
-            const pulse =
+            const energy =
                 node.energy;
 
 
             const size =
                 node.size
                 +
-                pulse
-                *
+                energy *
                 (
                     thinking
                     ? 2.5
@@ -1136,7 +1022,7 @@ function animate() {
 
 
             /*
-               Glow fucsia.
+               Glow giallo/oro.
             */
 
             const glow =
@@ -1146,31 +1032,31 @@ function animate() {
                     0,
                     node.x,
                     node.y,
-                    size * 9
+                    size * 10
                 );
 
 
             glow.addColorStop(
                 0,
-                "rgba(255,255,255,.95)"
+                "rgba(255,255,255,.98)"
             );
 
 
             glow.addColorStop(
                 .15,
-                "rgba(255,70,230,.95)"
+                "rgba(255,230,80,.95)"
             );
 
 
             glow.addColorStop(
-                .45,
-                "rgba(170,30,255,.55)"
+                .40,
+                "rgba(255,190,0,.55)"
             );
 
 
             glow.addColorStop(
                 1,
-                "rgba(130,0,255,0)"
+                "rgba(255,150,0,0)"
             );
 
 
@@ -1184,7 +1070,7 @@ function animate() {
             ctx.arc(
                 node.x,
                 node.y,
-                size * 9,
+                size * 10,
                 0,
                 Math.PI * 2
             );
@@ -1194,11 +1080,11 @@ function animate() {
 
 
             /*
-               Punto centrale.
+               Centro del nodo.
             */
 
             ctx.fillStyle =
-                "#ff7af0";
+                "#ffe66b";
 
 
             ctx.beginPath();
@@ -1222,56 +1108,39 @@ function animate() {
        ANELLI LENTI
     ================================================= */
 
-    const multiplier =
+    const speed =
         thinking
-        ? 1.35
+        ? 1.25
         : 1;
 
 
-    drawRing(
+    const smallest =
         Math.min(
             width,
             height
-        ) * .28,
+        );
 
-        .00008
-        *
-        multiplier,
 
+    drawRing(
+        smallest * .27,
+        .00008 * speed,
         .18,
-
         .30
     );
 
 
     drawRing(
-        Math.min(
-            width,
-            height
-        ) * .34,
-
-        -.000055
-        *
-        multiplier,
-
+        smallest * .34,
+        -.000055 * speed,
         .12,
-
         .25
     );
 
 
     drawRing(
-        Math.min(
-            width,
-            height
-        ) * .40,
-
-        .000035
-        *
-        multiplier,
-
-        .08,
-
+        smallest * .41,
+        .000035 * speed,
+        .07,
         .20
     );
 }
@@ -1313,8 +1182,7 @@ input.addEventListener(
     event => {
 
         if (
-            event.key ===
-            "Enter"
+            event.key === "Enter"
         ) {
 
             sendMessage();
@@ -1324,7 +1192,7 @@ input.addEventListener(
 
 
 /* =====================================================
-   INVIO MESSAGGIO
+   INVIO A JARVIS
 ===================================================== */
 
 async function sendMessage() {
@@ -1335,8 +1203,9 @@ async function sendMessage() {
 
     if (
         !text
-    )
+    ) {
         return;
+    }
 
 
     /*
@@ -1366,7 +1235,7 @@ async function sendMessage() {
 
 
     /*
-       Risposta JARVIS.
+       Messaggio JARVIS.
     */
 
     const jarvisMessage =
@@ -1389,11 +1258,10 @@ async function sendMessage() {
 
 
     /*
-       ATTIVIAMO LA RETE.
+       ACCENDIAMO LA RETE.
     */
 
-    thinking =
-        true;
+    thinking = true;
 
 
     chat.scrollTop =
@@ -1426,7 +1294,6 @@ async function sendMessage() {
                                 text
 
                         })
-
                 }
             );
 
@@ -1458,18 +1325,17 @@ async function sendMessage() {
 
 
     /*
-       Lasciamo la rete
-       attiva ancora un po'.
+       Lasciamo l'animazione
+       intensa ancora un attimo.
     */
 
     setTimeout(
         () => {
 
-            thinking =
-                false;
+            thinking = false;
 
         },
-        800
+        900
     );
 
 

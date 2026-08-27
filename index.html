@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>JARVIS</title>
 
 <style>
@@ -16,9 +15,9 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #020202;
+    background: #000;
     color: white;
+    font-family: Arial, sans-serif;
 }
 
 body {
@@ -27,272 +26,100 @@ body {
 
 /* SFONDO */
 
-.background {
+#space {
     position: fixed;
     inset: 0;
-    background:
-        radial-gradient(circle at center, rgba(255, 190, 0, 0.12), transparent 25%),
-        radial-gradient(circle at center, #100d02 0%, #030303 48%, #000 100%);
+    width: 100%;
+    height: 100%;
 }
 
-.background::before {
-    content: "";
-    position: absolute;
+/* INTERFACCIA */
+
+.interface {
+    position: fixed;
     inset: 0;
-    background-image:
-        linear-gradient(rgba(255, 200, 0, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 200, 0, 0.025) 1px, transparent 1px);
-    background-size: 45px 45px;
-    mask-image: radial-gradient(circle, black, transparent 75%);
+    pointer-events: none;
+    z-index: 5;
 }
-
-/* HEADER */
 
 .header {
-    position: fixed;
-    top: 25px;
+    position: absolute;
+    top: 28px;
     left: 0;
     width: 100%;
     text-align: center;
-    z-index: 20;
 }
 
 .logo {
     font-size: 38px;
-    font-weight: 300;
     letter-spacing: 12px;
+    font-weight: 300;
     color: #ffd21f;
+
     text-shadow:
-        0 0 8px #ffd21f,
-        0 0 25px rgba(255, 180, 0, 0.8),
-        0 0 55px rgba(255, 140, 0, 0.4);
+        0 0 8px #fff06a,
+        0 0 25px #ffd21f,
+        0 0 55px #ff9900;
 }
 
 .status {
     margin-top: 8px;
     font-size: 10px;
     letter-spacing: 4px;
-    color: #999;
+    color: #aaa;
 }
 
-.status span {
+.status-dot {
     color: #ffd21f;
-    text-shadow: 0 0 10px #ffd21f;
+    text-shadow: 0 0 12px #ffd21f;
 }
 
-/* CORE */
+/* INFO LATERALI */
 
-.core-area {
+.info {
     position: absolute;
-    width: 360px;
-    height: 360px;
-    left: 50%;
-    top: 46%;
-    transform: translate(-50%, -50%);
-}
-
-/* BAGLIORE */
-
-.core-glow {
-    position: absolute;
-    width: 190px;
-    height: 190px;
-    left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-
-    border-radius: 50%;
-
-    background: rgba(255, 190, 0, 0.3);
-
-    filter: blur(45px);
-
-    animation: glowPulse 3s ease-in-out infinite;
-}
-
-/* SFERA */
-
-.core {
-    position: absolute;
-    width: 125px;
-    height: 125px;
-
-    left: 50%;
-    top: 50%;
-
-    transform: translate(-50%, -50%);
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle at 30% 25%,
-            #fffbd0 0%,
-            #fff06b 8%,
-            #ffd21f 28%,
-            #ffae00 55%,
-            #c85b00 78%,
-            #4a1b00 100%
-        );
-
-    box-shadow:
-        inset -18px -15px 30px rgba(80, 20, 0, 0.45),
-        inset 12px 10px 20px rgba(255, 255, 180, 0.5),
-        0 0 15px #fff06b,
-        0 0 40px #ffd21f,
-        0 0 80px rgba(255, 150, 0, 0.9),
-        0 0 140px rgba(255, 120, 0, 0.35);
-
-    animation: spherePulse 2.5s ease-in-out infinite;
-}
-
-/* TEXTURE DELLA SFERA */
-
-.core::before {
-    content: "";
-    position: absolute;
-    inset: 8px;
-
-    border-radius: 50%;
-
-    background:
-        repeating-radial-gradient(
-            circle at center,
-            transparent 0px,
-            rgba(255,255,180,.08) 2px,
-            transparent 4px
-        );
-
-    opacity: .5;
-
-    animation: sphereSpin 7s linear infinite;
-}
-
-/* ANELLI */
-
-.orbit {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-
-    border-radius: 50%;
-
-    border: 1px solid rgba(255, 215, 70, .75);
-
-    box-shadow:
-        0 0 6px rgba(255, 210, 30, .6),
-        0 0 18px rgba(255, 160, 0, .25);
-
-    transform-style: preserve-3d;
-}
-
-.orbit1 {
-    width: 320px;
-    height: 105px;
-    transform: translate(-50%, -50%) rotateX(65deg) rotateZ(15deg);
-    animation: orbit1 6s linear infinite;
-}
-
-.orbit2 {
-    width: 300px;
-    height: 115px;
-    transform: translate(-50%, -50%) rotateX(70deg) rotateZ(-55deg);
-    animation: orbit2 8s linear infinite reverse;
-}
-
-.orbit3 {
-    width: 270px;
-    height: 160px;
-    transform: translate(-50%, -50%) rotateY(65deg) rotateZ(20deg);
-    animation: orbit3 10s linear infinite;
-}
-
-.orbit4 {
-    width: 235px;
-    height: 235px;
-    border-style: dashed;
-    border-color: rgba(255, 210, 30, .3);
-    transform: translate(-50%, -50%) rotateX(70deg);
-    animation: orbit4 13s linear infinite reverse;
-}
-
-/* PUNTI LUMINOSI */
-
-.dot {
-    position: absolute;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-
-    background: #fff8a0;
-
-    box-shadow:
-        0 0 8px #fff06b,
-        0 0 20px #ffd21f;
-}
-
-.dot1 {
-    top: 35px;
-    left: 40px;
-    animation: floatingDot 3s infinite ease-in-out;
-}
-
-.dot2 {
-    bottom: 45px;
-    right: 35px;
-    animation: floatingDot 4s infinite ease-in-out 1s;
-}
-
-.dot3 {
-    top: 70px;
-    right: 25px;
-    animation: floatingDot 5s infinite ease-in-out 2s;
-}
-
-/* STATO */
-
-.core-status {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    bottom: -35px;
-
+    transform: translateY(-50%);
     font-size: 9px;
-    letter-spacing: 4px;
+    letter-spacing: 2px;
+    color: rgba(255, 215, 70, .55);
+    line-height: 2;
+}
 
-    color: rgba(255, 215, 70, .7);
+.info.left {
+    left: 18px;
+}
+
+.info.right {
+    right: 18px;
+    text-align: right;
 }
 
 /* CHAT */
 
 #chat {
     position: fixed;
-
     left: 15px;
     right: 15px;
-    bottom: 105px;
+    bottom: 100px;
 
-    max-height: 27vh;
-
+    max-height: 28vh;
     overflow-y: auto;
 
     display: flex;
     flex-direction: column;
-
     gap: 8px;
 
-    z-index: 30;
+    z-index: 20;
 }
 
 .message {
     max-width: 85%;
-
     padding: 12px 15px;
-
-    border-radius: 14px;
+    border-radius: 15px;
 
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.45;
 
     backdrop-filter: blur(15px);
 }
@@ -300,216 +127,101 @@ body {
 .user {
     align-self: flex-end;
 
-    background: rgba(255, 200, 20, .12);
-
-    border: 1px solid rgba(255, 210, 40, .35);
+    background: rgba(255, 205, 20, .10);
+    border: 1px solid rgba(255, 215, 70, .35);
 }
 
 .jarvis {
     align-self: flex-start;
 
-    background: rgba(255,255,255,.055);
-
-    border: 1px solid rgba(255,210,40,.2);
-
-    box-shadow: 0 0 15px rgba(255,180,0,.05);
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,215,70,.20);
 }
 
 /* INPUT */
 
 .input-area {
     position: fixed;
-
     left: 15px;
     right: 15px;
-    bottom: 20px;
+    bottom: 18px;
 
     display: flex;
     gap: 10px;
 
-    z-index: 40;
+    z-index: 30;
 }
 
 input {
     flex: 1;
-
     height: 55px;
 
     padding: 0 20px;
 
     border-radius: 30px;
-
-    border: 1px solid rgba(255,210,30,.35);
+    border: 1px solid rgba(255, 210, 30, .35);
 
     outline: none;
 
-    background: rgba(5,5,5,.85);
-
+    background: rgba(5,5,5,.82);
     color: white;
 
     font-size: 16px;
 
-    box-shadow:
-        0 0 20px rgba(255,180,0,.08);
-
     backdrop-filter: blur(15px);
+
+    box-shadow:
+        0 0 25px rgba(255,170,0,.08);
 }
 
 input:focus {
     border-color: #ffd21f;
 
     box-shadow:
-        0 0 20px rgba(255,210,30,.25);
+        0 0 25px rgba(255,210,30,.25);
 }
 
 button {
     width: 55px;
     height: 55px;
 
-    border: none;
+    border: 0;
     border-radius: 50%;
 
     background:
-        radial-gradient(circle at 35% 30%, #fff47a, #ffd21f 45%, #e88900);
+        radial-gradient(
+            circle at 30% 25%,
+            #fff9a0,
+            #ffd21f 40%,
+            #e88900
+        );
 
-    color: #241700;
+    color: #211500;
 
     font-size: 21px;
 
-    cursor: pointer;
-
     box-shadow:
-        0 0 12px #ffd21f,
-        0 0 30px rgba(255,150,0,.4);
+        0 0 15px #ffd21f,
+        0 0 40px rgba(255,150,0,.4);
 
-    transition: .2s;
+    cursor: pointer;
 }
 
 button:active {
     transform: scale(.92);
 }
 
-/* ANIMAZIONI */
-
-@keyframes spherePulse {
-    0%,100% {
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    50% {
-        transform: translate(-50%, -50%) scale(1.07);
-    }
-}
-
-@keyframes sphereSpin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes glowPulse {
-    0%,100% {
-        opacity: .35;
-        transform: translate(-50%, -50%) scale(.9);
-    }
-
-    50% {
-        opacity: .65;
-        transform: translate(-50%, -50%) scale(1.2);
-    }
-}
-
-@keyframes orbit1 {
-    from {
-        transform: translate(-50%, -50%) rotateX(65deg) rotateZ(0deg);
-    }
-
-    to {
-        transform: translate(-50%, -50%) rotateX(65deg) rotateZ(360deg);
-    }
-}
-
-@keyframes orbit2 {
-    from {
-        transform: translate(-50%, -50%) rotateX(70deg) rotateZ(0deg);
-    }
-
-    to {
-        transform: translate(-50%, -50%) rotateX(70deg) rotateZ(360deg);
-    }
-}
-
-@keyframes orbit3 {
-    from {
-        transform: translate(-50%, -50%) rotateY(65deg) rotateZ(0deg);
-    }
-
-    to {
-        transform: translate(-50%, -50%) rotateY(65deg) rotateZ(360deg);
-    }
-}
-
-@keyframes orbit4 {
-    from {
-        transform: translate(-50%, -50%) rotateX(70deg) rotateZ(0deg);
-    }
-
-    to {
-        transform: translate(-50%, -50%) rotateX(70deg) rotateZ(360deg);
-    }
-}
-
-@keyframes floatingDot {
-    0%,100% {
-        transform: translateY(0);
-        opacity: .4;
-    }
-
-    50% {
-        transform: translateY(-18px);
-        opacity: 1;
-    }
-}
-
-/* TELEFONO */
+/* MOBILE */
 
 @media (max-width: 500px) {
 
     .logo {
-        font-size: 31px;
+        font-size: 30px;
         letter-spacing: 9px;
     }
 
-    .core-area {
-        width: 320px;
-        height: 320px;
-        top: 44%;
-    }
-
-    .core {
-        width: 110px;
-        height: 110px;
-    }
-
-    .orbit1 {
-        width: 290px;
-    }
-
-    .orbit2 {
-        width: 275px;
-    }
-
-    .orbit3 {
-        width: 250px;
-    }
-
-    .orbit4 {
-        width: 210px;
-        height: 210px;
+    .info {
+        display: none;
     }
 
     #chat {
@@ -521,40 +233,40 @@ button:active {
 
 <body>
 
-<div class="background"></div>
+<canvas id="space"></canvas>
 
-<header class="header">
-    <div class="logo">JARVIS</div>
+<div class="interface">
 
-    <div class="status">
-        <span>●</span> SYSTEM ONLINE
+    <div class="header">
+
+        <div class="logo">
+            JARVIS
+        </div>
+
+        <div class="status">
+            <span class="status-dot">●</span>
+            SYSTEM ONLINE
+        </div>
+
     </div>
-</header>
 
-<!-- CORE CENTRALE -->
+    <div class="info left">
+        CORE<br>
+        ONLINE<br>
+        POWER 100%<br>
+        NEURAL LINK<br>
+        ACTIVE
+    </div>
 
-<div class="core-area">
-
-    <div class="core-glow"></div>
-
-    <div class="orbit orbit1"></div>
-    <div class="orbit orbit2"></div>
-    <div class="orbit orbit3"></div>
-    <div class="orbit orbit4"></div>
-
-    <div class="core"></div>
-
-    <div class="dot dot1"></div>
-    <div class="dot dot2"></div>
-    <div class="dot dot3"></div>
-
-    <div class="core-status">
-        JARVIS READY
+    <div class="info right">
+        JARVIS AI<br>
+        MODEL ONLINE<br>
+        RESPONSE READY<br>
+        MEMORY ACTIVE<br>
+        v2.0
     </div>
 
 </div>
-
-<!-- CHAT -->
 
 <div id="chat">
 
@@ -563,8 +275,6 @@ button:active {
     </div>
 
 </div>
-
-<!-- INPUT -->
 
 <div class="input-area">
 
@@ -575,72 +285,610 @@ button:active {
         onkeydown="if(event.key === 'Enter') sendMessage()"
     >
 
-    <button onclick="sendMessage()">➤</button>
+    <button onclick="sendMessage()">
+        ➤
+    </button>
 
 </div>
 
 <script>
 
+/* =========================================================
+   JARVIS CORE
+   ========================================================= */
+
+const canvas = document.getElementById("space");
+const ctx = canvas.getContext("2d");
+
+let width;
+let height;
+let centerX;
+let centerY;
+
+let time = 0;
+let thinking = false;
+
+function resize() {
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    width = window.innerWidth;
+    height = window.innerHeight;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    centerX = width / 2;
+    centerY = height * 0.45;
+}
+
+window.addEventListener("resize", resize);
+
+resize();
+
+/* PARTICELLE */
+
+const particles = [];
+
+for (let i = 0; i < 180; i++) {
+
+    particles.push({
+
+        angle: Math.random() * Math.PI * 2,
+
+        radius:
+            75 +
+            Math.random() * 150,
+
+        speed:
+            .0008 +
+            Math.random() * .002,
+
+        size:
+            .5 +
+            Math.random() * 1.8,
+
+        offset:
+            Math.random() * Math.PI * 2,
+
+        depth:
+            Math.random() * 2 - 1
+
+    });
+}
+
+/* =========================================================
+   SFONDO
+   ========================================================= */
+
+function drawBackground() {
+
+    const gradient =
+        ctx.createRadialGradient(
+            centerX,
+            centerY,
+            0,
+            centerX,
+            centerY,
+            Math.max(width, height) * .7
+        );
+
+    gradient.addColorStop(0, "#171000");
+    gradient.addColorStop(.25, "#090700");
+    gradient.addColorStop(.55, "#030303");
+    gradient.addColorStop(1, "#000000");
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(0, 0, width, height);
+
+    /* STELLE */
+
+    for (let i = 0; i < particles.length; i++) {
+
+        const p = particles[i];
+
+        const a =
+            p.angle +
+            time * p.speed * 20;
+
+        const x =
+            centerX +
+            Math.cos(a) * p.radius;
+
+        const y =
+            centerY +
+            Math.sin(a) * p.radius * .55;
+
+        const opacity =
+            .15 +
+            .4 *
+            Math.abs(
+                Math.sin(time * .01 + p.offset)
+            );
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            p.size,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            `rgba(255,215,70,${opacity})`;
+
+        ctx.fill();
+    }
+}
+
+/* =========================================================
+   BAGLIORE CENTRALE
+   ========================================================= */
+
+function drawGlow() {
+
+    const pulse =
+        1 +
+        Math.sin(time * .035) * .08;
+
+    if (thinking) {
+        pulse += .15;
+    }
+
+    const gradient =
+        ctx.createRadialGradient(
+            centerX,
+            centerY,
+            5,
+            centerX,
+            centerY,
+            190 * pulse
+        );
+
+    gradient.addColorStop(
+        0,
+        "rgba(255,245,120,.75)"
+    );
+
+    gradient.addColorStop(
+        .15,
+        "rgba(255,210,30,.40)"
+    );
+
+    gradient.addColorStop(
+        .45,
+        "rgba(255,150,0,.15)"
+    );
+
+    gradient.addColorStop(
+        1,
+        "rgba(255,100,0,0)"
+    );
+
+    ctx.fillStyle = gradient;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        centerX,
+        centerY,
+        190 * pulse,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+}
+
+/* =========================================================
+   SFERA 3D
+   ========================================================= */
+
+function drawCore() {
+
+    const radius =
+        67 +
+        Math.sin(time * .035) * 3 +
+        (thinking ? 5 : 0);
+
+    /* alone */
+
+    const glow =
+        ctx.createRadialGradient(
+            centerX - 20,
+            centerY - 22,
+            2,
+            centerX,
+            centerY,
+            radius * 1.6
+        );
+
+    glow.addColorStop(
+        0,
+        "#fffbd0"
+    );
+
+    glow.addColorStop(
+        .12,
+        "#fff06a"
+    );
+
+    glow.addColorStop(
+        .35,
+        "#ffd21f"
+    );
+
+    glow.addColorStop(
+        .65,
+        "#ff9d00"
+    );
+
+    glow.addColorStop(
+        .86,
+        "#9d4000"
+    );
+
+    glow.addColorStop(
+        1,
+        "#170700"
+    );
+
+    ctx.shadowColor = "#ffd21f";
+
+    ctx.shadowBlur =
+        thinking ? 65 : 45;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        centerX,
+        centerY,
+        radius,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = glow;
+
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+
+    /* RIFLESSO */
+
+    const reflection =
+        ctx.createRadialGradient(
+            centerX - 25,
+            centerY - 30,
+            1,
+            centerX - 15,
+            centerY - 20,
+            50
+        );
+
+    reflection.addColorStop(
+        0,
+        "rgba(255,255,220,.85)"
+    );
+
+    reflection.addColorStop(
+        .2,
+        "rgba(255,255,170,.25)"
+    );
+
+    reflection.addColorStop(
+        1,
+        "rgba(255,255,255,0)"
+    );
+
+    ctx.fillStyle = reflection;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        centerX,
+        centerY,
+        radius,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+    /* FILAMENTI INTERNI */
+
+    ctx.save();
+
+    ctx.beginPath();
+
+    ctx.arc(
+        centerX,
+        centerY,
+        radius - 2,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.clip();
+
+    for (let i = 0; i < 15; i++) {
+
+        const wave =
+            Math.sin(
+                time * .025 +
+                i * .8
+            );
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            centerX - radius,
+            centerY + wave * radius
+        );
+
+        ctx.bezierCurveTo(
+            centerX - 20,
+            centerY - radius + i * 8,
+            centerX + 20,
+            centerY + radius - i * 5,
+            centerX + radius,
+            centerY - wave * radius
+        );
+
+        ctx.strokeStyle =
+            `rgba(255,245,130,${.12 + i*.012})`;
+
+        ctx.lineWidth = 1;
+
+        ctx.stroke();
+    }
+
+    ctx.restore();
+}
+
+/* =========================================================
+   ANELLI ORBITANTI
+   ========================================================= */
+
+function drawOrbit(
+    radiusX,
+    radiusY,
+    rotation,
+    speed,
+    alpha,
+    dash
+) {
+
+    ctx.save();
+
+    ctx.translate(
+        centerX,
+        centerY
+    );
+
+    ctx.rotate(
+        rotation +
+        time * speed
+    );
+
+    ctx.scale(
+        1,
+        radiusY / radiusX
+    );
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        radiusX,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.setLineDash(
+        dash ? [5, 8] : []
+    );
+
+    ctx.strokeStyle =
+        `rgba(255,215,70,${alpha})`;
+
+    ctx.lineWidth = 1;
+
+    ctx.shadowColor = "#ffd21f";
+
+    ctx.shadowBlur = 8;
+
+    ctx.stroke();
+
+    ctx.restore();
+}
+
+/* =========================================================
+   PARTICELLE ORBITANTI
+   ========================================================= */
+
+function drawOrbitParticles() {
+
+    for (let i = 0; i < 14; i++) {
+
+        const angle =
+            time * (.006 + i * .00015) +
+            i * (Math.PI * 2 / 14);
+
+        const radius = 115 + (i % 3) * 28;
+
+        const x =
+            centerX +
+            Math.cos(angle) * radius;
+
+        const y =
+            centerY +
+            Math.sin(angle) * radius * .42;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            2,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle = "#ffe76a";
+
+        ctx.shadowColor = "#ffd21f";
+        ctx.shadowBlur = 15;
+
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+    }
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function render() {
+
+    time++;
+
+    drawBackground();
+
+    drawGlow();
+
+    /* anelli */
+
+    drawOrbit(
+        175,
+        65,
+        .2,
+        .003,
+        .65,
+        false
+    );
+
+    drawOrbit(
+        155,
+        70,
+        1.1,
+        -.004,
+        .55,
+        false
+    );
+
+    drawOrbit(
+        145,
+        95,
+        -.5,
+        .002,
+        .45,
+        true
+    );
+
+    drawOrbit(
+        125,
+        125,
+        .7,
+        -.0018,
+        .25,
+        true
+    );
+
+    drawOrbitParticles();
+
+    drawCore();
+
+    requestAnimationFrame(render);
+}
+
+render();
+
+/* =========================================================
+   CHAT CON JARVIS
+   ========================================================= */
+
 async function sendMessage() {
 
-    const input = document.getElementById("input");
-    const chat = document.getElementById("chat");
+    const input =
+        document.getElementById("input");
 
-    const text = input.value.trim();
+    const chat =
+        document.getElementById("chat");
+
+    const text =
+        input.value.trim();
 
     if (!text) return;
 
-    /* MESSAGGIO UTENTE */
+    /* UTENTE */
 
-    const userMessage = document.createElement("div");
+    const userMessage =
+        document.createElement("div");
 
-    userMessage.className = "message user";
-    userMessage.textContent = text;
+    userMessage.className =
+        "message user";
+
+    userMessage.textContent =
+        text;
 
     chat.appendChild(userMessage);
 
     input.value = "";
 
-    /* RISPOSTA JARVIS */
+    /* JARVIS */
 
-    const jarvisMessage = document.createElement("div");
+    const jarvisMessage =
+        document.createElement("div");
 
-    jarvisMessage.className = "message jarvis";
-    jarvisMessage.textContent = "Elaborazione in corso...";
+    jarvisMessage.className =
+        "message jarvis";
+
+    jarvisMessage.textContent =
+        "Elaborazione in corso...";
 
     chat.appendChild(jarvisMessage);
 
-    chat.scrollTop = chat.scrollHeight;
+    thinking = true;
+
+    chat.scrollTop =
+        chat.scrollHeight;
 
     try {
 
-        const response = await fetch(
-            "https://iao-ai-v3.oceano-masoud.workers.dev/",
-            {
-                method: "POST",
+        const response =
+            await fetch(
+                "https://iao-ai-v3.oceano-masoud.workers.dev/",
+                {
+                    method: "POST",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body: JSON.stringify({
-                    message: text
-                })
-            }
-        );
+                    body: JSON.stringify({
+                        message: text
+                    })
+                }
+            );
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        if (data.reply) {
-
-            jarvisMessage.textContent = data.reply;
-
-        } else {
-
-            jarvisMessage.textContent =
-                "Non ho ricevuto una risposta.";
-
-        }
+        jarvisMessage.textContent =
+            data.reply ||
+            "Non ho ricevuto una risposta.";
 
     } catch (error) {
 
@@ -651,7 +899,10 @@ async function sendMessage() {
 
     }
 
-    chat.scrollTop = chat.scrollHeight;
+    thinking = false;
+
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 </script>

@@ -17,215 +17,175 @@ html, body {
     overflow: hidden;
     background: #000;
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-body {
-    position: relative;
-}
-
-/* SFONDO */
-
-#space {
+#scene {
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
 }
 
-/* INTERFACCIA */
+/* =========================
+   INTERFACCIA
+========================= */
 
-.interface {
+.hud {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 5;
+    z-index: 10;
 }
 
-.header {
+.title {
     position: absolute;
-    top: 28px;
-    left: 0;
+    top: 25px;
     width: 100%;
     text-align: center;
-}
 
-.logo {
-    font-size: 38px;
-    letter-spacing: 12px;
+    font-size: 34px;
     font-weight: 300;
-    color: #ffd21f;
+    letter-spacing: 12px;
+
+    color: #e9fbff;
 
     text-shadow:
-        0 0 8px #fff06a,
-        0 0 25px #ffd21f,
-        0 0 55px #ff9900;
+        0 0 8px rgba(0,234,255,.7),
+        0 0 25px rgba(0,234,255,.3);
 }
 
-.status {
+.system {
     margin-top: 8px;
-    font-size: 10px;
-    letter-spacing: 4px;
-    color: #aaa;
-}
-
-.status-dot {
-    color: #ffd21f;
-    text-shadow: 0 0 12px #ffd21f;
-}
-
-/* INFO LATERALI */
-
-.info {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     font-size: 9px;
-    letter-spacing: 2px;
-    color: rgba(255, 215, 70, .55);
-    line-height: 2;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,.4);
 }
 
-.info.left {
-    left: 18px;
+.system span {
+    color: #00eaff;
+    text-shadow: 0 0 12px #00eaff;
 }
 
-.info.right {
-    right: 18px;
-    text-align: right;
-}
-
-/* CHAT */
+/* =========================
+   CHAT
+========================= */
 
 #chat {
     position: fixed;
-    left: 15px;
-    right: 15px;
-    bottom: 100px;
+    left: 14px;
+    right: 14px;
+    bottom: 95px;
 
-    max-height: 28vh;
+    max-height: 25vh;
     overflow-y: auto;
 
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 7px;
 
     z-index: 20;
 }
 
 .message {
-    max-width: 85%;
-    padding: 12px 15px;
-    border-radius: 15px;
+    max-width: 82%;
+    padding: 11px 14px;
+
+    border-radius: 12px;
 
     font-size: 14px;
-    line-height: 1.45;
+    line-height: 1.4;
 
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(12px);
 }
 
 .user {
     align-self: flex-end;
 
-    background: rgba(255, 205, 20, .10);
-    border: 1px solid rgba(255, 215, 70, .35);
+    background: rgba(0,234,255,.06);
+    border: 1px solid rgba(0,234,255,.23);
 }
 
 .jarvis {
     align-self: flex-start;
 
-    background: rgba(255,255,255,.045);
-    border: 1px solid rgba(255,215,70,.20);
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(0,234,255,.12);
 }
 
-/* INPUT */
+/* =========================
+   INPUT
+========================= */
 
 .input-area {
     position: fixed;
-    left: 15px;
-    right: 15px;
-    bottom: 18px;
+    left: 14px;
+    right: 14px;
+    bottom: 17px;
 
     display: flex;
-    gap: 10px;
+    gap: 9px;
 
     z-index: 30;
 }
 
 input {
     flex: 1;
-    height: 55px;
 
-    padding: 0 20px;
+    height: 52px;
 
-    border-radius: 30px;
-    border: 1px solid rgba(255, 210, 30, .35);
+    padding: 0 18px;
 
+    border-radius: 26px;
+
+    border: 1px solid rgba(0,234,255,.22);
+
+    background: rgba(3,3,3,.9);
+
+    color: white;
     outline: none;
 
-    background: rgba(5,5,5,.82);
-    color: white;
-
-    font-size: 16px;
+    font-size: 15px;
 
     backdrop-filter: blur(15px);
-
-    box-shadow:
-        0 0 25px rgba(255,170,0,.08);
 }
 
 input:focus {
-    border-color: #ffd21f;
+    border-color: rgba(0,234,255,.7);
 
     box-shadow:
-        0 0 25px rgba(255,210,30,.25);
+        0 0 20px rgba(0,234,255,.12);
 }
 
 button {
-    width: 55px;
-    height: 55px;
+    width: 52px;
+    height: 52px;
 
     border: 0;
     border-radius: 50%;
 
-    background:
-        radial-gradient(
-            circle at 30% 25%,
-            #fff9a0,
-            #ffd21f 40%,
-            #e88900
-        );
+    background: #00dff5;
 
-    color: #211500;
+    color: #001114;
 
-    font-size: 21px;
-
-    box-shadow:
-        0 0 15px #ffd21f,
-        0 0 40px rgba(255,150,0,.4);
+    font-size: 19px;
 
     cursor: pointer;
+
+    box-shadow:
+        0 0 15px rgba(0,234,255,.55),
+        0 0 35px rgba(0,234,255,.2);
 }
 
 button:active {
-    transform: scale(.92);
+    transform: scale(.9);
 }
-
-/* MOBILE */
 
 @media (max-width: 500px) {
 
-    .logo {
-        font-size: 30px;
+    .title {
+        font-size: 29px;
         letter-spacing: 9px;
-    }
-
-    .info {
-        display: none;
-    }
-
-    #chat {
-        max-height: 25vh;
     }
 }
 </style>
@@ -233,37 +193,18 @@ button:active {
 
 <body>
 
-<canvas id="space"></canvas>
+<canvas id="scene"></canvas>
 
-<div class="interface">
+<div class="hud">
 
-    <div class="header">
+    <div class="title">
 
-        <div class="logo">
-            JARVIS
+        JARVIS
+
+        <div class="system">
+            <span>●</span> NEURAL CORE ONLINE
         </div>
 
-        <div class="status">
-            <span class="status-dot">●</span>
-            SYSTEM ONLINE
-        </div>
-
-    </div>
-
-    <div class="info left">
-        CORE<br>
-        ONLINE<br>
-        POWER 100%<br>
-        NEURAL LINK<br>
-        ACTIVE
-    </div>
-
-    <div class="info right">
-        JARVIS AI<br>
-        MODEL ONLINE<br>
-        RESPONSE READY<br>
-        MEMORY ACTIVE<br>
-        v2.0
     </div>
 
 </div>
@@ -271,7 +212,7 @@ button:active {
 <div id="chat">
 
     <div class="message jarvis">
-        Ciao. Sono JARVIS. 🧠
+        Sistema online. Sono JARVIS.
     </div>
 
 </div>
@@ -285,556 +226,637 @@ button:active {
         onkeydown="if(event.key === 'Enter') sendMessage()"
     >
 
-    <button onclick="sendMessage()">
-        ➤
-    </button>
+    <button onclick="sendMessage()">➤</button>
 
 </div>
 
-<script>
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+    }
+}
+</script>
+
+<script type="module">
+
+import * as THREE from "three";
 
 /* =========================================================
-   JARVIS CORE
-   ========================================================= */
+   SCENA
+========================================================= */
 
-const canvas = document.getElementById("space");
-const ctx = canvas.getContext("2d");
+const canvas =
+    document.getElementById("scene");
 
-let width;
-let height;
-let centerX;
-let centerY;
+const scene =
+    new THREE.Scene();
 
-let time = 0;
-let thinking = false;
+const camera =
+    new THREE.PerspectiveCamera(
+        42,
+        innerWidth / innerHeight,
+        0.1,
+        1000
+    );
 
-function resize() {
+camera.position.z = 7;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    width = window.innerWidth;
-    height = window.innerHeight;
-
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    centerX = width / 2;
-    centerY = height * 0.45;
-}
-
-window.addEventListener("resize", resize);
-
-resize();
-
-/* PARTICELLE */
-
-const particles = [];
-
-for (let i = 0; i < 180; i++) {
-
-    particles.push({
-
-        angle: Math.random() * Math.PI * 2,
-
-        radius:
-            75 +
-            Math.random() * 150,
-
-        speed:
-            .0008 +
-            Math.random() * .002,
-
-        size:
-            .5 +
-            Math.random() * 1.8,
-
-        offset:
-            Math.random() * Math.PI * 2,
-
-        depth:
-            Math.random() * 2 - 1
-
+const renderer =
+    new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true
     });
-}
+
+renderer.setPixelRatio(
+    Math.min(devicePixelRatio, 2)
+);
+
+renderer.setSize(
+    innerWidth,
+    innerHeight
+);
 
 /* =========================================================
-   SFONDO
-   ========================================================= */
+   LUCI
+========================================================= */
 
-function drawBackground() {
+const ambient =
+    new THREE.AmbientLight(
+        0x061519,
+        1.4
+    );
 
-    const gradient =
-        ctx.createRadialGradient(
-            centerX,
-            centerY,
-            0,
-            centerX,
-            centerY,
-            Math.max(width, height) * .7
+scene.add(ambient);
+
+const cyanLight =
+    new THREE.PointLight(
+        0x00eaff,
+        7,
+        9
+    );
+
+scene.add(cyanLight);
+
+const goldLight =
+    new THREE.PointLight(
+        0xffb800,
+        3,
+        5
+    );
+
+scene.add(goldLight);
+
+/* =========================================================
+   MENTE JARVIS
+========================================================= */
+
+const brain =
+    new THREE.Group();
+
+scene.add(brain);
+
+/* =========================================================
+   NUCLEO CENTRALE
+========================================================= */
+
+const nucleusGeometry =
+    new THREE.SphereGeometry(
+        .42,
+        64,
+        64
+    );
+
+const nucleusMaterial =
+    new THREE.MeshPhysicalMaterial({
+
+        color: 0xffd94a,
+
+        emissive: 0xffa800,
+
+        emissiveIntensity: 2.2,
+
+        roughness: .12,
+
+        metalness: .15,
+
+        clearcoat: 1
+    });
+
+const nucleus =
+    new THREE.Mesh(
+        nucleusGeometry,
+        nucleusMaterial
+    );
+
+brain.add(nucleus);
+
+/* piccolo nucleo bianco */
+
+const nucleusGlowGeometry =
+    new THREE.SphereGeometry(
+        .20,
+        32,
+        32
+    );
+
+const nucleusGlowMaterial =
+    new THREE.MeshBasicMaterial({
+        color: 0xffffff
+    });
+
+const nucleusGlow =
+    new THREE.Mesh(
+        nucleusGlowGeometry,
+        nucleusGlowMaterial
+    );
+
+brain.add(nucleusGlow);
+
+/* =========================================================
+   RETE NEURALE
+========================================================= */
+
+const nodes = [];
+const nodeCount = 125;
+
+/*
+    I nodi vengono distribuiti
+    su una sfera 3D.
+*/
+
+for (let i = 0; i < nodeCount; i++) {
+
+    const phi =
+        Math.acos(
+            1 -
+            2 *
+            (i + .5) /
+            nodeCount
         );
 
-    gradient.addColorStop(0, "#171000");
-    gradient.addColorStop(.25, "#090700");
-    gradient.addColorStop(.55, "#030303");
-    gradient.addColorStop(1, "#000000");
+    const theta =
+        Math.PI *
+        (1 + Math.sqrt(5)) *
+        i;
 
-    ctx.fillStyle = gradient;
+    const radius =
+        1.0 +
+        Math.random() * .45;
 
-    ctx.fillRect(0, 0, width, height);
+    const x =
+        radius *
+        Math.sin(phi) *
+        Math.cos(theta);
 
-    /* STELLE */
+    const y =
+        radius *
+        Math.cos(phi);
 
-    for (let i = 0; i < particles.length; i++) {
+    const z =
+        radius *
+        Math.sin(phi) *
+        Math.sin(theta);
 
-        const p = particles[i];
-
-        const a =
-            p.angle +
-            time * p.speed * 20;
-
-        const x =
-            centerX +
-            Math.cos(a) * p.radius;
-
-        const y =
-            centerY +
-            Math.sin(a) * p.radius * .55;
-
-        const opacity =
-            .15 +
-            .4 *
-            Math.abs(
-                Math.sin(time * .01 + p.offset)
-            );
-
-        ctx.beginPath();
-
-        ctx.arc(
+    nodes.push(
+        new THREE.Vector3(
             x,
             y,
-            p.size,
-            0,
-            Math.PI * 2
-        );
+            z
+        )
+    );
+}
 
-        ctx.fillStyle =
-            `rgba(255,215,70,${opacity})`;
+/* =========================================================
+   PUNTI DELLA RETE
+========================================================= */
 
-        ctx.fill();
+const nodePositions =
+    new Float32Array(
+        nodeCount * 3
+    );
+
+for (
+    let i = 0;
+    i < nodeCount;
+    i++
+) {
+
+    nodePositions[i * 3] =
+        nodes[i].x;
+
+    nodePositions[i * 3 + 1] =
+        nodes[i].y;
+
+    nodePositions[i * 3 + 2] =
+        nodes[i].z;
+}
+
+const nodeGeometry =
+    new THREE.BufferGeometry();
+
+nodeGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        nodePositions,
+        3
+    )
+);
+
+const nodeMaterial =
+    new THREE.PointsMaterial({
+
+        color: 0x7df6ff,
+
+        size: .035,
+
+        transparent: true,
+
+        opacity: .9,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+const nodePoints =
+    new THREE.Points(
+        nodeGeometry,
+        nodeMaterial
+    );
+
+brain.add(nodePoints);
+
+/* =========================================================
+   CONNESSIONI NEURALI
+========================================================= */
+
+const linePositions = [];
+
+for (
+    let i = 0;
+    i < nodeCount;
+    i++
+) {
+
+    for (
+        let j = i + 1;
+        j < nodeCount;
+        j++
+    ) {
+
+        const distance =
+            nodes[i].distanceTo(
+                nodes[j]
+            );
+
+        if (distance < .48) {
+
+            linePositions.push(
+                nodes[i].x,
+                nodes[i].y,
+                nodes[i].z,
+
+                nodes[j].x,
+                nodes[j].y,
+                nodes[j].z
+            );
+        }
     }
 }
 
-/* =========================================================
-   BAGLIORE CENTRALE
-   ========================================================= */
+const lineGeometry =
+    new THREE.BufferGeometry();
 
-function drawGlow() {
+lineGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(
+        linePositions,
+        3
+    )
+);
+
+const lineMaterial =
+    new THREE.LineBasicMaterial({
+
+        color: 0x00dff5,
+
+        transparent: true,
+
+        opacity: .20,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+const neuralLines =
+    new THREE.LineSegments(
+        lineGeometry,
+        lineMaterial
+    );
+
+brain.add(neuralLines);
+
+/* =========================================================
+   ANELLI
+========================================================= */
+
+const rings = [];
+
+function createRing(
+    radius,
+    rotation,
+    speed,
+    opacity
+) {
+
+    const geometry =
+        new THREE.TorusGeometry(
+            radius,
+            .006,
+            8,
+            240
+        );
+
+    const material =
+        new THREE.MeshBasicMaterial({
+
+            color: 0x00eaff,
+
+            transparent: true,
+
+            opacity,
+
+            blending:
+                THREE.AdditiveBlending
+        });
+
+    const ring =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+    ring.rotation.set(
+        rotation.x,
+        rotation.y,
+        rotation.z
+    );
+
+    ring.userData.speed =
+        speed;
+
+    brain.add(ring);
+
+    rings.push(ring);
+}
+
+createRing(
+    1.45,
+    {x: .9, y: .2, z: .2},
+    .00055,
+    .55
+);
+
+createRing(
+    1.65,
+    {x: 1.3, y: -.4, z: .8},
+    -.00035,
+    .38
+);
+
+createRing(
+    1.85,
+    {x: .3, y: 1.1, z: -.5},
+    .00025,
+    .28
+);
+
+/* =========================================================
+   PARTICELLE
+========================================================= */
+
+const particleCount = 280;
+
+const particlePositions =
+    new Float32Array(
+        particleCount * 3
+    );
+
+for (
+    let i = 0;
+    i < particleCount;
+    i++
+) {
+
+    const radius =
+        1.5 +
+        Math.random() * 2.5;
+
+    const angle =
+        Math.random() *
+        Math.PI * 2;
+
+    particlePositions[i * 3] =
+        Math.cos(angle) *
+        radius;
+
+    particlePositions[i * 3 + 1] =
+        (Math.random() - .5) *
+        3;
+
+    particlePositions[i * 3 + 2] =
+        Math.sin(angle) *
+        radius;
+}
+
+const particleGeometry =
+    new THREE.BufferGeometry();
+
+particleGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        particlePositions,
+        3
+    )
+);
+
+const particleMaterial =
+    new THREE.PointsMaterial({
+
+        color: 0x52eefa,
+
+        size: .014,
+
+        transparent: true,
+
+        opacity: .35,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+const particles =
+    new THREE.Points(
+        particleGeometry,
+        particleMaterial
+    );
+
+brain.add(particles);
+
+/* =========================================================
+   ANIMAZIONE
+========================================================= */
+
+let thinking = false;
+
+const clock =
+    new THREE.Clock();
+
+function animate() {
+
+    requestAnimationFrame(
+        animate
+    );
+
+    const t =
+        clock.getElapsedTime();
+
+    /* ROTAZIONE GENERALE */
+
+    brain.rotation.y =
+        t * .035;
+
+    brain.rotation.x =
+        Math.sin(t * .12) * .025;
+
+    /* NUCLEO */
+
+    nucleus.rotation.y =
+        t * .15;
+
+    nucleusGlow.scale.setScalar(
+        1 +
+        Math.sin(t * 2) * .08
+    );
+
+    /* RETE */
+
+    nodePoints.rotation.y =
+        -t * .025;
+
+    neuralLines.rotation.y =
+        -t * .025;
+
+    /* ANELLI */
+
+    rings.forEach(
+        ring => {
+
+            ring.rotation.z +=
+                ring.userData.speed *
+                (thinking ? 1.5 : 1);
+
+            ring.rotation.x +=
+                ring.userData.speed *
+                .05;
+        }
+    );
+
+    /* PARTICELLE */
+
+    particles.rotation.y =
+        t * .012;
+
+    particles.rotation.x =
+        Math.sin(t * .1) * .025;
+
+    /* PULSAZIONE */
 
     const pulse =
         1 +
-        Math.sin(time * .035) * .08;
+        Math.sin(t * 1.7) *
+        .018;
 
-    if (thinking) {
-        pulse += .15;
+    const active =
+        thinking
+            ? 1.07
+            : 1;
+
+    brain.scale.setScalar(
+        pulse * active
+    );
+
+    /* LUCI */
+
+    cyanLight.intensity =
+        thinking
+            ? 11
+            : 6 +
+              Math.sin(t * 1.7) *
+              .7;
+
+    goldLight.intensity =
+        thinking
+            ? 5
+            : 2.5;
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+animate();
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        camera.aspect =
+            innerWidth /
+            innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            innerWidth,
+            innerHeight
+        );
     }
-
-    const gradient =
-        ctx.createRadialGradient(
-            centerX,
-            centerY,
-            5,
-            centerX,
-            centerY,
-            190 * pulse
-        );
-
-    gradient.addColorStop(
-        0,
-        "rgba(255,245,120,.75)"
-    );
-
-    gradient.addColorStop(
-        .15,
-        "rgba(255,210,30,.40)"
-    );
-
-    gradient.addColorStop(
-        .45,
-        "rgba(255,150,0,.15)"
-    );
-
-    gradient.addColorStop(
-        1,
-        "rgba(255,100,0,0)"
-    );
-
-    ctx.fillStyle = gradient;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        centerX,
-        centerY,
-        190 * pulse,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-}
+);
 
 /* =========================================================
-   SFERA 3D
-   ========================================================= */
-
-function drawCore() {
-
-    const radius =
-        67 +
-        Math.sin(time * .035) * 3 +
-        (thinking ? 5 : 0);
-
-    /* alone */
-
-    const glow =
-        ctx.createRadialGradient(
-            centerX - 20,
-            centerY - 22,
-            2,
-            centerX,
-            centerY,
-            radius * 1.6
-        );
-
-    glow.addColorStop(
-        0,
-        "#fffbd0"
-    );
-
-    glow.addColorStop(
-        .12,
-        "#fff06a"
-    );
-
-    glow.addColorStop(
-        .35,
-        "#ffd21f"
-    );
-
-    glow.addColorStop(
-        .65,
-        "#ff9d00"
-    );
-
-    glow.addColorStop(
-        .86,
-        "#9d4000"
-    );
-
-    glow.addColorStop(
-        1,
-        "#170700"
-    );
-
-    ctx.shadowColor = "#ffd21f";
-
-    ctx.shadowBlur =
-        thinking ? 65 : 45;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        centerX,
-        centerY,
-        radius,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle = glow;
-
-    ctx.fill();
-
-    ctx.shadowBlur = 0;
-
-    /* RIFLESSO */
-
-    const reflection =
-        ctx.createRadialGradient(
-            centerX - 25,
-            centerY - 30,
-            1,
-            centerX - 15,
-            centerY - 20,
-            50
-        );
-
-    reflection.addColorStop(
-        0,
-        "rgba(255,255,220,.85)"
-    );
-
-    reflection.addColorStop(
-        .2,
-        "rgba(255,255,170,.25)"
-    );
-
-    reflection.addColorStop(
-        1,
-        "rgba(255,255,255,0)"
-    );
-
-    ctx.fillStyle = reflection;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        centerX,
-        centerY,
-        radius,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-    /* FILAMENTI INTERNI */
-
-    ctx.save();
-
-    ctx.beginPath();
-
-    ctx.arc(
-        centerX,
-        centerY,
-        radius - 2,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.clip();
-
-    for (let i = 0; i < 15; i++) {
-
-        const wave =
-            Math.sin(
-                time * .025 +
-                i * .8
-            );
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            centerX - radius,
-            centerY + wave * radius
-        );
-
-        ctx.bezierCurveTo(
-            centerX - 20,
-            centerY - radius + i * 8,
-            centerX + 20,
-            centerY + radius - i * 5,
-            centerX + radius,
-            centerY - wave * radius
-        );
-
-        ctx.strokeStyle =
-            `rgba(255,245,130,${.12 + i*.012})`;
-
-        ctx.lineWidth = 1;
-
-        ctx.stroke();
-    }
-
-    ctx.restore();
-}
-
-/* =========================================================
-   ANELLI ORBITANTI
-   ========================================================= */
-
-function drawOrbit(
-    radiusX,
-    radiusY,
-    rotation,
-    speed,
-    alpha,
-    dash
-) {
-
-    ctx.save();
-
-    ctx.translate(
-        centerX,
-        centerY
-    );
-
-    ctx.rotate(
-        rotation +
-        time * speed
-    );
-
-    ctx.scale(
-        1,
-        radiusY / radiusX
-    );
-
-    ctx.beginPath();
-
-    ctx.arc(
-        0,
-        0,
-        radiusX,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.setLineDash(
-        dash ? [5, 8] : []
-    );
-
-    ctx.strokeStyle =
-        `rgba(255,215,70,${alpha})`;
-
-    ctx.lineWidth = 1;
-
-    ctx.shadowColor = "#ffd21f";
-
-    ctx.shadowBlur = 8;
-
-    ctx.stroke();
-
-    ctx.restore();
-}
-
-/* =========================================================
-   PARTICELLE ORBITANTI
-   ========================================================= */
-
-function drawOrbitParticles() {
-
-    for (let i = 0; i < 14; i++) {
-
-        const angle =
-            time * (.006 + i * .00015) +
-            i * (Math.PI * 2 / 14);
-
-        const radius = 115 + (i % 3) * 28;
-
-        const x =
-            centerX +
-            Math.cos(angle) * radius;
-
-        const y =
-            centerY +
-            Math.sin(angle) * radius * .42;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            x,
-            y,
-            2,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fillStyle = "#ffe76a";
-
-        ctx.shadowColor = "#ffd21f";
-        ctx.shadowBlur = 15;
-
-        ctx.fill();
-
-        ctx.shadowBlur = 0;
-    }
-}
-
-/* =========================================================
-   RENDER
-   ========================================================= */
-
-function render() {
-
-    time++;
-
-    drawBackground();
-
-    drawGlow();
-
-    /* anelli */
-
-    drawOrbit(
-        175,
-        65,
-        .2,
-        .003,
-        .65,
-        false
-    );
-
-    drawOrbit(
-        155,
-        70,
-        1.1,
-        -.004,
-        .55,
-        false
-    );
-
-    drawOrbit(
-        145,
-        95,
-        -.5,
-        .002,
-        .45,
-        true
-    );
-
-    drawOrbit(
-        125,
-        125,
-        .7,
-        -.0018,
-        .25,
-        true
-    );
-
-    drawOrbitParticles();
-
-    drawCore();
-
-    requestAnimationFrame(render);
-}
-
-render();
-
-/* =========================================================
-   CHAT CON JARVIS
-   ========================================================= */
-
-async function sendMessage() {
+   CHAT JARVIS
+========================================================= */
+
+window.sendMessage =
+async function() {
 
     const input =
-        document.getElementById("input");
+        document.getElementById(
+            "input"
+        );
 
     const chat =
-        document.getElementById("chat");
+        document.getElementById(
+            "chat"
+        );
 
     const text =
         input.value.trim();
 
-    if (!text) return;
-
-    /* UTENTE */
+    if (!text)
+        return;
 
     const userMessage =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     userMessage.className =
         "message user";
@@ -842,22 +864,26 @@ async function sendMessage() {
     userMessage.textContent =
         text;
 
-    chat.appendChild(userMessage);
+    chat.appendChild(
+        userMessage
+    );
 
     input.value = "";
 
-    /* JARVIS */
-
     const jarvisMessage =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     jarvisMessage.className =
         "message jarvis";
 
     jarvisMessage.textContent =
-        "Elaborazione in corso...";
+        "Sto elaborando...";
 
-    chat.appendChild(jarvisMessage);
+    chat.appendChild(
+        jarvisMessage
+    );
 
     thinking = true;
 
@@ -895,7 +921,7 @@ async function sendMessage() {
         console.error(error);
 
         jarvisMessage.textContent =
-            "Errore di collegamento con JARVIS.";
+            "Errore di collegamento.";
 
     }
 
@@ -903,7 +929,7 @@ async function sendMessage() {
 
     chat.scrollTop =
         chat.scrollHeight;
-}
+};
 
 </script>
 

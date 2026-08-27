@@ -51,8 +51,8 @@ html, body {
     color: #eaffff;
 
     text-shadow:
-        0 0 10px rgba(0, 234, 255, .8),
-        0 0 35px rgba(0, 234, 255, .25);
+        0 0 10px rgba(0,234,255,.8),
+        0 0 35px rgba(0,234,255,.25);
 }
 
 .status {
@@ -68,7 +68,7 @@ html, body {
     color: #00eaff;
 
     text-shadow:
-        0 0 10px #00eaff;
+        0 0 12px #00eaff;
 }
 
 /* =========================
@@ -109,10 +109,11 @@ html, body {
 .user {
     align-self: flex-end;
 
-    background: rgba(0, 220, 255, .06);
+    background:
+        rgba(0,220,255,.06);
 
     border:
-        1px solid rgba(0, 220, 255, .25);
+        1px solid rgba(0,220,255,.25);
 }
 
 .jarvis {
@@ -122,7 +123,7 @@ html, body {
         rgba(255,255,255,.035);
 
     border:
-        1px solid rgba(0, 220, 255, .12);
+        1px solid rgba(0,220,255,.12);
 }
 
 /* =========================
@@ -152,7 +153,7 @@ input {
     border-radius: 28px;
 
     border:
-        1px solid rgba(0, 234, 255, .25);
+        1px solid rgba(0,234,255,.25);
 
     background:
         rgba(0,0,0,.9);
@@ -272,7 +273,7 @@ const scene =
 
 const camera =
     new THREE.PerspectiveCamera(
-        40,
+        42,
         innerWidth / innerHeight,
         .1,
         100
@@ -282,7 +283,7 @@ camera.position.z = 6.5;
 
 const renderer =
     new THREE.WebGLRenderer({
-        canvas: canvas,
+        canvas,
         antialias: true,
         alpha: true
     });
@@ -302,16 +303,16 @@ renderer.setSize(
 
 scene.add(
     new THREE.AmbientLight(
-        0x062025,
-        1.5
+        0x061820,
+        1.4
     )
 );
 
 const cyanLight =
     new THREE.PointLight(
         0x00eaff,
-        5,
-        8
+        7,
+        9
     );
 
 scene.add(cyanLight);
@@ -326,138 +327,249 @@ const goldLight =
 scene.add(goldLight);
 
 /* =====================================================
-   CORE
+   CERVELLO
 ===================================================== */
 
-const core =
+const brain =
     new THREE.Group();
 
-scene.add(core);
+scene.add(brain);
+
+/*
+    Dimensioni principali
+*/
+
+const WIDTH = 2.4;
+const HEIGHT = 1.65;
+const DEPTH = 1.35;
 
 /* =====================================================
-   ENERGIA CENTRALE
+   FUNZIONE FORMA CERVELLO
 ===================================================== */
 
-const energyGeometry =
-    new THREE.SphereGeometry(
-        .38,
-        64,
-        64
+function brainPoint(t, side) {
+
+    /*
+       t = posizione lungo il cervello
+       side = emisfero
+    */
+
+    const x =
+        side *
+        (
+            .15 +
+            .95 *
+            Math.sin(t)
+        );
+
+    const y =
+        .25 *
+        Math.cos(t * 2) +
+        .35;
+
+    const z =
+        .7 *
+        Math.sin(t * 1.5);
+
+    return new THREE.Vector3(
+        x,
+        y,
+        z
     );
-
-const energyMaterial =
-    new THREE.MeshBasicMaterial({
-        color: 0xffffff
-    });
-
-const energy =
-    new THREE.Mesh(
-        energyGeometry,
-        energyMaterial
-    );
-
-core.add(energy);
+}
 
 /* =====================================================
-   GLOW INTERNO
+   FILAMENTI CEREBRALI
 ===================================================== */
 
-const glowGeometry =
-    new THREE.SphereGeometry(
-        .62,
-        64,
-        64
-    );
+const filamentGroup =
+    new THREE.Group();
 
-const glowMaterial =
-    new THREE.MeshBasicMaterial({
+brain.add(
+    filamentGroup
+);
 
+const filamentMaterials = [
+    new THREE.LineBasicMaterial({
         color: 0x00eaff,
-
         transparent: true,
+        opacity: .65,
+        blending: THREE.AdditiveBlending
+    }),
 
-        opacity: .07,
+    new THREE.LineBasicMaterial({
+        color: 0x52f3ff,
+        transparent: true,
+        opacity: .32,
+        blending: THREE.AdditiveBlending
+    })
+];
 
-        side: THREE.BackSide,
+/*
+    Creiamo molte "circonvoluzioni"
+*/
 
-        blending:
-            THREE.AdditiveBlending
-    });
+for (
+    let row = 0;
+    row < 30;
+    row++
+) {
 
-const glow =
-    new THREE.Mesh(
-        glowGeometry,
-        glowMaterial
+    const points = [];
+
+    const side =
+        row % 2 === 0
+        ? 1
+        : -1;
+
+    const offset =
+        (row / 30) * Math.PI * 2;
+
+    for (
+        let i = 0;
+        i < 70;
+        i++
+    ) {
+
+        const t =
+            (i / 69) *
+            Math.PI *
+            2;
+
+        const x =
+            side *
+            (
+                .25 +
+                .72 *
+                Math.cos(t)
+            );
+
+        const y =
+            .15 +
+            .55 *
+            Math.sin(t * 2 + offset)
+            +
+            (
+                row / 30 -
+                .5
+            ) *
+            .45;
+
+        const z =
+            .62 *
+            Math.sin(
+                t +
+                offset
+            );
+
+        points.push(
+            new THREE.Vector3(
+                x,
+                y,
+                z
+            )
+        );
+    }
+
+    const geometry =
+        new THREE.BufferGeometry()
+            .setFromPoints(points);
+
+    const line =
+        new THREE.Line(
+            geometry,
+            filamentMaterials[
+                row % 2
+            ]
+        );
+
+    filamentGroup.add(
+        line
     );
-
-core.add(glow);
+}
 
 /* =====================================================
-   RETE NEURALE
+   NODI NEURALI
 ===================================================== */
-
-const nodeCount = 180;
 
 const nodes = [];
 
 for (
     let i = 0;
-    i < nodeCount;
+    i < 260;
     i++
 ) {
 
-    const phi =
-        Math.acos(
-            1 -
-            2 * (
-                i + .5
-            ) /
-            nodeCount
+    const side =
+        Math.random() > .5
+        ? 1
+        : -1;
+
+    const x =
+        side *
+        (
+            .15 +
+            Math.random() *
+            .95
         );
 
-    const theta =
-        Math.PI *
-        (1 + Math.sqrt(5)) *
-        i;
+    const y =
+        (
+            Math.random() -
+            .5
+        ) *
+        1.25;
+
+    const z =
+        (
+            Math.random() -
+            .5
+        ) *
+        1.25;
 
     /*
-       Distanza variabile:
-       crea una struttura meno perfetta
-       e più organica.
+       Eliminiamo alcuni punti
+       fuori dalla forma.
     */
 
-    const radius =
-        0.85 +
-        Math.random() * .55;
+    const normalized =
+        (
+            x * x
+        ) / 1.1 +
+        (
+            y * y
+        ) / 1.0 +
+        (
+            z * z
+        ) / 1.0;
 
-    nodes.push(
-        new THREE.Vector3(
-            radius *
-            Math.sin(phi) *
-            Math.cos(theta),
+    if (
+        normalized <
+        1.35
+    ) {
 
-            radius *
-            Math.cos(phi),
-
-            radius *
-            Math.sin(phi) *
-            Math.sin(theta)
-        )
-    );
+        nodes.push(
+            new THREE.Vector3(
+                x,
+                y,
+                z
+            )
+        );
+    }
 }
 
 /* =====================================================
-   NODI
+   PUNTI
 ===================================================== */
 
 const nodePositions =
     new Float32Array(
-        nodeCount * 3
+        nodes.length * 3
     );
 
 for (
     let i = 0;
-    i < nodeCount;
+    i < nodes.length;
     i++
 ) {
 
@@ -492,13 +604,13 @@ nodeGeometry.setAttribute(
 const nodeMaterial =
     new THREE.PointsMaterial({
 
-        color: 0x8ff8ff,
+        color: 0x9dfaff,
 
         size: .025,
 
         transparent: true,
 
-        opacity: .9,
+        opacity: .95,
 
         blending:
             THREE.AdditiveBlending
@@ -510,7 +622,9 @@ const nodePoints =
         nodeMaterial
     );
 
-core.add(nodePoints);
+brain.add(
+    nodePoints
+);
 
 /* =====================================================
    CONNESSIONI
@@ -520,13 +634,13 @@ const connections = [];
 
 for (
     let i = 0;
-    i < nodeCount;
+    i < nodes.length;
     i++
 ) {
 
     for (
         let j = i + 1;
-        j < nodeCount;
+        j < nodes.length;
         j++
     ) {
 
@@ -537,7 +651,7 @@ for (
 
         if (
             distance <
-            .43
+            .28
         ) {
 
             connections.push(
@@ -568,37 +682,91 @@ connectionGeometry.setAttribute(
 const connectionMaterial =
     new THREE.LineBasicMaterial({
 
-        color: 0x00eaff,
+        color: 0x00dff5,
 
         transparent: true,
 
-        opacity: .16,
+        opacity: .13,
 
         blending:
             THREE.AdditiveBlending
     });
 
-const connectionsMesh =
+const connectionMesh =
     new THREE.LineSegments(
         connectionGeometry,
         connectionMaterial
     );
 
-core.add(connectionsMesh);
+brain.add(
+    connectionMesh
+);
 
 /* =====================================================
-   ANELLI ORBITALI
+   DIVISIONE TRA EMISFERI
+===================================================== */
+
+const divisionGeometry =
+    new THREE.BoxGeometry(
+        .025,
+        1.3,
+        1.1
+    );
+
+const divisionMaterial =
+    new THREE.MeshBasicMaterial({
+        color: 0x00eaff,
+        transparent: true,
+        opacity: .15,
+        blending: THREE.AdditiveBlending
+    });
+
+const division =
+    new THREE.Mesh(
+        divisionGeometry,
+        divisionMaterial
+    );
+
+brain.add(
+    division
+);
+
+/* =====================================================
+   NUCLEO
+===================================================== */
+
+const coreGeometry =
+    new THREE.SphereGeometry(
+        .20,
+        32,
+        32
+    );
+
+const coreMaterial =
+    new THREE.MeshBasicMaterial({
+        color: 0xffffff
+    });
+
+const coreLight =
+    new THREE.Mesh(
+        coreGeometry,
+        coreMaterial
+    );
+
+brain.add(
+    coreLight
+);
+
+/* =====================================================
+   ANELLI
 ===================================================== */
 
 const rings = [];
 
-function addRing(
+function createRing(
     radius,
-    rotX,
-    rotY,
-    rotZ,
-    speed,
-    opacity
+    rotation,
+    speed
 ) {
 
     const geometry =
@@ -606,7 +774,7 @@ function addRing(
             radius,
             .004,
             8,
-            300
+            260
         );
 
     const material =
@@ -616,7 +784,7 @@ function addRing(
 
             transparent: true,
 
-            opacity: opacity,
+            opacity: .28,
 
             blending:
                 THREE.AdditiveBlending
@@ -629,51 +797,46 @@ function addRing(
         );
 
     ring.rotation.set(
-        rotX,
-        rotY,
-        rotZ
+        rotation.x,
+        rotation.y,
+        rotation.z
     );
 
     ring.userData.speed =
         speed;
 
-    core.add(ring);
+    brain.add(
+        ring
+    );
 
-    rings.push(ring);
+    rings.push(
+        ring
+    );
 }
 
-addRing(
-    1.42,
-    .8,
-    .2,
-    .2,
-    .00045,
-    .45
+createRing(
+    1.45,
+    {x: .9, y: .2, z: .2},
+    .00035
 );
 
-addRing(
-    1.63,
-    1.3,
-    -.4,
-    .8,
-    -.00028,
-    .32
+createRing(
+    1.65,
+    {x: 1.3, y: -.4, z: .8},
+    -.00025
 );
 
-addRing(
-    1.82,
-    .3,
-    1.1,
-    -.5,
-    .00020,
-    .22
+createRing(
+    1.85,
+    {x: .3, y: 1.1, z: -.5},
+    .00018
 );
 
 /* =====================================================
    PARTICELLE
 ===================================================== */
 
-const particleCount = 450;
+const particleCount = 300;
 
 const particlePositions =
     new Float32Array(
@@ -687,8 +850,8 @@ for (
 ) {
 
     const radius =
-        1.5 +
-        Math.random() * 2.7;
+        1.4 +
+        Math.random() * 2.5;
 
     const angle =
         Math.random() *
@@ -706,7 +869,7 @@ for (
         (
             Math.random() -
             .5
-        ) * 3;
+        ) * 2.7;
 
     particlePositions[
         i * 3 + 2
@@ -730,13 +893,13 @@ particleGeometry.setAttribute(
 const particleMaterial =
     new THREE.PointsMaterial({
 
-        color: 0x39eaff,
+        color: 0x42eaff,
 
         size: .012,
 
         transparent: true,
 
-        opacity: .3,
+        opacity: .25,
 
         blending:
             THREE.AdditiveBlending
@@ -748,20 +911,18 @@ const particles =
         particleMaterial
     );
 
-core.add(particles);
+brain.add(
+    particles
+);
 
 /* =====================================================
-   STATO
+   ANIMAZIONE
 ===================================================== */
 
 let thinking = false;
 
 const clock =
     new THREE.Clock();
-
-/* =====================================================
-   ANIMAZIONE
-===================================================== */
 
 function animate() {
 
@@ -772,23 +933,30 @@ function animate() {
     const t =
         clock.getElapsedTime();
 
-    /* movimento generale */
+    /* movimento cervello */
 
-    core.rotation.y =
-        t * .025;
-
-    core.rotation.x =
+    brain.rotation.y =
         Math.sin(
-            t * .12
+            t * .08
+        ) * .10;
+
+    brain.rotation.x =
+        Math.sin(
+            t * .11
         ) * .025;
+
+    /* filamenti */
+
+    filamentGroup.rotation.y =
+        t * .012;
 
     /* rete */
 
     nodePoints.rotation.y =
-        -t * .035;
+        -t * .018;
 
-    connectionsMesh.rotation.y =
-        -t * .035;
+    connectionMesh.rotation.y =
+        -t * .018;
 
     /* anelli */
 
@@ -799,62 +967,38 @@ function animate() {
                 ring.userData.speed *
                 (
                     thinking
-                    ? 1.6
+                    ? 1.5
                     : 1
                 );
 
             ring.rotation.x +=
                 ring.userData.speed *
-                .04;
+                .03;
         }
     );
 
     /* particelle */
 
     particles.rotation.y =
-        t * .01;
+        t * .008;
 
-    particles.rotation.x =
-        Math.sin(
-            t * .08
-        ) * .02;
+    /* nucleo */
 
-    /* pulsazione */
-
-    const pulse =
-        1 +
-        Math.sin(
-            t * 1.6
-        ) * .025;
-
-    const active =
+    coreLight.scale.setScalar(
         thinking
-        ? 1.08
-        : 1;
-
-    core.scale.setScalar(
-        pulse * active
-    );
-
-    /* energia */
-
-    energy.scale.setScalar(
-        thinking
-        ? 1.15 +
-          Math.sin(t * 6) * .06
+        ? 1.25 +
+          Math.sin(t * 7) * .08
         : 1 +
           Math.sin(t * 2) * .03
     );
 
-    /* luci */
+    /* luce */
 
     cyanLight.intensity =
         thinking
-        ? 10
-        : 5 +
-          Math.sin(
-              t * 1.5
-          ) * .6;
+        ? 11
+        : 6 +
+          Math.sin(t * 1.5) * .6;
 
     goldLight.intensity =
         thinking
@@ -913,36 +1057,36 @@ async function() {
     if (!text)
         return;
 
-    const user =
+    const userMessage =
         document.createElement(
             "div"
         );
 
-    user.className =
+    userMessage.className =
         "message user";
 
-    user.textContent =
+    userMessage.textContent =
         text;
 
     chat.appendChild(
-        user
+        userMessage
     );
 
     input.value = "";
 
-    const reply =
+    const jarvisMessage =
         document.createElement(
             "div"
         );
 
-    reply.className =
+    jarvisMessage.className =
         "message jarvis";
 
-    reply.textContent =
+    jarvisMessage.textContent =
         "Elaborazione...";
 
     chat.appendChild(
-        reply
+        jarvisMessage
     );
 
     thinking = true;
@@ -972,7 +1116,7 @@ async function() {
         const data =
             await response.json();
 
-        reply.textContent =
+        jarvisMessage.textContent =
             data.reply ||
             "Non ho ricevuto una risposta.";
 
@@ -980,7 +1124,7 @@ async function() {
 
         console.error(error);
 
-        reply.textContent =
+        jarvisMessage.textContent =
             "Errore di collegamento.";
     }
 

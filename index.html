@@ -3,152 +3,509 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jarvis</title>
+
+    <title>JARVIS</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
             font-family: Arial, sans-serif;
-            background: #0b0a0f;
             color: white;
-            height: 100vh;
+            background:
+                radial-gradient(circle at center, #302400 0%, #080808 35%, #020202 75%);
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
-        h1 {
+        /* TITOLO */
+
+        .header {
+            position: relative;
+            z-index: 10;
             text-align: center;
-            margin: 20px 0 5px;
+            padding-top: 30px;
         }
 
-        p {
-            text-align: center;
-            color: #999;
+        .header h1 {
+            margin: 0;
+            font-size: 42px;
+            letter-spacing: 10px;
+            color: #ffd83d;
+            text-shadow:
+                0 0 10px #ffd83d,
+                0 0 25px #ffb700,
+                0 0 50px #ff9500;
         }
+
+        .status {
+            margin-top: 8px;
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #d6d6d6;
+        }
+
+        .online {
+            color: #ffd83d;
+        }
+
+        /* AREA CENTRALE */
+
+        .core-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 310px;
+            height: 310px;
+            transform: translate(-50%, -52%);
+        }
+
+        /* BAGLIORE */
+
+        .glow {
+            position: absolute;
+            inset: 70px;
+            border-radius: 50%;
+            background: #ffd21f;
+            filter: blur(35px);
+            opacity: .45;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        /* SFERA */
+
+        .core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 115px;
+            height: 115px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle at 35% 30%,
+                    #fff9b0 0%,
+                    #fff06a 15%,
+                    #ffd21f 45%,
+                    #ff9d00 75%,
+                    #c75b00 100%
+                );
+
+            box-shadow:
+                0 0 20px #fff16a,
+                0 0 45px #ffd21f,
+                0 0 90px #ff9d00;
+
+            animation: coreRotate 8s linear infinite,
+                       corePulse 2.5s ease-in-out infinite;
+        }
+
+        /* LINEE ORBITANTI */
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 280px;
+            height: 100px;
+
+            border: 2px solid rgba(255, 216, 61, .8);
+            border-radius: 50%;
+
+            transform: translate(-50%, -50%) rotate(25deg);
+            box-shadow:
+                0 0 8px rgba(255, 216, 61, .7),
+                inset 0 0 8px rgba(255, 216, 61, .3);
+
+            animation: orbitSpin 5s linear infinite;
+        }
+
+        .orbit:nth-child(2) {
+            width: 250px;
+            height: 140px;
+            transform: translate(-50%, -50%) rotate(70deg);
+            animation-duration: 7s;
+            animation-direction: reverse;
+        }
+
+        .orbit:nth-child(3) {
+            width: 300px;
+            height: 75px;
+            transform: translate(-50%, -50%) rotate(-20deg);
+            animation-duration: 9s;
+        }
+
+        .orbit:nth-child(4) {
+            width: 190px;
+            height: 190px;
+            transform: translate(-50%, -50%) rotate(45deg);
+            border-style: dashed;
+            opacity: .55;
+            animation-duration: 12s;
+            animation-direction: reverse;
+        }
+
+        /* PICCOLE PARTICELLE */
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #ffe76a;
+            box-shadow: 0 0 12px #ffd21f;
+            animation: particleFloat 4s ease-in-out infinite;
+        }
+
+        .p1 {
+            top: 15%;
+            left: 10%;
+        }
+
+        .p2 {
+            top: 70%;
+            left: 5%;
+            animation-delay: 1s;
+        }
+
+        .p3 {
+            top: 20%;
+            right: 8%;
+            animation-delay: 2s;
+        }
+
+        .p4 {
+            bottom: 10%;
+            right: 12%;
+            animation-delay: 3s;
+        }
+
+        /* TESTO CENTRALE */
+
+        .listening {
+            position: absolute;
+            bottom: -55px;
+            width: 100%;
+            text-align: center;
+
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #cfcfcf;
+        }
+
+        /* CHAT */
 
         #chat {
-            flex: 1;
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            bottom: 105px;
+
+            max-height: 35vh;
             overflow-y: auto;
-            padding: 20px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            padding: 5px;
         }
 
         .message {
-            max-width: 80%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 12px;
+            max-width: 85%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            font-size: 15px;
+            line-height: 1.4;
+            backdrop-filter: blur(10px);
         }
 
         .user {
-            margin-left: auto;
-            background: #3b3bff;
+            align-self: flex-end;
+            background: rgba(255, 210, 31, .15);
+            border: 1px solid rgba(255, 210, 31, .4);
         }
 
-        .iao {
-            background: #202027;
+        .jarvis {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 216, 61, .25);
         }
+
+        /* INPUT */
 
         .input-area {
+            position: fixed;
+            bottom: 20px;
+            left: 15px;
+            right: 15px;
+
             display: flex;
             gap: 10px;
-            padding: 15px;
+            z-index: 20;
         }
 
         input {
             flex: 1;
-            padding: 14px;
-            border-radius: 10px;
-            border: 1px solid #333;
-            background: #18181f;
+            padding: 15px 18px;
+
+            border-radius: 25px;
+            border: 1px solid rgba(255, 216, 61, .4);
+
+            outline: none;
+
+            background: rgba(10, 10, 10, .85);
             color: white;
+
             font-size: 16px;
+
+            box-shadow:
+                0 0 15px rgba(255, 210, 31, .1);
+        }
+
+        input:focus {
+            border-color: #ffd21f;
+            box-shadow:
+                0 0 20px rgba(255, 210, 31, .25);
         }
 
         button {
-            padding: 0 18px;
+            width: 55px;
+            height: 55px;
+
             border: none;
-            border-radius: 10px;
-            background: #3b3bff;
-            color: white;
-            font-size: 16px;
+            border-radius: 50%;
+
+            background: #ffd21f;
+            color: #111;
+
+            font-size: 20px;
+            cursor: pointer;
+
+            box-shadow:
+                0 0 15px rgba(255, 210, 31, .6),
+                0 0 35px rgba(255, 150, 0, .25);
+
+            transition: .2s;
+        }
+
+        button:hover {
+            transform: scale(1.08);
+        }
+
+        /* ANIMAZIONI */
+
+        @keyframes orbitSpin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @keyframes coreRotate {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @keyframes corePulse {
+            0%, 100% {
+                box-shadow:
+                    0 0 20px #fff16a,
+                    0 0 45px #ffd21f,
+                    0 0 90px #ff9d00;
+            }
+
+            50% {
+                box-shadow:
+                    0 0 30px #fff16a,
+                    0 0 65px #ffd21f,
+                    0 0 120px #ff9d00;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(.9);
+                opacity: .35;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: .55;
+            }
+        }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: .4;
+            }
+
+            50% {
+                transform: translateY(-25px);
+                opacity: 1;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 500px) {
+
+            .header h1 {
+                font-size: 34px;
+                letter-spacing: 8px;
+            }
+
+            .core-container {
+                width: 280px;
+                height: 280px;
+            }
+
+            .core {
+                width: 100px;
+                height: 100px;
+            }
+
+            .orbit {
+                width: 250px;
+            }
+
+            #chat {
+                max-height: 30vh;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<h1> Jarvis </h1>
-<p>La tua intelligenza artificiale personale</p>
-
-<div id="chat">
-    <div class="message iao">
-        Ciao! Sono Jarvis. 👋
+    <div class="header">
+        <h1>JARVIS</h1>
+        <div class="status">
+            <span class="online">●</span>
+            SYSTEM ONLINE
+        </div>
     </div>
-</div>
 
-<div class="input-area">
-    <input id="input" type="text" placeholder="Scrivi a Jarvis...">
-    <button onclick="sendMessage()">Invia</button>
-</div>
+    <div class="core-container">
 
-<script>
+        <div class="glow"></div>
 
-async function sendMessage() {
+        <div class="orbit"></div>
+        <div class="orbit"></div>
+        <div class="orbit"></div>
+        <div class="orbit"></div>
 
-    const input = document.getElementById("input");
-    const chat = document.getElementById("chat");
+        <div class="core"></div>
 
-    const text = input.value.trim();
+        <div class="particle p1"></div>
+        <div class="particle p2"></div>
+        <div class="particle p3"></div>
+        <div class="particle p4"></div>
 
-    if (text === "") return;
+        <div class="listening">
+            JARVIS ONLINE
+        </div>
 
-    const userMessage = document.createElement("div");
-    userMessage.className = "message user";
-    userMessage.textContent = text;
+    </div>
 
-    chat.appendChild(userMessage);
+    <div id="chat">
 
-    input.value = "";
+        <div class="message jarvis">
+            Ciao! Sono JARVIS. 🧠
+        </div>
 
-    const iaoMessage = document.createElement("div");
-    iaoMessage.className = "message iao";
-    iaoMessage.textContent = "Sto pensando... 🧠";
+    </div>
 
-    chat.appendChild(iaoMessage);
+    <div class="input-area">
 
-    try {
+        <input
+            id="input"
+            type="text"
+            placeholder="Parla con JARVIS..."
+            onkeydown="if(event.key === 'Enter') sendMessage()"
+        >
 
-        const response = await fetch(
-            "https://iao-ai-v3.oceano-masoud.workers.dev/",
-            {
-                method: "POST",
+        <button onclick="sendMessage()">➤</button>
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+    </div>
 
-                body: JSON.stringify({
-                    message: text
-                })
+    <script>
+
+        async function sendMessage() {
+
+            const input = document.getElementById("input");
+            const chat = document.getElementById("chat");
+
+            const text = input.value.trim();
+
+            if (text === "") return;
+
+            const userMessage = document.createElement("div");
+            userMessage.className = "message user";
+            userMessage.textContent = text;
+
+            chat.appendChild(userMessage);
+
+            input.value = "";
+
+            const jarvisMessage = document.createElement("div");
+            jarvisMessage.className = "message jarvis";
+            jarvisMessage.textContent = "Sto pensando... 🧠";
+
+            chat.appendChild(jarvisMessage);
+
+            chat.scrollTop = chat.scrollHeight;
+
+            try {
+
+                const response = await fetch(
+                    "https://iao-ai-v3.oceano-masoud.workers.dev/",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            message: text
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                jarvisMessage.textContent =
+                    data.reply || "Non ho ricevuto una risposta.";
+
+            } catch (error) {
+
+                jarvisMessage.textContent =
+                    "Errore di collegamento.";
+
             }
-        );
 
-        const data = await response.json();
+            chat.scrollTop = chat.scrollHeight;
+        }
 
-        iaoMessage.textContent =
-            data.reply || "Non ho ricevuto una risposta.";
-
-    } catch (error) {
-
-        iaoMessage.textContent =
-            "Errore di collegamento.";
-
-    }
-
-    chat.scrollTop = chat.scrollHeight;
-}
-
-</script>
+    </script>
 
 </body>
 </html>

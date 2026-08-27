@@ -216,7 +216,7 @@ button:disabled {
 </div>
 
 <div class="header-title">
-    <h1>J.A.R.V.I.S.</h1>
+    <h2>JARVIS</h2>
     <div class="status">
         <b>●</b> NEURAL SPHERE ONLINE
     </div>
@@ -226,13 +226,13 @@ button:disabled {
 
 <div id="chat">
     <div class="message jarvis">
-        Inizializzazione matrice completata. In attesa di istruzioni.
+        
     </div>
 </div>
 
 <div class="input-container">
     <div class="input-box">
-        <input id="input" type="text" placeholder="Comunica con JARVIS..." autocomplete="off">
+        <input id="input" type="text" placeholder="ASK JARVIS..." autocomplete="off">
         <button id="send">send</button>
     </div>
 </div>
@@ -265,13 +265,13 @@ function resize() {
 window.addEventListener("resize", resize);
 
 /* =====================================================
-   SFERA CINEMATOGRAFICA JARVIS (AVENGERS STYLE)
+   SFERA CINEMATOGRAFICA JARVIS (AGE OF ULTRON STYLE)
 ===================================================== */
 
 const RINGS_COUNT = 16;
 const PARTICLES_COUNT = 320;
 const rings = [];
-const particles = [];
+const particles = [5];
 
 function initJarvisSphere() {
     rings.length = 0;

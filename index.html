@@ -2,233 +2,281 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>JARVIS — Neural Interface</title>
 
 <style>
 *{box-sizing:border-box}
 
 html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    color:#ffd000;
-    font-family:Arial,Helvetica,sans-serif;
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+background:#000;
+color:#fff;
+font-family:Arial,Helvetica,sans-serif
+}
+
+body{
+background:
+radial-gradient(circle at center,rgba(255,180,0,.035),transparent 38%),
+#000
 }
 
 #canvas{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
+position:fixed;
+inset:0;
+width:100%;
+height:100%;
+z-index:1
 }
 
+/* HUD */
+
+.hud{
+position:fixed;
+z-index:10;
+font-family:monospace;
+font-size:9px;
+letter-spacing:2px;
+line-height:1.8;
+color:rgba(255,205,50,.48);
+pointer-events:none
+}
+
+.hud.left{
+top:24px;
+left:24px;
+border-left:2px solid rgba(255,190,0,.6);
+padding-left:10px
+}
+
+.hud.right{
+top:24px;
+right:24px;
+text-align:right;
+border-right:2px solid rgba(255,190,0,.6);
+padding-right:10px
+}
+
+/* TITLE */
+
 .title{
-    position:fixed;
-    top:25px;
-    left:0;
-    right:0;
-    text-align:center;
-    z-index:10;
-    pointer-events:none;
+position:fixed;
+top:22px;
+left:0;
+right:0;
+z-index:11;
+text-align:center;
+pointer-events:none
 }
 
 .title h1{
-    margin:0;
-    color:white;
-    font-size:25px;
-    font-weight:300;
-    letter-spacing:12px;
-    text-shadow:0 0 15px #ffd000;
+margin:0;
+font-size:24px;
+font-weight:200;
+letter-spacing:12px;
+color:#fff;
+text-shadow:
+0 0 8px rgba(255,220,100,.9),
+0 0 25px rgba(255,160,0,.45)
 }
 
 .status{
-    margin-top:6px;
-    font-family:monospace;
-    font-size:9px;
-    letter-spacing:3px;
-    color:#d9aa00;
+margin-top:7px;
+font-family:monospace;
+font-size:9px;
+letter-spacing:3px;
+color:rgba(255,205,50,.7)
 }
 
-.hud{
-    position:fixed;
-    top:25px;
-    z-index:10;
-    font-family:monospace;
-    font-size:9px;
-    line-height:1.8;
-    letter-spacing:2px;
-    color:rgba(255,210,0,.55);
+.status span{
+color:#ffd000;
+text-shadow:0 0 10px #ffd000
 }
 
-.left{
-    left:25px;
-    border-left:2px solid #b58b00;
-    padding-left:10px;
+/* CORE LABEL */
+
+.core-label{
+position:fixed;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+z-index:6;
+font-family:monospace;
+text-align:center;
+font-size:8px;
+letter-spacing:4px;
+color:rgba(255,220,100,.35);
+pointer-events:none;
+transition:.3s
 }
 
-.right{
-    right:25px;
-    text-align:right;
-    border-right:2px solid #b58b00;
-    padding-right:10px;
+.core-label b{
+display:block;
+font-size:7px;
+margin-top:8px;
+letter-spacing:2px;
+font-weight:normal
 }
 
-#core{
-    position:fixed;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    z-index:5;
-    text-align:center;
-    pointer-events:none;
-    font-family:monospace;
-    color:rgba(255,210,0,.5);
-    font-size:8px;
-    letter-spacing:3px;
-}
-
-#core small{
-    display:block;
-    margin-top:6px;
-    font-size:7px;
-    letter-spacing:2px;
-}
+/* CHAT */
 
 #chat{
-    position:fixed;
-    left:50%;
-    bottom:105px;
-    transform:translateX(-50%);
-    width:100%;
-    max-width:720px;
-    max-height:27vh;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    padding:0 20px;
-    z-index:20;
-    scrollbar-width:none;
+position:fixed;
+left:50%;
+bottom:112px;
+transform:translateX(-50%);
+width:100%;
+max-width:720px;
+max-height:24vh;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:9px;
+padding:0 20px;
+z-index:20;
+scrollbar-width:none
 }
 
 #chat::-webkit-scrollbar{
-    display:none;
+display:none
 }
 
 .message{
-    max-width:82%;
-    padding:11px 15px;
-    border-radius:4px;
-    font-size:13px;
-    line-height:1.5;
-    word-break:break-word;
-    white-space:pre-wrap;
+max-width:82%;
+padding:10px 14px;
+border-radius:4px;
+font-size:13px;
+line-height:1.5;
+white-space:pre-wrap;
+word-break:break-word;
+backdrop-filter:blur(12px)
 }
 
 .user{
-    align-self:flex-end;
-    color:white;
-    background:rgba(255,190,0,.08);
-    border:1px solid rgba(255,200,0,.3);
-    border-right:3px solid #ffd000;
+align-self:flex-end;
+color:#fff;
+background:rgba(255,190,0,.07);
+border:1px solid rgba(255,200,0,.3);
+border-right:3px solid #ffd000
 }
 
 .jarvis{
-    align-self:flex-start;
-    color:#ffe8a0;
-    background:rgba(15,10,0,.85);
-    border:1px solid rgba(255,200,0,.2);
-    border-left:3px solid #ffd000;
+align-self:flex-start;
+color:#ffeab0;
+background:rgba(15,10,0,.82);
+border:1px solid rgba(255,200,0,.18);
+border-left:3px solid #ffd000
 }
 
+/* INPUT */
+
 .input-container{
-    position:fixed;
-    left:50%;
-    bottom:25px;
-    transform:translateX(-50%);
-    width:100%;
-    max-width:720px;
-    padding:0 20px;
-    z-index:30;
+position:fixed;
+left:50%;
+bottom:23px;
+transform:translateX(-50%);
+width:100%;
+max-width:720px;
+padding:0 20px;
+z-index:30
 }
 
 .input-box{
-    display:flex;
-    gap:7px;
-    padding:5px;
-    background:rgba(8,6,0,.94);
-    border:1px solid rgba(255,200,0,.4);
-    border-radius:6px;
+display:flex;
+gap:7px;
+padding:5px;
+background:rgba(7,5,0,.94);
+border:1px solid rgba(255,200,0,.35);
+border-radius:7px;
+box-shadow:0 0 30px rgba(255,160,0,.05);
+transition:.3s
+}
+
+.input-box:focus-within{
+border-color:rgba(255,205,0,.8);
+box-shadow:0 0 25px rgba(255,180,0,.12)
 }
 
 #input{
-    flex:1;
-    min-width:0;
-    height:44px;
-    padding:0 14px;
-    background:transparent;
-    border:0;
-    outline:0;
-    color:white;
-    font-size:14px;
+flex:1;
+min-width:0;
+height:44px;
+padding:0 14px;
+border:0;
+outline:0;
+background:transparent;
+color:#fff;
+font-size:14px
 }
 
 #input::placeholder{
-    color:rgba(255,220,130,.35);
+color:rgba(255,220,150,.3)
 }
 
 button{
-    height:44px;
-    border:1px solid rgba(255,200,0,.55);
-    border-radius:4px;
-    background:rgba(255,190,0,.1);
-    color:#ffd000;
-    font-family:monospace;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-#mic{
-    width:48px;
-    font-size:18px;
-}
-
-#send{
-    width:75px;
+height:44px;
+border-radius:4px;
+border:1px solid rgba(255,200,0,.5);
+background:rgba(255,180,0,.08);
+color:#ffd000;
+cursor:pointer;
+font-family:monospace;
+font-weight:bold;
+transition:.2s
 }
 
 button:hover{
-    background:#ffd000;
-    color:#000;
+background:#ffd000;
+color:#000;
+box-shadow:0 0 18px rgba(255,190,0,.5)
 }
 
 button:disabled{
-    opacity:.35;
+opacity:.3;
+cursor:not-allowed
+}
+
+#mic{
+width:48px;
+font-size:17px
+}
+
+#send{
+width:72px
 }
 
 .listening{
-    background:#ffd000 !important;
-    color:#000 !important;
-    box-shadow:0 0 20px #ffd000;
+background:#ffd000!important;
+color:#000!important;
+box-shadow:
+0 0 10px #ffd000,
+0 0 30px rgba(255,180,0,.7)!important
 }
+
+/* MOBILE */
 
 @media(max-width:600px){
 
-    .hud{
-        display:none;
-    }
+.hud{
+display:none
+}
 
-    .title h1{
-        font-size:19px;
-        letter-spacing:7px;
-    }
+.title h1{
+font-size:19px;
+letter-spacing:8px
+}
 
-    .message{
-        max-width:90%;
-    }
+.message{
+max-width:90%
+}
+
+#chat{
+bottom:110px
+}
+
 }
 </style>
 </head>
@@ -237,69 +285,76 @@ button:disabled{
 
 <canvas id="canvas"></canvas>
 
-<div class="title">
-    <h1>J.A.R.V.I.S.</h1>
-    <div class="status">● NEURAL MATRIX ONLINE</div>
-</div>
-
 <div class="hud left">
-    JARVIS_CORE<br>
-    SYSTEM: ONLINE<br>
-    NEURAL ENGINE: ACTIVE
+JARVIS_CORE // V4<br>
+NEURAL ENGINE: ONLINE<br>
+VOICE SYSTEM: READY
 </div>
 
 <div class="hud right">
-    MEMORY: <span id="memoryCount">0</span><br>
-    CORE: ACTIVE
+MEMORY: <span id="memoryNumber">0</span><br>
+STATE: <span id="hudState">IDLE</span>
 </div>
 
-<div id="core">
-    NEURAL CORE
-    <small id="coreStatus">SYSTEM READY</small>
+<div class="title">
+<h1>J.A.R.V.I.S.</h1>
+<div class="status">
+<span>●</span> NEURAL INTERFACE ONLINE
+</div>
+</div>
+
+<div class="core-label">
+NEURAL CORE
+<b id="coreState">SYSTEM READY</b>
 </div>
 
 <div id="chat">
-    <div class="message jarvis">
-        JARVIS online. In attesa di istruzioni.
-    </div>
+<div class="message jarvis">
+JARVIS online. Neural interface inizializzata.
+</div>
 </div>
 
 <div class="input-container">
-    <div class="input-box">
+<div class="input-box">
 
-        <input
-            id="input"
-            type="text"
-            placeholder="Comunica con JARVIS..."
-            autocomplete="off"
-        >
+<input
+id="input"
+type="text"
+placeholder="Parla con JARVIS..."
+autocomplete="off"
+>
 
-        <button id="mic" type="button">🎙️</button>
+<button id="mic" type="button">🎙</button>
 
-        <button id="send" type="button">EXEC</button>
+<button id="send" type="button">EXEC</button>
 
-    </div>
+</div>
 </div>
 
 <script>
 
-/* =====================================================
-   CONFIGURAZIONE
-===================================================== */
+/* =========================================================
+   JARVIS CONFIG
+========================================================= */
 
 const API_URL =
 "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
 const MEMORY_KEY =
-"jarvis_memory_v2";
+"JARVIS_NEURAL_MEMORY";
 
-const MAX_MEMORY =
-20;
+const MAX_MEMORY = 30;
 
 
-/* =====================================================
+/* =========================================================
    ELEMENTI
-===================================================== */
+========================================================= */
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
 
 const input =
 document.getElementById("input");
@@ -313,977 +368,1272 @@ document.getElementById("mic");
 const chat =
 document.getElementById("chat");
 
-const memoryCount =
-document.getElementById("memoryCount");
+const memoryNumber =
+document.getElementById("memoryNumber");
 
-const coreStatus =
-document.getElementById("coreStatus");
+const hudState =
+document.getElementById("hudState");
+
+const coreState =
+document.getElementById("coreState");
 
 
-/* =====================================================
-   MEMORIA
-===================================================== */
+/* =========================================================
+   STATO JARVIS
+========================================================= */
+
+let state = "idle";
+
+let voiceLevel = 0;
+
+let speaking = false;
+
+let listening = false;
+
+
+function setState(newState){
+
+state = newState;
+
+hudState.textContent =
+newState.toUpperCase();
+
+coreState.textContent =
+newState === "idle"
+? "SYSTEM READY"
+: newState === "listening"
+? "LISTENING..."
+: newState === "thinking"
+? "PROCESSING..."
+: newState === "speaking"
+? "SPEAKING..."
+: "ONLINE";
+
+}
+
+
+/* =========================================================
+   MEMORIA LOCALE
+========================================================= */
 
 let memory = [];
 
 try{
 
-    const saved =
-    localStorage.getItem(MEMORY_KEY);
+const saved =
+localStorage.getItem(MEMORY_KEY);
 
-    if(saved){
-        memory = JSON.parse(saved);
-    }
+if(saved){
+memory = JSON.parse(saved);
+}
 
 }catch(e){
 
-    memory = [];
+memory=[];
 
 }
 
 
 function saveMemory(){
 
-    memory =
-    memory.slice(-MAX_MEMORY);
+memory =
+memory.slice(-MAX_MEMORY);
 
-    try{
+try{
 
-        localStorage.setItem(
-            MEMORY_KEY,
-            JSON.stringify(memory)
-        );
+localStorage.setItem(
+MEMORY_KEY,
+JSON.stringify(memory)
+);
 
-    }catch(e){
+}catch(e){}
 
-        console.log(
-            "Memoria non disponibile"
-        );
+memoryNumber.textContent =
+memory.length;
 
-    }
-
-    memoryCount.textContent =
-    memory.length;
 }
-
-
-function addMemory(role,content){
-
-    memory.push({
-        role:role,
-        content:content
-    });
-
-    saveMemory();
-}
-
 
 saveMemory();
 
 
-/* =====================================================
-   CHAT
-===================================================== */
+function remember(role,content){
 
-function addMessage(type,text){
+memory.push({
+role,
+content,
+time:Date.now()
+});
 
-    const element =
-    document.createElement("div");
+saveMemory();
 
-    element.className =
-    "message " + type;
-
-    element.textContent =
-    text;
-
-    chat.appendChild(element);
-
-    chat.scrollTop =
-    chat.scrollHeight;
-
-    return element;
 }
 
 
-/* =====================================================
-   INVIO
-===================================================== */
+/* =========================================================
+   CHAT
+========================================================= */
 
-send.onclick =
-sendMessage;
+function addMessage(type,text){
+
+const div =
+document.createElement("div");
+
+div.className =
+"message " + type;
+
+div.textContent =
+text;
+
+chat.appendChild(div);
+
+chat.scrollTop =
+chat.scrollHeight;
+
+return div;
+
+}
+
+
+/* =========================================================
+   ORA LOCALE
+========================================================= */
+
+function getLocalTime(){
+
+const now =
+new Date();
+
+return now.toLocaleTimeString(
+"it-IT",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+);
+
+}
+
+function getLocalDate(){
+
+const now =
+new Date();
+
+return now.toLocaleDateString(
+"it-IT",
+{
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric"
+}
+);
+
+}
+
+
+/* =========================================================
+   COMANDI LOCALI
+========================================================= */
+
+function localCommand(text){
+
+const t =
+text.toLowerCase().trim();
+
+
+if(
+t.includes("che ore sono") ||
+t.includes("che ora è") ||
+t.includes("dimmi l'ora") ||
+t.includes("dimmi l ora")
+){
+
+return "Sono le " +
+getLocalTime() +
+".";
+
+}
+
+
+if(
+t.includes("che giorno è") ||
+t.includes("che giorno e") ||
+t.includes("data di oggi")
+){
+
+return "Oggi è " +
+getLocalDate() +
+".";
+
+}
+
+
+return null;
+
+}
+
+
+/* =========================================================
+   INVIO
+========================================================= */
+
+send.addEventListener(
+"click",
+sendMessage
+);
 
 
 input.addEventListener(
-    "keydown",
-    function(event){
+"keydown",
+event=>{
 
-        if(event.key === "Enter"){
+if(event.key==="Enter"){
 
-            event.preventDefault();
+event.preventDefault();
 
-            sendMessage();
+sendMessage();
 
-        }
+}
 
-    }
-);
+});
 
 
 async function sendMessage(){
 
-    const text =
-    input.value.trim();
+const text =
+input.value.trim();
 
-    if(!text){
-        return;
-    }
+if(!text) return;
 
-    if(
-        input.disabled
-    ){
-        return;
-    }
+if(
+input.disabled
+) return;
 
 
-    /* Mostra messaggio */
+addMessage(
+"user",
+text
+);
 
-    addMessage(
-        "user",
-        text
-    );
+remember(
+"user",
+text
+);
 
+input.value="";
 
-    input.value = "";
+input.disabled=true;
+send.disabled=true;
+mic.disabled=true;
 
-    input.disabled = true;
-    send.disabled = true;
-    mic.disabled = true;
 
+setState("thinking");
 
-    /* Stato */
 
-    coreStatus.textContent =
-    "PROCESSING";
+/* COMANDO LOCALE */
 
+const local =
+localCommand(text);
 
-    /* Comando memoria */
 
-    const lower =
-    text.toLowerCase();
+if(local){
 
+const responseBox =
+addMessage(
+"jarvis",
+""
+);
 
-    if(
-        lower.startsWith("ricorda che ") ||
-        lower.startsWith("ricordati che ")
-    ){
+typeResponse(
+responseBox,
+local
+);
 
-        addMemory(
-            "memory",
-            text
-        );
+remember(
+"assistant",
+local
+);
 
+speak(local);
 
-        const reply =
-        "Informazione salvata nella mia memoria.";
+finish();
 
-        addMessage(
-            "jarvis",
-            reply
-        );
-
-        speak(reply);
-
-        finish();
-
-        return;
-    }
-
-
-    if(
-        lower === "dimentica tutto" ||
-        lower === "cancella memoria"
-    ){
-
-        memory = [];
-
-        saveMemory();
-
-
-        const reply =
-        "Memoria cancellata.";
-
-        addMessage(
-            "jarvis",
-            reply
-        );
-
-        speak(reply);
-
-        finish();
-
-        return;
-    }
-
-
-    /* Salva domanda */
-
-    addMemory(
-        "user",
-        text
-    );
-
-
-    const jarvisMessage =
-    addMessage(
-        "jarvis",
-        "JARVIS // elaborazione..."
-    );
-
-
-    try{
-
-        const response =
-        await fetch(
-            API_URL,
-            {
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body:
-                JSON.stringify({
-
-                    message:text,
-
-                    memory:
-                    memory.slice(-MAX_MEMORY)
-
-                })
-
-            }
-        );
-
-
-        if(!response.ok){
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-
-        const data =
-        await response.json();
-
-
-        if(data.error){
-
-            throw new Error(
-                data.error
-            );
-
-        }
-
-
-        const reply =
-        data.reply ||
-        "Non ho ricevuto una risposta.";
-
-
-        jarvisMessage.textContent =
-        reply;
-
-
-        addMemory(
-            "assistant",
-            reply
-        );
-
-
-        speak(reply);
-
-
-    }catch(error){
-
-        console.error(error);
-
-
-        jarvisMessage.textContent =
-        "Errore di connessione con il Neural Core.";
-
-
-    }
-
-
-    finish();
+return;
 
 }
 
+
+/* MEMORIA */
+
+const lower =
+text.toLowerCase();
+
+
+if(
+lower.startsWith("ricorda che ") ||
+lower.startsWith("ricordati che ")
+){
+
+const reply =
+"Informazione memorizzata.";
+
+remember(
+"memory",
+text
+);
+
+const box =
+addMessage(
+"jarvis",
+reply
+);
+
+speak(reply);
+
+finish();
+
+return;
+
+}
+
+
+if(
+lower==="cancella memoria" ||
+lower==="dimentica tutto"
+){
+
+memory=[];
+
+saveMemory();
+
+const reply =
+"Memoria cancellata.";
+
+addMessage(
+"jarvis",
+reply
+);
+
+speak(reply);
+
+finish();
+
+return;
+
+}
+
+
+/* API */
+
+const box =
+addMessage(
+"jarvis",
+""
+);
+
+
+try{
+
+const response =
+await fetch(
+API_URL,
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+
+message:text,
+
+memory:
+memory.slice(-MAX_MEMORY)
+
+})
+}
+);
+
+
+if(!response.ok){
+
+throw new Error(
+"HTTP "+response.status
+);
+
+}
+
+
+const data =
+await response.json();
+
+
+if(data.error){
+
+throw new Error(
+data.error
+);
+
+}
+
+
+const reply =
+data.reply ||
+"Non ho ricevuto una risposta.";
+
+
+typeResponse(
+box,
+reply
+);
+
+
+remember(
+"assistant",
+reply
+);
+
+
+speak(reply);
+
+
+}catch(error){
+
+console.error(error);
+
+box.textContent =
+"Neural Core offline. Controlla la connessione con il Worker.";
+
+}
+
+
+finish();
+
+}
+
+
+/* =========================================================
+   RISPOSTA CON EFFETTO DIGITAZIONE
+========================================================= */
+
+function typeResponse(element,text){
+
+element.textContent="";
+
+let i=0;
+
+const interval =
+setInterval(()=>{
+
+element.textContent +=
+text[i] || "";
+
+i++;
+
+chat.scrollTop =
+chat.scrollHeight;
+
+if(i>=text.length){
+
+clearInterval(interval);
+
+}
+
+},8);
+
+}
+
+
+/* =========================================================
+   FINE ELABORAZIONE
+========================================================= */
 
 function finish(){
 
-    input.disabled = false;
-    send.disabled = false;
-    mic.disabled = false;
+input.disabled=false;
+send.disabled=false;
+mic.disabled=false;
 
-    coreStatus.textContent =
-    "SYSTEM READY";
+setState("idle");
 
-    input.focus();
+input.focus();
 
 }
 
 
-/* =====================================================
-   VOCE
-===================================================== */
+/* =========================================================
+   VOCE JARVIS
+========================================================= */
 
 function speak(text){
 
-    if(
-        !window.speechSynthesis
-    ){
-        return;
-    }
+if(!window.speechSynthesis)
+return;
 
 
-    speechSynthesis.cancel();
+speechSynthesis.cancel();
 
 
-    const speech =
-    new SpeechSynthesisUtterance(
-        text
-    );
+const utterance =
+new SpeechSynthesisUtterance(
+text
+);
+
+utterance.lang =
+"it-IT";
+
+utterance.rate =
+0.92;
+
+utterance.pitch =
+0.72;
+
+utterance.volume =
+1;
 
 
-    speech.lang =
-    "it-IT";
+utterance.onstart=()=>{
 
-    speech.rate =
-    0.92;
+speaking=true;
 
-    speech.pitch =
-    0.8;
+setState("speaking");
 
-    speech.volume =
-    1;
+};
 
 
-    speechSynthesis.speak(
-        speech
-    );
+utterance.onend=()=>{
+
+speaking=false;
+
+voiceLevel=0;
+
+setState("idle");
+
+};
+
+
+utterance.onerror=()=>{
+
+speaking=false;
+
+voiceLevel=0;
+
+setState("idle");
+
+};
+
+
+speechSynthesis.speak(
+utterance
+);
 
 }
 
 
-/* =====================================================
-   RICONOSCIMENTO VOCALE
-===================================================== */
+/* =========================================================
+   MICROFONO
+========================================================= */
 
 const SpeechRecognition =
 window.SpeechRecognition ||
 window.webkitSpeechRecognition;
 
 
-let recognition = null;
-
-let listening = false;
+let recognition=null;
 
 
 if(SpeechRecognition){
 
-    recognition =
-    new SpeechRecognition();
+recognition =
+new SpeechRecognition();
+
+recognition.lang =
+"it-IT";
+
+recognition.continuous=false;
+
+recognition.interimResults=true;
 
 
-    recognition.lang =
-    "it-IT";
+recognition.onstart=()=>{
 
-    recognition.continuous =
-    false;
+listening=true;
 
-    recognition.interimResults =
-    false;
+mic.classList.add(
+"listening"
+);
 
+mic.textContent="●";
 
-    recognition.onstart =
-    function(){
+input.placeholder =
+"Ascolto...";
 
-        listening = true;
+setState("listening");
 
-        mic.classList.add(
-            "listening"
-        );
-
-        mic.textContent =
-        "🔴";
-
-        input.placeholder =
-        "Sto ascoltando...";
-
-        coreStatus.textContent =
-        "LISTENING";
-
-    };
+};
 
 
-    recognition.onresult =
-    function(event){
+recognition.onresult=
+event=>{
 
-        const result =
-        event.results[0][0]
-        .transcript;
+let finalText="";
 
-
-        input.value =
-        result;
+let interim="";
 
 
-        listening =
-        false;
+for(
+let i=event.resultIndex;
+i<event.results.length;
+i++
+){
 
-        mic.classList.remove(
-            "listening"
-        );
+const transcript =
+event.results[i][0].transcript;
 
-        mic.textContent =
-        "🎙️";
+if(
+event.results[i].isFinal
+){
 
-        input.placeholder =
-        "Comunica con JARVIS...";
-
-
-        /* Invia automaticamente */
-
-        sendMessage();
-
-    };
-
-
-    recognition.onerror =
-    function(event){
-
-        console.log(
-            "Microfono:",
-            event.error
-        );
-
-
-        listening =
-        false;
-
-        mic.classList.remove(
-            "listening"
-        );
-
-        mic.textContent =
-        "🎙️";
-
-        input.placeholder =
-        "Comunica con JARVIS...";
-
-        coreStatus.textContent =
-        "SYSTEM READY";
-
-    };
-
-
-    recognition.onend =
-    function(){
-
-        listening =
-        false;
-
-        mic.classList.remove(
-            "listening"
-        );
-
-        mic.textContent =
-        "🎙️";
-
-        input.placeholder =
-        "Comunica con JARVIS...";
-
-    };
-
-
-    mic.onclick =
-    function(){
-
-        if(listening){
-
-            recognition.stop();
-
-            return;
-        }
-
-
-        try{
-
-            recognition.start();
-
-        }catch(error){
-
-            console.log(error);
-
-        }
-
-    };
-
+finalText += transcript;
 
 }else{
 
-    mic.disabled =
-    true;
+interim += transcript;
 
-    mic.title =
-    "Il browser non supporta il riconoscimento vocale.";
+}
 
 }
 
 
-/* =====================================================
-   SFERA NEURALE
-===================================================== */
-
-const canvas =
-document.getElementById("canvas");
-
-const ctx =
-canvas.getContext("2d");
+input.value =
+finalText || interim;
 
 
-let width;
-let height;
-let dpr;
+voiceLevel =
+Math.min(
+1,
+0.4+
+Math.random()*.6
+);
 
-let centerX;
-let centerY;
-let radius;
 
-let nodes = [];
+if(finalText){
 
-let rotation = 0;
+setTimeout(
+()=>{
+sendMessage();
+},
+150
+);
+
+}
+
+};
+
+
+recognition.onerror=
+event=>{
+
+console.log(
+"Voice error:",
+event.error
+);
+
+listening=false;
+
+voiceLevel=0;
+
+};
+
+
+recognition.onend=()=>{
+
+listening=false;
+
+mic.classList.remove(
+"listening"
+);
+
+mic.textContent="🎙";
+
+input.placeholder =
+"Parla con JARVIS...";
+
+if(state==="listening")
+setState("idle");
+
+};
+
+
+mic.addEventListener(
+"click",
+()=>{
+
+if(listening){
+
+recognition.stop();
+
+}else{
+
+try{
+
+recognition.start();
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+}
+);
+
+}else{
+
+mic.disabled=true;
+
+}
+
+
+/* =========================================================
+   NEURAL SPHERE
+========================================================= */
+
+let width=0;
+let height=0;
+let dpr=1;
+
+let centerX=0;
+let centerY=0;
+
+let radius=0;
+
+let rotation=0;
+
+let nodes=[];
 
 
 function resize(){
 
-    width =
-    window.innerWidth;
+width =
+window.innerWidth;
 
-    height =
-    window.innerHeight;
+height =
+window.innerHeight;
 
-    dpr =
-    Math.min(
-        window.devicePixelRatio || 1,
-        2
-    );
+dpr =
+Math.min(
+window.devicePixelRatio||1,
+2
+);
+
+canvas.width =
+width*dpr;
+
+canvas.height =
+height*dpr;
+
+canvas.style.width =
+width+"px";
+
+canvas.style.height =
+height+"px";
+
+ctx.setTransform(
+dpr,
+0,
+0,
+dpr,
+0,
+0
+);
+
+centerX =
+width/2;
+
+centerY =
+height/2;
+
+radius =
+Math.min(
+width,
+height
+)*.22;
+
+createNodes();
+
+}
 
 
-    canvas.width =
-    width * dpr;
+function createNodes(){
 
-    canvas.height =
-    height * dpr;
+nodes=[];
 
-    canvas.style.width =
-    width + "px";
+for(
+let i=0;
+i<170;
+i++
+){
 
-    canvas.style.height =
-    height + "px";
+nodes.push({
+
+theta:
+Math.random()*
+Math.PI*2,
+
+phi:
+Math.acos(
+2*Math.random()-1
+),
+
+r:
+radius*
+(
+.65+
+Math.random()*.55
+),
+
+speed:
+.001+
+Math.random()*.004,
+
+size:
+.7+
+Math.random()*1.5,
+
+phase:
+Math.random()*
+Math.PI*2
+
+});
+
+}
+
+}
 
 
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
+function animate(){
+
+requestAnimationFrame(
+animate
+);
 
 
-    centerX =
-    width / 2;
-
-    centerY =
-    height / 2;
+const time =
+performance.now()/1000;
 
 
-    radius =
-    Math.min(
-        width,
-        height
-    ) * .23;
+ctx.fillStyle =
+"rgba(0,0,0,.25)";
+
+ctx.fillRect(
+0,
+0,
+width,
+height
+);
 
 
-    createNodes();
+let speed=1;
+
+if(state==="listening")
+speed=2.4;
+
+if(state==="thinking")
+speed=4;
+
+if(state==="speaking")
+speed=2.8;
+
+
+rotation +=
+.004*speed;
+
+
+const pulse =
+Math.sin(time*3)*
+.5+.5;
+
+
+const energy =
+state==="idle"
+? .25
+: state==="listening"
+? .75
+: state==="thinking"
+? 1
+: .85;
+
+
+/* CORE GLOW */
+
+const glow =
+ctx.createRadialGradient(
+centerX,
+centerY,
+0,
+centerX,
+centerY,
+radius*(1.2+energy*.8)
+);
+
+
+glow.addColorStop(
+0,
+`rgba(255,235,130,${.32+energy*.35})`
+);
+
+glow.addColorStop(
+.2,
+`rgba(255,190,0,${.18+energy*.18})`
+);
+
+glow.addColorStop(
+.5,
+"rgba(255,120,0,.06)"
+);
+
+glow.addColorStop(
+1,
+"rgba(0,0,0,0)"
+);
+
+
+ctx.fillStyle =
+glow;
+
+ctx.beginPath();
+
+ctx.arc(
+centerX,
+centerY,
+radius*2,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+const projected=[];
+
+
+/* NODES */
+
+nodes.forEach(n=>{
+
+n.theta +=
+n.speed*speed;
+
+
+let x =
+n.r*
+Math.sin(n.phi)*
+Math.cos(n.theta);
+
+let y =
+n.r*
+Math.cos(n.phi);
+
+let z =
+n.r*
+Math.sin(n.phi)*
+Math.sin(n.theta);
+
+
+/* VOICE REACTION */
+
+if(
+state==="speaking" ||
+state==="listening"
+){
+
+const wave =
+Math.sin(
+time*8+
+n.phase
+);
+
+const boost =
+1+
+Math.max(
+0,wave
+)*energy*.16;
+
+x*=boost;
+y*=boost;
+z*=boost;
+
+}
+
+
+/* ROTATION */
+
+const c =
+Math.cos(rotation);
+
+const s =
+Math.sin(rotation);
+
+const rx =
+x*c+z*s;
+
+const rz =
+-x*s+z*c;
+
+
+/* PERSPECTIVE */
+
+const perspective =
+420/
+(420+rz);
+
+
+projected.push({
+
+x:
+centerX+
+rx*
+perspective,
+
+y:
+centerY+
+y*
+perspective,
+
+z:rz,
+
+alpha:
+Math.max(
+.1,
+Math.min(
+1,
+(rz+radius)/
+(radius*2)
+)
+),
+
+size:
+n.size*
+perspective,
+
+phase:
+n.phase
+
+});
+
+});
+
+
+/* CONNECTIONS */
+
+for(
+let i=0;
+i<projected.length;
+i++
+){
+
+for(
+let j=i+1;
+j<projected.length;
+j++
+){
+
+const a =
+projected[i];
+
+const b =
+projected[j];
+
+
+const dx =
+a.x-b.x;
+
+const dy =
+a.y-b.y;
+
+
+const dist =
+Math.sqrt(
+dx*dx+dy*dy
+);
+
+
+const maxDistance =
+state==="thinking"
+? 95
+: 78;
+
+
+if(dist<maxDistance){
+
+const alpha =
+(
+1-dist/maxDistance
+)*
+.24*
+a.alpha*
+(.5+energy);
+
+
+ctx.beginPath();
+
+ctx.moveTo(
+a.x,
+a.y
+);
+
+ctx.lineTo(
+b.x,
+b.y
+);
+
+ctx.strokeStyle =
+`rgba(
+255,
+205,
+35,
+${alpha}
+)`;
+
+ctx.lineWidth =
+state==="thinking"
+? .8
+: .55;
+
+ctx.stroke();
+
+}
+
+}
+
+}
+
+
+/* PARTICLES */
+
+projected.forEach(n=>{
+
+const p =
+(
+Math.sin(
+time*5+
+n.phase
+)+1
+)/2;
+
+
+ctx.fillStyle =
+`rgba(
+255,
+190,
+20,
+${n.alpha*.18}
+)`;
+
+ctx.beginPath();
+
+ctx.arc(
+n.x,
+n.y,
+n.size*(3+p*2),
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+ctx.fillStyle =
+`rgba(
+255,
+245,
+190,
+${n.alpha}
+)`;
+
+ctx.beginPath();
+
+ctx.arc(
+n.x,
+n.y,
+n.size+
+p*.5,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+});
+
+
+/* CENTRAL PULSE */
+
+const coreSize =
+10+
+pulse*5+
+energy*5;
+
+
+ctx.fillStyle =
+`rgba(
+255,
+220,
+100,
+${.15+energy*.2}
+)`;
+
+ctx.beginPath();
+
+ctx.arc(
+centerX,
+centerY,
+coreSize*3,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+ctx.fillStyle =
+"rgba(255,245,200,.95)";
+
+ctx.beginPath();
+
+ctx.arc(
+centerX,
+centerY,
+coreSize,
+0,
+Math.PI*2
+);
+
+ctx.fill();
 
 }
 
 
 window.addEventListener(
-    "resize",
-    resize
+"resize",
+resize
 );
-
-
-function createNodes(){
-
-    nodes = [];
-
-    for(
-        let i=0;
-        i<180;
-        i++
-    ){
-
-        nodes.push({
-
-            theta:
-            Math.random() *
-            Math.PI * 2,
-
-            phi:
-            Math.acos(
-                2 *
-                Math.random() -
-                1
-            ),
-
-            r:
-            radius *
-            (
-                .65 +
-                Math.random() * .55
-            ),
-
-            speed:
-            .001 +
-            Math.random() * .004,
-
-            size:
-            .7 +
-            Math.random() * 1.5,
-
-            phase:
-            Math.random() *
-            Math.PI * 2
-
-        });
-
-    }
-
-}
-
-
-let active =
-false;
-
-
-function animate(){
-
-    requestAnimationFrame(
-        animate
-    );
-
-
-    const time =
-    performance.now() / 1000;
-
-
-    ctx.fillStyle =
-    "rgba(0,0,0,.25)";
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    rotation +=
-    active
-    ? .015
-    : .004;
-
-
-    /* Glow */
-
-    const glow =
-    ctx.createRadialGradient(
-        centerX,
-        centerY,
-        0,
-        centerX,
-        centerY,
-        radius * 1.8
-    );
-
-
-    glow.addColorStop(
-        0,
-        "rgba(255,230,100,.5)"
-    );
-
-    glow.addColorStop(
-        .25,
-        "rgba(255,180,0,.18)"
-    );
-
-    glow.addColorStop(
-        1,
-        "rgba(0,0,0,0)"
-    );
-
-
-    ctx.fillStyle =
-    glow;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        centerX,
-        centerY,
-        radius * 1.8,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fill();
-
-
-    const projected = [];
-
-
-    nodes.forEach(
-    n => {
-
-        n.theta +=
-        n.speed *
-        (
-            active
-            ? 3
-            : 1
-        );
-
-
-        let x =
-        n.r *
-        Math.sin(n.phi) *
-        Math.cos(n.theta);
-
-
-        let y =
-        n.r *
-        Math.cos(n.phi);
-
-
-        let z =
-        n.r *
-        Math.sin(n.phi) *
-        Math.sin(n.theta);
-
-
-        const c =
-        Math.cos(rotation);
-
-        const s =
-        Math.sin(rotation);
-
-
-        const rx =
-        x*c + z*s;
-
-        const rz =
-        -x*s + z*c;
-
-
-        const perspective =
-        400 /
-        (400 + rz);
-
-
-        projected.push({
-
-            x:
-            centerX +
-            rx *
-            perspective,
-
-            y:
-            centerY +
-            y *
-            perspective,
-
-            z:rz,
-
-            alpha:
-            Math.max(
-                .1,
-                Math.min(
-                    1,
-                    (rz + radius) /
-                    (radius * 2)
-                )
-            ),
-
-            size:
-            n.size *
-            perspective,
-
-            pulse:
-            (
-                Math.sin(
-                    time*4 +
-                    n.phase
-                )+1
-            )/2
-
-        });
-
-    });
-
-
-    /* Connessioni */
-
-    for(
-        let i=0;
-        i<projected.length;
-        i++
-    ){
-
-        for(
-            let j=i+1;
-            j<projected.length;
-            j++
-        ){
-
-            const a =
-            projected[i];
-
-            const b =
-            projected[j];
-
-
-            const dx =
-            a.x-b.x;
-
-            const dy =
-            a.y-b.y;
-
-
-            const dist =
-            Math.sqrt(
-                dx*dx +
-                dy*dy
-            );
-
-
-            if(dist < 78){
-
-                const alpha =
-                (
-                    1 -
-                    dist/78
-                ) *
-                .25 *
-                a.alpha;
-
-
-                ctx.beginPath();
-
-                ctx.moveTo(
-                    a.x,
-                    a.y
-                );
-
-                ctx.lineTo(
-                    b.x,
-                    b.y
-                );
-
-
-                ctx.strokeStyle =
-                `rgba(
-                    255,
-                    205,
-                    35,
-                    ${alpha}
-                )`;
-
-                ctx.lineWidth =
-                .6;
-
-                ctx.stroke();
-
-            }
-
-        }
-
-    }
-
-
-    /* Nodi */
-
-    projected.forEach(
-    n => {
-
-        ctx.fillStyle =
-        `rgba(
-            255,
-            170,
-            0,
-            ${n.alpha*.2}
-        )`;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            n.x,
-            n.y,
-            n.size*4,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-
-        ctx.fillStyle =
-        `rgba(
-            255,
-            245,
-            190,
-            ${n.alpha}
-        )`;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            n.x,
-            n.y,
-            n.size,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-    });
-
-}
-
 
 resize();
 animate();
+
+
+/* =========================================================
+   AVVIO
+========================================================= */
+
+input.focus();
 
 </script>
 

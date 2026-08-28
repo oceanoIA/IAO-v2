@@ -2,29 +2,23 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport"
-      content="width=device-width,
-               initial-scale=1,
-               maximum-scale=1,
-               user-scalable=no">
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>JARVIS — HOLOGRAPHIC AI</title>
+<title>JARVIS — NEURAL FACE</title>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
 
-html,
-body{
+html,body{
     margin:0;
     width:100%;
     height:100%;
     overflow:hidden;
     background:#000;
-    color:white;
+    color:#fff;
     font-family:Arial,sans-serif;
 }
 
@@ -40,9 +34,7 @@ body{
     position:fixed;
     inset:0;
     z-index:1000;
-
     background:#000;
-
     display:flex;
     align-items:center;
     justify-content:center;
@@ -54,9 +46,9 @@ body{
 
     text-shadow:
         0 0 10px #168cff,
-        0 0 30px rgba(30,140,255,.6);
+        0 0 30px rgba(20,130,255,.6);
 
-    transition:opacity 1.5s ease;
+    transition:opacity 1.2s ease;
 }
 
 #loading.hidden{
@@ -68,21 +60,16 @@ body{
    CANVAS
 ===================================================== */
 
-#neuralCanvas{
+#faceCanvas{
     position:fixed;
     inset:0;
-
     width:100%;
     height:100%;
-
     z-index:1;
 
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(5,25,55,.35),
-            rgba(0,0,0,1) 65%
-        );
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
 }
 
 /* =====================================================
@@ -91,16 +78,13 @@ body{
 
 .header{
     position:fixed;
-
     top:20px;
     left:0;
-
     width:100%;
 
     text-align:center;
 
     z-index:20;
-
     pointer-events:none;
 }
 
@@ -115,19 +99,18 @@ body{
     color:#fff;
 
     text-shadow:
-        0 0 10px rgba(70,180,255,.9),
-        0 0 25px rgba(30,140,255,.7),
-        0 0 60px rgba(0,100,255,.4);
+        0 0 12px rgba(40,150,255,.9),
+        0 0 30px rgba(20,120,255,.7),
+        0 0 65px rgba(0,90,255,.45);
 }
 
 .status{
     margin-top:7px;
 
     font:10px monospace;
-
     letter-spacing:3px;
 
-    color:rgba(200,230,255,.75);
+    color:rgba(210,235,255,.8);
 }
 
 #dot{
@@ -135,7 +118,7 @@ body{
 
     text-shadow:
         0 0 8px #168cff,
-        0 0 20px #168cff;
+        0 0 18px #168cff;
 }
 
 /* =====================================================
@@ -151,7 +134,6 @@ body{
     z-index:20;
 
     text-align:right;
-
     pointer-events:none;
 
     font-family:monospace;
@@ -159,27 +141,25 @@ body{
 
 #clock{
     font-size:15px;
-
     letter-spacing:2px;
 
     color:#fff;
 
     text-shadow:
-        0 0 10px rgba(50,160,255,.6);
+        0 0 10px rgba(40,150,255,.6);
 }
 
 #date{
     margin-top:3px;
 
     font-size:9px;
-
     letter-spacing:2px;
 
     color:rgba(120,190,255,.75);
 }
 
 /* =====================================================
-   CHAT VOCALE
+   CHAT
 ===================================================== */
 
 #chat{
@@ -192,17 +172,13 @@ body{
 
     transform:translateX(-50%);
 
-    width:min(
-        600px,
-        calc(100% - 30px)
-    );
+    width:min(600px,calc(100% - 30px));
 
-    max-height:120px;
+    max-height:130px;
 
     overflow:hidden;
 
     display:flex;
-
     flex-direction:column;
 
     align-items:center;
@@ -215,8 +191,8 @@ body{
         linear-gradient(
             to bottom,
             transparent,
-            black 15%,
-            black 85%,
+            black 20%,
+            black 80%,
             transparent
         );
 }
@@ -227,15 +203,12 @@ body{
     border-radius:14px;
 
     font-size:12px;
-
     line-height:1.4;
 
-    backdrop-filter:blur(12px);
+    backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
 
-    -webkit-backdrop-filter:blur(12px);
-
-    animation:
-        messageIn .5s ease;
+    animation:messageIn .5s ease;
 
     text-align:center;
 
@@ -284,8 +257,7 @@ body{
     color:#dcecff;
 
     box-shadow:
-        0 0 25px
-        rgba(20,130,255,.08);
+        0 0 25px rgba(20,130,255,.08);
 }
 
 /* =====================================================
@@ -293,14 +265,12 @@ body{
 ===================================================== */
 
 #voiceCore{
-
     position:fixed;
 
     left:50%;
     bottom:28px;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
     width:58px;
     height:58px;
@@ -323,21 +293,25 @@ body{
     color:#4da8ff;
 
     box-shadow:
-        0 0 20px
-        rgba(20,130,255,.2),
-
-        inset 0 0 20px
-        rgba(30,150,255,.1);
+        0 0 20px rgba(20,130,255,.2),
+        inset 0 0 20px rgba(30,150,255,.08);
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
     cursor:pointer;
 
     transition:
-        .5s ease;
+        transform .4s ease,
+        background .5s ease,
+        box-shadow .5s ease;
+}
+
+#voiceCore:hover{
+    transform:
+        translateX(-50%)
+        scale(1.05);
 }
 
 #voiceCore.active{
@@ -346,31 +320,46 @@ body{
         radial-gradient(
             circle,
             rgba(40,160,255,.42),
-            rgba(0,20,45,.72)
+            rgba(0,20,45,.75)
         );
 
     border-color:#168cff;
 
     box-shadow:
-        0 0 30px
-        rgba(20,140,255,.7),
+        0 0 25px rgba(20,140,255,.6),
+        0 0 55px rgba(20,100,255,.35),
+        inset 0 0 25px rgba(40,160,255,.2);
 
-        0 0 70px
-        rgba(20,100,255,.35),
-
-        inset 0 0 25px
-        rgba(40,160,255,.25);
+    animation:
+        voicePulse 2s ease-in-out infinite;
 }
 
-.icon{
+@keyframes voicePulse{
 
+    0%,100%{
+        box-shadow:
+            0 0 22px rgba(20,140,255,.45),
+            0 0 45px rgba(20,100,255,.18);
+    }
+
+    50%{
+        box-shadow:
+            0 0 35px rgba(30,160,255,.85),
+            0 0 70px rgba(20,110,255,.35);
+    }
+}
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
+.icon{
     width:23px;
     height:23px;
 
     display:block;
 
     stroke:currentColor;
-
     fill:none;
 
     stroke-width:1.7;
@@ -410,13 +399,32 @@ body{
     }
 
     #voiceCore{
+        bottom:23px;
+
         width:54px;
         height:54px;
-        bottom:22px;
     }
 
     #chat{
         bottom:90px;
+    }
+}
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+
+        animation-duration:.01ms !important;
+
+        animation-iteration-count:1 !important;
+
+        transition-duration:.01ms !important;
     }
 }
 
@@ -426,10 +434,10 @@ body{
 <body>
 
 <div id="loading">
-    JARVIS HOLOGRAPHIC CORE
+    JARVIS NEURAL FACE
 </div>
 
-<canvas id="neuralCanvas"></canvas>
+<canvas id="faceCanvas"></canvas>
 
 <div class="header">
 
@@ -440,7 +448,7 @@ body{
         <span id="dot">●</span>
 
         <span id="statusText">
-            HOLOGRAPHIC INTERFACE ONLINE
+            NEURAL INTERFACE ONLINE
         </span>
 
     </div>
@@ -468,23 +476,28 @@ body{
 
     <svg
         class="icon"
-        viewBox="0 0 24 24">
+        viewBox="0 0 24 24"
+        aria-hidden="true">
 
         <rect
             x="9"
             y="3"
             width="6"
             height="11"
-            rx="3"/>
+            rx="3">
+        </rect>
 
         <path
-            d="M5 11a7 7 0 0 0 14 0"/>
+            d="M5 11a7 7 0 0 0 14 0">
+        </path>
 
         <path
-            d="M12 18v3"/>
+            d="M12 18v3">
+        </path>
 
         <path
-            d="M8 21h8"/>
+            d="M8 21h8">
+        </path>
 
     </svg>
 
@@ -494,7 +507,7 @@ body{
 <script>
 
 /* =====================================================
-   CONFIGURAZIONE API
+   API
 ===================================================== */
 
 const API =
@@ -506,42 +519,28 @@ const API =
 ===================================================== */
 
 const canvas =
-    document.getElementById(
-        "neuralCanvas"
-    );
+    document.getElementById("faceCanvas");
 
 const ctx =
     canvas.getContext("2d");
 
 const voiceCore =
-    document.getElementById(
-        "voiceCore"
-    );
+    document.getElementById("voiceCore");
 
 const chat =
-    document.getElementById(
-        "chat"
-    );
+    document.getElementById("chat");
 
 const dot =
-    document.getElementById(
-        "dot"
-    );
+    document.getElementById("dot");
 
 const statusText =
-    document.getElementById(
-        "statusText"
-    );
+    document.getElementById("statusText");
 
 const clock =
-    document.getElementById(
-        "clock"
-    );
+    document.getElementById("clock");
 
 const date =
-    document.getElementById(
-        "date"
-    );
+    document.getElementById("date");
 
 
 /* =====================================================
@@ -616,6 +615,7 @@ function remember(
 
         role,
         content,
+
         time:
             Date.now()
 
@@ -637,9 +637,13 @@ function setState(
         newState;
 
     if(
+
         newState === "listening" ||
+
         newState === "thinking" ||
+
         newState === "speaking"
+
     ){
 
         dot.style.color =
@@ -651,11 +655,15 @@ function setState(
 
     }else{
 
+        dot.style.color =
+            "#168cff";
+
         voiceCore.classList.remove(
             "active"
         );
 
     }
+
 
     if(
         newState === "listening"
@@ -681,9 +689,10 @@ function setState(
     }else{
 
         statusText.textContent =
-            "HOLOGRAPHIC INTERFACE ONLINE";
+            "NEURAL INTERFACE ONLINE";
 
     }
+
 }
 
 
@@ -710,6 +719,7 @@ function updateClock(){
                 month:"short"
             }
         ).toUpperCase();
+
 }
 
 updateClock();
@@ -759,7 +769,7 @@ function addMessage(
 
 
 /* =====================================================
-   CANVAS
+   NEURAL FACE
 ===================================================== */
 
 let width =
@@ -768,228 +778,37 @@ let width =
 let height =
     innerHeight;
 
-let cx =
+let dpr =
+    Math.min(
+        window.devicePixelRatio || 1,
+        2
+    );
+
+let centerX =
     width / 2;
 
-let cy =
+let centerY =
     height / 2;
 
-
-/* =====================================================
-   PARTICELLE DELLA TESTA
-===================================================== */
+let faceScale =
+    Math.min(
+        width,
+        height
+    ) * .38;
 
 let particles = [];
 
+let faceRotation =
+    0;
 
-/*
-    Questa funzione crea una testa
-    tridimensionale vista frontalmente.
+let faceTilt =
+    0;
 
-    Le particelle non sono un'immagine:
-    vengono generate matematicamente.
-*/
+let energy =
+    0;
 
-function createHead(){
-
-    particles = [];
-
-    const amount =
-        innerWidth < 600
-        ? 900
-        : 1400;
-
-
-    for(
-        let i = 0;
-        i < amount;
-        i++
-    ){
-
-        /*
-            Coordinate casuali
-            sulla superficie di una testa.
-        */
-
-        const theta =
-            Math.random()
-            * Math.PI
-            * 2;
-
-        const phi =
-            Math.acos(
-                2 * Math.random() - 1
-            );
-
-
-        /*
-            Forma base cranio.
-        */
-
-        let x =
-            Math.sin(phi)
-            * Math.cos(theta);
-
-        let y =
-            Math.cos(phi);
-
-        let z =
-            Math.sin(phi)
-            * Math.sin(theta);
-
-
-        /*
-            Allungamento verticale
-            per sembrare una testa.
-        */
-
-        x *= .72;
-
-        y *= 1.05;
-
-        z *= .62;
-
-
-        /*
-            Mandibola leggermente più stretta.
-        */
-
-        if(
-            y < -.15
-        ){
-
-            const factor =
-                .78 +
-                (y + 1)
-                * .22;
-
-            x *= factor;
-        }
-
-
-        /*
-            MENTO.
-        */
-
-        if(
-            y < -.55
-        ){
-
-            z -=
-                .08 *
-                Math.abs(y + .55);
-        }
-
-
-        /*
-            NASO.
-        */
-
-        const noseZone =
-            Math.abs(x) < .10 &&
-            y > -.18 &&
-            y < .32 &&
-            z > .45;
-
-        if(noseZone){
-
-            z +=
-                .20 *
-                (1 -
-                Math.abs(y-.05)/.25);
-        }
-
-
-        /*
-            OCCHI.
-
-            Creiamo due zone
-            leggermente più sporgenti.
-        */
-
-        const eyeLeft =
-            Math.pow(
-                x + .27,
-                2
-            ) < .055 &&
-            Math.pow(
-                y - .18,
-                2
-            ) < .035 &&
-            z > .40;
-
-        const eyeRight =
-            Math.pow(
-                x - .27,
-                2
-            ) < .055 &&
-            Math.pow(
-                y - .18,
-                2
-            ) < .035 &&
-            z > .40;
-
-        if(
-            eyeLeft ||
-            eyeRight
-        ){
-
-            z += .07;
-        }
-
-
-        /*
-            BOCCA.
-
-            Una zona più sottile.
-        */
-
-        const mouth =
-            Math.abs(y + .30) < .055 &&
-            Math.abs(x) < .27 &&
-            z > .42;
-
-        if(mouth){
-
-            z += .035;
-        }
-
-
-        /*
-            Pixel / particella.
-        */
-
-        particles.push({
-
-            x:x,
-            y:y,
-            z:z,
-
-            baseX:x,
-            baseY:y,
-            baseZ:z,
-
-            phase:
-                Math.random()
-                * Math.PI
-                * 2,
-
-            speed:
-                .5 +
-                Math.random()*1.5,
-
-            size:
-                .45 +
-                Math.random()*.8,
-
-            brightness:
-                .45 +
-                Math.random()*.55
-
-        });
-
-    }
-}
+let targetEnergy =
+    0;
 
 
 /* =====================================================
@@ -1004,9 +823,9 @@ function resize(){
     height =
         innerHeight;
 
-    const dpr =
+    dpr =
         Math.min(
-            devicePixelRatio || 1,
+            window.devicePixelRatio || 1,
             2
         );
 
@@ -1031,215 +850,664 @@ function resize(){
         0
     );
 
-    cx =
+    centerX =
         width / 2;
 
-    cy =
+    centerY =
         height / 2;
 
-    createHead();
+    faceScale =
+        Math.min(
+            width,
+            height
+        ) * .38;
+
 }
 
 resize();
 
+window.addEventListener(
+    "resize",
+    resize
+);
+
 
 /* =====================================================
-   MICROFONO / VOLUME
+   CREAZIONE DEL VOLTO
+=====================================================
+
+   Il volto viene costruito con coordinate
+   geometriche.
+
+   Ogni zona contiene moltissime particelle:
+
+   - contorno
+   - fronte
+   - occhi
+   - sopracciglia
+   - naso
+   - guance
+   - bocca
+   - mento
+   - capelli
 ===================================================== */
 
-let audioLevel =
-    0;
+function addParticle(
+    x,
+    y,
+    z,
+    size = 1,
+    brightness = 1
+){
 
-let targetAudioLevel =
-    0;
+    particles.push({
 
+        x,
+        y,
+        z,
 
-/*
-    Simuliamo un movimento
-    organico quando JARVIS parla
-    o quando l'utente parla.
+        baseX:x,
+        baseY:y,
+        baseZ:z,
 
-    Se il browser permette l'accesso
-    al microfono, utilizziamo il volume reale.
-*/
+        size,
 
-let audioContext =
-    null;
+        brightness,
 
-let analyser =
-    null;
+        phase:
+            Math.random() *
+            Math.PI * 2,
 
-let microphone =
-    null;
+        speed:
+            .5 +
+            Math.random() * 1.5
 
-let audioData =
-    null;
+    });
 
-
-async function setupAudio(){
-
-    try{
-
-        const stream =
-            await navigator.mediaDevices
-                .getUserMedia({
-                    audio:true
-                });
-
-        audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
-
-        analyser =
-            audioContext.createAnalyser();
-
-        analyser.fftSize =
-            256;
-
-        microphone =
-            audioContext.createMediaStreamSource(
-                stream
-            );
-
-        microphone.connect(
-            analyser
-        );
-
-        audioData =
-            new Uint8Array(
-                analyser.frequencyBinCount
-            );
-
-    }catch(error){
-
-        console.log(
-            "Microfono non disponibile."
-        );
-
-    }
 }
 
 
-function updateAudio(){
+/* =====================================================
+   PUNTO SU ELLISSE
+===================================================== */
 
-    if(
-        analyser &&
-        audioData
+function ellipsePoints(
+    cx,
+    cy,
+    rx,
+    ry,
+    count,
+    z = 0
+){
+
+    for(
+        let i=0;
+        i<count;
+        i++
     ){
 
-        analyser.getByteFrequencyData(
-            audioData
+        const a =
+            Math.random() *
+            Math.PI * 2;
+
+        const radius =
+            .82 +
+            Math.random() * .18;
+
+        const x =
+            cx +
+            Math.cos(a) *
+            rx *
+            radius;
+
+        const y =
+            cy +
+            Math.sin(a) *
+            ry *
+            radius;
+
+        addParticle(
+            x,
+            y,
+            z +
+            (Math.random()-.5)*.15,
+            .45 +
+            Math.random()*.7,
+            .7 +
+            Math.random()*.3
         );
 
-        let sum = 0;
-
-        for(
-            let i=0;
-            i<audioData.length;
-            i++
-        ){
-
-            sum +=
-                audioData[i];
-
-        }
-
-        targetAudioLevel =
-            sum /
-            audioData.length /
-            255;
-
-    }else{
-
-        /*
-            Movimento automatico
-            se il microfono non è disponibile.
-        */
-
-        if(
-            state === "speaking" ||
-            state === "listening"
-        ){
-
-            targetAudioLevel =
-                .18 +
-                Math.random()*.12;
-
-        }else{
-
-            targetAudioLevel =
-                .025;
-
-        }
     }
 
-    audioLevel +=
-        (
-            targetAudioLevel -
-            audioLevel
-        ) * .15;
 }
 
 
 /* =====================================================
-   DISEGNO
+   LINEA PARTICELLARE
 ===================================================== */
 
-let rotation =
-    0;
+function lineParticles(
+    x1,
+    y1,
+    x2,
+    y2,
+    count,
+    thickness = 2,
+    z = 0
+){
 
-let headScale =
-    1;
+    for(
+        let i=0;
+        i<count;
+        i++
+    ){
+
+        const t =
+            Math.random();
+
+        const x =
+            x1 +
+            (x2-x1) * t;
+
+        const y =
+            y1 +
+            (y2-y1) * t;
+
+        addParticle(
+
+            x +
+            (Math.random()-.5) *
+            thickness,
+
+            y +
+            (Math.random()-.5) *
+            thickness,
+
+            z +
+            (Math.random()-.5)*.12,
+
+            .45 +
+            Math.random()*.75,
+
+            .75 +
+            Math.random()*.25
+
+        );
+
+    }
+
+}
 
 
-function animate(){
+/* =====================================================
+   COSTRUZIONE DEL VOLTO
+===================================================== */
 
-    requestAnimationFrame(
-        animate
+function createFace(){
+
+    particles = [];
+
+
+    /* =================================================
+       SCALA
+    ================================================= */
+
+    const s =
+        faceScale;
+
+
+    /* =================================================
+       CONTORNO DEL VISO
+    ================================================= */
+
+    ellipsePoints(
+        0,
+        5,
+        s * .70,
+        s * .91,
+        260,
+        .05
     );
 
-    updateAudio();
+
+    /* =================================================
+       SECONDO STRATO DEL CONTORNO
+    ================================================= */
+
+    ellipsePoints(
+        0,
+        5,
+        s * .66,
+        s * .87,
+        170,
+        .02
+    );
+
+
+    /* =================================================
+       FRONTE
+    ================================================= */
+
+    for(
+        let i=0;
+        i<150;
+        i++
+    ){
+
+        const x =
+            (Math.random()-.5)
+            * s * 1.0;
+
+        const y =
+            -s * .58 +
+            Math.random() * s * .32;
+
+        addParticle(
+            x,
+            y,
+            .1 +
+            Math.random()*.3,
+            .4 +
+            Math.random()*.6,
+            .55 +
+            Math.random()*.45
+        );
+
+    }
+
+
+    /* =================================================
+       OCCHI
+    ================================================= */
+
+    const eyeY =
+        -s * .18;
+
+    const eyeDistance =
+        s * .27;
+
+    const eyeRX =
+        s * .17;
+
+    const eyeRY =
+        s * .075;
+
+
+    /* occhio sinistro */
+
+    ellipsePoints(
+        -eyeDistance,
+        eyeY,
+        eyeRX,
+        eyeRY,
+        115,
+        .38
+    );
+
+
+    /* occhio destro */
+
+    ellipsePoints(
+        eyeDistance,
+        eyeY,
+        eyeRX,
+        eyeRY,
+        115,
+        .38
+    );
+
+
+    /* =================================================
+       IRIDI
+    ================================================= */
+
+    ellipsePoints(
+        -eyeDistance,
+        eyeY,
+        s*.045,
+        s*.045,
+        45,
+        .48
+    );
+
+    ellipsePoints(
+        eyeDistance,
+        eyeY,
+        s*.045,
+        s*.045,
+        45,
+        .48
+    );
+
+
+    /* =================================================
+       SOPRACCIGLIA
+    ================================================= */
+
+    lineParticles(
+        -s*.43,
+        -s*.30,
+        -s*.12,
+        -s*.34,
+        80,
+        5,
+        .18
+    );
+
+    lineParticles(
+        s*.12,
+        -s*.34,
+        s*.43,
+        -s*.30,
+        80,
+        5,
+        .18
+    );
+
+
+    /* =================================================
+       NASO
+    ================================================= */
+
+    lineParticles(
+        -s*.025,
+        -s*.13,
+        -s*.055,
+        s*.15,
+        105,
+        3,
+        .32
+    );
+
+    lineParticles(
+        -s*.055,
+        s*.15,
+        0,
+        s*.21,
+        60,
+        3,
+        .35
+    );
+
+    lineParticles(
+        0,
+        s*.21,
+        s*.055,
+        s*.15,
+        60,
+        3,
+        .35
+    );
+
+
+    /* =================================================
+       NARICI
+    ================================================= */
+
+    ellipsePoints(
+        -s*.075,
+        s*.17,
+        s*.035,
+        s*.018,
+        30,
+        .42
+    );
+
+    ellipsePoints(
+        s*.075,
+        s*.17,
+        s*.035,
+        s*.018,
+        30,
+        .42
+    );
+
+
+    /* =================================================
+       GUANCE
+    ================================================= */
+
+    ellipsePoints(
+        -s*.39,
+        s*.12,
+        s*.13,
+        s*.18,
+        80,
+        -.02
+    );
+
+    ellipsePoints(
+        s*.39,
+        s*.12,
+        s*.13,
+        s*.18,
+        80,
+        -.02
+    );
+
+
+    /* =================================================
+       BOCCA
+    ================================================= */
+
+    const mouthY =
+        s*.36;
+
+    lineParticles(
+        -s*.20,
+        mouthY,
+        0,
+        mouthY + s*.025,
+        90,
+        3,
+        .42
+    );
+
+    lineParticles(
+        0,
+        mouthY + s*.025,
+        s*.20,
+        mouthY,
+        90,
+        3,
+        .42
+    );
+
+
+    /* labbro inferiore */
+
+    lineParticles(
+        -s*.14,
+        mouthY + s*.065,
+        0,
+        mouthY + s*.10,
+        65,
+        3,
+        .38
+    );
+
+    lineParticles(
+        0,
+        mouthY + s*.10,
+        s*.14,
+        mouthY + s*.065,
+        65,
+        3,
+        .38
+    );
+
+
+    /* =================================================
+       MENTO
+    ================================================= */
+
+    ellipsePoints(
+        0,
+        s*.57,
+        s*.18,
+        s*.09,
+        65,
+        .02
+    );
+
+
+    /* =================================================
+       CAPELLI / PARTE SUPERIORE
+    ================================================= */
+
+    for(
+        let i=0;
+        i<300;
+        i++
+    ){
+
+        const a =
+            Math.PI *
+            (0.1 +
+            Math.random()*.8);
+
+        const radius =
+            s *
+            (.65 +
+            Math.random()*.12);
+
+        const x =
+            Math.cos(a) *
+            radius;
+
+        const y =
+            -Math.abs(
+                Math.sin(a)
+            ) *
+            s*.86 -
+            s*.02;
+
+        addParticle(
+            x,
+            y,
+            -.05 +
+            Math.random()*.2,
+            .4 +
+            Math.random()*.7,
+            .45 +
+            Math.random()*.55
+        );
+
+    }
+
+
+    /* =================================================
+       PARTICELLE INTERNE
+    ================================================= */
+
+    for(
+        let i=0;
+        i<850;
+        i++
+    ){
+
+        const x =
+            (Math.random()-.5)
+            * s*1.15;
+
+        const y =
+            (Math.random()-.5)
+            * s*1.65;
+
+        const normalized =
+            Math.pow(
+                x/(s*.62),
+                2
+            ) +
+            Math.pow(
+                (y-s*.02)/(s*.84),
+                2
+            );
+
+        if(
+            normalized < 1
+        ){
+
+            addParticle(
+                x,
+                y,
+                (Math.random()-.5)*.7,
+                .35 +
+                Math.random()*.65,
+                .25 +
+                Math.random()*.6
+            );
+
+        }
+
+    }
+
+}
+
+createFace();
+
+
+/* =====================================================
+   ANIMAZIONE VOLTO
+===================================================== */
+
+function animateFace(){
+
+    requestAnimationFrame(
+        animateFace
+    );
 
 
     const time =
-        performance.now()
-        / 1000;
+        performance.now()/1000;
 
 
-    /*
-        Movimento della testa.
-    */
+    /* =================================================
+       ENERGIA
+    ================================================= */
 
-    rotation +=
-        .0015;
+    if(
+        state === "listening"
+    ){
+
+        targetEnergy =
+            .9;
+
+    }else if(
+        state === "thinking"
+    ){
+
+        targetEnergy =
+            1.15;
+
+    }else if(
+        state === "speaking"
+    ){
+
+        targetEnergy =
+            .95;
+
+    }else{
+
+        targetEnergy =
+            .18;
+
+    }
 
 
-    /*
-        La testa respira
-        in base alla voce.
-    */
-
-    const pulse =
-        Math.sin(
-            time * 1.8
-        ) * .015;
+    energy +=
+        (
+            targetEnergy -
+            energy
+        ) * .08;
 
 
-    headScale =
-        1 +
-        pulse +
-        audioLevel * .12;
-
-
-    /*
-        Sfondo nero con persistenza
-        per lasciare una scia luminosa.
-    */
+    /* =================================================
+       PULIZIA
+    ================================================= */
 
     ctx.fillStyle =
-        "rgba(0,0,0,.20)";
+        "rgba(0,0,0,.22)";
 
     ctx.fillRect(
         0,
@@ -1249,34 +1517,38 @@ function animate(){
     );
 
 
-    /*
-        Glow centrale.
-    */
+    /* =================================================
+       GLOW CENTRALE
+    ================================================= */
 
     const glow =
-        Math.min(
-            width,
-            height
-        ) * .42;
+        faceScale *
+        (
+            .85 +
+            energy*.22
+        );
 
     const gradient =
         ctx.createRadialGradient(
-            cx,
-            cy,
+
+            centerX,
+            centerY,
             0,
-            cx,
-            cy,
+
+            centerX,
+            centerY,
             glow
+
         );
 
     gradient.addColorStop(
         0,
-        "rgba(20,130,255,.15)"
+        "rgba(25,145,255,.13)"
     );
 
     gradient.addColorStop(
         .45,
-        "rgba(10,100,255,.05)"
+        "rgba(20,120,255,.055)"
     );
 
     gradient.addColorStop(
@@ -1290,8 +1562,8 @@ function animate(){
     ctx.beginPath();
 
     ctx.arc(
-        cx,
-        cy,
+        centerX,
+        centerY,
         glow,
         0,
         Math.PI*2
@@ -1300,30 +1572,35 @@ function animate(){
     ctx.fill();
 
 
-    /*
-        Scala della testa.
-    */
+    /* =================================================
+       ROTAZIONE LEGGERA
+    ================================================= */
 
-    const radius =
-        Math.min(
-            width,
-            height
-        ) * .32;
+    faceRotation +=
+        .0007 *
+        (
+            1 +
+            energy*2
+        );
 
 
-    /*
-        Proiezione 3D.
-    */
+    const breathing =
+        Math.sin(
+            time*1.4
+        ) *
+        energy *
+        2.5;
+
+
+    /* =================================================
+       PROIEZIONE PARTICELLE
+    ================================================= */
 
     const projected = [];
 
 
     particles.forEach(
-        p=>{
-
-            /*
-                Rotazione 3D.
-            */
+        p => {
 
             let x =
                 p.baseX;
@@ -1335,39 +1612,7 @@ function animate(){
                 p.baseZ;
 
 
-            const rot =
-                rotation;
-
-            const cos =
-                Math.cos(rot);
-
-            const sin =
-                Math.sin(rot);
-
-
-            const rx =
-                x*cos -
-                z*sin;
-
-            const rz =
-                x*sin +
-                z*cos;
-
-
-            x =
-                rx;
-
-            z =
-                rz;
-
-
-            /*
-                Movimento legato
-                alla voce.
-
-                Le particelle si espandono
-                e vibrano invece di sfocarsi.
-            */
+            /* movimento neurale */
 
             const wave =
                 Math.sin(
@@ -1376,75 +1621,111 @@ function animate(){
                     p.phase
                 );
 
-            const movement =
-                audioLevel *
-                (
-                    0.025 +
-                    Math.abs(wave)
-                    * .065
+
+            const wave2 =
+                Math.cos(
+                    time *
+                    .7 +
+                    p.phase
                 );
 
 
             x +=
-                x *
-                movement;
+                wave *
+                energy *
+                3.5;
 
             y +=
-                y *
-                movement;
-
-            z +=
-                z *
-                movement;
+                wave2 *
+                energy *
+                2.2;
 
 
-            /*
-                Prospettiva.
-            */
+            /* respirazione */
+
+            const distance =
+                Math.sqrt(
+                    x*x +
+                    y*y
+                );
+
+            const scale =
+                1 +
+                breathing /
+                Math.max(
+                    faceScale,
+                    1
+                );
+
+
+            x *=
+                scale;
+
+            y *=
+                scale;
+
+
+            /* rotazione 3D */
+
+            const cos =
+                Math.cos(
+                    faceRotation
+                );
+
+            const sin =
+                Math.sin(
+                    faceRotation
+                );
+
+
+            const rotatedX =
+                x*cos -
+                z*sin;
+
+            const rotatedZ =
+                x*sin +
+                z*cos;
+
+
+            x =
+                rotatedX;
+
+            z =
+                rotatedZ;
+
+
+            /* prospettiva */
 
             const perspective =
-                1 /
+                520 /
                 (
-                    1.7 -
-                    z*.45
+                    520 +
+                    z
                 );
 
 
             const screenX =
-                cx +
+                centerX +
                 x *
-                radius *
-                perspective *
-                headScale;
+                perspective;
 
             const screenY =
-                cy -
+                centerY +
                 y *
-                radius *
-                perspective *
-                headScale;
-
-
-            const particleSize =
-                (
-                    p.size *
-                    perspective
-                ) *
-                (
-                    1 +
-                    audioLevel*1.4
-                );
+                perspective;
 
 
             projected.push({
 
                 x:screenX,
+
                 y:screenY,
 
-                z:z,
+                z,
 
                 size:
-                    particleSize,
+                    p.size *
+                    perspective,
 
                 brightness:
                     p.brightness,
@@ -1458,32 +1739,14 @@ function animate(){
     );
 
 
-    /*
-        Ordiniamo le particelle
-        per profondità.
-    */
-
-    projected.sort(
-        (a,b)=>
-            a.z-b.z
-    );
-
-
     /* =================================================
        CONNESSIONI
     ================================================= */
 
-    /*
-        Non colleghiamo tutto.
-
-        Questo crea una rete neurale
-        molto più elegante.
-    */
-
-    const connectionDistance =
+    const maxDistance =
         state === "thinking"
-        ? 85
-        : 62;
+        ? 46
+        : 38;
 
 
     for(
@@ -1492,30 +1755,39 @@ function animate(){
         i++
     ){
 
-        /*
-            Limitiamo il numero
-            di confronti per evitare
-            di appesantire il telefono.
-        */
-
-        if(
-            i % 2 !== 0
-        )
-            continue;
-
-
         const a =
             projected[i];
 
 
+        /* controlliamo solo un numero limitato
+           di particelle successive */
+
+        const limit =
+            Math.min(
+                projected.length,
+                i+65
+            );
+
+
         for(
             let j=i+1;
-            j<projected.length;
-            j+=2
+            j<limit;
+            j++
         ){
 
             const b =
                 projected[j];
+
+
+            if(
+                Math.abs(
+                    a.z-b.z
+                ) > 30
+            ){
+
+                continue;
+
+            }
 
 
             const dx =
@@ -1526,27 +1798,25 @@ function animate(){
 
             const dist =
                 Math.sqrt(
-                    dx*dx+
+                    dx*dx +
                     dy*dy
                 );
 
 
             if(
                 dist <
-                connectionDistance
+                maxDistance
             ){
 
                 const alpha =
                     (
                         1 -
                         dist /
-                        connectionDistance
+                        maxDistance
                     )
                     *
-                    (
-                        .09 +
-                        audioLevel*.22
-                    );
+                    .12 *
+                    energy;
 
 
                 ctx.beginPath();
@@ -1564,14 +1834,13 @@ function animate(){
                 ctx.strokeStyle =
                     `rgba(
                         35,
-                        145,
+                        150,
                         255,
                         ${alpha}
                     )`;
 
                 ctx.lineWidth =
-                    .35 +
-                    audioLevel*.5;
+                    .35;
 
                 ctx.stroke();
 
@@ -1587,107 +1856,105 @@ function animate(){
     ================================================= */
 
     projected.forEach(
-        p=>{
+        p => {
 
             const flicker =
                 (
                     Math.sin(
-                        time*3+
+                        time*3 +
                         p.phase
-                    )+1
-                )/2;
+                    ) + 1
+                ) / 2;
 
 
-            const brightness =
+            const size =
+                p.size +
+                flicker *
+                energy *
+                .8;
+
+
+            const alpha =
                 Math.min(
                     1,
-                    p.brightness +
-                    flicker*.15 +
-                    audioLevel*.45
+                    .35 +
+                    p.brightness *
+                    .65
                 );
 
 
-            /*
-                Glow.
-            */
+            /* alone */
 
-            const glowSize =
-                p.size *
-                (
-                    2.5 +
-                    audioLevel*3
-                );
-
+            ctx.fillStyle =
+                `rgba(
+                    30,
+                    145,
+                    255,
+                    ${alpha*.12}
+                )`;
 
             ctx.beginPath();
 
             ctx.arc(
                 p.x,
                 p.y,
-                glowSize,
+                size*4,
                 0,
                 Math.PI*2
             );
 
-
-            ctx.fillStyle =
-                `rgba(
-                    35,
-                    150,
-                    255,
-                    ${brightness*.12}
-                )`;
-
             ctx.fill();
 
 
-            /*
-                Particella principale.
-            */
+            /* particella */
+
+            ctx.fillStyle =
+                `rgba(
+                    55,
+                    170,
+                    255,
+                    ${alpha}
+                )`;
 
             ctx.beginPath();
 
             ctx.arc(
                 p.x,
                 p.y,
-                p.size,
+                size,
                 0,
                 Math.PI*2
             );
 
-
-            ctx.fillStyle =
-                `rgba(
-                    ${100 + brightness*100},
-                    ${190 + brightness*50},
-                    255,
-                    ${.65 + brightness*.35}
-                )`;
-
             ctx.fill();
 
 
-            /*
-                Piccolo punto bianco
-                al centro.
-            */
+            /* nucleo bianco/blu */
 
             if(
-                p.size > .65
+                p.brightness > .85
             ){
+
+                ctx.fillStyle =
+                    `rgba(
+                        180,
+                        235,
+                        255,
+                        ${alpha*.7}
+                    )`;
 
                 ctx.beginPath();
 
                 ctx.arc(
                     p.x,
                     p.y,
-                    p.size*.25,
+                    Math.max(
+                        .45,
+                        size*.35
+                    ),
                     0,
                     Math.PI*2
                 );
-
-                ctx.fillStyle =
-                    "rgba(255,255,255,.8)";
 
                 ctx.fill();
 
@@ -1697,89 +1964,52 @@ function animate(){
     );
 
 
-    /*
-        LINEA ORIZZONTALE
-        tipo scanner.
-    */
+    /* =================================================
+       OCCHI PIÙ LUMINOSI
+    ================================================= */
 
-    const scanY =
-        cy +
-        Math.sin(time*.5)
-        * radius
-        * .9;
+    const eyeGlow =
+        faceScale *
+        .045 *
+        (
+            1 +
+            energy*1.8
+        );
 
 
-    ctx.beginPath();
+    const eyeY =
+        centerY -
+        faceScale*.18;
 
-    ctx.moveTo(
-        cx-radius*1.05,
-        scanY
+
+    const eyeX =
+        faceScale*.27;
+
+
+    drawEyeCore(
+        centerX-eyeX,
+        eyeY,
+        eyeGlow
     );
 
-    ctx.lineTo(
-        cx+radius*1.05,
-        scanY
+    drawEyeCore(
+        centerX+eyeX,
+        eyeY,
+        eyeGlow
     );
 
-    ctx.strokeStyle =
-        "rgba(40,160,255,.035)";
-
-    ctx.lineWidth =
-        1;
-
-    ctx.stroke();
-
-
-    /*
-        Occhi più luminosi.
-
-        Non sono immagini:
-        sono semplicemente particelle
-        enfatizzate matematicamente.
-    */
-
-    drawEye(
-        -.27
-    );
-
-    drawEye(
-        .27
-    );
 }
 
 
 /* =====================================================
-   OCCHI
+   CORE OCCHI
 ===================================================== */
 
-function drawEye(
-    side
+function drawEyeCore(
+    x,
+    y,
+    radius
 ){
-
-    const radius =
-        Math.min(
-            width,
-            height
-        ) * .32;
-
-
-    const x =
-        cx +
-        side *
-        radius *
-        .70;
-
-
-    const y =
-        cy -
-        radius *
-        .19;
-
-
-    const eyeGlow =
-        7 +
-        audioLevel*10;
-
 
     const gradient =
         ctx.createRadialGradient(
@@ -1788,25 +2018,23 @@ function drawEye(
             0,
             x,
             y,
-            eyeGlow
+            radius*5
         );
-
 
     gradient.addColorStop(
         0,
-        "rgba(120,220,255,.9)"
+        "rgba(180,240,255,.8)"
     );
 
     gradient.addColorStop(
-        .3,
-        "rgba(40,160,255,.35)"
+        .25,
+        "rgba(60,180,255,.25)"
     );
 
     gradient.addColorStop(
         1,
-        "rgba(0,0,0,0)"
+        "rgba(20,130,255,0)"
     );
-
 
     ctx.fillStyle =
         gradient;
@@ -1816,7 +2044,7 @@ function drawEye(
     ctx.arc(
         x,
         y,
-        eyeGlow,
+        radius*5,
         0,
         Math.PI*2
     );
@@ -1825,35 +2053,30 @@ function drawEye(
 
 
     ctx.fillStyle =
-        "#dff8ff";
+        "rgba(210,245,255,.95)";
 
     ctx.beginPath();
 
     ctx.arc(
         x,
         y,
-        1.5+
-        audioLevel*1.5,
+        radius,
         0,
         Math.PI*2
     );
 
     ctx.fill();
+
 }
 
 
 /* =====================================================
-   AVVIO ANIMAZIONE
+   SPEAK
 ===================================================== */
 
-animate();
-
-
-/* =====================================================
-   SPEECH SYNTHESIS
-===================================================== */
-
-function speak(text){
+function speak(
+    text
+){
 
     if(
         !("speechSynthesis" in window)
@@ -1864,6 +2087,7 @@ function speak(text){
         );
 
         return;
+
     }
 
 
@@ -1881,7 +2105,9 @@ function speak(text){
 
 
     /*
-        Voce più profonda.
+       Voce profonda e lenta.
+       La voce effettiva dipende dalle
+       voci installate sul dispositivo.
     */
 
     utterance.rate =
@@ -1895,7 +2121,7 @@ function speak(text){
 
 
     utterance.onstart =
-        ()=>{
+        () => {
 
             setState(
                 "speaking"
@@ -1905,11 +2131,12 @@ function speak(text){
 
 
     utterance.onend =
-        ()=>{
+        () => {
 
             setState(
                 "idle"
             );
+
 
             if(
                 wakeMode &&
@@ -1927,7 +2154,7 @@ function speak(text){
 
 
     utterance.onerror =
-        ()=>{
+        () => {
 
             setState(
                 "idle"
@@ -1939,319 +2166,92 @@ function speak(text){
     speechSynthesis.speak(
         utterance
     );
-}
-
-
-/* =====================================================
-   SPEECH RECOGNITION
-===================================================== */
-
-const Recognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-
-if(Recognition){
-
-    recognition =
-        new Recognition();
-
-
-    recognition.lang =
-        "it-IT";
-
-
-    recognition.continuous =
-        false;
-
-
-    recognition.interimResults =
-        true;
-
-
-    recognition.onstart =
-        ()=>{
-
-            listening =
-                true;
-
-            setState(
-                "listening"
-            );
-
-        };
-
-
-    recognition.onresult =
-        event=>{
-
-            let transcript =
-                "";
-
-
-            for(
-                let i =
-                    event.resultIndex;
-
-                i <
-                    event.results.length;
-
-                i++
-            ){
-
-                transcript +=
-                    event.results[i][0]
-                    .transcript;
-
-            }
-
-
-            const last =
-                event.results[
-                    event.results.length-1
-                ];
-
-
-            if(
-                last.isFinal
-            ){
-
-                const text =
-                    transcript.trim();
-
-
-                if(text){
-
-                    sendMessage(
-                        text
-                    );
-
-                }
-
-            }
-
-        };
-
-
-    recognition.onerror =
-        event=>{
-
-            console.log(
-                "Speech recognition:",
-                event.error
-            );
-
-        };
-
-
-    recognition.onend =
-        ()=>{
-
-            listening =
-                false;
-
-
-            if(
-                state === "listening"
-            ){
-
-                setState(
-                    "idle"
-                );
-
-            }
-
-        };
-
-}else{
-
-    console.log(
-        "Speech Recognition non supportato."
-    );
 
 }
 
 
 /* =====================================================
-   WAKE WORD "JARVIS"
+   COMANDI LOCALI
 ===================================================== */
 
-function startWakeWord(){
+function localCommand(
+    text
+){
+
+    const t =
+        text.toLowerCase();
+
 
     if(
-        !Recognition ||
-        !wakeMode ||
-        busy ||
-        listening ||
-        wakeRecognition
+
+        t.includes(
+            "che ore sono"
+        )
+
+        ||
+
+        t.includes(
+            "che ora è"
+        )
+
+        ||
+
+        t.includes(
+            "che ora e"
+        )
+
     ){
 
-        return;
-    }
-
-
-    wakeRecognition =
-        new Recognition();
-
-
-    wakeRecognition.lang =
-        "it-IT";
-
-
-    wakeRecognition.continuous =
-        true;
-
-
-    wakeRecognition.interimResults =
-        true;
-
-
-    wakeRecognition.onresult =
-        event=>{
-
-            for(
-                let i =
-                    event.resultIndex;
-
-                i <
-                    event.results.length;
-
-                i++
-            ){
-
-                const text =
-                    event.results[i][0]
-                    .transcript
-                    .toLowerCase()
-                    .trim();
-
-
-                if(
-                    text.includes(
-                        "jarvis"
-                    )
-                ){
-
-                    try{
-
-                        wakeRecognition.stop();
-
-                    }catch{}
-
-
-                    wakeRecognition =
-                        null;
-
-
-                    activateJarvis();
-
-                    return;
-
+        return(
+            "Sono le " +
+            new Date()
+            .toLocaleTimeString(
+                "it-IT",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
                 }
-
-            }
-
-        };
-
-
-    wakeRecognition.onerror =
-        ()=>{
-
-            wakeRecognition =
-                null;
-
-
-            if(
-                wakeMode &&
-                !busy &&
-                !listening
-            ){
-
-                setTimeout(
-                    startWakeWord,
-                    1000
-                );
-
-            }
-
-        };
-
-
-    wakeRecognition.onend =
-        ()=>{
-
-            wakeRecognition =
-                null;
-
-
-            if(
-                wakeMode &&
-                !busy &&
-                !listening
-            ){
-
-                setTimeout(
-                    startWakeWord,
-                    700
-                );
-
-            }
-
-        };
-
-
-    try{
-
-        wakeRecognition.start();
-
-    }catch{
-
-        wakeRecognition =
-            null;
+            ) +
+            "."
+        );
 
     }
 
-}
-
-
-/* =====================================================
-   ATTIVAZIONE
-===================================================== */
-
-function activateJarvis(){
 
     if(
-        busy ||
-        listening
+
+        t.includes(
+            "che giorno è"
+        )
+
+        ||
+
+        t.includes(
+            "che giorno e"
+        )
+
     ){
 
-        return;
+        return(
+            "Oggi è " +
+            new Date()
+            .toLocaleDateString(
+                "it-IT",
+                {
+                    weekday:"long",
+                    day:"numeric",
+                    month:"long",
+                    year:"numeric"
+                }
+            ) +
+            "."
+        );
+
     }
 
 
-    setState(
-        "listening"
-    );
+    return null;
 
-
-    setTimeout(
-        ()=>{
-
-            try{
-
-                recognition.start();
-
-            }catch(error){
-
-                console.log(
-                    error
-                );
-
-            }
-
-        },
-        450
-    );
 }
 
 
@@ -2269,6 +2269,7 @@ async function sendMessage(
     ){
 
         return;
+
     }
 
 
@@ -2286,6 +2287,38 @@ async function sendMessage(
         "user",
         text
     );
+
+
+    const local =
+        localCommand(
+            text
+        );
+
+
+    if(local){
+
+        addMessage(
+            "jarvis",
+            local
+        );
+
+
+        remember(
+            "assistant",
+            local
+        );
+
+
+        speak(
+            local
+        );
+
+
+        finish();
+
+        return;
+
+    }
 
 
     setState(
@@ -2361,8 +2394,7 @@ async function sendMessage(
                 API,
                 {
 
-                    method:
-                        "POST",
+                    method:"POST",
 
                     headers:{
                         "Content-Type":
@@ -2437,7 +2469,7 @@ async function sendMessage(
 
 
         answer.textContent =
-            "Neural Core non raggiungibile.";
+            "Neural Core non raggiungibile. Controlla la connessione o il server AI.";
 
 
         speak(
@@ -2452,8 +2484,344 @@ async function sendMessage(
     }
 
 
+    finish();
+
+}
+
+
+/* =====================================================
+   FINE
+===================================================== */
+
+function finish(){
+
     busy =
         false;
+
+}
+
+
+/* =====================================================
+   SPEECH RECOGNITION
+===================================================== */
+
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if(Recognition){
+
+    recognition =
+        new Recognition();
+
+
+    recognition.lang =
+        "it-IT";
+
+
+    recognition.continuous =
+        false;
+
+
+    recognition.interimResults =
+        true;
+
+
+    recognition.onstart =
+        () => {
+
+            listening =
+                true;
+
+            setState(
+                "listening"
+            );
+
+        };
+
+
+    recognition.onresult =
+        event => {
+
+            let transcript =
+                "";
+
+
+            for(
+                let i =
+                    event.resultIndex;
+
+                i <
+                    event.results.length;
+
+                i++
+            ){
+
+                transcript +=
+                    event.results[i][0]
+                    .transcript;
+
+            }
+
+
+            const last =
+                event.results[
+                    event.results.length-1
+                ];
+
+
+            if(
+                last.isFinal
+            ){
+
+                const text =
+                    transcript.trim();
+
+
+                if(text){
+
+                    sendMessage(
+                        text
+                    );
+
+                }
+
+            }
+
+        };
+
+
+    recognition.onerror =
+        event => {
+
+            console.log(
+                "Speech recognition:",
+                event.error
+            );
+
+        };
+
+
+    recognition.onend =
+        () => {
+
+            listening =
+                false;
+
+
+            if(
+                state === "listening"
+            ){
+
+                setState(
+                    "idle"
+                );
+
+            }
+
+        };
+
+}
+
+
+/* =====================================================
+   WAKE WORD
+===================================================== */
+
+function startWakeWord(){
+
+    if(
+
+        !Recognition ||
+
+        !wakeMode ||
+
+        busy ||
+
+        listening ||
+
+        wakeRecognition
+
+    ){
+
+        return;
+
+    }
+
+
+    wakeRecognition =
+        new Recognition();
+
+
+    wakeRecognition.lang =
+        "it-IT";
+
+
+    wakeRecognition.continuous =
+        true;
+
+
+    wakeRecognition.interimResults =
+        true;
+
+
+    wakeRecognition.onresult =
+        event => {
+
+            for(
+                let i =
+                    event.resultIndex;
+
+                i <
+                    event.results.length;
+
+                i++
+            ){
+
+                const text =
+                    event.results[i][0]
+                    .transcript
+                    .toLowerCase()
+                    .trim();
+
+
+                if(
+                    text.includes(
+                        "jarvis"
+                    )
+                ){
+
+                    try{
+
+                        wakeRecognition.stop();
+
+                    }catch{}
+
+
+                    wakeRecognition =
+                        null;
+
+
+                    activateJarvis();
+
+
+                    return;
+
+                }
+
+            }
+
+        };
+
+
+    wakeRecognition.onerror =
+        () => {
+
+            wakeRecognition =
+                null;
+
+
+            if(
+                wakeMode &&
+                !busy &&
+                !listening
+            ){
+
+                setTimeout(
+                    startWakeWord,
+                    1000
+                );
+
+            }
+
+        };
+
+
+    wakeRecognition.onend =
+        () => {
+
+            wakeRecognition =
+                null;
+
+
+            if(
+                wakeMode &&
+                !busy &&
+                !listening
+            ){
+
+                setTimeout(
+                    startWakeWord,
+                    700
+                );
+
+            }
+
+        };
+
+
+    try{
+
+        wakeRecognition.start();
+
+    }catch{
+
+        wakeRecognition =
+            null;
+
+    }
+
+}
+
+
+/* =====================================================
+   ATTIVA JARVIS
+===================================================== */
+
+function activateJarvis(){
+
+    if(
+        busy ||
+        listening ||
+        !recognition
+    ){
+
+        return;
+
+    }
+
+
+    setState(
+        "listening"
+    );
+
+
+    /*
+       Piccola pausa dopo "Jarvis"
+       per non registrare la wake word
+       nella domanda.
+    */
+
+    setTimeout(
+        () => {
+
+            try{
+
+                recognition.start();
+
+            }catch(error){
+
+                console.log(
+                    error
+                );
+
+            }
+
+        },
+        450
+    );
+
 }
 
 
@@ -2462,40 +2830,24 @@ async function sendMessage(
 ===================================================== */
 
 voiceCore.onclick =
-    async ()=>{
+    () => {
 
         if(
+            busy ||
             !recognition
         ){
 
             return;
-        }
-
-
-        if(
-            !analyser
-        ){
-
-            setupAudio();
 
         }
 
 
-        if(
-            busy
-        ){
-
-            return;
-        }
-
-
-        if(
-            listening
-        ){
+        if(listening){
 
             recognition.stop();
 
             return;
+
         }
 
 
@@ -2515,21 +2867,14 @@ voiceCore.onclick =
 
 
 /* =====================================================
-   RESIZE
-===================================================== */
-
-window.addEventListener(
-    "resize",
-    resize
-);
-
-
-/* =====================================================
    START
 ===================================================== */
 
+animateFace();
+
+
 setTimeout(
-    ()=>{
+    () => {
 
         document
             .getElementById(
@@ -2541,20 +2886,13 @@ setTimeout(
 
 
         /*
-            Prepariamo il microfono.
-        */
-
-        setupAudio();
-
-
-        /*
-            Dopo l'avvio,
-            JARVIS ascolta "Jarvis".
+           Avvio automatico del
+           riconoscimento "Jarvis".
         */
 
         setTimeout(
             startWakeWord,
-            1000
+            800
         );
 
     },
@@ -2566,16 +2904,15 @@ setTimeout(
    API PUBBLICA
 ===================================================== */
 
-window.JARVIS =
-{
+window.JARVIS_FACE = {
 
     speak,
 
-    activate:
-        activateJarvis,
+    activateJarvis,
 
-    listen:
-        startWakeWord
+    startWakeWord,
+
+    sendMessage
 
 };
 

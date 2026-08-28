@@ -1533,17 +1533,20 @@ maximumAge:30000
 
 
 /* =====================================================
-   FOCUS TERRA
+   FOCUS TERRA — ZOOM ANIMATO
 ===================================================== */
 
-let targetLat =
-0;
+let targetLat = 0;
+let targetLon = 0;
 
-let targetLon =
-0;
+let zoomStart = 3.3;
+let zoomEnd = 1.65;
 
-let zoomTarget =
-3.3;
+let zoomProgress = 1;
+let zoomAnimating = false;
+
+let targetEarthQuaternion =
+new THREE.Quaternion();
 
 
 function latLonToVector3(
@@ -1553,12 +1556,12 @@ radius
 ){
 
 const phi =
-(90-lat) *
-Math.PI/180;
+(90 - lat) *
+Math.PI / 180;
 
 const theta =
-(lon+180) *
-Math.PI/180;
+(lon + 180) *
+Math.PI / 180;
 
 return new THREE.Vector3(
 
@@ -1583,16 +1586,29 @@ lat,
 lon
 ){
 
-openMap();
+/*
+   Apriamo la Terra senza
+   resettare la telecamera.
+*/
 
-targetLat =
-lat;
+mapMode = true;
 
-targetLon =
-lon;
+document.body.classList.add(
+"mapMode"
+);
 
-zoomTarget =
-2.05;
+statusText.textContent =
+"EARTH NAVIGATION ONLINE";
+
+mapButton.textContent =
+"✕";
+
+
+targetLat = lat;
+targetLon = lon;
+
+
+/* posizione del luogo sulla Terra */
 
 const target =
 latLonToVector3(
@@ -1601,20 +1617,72 @@ lon,
 1
 );
 
+
+/*
+   Vogliamo che il punto richiesto
+   venga portato davanti alla telecamera.
+*/
+
 const direction =
 target.clone().normalize();
 
-earthCamera.position.copy(
-direction.multiplyScalar(
-2.15
-)
+
+/*
+   La Terra deve ruotare fino a
+   mettere il luogo al centro.
+*/
+
+const cameraDirection =
+new THREE.Vector3(
+0,
+0,
+1
 );
 
-earthCamera.lookAt(
-0,
-0,
-0
+
+/*
+   Rotazione necessaria per portare
+   il punto verso la telecamera.
+*/
+
+targetEarthQuaternion =
+new THREE.Quaternion().setFromUnitVectors(
+direction,
+cameraDirection
 );
+
+
+/*
+   Inizio dello zoom
+*/
+
+zoomStart =
+earthCamera.position.length();
+
+if(
+zoomStart < 2
+){
+
+zoomStart = 3.3;
+
+earthCamera.position.set(
+0,
+0,
+zoomStart
+);
+
+}
+
+zoomEnd = 1.65;
+
+zoomProgress = 0;
+
+zoomAnimating = true;
+
+
+/*
+   Mostra marker
+*/
 
 marker.position.copy(
 target.clone().multiplyScalar(
@@ -1622,10 +1690,18 @@ target.clone().multiplyScalar(
 )
 );
 
-marker.visible =
-true;
+marker.visible = true;
 
-animateMarker();
+markerRing.visible = true;
+
+
+/*
+   Stato JARVIS
+*/
+
+setState(
+"thinking"
+);
 
 }
 

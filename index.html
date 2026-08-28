@@ -115,7 +115,7 @@ body.mapMode #earthContainer{
 
 .header h1{
     margin:0;
-    font-size:30px;
+    font-size:36px;
     font-weight:300;
     letter-spacing:12px;
     text-shadow:
@@ -168,17 +168,13 @@ body.mapMode .header h1{
     color:rgba(255,210,0,.65);
 }
 
-body.mapMode #clockPanel{
-    color:#fff;
-}
-
 body.mapMode #date{
     color:rgba(80,170,255,.8);
 }
 
 
 /* =====================================================
-   CHAT
+   CHAT HUD FUTURISTICA
 ===================================================== */
 
 #chat{
@@ -186,18 +182,19 @@ body.mapMode #date{
     z-index:25;
     left:22px;
     top:125px;
-    width:330px;
+    width:350px;
     max-height:calc(100vh - 245px);
     overflow-y:auto;
     display:flex;
     flex-direction:column;
-    gap:9px;
-    padding:8px 4px 8px 0;
+    gap:12px;
+    padding:10px 8px 14px 4px;
     scrollbar-width:none;
+
     mask-image:linear-gradient(
         to bottom,
         transparent 0,
-        black 12px,
+        black 15px,
         black 92%,
         transparent 100%
     );
@@ -208,41 +205,187 @@ body.mapMode #date{
 }
 
 .message{
+    position:relative;
     max-width:100%;
-    padding:10px 13px;
-    border-radius:7px;
+    padding:12px 15px 12px 18px;
+
+    border-radius:2px;
+
     font-size:13px;
     line-height:1.5;
-    backdrop-filter:blur(12px);
-    animation:messageIn .3s ease;
+
+    backdrop-filter:blur(18px);
+
+    animation:
+        messageIn .35s ease,
+        hudGlow 3s ease-in-out infinite;
+
+    overflow:hidden;
 }
 
+/* LINEA SUPERIORE */
+
+.message::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:1px;
+    opacity:.7;
+}
+
+/* PICCOLA LINEA LATERALE */
+
+.message::after{
+    content:"";
+    position:absolute;
+    left:0;
+    top:9px;
+    bottom:9px;
+    width:2px;
+}
+
+/* ENTRATA */
+
 @keyframes messageIn{
+
     from{
         opacity:0;
-        transform:translateX(-12px);
+        transform:translateX(-18px);
+        filter:blur(5px);
     }
 
     to{
         opacity:1;
         transform:translateX(0);
+        filter:blur(0);
     }
+
 }
+
+/* BAGLIORE */
+
+@keyframes hudGlow{
+
+    0%,100%{
+        box-shadow:0 0 15px rgba(255,200,0,.03);
+    }
+
+    50%{
+        box-shadow:0 0 22px rgba(255,200,0,.08);
+    }
+
+}
+
+
+/* MESSAGGIO UTENTE */
 
 .user{
     align-self:flex-end;
-    background:rgba(255,190,0,.08);
-    border:1px solid rgba(255,190,0,.3);
-    border-left:2px solid #ffd000;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,190,0,.12),
+            rgba(255,190,0,.025)
+        );
+
+    border:1px solid rgba(255,190,0,.32);
+
+    border-right:2px solid #ffd000;
+
     color:#fff;
+
+    clip-path:polygon(
+        0 0,
+        calc(100% - 9px) 0,
+        100% 9px,
+        100% 100%,
+        9px 100%,
+        0 calc(100% - 9px)
+    );
 }
+
+.user::before{
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #ffd000,
+            transparent
+        );
+}
+
+.user::after{
+    left:auto;
+    right:0;
+    background:#ffd000;
+    box-shadow:0 0 10px #ffd000;
+}
+
+
+/* MESSAGGIO JARVIS */
 
 .jarvis{
     align-self:flex-start;
-    background:rgba(4,9,17,.72);
-    border:1px solid rgba(30,140,255,.2);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(15,30,45,.78),
+            rgba(3,8,15,.62)
+        );
+
+    border:1px solid rgba(60,150,255,.28);
+
     border-left:2px solid #168cff;
+
     color:#dcecff;
+
+    clip-path:polygon(
+        9px 0,
+        100% 0,
+        100% calc(100% - 9px),
+        calc(100% - 9px) 100%,
+        0 100%,
+        0 9px
+    );
+
+    animation:
+        messageIn .35s ease,
+        jarvisGlow 3s ease-in-out infinite;
+}
+
+.jarvis::before{
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #168cff,
+            transparent
+        );
+}
+
+.jarvis::after{
+    background:#168cff;
+    box-shadow:0 0 10px #168cff;
+}
+
+@keyframes jarvisGlow{
+
+    0%,100%{
+        box-shadow:
+            0 0 12px rgba(22,140,255,.04),
+            inset 0 0 15px rgba(22,140,255,.015);
+    }
+
+    50%{
+        box-shadow:
+            0 0 24px rgba(22,140,255,.10),
+            inset 0 0 18px rgba(22,140,255,.025);
+    }
+
 }
 
 
@@ -327,7 +470,7 @@ body.mapMode #mapHud{
 
 
 /* =====================================================
-   INPUT
+   INPUT HUD
 ===================================================== */
 
 .inputArea{
@@ -340,13 +483,73 @@ body.mapMode #mapHud{
 }
 
 .inputBox{
+    position:relative;
+
     display:flex;
     gap:7px;
-    padding:5px;
-    background:rgba(5,7,10,.96);
-    border:1px solid rgba(255,190,0,.4);
-    border-radius:8px;
-    box-shadow:0 0 25px rgba(255,190,0,.06);
+    padding:6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(8,12,17,.98),
+            rgba(3,7,11,.94)
+        );
+
+    border:1px solid rgba(255,190,0,.42);
+
+    border-radius:3px;
+
+    box-shadow:
+        0 0 25px rgba(255,190,0,.07),
+        inset 0 0 20px rgba(255,190,0,.015);
+
+    clip-path:polygon(
+        0 0,
+        calc(100% - 10px) 0,
+        100% 10px,
+        100% 100%,
+        10px 100%,
+        0 calc(100% - 10px)
+    );
+}
+
+.inputBox::before{
+    content:"JARVIS // NEURAL INPUT";
+
+    position:absolute;
+
+    left:12px;
+    top:-9px;
+
+    padding:0 7px;
+
+    background:#000;
+
+    color:rgba(255,210,0,.7);
+
+    font:8px monospace;
+
+    letter-spacing:2px;
+}
+
+.inputBox::after{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:15%;
+    width:70%;
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,210,0,.7),
+            transparent
+        );
 }
 
 input{
@@ -359,6 +562,7 @@ input{
     outline:0;
     color:#fff;
     font-size:14px;
+    font-family:monospace;
 }
 
 input::placeholder{
@@ -367,18 +571,24 @@ input::placeholder{
 
 button{
     height:44px;
-    border-radius:5px;
+    border-radius:2px;
     border:1px solid rgba(255,190,0,.5);
-    background:rgba(255,190,0,.1);
+    background:rgba(255,190,0,.08);
     color:#ffd000;
     font-family:monospace;
     font-weight:bold;
     cursor:pointer;
+    transition:
+        background .2s,
+        box-shadow .2s,
+        transform .2s;
 }
 
 button:hover{
     background:#ffd000;
     color:#000;
+    box-shadow:0 0 18px rgba(255,208,0,.35);
+    transform:translateY(-1px);
 }
 
 #mic,
@@ -454,7 +664,7 @@ body.mapMode #mapCrosshair{
     }
 
     .header h1{
-        font-size:20px;
+        font-size:24px;
         letter-spacing:8px;
     }
 
@@ -501,12 +711,8 @@ body.mapMode #mapCrosshair{
     #locationInfo{
         top:60%;
     }
+
 }
-
-
-/* =====================================================
-   SMALL PHONES
-===================================================== */
 
 @media(max-width:430px){
 
@@ -523,6 +729,12 @@ body.mapMode #mapCrosshair{
     input{
         font-size:13px;
     }
+
+    .header h1{
+        font-size:21px;
+        letter-spacing:6px;
+    }
+
 }
 
 </style><script>
@@ -678,9 +890,6 @@ document.getElementById("clock");
 
 const date =
 document.getElementById("date");
-
-const mapButton =
-null;
 
 const coordinates =
 document.getElementById("coordinates");
@@ -859,7 +1068,6 @@ function addMessage(type,text){
 const earthScene=
     new THREE.Scene();
 
-
 const earthCamera=
     new THREE.PerspectiveCamera(
         45,
@@ -868,13 +1076,11 @@ const earthCamera=
         100
     );
 
-
 earthCamera.position.set(
     0,
     0,
     3.3
 );
-
 
 const earthRenderer=
     new THREE.WebGLRenderer({
@@ -887,14 +1093,12 @@ const earthRenderer=
 
     });
 
-
 earthRenderer.setPixelRatio(
     Math.min(
         window.devicePixelRatio || 1,
         2
     )
 );
-
 
 earthRenderer.setSize(
     innerWidth,
@@ -915,7 +1119,6 @@ const ambientLight=
 earthScene.add(
     ambientLight
 );
-
 
 const sun=
     new THREE.DirectionalLight(
@@ -943,7 +1146,6 @@ earthScene.add(
     earthGroup
 );
 
-
 const earthGeometry=
     new THREE.SphereGeometry(
         1,
@@ -951,16 +1153,13 @@ const earthGeometry=
         128
     );
 
-
 const textureLoader=
     new THREE.TextureLoader();
-
 
 const earthTexture=
     textureLoader.load(
         "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
     );
-
 
 const earthMaterial=
     new THREE.MeshPhongMaterial({
@@ -976,13 +1175,11 @@ const earthMaterial=
 
     });
 
-
 const earth=
     new THREE.Mesh(
         earthGeometry,
         earthMaterial
     );
-
 
 earthGroup.add(earth);
 
@@ -1013,7 +1210,6 @@ const atmosphere=
         })
 
     );
-
 
 earthGroup.add(
     atmosphere
@@ -1047,7 +1243,6 @@ const glow=
 
     );
 
-
 earthGroup.add(glow);
 
 
@@ -1070,11 +1265,9 @@ const marker=
 
     );
 
-
 marker.visible=false;
 
 earthGroup.add(marker);
-
 
 const markerRing=
     new THREE.Mesh(
@@ -1098,7 +1291,6 @@ const markerRing=
         })
 
     );
-
 
 markerRing.visible=false;
 
@@ -1146,7 +1338,6 @@ function openMap(){
     setState("idle");
 
 }
-
 
 function closeMap(){
 
@@ -1226,14 +1417,12 @@ function extractLocation(text){
     const lower=
         text.toLowerCase();
 
-
     for(
         const prefix of patterns
     ){
 
         const index=
             lower.indexOf(prefix);
-
 
         if(index!==-1){
 
@@ -1242,13 +1431,11 @@ function extractLocation(text){
                     index+prefix.length
                 ).trim();
 
-
             place=
                 place.replace(
                     /^(la|il|lo|un|una|a|ad)\s+/i,
                     ""
                 );
-
 
             if(place.length>1){
 
@@ -1276,7 +1463,6 @@ async function searchPlace(place){
     coordinates.textContent=
         "SEARCHING LOCATION...";
 
-
     try{
 
         const url=
@@ -1284,10 +1470,8 @@ async function searchPlace(place){
             +
             encodeURIComponent(place);
 
-
         const response=
             await fetch(url);
-
 
         if(!response.ok){
 
@@ -1297,10 +1481,8 @@ async function searchPlace(place){
 
         }
 
-
         const results=
             await response.json();
-
 
         if(!results.length){
 
@@ -1310,18 +1492,14 @@ async function searchPlace(place){
 
         }
 
-
         const result=
             results[0];
-
 
         const lat=
             parseFloat(result.lat);
 
-
         const lon=
             parseFloat(result.lon);
-
 
         const name=
             result.display_name
@@ -1329,20 +1507,17 @@ async function searchPlace(place){
             .slice(0,3)
             .join(", ");
 
-
         showLocation(
             name,
             lat,
             lon
         );
 
-
         return{
             name,
             lat,
             lon
         };
-
 
     }catch(error){
 
@@ -1376,7 +1551,6 @@ function formatCoordinates(lat,lon){
 
     const lonDir=
         lon>=0 ? "E" : "W";
-
 
     return(
 
@@ -1453,12 +1627,10 @@ function showMyLocation(){
 
     }
 
-
     setState("thinking");
 
     coordinates.textContent=
         "ACQUISIZIONE POSIZIONE...";
-
 
     navigator.geolocation.getCurrentPosition(
 
@@ -1470,13 +1642,11 @@ function showMyLocation(){
             const lon=
                 position.coords.longitude;
 
-
             showLocation(
                 "La mia posizione",
                 lat,
                 lon
             );
-
 
             addMessage(
                 "jarvis",
@@ -1484,7 +1654,6 @@ function showMyLocation(){
             );
 
         },
-
 
         error=>{
 
@@ -1501,7 +1670,6 @@ function showMyLocation(){
             );
 
         },
-
 
         {
             enableHighAccuracy:true,
@@ -1529,7 +1697,6 @@ let zoomEnd=1.55;
 let targetQuaternion=
     new THREE.Quaternion();
 
-
 function latLonToVector3(
     lat,
     lon,
@@ -1541,12 +1708,10 @@ function latLonToVector3(
         *
         Math.PI/180;
 
-
     const theta=
         (lon+180)
         *
         Math.PI/180;
-
 
     return new THREE.Vector3(
 
@@ -1565,14 +1730,12 @@ function latLonToVector3(
 
 }
 
-
 function focusEarth(
     lat,
     lon
 ){
 
     openMap();
-
 
     const target=
         latLonToVector3(
@@ -1581,24 +1744,20 @@ function focusEarth(
             1
         );
 
-
     marker.position.copy(
         target
         .clone()
         .multiplyScalar(1.025)
     );
 
-
     marker.visible=true;
 
     markerRing.visible=true;
-
 
     const direction=
         target
         .clone()
         .normalize();
-
 
     const front=
         new THREE.Vector3(
@@ -1607,20 +1766,16 @@ function focusEarth(
             1
         );
 
-
     targetQuaternion=
         new THREE.Quaternion();
-
 
     targetQuaternion.setFromUnitVectors(
         direction,
         front
     );
 
-
     zoomStart=
         earthCamera.position.length();
-
 
     if(zoomStart<2){
 
@@ -1633,7 +1788,6 @@ function focusEarth(
         );
 
     }
-
 
     zoomEnd=1.55;
 
@@ -1665,11 +1819,13 @@ let neuralCy=
     neuralHeight/2;
 
 
+/* CORE PIÙ GRANDE */
+
 let neuralRadius=
     Math.min(
         neuralWidth,
         neuralHeight
-    )*.40;
+    )*.30;
 
 
 let neuralRotation=0;
@@ -1689,13 +1845,11 @@ function resizeNeural(){
     neuralHeight=
         innerHeight;
 
-
     const dpr=
         Math.min(
             devicePixelRatio || 1,
             2
         );
-
 
     neuralCanvas.width=
         neuralWidth*dpr;
@@ -1703,13 +1857,11 @@ function resizeNeural(){
     neuralCanvas.height=
         neuralHeight*dpr;
 
-
     neuralCanvas.style.width=
         neuralWidth+"px";
 
     neuralCanvas.style.height=
         neuralHeight+"px";
-
 
     neuralCtx.setTransform(
         dpr,
@@ -1720,20 +1872,17 @@ function resizeNeural(){
         0
     );
 
-
     neuralCx=
         neuralWidth/2;
 
     neuralCy=
         neuralHeight/2;
 
-
     neuralRadius=
         Math.min(
             neuralWidth,
             neuralHeight
         )*.30;
-
 
     createNeuralNodes();
 
@@ -1748,12 +1897,17 @@ function createNeuralNodes(){
 
     nodes=[];
 
-
     for(
         let i=0;
         i<145;
         i++
     ){
+
+        /*
+           Ogni nodo ha un valore
+           che decide se può diventare
+           un nodo secondario.
+        */
 
         nodes.push({
 
@@ -1787,24 +1941,20 @@ function createNeuralNodes(){
                 *
                 2,
 
-            /* =========================================
-               COLORE DINAMICO
-            ========================================= */
+            /*
+               Circa il 13% dei nodi
+               appartiene al gruppo speciale.
+            */
 
-            colorState:
-                Math.random(),
+            special:
+                Math.random()<.13,
 
-            colorTarget:
-                Math.random()<.13
-                ? 1
-                : 0,
-
-            colorChangeTime:
-                Math.random()*8,
-
-            colorSpeed:
-                .35+
-                Math.random()*.65
+            colorPhase:
+                Math.random()
+                *
+                Math.PI
+                *
+                2
 
         });
 
@@ -1823,15 +1973,12 @@ function animateNeural(){
         animateNeural
     );
 
-
     const time=
         performance.now()/1000;
-
 
     let speed=1;
 
     let energy=.2;
-
 
     if(state==="listening"){
 
@@ -1841,7 +1988,6 @@ function animateNeural(){
 
     }
 
-
     if(state==="thinking"){
 
         speed=7;
@@ -1849,7 +1995,6 @@ function animateNeural(){
         energy=2;
 
     }
-
 
     if(state==="speaking"){
 
@@ -1859,14 +2004,11 @@ function animateNeural(){
 
     }
 
-
     neuralRotation+=
         .004*speed;
 
-
     neuralCtx.fillStyle=
         "rgba(0,0,0,.28)";
-
 
     neuralCtx.fillRect(
         0,
@@ -1876,8 +2018,11 @@ function animateNeural(){
     );
 
 
-    let targetColor;
+    /* =================================================
+       COLORE CORE
+    ================================================= */
 
+    let targetColor;
 
     if(
 
@@ -1921,13 +2066,11 @@ function animateNeural(){
             jarvisColor.r
         )*.055;
 
-
     jarvisColor.g+=
         (
             targetColor.g-
             jarvisColor.g
         )*.055;
-
 
     jarvisColor.b+=
         (
@@ -1958,14 +2101,17 @@ function animateNeural(){
         )/2;
 
 
-    const glow=
+    /* =================================================
+       GLOW
+    ================================================= */
+
+    const glowRadius=
         neuralRadius*
         (
             1.05+
             energy*.7+
             pulse*.18
         );
-
 
     const gradient=
         neuralCtx.createRadialGradient(
@@ -1976,50 +2122,46 @@ function animateNeural(){
 
             neuralCx,
             neuralCy,
-            glow
+            glowRadius
 
         );
-
 
     gradient.addColorStop(
         0,
         `rgba(${r},${g},${b},.48)`
     );
 
-
     gradient.addColorStop(
         .35,
         `rgba(${r},${g},${b},.15)`
     );
-
 
     gradient.addColorStop(
         1,
         "rgba(0,0,0,0)"
     );
 
-
     neuralCtx.fillStyle=
         gradient;
 
-
     neuralCtx.beginPath();
-
 
     neuralCtx.arc(
         neuralCx,
         neuralCy,
-        glow,
+        glowRadius,
         0,
         Math.PI*2
     );
 
-
     neuralCtx.fill();
 
 
-    const projected=[];
+    /* =================================================
+       PROIEZIONE NODI
+    ================================================= */
 
+    const projected=[];
 
     nodes.forEach(n=>{
 
@@ -2032,7 +2174,6 @@ function animateNeural(){
             energy*
             7;
 
-
         let x=
             rr*
             Math.sin(n.phi)*
@@ -2041,11 +2182,9 @@ function animateNeural(){
                 neuralRotation
             );
 
-
         let y=
             rr*
             Math.cos(n.phi);
-
 
         let z=
             rr*
@@ -2066,7 +2205,6 @@ function animateNeural(){
                 energy*
                 7;
 
-
             y+=
                 Math.cos(
                     time*2.5+n.phase
@@ -2082,128 +2220,6 @@ function animateNeural(){
             430/
             (
                 430+z
-            );
-
-
-        /*
-           =============================================
-           COLORE DINAMICO DELLE PALLINE
-           =============================================
-        */
-
-        /*
-           Ogni nodo ha un momento diverso in cui
-           può cambiare colore.
-        */
-
-        const cycle=
-            Math.sin(
-                time*n.colorSpeed*.45
-                +
-                n.colorChangeTime
-            );
-
-
-        /*
-           Quando il ciclo supera una certa soglia,
-           il nodo cambia "destinazione".
-        */
-
-        if(
-            cycle>.92 &&
-            n.lastCycleState!==1
-        ){
-
-            n.lastCycleState=1;
-
-            n.colorTarget=
-                Math.random()<.14
-                ? 1
-                : 0;
-
-        }
-
-
-        if(cycle<.75){
-
-            n.lastCycleState=0;
-
-        }
-
-
-        /*
-           1 = viola
-           0 = colore principale
-        */
-
-        n.colorState+=
-            (
-                n.colorTarget-
-                n.colorState
-            )
-            *
-            .035;
-
-
-        /*
-           Colore giallo
-        */
-
-        const yellow={
-            r:255,
-            g:195,
-            b:0
-        };
-
-
-        /*
-           Colore viola/fucsia
-        */
-
-        const purple={
-            r:190,
-            g:55,
-            b:255
-        };
-
-
-        /*
-           Interpolazione morbida tra giallo e viola
-        */
-
-        const particleR=
-            Math.round(
-                yellow.r+
-                (
-                    purple.r-
-                    yellow.r
-                )
-                *
-                n.colorState
-            );
-
-
-        const particleG=
-            Math.round(
-                yellow.g+
-                (
-                    purple.g-
-                    yellow.g
-                )
-                *
-                n.colorState
-            );
-
-
-        const particleB=
-            Math.round(
-                yellow.b+
-                (
-                    purple.b-
-                    yellow.b
-                )
-                *
-                n.colorState
             );
 
 
@@ -2235,16 +2251,18 @@ function animateNeural(){
 
             phase:n.phase,
 
-            particleR,
+            special:n.special,
 
-            particleG,
-
-            particleB
+            colorPhase:n.colorPhase
 
         });
 
     });
 
+
+    /* =================================================
+       COLLEGAMENTI
+    ================================================= */
 
     const maxDist=
         state==="thinking"
@@ -2270,20 +2288,17 @@ function animateNeural(){
             const c=
                 projected[j];
 
-
             const dx=
                 a.x-c.x;
 
             const dy=
                 a.y-c.y;
 
-
             const dist=
                 Math.sqrt(
                     dx*dx+
                     dy*dy
                 );
-
 
             if(dist<maxDist){
 
@@ -2296,28 +2311,22 @@ function animateNeural(){
                     .3*
                     a.alpha;
 
-
                 neuralCtx.beginPath();
-
 
                 neuralCtx.moveTo(
                     a.x,
                     a.y
                 );
 
-
                 neuralCtx.lineTo(
                     c.x,
                     c.y
                 );
 
-
                 neuralCtx.strokeStyle=
                     `rgba(${r},${g},${b},${alpha})`;
 
-
                 neuralCtx.lineWidth=.65;
-
 
                 neuralCtx.stroke();
 
@@ -2327,6 +2336,10 @@ function animateNeural(){
 
     }
 
+
+    /* =================================================
+       NODI
+    ================================================= */
 
     projected.forEach(n=>{
 
@@ -2349,17 +2362,107 @@ function animateNeural(){
 
 
         /*
-           =============================================
-           GLOW DELLA SINGOLA PALLINA
-           =============================================
+           COLORE SECONDARIO DINAMICO
+
+           I nodi speciali non sono più
+           semplicemente "viola fissi".
+
+           Il colore cambia gradualmente
+           durante l'animazione.
         */
 
-        neuralCtx.fillStyle=
-            `rgba(${n.particleR},${n.particleG},${n.particleB},${n.alpha*.30})`;
+        let nodeR=r;
+        let nodeG=g;
+        let nodeB=b;
 
+
+        if(n.special){
+
+            /*
+               Valore che cambia nel tempo.
+            */
+
+            const colorWave=
+                (
+                    Math.sin(
+                        time*.75+
+                        n.colorPhase
+                    )+1
+                )/2;
+
+
+            /*
+               Passaggio morbido:
+               giallo → viola → rosa
+               → ritorno al colore principale.
+            */
+
+            const violetR=170;
+            const violetG=55;
+            const violetB=255;
+
+            const pinkR=255;
+            const pinkG=45;
+            const pinkB=190;
+
+
+            if(colorWave<.5){
+
+                const p=
+                    colorWave*2;
+
+                nodeR=
+                    Math.round(
+                        violetR+
+                        (pinkR-violetR)*p
+                    );
+
+                nodeG=
+                    Math.round(
+                        violetG+
+                        (pinkG-violetG)*p
+                    );
+
+                nodeB=
+                    Math.round(
+                        violetB+
+                        (pinkB-violetB)*p
+                    );
+
+            }else{
+
+                const p=
+                    (colorWave-.5)*2;
+
+                nodeR=
+                    Math.round(
+                        pinkR+
+                        (r-pinkR)*p
+                    );
+
+                nodeG=
+                    Math.round(
+                        pinkG+
+                        (g-pinkG)*p
+                    );
+
+                nodeB=
+                    Math.round(
+                        pinkB+
+                        (b-pinkB)*p
+                    );
+
+            }
+
+        }
+
+
+        /* GLOW DEL NODO */
+
+        neuralCtx.fillStyle=
+            `rgba(${nodeR},${nodeG},${nodeB},${n.alpha*.30})`;
 
         neuralCtx.beginPath();
-
 
         neuralCtx.arc(
             n.x,
@@ -2369,22 +2472,15 @@ function animateNeural(){
             Math.PI*2
         );
 
-
         neuralCtx.fill();
 
 
-        /*
-           =============================================
-           PALLINA CENTRALE
-           =============================================
-        */
+        /* NUCLEO */
 
         neuralCtx.fillStyle=
-            `rgba(${n.particleR},${n.particleG},${n.particleB},${n.alpha})`;
-
+            `rgba(${nodeR},${nodeG},${nodeB},${n.alpha})`;
 
         neuralCtx.beginPath();
-
 
         neuralCtx.arc(
             n.x,
@@ -2394,24 +2490,24 @@ function animateNeural(){
             Math.PI*2
         );
 
-
         neuralCtx.fill();
 
     });
 
+
+    /* =================================================
+       CORE CENTRALE
+    ================================================= */
 
     const core=
         5+
         pulse*2+
         energy*2;
 
-
     neuralCtx.fillStyle=
         `rgba(${r},${g},${b},.38)`;
 
-
     neuralCtx.beginPath();
-
 
     neuralCtx.arc(
         neuralCx,
@@ -2421,15 +2517,11 @@ function animateNeural(){
         Math.PI*2
     );
 
-
     neuralCtx.fill();
-
 
     neuralCtx.fillStyle="#fff";
 
-
     neuralCtx.beginPath();
-
 
     neuralCtx.arc(
         neuralCx,
@@ -2438,7 +2530,6 @@ function animateNeural(){
         0,
         Math.PI*2
     );
-
 
     neuralCtx.fill();
 
@@ -2451,13 +2542,11 @@ function animateNeural(){
 
 let markerPulse=0;
 
-
 function animateEarth(){
 
     requestAnimationFrame(
         animateEarth
     );
-
 
     if(
         mapMode &&
@@ -2465,7 +2554,6 @@ function animateEarth(){
     ){
 
         zoomProgress+=.012;
-
 
         if(zoomProgress>=1){
 
@@ -2479,14 +2567,12 @@ function animateEarth(){
 
         }
 
-
         const eased=
             1-
             Math.pow(
                 1-zoomProgress,
                 3
             );
-
 
         const distance=
             zoomStart+
@@ -2497,12 +2583,10 @@ function animateEarth(){
             *
             eased;
 
-
         const cameraDirection=
             earthCamera.position
             .clone()
             .normalize();
-
 
         earthCamera.position.copy(
 
@@ -2513,7 +2597,6 @@ function animateEarth(){
 
         );
 
-
         earthGroup.quaternion.slerp(
             targetQuaternion,
             .045
@@ -2521,14 +2604,11 @@ function animateEarth(){
 
     }
 
-
     controls.update();
-
 
     if(marker.visible){
 
         markerPulse+=.08;
-
 
         const scale=
             1+
@@ -2536,26 +2616,21 @@ function animateEarth(){
                 markerPulse
             )*.3;
 
-
         marker.scale.set(
             scale,
             scale,
             scale
         );
 
-
         markerRing.visible=true;
-
 
         markerRing.position.copy(
             marker.position
         );
 
-
         markerRing.lookAt(
             earthCamera.position
         );
-
 
         markerRing.scale.set(
             scale,
@@ -2564,7 +2639,6 @@ function animateEarth(){
         );
 
     }
-
 
     earthRenderer.render(
         earthScene,
@@ -2704,27 +2778,22 @@ async function sendMessage(){
     const text=
         input.value.trim();
 
-
     if(!text || busy){
 
         return;
 
     }
 
-
     busy=true;
-
 
     input.blur();
 
     input.value="";
 
-
     addMessage(
         "user",
         text
     );
-
 
     remember(
         "user",
@@ -2740,7 +2809,6 @@ async function sendMessage(){
 
         openMap();
 
-
         const answer=
             addMessage(
                 "jarvis",
@@ -2751,12 +2819,10 @@ async function sendMessage(){
                 "..."
             );
 
-
         const result=
             await searchPlace(
                 place
             );
-
 
         if(result){
 
@@ -2767,14 +2833,12 @@ async function sendMessage(){
                 +
                 ".";
 
-
             remember(
                 "assistant",
                 answer.textContent
             );
 
         }
-
 
         finish();
 
@@ -2796,12 +2860,10 @@ async function sendMessage(){
                 local
             );
 
-
             remember(
                 "assistant",
                 local
             );
-
 
             if(conversationMode){
 
@@ -2814,7 +2876,6 @@ async function sendMessage(){
             }
 
         }
-
 
         finish();
 
@@ -2830,7 +2891,6 @@ async function sendMessage(){
     mic.disabled=true;
 
     conversation.disabled=true;
-
 
     setState("thinking");
 
@@ -3016,9 +3076,6 @@ function finish(){
    VOCI
 ===================================================== */
 
-let voices=[];
-
-
 function speak(text){
 
     if(!("speechSynthesis" in window)){
@@ -3028,7 +3085,6 @@ function speak(text){
         return;
 
     }
-
 
     speechSynthesis.cancel();
 
@@ -3109,20 +3165,16 @@ conversation.onclick=()=>{
 
         wakeMode=true;
 
-
         conversation.classList.add(
             "active"
         );
 
-
         conversation.textContent=
             "🔵";
-
 
         setState(
             "listening"
         );
-
 
         startWakeWord();
 
@@ -3131,25 +3183,20 @@ conversation.onclick=()=>{
 
         wakeMode=false;
 
-
         conversation.classList.remove(
             "active"
         );
 
-
         conversation.textContent=
             "🔊";
 
-
         stopWakeWord();
-
 
         if(speechSynthesis){
 
             speechSynthesis.cancel();
 
         }
-
 
         setState(
             "idle"
@@ -3191,19 +3238,15 @@ if(Recognition){
 
         listening=true;
 
-
         mic.classList.add(
             "active"
         );
 
-
         mic.textContent=
             "■";
 
-
         input.placeholder=
             "JARVIS ti sta ascoltando...";
-
 
         setState(
             "listening"
@@ -3277,15 +3320,12 @@ if(Recognition){
 
         listening=false;
 
-
         mic.classList.remove(
             "active"
         );
 
-
         mic.textContent=
             "🎙";
-
 
         input.placeholder=
             "Comunica con JARVIS...";
@@ -3306,16 +3346,13 @@ if(Recognition){
 
         if(busy)return;
 
-
         conversationMode=true;
 
         wakeMode=false;
 
-
         conversation.classList.add(
             "active"
         );
-
 
         conversation.textContent=
             "🔵";
@@ -3496,7 +3533,6 @@ function stopWakeWord(){
 
         }catch{}
 
-
         wakeRecognition=null;
 
     }
@@ -3515,11 +3551,9 @@ function activateJarvis(){
 
     }
 
-
     setState(
         "listening"
     );
-
 
     input.placeholder=
         "JARVIS ti ascolta...";
@@ -3548,14 +3582,11 @@ window.addEventListener(
 
         resizeNeural();
 
-
         earthCamera.aspect=
             innerWidth/
             innerHeight;
 
-
         earthCamera.updateProjectionMatrix();
-
 
         earthRenderer.setSize(
             innerWidth,

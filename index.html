@@ -46,8 +46,11 @@ body{
     justify-content:center;
     font:11px monospace;
     letter-spacing:4px;
-    color:#ffd000;
-    transition:opacity 1s ease;
+    color:#00a8ff;
+    text-shadow:
+        0 0 10px #00a8ff,
+        0 0 25px rgba(0,168,255,.55);
+    transition:opacity 1.5s ease;
 }
 
 #loading.hidden{
@@ -120,9 +123,9 @@ body.mapMode #earthContainer{
 .header{
     position:fixed;
     top:20px;
-    left:0;
-    width:100%;
-    text-align:center;
+    left:22px;
+    width:auto;
+    text-align:left;
     z-index:20;
     pointer-events:none;
 }
@@ -133,26 +136,38 @@ body.mapMode #earthContainer{
     font-weight:300;
     letter-spacing:12px;
 
+    color:#e8f8ff;
+
     text-shadow:
-        0 0 15px #ffd000,
-        0 0 35px rgba(255,200,0,.35);
+        0 0 12px #00a8ff,
+        0 0 28px rgba(0,168,255,.65),
+        0 0 55px rgba(0,110,255,.3);
 }
 
 .status{
-    margin-top:7px;
-    font:10px monospace;
+    margin-top:9px;
+    font:15px monospace;
     letter-spacing:3px;
+    color:rgba(210,240,255,.9);
+
+    text-shadow:
+        0 0 8px rgba(0,168,255,.55);
 }
 
 #dot{
-    color:#ffd000;
-    text-shadow:0 0 10px currentColor;
+    color:#00a8ff;
+
+    text-shadow:
+        0 0 8px #00a8ff,
+        0 0 18px #00a8ff,
+        0 0 30px rgba(0,168,255,.7);
 }
 
 body.mapMode .header h1{
     text-shadow:
         0 0 15px #168cff,
-        0 0 35px rgba(30,140,255,.4);
+        0 0 35px rgba(30,140,255,.7),
+        0 0 60px rgba(30,140,255,.3);
 }
 
 
@@ -173,14 +188,17 @@ body.mapMode .header h1{
 #clock{
     font-size:15px;
     letter-spacing:2px;
-    color:#fff;
+    color:#eaf8ff;
+
+    text-shadow:
+        0 0 10px rgba(0,168,255,.5);
 }
 
 #date{
     margin-top:3px;
     font-size:9px;
     letter-spacing:2px;
-    color:rgba(255,210,0,.65);
+    color:rgba(80,190,255,.8);
 }
 
 body.mapMode #clockPanel{
@@ -188,7 +206,7 @@ body.mapMode #clockPanel{
 }
 
 body.mapMode #date{
-    color:rgba(80,170,255,.8);
+    color:rgba(80,170,255,.9);
 }
 
 
@@ -251,7 +269,7 @@ body.mapMode #date{
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
 
-    animation:messageIn .3s ease;
+    animation:messageIn .45s ease;
 
     word-wrap:break-word;
 }
@@ -278,18 +296,24 @@ body.mapMode #date{
 .user{
     align-self:flex-end;
 
-    background:rgba(255,190,0,.07);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,150,255,.10),
+            rgba(0,35,65,.18)
+        );
 
-    border:1px solid rgba(255,190,0,.28);
+    border:1px solid rgba(0,168,255,.30);
 
-    border-right:2px solid #ffd000;
+    border-right:2px solid #00a8ff;
 
     color:#fff;
 
     border-radius:16px 16px 4px 16px;
 
     box-shadow:
-        0 0 18px rgba(255,190,0,.04);
+        0 0 18px rgba(0,168,255,.06),
+        inset 0 1px 0 rgba(255,255,255,.04);
 }
 
 
@@ -303,24 +327,29 @@ body.mapMode #date{
     width:auto;
     max-width:92%;
 
-    background:rgba(3,7,13,.58);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8,18,28,.68),
+            rgba(0,5,12,.52)
+        );
 
-    border:1px solid rgba(30,140,255,.16);
+    border:1px solid rgba(0,168,255,.20);
 
-    border-left:2px solid #168cff;
+    border-left:2px solid #00a8ff;
 
-    color:#dcecff;
+    color:#dcefff;
 
     border-radius:4px 16px 16px 16px;
 
     box-shadow:
-        0 0 18px rgba(20,130,255,.04);
+        0 0 20px rgba(0,130,255,.07),
+        inset 0 1px 0 rgba(255,255,255,.035);
 }
 
 
 /* =====================================================
    PRIMO MESSAGGIO JARVIS
-   PIÙ GRANDE
 ===================================================== */
 
 #chat .message.jarvis:first-child{
@@ -378,7 +407,9 @@ body.mapMode #mapHud{
     letter-spacing:5px;
     margin-bottom:6px;
 
-    text-shadow:0 0 15px #168cff;
+    text-shadow:
+        0 0 15px #168cff,
+        0 0 30px rgba(22,140,255,.45);
 }
 
 #coordinates{
@@ -406,9 +437,16 @@ body.mapMode #mapHud{
 
     padding:10px 18px;
 
-    background:rgba(0,10,20,.75);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,25,45,.82),
+            rgba(0,5,15,.68)
+        );
 
-    border:1px solid rgba(40,160,255,.5);
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(40,160,255,.55);
 
     border-radius:12px;
 
@@ -418,7 +456,8 @@ body.mapMode #mapHud{
     text-align:center;
 
     box-shadow:
-        0 0 25px rgba(0,130,255,.15);
+        0 0 25px rgba(0,130,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.05);
 
     transition:
         opacity 1s ease,
@@ -467,6 +506,7 @@ body.mapMode #mapHud{
 
 /* =====================================================
    CASELLA CHAT
+   VETRO NERO + BLU FUTURISTICO
 ===================================================== */
 
 .inputBox{
@@ -482,50 +522,52 @@ body.mapMode #mapHud{
     background:
         linear-gradient(
             135deg,
-            rgba(10,12,16,.58),
-            rgba(0,0,0,.38)
+            rgba(8,15,23,.72),
+            rgba(0,3,8,.48)
         );
 
     backdrop-filter:
-        blur(24px)
-        saturate(135%);
+        blur(26px)
+        saturate(140%);
 
     -webkit-backdrop-filter:
-        blur(24px)
-        saturate(135%);
+        blur(26px)
+        saturate(140%);
 
     border:
         1px solid
-        rgba(255,200,0,.28);
+        rgba(0,168,255,.34);
 
     border-radius:32px;
 
     box-shadow:
-        0 0 25px rgba(0,0,0,.55),
-        0 0 35px rgba(255,190,0,.045),
-        inset 0 1px 0 rgba(255,255,255,.045);
+        0 0 25px rgba(0,0,0,.6),
+        0 0 35px rgba(0,150,255,.07),
+        0 0 60px rgba(0,90,255,.025),
+        inset 0 1px 0 rgba(255,255,255,.06);
 
     transition:
-        border-color .7s ease,
-        box-shadow .7s ease,
-        background .7s ease;
+        border-color .8s ease,
+        box-shadow .8s ease,
+        background .8s ease;
 }
 
 .inputBox:focus-within{
 
     border-color:
-        rgba(255,205,0,.55);
+        rgba(0,190,255,.62);
 
     background:
         linear-gradient(
             135deg,
-            rgba(10,12,16,.68),
-            rgba(0,0,0,.45)
+            rgba(8,18,28,.80),
+            rgba(0,5,12,.55)
         );
 
     box-shadow:
-        0 0 30px rgba(255,190,0,.08),
-        inset 0 1px 0 rgba(255,255,255,.06);
+        0 0 30px rgba(0,168,255,.12),
+        0 0 60px rgba(0,100,255,.05),
+        inset 0 1px 0 rgba(255,255,255,.07);
 }
 
 
@@ -560,7 +602,7 @@ input{
 input::placeholder{
 
     color:
-        rgba(255,255,255,.32);
+        rgba(210,235,255,.34);
 
 }
 
@@ -577,12 +619,12 @@ button{
 
     border:
         1px solid
-        rgba(255,190,0,.38);
+        rgba(0,168,255,.40);
 
     background:
-        rgba(255,190,0,.055);
+        rgba(0,145,255,.065);
 
-    color:#ffd000;
+    color:#00a8ff;
 
     font-family:Arial,sans-serif;
 
@@ -591,11 +633,11 @@ button{
     cursor:pointer;
 
     transition:
-        background .7s ease,
-        color .7s ease,
-        box-shadow .7s ease,
-        border-color .7s ease,
-        transform .35s ease;
+        background .8s ease,
+        color .8s ease,
+        box-shadow .8s ease,
+        border-color .8s ease,
+        transform .5s ease;
 
     display:flex;
 
@@ -610,13 +652,13 @@ button{
 
 button:hover{
 
-    background:#ffd000;
+    background:#00a8ff;
 
-    color:#000;
+    color:#00101a;
 
     box-shadow:
-        0 0 18px
-        rgba(255,208,0,.35);
+        0 0 18px rgba(0,168,255,.45),
+        0 0 35px rgba(0,120,255,.18);
 
     transform:scale(1.04);
 }
@@ -687,20 +729,17 @@ button:active{
 
 .active{
 
-    background:#168cff !important;
+    background:#087dff !important;
 
-    border-color:#168cff !important;
+    border-color:#20baff !important;
 
     color:#fff !important;
 
     box-shadow:
-        0 0 20px #168cff;
+        0 0 18px #087dff,
+        0 0 38px rgba(0,145,255,.55),
+        inset 0 0 12px rgba(255,255,255,.08);
 
-    transition:
-        background 1.2s ease,
-        border-color 1.2s ease,
-        color 1.2s ease,
-        box-shadow 1.2s ease;
 }
 
 
@@ -712,19 +751,21 @@ button:active{
 #mic.active{
 
     animation:
-        micPulse 2.2s infinite ease-in-out;
+        micPulse 2.4s infinite ease-in-out;
 }
 
 @keyframes micPulse{
 
     0%,100%{
         box-shadow:
-            0 0 10px rgba(22,140,255,.40);
+            0 0 10px rgba(0,145,255,.38),
+            0 0 22px rgba(0,100,255,.12);
     }
 
     50%{
         box-shadow:
-            0 0 23px rgba(22,140,255,.72);
+            0 0 20px rgba(0,175,255,.75),
+            0 0 40px rgba(0,120,255,.28);
     }
 
 }
@@ -771,7 +812,8 @@ body.mapMode #mapCrosshair{
     background:#168cff;
 
     box-shadow:
-        0 0 8px #168cff;
+        0 0 8px #168cff,
+        0 0 18px rgba(22,140,255,.45);
 }
 
 #mapCrosshair::before{
@@ -801,6 +843,7 @@ body.mapMode #mapCrosshair{
 
     .header{
         top:15px;
+        left:15px;
     }
 
     .header h1{
@@ -808,6 +851,13 @@ body.mapMode #mapCrosshair{
         font-size:20px;
 
         letter-spacing:8px;
+    }
+
+    .status{
+
+        font-size:12px;
+
+        letter-spacing:2px;
     }
 
     #clockPanel{
@@ -1173,9 +1223,7 @@ setTimeout(function(){
                 aria-hidden="true"
             >
 
-                <path
-                    d="M21 3L10 14"
-                />
+                <path d="M21 3L10 14"/>
 
                 <path
                     d="M21 3L14 21L10 14L3 10L21 3Z"
@@ -1364,11 +1412,11 @@ function setState(newState){
 
     ){
 
-        dot.style.color="#168cff";
+        dot.style.color="#00a8ff";
 
     }else{
 
-        dot.style.color="#ffd000";
+        dot.style.color="#00a8ff";
 
     }
 
@@ -1589,11 +1637,11 @@ const atmosphere =
 
         new THREE.MeshBasicMaterial({
 
-            color:0x2d9cff,
+            color:0x168cff,
 
             transparent:true,
 
-            opacity:.10,
+            opacity:.13,
 
             side:THREE.BackSide
 
@@ -1622,11 +1670,11 @@ const glow =
 
         new THREE.MeshBasicMaterial({
 
-            color:0x168cff,
+            color:0x00a8ff,
 
             transparent:true,
 
-            opacity:.045,
+            opacity:.055,
 
             side:THREE.BackSide
 
@@ -1652,7 +1700,7 @@ const marker =
         ),
 
         new THREE.MeshBasicMaterial({
-            color:0xffd000
+            color:0x00c8ff
         })
 
     );
@@ -1674,7 +1722,7 @@ const markerRing =
 
         new THREE.MeshBasicMaterial({
 
-            color:0xffd000,
+            color:0x00c8ff,
 
             transparent:true,
 
@@ -2151,7 +2199,6 @@ function latLonToVector3(
 
     );
 
-
 }
 
 
@@ -2399,7 +2446,6 @@ function createNeuralNodes(){
 
 /* =====================================================
    ANIMAZIONE RETE NEURALE
-   MOVIMENTO PIÙ LENTO
 ===================================================== */
 
 function animateNeural(){
@@ -2413,63 +2459,40 @@ function animateNeural(){
         performance.now()/1000;
 
 
-    let speed=.55;
+    let speed=.65;
 
     let energy=.2;
 
 
-    /*
-       MICROFONO / ASCOLTO
-       Prima: speed = 4
-       Ora: movimento molto più lento
-    */
-
     if(state==="listening"){
 
-        speed=1.7;
+        speed=1.6;
 
-        energy=.75;
+        energy=.9;
 
     }
 
-
-    /*
-       PENSIERO
-       Prima: speed = 7
-       Ora: più controllato
-    */
 
     if(state==="thinking"){
 
-        speed=3.2;
+        speed=2.5;
 
-        energy=1.35;
+        energy=1.5;
 
     }
 
-
-    /*
-       VOCE
-       Prima: speed = 5
-       Ora: più lenta
-    */
 
     if(state==="speaking"){
 
-        speed=2.4;
+        speed=1.9;
 
-        energy=1.05;
+        energy=1.15;
 
     }
 
 
-    /*
-       ROTAZIONE GENERALE
-       Rallentata rispetto alla versione precedente
-    */
-
     neuralRotation +=
-        .0022*speed;
+        .004*speed;
 
 
     neuralCtx.fillStyle =
@@ -2498,17 +2521,17 @@ function animateNeural(){
     ){
 
         targetColor={
-            r:25,
-            g:140,
+            r:0,
+            g:165,
             b:255
         };
 
     }else{
 
         targetColor={
-            r:255,
-            g:195,
-            b:0
+            r:0,
+            g:150,
+            b:225
         };
 
     }
@@ -2517,41 +2540,31 @@ function animateNeural(){
     window.jarvisColor =
         window.jarvisColor ||
         {
-            r:255,
-            g:195,
-            b:0
+            r:0,
+            g:150,
+            b:225
         };
 
-
-    /*
-       CAMBIO COLORE PIÙ LENTO
-
-       Prima: .055
-       Ora: .022
-
-       Questo rende il passaggio
-       blu -> giallo molto più morbido.
-    */
 
     jarvisColor.r +=
         (
             targetColor.r-
             jarvisColor.r
-        )*.022;
+        )*.025;
 
 
     jarvisColor.g +=
         (
             targetColor.g-
             jarvisColor.g
-        )*.022;
+        )*.025;
 
 
     jarvisColor.b +=
         (
             targetColor.b-
             jarvisColor.b
-        )*.022;
+        )*.025;
 
 
     const r =
@@ -2572,7 +2585,7 @@ function animateNeural(){
 
     const pulse =
         (
-            Math.sin(time*2.7)+1
+            Math.sin(time*2.4)+1
         )/2;
 
 
@@ -2644,7 +2657,7 @@ function animateNeural(){
         const rr =
             n.r+
             Math.sin(
-                time*2+n.phase
+                time*1.8+n.phase
             )
             *
             energy*
@@ -2678,7 +2691,7 @@ function animateNeural(){
 
             x +=
                 Math.sin(
-                    time*1.5+n.phase
+                    time*1.4+n.phase
                 )
                 *
                 energy*
@@ -2687,7 +2700,7 @@ function animateNeural(){
 
             y +=
                 Math.cos(
-                    time*1.8+n.phase
+                    time*1.7+n.phase
                 )
                 *
                 energy*
@@ -2745,8 +2758,8 @@ function animateNeural(){
 
     const maxDist =
         state==="thinking"
-        ? 105
-        : 78;
+        ? 110
+        : 82;
 
 
     for(
@@ -2830,7 +2843,7 @@ function animateNeural(){
         const flicker =
             (
                 Math.sin(
-                    time*5+n.phase
+                    time*4+n.phase
                 )+1
             )/2;
 
@@ -2840,8 +2853,8 @@ function animateNeural(){
             flicker*
             (
                 state==="thinking"
-                ? 1.5
-                : .6
+                ? 1.8
+                : .7
             );
 
 
@@ -2869,19 +2882,19 @@ function animateNeural(){
 
                 particleR =
                     Math.round(
-                        255*(1-mix)+
-                        180*mix
+                        0*(1-mix)+
+                        100*mix
                     );
 
                 particleG =
                     Math.round(
-                        195*(1-mix)+
-                        40*mix
+                        170*(1-mix)+
+                        225*mix
                     );
 
                 particleB =
                     Math.round(
-                        0*(1-mix)+
+                        255*(1-mix)+
                         255*mix
                     );
 
@@ -2893,21 +2906,18 @@ function animateNeural(){
 
                 particleR =
                     Math.round(
-                        180*(1-mix)+
-                        25*mix
+                        100*(1-mix)+
+                        0*mix
                     );
 
                 particleG =
                     Math.round(
-                        40*(1-mix)+
-                        140*mix
+                        225*(1-mix)+
+                        150*mix
                     );
 
                 particleB =
-                    Math.round(
-                        255*(1-mix)+
-                        255*mix
-                    );
+                    255;
 
             }
 
@@ -2980,7 +2990,7 @@ function animateNeural(){
 
 
     neuralCtx.fillStyle =
-        "#fff";
+        "#ffffff";
 
 
     neuralCtx.beginPath();
@@ -3019,7 +3029,7 @@ function animateEarth(){
         zoomAnimating
     ){
 
-        zoomProgress += .008;
+        zoomProgress += .007;
 
 
         if(zoomProgress>=1){
@@ -3071,7 +3081,7 @@ function animateEarth(){
 
         earthGroup.quaternion.slerp(
             targetQuaternion,
-            .032
+            .025
         );
 
     }
@@ -3082,7 +3092,7 @@ function animateEarth(){
 
     if(marker.visible){
 
-        markerPulse += .055;
+        markerPulse += .045;
 
 
         const scale =
@@ -3944,8 +3954,11 @@ if(Recognition){
 
         if(state==="listening"){
 
-            setState(
-                "idle"
+            setTimeout(
+                ()=>{
+                    setState("idle");
+                },
+                650
             );
 
         }
@@ -4139,7 +4152,7 @@ function startWakeWord(){
 
             setTimeout(
                 startWakeWord,
-                1000
+                900
             );
 
         }
@@ -4207,7 +4220,7 @@ function activateJarvis(){
 
         }catch{}
 
-    },500);
+    },450);
 
 }
 
@@ -4257,7 +4270,7 @@ setTimeout(()=>{
         .getElementById("loading")
         .classList.add("hidden");
 
-},800);
+},900);
 
 
 /* =====================================================

@@ -2,32 +2,29 @@
 <html lang="it">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
 <title>JARVIS — NEURAL CORE</title>
 
 <style>
 
 *{
-box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 html,body{
-margin:0;
-width:100%;
-height:100%;
-overflow:hidden;
-background:#000;
-color:#fff;
-font-family:Arial,sans-serif;
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    color:#fff;
+    font-family:Arial,sans-serif;
 }
 
 body{
-touch-action:none;
+    touch-action:none;
 }
 
 /* =====================================================
@@ -35,28 +32,27 @@ touch-action:none;
 ===================================================== */
 
 #loading{
-position:fixed;
-inset:0;
-z-index:1000;
+    position:fixed;
+    inset:0;
+    z-index:1000;
 
-background:#000;
+    background:#000;
 
-display:flex;
-align-items:center;
-justify-content:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-font:11px monospace;
-letter-spacing:4px;
+    font:11px monospace;
+    letter-spacing:4px;
 
-color:#ffd000;
+    color:#ffd000;
 
-transition:
-opacity 1s ease;
+    transition:opacity 1s ease;
 }
 
 #loading.hidden{
-opacity:0;
-pointer-events:none;
+    opacity:0;
+    pointer-events:none;
 }
 
 
@@ -65,25 +61,25 @@ pointer-events:none;
 ===================================================== */
 
 #neuralCanvas{
-position:fixed;
-inset:0;
+    position:fixed;
+    inset:0;
 
-width:100%;
-height:100%;
+    width:100%;
+    height:100%;
 
-z-index:1;
+    z-index:1;
 
-transition:
-opacity 1.2s ease,
-transform 1.2s ease,
-filter 1.2s ease;
+    transition:
+        opacity 1.2s ease,
+        transform 1.2s ease,
+        filter 1.2s ease;
 }
 
 body.mapMode #neuralCanvas{
-opacity:0;
-transform:scale(.45);
-filter:blur(15px);
-pointer-events:none;
+    opacity:0;
+    transform:scale(.45);
+    filter:blur(15px);
+    pointer-events:none;
 }
 
 
@@ -92,143 +88,132 @@ pointer-events:none;
 ===================================================== */
 
 #earthContainer{
-position:fixed;
-inset:0;
+    position:fixed;
+    inset:0;
 
-z-index:2;
+    z-index:2;
 
-opacity:0;
-pointer-events:none;
+    opacity:0;
+    pointer-events:none;
 
-transform:scale(.55);
+    transform:scale(.55);
 
-transition:
-opacity 1.2s ease,
-transform 1.2s ease;
+    transition:
+        opacity 1.2s ease,
+        transform 1.2s ease;
 }
 
 body.mapMode #earthContainer{
-opacity:1;
-transform:scale(1);
-pointer-events:auto;
+    opacity:1;
+    transform:scale(1);
+    pointer-events:auto;
 }
 
 #earthCanvas{
-position:absolute;
-inset:0;
+    position:absolute;
+    inset:0;
 
-width:100%;
-height:100%;
+    width:100%;
+    height:100%;
 }
 
 
 /* =====================================================
-   HEADER
+   HEADER MINIMAL
 ===================================================== */
 
 .header{
-position:fixed;
+    position:fixed;
 
-top:20px;
-left:0;
+    top:22px;
+    left:0;
 
-width:100%;
+    width:100%;
 
-text-align:center;
+    text-align:center;
 
-z-index:20;
+    z-index:20;
 
-pointer-events:none;
+    pointer-events:none;
 }
 
 .header h1{
-margin:0;
+    margin:0;
 
-font-size:25px;
-font-weight:300;
+    font-size:25px;
+    font-weight:300;
 
-letter-spacing:12px;
+    letter-spacing:12px;
 
-text-shadow:
-0 0 15px #ffd000,
-0 0 35px rgba(255,200,0,.35);
+    text-shadow:
+        0 0 15px #ffd000,
+        0 0 35px rgba(255,200,0,.35);
+
+    transition:text-shadow .8s ease;
 }
 
 .status{
-margin-top:7px;
+    margin-top:7px;
 
-font:10px monospace;
+    font:9px monospace;
 
-letter-spacing:3px;
+    letter-spacing:3px;
+
+    opacity:.55;
 }
 
 #dot{
-color:#ffd000;
+    color:#ffd000;
 
-text-shadow:
-0 0 10px currentColor;
+    text-shadow:
+        0 0 10px currentColor;
+
+    transition:color .5s ease;
 }
 
 body.mapMode .header h1{
-text-shadow:
-0 0 15px #168cff,
-0 0 35px rgba(30,140,255,.4);
+    text-shadow:
+        0 0 15px #168cff,
+        0 0 35px rgba(30,140,255,.4);
 }
 
 
 /* =====================================================
-   SIDE PANELS
+   OROLOGIO
 ===================================================== */
 
-.panel{
-position:fixed;
+#clockContainer{
+    position:fixed;
 
-top:25px;
+    top:24px;
+    right:25px;
 
-z-index:20;
+    z-index:30;
 
-font:10px monospace;
+    text-align:right;
 
-line-height:1.8;
-
-letter-spacing:2px;
-
-color:rgba(255,210,0,.65);
-}
-
-.left{
-left:22px;
-
-border-left:
-2px solid rgba(255,210,0,.5);
-
-padding-left:10px;
-}
-
-.right{
-right:22px;
-
-text-align:right;
-
-border-right:
-2px solid rgba(255,210,0,.5);
-
-padding-right:10px;
-}
-
-body.mapMode .panel{
-color:rgba(40,160,255,.8);
-}
-
-body.mapMode .left,
-body.mapMode .right{
-border-color:
-rgba(40,160,255,.6);
+    pointer-events:none;
 }
 
 #clock{
-font-size:15px;
-color:#fff;
+    font:14px monospace;
+
+    letter-spacing:2px;
+
+    color:rgba(255,255,255,.8);
+
+    text-shadow:
+        0 0 10px rgba(255,255,255,.15);
+}
+
+#date{
+    margin-top:3px;
+
+    font:8px monospace;
+
+    letter-spacing:2px;
+
+    color:rgba(255,255,255,.35);
 }
 
 
@@ -237,102 +222,107 @@ color:#fff;
 ===================================================== */
 
 #chat{
-position:fixed;
+    position:fixed;
 
-z-index:25;
+    z-index:25;
 
-left:22px;
-top:125px;
+    left:22px;
+    top:125px;
 
-width:330px;
+    width:330px;
 
-max-height:
-calc(100vh - 245px);
+    max-height:calc(100vh - 245px);
 
-overflow-y:auto;
+    overflow-y:auto;
 
-display:flex;
-flex-direction:column;
+    display:flex;
+    flex-direction:column;
 
-gap:9px;
+    gap:9px;
 
-padding:
-8px 4px 8px 0;
+    padding:
+        8px
+        4px
+        8px
+        0;
 
-scrollbar-width:none;
+    scrollbar-width:none;
 
-mask-image:
-linear-gradient(
-to bottom,
-transparent 0,
-black 12px,
-black 92%,
-transparent 100%
-);
+    mask-image:
+        linear-gradient(
+            to bottom,
+            transparent 0,
+            black 12px,
+            black 92%,
+            transparent 100%
+        );
 }
 
 #chat::-webkit-scrollbar{
-display:none;
+    display:none;
 }
 
 .message{
-max-width:100%;
+    max-width:100%;
 
-padding:10px 13px;
+    padding:10px 13px;
 
-border-radius:7px;
+    border-radius:7px;
 
-font-size:13px;
-line-height:1.5;
+    font-size:13px;
 
-backdrop-filter:blur(12px);
+    line-height:1.5;
 
-animation:
-messageIn .3s ease;
+    backdrop-filter:blur(12px);
+
+    animation:messageIn .3s ease;
 }
 
 @keyframes messageIn{
 
-from{
-opacity:0;
-transform:translateX(-12px);
-}
+    from{
+        opacity:0;
+        transform:translateX(-12px);
+    }
 
-to{
-opacity:1;
-transform:translateX(0);
-}
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
 
 }
 
 .user{
-align-self:flex-end;
+    align-self:flex-end;
 
-background:
-rgba(255,190,0,.08);
+    background:rgba(255,190,0,.08);
 
-border:
-1px solid rgba(255,190,0,.3);
+    border:
+        1px solid
+        rgba(255,190,0,.3);
 
-border-left:
-2px solid #ffd000;
+    border-left:
+        2px solid
+        #ffd000;
 
-color:#fff;
+    color:#fff;
 }
 
 .jarvis{
-align-self:flex-start;
+    align-self:flex-start;
 
-background:
-rgba(4,9,17,.72);
+    background:
+        rgba(4,9,17,.72);
 
-border:
-1px solid rgba(30,140,255,.2);
+    border:
+        1px solid
+        rgba(30,140,255,.2);
 
-border-left:
-2px solid #168cff;
+    border-left:
+        2px solid
+        #168cff;
 
-color:#dcecff;
+    color:#dcecff;
 }
 
 
@@ -341,58 +331,58 @@ color:#dcecff;
 ===================================================== */
 
 #mapHud{
-position:fixed;
+    position:fixed;
 
-z-index:15;
+    z-index:15;
 
-left:50%;
-top:90px;
+    left:50%;
+    top:90px;
 
-transform:
-translateX(-50%)
-translateY(-20px);
+    transform:
+        translateX(-50%)
+        translateY(-20px);
 
-opacity:0;
+    opacity:0;
 
-pointer-events:none;
+    pointer-events:none;
 
-font:11px monospace;
+    font:11px monospace;
 
-letter-spacing:3px;
+    letter-spacing:3px;
 
-text-align:center;
+    text-align:center;
 
-color:#5eb8ff;
+    color:#5eb8ff;
 
-transition:
-opacity .8s ease,
-transform .8s ease;
+    transition:
+        opacity .8s ease,
+        transform .8s ease;
 }
 
 body.mapMode #mapHud{
-opacity:1;
+    opacity:1;
 
-transform:
-translateX(-50%)
-translateY(0);
+    transform:
+        translateX(-50%)
+        translateY(0);
 }
 
 #mapTitle{
-font-size:16px;
+    font-size:16px;
 
-letter-spacing:5px;
+    letter-spacing:5px;
 
-margin-bottom:6px;
+    margin-bottom:6px;
 
-text-shadow:
-0 0 15px #168cff;
+    text-shadow:
+        0 0 15px #168cff;
 }
 
 #coordinates{
-font-size:10px;
+    font-size:10px;
 
-color:
-rgba(180,220,255,.85);
+    color:
+        rgba(180,220,255,.85);
 }
 
 
@@ -401,62 +391,64 @@ rgba(180,220,255,.85);
 ===================================================== */
 
 #locationInfo{
-position:fixed;
+    position:fixed;
 
-z-index:18;
+    z-index:18;
 
-left:50%;
-top:58%;
+    left:50%;
+    top:58%;
 
-transform:
-translate(-50%,20px);
+    transform:
+        translate(-50%,20px);
 
-opacity:0;
+    opacity:0;
 
-pointer-events:none;
+    pointer-events:none;
 
-padding:
-10px 18px;
+    padding:
+        10px 18px;
 
-background:
-rgba(0,10,20,.75);
+    background:
+        rgba(0,10,20,.75);
 
-border:
-1px solid rgba(40,160,255,.5);
+    border:
+        1px solid
+        rgba(40,160,255,.5);
 
-border-radius:5px;
+    border-radius:5px;
 
-font:11px monospace;
+    font:11px monospace;
 
-letter-spacing:2px;
+    letter-spacing:2px;
 
-text-align:center;
+    text-align:center;
 
-box-shadow:
-0 0 25px rgba(0,130,255,.15);
+    box-shadow:
+        0 0 25px
+        rgba(0,130,255,.15);
 
-transition:
-opacity .7s ease,
-transform .7s ease;
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
 }
 
 #locationInfo.visible{
-opacity:1;
+    opacity:1;
 
-transform:
-translate(-50%,0);
+    transform:
+        translate(-50%,0);
 }
 
 #locationName{
-font-size:14px;
+    font-size:14px;
 
-color:#fff;
+    color:#fff;
 
-margin-bottom:4px;
+    margin-bottom:4px;
 }
 
 #locationCoords{
-color:#4faaff;
+    color:#4faaff;
 }
 
 
@@ -465,113 +457,116 @@ color:#4faaff;
 ===================================================== */
 
 .inputArea{
-position:fixed;
+    position:fixed;
 
-z-index:40;
+    z-index:40;
 
-bottom:18px;
-left:50%;
+    bottom:18px;
+    left:50%;
 
-transform:
-translateX(-50%);
+    transform:translateX(-50%);
 
-width:
-min(700px,calc(100% - 40px));
+    width:
+        min(
+            700px,
+            calc(100% - 40px)
+        );
 }
 
 .inputBox{
-display:flex;
+    display:flex;
 
-gap:7px;
+    gap:7px;
 
-padding:5px;
+    padding:5px;
 
-background:
-rgba(5,7,10,.96);
+    background:
+        rgba(5,7,10,.96);
 
-border:
-1px solid rgba(255,190,0,.4);
+    border:
+        1px solid
+        rgba(255,190,0,.4);
 
-border-radius:8px;
+    border-radius:8px;
 
-box-shadow:
-0 0 25px rgba(255,190,0,.06);
+    box-shadow:
+        0 0 25px
+        rgba(255,190,0,.06);
 }
 
 input{
-flex:1;
+    flex:1;
 
-min-width:0;
+    min-width:0;
 
-height:44px;
+    height:44px;
 
-padding:
-0 14px;
+    padding:
+        0 14px;
 
-background:transparent;
+    background:transparent;
 
-border:0;
-outline:0;
+    border:0;
 
-color:#fff;
+    outline:0;
 
-font-size:14px;
+    color:#fff;
+
+    font-size:14px;
 }
 
 input::placeholder{
-color:
-rgba(255,255,255,.3);
+    color:
+        rgba(255,255,255,.3);
 }
 
 button{
-height:44px;
+    height:44px;
 
-border-radius:5px;
+    border-radius:5px;
 
-border:
-1px solid rgba(255,190,0,.5);
+    border:
+        1px solid
+        rgba(255,190,0,.5);
 
-background:
-rgba(255,190,0,.1);
+    background:
+        rgba(255,190,0,.1);
 
-color:#ffd000;
+    color:#ffd000;
 
-font-family:monospace;
+    font-family:monospace;
 
-font-weight:bold;
+    font-weight:bold;
 
-cursor:pointer;
+    cursor:pointer;
 }
 
 button:hover{
-background:#ffd000;
-color:#000;
+    background:#ffd000;
+
+    color:#000;
 }
 
 #mic,
-#conversation,
-#voiceButton,
-#mapButton{
-width:48px;
+#conversation{
+    width:48px;
 
-font-size:17px;
+    font-size:17px;
 }
 
 #send{
-width:70px;
+    width:70px;
 }
 
 .active{
-background:
-#168cff !important;
+    background:#168cff !important;
 
-border-color:
-#168cff !important;
+    border-color:#168cff !important;
 
-color:#fff !important;
+    color:#fff !important;
 
-box-shadow:
-0 0 20px #168cff;
+    box-shadow:
+        0 0 20px #168cff;
 }
 
 
@@ -580,62 +575,16 @@ box-shadow:
 ===================================================== */
 
 #mapButton{
-position:fixed;
+    position:fixed;
 
-z-index:50;
+    z-index:50;
 
-left:20px;
-bottom:18px;
+    left:20px;
+    bottom:18px;
 
-font-size:16px;
-}
+    width:48px;
 
-
-/* =====================================================
-   VOICE
-===================================================== */
-
-#voicePanel{
-position:fixed;
-
-z-index:50;
-
-right:20px;
-bottom:75px;
-
-display:none;
-
-padding:12px;
-
-background:
-rgba(5,8,12,.97);
-
-border:
-1px solid rgba(30,140,255,.5);
-
-border-radius:7px;
-}
-
-#voiceSelect{
-background:#05080c;
-
-color:#fff;
-
-border:
-1px solid #168cff;
-
-padding:7px;
-
-max-width:230px;
-}
-
-#voiceButton{
-position:fixed;
-
-right:20px;
-bottom:18px;
-
-z-index:50;
+    font-size:16px;
 }
 
 
@@ -644,57 +593,56 @@ z-index:50;
 ===================================================== */
 
 #mapCrosshair{
-position:fixed;
+    position:fixed;
 
-z-index:12;
+    z-index:12;
 
-left:50%;
-top:50%;
+    left:50%;
+    top:50%;
 
-width:25px;
-height:25px;
+    width:25px;
+    height:25px;
 
-transform:
-translate(-50%,-50%);
+    transform:
+        translate(-50%,-50%);
 
-opacity:0;
+    opacity:0;
 
-pointer-events:none;
+    pointer-events:none;
 
-transition:
-opacity .7s;
+    transition:opacity .7s;
 }
 
 body.mapMode #mapCrosshair{
-opacity:.35;
+    opacity:.35;
 }
 
 #mapCrosshair::before,
 #mapCrosshair::after{
-content:"";
+    content:"";
 
-position:absolute;
+    position:absolute;
 
-background:#168cff;
+    background:#168cff;
 
-box-shadow:
-0 0 8px #168cff;
+    box-shadow:
+        0 0 8px #168cff;
 }
 
 #mapCrosshair::before{
-width:25px;
-height:1px;
+    width:25px;
+    height:1px;
 
-top:12px;
-left:0;
+    top:12px;
+    left:0;
 }
 
 #mapCrosshair::after{
-width:1px;
-height:25px;
+    width:1px;
+    height:25px;
 
-left:12px;
-top:0;
+    left:12px;
+    top:0;
 }
 
 
@@ -704,64 +652,70 @@ top:0;
 
 @media(max-width:700px){
 
-.panel{
-display:none;
-}
+    .header{
+        top:15px;
+    }
 
-.header{
-top:15px;
-}
+    .header h1{
+        font-size:20px;
 
-.header h1{
-font-size:20px;
-letter-spacing:8px;
-}
+        letter-spacing:8px;
+    }
 
-#mapHud{
-top:65px;
-}
+    #clockContainer{
+        top:17px;
+        right:15px;
+    }
 
-#mapTitle{
-font-size:13px;
-}
+    #clock{
+        font-size:11px;
+    }
 
-#chat{
-left:12px;
-right:12px;
+    #date{
+        font-size:7px;
+    }
 
-top:auto;
-bottom:105px;
+    #mapHud{
+        top:65px;
+    }
 
-width:auto;
+    #mapTitle{
+        font-size:13px;
+    }
 
-max-height:23vh;
+    #chat{
+        left:12px;
+        right:12px;
 
-padding:0;
-}
+        top:auto;
+        bottom:105px;
 
-.message{
-max-width:90%;
+        width:auto;
 
-font-size:13px;
-}
+        max-height:23vh;
 
-.inputArea{
-width:
-calc(100% - 20px);
-}
+        padding:0;
+    }
 
-#mapButton{
-left:10px;
-bottom:18px;
-}
+    .message{
+        max-width:90%;
 
-#voiceButton{
-right:10px;
-}
+        font-size:13px;
+    }
 
-#locationInfo{
-top:60%;
-}
+    .inputArea{
+        width:
+            calc(100% - 20px);
+    }
+
+    #mapButton{
+        left:10px;
+        bottom:18px;
+    }
+
+    #locationInfo{
+        top:60%;
+    }
 
 }
 
@@ -772,42 +726,45 @@ top:60%;
 
 @media(max-width:430px){
 
-#conversation,
-#mic{
-width:42px;
-}
+    #conversation,
+    #mic{
+        width:42px;
+    }
 
-#send{
-width:58px;
+    #send{
+        width:58px;
 
-font-size:10px;
-}
+        font-size:10px;
+    }
 
-input{
-font-size:13px;
-}
+    input{
+        font-size:13px;
+    }
+
+    #clockContainer{
+        right:10px;
+    }
+
+    .header h1{
+        font-size:18px;
+        letter-spacing:6px;
+    }
 
 }
 
 </style>
 
-<!-- =====================================================
-     FALLBACK LOADING
-     Questo parte anche se Three.js dovesse avere problemi.
-===================================================== -->
 
 <script>
 
 setTimeout(function(){
 
-const loading =
-document.getElementById("loading");
+    const loading =
+        document.getElementById("loading");
 
-if(loading){
-
-loading.classList.add("hidden");
-
-}
+    if(loading){
+        loading.classList.add("hidden");
+    }
 
 },1800);
 
@@ -820,7 +777,7 @@ loading.classList.add("hidden");
 
 
 <div id="loading">
-JARVIS NEURAL CORE
+    JARVIS NEURAL CORE
 </div>
 
 
@@ -829,66 +786,62 @@ JARVIS NEURAL CORE
 
 <div id="earthContainer">
 
-<canvas id="earthCanvas"></canvas>
+    <canvas id="earthCanvas"></canvas>
 
 </div>
 
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <div class="header">
 
-<h1>J.A.R.V.I.S.</h1>
+    <h1>J.A.R.V.I.S.</h1>
 
-<div class="status">
+    <div class="status">
 
-<span id="dot">●</span>
+        <span id="dot">●</span>
 
-<span id="statusText">
-NEURAL INTERFACE ONLINE
-</span>
+        <span id="statusText">
+            NEURAL INTERFACE ONLINE
+        </span>
 
-</div>
-
-</div>
-
-
-<div class="panel left">
-
-JARVIS CORE V13<br>
-NEURAL ENGINE: ONLINE<br>
-
-MEMORY:
-<span id="memoryCount">0</span>
+    </div>
 
 </div>
 
 
-<div class="panel right">
+<!-- =====================================================
+     OROLOGIO
+===================================================== -->
 
-<div id="clock">
---:--:--
+<div id="clockContainer">
+
+    <div id="clock">
+        --:--:--
+    </div>
+
+    <div id="date">
+        --
+    </div>
+
 </div>
 
-<div id="date">
---
-</div>
 
-STATE:
-<span id="state">
-IDLE
-</span>
-
-</div>
-
+<!-- =====================================================
+     MAP HUD
+===================================================== -->
 
 <div id="mapHud">
 
-<div id="mapTitle">
-EARTH NAVIGATION
-</div>
+    <div id="mapTitle">
+        EARTH NAVIGATION
+    </div>
 
-<div id="coordinates">
-GLOBAL POSITIONING SYSTEM ONLINE
-</div>
+    <div id="coordinates">
+        GLOBAL POSITIONING SYSTEM ONLINE
+    </div>
 
 </div>
 
@@ -898,100 +851,90 @@ GLOBAL POSITIONING SYSTEM ONLINE
 
 <div id="locationInfo">
 
-<div id="locationName">
-LOCATION
+    <div id="locationName">
+        LOCATION
+    </div>
+
+    <div id="locationCoords">
+        --°
+    </div>
+
 </div>
 
-<div id="locationCoords">
---°
-</div>
 
-</div>
-
+<!-- =====================================================
+     CHAT
+===================================================== -->
 
 <div id="chat">
 
-<div class="message jarvis">
+    <div class="message jarvis">
 
-JARVIS online.<br>
-Neural Core inizializzato.<br><br>
-Pronto a elaborare.
+        JARVIS online.<br>
+        Neural Core inizializzato.<br><br>
+        Pronto a elaborare.
 
-</div>
-
-</div>
-
-
-<div id="voicePanel">
-
-<select id="voiceSelect"></select>
+    </div>
 
 </div>
 
 
-<button
-id="voiceButton"
-title="Impostazioni voce">
-
-⚙
-
-</button>
-
+<!-- =====================================================
+     INPUT
+===================================================== -->
 
 <div class="inputArea">
 
-<div class="inputBox">
+    <div class="inputBox">
 
-<input
-id="input"
-type="text"
-placeholder="Comunica con JARVIS..."
-autocomplete="off"
+        <input
+            id="input"
+            type="text"
+            placeholder="Comunica con JARVIS..."
+            autocomplete="off"
+        >
+
+        <button
+            id="conversation"
+            title="Modalità conversazione"
+        >
+            🔊
+        </button>
+
+        <button
+            id="mic"
+            title="Microfono"
+        >
+            🎙
+        </button>
+
+        <button id="send">
+            INVIA
+        </button>
+
+    </div>
+
+</div>
+
+
+<button
+    id="mapButton"
+    title="Apri mappa"
 >
-
-<button
-id="conversation"
-title="Modalità conversazione">
-
-🔊
-
-</button>
-
-<button
-id="mic"
-title="Microfono">
-
-🎙
-
-</button>
-
-<button id="send">
-
-INVIA
-
-</button>
-
-</div>
-
-</div>
-
-
-<button
-id="mapButton"
-title="Apri mappa">
-
-🌍
-
+    🌍
 </button>
 
 
 <script type="importmap">
 
 {
-"imports":{
-"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
-"three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
-}
+    "imports":{
+        "three":
+        "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+
+        "three/addons/":
+        "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+    }
 }
 
 </script>
@@ -1003,7 +946,7 @@ import * as THREE
 from "three";
 
 import {
-OrbitControls
+    OrbitControls
 }
 from "three/addons/controls/OrbitControls.js";
 
@@ -1013,7 +956,7 @@ from "three/addons/controls/OrbitControls.js";
 ===================================================== */
 
 const API =
-"https://iao-ai-v3.oceano-masoud.workers.dev/";
+    "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
 
 /* =====================================================
@@ -1021,70 +964,58 @@ const API =
 ===================================================== */
 
 const neuralCanvas =
-document.getElementById("neuralCanvas");
+    document.getElementById("neuralCanvas");
 
 const neuralCtx =
-neuralCanvas.getContext("2d");
+    neuralCanvas.getContext("2d");
 
 const earthCanvas =
-document.getElementById("earthCanvas");
+    document.getElementById("earthCanvas");
 
 const input =
-document.getElementById("input");
+    document.getElementById("input");
 
 const send =
-document.getElementById("send");
+    document.getElementById("send");
 
 const mic =
-document.getElementById("mic");
+    document.getElementById("mic");
 
 const conversation =
-document.getElementById("conversation");
+    document.getElementById("conversation");
 
 const chat =
-document.getElementById("chat");
+    document.getElementById("chat");
 
 const stateEl =
-document.getElementById("state");
+    document.createElement("span");
 
 const dot =
-document.getElementById("dot");
+    document.getElementById("dot");
 
 const statusText =
-document.getElementById("statusText");
-
-const memoryCount =
-document.getElementById("memoryCount");
+    document.getElementById("statusText");
 
 const clock =
-document.getElementById("clock");
+    document.getElementById("clock");
 
 const date =
-document.getElementById("date");
-
-const voiceButton =
-document.getElementById("voiceButton");
-
-const voicePanel =
-document.getElementById("voicePanel");
-
-const voiceSelect =
-document.getElementById("voiceSelect");
+    document.getElementById("date");
 
 const mapButton =
-document.getElementById("mapButton");
+    document.getElementById("mapButton");
 
 const coordinates =
-document.getElementById("coordinates");
+    document.getElementById("coordinates");
 
 const locationInfo =
-document.getElementById("locationInfo");
+    document.getElementById("locationInfo");
 
 const locationName =
-document.getElementById("locationName");
+    document.getElementById("locationName");
 
 const locationCoords =
-document.getElementById("locationCoords");
+    document.getElementById("locationCoords");
 
 
 /* =====================================================
@@ -1116,53 +1047,48 @@ let memory = [];
 
 try{
 
-memory =
-JSON.parse(
-localStorage.getItem(
-"jarvis_memory"
-) || "[]"
-);
+    memory =
+        JSON.parse(
+            localStorage.getItem(
+                "jarvis_memory"
+            ) || "[]"
+        );
 
 }catch{
 
-memory = [];
+    memory = [];
 
 }
 
 memory =
-memory.slice(-40);
+    memory.slice(-40);
 
 
 function saveMemory(){
 
-memory =
-memory.slice(-40);
+    memory =
+        memory.slice(-40);
 
-localStorage.setItem(
-"jarvis_memory",
-JSON.stringify(memory)
-);
-
-memoryCount.textContent =
-memory.length;
+    localStorage.setItem(
+        "jarvis_memory",
+        JSON.stringify(memory)
+    );
 
 }
 
-
 function remember(role,content){
 
-if(!content)
-return;
+    if(!content) return;
 
-memory.push({
+    memory.push({
 
-role,
-content,
-time:Date.now()
+        role,
+        content,
+        time:Date.now()
 
-});
+    });
 
-saveMemory();
+    saveMemory();
 
 }
 
@@ -1175,29 +1101,23 @@ saveMemory();
 
 function setState(newState){
 
-state =
-newState;
+    state = newState;
 
-stateEl.textContent =
-newState.toUpperCase();
+    if(
+        newState === "listening" ||
+        newState === "thinking" ||
+        newState === "speaking"
+    ){
 
-if(
+        dot.style.color =
+            "#168cff";
 
-newState === "listening" ||
-newState === "thinking" ||
-newState === "speaking"
+    }else{
 
-){
+        dot.style.color =
+            "#ffd000";
 
-dot.style.color =
-"#168cff";
-
-}else{
-
-dot.style.color =
-"#ffd000";
-
-}
+    }
 
 }
 
@@ -1208,31 +1128,30 @@ dot.style.color =
 
 function updateClock(){
 
-const now =
-new Date();
+    const now = new Date();
 
-clock.textContent =
-now.toLocaleTimeString(
-"it-IT"
-);
+    clock.textContent =
+        now.toLocaleTimeString(
+            "it-IT"
+        );
 
-date.textContent =
-now.toLocaleDateString(
-"it-IT",
-{
-weekday:"short",
-day:"2-digit",
-month:"short"
-}
-).toUpperCase();
+    date.textContent =
+        now.toLocaleDateString(
+            "it-IT",
+            {
+                weekday:"short",
+                day:"2-digit",
+                month:"short"
+            }
+        ).toUpperCase();
 
 }
 
 updateClock();
 
 setInterval(
-updateClock,
-1000
+    updateClock,
+    1000
 );
 
 
@@ -1242,33 +1161,31 @@ updateClock,
 
 function addMessage(type,text){
 
-const element =
-document.createElement("div");
+    const element =
+        document.createElement("div");
 
-element.className =
-"message " + type;
+    element.className =
+        "message " + type;
 
-element.textContent =
-text;
+    element.textContent =
+        text;
 
-chat.appendChild(
-element
-);
+    chat.appendChild(element);
 
-while(
-chat.children.length > 20
-){
+    while(
+        chat.children.length > 20
+    ){
 
-chat.removeChild(
-chat.firstChild
-);
+        chat.removeChild(
+            chat.firstChild
+        );
 
-}
+    }
 
-chat.scrollTop =
-chat.scrollHeight;
+    chat.scrollTop =
+        chat.scrollHeight;
 
-return element;
+    return element;
 
 }
 
@@ -1278,78 +1195,77 @@ return element;
 ===================================================== */
 
 const earthScene =
-new THREE.Scene();
+    new THREE.Scene();
 
 
 const earthCamera =
-new THREE.PerspectiveCamera(
-45,
-innerWidth / innerHeight,
-0.1,
-100
-);
+    new THREE.PerspectiveCamera(
+        45,
+        innerWidth / innerHeight,
+        .1,
+        100
+    );
 
 earthCamera.position.set(
-0,
-0,
-3.3
+    0,
+    0,
+    3.3
 );
 
 
 const earthRenderer =
-new THREE.WebGLRenderer({
+    new THREE.WebGLRenderer({
 
-canvas:earthCanvas,
+        canvas:earthCanvas,
 
-antialias:true,
+        antialias:true,
 
-alpha:true
+        alpha:true
 
-});
+    });
+
 
 earthRenderer.setPixelRatio(
-Math.min(
-window.devicePixelRatio || 1,
-2
-)
+    Math.min(
+        window.devicePixelRatio || 1,
+        2
+    )
 );
 
 earthRenderer.setSize(
-innerWidth,
-innerHeight
+    innerWidth,
+    innerHeight
 );
 
 
 /* =====================================================
-   LUCI REALISTICHE
+   LUCI
 ===================================================== */
 
 const ambientLight =
-new THREE.AmbientLight(
-0x7890aa,
-1.1
-);
+    new THREE.AmbientLight(
+        0x7890aa,
+        1.1
+    );
 
 earthScene.add(
-ambientLight
+    ambientLight
 );
 
 
 const sun =
-new THREE.DirectionalLight(
-0xffffff,
-3
-);
+    new THREE.DirectionalLight(
+        0xffffff,
+        3
+    );
 
 sun.position.set(
-5,
-3,
-5
+    5,
+    3,
+    5
 );
 
-earthScene.add(
-sun
-);
+earthScene.add(sun);
 
 
 /* =====================================================
@@ -1357,55 +1273,53 @@ sun
 ===================================================== */
 
 const earthGroup =
-new THREE.Group();
+    new THREE.Group();
 
 earthScene.add(
-earthGroup
+    earthGroup
 );
 
 
 const earthGeometry =
-new THREE.SphereGeometry(
-1,
-128,
-128
-);
+    new THREE.SphereGeometry(
+        1,
+        128,
+        128
+    );
 
 
 const textureLoader =
-new THREE.TextureLoader();
+    new THREE.TextureLoader();
 
 
 const earthTexture =
-textureLoader.load(
-"https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
-);
+    textureLoader.load(
+        "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+    );
 
 
 const earthMaterial =
-new THREE.MeshPhongMaterial({
+    new THREE.MeshPhongMaterial({
 
-map:earthTexture,
+        map:earthTexture,
 
-shininess:18,
+        shininess:18,
 
-specular:
-new THREE.Color(
-0x333333
-)
+        specular:
+            new THREE.Color(
+                0x333333
+            )
 
-});
+    });
 
 
 const earth =
-new THREE.Mesh(
-earthGeometry,
-earthMaterial
-);
+    new THREE.Mesh(
+        earthGeometry,
+        earthMaterial
+    );
 
-earthGroup.add(
-earth
-);
+earthGroup.add(earth);
 
 
 /* =====================================================
@@ -1413,63 +1327,61 @@ earth
 ===================================================== */
 
 const atmosphere =
-new THREE.Mesh(
+    new THREE.Mesh(
 
-new THREE.SphereGeometry(
-1.035,
-96,
-96
-),
+        new THREE.SphereGeometry(
+            1.035,
+            96,
+            96
+        ),
 
-new THREE.MeshBasicMaterial({
+        new THREE.MeshBasicMaterial({
 
-color:0x2d9cff,
+            color:0x2d9cff,
 
-transparent:true,
+            transparent:true,
 
-opacity:.10,
+            opacity:.10,
 
-side:THREE.BackSide
+            side:THREE.BackSide
 
-})
+        })
 
-);
+    );
 
 earthGroup.add(
-atmosphere
+    atmosphere
 );
 
 
 /* =====================================================
-   GLOW ESTERNO
+   GLOW
 ===================================================== */
 
 const glow =
-new THREE.Mesh(
+    new THREE.Mesh(
 
-new THREE.SphereGeometry(
-1.08,
-96,
-96
-),
+        new THREE.SphereGeometry(
+            1.08,
+            96,
+            96
+        ),
 
-new THREE.MeshBasicMaterial({
+        new THREE.MeshBasicMaterial({
 
-color:0x168cff,
+            color:0x168cff,
 
-transparent:true,
+            transparent:true,
 
-opacity:.045,
+            opacity:.045,
 
-side:THREE.BackSide
+            side:THREE.BackSide
 
-})
+        })
 
-);
+    );
 
-earthGroup.add(
-glow
-);
+earthGroup.add(glow);
 
 
 /* =====================================================
@@ -1477,56 +1389,54 @@ glow
 ===================================================== */
 
 const marker =
-new THREE.Mesh(
+    new THREE.Mesh(
 
-new THREE.SphereGeometry(
-.022,
-24,
-24
-),
+        new THREE.SphereGeometry(
+            .022,
+            24,
+            24
+        ),
 
-new THREE.MeshBasicMaterial({
-color:0xffd000
-})
+        new THREE.MeshBasicMaterial({
 
-);
+            color:0xffd000
 
-marker.visible =
-false;
+        })
 
-earthGroup.add(
-marker
-);
+    );
+
+marker.visible = false;
+
+earthGroup.add(marker);
 
 
 const markerRing =
-new THREE.Mesh(
+    new THREE.Mesh(
 
-new THREE.RingGeometry(
-.035,
-.052,
-40
-),
+        new THREE.RingGeometry(
+            .035,
+            .052,
+            40
+        ),
 
-new THREE.MeshBasicMaterial({
+        new THREE.MeshBasicMaterial({
 
-color:0xffd000,
+            color:0xffd000,
 
-transparent:true,
+            transparent:true,
 
-opacity:.95,
+            opacity:.95,
 
-side:THREE.DoubleSide
+            side:THREE.DoubleSide
 
-})
+        })
 
-);
+    );
 
-markerRing.visible =
-false;
+markerRing.visible = false;
 
 earthGroup.add(
-markerRing
+    markerRing
 );
 
 
@@ -1535,25 +1445,20 @@ markerRing
 ===================================================== */
 
 const controls =
-new OrbitControls(
-earthCamera,
-earthCanvas
-);
+    new OrbitControls(
+        earthCamera,
+        earthCanvas
+    );
 
-controls.enableDamping =
-true;
+controls.enableDamping = true;
 
-controls.dampingFactor =
-.06;
+controls.dampingFactor = .06;
 
-controls.enablePan =
-false;
+controls.enablePan = false;
 
-controls.minDistance =
-1.25;
+controls.minDistance = 1.25;
 
-controls.maxDistance =
-6;
+controls.maxDistance = 6;
 
 
 /* =====================================================
@@ -1562,76 +1467,65 @@ controls.maxDistance =
 
 function openMap(){
 
-if(mapMode)
-return;
+    if(mapMode) return;
 
-mapMode =
-true;
+    mapMode = true;
 
-document.body.classList.add(
-"mapMode"
-);
+    document.body.classList.add(
+        "mapMode"
+    );
 
-statusText.textContent =
-"EARTH NAVIGATION ONLINE";
+    statusText.textContent =
+        "EARTH NAVIGATION ONLINE";
 
-mapButton.textContent =
-"✕";
+    mapButton.textContent =
+        "✕";
 
-setState(
-"idle"
-);
+    setState("idle");
 
 }
 
 
 function closeMap(){
 
-mapMode =
-false;
+    mapMode = false;
 
-document.body.classList.remove(
-"mapMode"
-);
+    document.body.classList.remove(
+        "mapMode"
+    );
 
-statusText.textContent =
-"NEURAL INTERFACE ONLINE";
+    statusText.textContent =
+        "NEURAL INTERFACE ONLINE";
 
-mapButton.textContent =
-"🌍";
+    mapButton.textContent =
+        "🌍";
 
-locationInfo.classList.remove(
-"visible"
-);
+    locationInfo.classList.remove(
+        "visible"
+    );
 
-marker.visible =
-false;
+    marker.visible = false;
 
-markerRing.visible =
-false;
+    markerRing.visible = false;
 
-zoomAnimating =
-false;
+    zoomAnimating = false;
 
-setState(
-"idle"
-);
+    setState("idle");
 
 }
 
 
-mapButton.onclick =
-() => {
+mapButton.onclick = () => {
 
-if(mapMode){
+    if(mapMode){
 
-closeMap();
+        closeMap();
 
-}else{
+    }else{
 
-openMap();
+        openMap();
 
-}
+    }
 
 };
 
@@ -1642,19 +1536,24 @@ openMap();
 
 function isMapCommand(text){
 
-const t =
-text.toLowerCase();
+    const t =
+        text.toLowerCase();
 
-return (
+    return(
 
-t.includes("apri la mappa") ||
-t.includes("apri mappa") ||
-t.includes("mostrami la mappa") ||
-t.includes("mostra la mappa") ||
-t.includes("mappa del mondo") ||
-t === "mappa"
+        t.includes("apri la mappa") ||
 
-);
+        t.includes("apri mappa") ||
+
+        t.includes("mostrami la mappa") ||
+
+        t.includes("mostra la mappa") ||
+
+        t.includes("mappa del mondo") ||
+
+        t === "mappa"
+
+    );
 
 }
 
@@ -1665,58 +1564,56 @@ t === "mappa"
 
 function extractLocation(text){
 
-const patterns = [
+    const patterns = [
 
-"mostrami ",
-"mostra ",
-"portami a ",
-"portami ad ",
-"fammi vedere ",
-"cerca ",
-"trova ",
-"vai a ",
-"vai ad ",
-"localizza ",
-"localizzami "
+        "mostrami ",
+        "mostra ",
+        "portami a ",
+        "portami ad ",
+        "fammi vedere ",
+        "cerca ",
+        "trova ",
+        "vai a ",
+        "vai ad ",
+        "localizza ",
+        "localizzami "
 
-];
+    ];
 
-const lower =
-text.toLowerCase();
+    const lower =
+        text.toLowerCase();
 
-for(
-const prefix of patterns
-){
+    for(
+        const prefix of patterns
+    ){
 
-const index =
-lower.indexOf(prefix);
+        const index =
+            lower.indexOf(prefix);
 
-if(index !== -1){
+        if(index !== -1){
 
-let place =
-text.substring(
-index + prefix.length
-).trim();
+            let place =
+                text.substring(
+                    index + prefix.length
+                ).trim();
 
-place =
-place.replace(
-/^(la|il|lo|un|una|a|ad)\s+/i,
-""
-);
+            place =
+                place.replace(
+                    /^(la|il|lo|un|una|a|ad)\s+/i,
+                    ""
+                );
 
-if(
-place.length > 1
-){
+            if(place.length > 1){
 
-return place;
+                return place;
 
-}
+            }
 
-}
+        }
 
-}
+    }
 
-return null;
+    return null;
 
 }
 
@@ -1727,87 +1624,84 @@ return null;
 
 async function searchPlace(place){
 
-setState(
-"thinking"
-);
+    setState("thinking");
 
-coordinates.textContent =
-"SEARCHING LOCATION...";
+    coordinates.textContent =
+        "SEARCHING LOCATION...";
 
-try{
+    try{
 
-const url =
-"https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=it&q=" +
-encodeURIComponent(place);
+        const url =
+            "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=it&q="
+            +
+            encodeURIComponent(place);
 
-const response =
-await fetch(url);
+        const response =
+            await fetch(url);
 
-if(!response.ok){
+        if(!response.ok){
 
-throw new Error(
-"Geocoding error"
-);
+            throw new Error(
+                "Geocoding error"
+            );
 
-}
+        }
 
-const results =
-await response.json();
+        const results =
+            await response.json();
 
-if(!results.length){
+        if(!results.length){
 
-throw new Error(
-"Luogo non trovato"
-);
+            throw new Error(
+                "Luogo non trovato"
+            );
 
-}
+        }
 
-const result =
-results[0];
+        const result =
+            results[0];
 
-const lat =
-parseFloat(result.lat);
+        const lat =
+            parseFloat(result.lat);
 
-const lon =
-parseFloat(result.lon);
+        const lon =
+            parseFloat(result.lon);
 
-const name =
-result.display_name
-.split(",")
-.slice(0,3)
-.join(", ");
+        const name =
+            result.display_name
+                .split(",")
+                .slice(0,3)
+                .join(", ");
 
-showLocation(
-name,
-lat,
-lon
-);
+        showLocation(
+            name,
+            lat,
+            lon
+        );
 
-return {
-name,
-lat,
-lon
-};
+        return{
+            name,
+            lat,
+            lon
+        };
 
-}catch(error){
+    }catch(error){
 
-console.error(error);
+        console.error(error);
 
-coordinates.textContent =
-"LOCATION NOT FOUND";
+        coordinates.textContent =
+            "LOCATION NOT FOUND";
 
-setState(
-"idle"
-);
+        setState("idle");
 
-addMessage(
-"jarvis",
-"Non riesco a trovare questo luogo."
-);
+        addMessage(
+            "jarvis",
+            "Non riesco a trovare questo luogo."
+        );
 
-return null;
+        return null;
 
-}
+    }
 
 }
 
@@ -1816,25 +1710,38 @@ return null;
    COORDINATE
 ===================================================== */
 
-function formatCoordinates(lat,lon){
+function formatCoordinates(
+    lat,
+    lon
+){
 
-const latDir =
-lat >= 0 ? "N" : "S";
+    const latDir =
+        lat >= 0
+            ? "N"
+            : "S";
 
-const lonDir =
-lon >= 0 ? "E" : "W";
+    const lonDir =
+        lon >= 0
+            ? "E"
+            : "W";
 
-return (
+    return(
 
-Math.abs(lat).toFixed(4) +
-"° " +
-latDir +
-"   |   " +
-Math.abs(lon).toFixed(4) +
-"° " +
-lonDir
+        Math.abs(lat).toFixed(4)
+        +
+        "° "
+        +
+        latDir
+        +
+        "   |   "
+        +
+        Math.abs(lon).toFixed(4)
+        +
+        "° "
+        +
+        lonDir
 
-);
+    );
 
 }
 
@@ -1844,34 +1751,34 @@ lonDir
 ===================================================== */
 
 function showLocation(
-name,
-lat,
-lon
+    name,
+    lat,
+    lon
 ){
 
-locationName.textContent =
-name;
+    locationName.textContent =
+        name;
 
-locationCoords.textContent =
-formatCoordinates(
-lat,
-lon
-);
+    locationCoords.textContent =
+        formatCoordinates(
+            lat,
+            lon
+        );
 
-coordinates.textContent =
-formatCoordinates(
-lat,
-lon
-);
+    coordinates.textContent =
+        formatCoordinates(
+            lat,
+            lon
+        );
 
-locationInfo.classList.add(
-"visible"
-);
+    locationInfo.classList.add(
+        "visible"
+    );
 
-focusEarth(
-lat,
-lon
-);
+    focusEarth(
+        lat,
+        lon
+    );
 
 }
 
@@ -1882,76 +1789,72 @@ lon
 
 function showMyLocation(){
 
-if(!navigator.geolocation){
+    if(!navigator.geolocation){
 
-addMessage(
-"jarvis",
-"Il browser non supporta la geolocalizzazione."
-);
+        addMessage(
+            "jarvis",
+            "Il browser non supporta la geolocalizzazione."
+        );
 
-return;
+        return;
 
-}
+    }
 
-setState(
-"thinking"
-);
+    setState("thinking");
 
-coordinates.textContent =
-"ACQUISIZIONE POSIZIONE...";
+    coordinates.textContent =
+        "ACQUISIZIONE POSIZIONE...";
 
-navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.getCurrentPosition(
 
-position => {
+        position => {
 
-const lat =
-position.coords.latitude;
+            const lat =
+                position.coords.latitude;
 
-const lon =
-position.coords.longitude;
+            const lon =
+                position.coords.longitude;
 
-showLocation(
-"La mia posizione",
-lat,
-lon
-);
+            showLocation(
+                "La mia posizione",
+                lat,
+                lon
+            );
 
-addMessage(
-"jarvis",
-"La tua posizione è stata individuata sulla Terra."
-);
+            addMessage(
+                "jarvis",
+                "La tua posizione è stata individuata sulla Terra."
+            );
 
-},
+        },
 
-error => {
+        error => {
 
-console.log(error);
+            console.log(error);
 
-coordinates.textContent =
-"POSITION UNAVAILABLE";
+            coordinates.textContent =
+                "POSITION UNAVAILABLE";
 
-setState(
-"idle"
-);
+            setState("idle");
 
-addMessage(
-"jarvis",
-"Non ho ricevuto il permesso per accedere alla posizione."
-);
+            addMessage(
+                "jarvis",
+                "Non ho ricevuto il permesso per accedere alla posizione."
+            );
 
-},
+        },
 
-{
+        {
 
-enableHighAccuracy:true,
+            enableHighAccuracy:true,
 
-timeout:10000,
+            timeout:10000,
 
-maximumAge:30000
+            maximumAge:30000
 
-}
+        }
 
-);
+    );
 
 }
 
@@ -1960,146 +1863,126 @@ maximumAge:30000
    FOCUS TERRA
 ===================================================== */
 
-let zoomAnimating =
-false;
+let zoomAnimating = false;
 
-let zoomProgress =
-1;
+let zoomProgress = 1;
 
-let zoomStart =
-3.3;
+let zoomStart = 3.3;
 
-let zoomEnd =
-1.55;
+let zoomEnd = 1.55;
 
 let targetQuaternion =
-new THREE.Quaternion();
+    new THREE.Quaternion();
 
 
 function latLonToVector3(
-lat,
-lon,
-radius
+    lat,
+    lon,
+    radius
 ){
 
-const phi =
-(90-lat) *
-Math.PI/180;
+    const phi =
+        (90-lat)
+        *
+        Math.PI
+        /
+        180;
 
-const theta =
-(lon+180) *
-Math.PI/180;
+    const theta =
+        (lon+180)
+        *
+        Math.PI
+        /
+        180;
 
-return new THREE.Vector3(
+    return new THREE.Vector3(
 
--radius *
-Math.sin(phi) *
-Math.cos(theta),
+        -radius
+        *
+        Math.sin(phi)
+        *
+        Math.cos(theta),
 
-radius *
-Math.cos(phi),
+        radius
+        *
+        Math.cos(phi),
 
-radius *
-Math.sin(phi) *
-Math.sin(theta)
+        radius
+        *
+        Math.sin(phi)
+        *
+        Math.sin(theta)
 
-);
+    );
 
 }
 
 
 function focusEarth(
-lat,
-lon
+    lat,
+    lon
 ){
 
-openMap();
+    openMap();
 
+    const target =
+        latLonToVector3(
+            lat,
+            lon,
+            1
+        );
 
-const target =
-latLonToVector3(
-lat,
-lon,
-1
-);
+    marker.position.copy(
+        target.clone()
+            .multiplyScalar(1.025)
+    );
 
+    marker.visible = true;
 
-marker.position.copy(
-target.clone().multiplyScalar(
-1.025
-)
-);
+    markerRing.visible = true;
 
-marker.visible =
-true;
+    const direction =
+        target.clone().normalize();
 
-markerRing.visible =
-true;
+    const front =
+        new THREE.Vector3(
+            0,
+            0,
+            1
+        );
 
+    targetQuaternion =
+        new THREE.Quaternion();
 
-const direction =
-target.clone().normalize();
+    targetQuaternion.setFromUnitVectors(
+        direction,
+        front
+    );
 
+    zoomStart =
+        earthCamera.position.length();
 
-const front =
-new THREE.Vector3(
-0,
-0,
-1
-);
+    if(zoomStart < 2){
 
+        zoomStart = 3.3;
 
-targetQuaternion =
-new THREE.Quaternion();
+        earthCamera.position.set(
+            0,
+            0,
+            zoomStart
+        );
 
-targetQuaternion.setFromUnitVectors(
-direction,
-front
-);
+    }
 
+    zoomEnd = 1.55;
 
-zoomStart =
-earthCamera.position.length();
+    zoomProgress = 0;
 
-if(
-zoomStart < 2
-){
+    zoomAnimating = true;
 
-zoomStart =
-3.3;
+    controls.enabled = false;
 
-earthCamera.position.set(
-0,
-0,
-zoomStart
-);
-
-}
-
-
-zoomEnd =
-1.55;
-
-zoomProgress =
-0;
-
-zoomAnimating =
-true;
-
-
-/*
-   IMPORTANTE:
-   durante la ricerca del luogo
-   impediamo all'utente di interferire
-   con il movimento.
-*/
-
-controls.enabled =
-false;
-
-setState(
-"thinking"
-);
+    setState("thinking");
 
 }
 
@@ -2109,573 +1992,653 @@ setState(
 ===================================================== */
 
 let neuralWidth =
-innerWidth;
+    innerWidth;
 
 let neuralHeight =
-innerHeight;
+    innerHeight;
 
 let neuralCx =
-neuralWidth/2;
+    neuralWidth / 2;
 
 let neuralCy =
-neuralHeight/2;
+    neuralHeight / 2;
 
 let neuralRadius =
-Math.min(
-neuralWidth,
-neuralHeight
-)*.22;
+    Math.min(
+        neuralWidth,
+        neuralHeight
+    ) * .22;
 
-let neuralRotation =
-0;
+let neuralRotation = 0;
 
 let nodes = [];
 
 
 function resizeNeural(){
 
-neuralWidth =
-innerWidth;
+    neuralWidth =
+        innerWidth;
 
-neuralHeight =
-innerHeight;
+    neuralHeight =
+        innerHeight;
 
-const dpr =
-Math.min(
-devicePixelRatio || 1,
-2
-);
+    const dpr =
+        Math.min(
+            devicePixelRatio || 1,
+            2
+        );
 
-neuralCanvas.width =
-neuralWidth*dpr;
+    neuralCanvas.width =
+        neuralWidth * dpr;
 
-neuralCanvas.height =
-neuralHeight*dpr;
+    neuralCanvas.height =
+        neuralHeight * dpr;
 
-neuralCanvas.style.width =
-neuralWidth+"px";
+    neuralCanvas.style.width =
+        neuralWidth + "px";
 
-neuralCanvas.style.height =
-neuralHeight+"px";
+    neuralCanvas.style.height =
+        neuralHeight + "px";
 
-neuralCtx.setTransform(
-dpr,
-0,
-0,
-dpr,
-0,
-0
-);
+    neuralCtx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
 
-neuralCx =
-neuralWidth/2;
+    neuralCx =
+        neuralWidth / 2;
 
-neuralCy =
-neuralHeight/2;
+    neuralCy =
+        neuralHeight / 2;
 
-neuralRadius =
-Math.min(
-neuralWidth,
-neuralHeight
-)*.22;
+    neuralRadius =
+        Math.min(
+            neuralWidth,
+            neuralHeight
+        ) * .22;
 
-createNeuralNodes();
+    createNeuralNodes();
 
 }
 
 
 function createNeuralNodes(){
 
-nodes = [];
+    nodes = [];
 
-for(
-let i=0;
-i<165;
-i++
-){
+    for(
+        let i=0;
+        i<165;
+        i++
+    ){
 
-nodes.push({
+        nodes.push({
 
-theta:
-Math.random()*Math.PI*2,
+            theta:
+                Math.random()
+                *
+                Math.PI
+                *
+                2,
 
-phi:
-Math.acos(
-2*Math.random()-1
-),
+            phi:
+                Math.acos(
+                    2
+                    *
+                    Math.random()
+                    -
+                    1
+                ),
 
-r:
-neuralRadius *
-(
-.72+
-Math.random()*.55
-),
+            r:
+                neuralRadius
+                *
+                (
+                    .72
+                    +
+                    Math.random()
+                    *
+                    .55
+                ),
 
-size:
-.7+
-Math.random()*1.8,
+            size:
+                .7
+                +
+                Math.random()
+                *
+                1.8,
 
-phase:
-Math.random()*Math.PI*2
+            phase:
+                Math.random()
+                *
+                Math.PI
+                *
+                2
 
-});
+        });
 
-}
+    }
 
 }
 
 
 /* =====================================================
-   ANIMAZIONE RETE NEURALE
+   ANIMAZIONE RETE
 ===================================================== */
 
 function animateNeural(){
 
-requestAnimationFrame(
-animateNeural
-);
+    requestAnimationFrame(
+        animateNeural
+    );
 
-const time =
-performance.now()/1000;
+    const time =
+        performance.now()
+        /
+        1000;
 
-let speed =
-1;
+    let speed = 1;
 
-let energy =
-.2;
+    let energy = .2;
 
-if(state === "listening"){
+    if(state === "listening"){
 
-speed = 4;
-energy = 1.2;
+        speed = 4;
 
-}
+        energy = 1.2;
 
-if(state === "thinking"){
+    }
 
-speed = 7;
-energy = 2;
+    if(state === "thinking"){
 
-}
+        speed = 7;
 
-if(state === "speaking"){
+        energy = 2;
 
-speed = 5;
-energy = 1.5;
+    }
 
-}
+    if(state === "speaking"){
 
-neuralRotation +=
-.004*speed;
+        speed = 5;
 
+        energy = 1.5;
 
-neuralCtx.fillStyle =
-"rgba(0,0,0,.28)";
+    }
 
-neuralCtx.fillRect(
-0,
-0,
-neuralWidth,
-neuralHeight
-);
+    neuralRotation +=
+        .004
+        *
+        speed;
 
 
-let targetColor;
+    neuralCtx.fillStyle =
+        "rgba(0,0,0,.28)";
 
-if(
+    neuralCtx.fillRect(
+        0,
+        0,
+        neuralWidth,
+        neuralHeight
+    );
 
-state === "listening" ||
-state === "thinking" ||
-state === "speaking"
 
-){
+    let targetColor;
 
-targetColor = {
-r:25,
-g:140,
-b:255
-};
+    if(
+        state === "listening" ||
+        state === "thinking" ||
+        state === "speaking"
+    ){
 
-}else{
+        targetColor = {
 
-targetColor = {
-r:255,
-g:195,
-b:0
-};
+            r:25,
+            g:140,
+            b:255
 
-}
+        };
 
+    }else{
 
-window.jarvisColor =
-window.jarvisColor ||
-{
-r:255,
-g:195,
-b:0
-};
+        targetColor = {
 
+            r:255,
+            g:195,
+            b:0
 
-jarvisColor.r +=
-(
-targetColor.r -
-jarvisColor.r
-)*.055;
+        };
 
-jarvisColor.g +=
-(
-targetColor.g -
-jarvisColor.g
-)*.055;
+    }
 
-jarvisColor.b +=
-(
-targetColor.b -
-jarvisColor.b
-)*.055;
 
+    window.jarvisColor =
+        window.jarvisColor ||
+        {
+            r:255,
+            g:195,
+            b:0
+        };
 
-const r =
-Math.round(
-jarvisColor.r
-);
 
-const g =
-Math.round(
-jarvisColor.g
-);
+    jarvisColor.r +=
+        (
+            targetColor.r
+            -
+            jarvisColor.r
+        )
+        *
+        .055;
 
-const b =
-Math.round(
-jarvisColor.b
-);
+    jarvisColor.g +=
+        (
+            targetColor.g
+            -
+            jarvisColor.g
+        )
+        *
+        .055;
 
+    jarvisColor.b +=
+        (
+            targetColor.b
+            -
+            jarvisColor.b
+        )
+        *
+        .055;
+
+
+    const r =
+        Math.round(
+            jarvisColor.r
+        );
 
-const pulse =
-(
-Math.sin(time*4)+1
-)/2;
+    const g =
+        Math.round(
+            jarvisColor.g
+        );
+
+    const b =
+        Math.round(
+            jarvisColor.b
+        );
+
+
+    const pulse =
+        (
+            Math.sin(time*4)
+            +
+            1
+        )
+        /
+        2;
+
+
+    const glow =
+        neuralRadius
+        *
+        (
+            1.05
+            +
+            energy*.7
+            +
+            pulse*.18
+        );
+
+
+    const gradient =
+        neuralCtx.createRadialGradient(
+
+            neuralCx,
+            neuralCy,
+            0,
+
+            neuralCx,
+            neuralCy,
+            glow
+
+        );
+
+
+    gradient.addColorStop(
+        0,
+        `rgba(${r},${g},${b},.48)`
+    );
+
+    gradient.addColorStop(
+        .35,
+        `rgba(${r},${g},${b},.15)`
+    );
+
+    gradient.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    neuralCtx.fillStyle =
+        gradient;
+
+    neuralCtx.beginPath();
+
+    neuralCtx.arc(
+        neuralCx,
+        neuralCy,
+        glow,
+        0,
+        Math.PI*2
+    );
+
+    neuralCtx.fill();
+
+
+    const projected = [];
+
+
+    nodes.forEach(n => {
+
+        const rr =
+            n.r
+            +
+            Math.sin(
+                time*3+n.phase
+            )
+            *
+            energy
+            *
+            7;
+
+
+        let x =
+            rr
+            *
+            Math.sin(n.phi)
+            *
+            Math.cos(
+                n.theta
+                +
+                neuralRotation
+            );
+
+
+        let y =
+            rr
+            *
+            Math.cos(n.phi);
+
+
+        let z =
+            rr
+            *
+            Math.sin(n.phi)
+            *
+            Math.sin(
+                n.theta
+                +
+                neuralRotation
+            );
+
+
+        if(state !== "idle"){
+
+            x +=
+                Math.sin(
+                    time*2+n.phase
+                )
+                *
+                energy
+                *
+                7;
+
+            y +=
+                Math.cos(
+                    time*2.5+n.phase
+                )
+                *
+                energy
+                *
+                7;
+
+        }
+
+
+        const perspective =
+            430
+            /
+            (
+                430+z
+            );
+
+
+        projected.push({
+
+            x:
+                neuralCx
+                +
+                x
+                *
+                perspective,
+
+            y:
+                neuralCy
+                +
+                y
+                *
+                perspective,
+
+            z,
+
+            size:
+                n.size
+                *
+                perspective,
 
+            alpha:
+                Math.max(
+                    .1,
+                    Math.min(
+                        1,
+                        (
+                            z
+                            +
+                            neuralRadius
+                        )
+                        /
+                        (
+                            neuralRadius*2
+                        )
+                    )
+                ),
+
+            phase:n.phase
 
-const glow =
-neuralRadius *
-(
-1.05+
-energy*.7+
-pulse*.18
-);
+        });
 
+    });
 
-const gradient =
-neuralCtx.createRadialGradient(
 
-neuralCx,
-neuralCy,
-0,
+    const maxDist =
+        state === "thinking"
+            ? 110
+            : 82;
+
+
+    for(
+        let i=0;
+        i<projected.length;
+        i++
+    ){
 
-neuralCx,
-neuralCy,
-glow
+        for(
+            let j=i+1;
+            j<projected.length;
+            j++
+        ){
+
+            const a =
+                projected[i];
+
+            const c =
+                projected[j];
 
-);
 
+            const dx =
+                a.x-c.x;
 
-gradient.addColorStop(
-0,
-`rgba(${r},${g},${b},.48)`
-);
+            const dy =
+                a.y-c.y;
 
-gradient.addColorStop(
-.35,
-`rgba(${r},${g},${b},.15)`
-);
 
-gradient.addColorStop(
-1,
-"rgba(0,0,0,0)"
-);
+            const dist =
+                Math.sqrt(
+                    dx*dx+
+                    dy*dy
+                );
 
 
-neuralCtx.fillStyle =
-gradient;
+            if(dist < maxDist){
 
-neuralCtx.beginPath();
+                const alpha =
+                    (
+                        1
+                        -
+                        dist/maxDist
+                    )
+                    *
+                    .3
+                    *
+                    a.alpha;
 
-neuralCtx.arc(
-neuralCx,
-neuralCy,
-glow,
-0,
-Math.PI*2
-);
 
-neuralCtx.fill();
+                neuralCtx.beginPath();
 
+                neuralCtx.moveTo(
+                    a.x,
+                    a.y
+                );
 
-const projected = [];
+                neuralCtx.lineTo(
+                    c.x,
+                    c.y
+                );
 
+                neuralCtx.strokeStyle =
+                    `rgba(${r},${g},${b},${alpha})`;
 
-nodes.forEach(
-n => {
+                neuralCtx.lineWidth =
+                    .65;
 
-const rr =
-n.r+
-Math.sin(
-time*3+n.phase
-)*
-energy*7;
+                neuralCtx.stroke();
 
+            }
 
-let x =
-rr*
-Math.sin(n.phi)*
-Math.cos(
-n.theta+
-neuralRotation
-);
+        }
 
+    }
 
-let y =
-rr*
-Math.cos(n.phi);
 
+    projected.forEach(n => {
 
-let z =
-rr*
-Math.sin(n.phi)*
-Math.sin(
-n.theta+
-neuralRotation
-);
+        const flicker =
+            (
+                Math.sin(
+                    time*7+n.phase
+                )
+                +
+                1
+            )
+            /
+            2;
 
 
-if(state !== "idle"){
+        const size =
+            n.size
+            +
+            flicker
+            *
+            (
+                state === "thinking"
+                    ? 1.8
+                    : .7
+            );
 
-x +=
-Math.sin(
-time*2+n.phase
-)*
-energy*7;
 
-y +=
-Math.cos(
-time*2.5+n.phase
-)*
-energy*7;
+        neuralCtx.fillStyle =
+            `rgba(${r},${g},${b},${n.alpha*.28})`;
 
-}
+        neuralCtx.beginPath();
 
+        neuralCtx.arc(
+            n.x,
+            n.y,
+            size*4,
+            0,
+            Math.PI*2
+        );
 
-const perspective =
-430/
-(
-430+z
-);
+        neuralCtx.fill();
 
 
-projected.push({
+        neuralCtx.fillStyle =
+            `rgba(255,255,255,${n.alpha})`;
 
-x:
-neuralCx+
-x*perspective,
+        neuralCtx.beginPath();
 
-y:
-neuralCy+
-y*perspective,
+        neuralCtx.arc(
+            n.x,
+            n.y,
+            size,
+            0,
+            Math.PI*2
+        );
 
-z,
+        neuralCtx.fill();
 
-size:
-n.size*perspective,
+    });
 
-alpha:
-Math.max(
-.1,
-Math.min(
-1,
-(z+neuralRadius)/
-(neuralRadius*2)
-)
-),
 
-phase:n.phase
+    const core =
+        5
+        +
+        pulse*2
+        +
+        energy*2;
 
-});
 
-});
+    neuralCtx.fillStyle =
+        `rgba(${r},${g},${b},.38)`;
 
+    neuralCtx.beginPath();
 
-const maxDist =
-state === "thinking"
-?
-110
-:
-82;
+    neuralCtx.arc(
+        neuralCx,
+        neuralCy,
+        core*5,
+        0,
+        Math.PI*2
+    );
 
+    neuralCtx.fill();
 
-for(
-let i=0;
-i<projected.length;
-i++
-){
 
-for(
-let j=i+1;
-j<projected.length;
-j++
-){
+    neuralCtx.fillStyle =
+        "#fff";
 
-const a =
-projected[i];
+    neuralCtx.beginPath();
 
-const c =
-projected[j];
+    neuralCtx.arc(
+        neuralCx,
+        neuralCy,
+        core,
+        0,
+        Math.PI*2
+    );
 
-const dx =
-a.x-c.x;
-
-const dy =
-a.y-c.y;
-
-const dist =
-Math.sqrt(
-dx*dx+
-dy*dy
-);
-
-
-if(
-dist < maxDist
-){
-
-const alpha =
-(
-1-dist/maxDist
-)*
-.3*
-a.alpha;
-
-
-neuralCtx.beginPath();
-
-neuralCtx.moveTo(
-a.x,
-a.y
-);
-
-neuralCtx.lineTo(
-c.x,
-c.y
-);
-
-neuralCtx.strokeStyle =
-`rgba(${r},${g},${b},${alpha})`;
-
-neuralCtx.lineWidth =
-.65;
-
-neuralCtx.stroke();
-
-}
-
-}
-
-}
-
-
-projected.forEach(
-n => {
-
-const flicker =
-(
-Math.sin(
-time*7+n.phase
-)+1
-)/2;
-
-
-const size =
-n.size+
-flicker*
-(
-state === "thinking"
-?
-1.8
-:
-.7
-);
-
-
-neuralCtx.fillStyle =
-`rgba(${r},${g},${b},${n.alpha*.28})`;
-
-neuralCtx.beginPath();
-
-neuralCtx.arc(
-n.x,
-n.y,
-size*4,
-0,
-Math.PI*2
-);
-
-neuralCtx.fill();
-
-
-neuralCtx.fillStyle =
-`rgba(255,255,255,${n.alpha})`;
-
-neuralCtx.beginPath();
-
-neuralCtx.arc(
-n.x,
-n.y,
-size,
-0,
-Math.PI*2
-);
-
-neuralCtx.fill();
-
-});
-
-
-const core =
-5+
-pulse*2+
-energy*2;
-
-
-neuralCtx.fillStyle =
-`rgba(${r},${g},${b},.38)`;
-
-neuralCtx.beginPath();
-
-neuralCtx.arc(
-neuralCx,
-neuralCy,
-core*5,
-0,
-Math.PI*2
-);
-
-neuralCtx.fill();
-
-
-neuralCtx.fillStyle =
-"#fff";
-
-neuralCtx.beginPath();
-
-neuralCtx.arc(
-neuralCx,
-neuralCy,
-core,
-0,
-Math.PI*2
-);
-
-neuralCtx.fill();
+    neuralCtx.fill();
 
 }
 
@@ -2684,160 +2647,132 @@ neuralCtx.fill();
    TERRA ANIMATA
 ===================================================== */
 
-let markerPulse =
-0;
+let markerPulse = 0;
 
 
 function animateEarth(){
 
-requestAnimationFrame(
-animateEarth
-);
+    requestAnimationFrame(
+        animateEarth
+    );
 
 
-/*
-=======================================================
-ZOOM SUL LUOGO
-=======================================================
-*/
+    if(
+        mapMode &&
+        zoomAnimating
+    ){
 
-if(
-mapMode &&
-zoomAnimating
-){
-
-zoomProgress +=
-.012;
+        zoomProgress += .012;
 
 
-if(
-zoomProgress >= 1
-){
+        if(zoomProgress >= 1){
 
-zoomProgress =
-1;
+            zoomProgress = 1;
 
-zoomAnimating =
-false;
+            zoomAnimating = false;
 
-/*
-   La Terra rimane ferma.
-   Nessuna rotazione automatica.
-*/
+            controls.enabled = true;
 
-controls.enabled =
-true;
+            setState("idle");
 
-setState(
-"idle"
-);
-
-}
+        }
 
 
-const eased =
-1-
-Math.pow(
-1-zoomProgress,
-3
-);
+        const eased =
+            1 -
+            Math.pow(
+                1-zoomProgress,
+                3
+            );
 
 
-const distance =
-zoomStart+
-(
-zoomEnd-
-zoomStart
-)*
-eased;
+        const distance =
+            zoomStart
+            +
+            (
+                zoomEnd
+                -
+                zoomStart
+            )
+            *
+            eased;
 
 
-const cameraDirection =
-earthCamera.position
-.clone()
-.normalize();
+        const cameraDirection =
+            earthCamera.position
+                .clone()
+                .normalize();
 
 
-earthCamera.position.copy(
-cameraDirection.multiplyScalar(
-distance
-)
-);
+        earthCamera.position.copy(
+
+            cameraDirection
+                .multiplyScalar(
+                    distance
+                )
+
+        );
 
 
-earthGroup.quaternion.slerp(
-targetQuaternion,
-.045
-);
+        earthGroup.quaternion.slerp(
+            targetQuaternion,
+            .045
+        );
 
-}
-
-
-/*
-=======================================================
-IMPORTANTE:
-NESSUNA ROTAZIONE AUTOMATICA
-=======================================================
-
-La Terra non gira più da sola quando
-viene mostrata la mappa o un luogo.
-
-L'utente può comunque ruotarla
-manualmente trascinandola.
-*/
+    }
 
 
-controls.update();
+    controls.update();
 
 
-/* =====================================================
-   MARKER
-===================================================== */
+    if(marker.visible){
 
-if(marker.visible){
-
-markerPulse +=
-.08;
+        markerPulse += .08;
 
 
-const scale =
-1+
-Math.sin(
-markerPulse
-)*.3;
+        const scale =
+            1
+            +
+            Math.sin(
+                markerPulse
+            )
+            *
+            .3;
 
 
-marker.scale.set(
-scale,
-scale,
-scale
-);
+        marker.scale.set(
+            scale,
+            scale,
+            scale
+        );
 
 
-markerRing.visible =
-true;
-
-markerRing.position.copy(
-marker.position
-);
-
-markerRing.lookAt(
-earthCamera.position
-);
-
-markerRing.scale.set(
-scale,
-scale,
-scale
-);
-
-}
+        markerRing.visible = true;
 
 
-earthRenderer.render(
-earthScene,
-earthCamera
-);
+        markerRing.position.copy(
+            marker.position
+        );
+
+
+        markerRing.lookAt(
+            earthCamera.position
+        );
+
+
+        markerRing.scale.set(
+            scale,
+            scale,
+            scale
+        );
+
+    }
+
+
+    earthRenderer.render(
+        earthScene,
+        earthCamera
+    );
 
 }
 
@@ -2848,94 +2783,83 @@ earthCamera
 
 function localCommand(text){
 
-const t =
-text.toLowerCase();
+    const t =
+        text.toLowerCase();
 
 
-if(
+    if(
+        t.includes("che ore sono") ||
+        t.includes("che ora è") ||
+        t.includes("che ora e")
+    ){
 
-t.includes("che ore sono") ||
-t.includes("che ora è") ||
-t.includes("che ora e")
+        return(
+            "Sono le "
+            +
+            new Date()
+                .toLocaleTimeString(
+                    "it-IT",
+                    {
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    }
+                )
+            +
+            "."
+        );
 
-){
-
-return (
-
-"Sono le " +
-
-new Date()
-.toLocaleTimeString(
-"it-IT",
-{
-hour:"2-digit",
-minute:"2-digit"
-}
-) +
-
-"."
-
-);
-
-}
+    }
 
 
-if(
+    if(
+        t.includes("che giorno è") ||
+        t.includes("che giorno e")
+    ){
 
-t.includes("che giorno è") ||
-t.includes("che giorno e")
+        return(
 
-){
+            "Oggi è "
+            +
+            new Date()
+                .toLocaleDateString(
+                    "it-IT",
+                    {
+                        weekday:"long",
+                        day:"numeric",
+                        month:"long",
+                        year:"numeric"
+                    }
+                )
+            +
+            "."
 
-return (
+        );
 
-"Oggi è " +
-
-new Date()
-.toLocaleDateString(
-"it-IT",
-{
-weekday:"long",
-day:"numeric",
-month:"long",
-year:"numeric"
-}
-) +
-
-"."
-
-);
-
-
-}
+    }
 
 
-if(
+    if(
+        t.includes("mia posizione") ||
+        t.includes("dove sono")
+    ){
 
-t.includes("mia posizione") ||
-t.includes("dove sono")
+        showMyLocation();
 
-){
+        return "__LOCATION__";
 
-showMyLocation();
-
-return "__LOCATION__";
-
-}
+    }
 
 
-if(
-isMapCommand(t)
-){
+    if(isMapCommand(t)){
 
-openMap();
+        openMap();
 
-return "Mappa terrestre attivata.";
+        return "Mappa terrestre attivata.";
 
-}
+    }
 
 
-return null;
+    return null;
 
 }
 
@@ -2945,361 +2869,321 @@ return null;
 ===================================================== */
 
 send.onclick =
-sendMessage;
+    sendMessage;
 
 
 input.addEventListener(
-"keydown",
-event => {
+    "keydown",
+    event => {
 
-if(
-event.key === "Enter"
-){
+        if(event.key === "Enter"){
 
-event.preventDefault();
+            event.preventDefault();
 
-/*
-   Nasconde immediatamente
-   la tastiera del telefono.
-*/
+            input.blur();
 
-input.blur();
+            sendMessage();
 
-sendMessage();
+        }
 
-}
-
-});
+    }
+);
 
 
 async function sendMessage(){
 
-const text =
-input.value.trim();
+    const text =
+        input.value.trim();
 
 
-if(
-!text ||
-busy
-){
+    if(
+        !text ||
+        busy
+    ){
 
-return;
+        return;
 
-}
+    }
 
 
-busy =
-true;
+    busy = true;
 
+    input.blur();
 
-/*
-   Nasconde la tastiera anche
-   quando si usa il pulsante INVIA.
-*/
+    input.value = "";
 
-input.blur();
 
+    addMessage(
+        "user",
+        text
+    );
 
-input.value = "";
 
+    remember(
+        "user",
+        text
+    );
 
-addMessage(
-"user",
-text
-);
 
+    const place =
+        extractLocation(text);
 
-remember(
-"user",
-text
-);
 
+    if(place){
 
-/* =====================================================
-   LUOGO
-===================================================== */
+        openMap();
 
-const place =
-extractLocation(text);
 
+        const answer =
+            addMessage(
+                "jarvis",
+                "Localizzazione di "
+                +
+                place
+                +
+                "..."
+            );
 
-if(place){
 
-openMap();
+        const result =
+            await searchPlace(
+                place
+            );
 
 
-const answer =
-addMessage(
-"jarvis",
-"Localizzazione di " +
-place +
-"..."
-);
+        if(result){
 
+            answer.textContent =
+                "Ho individuato "
+                +
+                result.name
+                +
+                ".";
 
-const result =
-await searchPlace(place);
 
+            remember(
+                "assistant",
+                answer.textContent
+            );
 
-if(result){
+        }
 
-answer.textContent =
-"Ho individuato " +
-result.name +
-".";
 
+        finish();
 
-remember(
-"assistant",
-answer.textContent
-);
+        return;
 
-}
+    }
 
 
-finish();
+    const local =
+        localCommand(text);
 
-return;
 
-}
+    if(local){
 
+        if(
+            local !==
+            "__LOCATION__"
+        ){
 
-/* =====================================================
-   COMANDI LOCALI
-===================================================== */
+            addMessage(
+                "jarvis",
+                local
+            );
 
-const local =
-localCommand(text);
 
+            remember(
+                "assistant",
+                local
+            );
 
-if(local){
 
-if(
-local !== "__LOCATION__"
-){
+            if(conversationMode){
 
-addMessage(
-"jarvis",
-local
-);
+                speak(local);
 
-remember(
-"assistant",
-local
-);
+            }else{
 
+                setState("idle");
 
-if(
-conversationMode
-){
+            }
 
-speak(local);
+        }
 
-}else{
+        finish();
 
-setState(
-"idle"
-);
+        return;
 
-}
+    }
 
-}
 
+    input.disabled = true;
 
-finish();
+    send.disabled = true;
 
-return;
+    mic.disabled = true;
 
-}
+    conversation.disabled = true;
 
 
-/* =====================================================
-   AI
-===================================================== */
+    setState("thinking");
 
-input.disabled =
-true;
 
-send.disabled =
-true;
+    const answer =
+        addMessage(
+            "jarvis",
+            "Analisi del Neural Core..."
+        );
 
-mic.disabled =
-true;
 
-conversation.disabled =
-true;
+    const recentMemory =
+        memory.slice(-24);
 
 
-setState(
-"thinking"
-);
+    const intelligentContext = {
 
+        assistantName:"JARVIS",
 
-const answer =
-addMessage(
-"jarvis",
-"Analisi del Neural Core..."
-);
+        language:"it-IT",
 
+        currentTime:
+            new Date()
+                .toLocaleTimeString(
+                    "it-IT"
+                ),
 
-/* =====================================================
-   CONTESTO
-===================================================== */
+        currentDate:
+            new Date()
+                .toLocaleDateString(
+                    "it-IT"
+                ),
 
-const recentMemory =
-memory.slice(-24);
+        mapMode:mapMode,
 
+        recentConversation:
+            recentMemory,
 
-const intelligentContext = {
+        instructions:[
 
-assistantName:
-"JARVIS",
+            "Rispondi sempre in italiano salvo richiesta diversa.",
 
-language:
-"it-IT",
+            "Comprendi il significato della domanda e non limitarti a ripetere parole chiave.",
 
-currentTime:
-new Date()
-.toLocaleTimeString(
-"it-IT"
-),
+            "Se hai abbastanza informazioni, rispondi direttamente.",
 
-currentDate:
-new Date()
-.toLocaleDateString(
-"it-IT"
-),
+            "Se una domanda è ambigua, fai una domanda breve per capire meglio.",
 
-mapMode:
-mapMode,
+            "Usa la memoria della conversazione quando è utile.",
 
-recentConversation:
-recentMemory,
+            "Non inventare informazioni quando non sei sicuro.",
 
-instructions:[
+            "Spiega le cose in modo naturale e intelligente.",
 
-"Rispondi sempre in italiano salvo richiesta diversa.",
+            "Per domande complesse, ragiona per passaggi ma presenta una risposta chiara.",
 
-"Comprendi il significato della domanda e non limitarti a ripetere parole chiave.",
+            "Non dire continuamente che sei un'intelligenza artificiale.",
 
-"Se hai abbastanza informazioni, rispondi direttamente.",
+            "Comportati come un assistente personale chiamato JARVIS."
 
-"Se una domanda è ambigua, fai una domanda breve per capire meglio.",
+        ]
 
-"Usa la memoria della conversazione quando è utile.",
+    };
 
-"Non inventare informazioni quando non sei sicuro.",
 
-"Spiega le cose in modo naturale e intelligente.",
+    try{
 
-"Per domande complesse, ragiona per passaggi ma presenta una risposta chiara.",
+        const response =
+            await fetch(
+                API,
+                {
 
-"Non dire continuamente che sei un'intelligenza artificiale.",
+                    method:"POST",
 
-"Comportati come un assistente personale chiamato JARVIS."
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-]
+                    body:
+                        JSON.stringify({
 
-};
+                            message:text,
 
+                            memory:
+                                recentMemory,
 
-try{
+                            context:
+                                intelligentContext
 
-const response =
-await fetch(
-API,
-{
+                        })
 
-method:"POST",
+                }
+            );
 
-headers:{
-"Content-Type":
-"application/json"
-},
 
-body:JSON.stringify({
+        if(!response.ok){
 
-message:text,
+            throw new Error(
+                "HTTP "
+                +
+                response.status
+            );
 
-memory:
-recentMemory,
+        }
 
-context:
-intelligentContext
 
-})
+        const data =
+            await response.json();
 
-}
-);
 
+        if(!data.reply){
 
-if(!response.ok){
+            throw new Error(
+                "Risposta mancante"
+            );
 
-throw new Error(
-"HTTP " +
-response.status
-);
+        }
 
-}
 
+        answer.textContent =
+            data.reply;
 
-const data =
-await response.json();
 
+        remember(
+            "assistant",
+            data.reply
+        );
 
-if(!data.reply){
 
-throw new Error(
-"Risposta mancante"
-);
+        if(conversationMode){
 
-}
+            speak(
+                data.reply
+            );
 
+        }else{
 
-answer.textContent =
-data.reply;
+            setState("idle");
 
+        }
 
-remember(
-"assistant",
-data.reply
-);
 
+    }catch(error){
 
-if(
-conversationMode
-){
+        console.error(error);
 
-speak(
-data.reply
-);
 
-}else{
+        answer.textContent =
+            "Neural Core non raggiungibile. Controlla la connessione o il server AI.";
 
-setState(
-"idle"
-);
 
-}
+        setState("idle");
 
+    }
 
-}catch(error){
 
-console.error(error);
-
-
-answer.textContent =
-"Neural Core non raggiungibile. Controlla la connessione o il server AI.";
-
-
-setState(
-"idle"
-);
-
-}
-
-
-finish();
+    finish();
 
 }
 
@@ -3310,26 +3194,15 @@ finish();
 
 function finish(){
 
-busy =
-false;
+    busy = false;
 
-input.disabled =
-false;
+    input.disabled = false;
 
-send.disabled =
-false;
+    send.disabled = false;
 
-mic.disabled =
-false;
+    mic.disabled = false;
 
-conversation.disabled =
-false;
-
-/*
-   NON facciamo più input.focus()
-   perché su telefono riaprirebbe
-   automaticamente la tastiera.
-*/
+    conversation.disabled = false;
 
 }
 
@@ -3343,200 +3216,118 @@ let voices = [];
 
 function loadVoices(){
 
-if(
-!("speechSynthesis" in window)
-){
+    if(
+        !("speechSynthesis" in window)
+    ){
 
-return;
+        return;
 
-}
-
-
-voices =
-speechSynthesis.getVoices();
+    }
 
 
-voiceSelect.innerHTML =
-"";
-
-
-voices.forEach(
-(voice,index) => {
-
-const option =
-document.createElement(
-"option"
-);
-
-option.value =
-index;
-
-option.textContent =
-voice.name +
-" — " +
-voice.lang;
-
-voiceSelect.appendChild(
-option
-);
-
-});
-
-
-const saved =
-localStorage.getItem(
-"jarvis_voice"
-);
-
-
-if(
-saved !== null &&
-voices[saved]
-){
-
-voiceSelect.value =
-saved;
-
-}
+    voices =
+        speechSynthesis.getVoices();
 
 }
 
 
 if(
-"speechSynthesis" in window
+    "speechSynthesis" in window
 ){
 
-speechSynthesis.onvoiceschanged =
-loadVoices;
+    speechSynthesis.onvoiceschanged =
+        loadVoices;
 
-loadVoices();
+    loadVoices();
 
 }
 
 
-voiceButton.onclick =
-() => {
-
-voicePanel.style.display =
-voicePanel.style.display === "block"
-?
-"none"
-:
-"block";
-
-};
-
-
-voiceSelect.onchange =
-() => {
-
-localStorage.setItem(
-"jarvis_voice",
-voiceSelect.value
-);
-
-};
-
+/* =====================================================
+   SPEAK
+===================================================== */
 
 function speak(text){
 
-if(
-!("speechSynthesis" in window)
-){
+    if(
+        !("speechSynthesis" in window)
+    ){
 
-setState(
-"idle"
-);
+        setState("idle");
 
-return;
+        return;
 
-}
+    }
 
 
-speechSynthesis.cancel();
+    speechSynthesis.cancel();
 
 
-const utterance =
-new SpeechSynthesisUtterance(
-text
-);
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
 
 
-utterance.lang =
-"it-IT";
+    utterance.lang =
+        "it-IT";
 
-utterance.rate =
-.88;
+    utterance.rate =
+        .88;
 
-utterance.pitch =
-.65;
+    utterance.pitch =
+        .65;
 
-utterance.volume =
-1;
-
-
-const selected =
-parseInt(
-voiceSelect.value
-);
+    utterance.volume =
+        1;
 
 
-if(
-voices[selected]
-){
-
-utterance.voice =
-voices[selected];
-
-}
+    speechSynthesis.speak(
+        utterance
+    );
 
 
-utterance.onstart =
-() => {
+    utterance.onstart =
+        () => {
 
-setState(
-"speaking"
-);
+            setState(
+                "speaking"
+            );
 
-};
-
-
-utterance.onend =
-() => {
-
-setState(
-"idle"
-);
+        };
 
 
-if(
-conversationMode &&
-wakeMode
-){
+    utterance.onend =
+        () => {
 
-setTimeout(
-startWakeWord,
-600
-);
-
-}
-
-};
+            setState(
+                "idle"
+            );
 
 
-utterance.onerror =
-() => {
+            if(
+                conversationMode &&
+                wakeMode
+            ){
 
-setState(
-"idle"
-);
+                setTimeout(
+                    startWakeWord,
+                    600
+                );
 
-};
+            }
+
+        };
 
 
-speechSynthesis.speak(
-utterance
-);
+    utterance.onerror =
+        () => {
+
+            setState(
+                "idle"
+            );
+
+        };
 
 }
 
@@ -3546,67 +3337,66 @@ utterance
 ===================================================== */
 
 conversation.onclick =
-() => {
+    () => {
 
-conversationMode =
-!conversationMode;
-
-
-if(conversationMode){
-
-wakeMode =
-true;
+        conversationMode =
+            !conversationMode;
 
 
-conversation.classList.add(
-"active"
-);
+        if(conversationMode){
 
-conversation.textContent =
-"🔵";
+            wakeMode = true;
 
 
-setState(
-"listening"
-);
+            conversation.classList.add(
+                "active"
+            );
+
+            conversation.textContent =
+                "🔵";
 
 
-startWakeWord();
+            setState(
+                "listening"
+            );
 
 
-}else{
-
-wakeMode =
-false;
+            startWakeWord();
 
 
-conversation.classList.remove(
-"active"
-);
+        }else{
 
-conversation.textContent =
-"🔊";
+            wakeMode = false;
 
 
-stopWakeWord();
+            conversation.classList.remove(
+                "active"
+            );
 
 
-if(
-speechSynthesis
-){
-
-speechSynthesis.cancel();
-
-}
+            conversation.textContent =
+                "🔊";
 
 
-setState(
-"idle"
-);
+            stopWakeWord();
 
-}
 
-};
+            if(
+                speechSynthesis
+            ){
+
+                speechSynthesis.cancel();
+
+            }
+
+
+            setState(
+                "idle"
+            );
+
+        }
+
+    };
 
 
 /* =====================================================
@@ -3614,196 +3404,197 @@ setState(
 ===================================================== */
 
 const Recognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
 
 if(Recognition){
 
-recognition =
-new Recognition();
+    recognition =
+        new Recognition();
 
 
-recognition.lang =
-"it-IT";
+    recognition.lang =
+        "it-IT";
 
-recognition.continuous =
-false;
+    recognition.continuous =
+        false;
 
-recognition.interimResults =
-true;
+    recognition.interimResults =
+        true;
 
 
-recognition.onstart =
-() => {
+    recognition.onstart =
+        () => {
 
-listening =
-true;
+            listening = true;
 
 
-mic.classList.add(
-"active"
-);
+            mic.classList.add(
+                "active"
+            );
 
-mic.textContent =
-"■";
 
+            mic.textContent =
+                "■";
 
-input.placeholder =
-"JARVIS ti sta ascoltando...";
 
+            input.placeholder =
+                "JARVIS ti sta ascoltando...";
 
-setState(
-"listening"
-);
 
-};
+            setState(
+                "listening"
+            );
 
+        };
 
-recognition.onresult =
-event => {
 
-let transcript =
-"";
+    recognition.onresult =
+        event => {
 
+            let transcript = "";
 
-for(
-let i=event.resultIndex;
-i<event.results.length;
-i++
-){
 
-transcript +=
-event.results[i][0].transcript;
+            for(
+                let i=event.resultIndex;
+                i<event.results.length;
+                i++
+            ){
 
-}
+                transcript +=
+                    event.results[i][0]
+                        .transcript;
 
+            }
 
-input.value =
-transcript;
 
+            input.value =
+                transcript;
 
-const last =
-event.results[
-event.results.length-1
-];
 
+            const last =
+                event.results[
+                    event.results.length-1
+                ];
 
-if(last.isFinal){
 
-setTimeout(
-() => {
+            if(last.isFinal){
 
-if(
-input.value.trim()
-){
+                setTimeout(
+                    () => {
 
-input.blur();
+                        if(
+                            input.value.trim()
+                        ){
 
-sendMessage();
+                            input.blur();
 
-}
+                            sendMessage();
 
-},
-250
-);
+                        }
 
-}
+                    },
+                    250
+                );
 
-};
+            }
 
+        };
 
-recognition.onerror =
-event => {
 
-console.log(
-"Speech recognition:",
-event.error
-);
+    recognition.onerror =
+        event => {
 
-};
+            console.log(
+                "Speech recognition:",
+                event.error
+            );
 
+        };
 
-recognition.onend =
-() => {
 
-listening =
-false;
+    recognition.onend =
+        () => {
 
+            listening = false;
 
-mic.classList.remove(
-"active"
-);
 
-mic.textContent =
-"🎙";
+            mic.classList.remove(
+                "active"
+            );
 
 
-input.placeholder =
-"Comunica con JARVIS...";
+            mic.textContent =
+                "🎙";
 
 
-if(
-state === "listening"
-){
+            input.placeholder =
+                "Comunica con JARVIS...";
 
-setState(
-"idle"
-);
 
-}
+            if(
+                state ===
+                "listening"
+            ){
 
-};
+                setState(
+                    "idle"
+                );
 
+            }
 
-mic.onclick =
-() => {
+        };
 
-if(busy)
-return;
 
+    mic.onclick =
+        () => {
 
-conversationMode =
-true;
+            if(busy) return;
 
-wakeMode =
-false;
 
+            conversationMode =
+                true;
 
-conversation.classList.add(
-"active"
-);
+            wakeMode =
+                false;
 
-conversation.textContent =
-"🔵";
 
+            conversation.classList.add(
+                "active"
+            );
 
-if(listening){
 
-recognition.stop();
+            conversation.textContent =
+                "🔵";
 
-return;
 
-}
+            if(listening){
 
+                recognition.stop();
 
-try{
+                return;
 
-recognition.start();
+            }
 
-}catch(error){
 
-console.log(error);
+            try{
 
-}
+                recognition.start();
 
-};
+            }catch(error){
+
+                console.log(error);
+
+            }
+
+        };
 
 
 }else{
 
-mic.disabled =
-true;
+    mic.disabled =
+        true;
 
 }
 
@@ -3814,197 +3605,203 @@ true;
 
 function startWakeWord(){
 
-if(
+    if(
 
-!Recognition ||
-!conversationMode ||
-!wakeMode ||
-busy ||
-listening ||
-wakeRecognition
+        !Recognition ||
 
-){
+        !conversationMode ||
 
-return;
+        !wakeMode ||
 
-}
+        busy ||
 
+        listening ||
 
-wakeRecognition =
-new Recognition();
+        wakeRecognition
 
+    ){
 
-wakeRecognition.lang =
-"it-IT";
+        return;
 
-wakeRecognition.continuous =
-true;
-
-wakeRecognition.interimResults =
-true;
+    }
 
 
-wakeRecognition.onresult =
-event => {
-
-for(
-let i=event.resultIndex;
-i<event.results.length;
-i++
-){
-
-const text =
-event.results[i][0]
-.transcript
-.toLowerCase();
+    wakeRecognition =
+        new Recognition();
 
 
-if(
-text.includes("jarvis")
-){
+    wakeRecognition.lang =
+        "it-IT";
 
-try{
+    wakeRecognition.continuous =
+        true;
 
-wakeRecognition.stop();
-
-}catch{}
-
-
-wakeRecognition =
-null;
+    wakeRecognition.interimResults =
+        true;
 
 
-activateJarvis();
+    wakeRecognition.onresult =
+        event => {
 
-return;
+            for(
+                let i=event.resultIndex;
+                i<event.results.length;
+                i++
+            ){
 
-}
-
-}
-
-};
-
-
-wakeRecognition.onerror =
-() => {
-
-wakeRecognition =
-null;
+                const text =
+                    event.results[i][0]
+                        .transcript
+                        .toLowerCase();
 
 
-if(
+                if(
+                    text.includes(
+                        "jarvis"
+                    )
+                ){
 
-conversationMode &&
-wakeMode &&
-!busy &&
-!listening
+                    try{
 
-){
+                        wakeRecognition.stop();
 
-setTimeout(
-startWakeWord,
-1200
-);
-
-}
-
-};
+                    }catch{}
 
 
-wakeRecognition.onend =
-() => {
-
-wakeRecognition =
-null;
+                    wakeRecognition =
+                        null;
 
 
-if(
-
-conversationMode &&
-wakeMode &&
-!busy &&
-!listening
-
-){
-
-setTimeout(
-startWakeWord,
-600
-);
-
-}
-
-};
+                    activateJarvis();
 
 
-try{
+                    return;
 
-wakeRecognition.start();
+                }
 
-}catch{
+            }
 
-wakeRecognition =
-null;
+        };
 
-}
+
+    wakeRecognition.onerror =
+        () => {
+
+            wakeRecognition =
+                null;
+
+
+            if(
+
+                conversationMode &&
+                wakeMode &&
+                !busy &&
+                !listening
+
+            ){
+
+                setTimeout(
+                    startWakeWord,
+                    1200
+                );
+
+            }
+
+        };
+
+
+    wakeRecognition.onend =
+        () => {
+
+            wakeRecognition =
+                null;
+
+
+            if(
+
+                conversationMode &&
+                wakeMode &&
+                !busy &&
+                !listening
+
+            ){
+
+                setTimeout(
+                    startWakeWord,
+                    600
+                );
+
+            }
+
+        };
+
+
+    try{
+
+        wakeRecognition.start();
+
+    }catch{
+
+        wakeRecognition =
+            null;
+
+    }
 
 }
 
 
 function stopWakeWord(){
 
-if(
-wakeRecognition
-){
+    if(wakeRecognition){
 
-try{
+        try{
 
-wakeRecognition.stop();
+            wakeRecognition.stop();
 
-}catch{}
+        }catch{}
 
 
-wakeRecognition =
-null;
+        wakeRecognition =
+            null;
 
-}
+    }
 
 }
 
 
 function activateJarvis(){
 
-if(
-busy ||
-listening
-){
+    if(
+        busy ||
+        listening
+    ){
 
-return;
+        return;
 
-}
-
-
-setState(
-"listening"
-);
+    }
 
 
-input.placeholder =
-"JARVIS ti ascolta...";
+    setState(
+        "listening"
+    );
 
 
-setTimeout(
-() => {
+    input.placeholder =
+        "JARVIS ti ascolta...";
 
-try{
 
-recognition.start();
+    setTimeout(
+        () => {
 
-}catch{}
+            try{
 
-},
-250
-);
+                recognition.start();
+
+            }catch{}
+
+        },
+        250
+    );
 
 }
 
@@ -4014,26 +3811,26 @@ recognition.start();
 ===================================================== */
 
 window.addEventListener(
-"resize",
-() => {
+    "resize",
+    () => {
 
-resizeNeural();
-
-
-earthCamera.aspect =
-innerWidth /
-innerHeight;
+        resizeNeural();
 
 
-earthCamera.updateProjectionMatrix();
+        earthCamera.aspect =
+            innerWidth /
+            innerHeight;
 
 
-earthRenderer.setSize(
-innerWidth,
-innerHeight
-);
+        earthCamera.updateProjectionMatrix();
 
-}
+
+        earthRenderer.setSize(
+            innerWidth,
+            innerHeight
+        );
+
+    }
 );
 
 
@@ -4049,24 +3846,17 @@ animateEarth();
 
 
 setTimeout(
-() => {
+    () => {
 
-document
-.getElementById("loading")
-.classList.add(
-"hidden"
+        document
+            .getElementById("loading")
+            .classList.add(
+                "hidden"
+            );
+
+    },
+    800
 );
-
-},
-800
-);
-
-
-/*
-   NON facciamo input.focus()
-   all'avvio: sui telefoni può aprire
-   la tastiera automaticamente.
-*/
 
 
 /* =====================================================
@@ -4075,20 +3865,19 @@ document
 
 window.JARVIS_EARTH = {
 
-openMap,
+    openMap,
 
-closeMap,
+    closeMap,
 
-searchPlace,
+    searchPlace,
 
-showMyLocation,
+    showMyLocation,
 
-focusEarth
+    focusEarth
 
 };
 
 </script>
 
 </body>
-
 </html>

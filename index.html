@@ -2,6 +2,7 @@
 <html lang="it">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
@@ -27,6 +28,7 @@ body{
     touch-action:none;
 }
 
+
 /* =====================================================
    LOADING
 ===================================================== */
@@ -35,7 +37,6 @@ body{
     position:fixed;
     inset:0;
     z-index:1000;
-
     background:#000;
 
     display:flex;
@@ -44,7 +45,6 @@ body{
 
     font:11px monospace;
     letter-spacing:4px;
-
     color:#ffd000;
 
     transition:opacity 1s ease;
@@ -119,13 +119,13 @@ body.mapMode #earthContainer{
 
 
 /* =====================================================
-   HEADER MINIMAL
+   HEADER
 ===================================================== */
 
 .header{
     position:fixed;
 
-    top:22px;
+    top:18px;
     left:0;
 
     width:100%;
@@ -148,18 +148,15 @@ body.mapMode #earthContainer{
     text-shadow:
         0 0 15px #ffd000,
         0 0 35px rgba(255,200,0,.35);
-
-    transition:text-shadow .8s ease;
 }
 
 .status{
-    margin-top:7px;
+    margin-top:6px;
 
     font:9px monospace;
-
     letter-spacing:3px;
 
-    opacity:.55;
+    opacity:.75;
 }
 
 #dot{
@@ -167,8 +164,6 @@ body.mapMode #earthContainer{
 
     text-shadow:
         0 0 10px currentColor;
-
-    transition:color .5s ease;
 }
 
 body.mapMode .header h1{
@@ -179,41 +174,49 @@ body.mapMode .header h1{
 
 
 /* =====================================================
-   OROLOGIO
+   CLOCK — MINIMAL
 ===================================================== */
 
 #clockContainer{
     position:fixed;
 
-    top:24px;
-    right:25px;
+    top:18px;
+    right:20px;
 
-    z-index:30;
+    z-index:20;
 
     text-align:right;
 
     pointer-events:none;
+
+    font-family:monospace;
 }
 
 #clock{
-    font:14px monospace;
+    font-size:15px;
+
+    color:rgba(255,255,255,.85);
 
     letter-spacing:2px;
-
-    color:rgba(255,255,255,.8);
-
-    text-shadow:
-        0 0 10px rgba(255,255,255,.15);
 }
 
 #date{
     margin-top:3px;
 
-    font:8px monospace;
-
-    letter-spacing:2px;
+    font-size:8px;
 
     color:rgba(255,255,255,.35);
+
+    letter-spacing:2px;
+}
+
+
+/* =====================================================
+   VECCHI PANNELLI NASCOSTI
+===================================================== */
+
+.panel{
+    display:none;
 }
 
 
@@ -240,11 +243,7 @@ body.mapMode .header h1{
 
     gap:9px;
 
-    padding:
-        8px
-        4px
-        8px
-        0;
+    padding:8px 4px 8px 0;
 
     scrollbar-width:none;
 
@@ -270,7 +269,6 @@ body.mapMode .header h1{
     border-radius:7px;
 
     font-size:13px;
-
     line-height:1.5;
 
     backdrop-filter:blur(12px);
@@ -297,13 +295,9 @@ body.mapMode .header h1{
 
     background:rgba(255,190,0,.08);
 
-    border:
-        1px solid
-        rgba(255,190,0,.3);
+    border:1px solid rgba(255,190,0,.3);
 
-    border-left:
-        2px solid
-        #ffd000;
+    border-left:2px solid #ffd000;
 
     color:#fff;
 }
@@ -311,16 +305,11 @@ body.mapMode .header h1{
 .jarvis{
     align-self:flex-start;
 
-    background:
-        rgba(4,9,17,.72);
+    background:rgba(4,9,17,.72);
 
-    border:
-        1px solid
-        rgba(30,140,255,.2);
+    border:1px solid rgba(30,140,255,.2);
 
-    border-left:
-        2px solid
-        #168cff;
+    border-left:2px solid #168cff;
 
     color:#dcecff;
 }
@@ -381,8 +370,7 @@ body.mapMode #mapHud{
 #coordinates{
     font-size:10px;
 
-    color:
-        rgba(180,220,255,.85);
+    color:rgba(180,220,255,.85);
 }
 
 
@@ -405,15 +393,11 @@ body.mapMode #mapHud{
 
     pointer-events:none;
 
-    padding:
-        10px 18px;
+    padding:10px 18px;
 
-    background:
-        rgba(0,10,20,.75);
+    background:rgba(0,10,20,.75);
 
-    border:
-        1px solid
-        rgba(40,160,255,.5);
+    border:1px solid rgba(40,160,255,.5);
 
     border-radius:5px;
 
@@ -424,8 +408,7 @@ body.mapMode #mapHud{
     text-align:center;
 
     box-shadow:
-        0 0 25px
-        rgba(0,130,255,.15);
+        0 0 25px rgba(0,130,255,.15);
 
     transition:
         opacity .7s ease,
@@ -466,11 +449,7 @@ body.mapMode #mapHud{
 
     transform:translateX(-50%);
 
-    width:
-        min(
-            700px,
-            calc(100% - 40px)
-        );
+    width:min(700px,calc(100% - 40px));
 }
 
 .inputBox{
@@ -480,18 +459,14 @@ body.mapMode #mapHud{
 
     padding:5px;
 
-    background:
-        rgba(5,7,10,.96);
+    background:rgba(5,7,10,.96);
 
-    border:
-        1px solid
-        rgba(255,190,0,.4);
+    border:1px solid rgba(255,190,0,.4);
 
     border-radius:8px;
 
     box-shadow:
-        0 0 25px
-        rgba(255,190,0,.06);
+        0 0 25px rgba(255,190,0,.06);
 }
 
 input{
@@ -501,8 +476,7 @@ input{
 
     height:44px;
 
-    padding:
-        0 14px;
+    padding:0 14px;
 
     background:transparent;
 
@@ -516,8 +490,7 @@ input{
 }
 
 input::placeholder{
-    color:
-        rgba(255,255,255,.3);
+    color:rgba(255,255,255,.3);
 }
 
 button{
@@ -525,12 +498,9 @@ button{
 
     border-radius:5px;
 
-    border:
-        1px solid
-        rgba(255,190,0,.5);
+    border:1px solid rgba(255,190,0,.5);
 
-    background:
-        rgba(255,190,0,.1);
+    background:rgba(255,190,0,.1);
 
     color:#ffd000;
 
@@ -571,20 +541,21 @@ button:hover{
 
 
 /* =====================================================
-   MAP BUTTON
+   VOICE SETTINGS NASCOSTE
+===================================================== */
+
+#voiceButton,
+#voicePanel{
+    display:none !important;
+}
+
+
+/* =====================================================
+   MAP BUTTON NASCOSTO
 ===================================================== */
 
 #mapButton{
-    position:fixed;
-
-    z-index:50;
-
-    left:20px;
-    bottom:18px;
-
-    width:48px;
-
-    font-size:16px;
+    display:none !important;
 }
 
 
@@ -663,12 +634,12 @@ body.mapMode #mapCrosshair{
     }
 
     #clockContainer{
-        top:17px;
-        right:15px;
+        top:15px;
+        right:12px;
     }
 
     #clock{
-        font-size:11px;
+        font-size:13px;
     }
 
     #date{
@@ -704,13 +675,7 @@ body.mapMode #mapCrosshair{
     }
 
     .inputArea{
-        width:
-            calc(100% - 20px);
-    }
-
-    #mapButton{
-        left:10px;
-        bottom:18px;
+        width:calc(100% - 20px);
     }
 
     #locationInfo{
@@ -741,15 +706,6 @@ body.mapMode #mapCrosshair{
         font-size:13px;
     }
 
-    #clockContainer{
-        right:10px;
-    }
-
-    .header h1{
-        font-size:18px;
-        letter-spacing:6px;
-    }
-
 }
 
 </style>
@@ -763,7 +719,9 @@ setTimeout(function(){
         document.getElementById("loading");
 
     if(loading){
+
         loading.classList.add("hidden");
+
     }
 
 },1800);
@@ -813,7 +771,7 @@ setTimeout(function(){
 
 
 <!-- =====================================================
-     OROLOGIO
+     CLOCK
 ===================================================== -->
 
 <div id="clockContainer">
@@ -848,6 +806,10 @@ setTimeout(function(){
 
 <div id="mapCrosshair"></div>
 
+
+<!-- =====================================================
+     LOCATION
+===================================================== -->
 
 <div id="locationInfo">
 
@@ -917,23 +879,16 @@ setTimeout(function(){
 </div>
 
 
-<button
-    id="mapButton"
-    title="Apri mappa"
->
-    🌍
-</button>
-
+<!-- =====================================================
+     THREE.JS
+===================================================== -->
 
 <script type="importmap">
 
 {
     "imports":{
-        "three":
-        "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
-
-        "three/addons/":
-        "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+        "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+        "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
     }
 }
 
@@ -942,8 +897,7 @@ setTimeout(function(){
 
 <script type="module">
 
-import * as THREE
-from "three";
+import * as THREE from "three";
 
 import {
     OrbitControls
@@ -988,7 +942,7 @@ const chat =
     document.getElementById("chat");
 
 const stateEl =
-    document.createElement("span");
+    document.getElementById("state");
 
 const dot =
     document.getElementById("dot");
@@ -996,14 +950,14 @@ const dot =
 const statusText =
     document.getElementById("statusText");
 
+const memoryCount =
+    document.getElementById("memoryCount");
+
 const clock =
     document.getElementById("clock");
 
 const date =
     document.getElementById("date");
-
-const mapButton =
-    document.getElementById("mapButton");
 
 const coordinates =
     document.getElementById("coordinates");
@@ -1049,9 +1003,7 @@ try{
 
     memory =
         JSON.parse(
-            localStorage.getItem(
-                "jarvis_memory"
-            ) || "[]"
+            localStorage.getItem("jarvis_memory") || "[]"
         );
 
 }catch{
@@ -1076,9 +1028,11 @@ function saveMemory(){
 
 }
 
+
 function remember(role,content){
 
-    if(!content) return;
+    if(!content)
+        return;
 
     memory.push({
 
@@ -1103,19 +1057,23 @@ function setState(newState){
 
     state = newState;
 
-    if(
-        newState === "listening" ||
-        newState === "thinking" ||
-        newState === "speaking"
-    ){
+    if(dot){
 
-        dot.style.color =
-            "#168cff";
+        if(
+            newState === "listening" ||
+            newState === "thinking" ||
+            newState === "speaking"
+        ){
 
-    }else{
+            dot.style.color =
+                "#168cff";
 
-        dot.style.color =
-            "#ffd000";
+        }else{
+
+            dot.style.color =
+                "#ffd000";
+
+        }
 
     }
 
@@ -1128,7 +1086,8 @@ function setState(newState){
 
 function updateClock(){
 
-    const now = new Date();
+    const now =
+        new Date();
 
     clock.textContent =
         now.toLocaleTimeString(
@@ -1170,7 +1129,9 @@ function addMessage(type,text){
     element.textContent =
         text;
 
-    chat.appendChild(element);
+    chat.appendChild(
+        element
+    );
 
     while(
         chat.children.length > 20
@@ -1206,6 +1167,7 @@ const earthCamera =
         100
     );
 
+
 earthCamera.position.set(
     0,
     0,
@@ -1231,6 +1193,7 @@ earthRenderer.setPixelRatio(
         2
     )
 );
+
 
 earthRenderer.setSize(
     innerWidth,
@@ -1265,7 +1228,9 @@ sun.position.set(
     5
 );
 
-earthScene.add(sun);
+earthScene.add(
+    sun
+);
 
 
 /* =====================================================
@@ -1319,7 +1284,9 @@ const earth =
         earthMaterial
     );
 
-earthGroup.add(earth);
+earthGroup.add(
+    earth
+);
 
 
 /* =====================================================
@@ -1348,6 +1315,7 @@ const atmosphere =
         })
 
     );
+
 
 earthGroup.add(
     atmosphere
@@ -1381,7 +1349,10 @@ const glow =
 
     );
 
-earthGroup.add(glow);
+
+earthGroup.add(
+    glow
+);
 
 
 /* =====================================================
@@ -1405,9 +1376,13 @@ const marker =
 
     );
 
-marker.visible = false;
 
-earthGroup.add(marker);
+marker.visible =
+    false;
+
+earthGroup.add(
+    marker
+);
 
 
 const markerRing =
@@ -1433,7 +1408,9 @@ const markerRing =
 
     );
 
-markerRing.visible = false;
+
+markerRing.visible =
+    false;
 
 earthGroup.add(
     markerRing
@@ -1450,15 +1427,20 @@ const controls =
         earthCanvas
     );
 
-controls.enableDamping = true;
+controls.enableDamping =
+    true;
 
-controls.dampingFactor = .06;
+controls.dampingFactor =
+    .06;
 
-controls.enablePan = false;
+controls.enablePan =
+    false;
 
-controls.minDistance = 1.25;
+controls.minDistance =
+    1.25;
 
-controls.maxDistance = 6;
+controls.maxDistance =
+    6;
 
 
 /* =====================================================
@@ -1467,9 +1449,11 @@ controls.maxDistance = 6;
 
 function openMap(){
 
-    if(mapMode) return;
+    if(mapMode)
+        return;
 
-    mapMode = true;
+    mapMode =
+        true;
 
     document.body.classList.add(
         "mapMode"
@@ -1478,17 +1462,17 @@ function openMap(){
     statusText.textContent =
         "EARTH NAVIGATION ONLINE";
 
-    mapButton.textContent =
-        "✕";
-
-    setState("idle");
+    setState(
+        "idle"
+    );
 
 }
 
 
 function closeMap(){
 
-    mapMode = false;
+    mapMode =
+        false;
 
     document.body.classList.remove(
         "mapMode"
@@ -1497,37 +1481,24 @@ function closeMap(){
     statusText.textContent =
         "NEURAL INTERFACE ONLINE";
 
-    mapButton.textContent =
-        "🌍";
-
     locationInfo.classList.remove(
         "visible"
     );
 
-    marker.visible = false;
+    marker.visible =
+        false;
 
-    markerRing.visible = false;
+    markerRing.visible =
+        false;
 
-    zoomAnimating = false;
+    zoomAnimating =
+        false;
 
-    setState("idle");
+    setState(
+        "idle"
+    );
 
 }
-
-
-mapButton.onclick = () => {
-
-    if(mapMode){
-
-        closeMap();
-
-    }else{
-
-        openMap();
-
-    }
-
-};
 
 
 /* =====================================================
@@ -1580,15 +1551,20 @@ function extractLocation(text){
 
     ];
 
+
     const lower =
         text.toLowerCase();
+
 
     for(
         const prefix of patterns
     ){
 
         const index =
-            lower.indexOf(prefix);
+            lower.indexOf(
+                prefix
+            );
+
 
         if(index !== -1){
 
@@ -1597,11 +1573,13 @@ function extractLocation(text){
                     index + prefix.length
                 ).trim();
 
+
             place =
                 place.replace(
                     /^(la|il|lo|un|una|a|ad)\s+/i,
                     ""
                 );
+
 
             if(place.length > 1){
 
@@ -1624,10 +1602,13 @@ function extractLocation(text){
 
 async function searchPlace(place){
 
-    setState("thinking");
+    setState(
+        "thinking"
+    );
 
     coordinates.textContent =
         "SEARCHING LOCATION...";
+
 
     try{
 
@@ -1636,8 +1617,10 @@ async function searchPlace(place){
             +
             encodeURIComponent(place);
 
+
         const response =
             await fetch(url);
+
 
         if(!response.ok){
 
@@ -1647,8 +1630,10 @@ async function searchPlace(place){
 
         }
 
+
         const results =
             await response.json();
+
 
         if(!results.length){
 
@@ -1658,14 +1643,22 @@ async function searchPlace(place){
 
         }
 
+
         const result =
             results[0];
 
+
         const lat =
-            parseFloat(result.lat);
+            parseFloat(
+                result.lat
+            );
+
 
         const lon =
-            parseFloat(result.lon);
+            parseFloat(
+                result.lon
+            );
+
 
         const name =
             result.display_name
@@ -1673,11 +1666,13 @@ async function searchPlace(place){
                 .slice(0,3)
                 .join(", ");
 
+
         showLocation(
             name,
             lat,
             lon
         );
+
 
         return{
             name,
@@ -1685,19 +1680,28 @@ async function searchPlace(place){
             lon
         };
 
+
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         coordinates.textContent =
             "LOCATION NOT FOUND";
 
-        setState("idle");
+
+        setState(
+            "idle"
+        );
+
 
         addMessage(
             "jarvis",
             "Non riesco a trovare questo luogo."
         );
+
 
         return null;
 
@@ -1716,14 +1720,11 @@ function formatCoordinates(
 ){
 
     const latDir =
-        lat >= 0
-            ? "N"
-            : "S";
+        lat >= 0 ? "N" : "S";
 
     const lonDir =
-        lon >= 0
-            ? "E"
-            : "W";
+        lon >= 0 ? "E" : "W";
+
 
     return(
 
@@ -1800,10 +1801,15 @@ function showMyLocation(){
 
     }
 
-    setState("thinking");
+
+    setState(
+        "thinking"
+    );
+
 
     coordinates.textContent =
         "ACQUISIZIONE POSIZIONE...";
+
 
     navigator.geolocation.getCurrentPosition(
 
@@ -1815,11 +1821,13 @@ function showMyLocation(){
             const lon =
                 position.coords.longitude;
 
+
             showLocation(
                 "La mia posizione",
                 lat,
                 lon
             );
+
 
             addMessage(
                 "jarvis",
@@ -1828,14 +1836,22 @@ function showMyLocation(){
 
         },
 
+
         error => {
 
-            console.log(error);
+            console.log(
+                error
+            );
+
 
             coordinates.textContent =
                 "POSITION UNAVAILABLE";
 
-            setState("idle");
+
+            setState(
+                "idle"
+            );
+
 
             addMessage(
                 "jarvis",
@@ -1843,6 +1859,7 @@ function showMyLocation(){
             );
 
         },
+
 
         {
 
@@ -1863,13 +1880,17 @@ function showMyLocation(){
    FOCUS TERRA
 ===================================================== */
 
-let zoomAnimating = false;
+let zoomAnimating =
+    false;
 
-let zoomProgress = 1;
+let zoomProgress =
+    1;
 
-let zoomStart = 3.3;
+let zoomStart =
+    3.3;
 
-let zoomEnd = 1.55;
+let zoomEnd =
+    1.55;
 
 let targetQuaternion =
     new THREE.Quaternion();
@@ -1884,16 +1905,14 @@ function latLonToVector3(
     const phi =
         (90-lat)
         *
-        Math.PI
-        /
-        180;
+        Math.PI/180;
+
 
     const theta =
         (lon+180)
         *
-        Math.PI
-        /
-        180;
+        Math.PI/180;
+
 
     return new THREE.Vector3(
 
@@ -1925,6 +1944,7 @@ function focusEarth(
 
     openMap();
 
+
     const target =
         latLonToVector3(
             lat,
@@ -1932,17 +1952,23 @@ function focusEarth(
             1
         );
 
+
     marker.position.copy(
         target.clone()
             .multiplyScalar(1.025)
     );
 
-    marker.visible = true;
 
-    markerRing.visible = true;
+    marker.visible =
+        true;
+
+    markerRing.visible =
+        true;
+
 
     const direction =
         target.clone().normalize();
+
 
     const front =
         new THREE.Vector3(
@@ -1951,20 +1977,25 @@ function focusEarth(
             1
         );
 
+
     targetQuaternion =
         new THREE.Quaternion();
+
 
     targetQuaternion.setFromUnitVectors(
         direction,
         front
     );
 
+
     zoomStart =
         earthCamera.position.length();
 
+
     if(zoomStart < 2){
 
-        zoomStart = 3.3;
+        zoomStart =
+            3.3;
 
         earthCamera.position.set(
             0,
@@ -1974,15 +2005,26 @@ function focusEarth(
 
     }
 
-    zoomEnd = 1.55;
 
-    zoomProgress = 0;
+    zoomEnd =
+        1.55;
 
-    zoomAnimating = true;
 
-    controls.enabled = false;
+    zoomProgress =
+        0;
 
-    setState("thinking");
+
+    zoomAnimating =
+        true;
+
+
+    controls.enabled =
+        false;
+
+
+    setState(
+        "thinking"
+    );
 
 }
 
@@ -2009,9 +2051,11 @@ let neuralRadius =
         neuralHeight
     ) * .22;
 
-let neuralRotation = 0;
+let neuralRotation =
+    0;
 
-let nodes = [];
+let nodes =
+    [];
 
 
 function resizeNeural(){
@@ -2022,11 +2066,13 @@ function resizeNeural(){
     neuralHeight =
         innerHeight;
 
+
     const dpr =
         Math.min(
             devicePixelRatio || 1,
             2
         );
+
 
     neuralCanvas.width =
         neuralWidth * dpr;
@@ -2034,11 +2080,13 @@ function resizeNeural(){
     neuralCanvas.height =
         neuralHeight * dpr;
 
+
     neuralCanvas.style.width =
         neuralWidth + "px";
 
     neuralCanvas.style.height =
         neuralHeight + "px";
+
 
     neuralCtx.setTransform(
         dpr,
@@ -2049,17 +2097,20 @@ function resizeNeural(){
         0
     );
 
+
     neuralCx =
         neuralWidth / 2;
 
     neuralCy =
         neuralHeight / 2;
 
+
     neuralRadius =
         Math.min(
             neuralWidth,
             neuralHeight
         ) * .22;
+
 
     createNeuralNodes();
 
@@ -2069,6 +2120,7 @@ function resizeNeural(){
 function createNeuralNodes(){
 
     nodes = [];
+
 
     for(
         let i=0;
@@ -2087,11 +2139,7 @@ function createNeuralNodes(){
 
             phi:
                 Math.acos(
-                    2
-                    *
-                    Math.random()
-                    -
-                    1
+                    2 * Math.random() - 1
                 ),
 
             r:
@@ -2100,17 +2148,13 @@ function createNeuralNodes(){
                 (
                     .72
                     +
-                    Math.random()
-                    *
-                    .55
+                    Math.random() * .55
                 ),
 
             size:
                 .7
                 +
-                Math.random()
-                *
-                1.8,
+                Math.random() * 1.8,
 
             phase:
                 Math.random()
@@ -2136,47 +2180,58 @@ function animateNeural(){
         animateNeural
     );
 
+
     const time =
-        performance.now()
-        /
-        1000;
+        performance.now() / 1000;
 
-    let speed = 1;
 
-    let energy = .2;
+    let speed =
+        1;
+
+    let energy =
+        .2;
+
 
     if(state === "listening"){
 
-        speed = 4;
+        speed =
+            4;
 
-        energy = 1.2;
+        energy =
+            1.2;
 
     }
+
 
     if(state === "thinking"){
 
-        speed = 7;
+        speed =
+            7;
 
-        energy = 2;
+        energy =
+            2;
 
     }
+
 
     if(state === "speaking"){
 
-        speed = 5;
+        speed =
+            5;
 
-        energy = 1.5;
+        energy =
+            1.5;
 
     }
 
+
     neuralRotation +=
-        .004
-        *
-        speed;
+        .004 * speed;
 
 
     neuralCtx.fillStyle =
         "rgba(0,0,0,.28)";
+
 
     neuralCtx.fillRect(
         0,
@@ -2188,6 +2243,7 @@ function animateNeural(){
 
     let targetColor;
 
+
     if(
         state === "listening" ||
         state === "thinking" ||
@@ -2195,21 +2251,17 @@ function animateNeural(){
     ){
 
         targetColor = {
-
             r:25,
             g:140,
             b:255
-
         };
 
     }else{
 
         targetColor = {
-
             r:255,
             g:195,
             b:0
-
         };
 
     }
@@ -2229,27 +2281,23 @@ function animateNeural(){
             targetColor.r
             -
             jarvisColor.r
-        )
-        *
-        .055;
+        ) * .055;
+
 
     jarvisColor.g +=
         (
             targetColor.g
             -
             jarvisColor.g
-        )
-        *
-        .055;
+        ) * .055;
+
 
     jarvisColor.b +=
         (
             targetColor.b
             -
             jarvisColor.b
-        )
-        *
-        .055;
+        ) * .055;
 
 
     const r =
@@ -2309,10 +2357,12 @@ function animateNeural(){
         `rgba(${r},${g},${b},.48)`
     );
 
+
     gradient.addColorStop(
         .35,
         `rgba(${r},${g},${b},.15)`
     );
+
 
     gradient.addColorStop(
         1,
@@ -2322,6 +2372,7 @@ function animateNeural(){
 
     neuralCtx.fillStyle =
         gradient;
+
 
     neuralCtx.beginPath();
 
@@ -2336,135 +2387,141 @@ function animateNeural(){
     neuralCtx.fill();
 
 
-    const projected = [];
+    const projected =
+        [];
 
 
-    nodes.forEach(n => {
+    nodes.forEach(
+        n => {
 
-        const rr =
-            n.r
-            +
-            Math.sin(
-                time*3+n.phase
-            )
-            *
-            energy
-            *
-            7;
-
-
-        let x =
-            rr
-            *
-            Math.sin(n.phi)
-            *
-            Math.cos(
-                n.theta
+            const rr =
+                n.r
                 +
-                neuralRotation
-            );
-
-
-        let y =
-            rr
-            *
-            Math.cos(n.phi);
-
-
-        let z =
-            rr
-            *
-            Math.sin(n.phi)
-            *
-            Math.sin(
-                n.theta
-                +
-                neuralRotation
-            );
-
-
-        if(state !== "idle"){
-
-            x +=
                 Math.sin(
-                    time*2+n.phase
+                    time*3+n.phase
                 )
                 *
                 energy
                 *
                 7;
 
-            y +=
+
+            let x =
+                rr
+                *
+                Math.sin(n.phi)
+                *
                 Math.cos(
-                    time*2.5+n.phase
-                )
+                    n.theta
+                    +
+                    neuralRotation
+                );
+
+
+            let y =
+                rr
                 *
-                energy
+                Math.cos(n.phi);
+
+
+            let z =
+                rr
                 *
-                7;
+                Math.sin(n.phi)
+                *
+                Math.sin(
+                    n.theta
+                    +
+                    neuralRotation
+                );
+
+
+            if(state !== "idle"){
+
+                x +=
+                    Math.sin(
+                        time*2+n.phase
+                    )
+                    *
+                    energy
+                    *
+                    7;
+
+
+                y +=
+                    Math.cos(
+                        time*2.5+n.phase
+                    )
+                    *
+                    energy
+                    *
+                    7;
+
+            }
+
+
+            const perspective =
+                430 /
+                (
+                    430 + z
+                );
+
+
+            projected.push({
+
+                x:
+                    neuralCx
+                    +
+                    x
+                    *
+                    perspective,
+
+                y:
+                    neuralCy
+                    +
+                    y
+                    *
+                    perspective,
+
+                z,
+
+                size:
+                    n.size
+                    *
+                    perspective,
+
+                alpha:
+                    Math.max(
+                        .1,
+                        Math.min(
+                            1,
+                            (
+                                z
+                                +
+                                neuralRadius
+                            )
+                            /
+                            (
+                                neuralRadius*2
+                            )
+                        )
+                    ),
+
+                phase:
+                    n.phase
+
+            });
 
         }
-
-
-        const perspective =
-            430
-            /
-            (
-                430+z
-            );
-
-
-        projected.push({
-
-            x:
-                neuralCx
-                +
-                x
-                *
-                perspective,
-
-            y:
-                neuralCy
-                +
-                y
-                *
-                perspective,
-
-            z,
-
-            size:
-                n.size
-                *
-                perspective,
-
-            alpha:
-                Math.max(
-                    .1,
-                    Math.min(
-                        1,
-                        (
-                            z
-                            +
-                            neuralRadius
-                        )
-                        /
-                        (
-                            neuralRadius*2
-                        )
-                    )
-                ),
-
-            phase:n.phase
-
-        });
-
-    });
+    );
 
 
     const maxDist =
         state === "thinking"
-            ? 110
-            : 82;
+        ?
+        110
+        :
+        82;
 
 
     for(
@@ -2504,9 +2561,7 @@ function animateNeural(){
 
                 const alpha =
                     (
-                        1
-                        -
-                        dist/maxDist
+                        1-dist/maxDist
                     )
                     *
                     .3
@@ -2516,21 +2571,26 @@ function animateNeural(){
 
                 neuralCtx.beginPath();
 
+
                 neuralCtx.moveTo(
                     a.x,
                     a.y
                 );
+
 
                 neuralCtx.lineTo(
                     c.x,
                     c.y
                 );
 
+
                 neuralCtx.strokeStyle =
                     `rgba(${r},${g},${b},${alpha})`;
 
+
                 neuralCtx.lineWidth =
                     .65;
+
 
                 neuralCtx.stroke();
 
@@ -2541,64 +2601,74 @@ function animateNeural(){
     }
 
 
-    projected.forEach(n => {
+    projected.forEach(
+        n => {
 
-        const flicker =
-            (
-                Math.sin(
-                    time*7+n.phase
+            const flicker =
+                (
+                    Math.sin(
+                        time*7+n.phase
+                    )
+                    +
+                    1
                 )
+                /
+                2;
+
+
+            const size =
+                n.size
                 +
-                1
-            )
-            /
-            2;
+                flicker
+                *
+                (
+                    state === "thinking"
+                    ?
+                    1.8
+                    :
+                    .7
+                );
 
 
-        const size =
-            n.size
-            +
-            flicker
-            *
-            (
-                state === "thinking"
-                    ? 1.8
-                    : .7
+            neuralCtx.fillStyle =
+                `rgba(${r},${g},${b},${n.alpha*.28})`;
+
+
+            neuralCtx.beginPath();
+
+
+            neuralCtx.arc(
+                n.x,
+                n.y,
+                size*4,
+                0,
+                Math.PI*2
             );
 
 
-        neuralCtx.fillStyle =
-            `rgba(${r},${g},${b},${n.alpha*.28})`;
-
-        neuralCtx.beginPath();
-
-        neuralCtx.arc(
-            n.x,
-            n.y,
-            size*4,
-            0,
-            Math.PI*2
-        );
-
-        neuralCtx.fill();
+            neuralCtx.fill();
 
 
-        neuralCtx.fillStyle =
-            `rgba(255,255,255,${n.alpha})`;
+            neuralCtx.fillStyle =
+                `rgba(255,255,255,${n.alpha})`;
 
-        neuralCtx.beginPath();
 
-        neuralCtx.arc(
-            n.x,
-            n.y,
-            size,
-            0,
-            Math.PI*2
-        );
+            neuralCtx.beginPath();
 
-        neuralCtx.fill();
 
-    });
+            neuralCtx.arc(
+                n.x,
+                n.y,
+                size,
+                0,
+                Math.PI*2
+            );
+
+
+            neuralCtx.fill();
+
+        }
+    );
 
 
     const core =
@@ -2612,7 +2682,9 @@ function animateNeural(){
     neuralCtx.fillStyle =
         `rgba(${r},${g},${b},.38)`;
 
+
     neuralCtx.beginPath();
+
 
     neuralCtx.arc(
         neuralCx,
@@ -2622,13 +2694,16 @@ function animateNeural(){
         Math.PI*2
     );
 
+
     neuralCtx.fill();
 
 
     neuralCtx.fillStyle =
         "#fff";
 
+
     neuralCtx.beginPath();
+
 
     neuralCtx.arc(
         neuralCx,
@@ -2637,6 +2712,7 @@ function animateNeural(){
         0,
         Math.PI*2
     );
+
 
     neuralCtx.fill();
 
@@ -2647,7 +2723,8 @@ function animateNeural(){
    TERRA ANIMATA
 ===================================================== */
 
-let markerPulse = 0;
+let markerPulse =
+    0;
 
 
 function animateEarth(){
@@ -2662,18 +2739,26 @@ function animateEarth(){
         zoomAnimating
     ){
 
-        zoomProgress += .012;
+        zoomProgress +=
+            .012;
 
 
-        if(zoomProgress >= 1){
+        if(
+            zoomProgress >= 1
+        ){
 
-            zoomProgress = 1;
+            zoomProgress =
+                1;
 
-            zoomAnimating = false;
+            zoomAnimating =
+                false;
 
-            controls.enabled = true;
+            controls.enabled =
+                true;
 
-            setState("idle");
+            setState(
+                "idle"
+            );
 
         }
 
@@ -2706,10 +2791,9 @@ function animateEarth(){
 
         earthCamera.position.copy(
 
-            cameraDirection
-                .multiplyScalar(
-                    distance
-                )
+            cameraDirection.multiplyScalar(
+                distance
+            )
 
         );
 
@@ -2727,7 +2811,8 @@ function animateEarth(){
 
     if(marker.visible){
 
-        markerPulse += .08;
+        markerPulse +=
+            .08;
 
 
         const scale =
@@ -2747,7 +2832,8 @@ function animateEarth(){
         );
 
 
-        markerRing.visible = true;
+        markerRing.visible =
+            true;
 
 
         markerRing.position.copy(
@@ -2794,6 +2880,7 @@ function localCommand(text){
     ){
 
         return(
+
             "Sono le "
             +
             new Date()
@@ -2806,6 +2893,7 @@ function localCommand(text){
                 )
             +
             "."
+
         );
 
     }
@@ -2850,7 +2938,9 @@ function localCommand(text){
     }
 
 
-    if(isMapCommand(t)){
+    if(
+        isMapCommand(t)
+    ){
 
         openMap();
 
@@ -2876,7 +2966,9 @@ input.addEventListener(
     "keydown",
     event => {
 
-        if(event.key === "Enter"){
+        if(
+            event.key === "Enter"
+        ){
 
             event.preventDefault();
 
@@ -2906,11 +2998,15 @@ async function sendMessage(){
     }
 
 
-    busy = true;
+    busy =
+        true;
+
 
     input.blur();
 
-    input.value = "";
+
+    input.value =
+        "";
 
 
     addMessage(
@@ -2983,8 +3079,7 @@ async function sendMessage(){
     if(local){
 
         if(
-            local !==
-            "__LOCATION__"
+            local !== "__LOCATION__"
         ){
 
             addMessage(
@@ -2999,17 +3094,22 @@ async function sendMessage(){
             );
 
 
-            if(conversationMode){
+            if(
+                conversationMode
+            ){
 
                 speak(local);
 
             }else{
 
-                setState("idle");
+                setState(
+                    "idle"
+                );
 
             }
 
         }
+
 
         finish();
 
@@ -3018,16 +3118,22 @@ async function sendMessage(){
     }
 
 
-    input.disabled = true;
+    input.disabled =
+        true;
 
-    send.disabled = true;
+    send.disabled =
+        true;
 
-    mic.disabled = true;
+    mic.disabled =
+        true;
 
-    conversation.disabled = true;
+    conversation.disabled =
+        true;
 
 
-    setState("thinking");
+    setState(
+        "thinking"
+    );
 
 
     const answer =
@@ -3043,9 +3149,11 @@ async function sendMessage(){
 
     const intelligentContext = {
 
-        assistantName:"JARVIS",
+        assistantName:
+            "JARVIS",
 
-        language:"it-IT",
+        language:
+            "it-IT",
 
         currentTime:
             new Date()
@@ -3059,7 +3167,8 @@ async function sendMessage(){
                     "it-IT"
                 ),
 
-        mapMode:mapMode,
+        mapMode:
+            mapMode,
 
         recentConversation:
             recentMemory,
@@ -3108,7 +3217,8 @@ async function sendMessage(){
                     body:
                         JSON.stringify({
 
-                            message:text,
+                            message:
+                                text,
 
                             memory:
                                 recentMemory,
@@ -3156,7 +3266,9 @@ async function sendMessage(){
         );
 
 
-        if(conversationMode){
+        if(
+            conversationMode
+        ){
 
             speak(
                 data.reply
@@ -3164,21 +3276,27 @@ async function sendMessage(){
 
         }else{
 
-            setState("idle");
+            setState(
+                "idle"
+            );
 
         }
 
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
 
 
         answer.textContent =
             "Neural Core non raggiungibile. Controlla la connessione o il server AI.";
 
 
-        setState("idle");
+        setState(
+            "idle"
+        );
 
     }
 
@@ -3194,15 +3312,20 @@ async function sendMessage(){
 
 function finish(){
 
-    busy = false;
+    busy =
+        false;
 
-    input.disabled = false;
+    input.disabled =
+        false;
 
-    send.disabled = false;
+    send.disabled =
+        false;
 
-    mic.disabled = false;
+    mic.disabled =
+        false;
 
-    conversation.disabled = false;
+    conversation.disabled =
+        false;
 
 }
 
@@ -3211,7 +3334,8 @@ function finish(){
    VOCI
 ===================================================== */
 
-let voices = [];
+let voices =
+    [];
 
 
 function loadVoices(){
@@ -3243,17 +3367,15 @@ if(
 }
 
 
-/* =====================================================
-   SPEAK
-===================================================== */
-
 function speak(text){
 
     if(
         !("speechSynthesis" in window)
     ){
 
-        setState("idle");
+        setState(
+            "idle"
+        );
 
         return;
 
@@ -3280,11 +3402,6 @@ function speak(text){
 
     utterance.volume =
         1;
-
-
-    speechSynthesis.speak(
-        utterance
-    );
 
 
     utterance.onstart =
@@ -3329,6 +3446,11 @@ function speak(text){
 
         };
 
+
+    speechSynthesis.speak(
+        utterance
+    );
+
 }
 
 
@@ -3343,14 +3465,18 @@ conversation.onclick =
             !conversationMode;
 
 
-        if(conversationMode){
+        if(
+            conversationMode
+        ){
 
-            wakeMode = true;
+            wakeMode =
+                true;
 
 
             conversation.classList.add(
                 "active"
             );
+
 
             conversation.textContent =
                 "🔵";
@@ -3366,7 +3492,8 @@ conversation.onclick =
 
         }else{
 
-            wakeMode = false;
+            wakeMode =
+                false;
 
 
             conversation.classList.remove(
@@ -3417,8 +3544,10 @@ if(Recognition){
     recognition.lang =
         "it-IT";
 
+
     recognition.continuous =
         false;
+
 
     recognition.interimResults =
         true;
@@ -3427,7 +3556,8 @@ if(Recognition){
     recognition.onstart =
         () => {
 
-            listening = true;
+            listening =
+                true;
 
 
             mic.classList.add(
@@ -3453,7 +3583,8 @@ if(Recognition){
     recognition.onresult =
         event => {
 
-            let transcript = "";
+            let transcript =
+                "";
 
 
             for(
@@ -3479,7 +3610,9 @@ if(Recognition){
                 ];
 
 
-            if(last.isFinal){
+            if(
+                last.isFinal
+            ){
 
                 setTimeout(
                     () => {
@@ -3517,7 +3650,8 @@ if(Recognition){
     recognition.onend =
         () => {
 
-            listening = false;
+            listening =
+                false;
 
 
             mic.classList.remove(
@@ -3534,8 +3668,7 @@ if(Recognition){
 
 
             if(
-                state ===
-                "listening"
+                state === "listening"
             ){
 
                 setState(
@@ -3550,11 +3683,13 @@ if(Recognition){
     mic.onclick =
         () => {
 
-            if(busy) return;
+            if(busy)
+                return;
 
 
             conversationMode =
                 true;
+
 
             wakeMode =
                 false;
@@ -3584,7 +3719,9 @@ if(Recognition){
 
             }catch(error){
 
-                console.log(error);
+                console.log(
+                    error
+                );
 
             }
 
@@ -3606,19 +3743,12 @@ if(Recognition){
 function startWakeWord(){
 
     if(
-
         !Recognition ||
-
         !conversationMode ||
-
         !wakeMode ||
-
         busy ||
-
         listening ||
-
         wakeRecognition
-
     ){
 
         return;
@@ -3633,8 +3763,10 @@ function startWakeWord(){
     wakeRecognition.lang =
         "it-IT";
 
+
     wakeRecognition.continuous =
         true;
+
 
     wakeRecognition.interimResults =
         true;
@@ -3656,9 +3788,7 @@ function startWakeWord(){
 
 
                 if(
-                    text.includes(
-                        "jarvis"
-                    )
+                    text.includes("jarvis")
                 ){
 
                     try{
@@ -3692,12 +3822,10 @@ function startWakeWord(){
 
 
             if(
-
                 conversationMode &&
                 wakeMode &&
                 !busy &&
                 !listening
-
             ){
 
                 setTimeout(
@@ -3718,12 +3846,10 @@ function startWakeWord(){
 
 
             if(
-
                 conversationMode &&
                 wakeMode &&
                 !busy &&
                 !listening
-
             ){
 
                 setTimeout(
@@ -3759,7 +3885,6 @@ function stopWakeWord(){
             wakeRecognition.stop();
 
         }catch{}
-
 
         wakeRecognition =
             null;
@@ -3880,4 +4005,5 @@ window.JARVIS_EARTH = {
 </script>
 
 </body>
+
 </html>

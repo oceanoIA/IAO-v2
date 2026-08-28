@@ -1,37 +1,29 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+>
 
 <title>JARVIS — NEURAL CORE</title>
 
-
 <style>
-
-/* =====================================================
-   BASE
-===================================================== */
 
 *{
     box-sizing:border-box;
 }
 
 html,body{
-
     margin:0;
     width:100%;
     height:100%;
-
     overflow:hidden;
-
     background:#000;
     color:#fff;
-
     font-family:Arial,sans-serif;
 }
 
@@ -45,32 +37,22 @@ body{
 ===================================================== */
 
 #loading{
-
     position:fixed;
     inset:0;
-
     z-index:1000;
-
     background:#000;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     font:11px monospace;
-
     letter-spacing:4px;
-
     color:#ffd000;
-
     transition:opacity 1s ease;
 }
 
 #loading.hidden{
-
     opacity:0;
     pointer-events:none;
-
 }
 
 
@@ -79,13 +61,10 @@ body{
 ===================================================== */
 
 #neuralCanvas{
-
     position:fixed;
     inset:0;
-
     width:100%;
     height:100%;
-
     z-index:1;
 
     transition:
@@ -95,13 +74,9 @@ body{
 }
 
 body.mapMode #neuralCanvas{
-
     opacity:0;
-
     transform:scale(.45);
-
     filter:blur(15px);
-
     pointer-events:none;
 }
 
@@ -111,15 +86,12 @@ body.mapMode #neuralCanvas{
 ===================================================== */
 
 #earthContainer{
-
     position:fixed;
     inset:0;
-
     z-index:2;
 
     opacity:0;
     pointer-events:none;
-
     transform:scale(.55);
 
     transition:
@@ -128,20 +100,14 @@ body.mapMode #neuralCanvas{
 }
 
 body.mapMode #earthContainer{
-
     opacity:1;
-
     transform:scale(1);
-
     pointer-events:auto;
 }
 
 #earthCanvas{
-
     position:absolute;
-
     inset:0;
-
     width:100%;
     height:100%;
 }
@@ -152,29 +118,19 @@ body.mapMode #earthContainer{
 ===================================================== */
 
 .header{
-
     position:fixed;
-
     top:20px;
     left:0;
-
     width:100%;
-
     text-align:center;
-
     z-index:20;
-
     pointer-events:none;
 }
 
 .header h1{
-
     margin:0;
-
-    font-size:35px;
-
+    font-size:30px;
     font-weight:300;
-
     letter-spacing:12px;
 
     text-shadow:
@@ -183,24 +139,17 @@ body.mapMode #earthContainer{
 }
 
 .status{
-
     margin-top:7px;
-
     font:10px monospace;
-
     letter-spacing:3px;
 }
 
 #dot{
-
     color:#ffd000;
-
-    text-shadow:
-        0 0 10px currentColor;
+    text-shadow:0 0 10px currentColor;
 }
 
 body.mapMode .header h1{
-
     text-shadow:
         0 0 15px #168cff,
         0 0 35px rgba(30,140,255,.4);
@@ -212,141 +161,74 @@ body.mapMode .header h1{
 ===================================================== */
 
 #clockPanel{
-
     position:fixed;
-
     top:22px;
     right:22px;
-
     z-index:20;
-
     text-align:right;
-
     pointer-events:none;
-
     font-family:monospace;
 }
 
 #clock{
-
     font-size:15px;
-
     letter-spacing:2px;
-
     color:#fff;
 }
 
 #date{
-
     margin-top:3px;
-
     font-size:9px;
-
     letter-spacing:2px;
-
     color:rgba(255,210,0,.65);
 }
 
-body.mapMode #date{
+body.mapMode #clockPanel{
+    color:#fff;
+}
 
+body.mapMode #date{
     color:rgba(80,170,255,.8);
 }
 
 
 /* =====================================================
-   CHAT — NUOVO DESIGN
+   CHAT
 ===================================================== */
 
 #chat{
-
     position:fixed;
-
     z-index:25;
 
     left:22px;
     top:125px;
 
-    width:350px;
+    width:330px;
 
     max-height:calc(100vh - 245px);
 
     overflow-y:auto;
 
     display:flex;
-
     flex-direction:column;
+    align-items:flex-start;
 
-    gap:10px;
+    gap:9px;
 
-    padding:18px;
+    padding:8px 4px 8px 0;
 
     scrollbar-width:none;
 
-
-    /* ==============================================
-       VETRO NERO
-    ============================================== */
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(5,7,10,.78),
-            rgba(0,0,0,.58)
-        );
-
-    backdrop-filter:blur(20px);
-
-    -webkit-backdrop-filter:blur(20px);
-
-
-    /* ==============================================
-       FORMA ROTONDA
-    ============================================== */
-
-    border-radius:30px;
-
-
-    /* ==============================================
-       BORDO
-    ============================================== */
-
-    border:
-        1px solid
-        rgba(255,208,0,.25);
-
-
-    /* ==============================================
-       BAGLIORE
-    ============================================== */
-
-    box-shadow:
-
-        0 0 30px
-        rgba(0,0,0,.9),
-
-        0 0 60px
-        rgba(255,208,0,.035),
-
-        inset 0 0 30px
-        rgba(255,255,255,.025);
-
-    
-    /* ==============================================
-       EFFETTO SFUMATURA
-    ============================================== */
-
-    mask-image:
-        linear-gradient(
-            to bottom,
-            transparent 0,
-            black 15px,
-            black 92%,
-            transparent 100%
-        );
+    mask-image:linear-gradient(
+        to bottom,
+        transparent 0,
+        black 12px,
+        black 92%,
+        transparent 100%
+    );
 }
 
 #chat::-webkit-scrollbar{
-
     display:none;
 }
 
@@ -356,44 +238,36 @@ body.mapMode #date{
 ===================================================== */
 
 .message{
+    width:auto;
+    max-width:92%;
 
-    max-width:100%;
+    padding:9px 12px;
 
-    padding:11px 15px;
+    border-radius:14px;
 
-    border-radius:20px;
-
-    font-size:13px;
-
-    line-height:1.5;
+    font-size:12px;
+    line-height:1.45;
 
     backdrop-filter:blur(14px);
-
     -webkit-backdrop-filter:blur(14px);
 
-    animation:
-        messageIn .3s ease;
+    animation:messageIn .3s ease;
+
+    word-wrap:break-word;
 }
 
 @keyframes messageIn{
 
     from{
-
         opacity:0;
-
-        transform:
-            translateX(-12px)
-            scale(.97);
+        transform:translateX(-12px);
     }
 
     to{
-
         opacity:1;
-
-        transform:
-            translateX(0)
-            scale(1);
+        transform:translateX(0);
     }
+
 }
 
 
@@ -402,25 +276,20 @@ body.mapMode #date{
 ===================================================== */
 
 .user{
-
     align-self:flex-end;
 
-    background:
-        rgba(255,190,0,.07);
+    background:rgba(255,190,0,.07);
 
-    border:
-        1px solid
-        rgba(255,190,0,.28);
+    border:1px solid rgba(255,190,0,.28);
 
-    border-right:
-        2px solid
-        #ffd000;
+    border-right:2px solid #ffd000;
 
     color:#fff;
 
+    border-radius:16px 16px 4px 16px;
+
     box-shadow:
-        0 0 15px
-        rgba(255,190,0,.035);
+        0 0 18px rgba(255,190,0,.04);
 }
 
 
@@ -429,25 +298,33 @@ body.mapMode #date{
 ===================================================== */
 
 .jarvis{
-
     align-self:flex-start;
 
-    background:
-        rgba(2,7,13,.72);
+    width:auto;
+    max-width:92%;
 
-    border:
-        1px solid
-        rgba(30,140,255,.18);
+    background:rgba(3,7,13,.58);
 
-    border-left:
-        2px solid
-        #168cff;
+    border:1px solid rgba(30,140,255,.16);
+
+    border-left:2px solid #168cff;
 
     color:#dcecff;
 
+    border-radius:4px 16px 16px 16px;
+
     box-shadow:
-        0 0 18px
-        rgba(30,140,255,.035);
+        0 0 18px rgba(20,130,255,.04);
+}
+
+
+/* Primo messaggio più compatto */
+
+#chat .message.jarvis:first-child{
+    font-size:11px;
+    line-height:1.4;
+    padding:8px 11px;
+    max-width:250px;
 }
 
 
@@ -456,9 +333,7 @@ body.mapMode #date{
 ===================================================== */
 
 #mapHud{
-
     position:fixed;
-
     z-index:15;
 
     left:50%;
@@ -469,11 +344,9 @@ body.mapMode #date{
         translateY(-20px);
 
     opacity:0;
-
     pointer-events:none;
 
     font:11px monospace;
-
     letter-spacing:3px;
 
     text-align:center;
@@ -486,7 +359,6 @@ body.mapMode #date{
 }
 
 body.mapMode #mapHud{
-
     opacity:1;
 
     transform:
@@ -495,23 +367,16 @@ body.mapMode #mapHud{
 }
 
 #mapTitle{
-
     font-size:16px;
-
     letter-spacing:5px;
-
     margin-bottom:6px;
 
-    text-shadow:
-        0 0 15px #168cff;
+    text-shadow:0 0 15px #168cff;
 }
 
 #coordinates{
-
     font-size:10px;
-
-    color:
-        rgba(180,220,255,.85);
+    color:rgba(180,220,255,.85);
 }
 
 
@@ -520,9 +385,7 @@ body.mapMode #mapHud{
 ===================================================== */
 
 #locationInfo{
-
     position:fixed;
-
     z-index:18;
 
     left:50%;
@@ -532,29 +395,23 @@ body.mapMode #mapHud{
         translate(-50%,20px);
 
     opacity:0;
-
     pointer-events:none;
 
     padding:10px 18px;
 
-    background:
-        rgba(0,10,20,.75);
+    background:rgba(0,10,20,.75);
 
-    border:
-        1px solid
-        rgba(40,160,255,.5);
+    border:1px solid rgba(40,160,255,.5);
 
-    border-radius:18px;
+    border-radius:12px;
 
     font:11px monospace;
-
     letter-spacing:2px;
 
     text-align:center;
 
     box-shadow:
-        0 0 25px
-        rgba(0,130,255,.15);
+        0 0 25px rgba(0,130,255,.15);
 
     transition:
         opacity .7s ease,
@@ -562,7 +419,6 @@ body.mapMode #mapHud{
 }
 
 #locationInfo.visible{
-
     opacity:1;
 
     transform:
@@ -570,43 +426,42 @@ body.mapMode #mapHud{
 }
 
 #locationName{
-
     font-size:14px;
-
     color:#fff;
-
     margin-bottom:4px;
 }
 
 #locationCoords{
-
     color:#4faaff;
 }
 
 
 /* =====================================================
-   INPUT
+   INPUT AREA
 ===================================================== */
 
 .inputArea{
-
     position:fixed;
 
     z-index:40;
 
     bottom:18px;
-
     left:50%;
 
     transform:
         translateX(-50%);
 
-    width:
-        min(
-            700px,
-            calc(100% - 40px)
-        );
+    width:min(
+        700px,
+        calc(100% - 40px)
+    );
 }
+
+
+/* =====================================================
+   NUOVA CASELLA CHAT
+   VETRO NERO + ROTONDA
+===================================================== */
 
 .inputBox{
 
@@ -614,30 +469,78 @@ body.mapMode #mapHud{
 
     gap:7px;
 
-    padding:5px;
+    padding:7px;
+
+    /*
+       Vetro nero trasparente
+    */
 
     background:
-        rgba(0,0,0,.82);
+        linear-gradient(
+            135deg,
+            rgba(10,12,16,.72),
+            rgba(0,0,0,.52)
+        );
+
+    /*
+       Trasparenza + effetto vetro
+    */
 
     backdrop-filter:
-        blur(18px);
+        blur(22px)
+        saturate(130%);
 
     -webkit-backdrop-filter:
-        blur(18px);
+        blur(22px)
+        saturate(130%);
+
+    /*
+       Bordo futuristico
+    */
 
     border:
         1px solid
-        rgba(255,190,0,.4);
+        rgba(255,200,0,.28);
 
-    border-radius:18px;
+    /*
+       CASSETTA COMPLETAMENTE ROTONDA
+    */
+
+    border-radius:28px;
+
+    /*
+       Ombra molto morbida
+    */
 
     box-shadow:
-        0 0 25px
-        rgba(255,190,0,.06),
+        0 0 25px rgba(0,0,0,.5),
+        0 0 35px rgba(255,190,0,.045),
+        inset 0 1px 0 rgba(255,255,255,.035);
 
-        inset 0 0 20px
-        rgba(255,255,255,.02);
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease;
 }
+
+
+/*
+   Quando tocchi/scrivi
+*/
+
+.inputBox:focus-within{
+
+    border-color:
+        rgba(255,205,0,.55);
+
+    box-shadow:
+        0 0 30px rgba(255,190,0,.08),
+        inset 0 1px 0 rgba(255,255,255,.045);
+}
+
+
+/* =====================================================
+   INPUT
+===================================================== */
 
 input{
 
@@ -648,7 +551,7 @@ input{
     height:44px;
 
     padding:
-        0 14px;
+        0 16px;
 
     background:transparent;
 
@@ -659,26 +562,34 @@ input{
     color:#fff;
 
     font-size:14px;
+
+    font-family:Arial,sans-serif;
 }
 
 input::placeholder{
 
     color:
-        rgba(255,255,255,.3);
+        rgba(255,255,255,.32);
+
 }
+
+
+/* =====================================================
+   PULSANTI
+===================================================== */
 
 button{
 
     height:44px;
 
-    border-radius:12px;
+    border-radius:22px;
 
     border:
         1px solid
-        rgba(255,190,0,.5);
+        rgba(255,190,0,.38);
 
     background:
-        rgba(255,190,0,.1);
+        rgba(255,190,0,.055);
 
     color:#ffd000;
 
@@ -689,7 +600,8 @@ button{
     cursor:pointer;
 
     transition:
-        .2s ease;
+        .25s ease;
+
 }
 
 button:hover{
@@ -699,9 +611,11 @@ button:hover{
     color:#000;
 
     box-shadow:
-        0 0 15px
-        rgba(255,208,0,.5);
+        0 0 18px
+        rgba(255,208,0,.35);
+
 }
+
 
 #mic,
 #conversation{
@@ -709,25 +623,33 @@ button:hover{
     width:48px;
 
     font-size:17px;
+
 }
+
 
 #send{
 
     width:70px;
+
+    font-size:11px;
+
 }
+
+
+/* =====================================================
+   PULSANTE ATTIVO
+===================================================== */
 
 .active{
 
     background:#168cff !important;
 
-    border-color:
-        #168cff !important;
+    border-color:#168cff !important;
 
     color:#fff !important;
 
     box-shadow:
-        0 0 20px
-        #168cff;
+        0 0 20px #168cff;
 }
 
 
@@ -759,7 +681,6 @@ button:hover{
 }
 
 body.mapMode #mapCrosshair{
-
     opacity:.35;
 }
 
@@ -773,8 +694,7 @@ body.mapMode #mapCrosshair{
     background:#168cff;
 
     box-shadow:
-        0 0 8px
-        #168cff;
+        0 0 8px #168cff;
 }
 
 #mapCrosshair::before{
@@ -803,13 +723,12 @@ body.mapMode #mapCrosshair{
 @media(max-width:700px){
 
     .header{
-
         top:15px;
     }
 
     .header h1{
 
-        font-size:22px;
+        font-size:20px;
 
         letter-spacing:8px;
     }
@@ -822,32 +741,26 @@ body.mapMode #mapCrosshair{
     }
 
     #clock{
-
         font-size:13px;
     }
 
     #date{
-
         font-size:8px;
     }
 
     #mapHud{
-
         top:65px;
     }
 
     #mapTitle{
-
         font-size:13px;
     }
 
 
-    /* CHAT MOBILE */
-
     #chat{
 
-        left:10px;
-        right:10px;
+        left:12px;
+        right:12px;
 
         top:auto;
 
@@ -855,19 +768,31 @@ body.mapMode #mapCrosshair{
 
         width:auto;
 
-        max-height:27vh;
+        max-height:23vh;
 
-        padding:14px;
-
-        border-radius:26px;
+        padding:0;
     }
+
 
     .message{
 
-        max-width:90%;
+        max-width:88%;
 
-        font-size:13px;
+        font-size:12px;
+
+        padding:8px 11px;
     }
+
+
+    #chat .message.jarvis:first-child{
+
+        font-size:10px;
+
+        max-width:220px;
+
+        padding:7px 10px;
+    }
+
 
     .inputArea{
 
@@ -875,8 +800,25 @@ body.mapMode #mapCrosshair{
             calc(100% - 20px);
     }
 
-    #locationInfo{
 
+    .inputBox{
+
+        padding:6px;
+
+        border-radius:25px;
+    }
+
+
+    input{
+
+        font-size:13px;
+
+        padding:
+            0 12px;
+    }
+
+
+    #locationInfo{
         top:60%;
     }
 
@@ -903,8 +845,27 @@ body.mapMode #mapCrosshair{
     }
 
     input{
-
         font-size:13px;
+    }
+
+}
+
+
+/* =====================================================
+   RIDUZIONE MOVIMENTO
+===================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+
+        animation-duration:.01ms !important;
+
+        animation-iteration-count:1 !important;
+
+        transition-duration:.01ms !important;
     }
 
 }
@@ -936,9 +897,7 @@ setTimeout(function(){
 
 
 <div id="loading">
-
     JARVIS NEURAL CORE
-
 </div>
 
 
@@ -961,9 +920,7 @@ setTimeout(function(){
         <span id="dot">●</span>
 
         <span id="statusText">
-
             NEURAL INTERFACE ONLINE
-
         </span>
 
     </div>
@@ -971,7 +928,9 @@ setTimeout(function(){
 </div>
 
 
-<!-- OROLOGIO -->
+<!-- =====================================================
+     OROLOGIO
+===================================================== -->
 
 <div id="clockPanel">
 
@@ -986,18 +945,18 @@ setTimeout(function(){
 </div>
 
 
+<!-- =====================================================
+     MAP HUD
+===================================================== -->
+
 <div id="mapHud">
 
     <div id="mapTitle">
-
         EARTH NAVIGATION
-
     </div>
 
     <div id="coordinates">
-
         GLOBAL POSITIONING SYSTEM ONLINE
-
     </div>
 
 </div>
@@ -1009,15 +968,11 @@ setTimeout(function(){
 <div id="locationInfo">
 
     <div id="locationName">
-
         LOCATION
-
     </div>
 
     <div id="locationCoords">
-
         --°
-
     </div>
 
 </div>
@@ -1059,24 +1014,18 @@ setTimeout(function(){
             id="conversation"
             title="Modalità conversazione"
         >
-
             🔊
-
         </button>
 
         <button
             id="mic"
             title="Microfono"
         >
-
             🎙
-
         </button>
 
         <button id="send">
-
             INVIA
-
         </button>
 
     </div>
@@ -1087,17 +1036,10 @@ setTimeout(function(){
 <script type="importmap">
 
 {
-
     "imports":{
-
-        "three":
-        "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
-
-        "three/addons/":
-        "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
-
+        "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+        "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
     }
-
 }
 
 </script>
@@ -1105,17 +1047,15 @@ setTimeout(function(){
 
 <script type="module">
 
-import * as THREE
-from "three";
+import * as THREE from "three";
 
 import {
     OrbitControls
-}
-from "three/addons/controls/OrbitControls.js";
+} from "three/addons/controls/OrbitControls.js";
 
 
 /* =====================================================
-   API
+   CONFIGURAZIONE
 ===================================================== */
 
 const API =
@@ -1205,9 +1145,7 @@ let memory=[];
 try{
 
     memory=JSON.parse(
-        localStorage.getItem(
-            "jarvis_memory"
-        ) || "[]"
+        localStorage.getItem("jarvis_memory") || "[]"
     );
 
 }catch{
@@ -1231,17 +1169,16 @@ function saveMemory(){
 }
 
 
-function remember(
-    role,
-    content
-){
+function remember(role,content){
 
     if(!content)return;
 
     memory.push({
 
         role,
+
         content,
+
         time:Date.now()
 
     });
@@ -1258,9 +1195,7 @@ saveMemory();
    STATO
 ===================================================== */
 
-function setState(
-    newState
-){
+function setState(newState){
 
     state=newState;
 
@@ -1292,19 +1227,15 @@ function updateClock(){
     const now=new Date();
 
     clock.textContent=
-        now.toLocaleTimeString(
-            "it-IT"
-        );
+        now.toLocaleTimeString("it-IT");
 
     date.textContent=
         now.toLocaleDateString(
             "it-IT",
             {
-
                 weekday:"short",
                 day:"2-digit",
                 month:"short"
-
             }
         ).toUpperCase();
 
@@ -1322,29 +1253,20 @@ setInterval(
    CHAT
 ===================================================== */
 
-function addMessage(
-    type,
-    text
-){
+function addMessage(type,text){
 
     const element =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     element.className =
-        "message " + type;
+        "message "+type;
 
     element.textContent =
         text;
 
-    chat.appendChild(
-        element
-    );
+    chat.appendChild(element);
 
-    while(
-        chat.children.length > 20
-    ){
+    while(chat.children.length>20){
 
         chat.removeChild(
             chat.firstChild
@@ -1370,16 +1292,10 @@ const earthScene =
 
 const earthCamera =
     new THREE.PerspectiveCamera(
-
         45,
-
-        innerWidth /
-        innerHeight,
-
+        innerWidth/innerHeight,
         .1,
-
         100
-
     );
 
 
@@ -1403,15 +1319,10 @@ const earthRenderer =
 
 
 earthRenderer.setPixelRatio(
-
     Math.min(
-
         window.devicePixelRatio || 1,
-
         2
-
     )
-
 );
 
 
@@ -1448,9 +1359,7 @@ sun.position.set(
     5
 );
 
-earthScene.add(
-    sun
-);
+earthScene.add(sun);
 
 
 /* =====================================================
@@ -1479,9 +1388,7 @@ const textureLoader =
 
 const earthTexture =
     textureLoader.load(
-
         "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
-
     );
 
 
@@ -1502,17 +1409,12 @@ const earthMaterial =
 
 const earth =
     new THREE.Mesh(
-
         earthGeometry,
-
         earthMaterial
-
     );
 
 
-earthGroup.add(
-    earth
-);
+earthGroup.add(earth);
 
 
 /* =====================================================
@@ -1576,9 +1478,7 @@ const glow =
     );
 
 
-earthGroup.add(
-    glow
-);
+earthGroup.add(glow);
 
 
 /* =====================================================
@@ -1595,9 +1495,7 @@ const marker =
         ),
 
         new THREE.MeshBasicMaterial({
-
             color:0xffd000
-
         })
 
     );
@@ -1605,9 +1503,7 @@ const marker =
 
 marker.visible=false;
 
-earthGroup.add(
-    marker
-);
+earthGroup.add(marker);
 
 
 const markerRing =
@@ -1636,9 +1532,7 @@ const markerRing =
 
 markerRing.visible=false;
 
-earthGroup.add(
-    markerRing
-);
+earthGroup.add(markerRing);
 
 
 /* =====================================================
@@ -1647,11 +1541,8 @@ earthGroup.add(
 
 const controls =
     new OrbitControls(
-
         earthCamera,
-
         earthCanvas
-
     );
 
 controls.enableDamping=true;
@@ -1724,25 +1615,15 @@ function isMapCommand(text){
 
     return(
 
-        t.includes(
-            "apri la mappa"
-        ) ||
+        t.includes("apri la mappa") ||
 
-        t.includes(
-            "apri mappa"
-        ) ||
+        t.includes("apri mappa") ||
 
-        t.includes(
-            "mostrami la mappa"
-        ) ||
+        t.includes("mostrami la mappa") ||
 
-        t.includes(
-            "mostra la mappa"
-        ) ||
+        t.includes("mostra la mappa") ||
 
-        t.includes(
-            "mappa del mondo"
-        ) ||
+        t.includes("mappa del mondo") ||
 
         t==="mappa"
 
@@ -1755,9 +1636,7 @@ function isMapCommand(text){
    ESTRAZIONE LUOGO
 ===================================================== */
 
-function extractLocation(
-    text
-){
+function extractLocation(text){
 
     const patterns=[
 
@@ -1784,29 +1663,21 @@ function extractLocation(
     ){
 
         const index =
-            lower.indexOf(
-                prefix
-            );
+            lower.indexOf(prefix);
 
 
         if(index!==-1){
 
             let place =
                 text.substring(
-
-                    index +
-                    prefix.length
-
+                    index+prefix.length
                 ).trim();
 
 
             place =
                 place.replace(
-
                     /^(la|il|lo|un|una|a|ad)\s+/i,
-
                     ""
-
                 );
 
 
@@ -1829,9 +1700,7 @@ function extractLocation(
    GEOCODING
 ===================================================== */
 
-async function searchPlace(
-    place
-){
+async function searchPlace(place){
 
     setState("thinking");
 
@@ -1844,9 +1713,7 @@ async function searchPlace(
         const url =
             "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=it&q="
             +
-            encodeURIComponent(
-                place
-            );
+            encodeURIComponent(place);
 
 
         const response =
@@ -1880,15 +1747,11 @@ async function searchPlace(
 
 
         const lat =
-            parseFloat(
-                result.lat
-            );
+            parseFloat(result.lat);
 
 
         const lon =
-            parseFloat(
-                result.lon
-            );
+            parseFloat(result.lon);
 
 
         const name =
@@ -1906,11 +1769,9 @@ async function searchPlace(
 
 
         return{
-
             name,
             lat,
             lon
-
         };
 
 
@@ -1924,11 +1785,8 @@ async function searchPlace(
         setState("idle");
 
         addMessage(
-
             "jarvis",
-
             "Non riesco a trovare questo luogo."
-
         );
 
         return null;
@@ -1942,20 +1800,13 @@ async function searchPlace(
    COORDINATE
 ===================================================== */
 
-function formatCoordinates(
-    lat,
-    lon
-){
+function formatCoordinates(lat,lon){
 
     const latDir =
-        lat>=0
-        ? "N"
-        : "S";
+        lat>=0 ? "N" : "S";
 
     const lonDir =
-        lon>=0
-        ? "E"
-        : "W";
+        lon>=0 ? "E" : "W";
 
 
     return(
@@ -1984,11 +1835,9 @@ function formatCoordinates(
 ===================================================== */
 
 function showLocation(
-
     name,
     lat,
     lon
-
 ){
 
     locationName.textContent =
@@ -2027,11 +1876,8 @@ function showMyLocation(){
     if(!navigator.geolocation){
 
         addMessage(
-
             "jarvis",
-
             "Il browser non supporta la geolocalizzazione."
-
         );
 
         return;
@@ -2039,9 +1885,7 @@ function showMyLocation(){
     }
 
 
-    setState(
-        "thinking"
-    );
+    setState("thinking");
 
     coordinates.textContent =
         "ACQUISIZIONE POSIZIONE...";
@@ -2059,22 +1903,15 @@ function showMyLocation(){
 
 
             showLocation(
-
                 "La mia posizione",
-
                 lat,
-
                 lon
-
             );
 
 
             addMessage(
-
                 "jarvis",
-
                 "La tua posizione è stata individuata sulla Terra."
-
             );
 
         },
@@ -2090,24 +1927,17 @@ function showMyLocation(){
             setState("idle");
 
             addMessage(
-
                 "jarvis",
-
                 "Non ho ricevuto il permesso per accedere alla posizione."
-
             );
 
         },
 
 
         {
-
             enableHighAccuracy:true,
-
             timeout:10000,
-
             maximumAge:30000
-
         }
 
     );
@@ -2132,11 +1962,9 @@ let targetQuaternion =
 
 
 function latLonToVector3(
-
     lat,
     lon,
     radius
-
 ){
 
     const phi =
@@ -2170,10 +1998,8 @@ function latLonToVector3(
 
 
 function focusEarth(
-
     lat,
     lon
-
 ){
 
     openMap();
@@ -2181,22 +2007,16 @@ function focusEarth(
 
     const target =
         latLonToVector3(
-
             lat,
             lon,
             1
-
         );
 
 
     marker.position.copy(
-
         target
         .clone()
-        .multiplyScalar(
-            1.025
-        )
-
+        .multiplyScalar(1.025)
     );
 
 
@@ -2224,11 +2044,8 @@ function focusEarth(
 
 
     targetQuaternion.setFromUnitVectors(
-
         direction,
-
         front
-
     );
 
 
@@ -2241,11 +2058,9 @@ function focusEarth(
         zoomStart=3.3;
 
         earthCamera.position.set(
-
             0,
             0,
             zoomStart
-
         );
 
     }
@@ -2283,12 +2098,9 @@ let neuralCy =
 
 let neuralRadius =
     Math.min(
-
         neuralWidth,
-
         neuralHeight
-
-    )*.30;
+    )*.40;
 
 
 let neuralRotation=0;
@@ -2311,11 +2123,8 @@ function resizeNeural(){
 
     const dpr =
         Math.min(
-
             devicePixelRatio || 1,
-
             2
-
         );
 
 
@@ -2334,14 +2143,12 @@ function resizeNeural(){
 
 
     neuralCtx.setTransform(
-
         dpr,
         0,
         0,
         dpr,
         0,
         0
-
     );
 
 
@@ -2354,11 +2161,8 @@ function resizeNeural(){
 
     neuralRadius =
         Math.min(
-
             neuralWidth,
-
             neuralHeight
-
         )*.30;
 
 
@@ -2381,6 +2185,15 @@ function createNeuralNodes(){
         i<145;
         i++
     ){
+
+        /*
+           Circa 15% dei nodi
+           avranno un colore alternativo.
+        */
+
+        const special =
+            Math.random() < .15;
+
 
         nodes.push({
 
@@ -2414,13 +2227,17 @@ function createNeuralNodes(){
                 *
                 2,
 
-            /* ==========================================
-               COLORE DINAMICO
-               CIRCA 12% DEI NODI SONO VIOLA
-            ========================================== */
-
             special:
-                Math.random()<.12
+
+                special,
+
+            colorPhase:
+
+                Math.random()
+                *
+                Math.PI
+                *
+                2
 
         });
 
@@ -2485,12 +2302,10 @@ function animateNeural(){
 
 
     neuralCtx.fillRect(
-
         0,
         0,
         neuralWidth,
         neuralHeight
-
     );
 
 
@@ -2508,21 +2323,17 @@ function animateNeural(){
     ){
 
         targetColor={
-
             r:25,
             g:140,
             b:255
-
         };
 
     }else{
 
         targetColor={
-
             r:255,
             g:195,
             b:0
-
         };
 
     }
@@ -2531,31 +2342,29 @@ function animateNeural(){
     window.jarvisColor =
         window.jarvisColor ||
         {
-
             r:255,
             g:195,
             b:0
-
         };
 
 
     jarvisColor.r +=
         (
-            targetColor.r -
+            targetColor.r-
             jarvisColor.r
         )*.055;
 
 
     jarvisColor.g +=
         (
-            targetColor.g -
+            targetColor.g-
             jarvisColor.g
         )*.055;
 
 
     jarvisColor.b +=
         (
-            targetColor.b -
+            targetColor.b-
             jarvisColor.b
         )*.055;
 
@@ -2582,8 +2391,8 @@ function animateNeural(){
         )/2;
 
 
-    const glowSize =
-        neuralRadius *
+    const glow =
+        neuralRadius*
         (
             1.05+
             energy*.7+
@@ -2600,35 +2409,26 @@ function animateNeural(){
 
             neuralCx,
             neuralCy,
-            glowSize
+            glow
 
         );
 
 
     gradient.addColorStop(
-
         0,
-
         `rgba(${r},${g},${b},.48)`
-
     );
 
 
     gradient.addColorStop(
-
         .35,
-
         `rgba(${r},${g},${b},.15)`
-
     );
 
 
     gradient.addColorStop(
-
         1,
-
         "rgba(0,0,0,0)"
-
     );
 
 
@@ -2640,13 +2440,11 @@ function animateNeural(){
 
 
     neuralCtx.arc(
-
         neuralCx,
         neuralCy,
-        glowSize,
+        glow,
         0,
         Math.PI*2
-
     );
 
 
@@ -2659,12 +2457,9 @@ function animateNeural(){
     nodes.forEach(n=>{
 
         const rr =
-            n.r +
+            n.r+
             Math.sin(
-
-                time*3+
-                n.phase
-
+                time*3+n.phase
             )
             *
             energy*
@@ -2672,29 +2467,25 @@ function animateNeural(){
 
 
         let x =
-            rr *
-            Math.sin(n.phi) *
+            rr*
+            Math.sin(n.phi)*
             Math.cos(
-
                 n.theta+
                 neuralRotation
-
             );
 
 
         let y =
-            rr *
+            rr*
             Math.cos(n.phi);
 
 
         let z =
-            rr *
-            Math.sin(n.phi) *
+            rr*
+            Math.sin(n.phi)*
             Math.sin(
-
                 n.theta+
                 neuralRotation
-
             );
 
 
@@ -2702,10 +2493,7 @@ function animateNeural(){
 
             x +=
                 Math.sin(
-
-                    time*2+
-                    n.phase
-
+                    time*2+n.phase
                 )
                 *
                 energy*
@@ -2714,10 +2502,7 @@ function animateNeural(){
 
             y +=
                 Math.cos(
-
-                    time*2.5+
-                    n.phase
-
+                    time*2.5+n.phase
                 )
                 *
                 energy*
@@ -2727,7 +2512,7 @@ function animateNeural(){
 
 
         const perspective =
-            430 /
+            430/
             (
                 430+z
             );
@@ -2751,23 +2536,22 @@ function animateNeural(){
 
             alpha:
                 Math.max(
-
                     .1,
-
                     Math.min(
-
                         1,
-
                         (z+neuralRadius)/
                         (neuralRadius*2)
-
                     )
-
                 ),
 
-            phase:n.phase,
+            phase:
+                n.phase,
 
-            special:n.special
+            special:
+                n.special,
+
+            colorPhase:
+                n.colorPhase
 
         });
 
@@ -2781,23 +2565,15 @@ function animateNeural(){
 
 
     for(
-
         let i=0;
-
         i<projected.length;
-
         i++
-
     ){
 
         for(
-
             let j=i+1;
-
             j<projected.length;
-
             j++
-
         ){
 
             const a =
@@ -2816,10 +2592,8 @@ function animateNeural(){
 
             const dist =
                 Math.sqrt(
-
                     dx*dx+
                     dy*dy
-
                 );
 
 
@@ -2839,23 +2613,18 @@ function animateNeural(){
 
 
                 neuralCtx.moveTo(
-
                     a.x,
                     a.y
-
                 );
 
 
                 neuralCtx.lineTo(
-
                     c.x,
                     c.y
-
                 );
 
 
                 neuralCtx.strokeStyle =
-
                     `rgba(${r},${g},${b},${alpha})`;
 
 
@@ -2876,12 +2645,8 @@ function animateNeural(){
         const flicker =
             (
                 Math.sin(
-
-                    time*7+
-                    n.phase
-
+                    time*7+n.phase
                 )+1
-
             )/2;
 
 
@@ -2889,120 +2654,135 @@ function animateNeural(){
             n.size+
             flicker*
             (
-
                 state==="thinking"
                 ? 1.8
                 : .7
-
             );
 
 
-        /* ============================================
-           COLORE DINAMICO
-        ============================================ */
+        /*
+           COLORE DINAMICO DEI NODI SPECIALI
 
-        let particleColor;
+           Non sono fissi:
+           il colore cambia continuamente.
+        */
+
+        let particleR=r;
+        let particleG=g;
+        let particleB=b;
 
 
         if(n.special){
 
-            const wave =
+            const colorWave =
                 (
                     Math.sin(
-                        time*2.2+
-                        n.phase
+                        time*.9+
+                        n.colorPhase
                     )+1
                 )/2;
 
 
-            /* Viola che cambia intensità */
+            /*
+               Transizione tra:
+               giallo/oro
+               viola/fucsia
+               blu
+            */
 
-            particleColor={
+            if(colorWave<.5){
 
-                r:180+
-                    wave*60,
+                const mix =
+                    colorWave*2;
 
-                g:45+
-                    wave*35,
 
-                b:220+
-                    wave*35
+                particleR =
+                    Math.round(
+                        255*(1-mix)+
+                        180*mix
+                    );
 
-            };
+                particleG =
+                    Math.round(
+                        195*(1-mix)+
+                        40*mix
+                    );
 
-        }else{
+                particleB =
+                    Math.round(
+                        0*(1-mix)+
+                        255*mix
+                    );
 
-            particleColor={
+            }else{
 
-                r:r,
-                g:g,
-                b:b
+                const mix =
+                    (colorWave-.5)*2;
 
-            };
+
+                particleR =
+                    Math.round(
+                        180*(1-mix)+
+                        25*mix
+                    );
+
+                particleG =
+                    Math.round(
+                        40*(1-mix)+
+                        140*mix
+                    );
+
+                particleB =
+                    Math.round(
+                        255*(1-mix)+
+                        255*mix
+                    );
+
+            }
 
         }
 
 
-        const pr =
-            Math.round(
-                particleColor.r
-            );
-
-        const pg =
-            Math.round(
-                particleColor.g
-            );
-
-        const pb =
-            Math.round(
-                particleColor.b
-            );
-
-
-        /* GLOW */
+        /*
+           Glow del singolo nodo
+        */
 
         neuralCtx.fillStyle =
-
-            `rgba(${pr},${pg},${pb},${n.alpha*.28})`;
+            `rgba(${particleR},${particleG},${particleB},${n.alpha*.28})`;
 
 
         neuralCtx.beginPath();
 
 
         neuralCtx.arc(
-
             n.x,
             n.y,
             size*4,
-
             0,
             Math.PI*2
-
         );
 
 
         neuralCtx.fill();
 
 
-        /* PALLINA */
+        /*
+           Centro del nodo
+        */
 
         neuralCtx.fillStyle =
-
-            `rgba(${pr},${pg},${pb},${n.alpha})`;
+            `rgba(${particleR},${particleG},${particleB},${n.alpha})`;
 
 
         neuralCtx.beginPath();
 
 
         neuralCtx.arc(
-
             n.x,
             n.y,
             size,
-
             0,
             Math.PI*2
-
         );
 
 
@@ -3018,7 +2798,6 @@ function animateNeural(){
 
 
     neuralCtx.fillStyle =
-
         `rgba(${r},${g},${b},.38)`;
 
 
@@ -3026,14 +2805,11 @@ function animateNeural(){
 
 
     neuralCtx.arc(
-
         neuralCx,
         neuralCy,
         core*5,
-
         0,
         Math.PI*2
-
     );
 
 
@@ -3048,14 +2824,11 @@ function animateNeural(){
 
 
     neuralCtx.arc(
-
         neuralCx,
         neuralCy,
         core,
-
         0,
         Math.PI*2
-
     );
 
 
@@ -3079,10 +2852,8 @@ function animateEarth(){
 
 
     if(
-
         mapMode &&
         zoomAnimating
-
     ){
 
         zoomProgress += .012;
@@ -3104,20 +2875,16 @@ function animateEarth(){
         const eased =
             1-
             Math.pow(
-
                 1-zoomProgress,
                 3
-
             );
 
 
         const distance =
             zoomStart+
             (
-
                 zoomEnd-
                 zoomStart
-
             )
             *
             eased;
@@ -3140,11 +2907,8 @@ function animateEarth(){
 
 
         earthGroup.quaternion.slerp(
-
             targetQuaternion,
-
             .045
-
         );
 
     }
@@ -3166,11 +2930,9 @@ function animateEarth(){
 
 
         marker.scale.set(
-
             scale,
             scale,
             scale
-
         );
 
 
@@ -3188,21 +2950,17 @@ function animateEarth(){
 
 
         markerRing.scale.set(
-
             scale,
             scale,
             scale
-
         );
 
     }
 
 
     earthRenderer.render(
-
         earthScene,
         earthCamera
-
     );
 
 }
@@ -3220,17 +2978,11 @@ function localCommand(text){
 
     if(
 
-        t.includes(
-            "che ore sono"
-        ) ||
+        t.includes("che ore sono") ||
 
-        t.includes(
-            "che ora è"
-        ) ||
+        t.includes("che ora è") ||
 
-        t.includes(
-            "che ora e"
-        )
+        t.includes("che ora e")
 
     ){
 
@@ -3240,16 +2992,11 @@ function localCommand(text){
             +
             new Date()
             .toLocaleTimeString(
-
                 "it-IT",
-
                 {
-
                     hour:"2-digit",
                     minute:"2-digit"
-
                 }
-
             )
             +
             "."
@@ -3261,13 +3008,9 @@ function localCommand(text){
 
     if(
 
-        t.includes(
-            "che giorno è"
-        ) ||
+        t.includes("che giorno è") ||
 
-        t.includes(
-            "che giorno e"
-        )
+        t.includes("che giorno e")
 
     ){
 
@@ -3277,18 +3020,13 @@ function localCommand(text){
             +
             new Date()
             .toLocaleDateString(
-
                 "it-IT",
-
                 {
-
                     weekday:"long",
                     day:"numeric",
                     month:"long",
                     year:"numeric"
-
                 }
-
             )
             +
             "."
@@ -3300,13 +3038,9 @@ function localCommand(text){
 
     if(
 
-        t.includes(
-            "mia posizione"
-        ) ||
+        t.includes("mia posizione") ||
 
-        t.includes(
-            "dove sono"
-        )
+        t.includes("dove sono")
 
     ){
 
@@ -3340,9 +3074,7 @@ send.onclick =
 
 
 input.addEventListener(
-
     "keydown",
-
     event=>{
 
         if(event.key==="Enter"){
@@ -3356,7 +3088,6 @@ input.addEventListener(
         }
 
     }
-
 );
 
 
@@ -3366,10 +3097,7 @@ async function sendMessage(){
         input.value.trim();
 
 
-    if(
-        !text ||
-        busy
-    ){
+    if(!text || busy){
 
         return;
 
@@ -3385,27 +3113,19 @@ async function sendMessage(){
 
 
     addMessage(
-
         "user",
-
         text
-
     );
 
 
     remember(
-
         "user",
-
         text
-
     );
 
 
     const place =
-        extractLocation(
-            text
-        );
+        extractLocation(text);
 
 
     if(place){
@@ -3415,15 +3135,12 @@ async function sendMessage(){
 
         const answer =
             addMessage(
-
                 "jarvis",
-
                 "Localizzazione di "
                 +
                 place
                 +
                 "..."
-
             );
 
 
@@ -3436,7 +3153,6 @@ async function sendMessage(){
         if(result){
 
             answer.textContent =
-
                 "Ho individuato "
                 +
                 result.name
@@ -3445,11 +3161,8 @@ async function sendMessage(){
 
 
             remember(
-
                 "assistant",
-
                 answer.textContent
-
             );
 
         }
@@ -3463,33 +3176,22 @@ async function sendMessage(){
 
 
     const local =
-        localCommand(
-            text
-        );
+        localCommand(text);
 
 
     if(local){
 
-        if(
-            local !==
-            "__LOCATION__"
-        ){
+        if(local!=="__LOCATION__"){
 
             addMessage(
-
                 "jarvis",
-
                 local
-
             );
 
 
             remember(
-
                 "assistant",
-
                 local
-
             );
 
 
@@ -3522,18 +3224,13 @@ async function sendMessage(){
     conversation.disabled=true;
 
 
-    setState(
-        "thinking"
-    );
+    setState("thinking");
 
 
     const answer =
         addMessage(
-
             "jarvis",
-
             "Analisi del Neural Core..."
-
         );
 
 
@@ -3543,11 +3240,9 @@ async function sendMessage(){
 
     const intelligentContext={
 
-        assistantName:
-            "JARVIS",
+        assistantName:"JARVIS",
 
-        language:
-            "it-IT",
+        language:"it-IT",
 
         currentTime:
             new Date()
@@ -3561,8 +3256,7 @@ async function sendMessage(){
                 "it-IT"
             ),
 
-        mapMode:
-            mapMode,
+        mapMode:mapMode,
 
         recentConversation:
             recentMemory,
@@ -3598,22 +3292,17 @@ async function sendMessage(){
 
         const response =
             await fetch(
-
                 API,
-
                 {
 
                     method:"POST",
 
                     headers:{
-
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body:
-
                         JSON.stringify({
 
                             message:text,
@@ -3627,18 +3316,15 @@ async function sendMessage(){
                         })
 
                 }
-
             );
 
 
         if(!response.ok){
 
             throw new Error(
-
                 "HTTP "
                 +
                 response.status
-
             );
 
         }
@@ -3662,11 +3348,8 @@ async function sendMessage(){
 
 
         remember(
-
             "assistant",
-
             data.reply
-
         );
 
 
@@ -3678,9 +3361,7 @@ async function sendMessage(){
 
         }else{
 
-            setState(
-                "idle"
-            );
+            setState("idle");
 
         }
 
@@ -3691,13 +3372,10 @@ async function sendMessage(){
 
 
         answer.textContent =
-
             "Neural Core non raggiungibile. Controlla la connessione o il server AI.";
 
 
-        setState(
-            "idle"
-        );
+        setState("idle");
 
     }
 
@@ -3730,11 +3408,12 @@ function finish(){
    VOCI
 ===================================================== */
 
+let voices=[];
+
+
 function speak(text){
 
-    if(
-        !("speechSynthesis" in window)
-    ){
+    if(!("speechSynthesis" in window)){
 
         setState("idle");
 
@@ -3752,20 +3431,16 @@ function speak(text){
         );
 
 
-    utterance.lang =
-        "it-IT";
+    utterance.lang="it-IT";
 
-    utterance.rate =
-        .88;
+    utterance.rate=.88;
 
-    utterance.pitch =
-        .65;
+    utterance.pitch=.65;
 
-    utterance.volume =
-        1;
+    utterance.volume=1;
 
 
-    utterance.onstart = ()=>{
+    utterance.onstart=()=>{
 
         setState(
             "speaking"
@@ -3774,7 +3449,7 @@ function speak(text){
     };
 
 
-    utterance.onend = ()=>{
+    utterance.onend=()=>{
 
         setState(
             "idle"
@@ -3782,18 +3457,13 @@ function speak(text){
 
 
         if(
-
             conversationMode &&
             wakeMode
-
         ){
 
             setTimeout(
-
                 startWakeWord,
-
                 600
-
             );
 
         }
@@ -3801,7 +3471,7 @@ function speak(text){
     };
 
 
-    utterance.onerror = ()=>{
+    utterance.onerror=()=>{
 
         setState(
             "idle"
@@ -3821,7 +3491,7 @@ function speak(text){
    CONVERSAZIONE
 ===================================================== */
 
-conversation.onclick = ()=>{
+conversation.onclick=()=>{
 
     conversationMode =
         !conversationMode;
@@ -3909,7 +3579,7 @@ if(Recognition){
         true;
 
 
-    recognition.onstart = ()=>{
+    recognition.onstart=()=>{
 
         listening=true;
 
@@ -3941,17 +3611,12 @@ if(Recognition){
 
 
             for(
-
                 let i=event.resultIndex;
-
                 i<event.results.length;
-
                 i++
-
             ){
 
                 transcript +=
-
                     event.results[i][0]
                     .transcript;
 
@@ -3993,17 +3658,14 @@ if(Recognition){
         event=>{
 
             console.log(
-
                 "Speech recognition:",
-
                 event.error
-
             );
 
         };
 
 
-    recognition.onend = ()=>{
+    recognition.onend=()=>{
 
         listening=false;
 
@@ -4021,9 +3683,7 @@ if(Recognition){
             "Comunica con JARVIS...";
 
 
-        if(
-            state==="listening"
-        ){
+        if(state==="listening"){
 
             setState(
                 "idle"
@@ -4034,7 +3694,7 @@ if(Recognition){
     };
 
 
-    mic.onclick = ()=>{
+    mic.onclick=()=>{
 
         if(busy)return;
 
@@ -4124,13 +3784,9 @@ function startWakeWord(){
         event=>{
 
             for(
-
                 let i=event.resultIndex;
-
                 i<event.results.length;
-
                 i++
-
             ){
 
                 const text =
@@ -4139,11 +3795,7 @@ function startWakeWord(){
                     .toLowerCase();
 
 
-                if(
-                    text.includes(
-                        "jarvis"
-                    )
-                ){
+                if(text.includes("jarvis")){
 
                     try{
 
@@ -4165,7 +3817,7 @@ function startWakeWord(){
         };
 
 
-    wakeRecognition.onerror = ()=>{
+    wakeRecognition.onerror=()=>{
 
         wakeRecognition=null;
 
@@ -4180,11 +3832,8 @@ function startWakeWord(){
         ){
 
             setTimeout(
-
                 startWakeWord,
-
                 1200
-
             );
 
         }
@@ -4192,7 +3841,7 @@ function startWakeWord(){
     };
 
 
-    wakeRecognition.onend = ()=>{
+    wakeRecognition.onend=()=>{
 
         wakeRecognition=null;
 
@@ -4207,11 +3856,8 @@ function startWakeWord(){
         ){
 
             setTimeout(
-
                 startWakeWord,
-
                 600
-
             );
 
         }
@@ -4253,10 +3899,8 @@ function stopWakeWord(){
 function activateJarvis(){
 
     if(
-
         busy ||
         listening
-
     ){
 
         return;
@@ -4291,16 +3935,14 @@ function activateJarvis(){
 ===================================================== */
 
 window.addEventListener(
-
     "resize",
-
     ()=>{
 
         resizeNeural();
 
 
         earthCamera.aspect =
-            innerWidth /
+            innerWidth/
             innerHeight;
 
 
@@ -4308,15 +3950,11 @@ window.addEventListener(
 
 
         earthRenderer.setSize(
-
             innerWidth,
-
             innerHeight
-
         );
 
     }
-
 );
 
 
@@ -4361,5 +3999,4 @@ window.JARVIS_EARTH={
 </script>
 
 </body>
-
 </html>

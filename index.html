@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
-<title>JARVIS — NEURAL CORE</title>
-
-<style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>JARVIS — NEURAL CORE</title><style>
 
 *{
     box-sizing:border-box;
@@ -120,13 +115,9 @@ body.mapMode #earthContainer{
 
 .header h1{
     margin:0;
-
-    /* JARVIS PIÙ GRANDE */
-    font-size:35px;
-
+    font-size:30px;
     font-weight:300;
     letter-spacing:12px;
-
     text-shadow:
         0 0 15px #ffd000,
         0 0 35px rgba(255,200,0,.35);
@@ -463,7 +454,7 @@ body.mapMode #mapCrosshair{
     }
 
     .header h1{
-        font-size:25px;
+        font-size:20px;
         letter-spacing:8px;
     }
 
@@ -519,11 +510,6 @@ body.mapMode #mapCrosshair{
 
 @media(max-width:430px){
 
-    .header h1{
-        font-size:22px;
-        letter-spacing:7px;
-    }
-
     #conversation,
     #mic{
         width:42px;
@@ -539,10 +525,7 @@ body.mapMode #mapCrosshair{
     }
 }
 
-</style>
-
-
-<script>
+</style><script>
 
 setTimeout(function(){
 
@@ -554,133 +537,83 @@ setTimeout(function(){
 
 },1800);
 
-</script>
-
-</head>
-
-
-<body>
-
-
-<div id="loading">
+</script></head><body><div id="loading">
     JARVIS NEURAL CORE
-</div>
-
-
-<canvas id="neuralCanvas"></canvas>
-
+</div><canvas id="neuralCanvas"></canvas>
 
 <div id="earthContainer">
     <canvas id="earthCanvas"></canvas>
+</div><div class="header"><h1>J.A.R.V.I.S.</h1>
+
+<div class="status">
+    <span id="dot">●</span>
+    <span id="statusText">
+        NEURAL INTERFACE ONLINE
+    </span>
 </div>
 
-
-<div class="header">
-
-    <h1>J.A.R.V.I.S.</h1>
-
-    <div class="status">
-        <span id="dot">●</span>
-        <span id="statusText">
-            NEURAL INTERFACE ONLINE
-        </span>
-    </div>
-
+</div><div id="clockPanel"><div id="clock">
+    --:--:--
 </div>
 
-
-<!-- SOLO OROLOGIO -->
-
-<div id="clockPanel">
-
-    <div id="clock">
-        --:--:--
-    </div>
-
-    <div id="date">
-        --
-    </div>
-
+<div id="date">
+    --
 </div>
 
+</div><div id="mapHud"><div id="mapTitle">
+    EARTH NAVIGATION
+</div>
 
-<div id="mapHud">
+<div id="coordinates">
+    GLOBAL POSITIONING SYSTEM ONLINE
+</div>
 
-    <div id="mapTitle">
-        EARTH NAVIGATION
-    </div>
+</div><div id="mapCrosshair"></div><div id="locationInfo"><div id="locationName">
+    LOCATION
+</div>
 
-    <div id="coordinates">
-        GLOBAL POSITIONING SYSTEM ONLINE
-    </div>
+<div id="locationCoords">
+    --°
+</div>
+
+</div><div id="chat"><div class="message jarvis">
+
+    JARVIS online.<br>
+    Neural Core inizializzato.<br><br>
+    Pronto a elaborare.
 
 </div>
 
+</div><div class="inputArea"><div class="inputBox">
 
-<div id="mapCrosshair"></div>
+    <input
+        id="input"
+        type="text"
+        placeholder="Comunica con JARVIS..."
+        autocomplete="off"
+    >
 
+    <button
+        id="conversation"
+        title="Modalità conversazione"
+    >
+        🔊
+    </button>
 
-<div id="locationInfo">
+    <button
+        id="mic"
+        title="Microfono"
+    >
+        🎙
+    </button>
 
-    <div id="locationName">
-        LOCATION
-    </div>
-
-    <div id="locationCoords">
-        --°
-    </div>
-
-</div>
-
-
-<div id="chat">
-
-    <div class="message jarvis">
-
-        JARVIS online.<br>
-        Neural Core inizializzato.<br><br>
-        Pronto a elaborare.
-
-    </div>
-
-</div>
-
-
-<div class="inputArea">
-
-    <div class="inputBox">
-
-        <input
-            id="input"
-            type="text"
-            placeholder="Comunica con JARVIS..."
-            autocomplete="off"
-        >
-
-        <button
-            id="conversation"
-            title="Modalità conversazione"
-        >
-            🔊
-        </button>
-
-        <button
-            id="mic"
-            title="Microfono"
-        >
-            🎙
-        </button>
-
-        <button id="send">
-            INVIA
-        </button>
-
-    </div>
+    <button id="send">
+        INVIA
+    </button>
 
 </div>
 
-
-<script type="importmap">
+</div><script type="importmap">
 
 {
     "imports":{
@@ -689,10 +622,7 @@ setTimeout(function(){
     }
 }
 
-</script>
-
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -748,6 +678,9 @@ document.getElementById("clock");
 
 const date =
 document.getElementById("date");
+
+const mapButton =
+null;
 
 const coordinates =
 document.getElementById("coordinates");
@@ -1732,10 +1665,6 @@ let neuralCy=
     neuralHeight/2;
 
 
-/*
-   CORE PIÙ GRANDE
-*/
-
 let neuralRadius=
     Math.min(
         neuralWidth,
@@ -1826,14 +1755,6 @@ function createNeuralNodes(){
         i++
     ){
 
-        /*
-           12% CIRCA DI NODI VIOLA
-        */
-
-        const isPurple=
-            Math.random()<.12;
-
-
         nodes.push({
 
             theta:
@@ -1866,7 +1787,24 @@ function createNeuralNodes(){
                 *
                 2,
 
-            isPurple
+            /* =========================================
+               COLORE DINAMICO
+            ========================================= */
+
+            colorState:
+                Math.random(),
+
+            colorTarget:
+                Math.random()<.13
+                ? 1
+                : 0,
+
+            colorChangeTime:
+                Math.random()*8,
+
+            colorSpeed:
+                .35+
+                Math.random()*.65
 
         });
 
@@ -2147,6 +2085,128 @@ function animateNeural(){
             );
 
 
+        /*
+           =============================================
+           COLORE DINAMICO DELLE PALLINE
+           =============================================
+        */
+
+        /*
+           Ogni nodo ha un momento diverso in cui
+           può cambiare colore.
+        */
+
+        const cycle=
+            Math.sin(
+                time*n.colorSpeed*.45
+                +
+                n.colorChangeTime
+            );
+
+
+        /*
+           Quando il ciclo supera una certa soglia,
+           il nodo cambia "destinazione".
+        */
+
+        if(
+            cycle>.92 &&
+            n.lastCycleState!==1
+        ){
+
+            n.lastCycleState=1;
+
+            n.colorTarget=
+                Math.random()<.14
+                ? 1
+                : 0;
+
+        }
+
+
+        if(cycle<.75){
+
+            n.lastCycleState=0;
+
+        }
+
+
+        /*
+           1 = viola
+           0 = colore principale
+        */
+
+        n.colorState+=
+            (
+                n.colorTarget-
+                n.colorState
+            )
+            *
+            .035;
+
+
+        /*
+           Colore giallo
+        */
+
+        const yellow={
+            r:255,
+            g:195,
+            b:0
+        };
+
+
+        /*
+           Colore viola/fucsia
+        */
+
+        const purple={
+            r:190,
+            g:55,
+            b:255
+        };
+
+
+        /*
+           Interpolazione morbida tra giallo e viola
+        */
+
+        const particleR=
+            Math.round(
+                yellow.r+
+                (
+                    purple.r-
+                    yellow.r
+                )
+                *
+                n.colorState
+            );
+
+
+        const particleG=
+            Math.round(
+                yellow.g+
+                (
+                    purple.g-
+                    yellow.g
+                )
+                *
+                n.colorState
+            );
+
+
+        const particleB=
+            Math.round(
+                yellow.b+
+                (
+                    purple.b-
+                    yellow.b
+                )
+                *
+                n.colorState
+            );
+
+
         projected.push({
 
             x:
@@ -2175,7 +2235,11 @@ function animateNeural(){
 
             phase:n.phase,
 
-            isPurple:n.isPurple
+            particleR,
+
+            particleG,
+
+            particleB
 
         });
 
@@ -2285,94 +2349,53 @@ function animateNeural(){
 
 
         /*
-           COLORE DEL NODO
-           GIALLO = NORMALE
-           VIOLA = 12% CIRCA
+           =============================================
+           GLOW DELLA SINGOLA PALLINA
+           =============================================
         */
 
-        if(n.isPurple){
-
-            /*
-               GLOW VIOLA
-            */
-
-            neuralCtx.fillStyle=
-                `rgba(180,60,255,${n.alpha*.42})`;
-
-            neuralCtx.beginPath();
-
-            neuralCtx.arc(
-                n.x,
-                n.y,
-                size*5,
-                0,
-                Math.PI*2
-            );
-
-            neuralCtx.fill();
+        neuralCtx.fillStyle=
+            `rgba(${n.particleR},${n.particleG},${n.particleB},${n.alpha*.30})`;
 
 
-            /*
-               PUNTO VIOLA
-            */
-
-            neuralCtx.fillStyle=
-                `rgba(210,100,255,${n.alpha})`;
-
-            neuralCtx.beginPath();
-
-            neuralCtx.arc(
-                n.x,
-                n.y,
-                size*1.15,
-                0,
-                Math.PI*2
-            );
-
-            neuralCtx.fill();
-
-        }else{
-
-            /*
-               GLOW NORMALE
-            */
-
-            neuralCtx.fillStyle=
-                `rgba(${r},${g},${b},${n.alpha*.28})`;
-
-            neuralCtx.beginPath();
-
-            neuralCtx.arc(
-                n.x,
-                n.y,
-                size*4,
-                0,
-                Math.PI*2
-            );
-
-            neuralCtx.fill();
+        neuralCtx.beginPath();
 
 
-            /*
-               PUNTO BIANCO
-            */
+        neuralCtx.arc(
+            n.x,
+            n.y,
+            size*4,
+            0,
+            Math.PI*2
+        );
 
-            neuralCtx.fillStyle=
-                `rgba(255,255,255,${n.alpha})`;
 
-            neuralCtx.beginPath();
+        neuralCtx.fill();
 
-            neuralCtx.arc(
-                n.x,
-                n.y,
-                size,
-                0,
-                Math.PI*2
-            );
 
-            neuralCtx.fill();
+        /*
+           =============================================
+           PALLINA CENTRALE
+           =============================================
+        */
 
-        }
+        neuralCtx.fillStyle=
+            `rgba(${n.particleR},${n.particleG},${n.particleB},${n.alpha})`;
+
+
+        neuralCtx.beginPath();
+
+
+        neuralCtx.arc(
+            n.x,
+            n.y,
+            size,
+            0,
+            Math.PI*2
+        );
+
+
+        neuralCtx.fill();
 
     });
 
@@ -3581,7 +3604,5 @@ window.JARVIS_EARTH={
 
 };
 
-</script>
-
-</body>
+</script></body>
 </html>

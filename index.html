@@ -493,7 +493,9 @@ remember(
 data.reply
 );
 
-speak(data.reply);
+if (conversationMode) {
+    speak(data.reply);
+}
 
 
 }catch(error){

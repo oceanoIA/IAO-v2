@@ -68,9 +68,9 @@ body{
     z-index:1;
 
     transition:
-        opacity 1.2s ease,
-        transform 1.2s ease,
-        filter 1.2s ease;
+        opacity 1.8s ease,
+        transform 1.8s ease,
+        filter 1.8s ease;
 }
 
 body.mapMode #neuralCanvas{
@@ -95,8 +95,8 @@ body.mapMode #neuralCanvas{
     transform:scale(.55);
 
     transition:
-        opacity 1.2s ease,
-        transform 1.2s ease;
+        opacity 1.8s ease,
+        transform 1.8s ease;
 }
 
 body.mapMode #earthContainer{
@@ -361,8 +361,8 @@ body.mapMode #date{
     color:#5eb8ff;
 
     transition:
-        opacity .8s ease,
-        transform .8s ease;
+        opacity 1.2s ease,
+        transform 1.2s ease;
 }
 
 body.mapMode #mapHud{
@@ -421,8 +421,8 @@ body.mapMode #mapHud{
         0 0 25px rgba(0,130,255,.15);
 
     transition:
-        opacity .7s ease,
-        transform .7s ease;
+        opacity 1s ease,
+        transform 1s ease;
 }
 
 #locationInfo.visible{
@@ -467,7 +467,6 @@ body.mapMode #mapHud{
 
 /* =====================================================
    CASELLA CHAT
-   VETRO NERO + TRASPARENTE + ROTONDA
 ===================================================== */
 
 .inputBox{
@@ -507,9 +506,9 @@ body.mapMode #mapHud{
         inset 0 1px 0 rgba(255,255,255,.045);
 
     transition:
-        border-color .3s ease,
-        box-shadow .3s ease,
-        background .3s ease;
+        border-color .7s ease,
+        box-shadow .7s ease,
+        background .7s ease;
 }
 
 .inputBox:focus-within{
@@ -592,11 +591,11 @@ button{
     cursor:pointer;
 
     transition:
-        background .25s ease,
-        color .25s ease,
-        box-shadow .25s ease,
-        border-color .25s ease,
-        transform .18s ease;
+        background .7s ease,
+        color .7s ease,
+        box-shadow .7s ease,
+        border-color .7s ease,
+        transform .35s ease;
 
     display:flex;
 
@@ -697,29 +696,35 @@ button:active{
     box-shadow:
         0 0 20px #168cff;
 
+    transition:
+        background 1.2s ease,
+        border-color 1.2s ease,
+        color 1.2s ease,
+        box-shadow 1.2s ease;
 }
 
 
 /* =====================================================
    ANIMAZIONE MICROFONO ATTIVO
+   PIÙ LENTA
 ===================================================== */
 
 #mic.active{
 
     animation:
-        micPulse 1.1s infinite;
+        micPulse 2.2s infinite ease-in-out;
 }
 
 @keyframes micPulse{
 
     0%,100%{
         box-shadow:
-            0 0 10px rgba(22,140,255,.45);
+            0 0 10px rgba(22,140,255,.40);
     }
 
     50%{
         box-shadow:
-            0 0 25px rgba(22,140,255,.9);
+            0 0 23px rgba(22,140,255,.72);
     }
 
 }
@@ -749,7 +754,7 @@ button:active{
     pointer-events:none;
 
     transition:
-        opacity .7s;
+        opacity 1s ease;
 }
 
 body.mapMode #mapCrosshair{
@@ -1104,25 +1109,11 @@ setTimeout(function(){
                 aria-hidden="true"
             >
 
-                <path
-                    d="M3 10v4"
-                />
-
-                <path
-                    d="M7 7v10"
-                />
-
-                <path
-                    d="M11 5v14"
-                />
-
-                <path
-                    d="M15 8v8"
-                />
-
-                <path
-                    d="M19 10v4"
-                />
+                <path d="M3 10v4"/>
+                <path d="M7 7v10"/>
+                <path d="M11 5v14"/>
+                <path d="M15 8v8"/>
+                <path d="M19 10v4"/>
 
             </svg>
 
@@ -2160,6 +2151,7 @@ function latLonToVector3(
 
     );
 
+
 }
 
 
@@ -2389,11 +2381,9 @@ function createNeuralNodes(){
                 2,
 
             special:
-
                 special,
 
             colorPhase:
-
                 Math.random()
                 *
                 Math.PI
@@ -2409,6 +2399,7 @@ function createNeuralNodes(){
 
 /* =====================================================
    ANIMAZIONE RETE NEURALE
+   MOVIMENTO PIÙ LENTO
 ===================================================== */
 
 function animateNeural(){
@@ -2422,40 +2413,63 @@ function animateNeural(){
         performance.now()/1000;
 
 
-    let speed=1;
+    let speed=.55;
 
     let energy=.2;
 
 
+    /*
+       MICROFONO / ASCOLTO
+       Prima: speed = 4
+       Ora: movimento molto più lento
+    */
+
     if(state==="listening"){
 
-        speed=4;
+        speed=1.7;
 
-        energy=1.2;
+        energy=.75;
 
     }
 
+
+    /*
+       PENSIERO
+       Prima: speed = 7
+       Ora: più controllato
+    */
 
     if(state==="thinking"){
 
-        speed=7;
+        speed=3.2;
 
-        energy=2;
+        energy=1.35;
 
     }
 
+
+    /*
+       VOCE
+       Prima: speed = 5
+       Ora: più lenta
+    */
 
     if(state==="speaking"){
 
-        speed=5;
+        speed=2.4;
 
-        energy=1.5;
+        energy=1.05;
 
     }
 
 
+    /*
+       ROTAZIONE GENERALE
+       Rallentata rispetto alla versione precedente
+    */
+
     neuralRotation +=
-        .004*speed;
+        .0022*speed;
 
 
     neuralCtx.fillStyle =
@@ -2509,25 +2523,35 @@ function animateNeural(){
         };
 
 
+    /*
+       CAMBIO COLORE PIÙ LENTO
+
+       Prima: .055
+       Ora: .022
+
+       Questo rende il passaggio
+       blu -> giallo molto più morbido.
+    */
+
     jarvisColor.r +=
         (
             targetColor.r-
             jarvisColor.r
-        )*.055;
+        )*.022;
 
 
     jarvisColor.g +=
         (
             targetColor.g-
             jarvisColor.g
-        )*.055;
+        )*.022;
 
 
     jarvisColor.b +=
         (
             targetColor.b-
             jarvisColor.b
-        )*.055;
+        )*.022;
 
 
     const r =
@@ -2548,7 +2572,7 @@ function animateNeural(){
 
     const pulse =
         (
-            Math.sin(time*4)+1
+            Math.sin(time*2.7)+1
         )/2;
 
 
@@ -2620,7 +2644,7 @@ function animateNeural(){
         const rr =
             n.r+
             Math.sin(
-                time*3+n.phase
+                time*2+n.phase
             )
             *
             energy*
@@ -2654,7 +2678,7 @@ function animateNeural(){
 
             x +=
                 Math.sin(
-                    time*2+n.phase
+                    time*1.5+n.phase
                 )
                 *
                 energy*
@@ -2663,7 +2687,7 @@ function animateNeural(){
 
             y +=
                 Math.cos(
-                    time*2.5+n.phase
+                    time*1.8+n.phase
                 )
                 *
                 energy*
@@ -2721,8 +2745,8 @@ function animateNeural(){
 
     const maxDist =
         state==="thinking"
-        ? 110
-        : 82;
+        ? 105
+        : 78;
 
 
     for(
@@ -2806,7 +2830,7 @@ function animateNeural(){
         const flicker =
             (
                 Math.sin(
-                    time*7+n.phase
+                    time*5+n.phase
                 )+1
             )/2;
 
@@ -2816,8 +2840,8 @@ function animateNeural(){
             flicker*
             (
                 state==="thinking"
-                ? 1.8
-                : .7
+                ? 1.5
+                : .6
             );
 
 
@@ -2831,7 +2855,7 @@ function animateNeural(){
             const colorWave =
                 (
                     Math.sin(
-                        time*.9+
+                        time*.7+
                         n.colorPhase
                     )+1
                 )/2;
@@ -2995,7 +3019,7 @@ function animateEarth(){
         zoomAnimating
     ){
 
-        zoomProgress += .012;
+        zoomProgress += .008;
 
 
         if(zoomProgress>=1){
@@ -3047,7 +3071,7 @@ function animateEarth(){
 
         earthGroup.quaternion.slerp(
             targetQuaternion,
-            .045
+            .032
         );
 
     }
@@ -3058,7 +3082,7 @@ function animateEarth(){
 
     if(marker.visible){
 
-        markerPulse += .08;
+        markerPulse += .055;
 
 
         const scale =
@@ -3602,7 +3626,7 @@ function speak(text){
 
             setTimeout(
                 startWakeWord,
-                600
+                900
             );
 
         }
@@ -3853,7 +3877,7 @@ if(Recognition){
 
                     }
 
-                },250);
+                },400);
 
             }
 
@@ -4091,7 +4115,7 @@ function startWakeWord(){
 
             setTimeout(
                 startWakeWord,
-                1200
+                1600
             );
 
         }
@@ -4115,7 +4139,7 @@ function startWakeWord(){
 
             setTimeout(
                 startWakeWord,
-                600
+                1000
             );
 
         }
@@ -4183,7 +4207,7 @@ function activateJarvis(){
 
         }catch{}
 
-    },250);
+    },500);
 
 }
 

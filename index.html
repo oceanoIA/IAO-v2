@@ -3,16 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JARVIS — Neural Interface</title>
+<title>JARVIS</title>
 
 <style>
 *{box-sizing:border-box}
-
-:root{
---yellow:#ffd000;
---blue:#168cff;
---bg:#000;
-}
 
 html,body{
 margin:0;
@@ -21,7 +15,7 @@ height:100%;
 overflow:hidden;
 background:#000;
 color:#fff;
-font-family:Arial,sans-serif;
+font-family:Arial,sans-serif
 }
 
 canvas{
@@ -29,150 +23,85 @@ position:fixed;
 inset:0;
 width:100%;
 height:100%;
-z-index:1;
+z-index:1
 }
-
-/* ================= HEADER ================= */
 
 .header{
 position:fixed;
-top:19px;
+top:20px;
 left:0;
 width:100%;
 text-align:center;
-z-index:20;
-pointer-events:none;
+z-index:10;
+pointer-events:none
 }
 
 .header h1{
 margin:0;
 font-size:25px;
 font-weight:300;
-letter-spacing:13px;
-text-shadow:0 0 12px var(--yellow),0 0 30px rgba(255,208,0,.25);
+letter-spacing:12px;
+text-shadow:0 0 15px #ffd000
 }
 
 .status{
-margin-top:8px;
+margin-top:7px;
 font:10px monospace;
-letter-spacing:3px;
-opacity:.9;
+letter-spacing:3px
 }
 
 #dot{
-color:var(--yellow);
-text-shadow:0 0 10px currentColor,0 0 25px currentColor;
+color:#ffd000;
+text-shadow:0 0 10px currentColor
 }
-
-/* ================= PANELS ================= */
 
 .panel{
 position:fixed;
-z-index:15;
+top:25px;
+z-index:10;
 font:10px monospace;
-line-height:1.9;
+line-height:1.8;
 letter-spacing:2px;
-color:rgba(255,210,0,.65);
-transition:.4s;
+color:rgba(255,210,0,.65)
 }
 
 .left{
-top:25px;
 left:22px;
 border-left:2px solid rgba(255,210,0,.5);
-padding-left:10px;
+padding-left:10px
 }
 
 .right{
-top:25px;
 right:22px;
 text-align:right;
 border-right:2px solid rgba(255,210,0,.5);
-padding-right:10px;
+padding-right:10px
 }
 
 #clock{
-font-size:16px;
-color:#fff;
-letter-spacing:2px;
+font-size:15px;
+color:#fff
 }
-
-#date{
-font-size:9px;
-}
-
-/* ================= CENTER HUD ================= */
-
-.centerLabel{
-position:fixed;
-left:50%;
-top:50%;
-transform:translate(-50%,calc(-50% + 145px));
-z-index:12;
-font:9px monospace;
-letter-spacing:4px;
-color:rgba(255,255,255,.45);
-pointer-events:none;
-transition:.5s;
-}
-
-.centerLabel.active{
-color:#fff;
-text-shadow:0 0 12px currentColor;
-}
-
-/* ================= ACTIVITY ================= */
-
-.activity{
-position:fixed;
-left:50%;
-bottom:215px;
-transform:translateX(-50%);
-z-index:15;
-width:170px;
-height:24px;
-display:flex;
-align-items:flex-end;
-justify-content:center;
-gap:3px;
-opacity:.35;
-transition:.4s;
-pointer-events:none;
-}
-
-.activity span{
-width:3px;
-height:5px;
-background:var(--yellow);
-box-shadow:0 0 7px currentColor;
-transition:height .15s;
-}
-
-.activity.active{
-opacity:1;
-}
-
-/* ================= CHAT ================= */
 
 #chat{
 position:fixed;
-z-index:25;
+z-index:20;
 left:50%;
-bottom:112px;
+bottom:115px;
 transform:translateX(-50%);
 width:100%;
 max-width:700px;
-max-height:25vh;
+max-height:27vh;
 overflow-y:auto;
 padding:0 20px;
 display:flex;
 flex-direction:column;
 gap:9px;
-scrollbar-width:none;
+scrollbar-width:none
 }
 
 #chat::-webkit-scrollbar{
-display:none;
+display:none
 }
 
 .message{
@@ -181,37 +110,23 @@ padding:10px 14px;
 border-radius:6px;
 font-size:14px;
 line-height:1.5;
-backdrop-filter:blur(12px);
-animation:messageIn .25s ease;
-}
-
-@keyframes messageIn{
-from{
-opacity:0;
-transform:translateY(8px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
+backdrop-filter:blur(10px)
 }
 
 .user{
 align-self:flex-end;
 background:rgba(255,190,0,.08);
 border:1px solid rgba(255,190,0,.35);
-border-right:3px solid var(--yellow);
+border-right:3px solid #ffd000
 }
 
 .jarvis{
 align-self:flex-start;
 background:rgba(5,10,18,.82);
 border:1px solid rgba(30,140,255,.25);
-border-left:3px solid var(--blue);
-color:#dcecff;
+border-left:3px solid #168cff;
+color:#dcecff
 }
-
-/* ================= INPUT ================= */
 
 .inputArea{
 position:fixed;
@@ -221,19 +136,17 @@ left:50%;
 transform:translateX(-50%);
 width:100%;
 max-width:700px;
-padding:0 15px;
+padding:0 15px
 }
 
 .inputBox{
 display:flex;
 gap:7px;
 padding:5px;
-background:rgba(4,6,9,.96);
+background:rgba(5,7,10,.96);
 border:1px solid rgba(255,190,0,.4);
-border-radius:9px;
-box-shadow:
-0 0 20px rgba(255,190,0,.04),
-inset 0 0 20px rgba(255,255,255,.01);
+border-radius:8px;
+box-shadow:0 0 25px rgba(255,190,0,.06)
 }
 
 input{
@@ -245,11 +158,11 @@ background:transparent;
 border:0;
 outline:0;
 color:#fff;
-font-size:14px;
+font-size:14px
 }
 
 input::placeholder{
-color:rgba(255,255,255,.3);
+color:rgba(255,255,255,.3)
 }
 
 button{
@@ -257,36 +170,32 @@ height:44px;
 border-radius:5px;
 border:1px solid rgba(255,190,0,.5);
 background:rgba(255,190,0,.1);
-color:var(--yellow);
+color:#ffd000;
 font-family:monospace;
 font-weight:bold;
-cursor:pointer;
-transition:.2s;
+cursor:pointer
 }
 
 button:hover{
-background:var(--yellow);
-color:#000;
-box-shadow:0 0 18px rgba(255,208,0,.5);
+background:#ffd000;
+color:#000
 }
 
 #mic,#conversation,#voiceButton{
 width:48px;
-font-size:17px;
+font-size:17px
 }
 
 #send{
-width:70px;
+width:70px
 }
 
 .active{
-background:var(--blue)!important;
-border-color:var(--blue)!important;
+background:#168cff!important;
+border-color:#168cff!important;
 color:#fff!important;
-box-shadow:0 0 20px var(--blue),0 0 45px rgba(22,140,255,.25)!important;
+box-shadow:0 0 20px #168cff
 }
-
-/* ================= VOICE ================= */
 
 #voicePanel{
 position:fixed;
@@ -295,76 +204,51 @@ right:20px;
 bottom:75px;
 display:none;
 padding:12px;
-background:rgba(5,8,12,.98);
+background:rgba(5,8,12,.97);
 border:1px solid rgba(30,140,255,.5);
-border-radius:7px;
-box-shadow:0 0 30px rgba(22,140,255,.12);
+border-radius:7px
 }
 
 #voiceSelect{
 background:#05080c;
 color:#fff;
-border:1px solid var(--blue);
+border:1px solid #168cff;
 padding:7px;
-max-width:230px;
+max-width:230px
 }
 
-/* ================= CORNERS ================= */
-
-.corner{
+#voiceButton{
 position:fixed;
-z-index:10;
-width:28px;
-height:28px;
-opacity:.45;
-pointer-events:none;
+right:20px;
+bottom:18px;
+z-index:50
 }
 
-.c1{
-left:14px;
-bottom:14px;
-border-left:1px solid var(--yellow);
-border-bottom:1px solid var(--yellow);
+#conversation{
+font-size:15px
 }
-
-.c2{
-right:14px;
-bottom:14px;
-border-right:1px solid var(--yellow);
-border-bottom:1px solid var(--yellow);
-}
-
-/* ================= MOBILE ================= */
 
 @media(max-width:600px){
 
 .panel{
-display:none;
+display:none
 }
 
 .header h1{
 font-size:20px;
-letter-spacing:8px;
+letter-spacing:8px
 }
 
 .message{
-max-width:90%;
+max-width:90%
 }
 
 #chat{
-max-height:29vh;
+max-height:30vh
 }
 
 #send{
-width:62px;
-}
-
-.centerLabel{
-transform:translate(-50%,calc(-50% + 125px));
-}
-
-.activity{
-bottom:190px;
+width:62px
 }
 
 }
@@ -375,14 +259,10 @@ bottom:190px;
 
 <canvas id="canvas"></canvas>
 
-<div class="corner c1"></div>
-<div class="corner c2"></div>
-
 <div class="panel left">
-JARVIS CORE V10<br>
+JARVIS CORE V9<br>
 NEURAL ENGINE: ONLINE<br>
-MEMORY: <span id="memoryCount">0</span><br>
-SYSTEM: ACTIVE
+MEMORY: <span id="memoryCount">0</span>
 </div>
 
 <div class="panel right">
@@ -393,22 +273,11 @@ STATE: <span id="state">IDLE</span>
 
 <div class="header">
 <h1>J.A.R.V.I.S.</h1>
+
 <div class="status">
 <span id="dot">●</span>
 NEURAL INTERFACE ONLINE
 </div>
-</div>
-
-<div class="centerLabel" id="centerLabel">
-NEURAL CORE
-</div>
-
-<div class="activity" id="activity">
-<span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span>
-<span></span><span></span><span></span><span></span>
 </div>
 
 <div id="chat">
@@ -423,9 +292,7 @@ JARVIS online. Neural Core inizializzato.
 <select id="voiceSelect"></select>
 </div>
 
-<button id="voiceButton" title="Impostazioni voce">
-⚙
-</button>
+<button id="voiceButton" title="Impostazioni voce">⚙</button>
 
 <div class="inputArea">
 
@@ -456,6 +323,7 @@ INVIA
 </div>
 
 </div>
+
 
 <script>
 
@@ -516,15 +384,6 @@ document.getElementById("voicePanel");
 const voiceSelect =
 document.getElementById("voiceSelect");
 
-const activity =
-document.getElementById("activity");
-
-const activityBars =
-activity.querySelectorAll("span");
-
-const centerLabel =
-document.getElementById("centerLabel");
-
 
 /* =====================================================
    STATO
@@ -542,7 +401,7 @@ let wakeRecognition = null;
 
 
 /* =====================================================
-   MEMORIA
+   MEMORIA LOCALE
 ===================================================== */
 
 let memory = [];
@@ -554,7 +413,7 @@ JSON.parse(
 localStorage.getItem("jarvis_memory") || "[]"
 );
 
-}catch(e){
+}catch(error){
 
 memory = [];
 
@@ -597,7 +456,7 @@ saveMemory();
 
 
 /* =====================================================
-   STATO JARVIS
+   STATO
 ===================================================== */
 
 function setState(newState){
@@ -608,7 +467,6 @@ newState;
 stateEl.textContent =
 newState.toUpperCase();
 
-
 if(
 newState === "listening" ||
 newState === "thinking" ||
@@ -618,55 +476,10 @@ newState === "speaking"
 dot.style.color =
 "#168cff";
 
-centerLabel.classList.add(
-"active"
-);
-
-activity.classList.add(
-"active"
-);
-
 }else{
 
 dot.style.color =
 "#ffd000";
-
-centerLabel.classList.remove(
-"active"
-);
-
-activity.classList.remove(
-"active"
-);
-
-}
-
-
-if(newState === "listening"){
-
-centerLabel.textContent =
-"LISTENING";
-
-}
-
-else if(newState === "thinking"){
-
-centerLabel.textContent =
-"PROCESSING";
-
-}
-
-else if(newState === "speaking"){
-
-centerLabel.textContent =
-"SPEAKING";
-
-}
-
-else{
-
-centerLabel.textContent =
-"NEURAL CORE";
 
 }
 
@@ -799,11 +612,13 @@ sendMessage;
 
 input.addEventListener(
 "keydown",
-e => {
+event => {
 
-if(e.key === "Enter"){
+if(
+event.key === "Enter"
+){
 
-e.preventDefault();
+event.preventDefault();
 
 sendMessage();
 
@@ -853,6 +668,8 @@ setState(
 );
 
 
+/* COMANDO LOCALE */
+
 const local =
 localCommand(text);
 
@@ -868,6 +685,12 @@ remember(
 "assistant",
 local
 );
+
+
+/*
+   La voce viene usata SOLO
+   in modalità conversazione.
+*/
 
 if(conversationMode){
 
@@ -885,6 +708,8 @@ return;
 
 }
 
+
+/* RISPOSTA */
 
 const answer =
 addMessage(
@@ -952,6 +777,12 @@ data.reply
 );
 
 
+/*
+   IMPORTANTE:
+   testo = nessuna voce
+   conversazione = voce
+*/
+
 if(conversationMode){
 
 speak(data.reply);
@@ -980,6 +811,10 @@ finish();
 }
 
 
+/* =====================================================
+   FINE RICHIESTA
+===================================================== */
+
 function finish(){
 
 busy = false;
@@ -995,7 +830,7 @@ input.focus();
 
 
 /* =====================================================
-   VOCE
+   VOCI
 ===================================================== */
 
 let voices = [];
@@ -1005,7 +840,11 @@ function loadVoices(){
 
 if(
 !("speechSynthesis" in window)
-)return;
+){
+
+return;
+
+}
 
 
 voices =
@@ -1016,7 +855,7 @@ voiceSelect.innerHTML =
 
 
 voices.forEach(
-(voice,index)=>{
+(voice,index) => {
 
 const option =
 document.createElement(
@@ -1070,7 +909,7 @@ loadVoices();
 
 
 voiceButton.onclick =
-()=>{
+() => {
 
 voicePanel.style.display =
 voicePanel.style.display ===
@@ -1082,7 +921,7 @@ voicePanel.style.display ===
 
 
 voiceSelect.onchange =
-()=>{
+() => {
 
 localStorage.setItem(
 "jarvis_voice",
@@ -1113,14 +952,15 @@ new SpeechSynthesisUtterance(
 text
 );
 
+
 utterance.lang =
 "it-IT";
 
 utterance.rate =
-.88;
+0.88;
 
 utterance.pitch =
-.65;
+0.65;
 
 utterance.volume =
 1;
@@ -1143,7 +983,7 @@ voices[selected];
 
 
 utterance.onstart =
-()=>{
+() => {
 
 setState(
 "speaking"
@@ -1153,7 +993,7 @@ setState(
 
 
 utterance.onend =
-()=>{
+() => {
 
 setState(
 "idle"
@@ -1166,7 +1006,7 @@ wakeMode
 
 setTimeout(
 startWakeWord,
-700
+600
 );
 
 }
@@ -1175,7 +1015,7 @@ startWakeWord,
 
 
 utterance.onerror =
-()=>{
+() => {
 
 setState(
 "idle"
@@ -1196,13 +1036,15 @@ utterance
 ===================================================== */
 
 conversation.onclick =
-()=>{
+() => {
 
 conversationMode =
 !conversationMode;
 
 
-if(conversationMode){
+if(
+conversationMode
+){
 
 wakeMode =
 true;
@@ -1213,6 +1055,10 @@ conversation.classList.add(
 
 conversation.textContent =
 "🔵";
+
+setState(
+"listening"
+);
 
 startWakeWord();
 
@@ -1231,7 +1077,7 @@ conversation.textContent =
 stopWakeWord();
 
 if(
-"speechSynthesis" in window
+speechSynthesis
 ){
 
 speechSynthesis.cancel();
@@ -1272,7 +1118,7 @@ true;
 
 
 recognition.onstart =
-()=>{
+() => {
 
 listening =
 true;
@@ -1295,7 +1141,7 @@ setState(
 
 
 recognition.onresult =
-event=>{
+event => {
 
 let transcript = "";
 
@@ -1322,10 +1168,12 @@ event.results.length-1
 ];
 
 
-if(last.isFinal){
+if(
+last.isFinal
+){
 
 setTimeout(
-()=>{
+() => {
 
 if(
 input.value.trim()
@@ -1345,7 +1193,7 @@ sendMessage();
 
 
 recognition.onerror =
-event=>{
+event => {
 
 console.log(
 "Speech recognition:",
@@ -1356,7 +1204,7 @@ event.error
 
 
 recognition.onend =
-()=>{
+() => {
 
 listening =
 false;
@@ -1385,10 +1233,11 @@ setState(
 
 
 mic.onclick =
-()=>{
+() => {
 
 if(busy)
 return;
+
 
 conversationMode =
 true;
@@ -1404,7 +1253,9 @@ conversation.textContent =
 "🔵";
 
 
-if(listening){
+if(
+listening
+){
 
 recognition.stop();
 
@@ -1417,9 +1268,9 @@ try{
 
 recognition.start();
 
-}catch(e){
+}catch(error){
 
-console.log(e);
+console.log(error);
 
 }
 
@@ -1435,7 +1286,7 @@ true;
 
 
 /* =====================================================
-   WAKE WORD — "JARVIS"
+   WAKE WORD
 ===================================================== */
 
 function startWakeWord(){
@@ -1468,7 +1319,7 @@ true;
 
 
 wakeRecognition.onresult =
-event=>{
+event => {
 
 for(
 let i=event.resultIndex;
@@ -1507,7 +1358,7 @@ return;
 
 
 wakeRecognition.onerror =
-()=>{
+() => {
 
 wakeRecognition =
 null;
@@ -1530,7 +1381,7 @@ startWakeWord,
 
 
 wakeRecognition.onend =
-()=>{
+() => {
 
 wakeRecognition =
 null;
@@ -1556,7 +1407,7 @@ try{
 
 wakeRecognition.start();
 
-}catch(e){
+}catch(error){
 
 wakeRecognition =
 null;
@@ -1568,7 +1419,9 @@ null;
 
 function stopWakeWord(){
 
-if(wakeRecognition){
+if(
+wakeRecognition
+){
 
 try{
 
@@ -1605,15 +1458,15 @@ input.placeholder =
 
 
 setTimeout(
-()=>{
+() => {
 
 try{
 
 recognition.start();
 
-}catch(e){
+}catch(error){
 
-console.log(e);
+console.log(error);
 
 }
 
@@ -1716,14 +1569,14 @@ nodes = [];
 
 for(
 let i=0;
-i<185;
+i<165;
 i++
 ){
 
 nodes.push({
 
 theta:
-Math.random()*
+Math.random() *
 Math.PI*2,
 
 phi:
@@ -1732,10 +1585,10 @@ Math.acos(
 ),
 
 r:
-radius*
+radius *
 (
-.7+
-Math.random()*.58
+.72+
+Math.random()*.55
 ),
 
 size:
@@ -1772,26 +1625,28 @@ if(
 state === "listening"
 ){
 
-speed = 5;
-energy = 1.4;
+speed = 4;
+energy = 1.2;
 
 }
+
 
 if(
 state === "thinking"
 ){
 
-speed = 8;
-energy = 2.2;
+speed = 7;
+energy = 2;
 
 }
+
 
 if(
 state === "speaking"
 ){
 
-speed = 6;
-energy = 1.7;
+speed = 5;
+energy = 1.5;
 
 }
 
@@ -1801,7 +1656,7 @@ rotation +=
 
 
 ctx.fillStyle =
-"rgba(0,0,0,.30)";
+"rgba(0,0,0,.28)";
 
 ctx.fillRect(
 0,
@@ -1810,8 +1665,6 @@ width,
 height
 );
 
-
-/* COLORE */
 
 let target;
 
@@ -1868,37 +1721,389 @@ jarvisColor.b
 
 
 const r =
-Math.round(jarvisColor.r);
+Math.round(
+jarvisColor.r
+);
 
 const g =
-Math.round(jarvisColor.g);
+Math.round(
+jarvisColor.g
+);
 
 const b =
-Math.round(jarvisColor.b);
+Math.round(
+jarvisColor.b
+);
 
-
-/* PULSAZIONI */
 
 const pulse =
 (
-Math.sin(time*4)+1
+Math.sin(
+time*4
+)+1
 )/2;
+
 
 const pulse2 =
 (
-Math.sin(time*9)+1
+Math.sin(
+time*8
+)+1
 )/2;
 
 
 const glow =
-radius*
+radius *
 (
 1.05+
-energy*.72+
+energy*.7+
 pulse*.18
 );
 
 
 /* GLOW */
 
-const gradient
+const gradient =
+ctx.createRadialGradient(
+cx,
+cy,
+0,
+cx,
+cy,
+glow
+);
+
+
+gradient.addColorStop(
+0,
+`rgba(${r},${g},${b},.48)`
+);
+
+gradient.addColorStop(
+.35,
+`rgba(${r},${g},${b},.15)`
+);
+
+gradient.addColorStop(
+1,
+"rgba(0,0,0,0)"
+);
+
+
+ctx.fillStyle =
+gradient;
+
+
+ctx.beginPath();
+
+ctx.arc(
+cx,
+cy,
+glow,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+/* NODI */
+
+const projected = [];
+
+
+nodes.forEach(
+n => {
+
+const rr =
+n.r+
+Math.sin(
+time*3+n.phase
+)*
+energy*7;
+
+
+let x =
+rr*
+Math.sin(n.phi)*
+Math.cos(
+n.theta+
+rotation
+);
+
+
+let y =
+rr*
+Math.cos(n.phi);
+
+
+let z =
+rr*
+Math.sin(n.phi)*
+Math.sin(
+n.theta+
+rotation
+);
+
+
+if(
+state !== "idle"
+){
+
+x +=
+Math.sin(
+time*2+n.phase
+)*
+energy*7;
+
+y +=
+Math.cos(
+time*2.5+n.phase
+)*
+energy*7;
+
+}
+
+
+const perspective =
+430/
+(
+430+z
+);
+
+
+projected.push({
+
+x:
+cx+x*perspective,
+
+y:
+cy+y*perspective,
+
+z:z,
+
+size:
+n.size*perspective,
+
+alpha:
+Math.max(
+.1,
+Math.min(
+1,
+(z+radius)/
+(radius*2)
+)
+),
+
+phase:
+n.phase
+
+});
+
+});
+
+
+/* RETI */
+
+const maxDist =
+state === "thinking"
+?110
+:82;
+
+
+for(
+let i=0;
+i<projected.length;
+i++
+){
+
+for(
+let j=i+1;
+j<projected.length;
+j++
+){
+
+const a =
+projected[i];
+
+const c =
+projected[j];
+
+
+const dx =
+a.x-c.x;
+
+const dy =
+a.y-c.y;
+
+
+const dist =
+Math.sqrt(
+dx*dx+
+dy*dy
+);
+
+
+if(
+dist < maxDist
+){
+
+const alpha =
+(
+1-
+dist/maxDist
+)*
+.3*
+a.alpha;
+
+
+ctx.beginPath();
+
+ctx.moveTo(
+a.x,
+a.y
+);
+
+ctx.lineTo(
+c.x,
+c.y
+);
+
+
+ctx.strokeStyle =
+`rgba(${r},${g},${b},${alpha})`;
+
+ctx.lineWidth =
+state === "thinking"
+? .9
+: .65;
+
+ctx.stroke();
+
+}
+
+}
+
+}
+
+
+/* PARTICELLE */
+
+projected.forEach(
+n => {
+
+const flicker =
+(
+Math.sin(
+time*7+n.phase
+)+1
+)/2;
+
+
+const size =
+n.size+
+flicker*
+(
+state === "thinking"
+?1.8
+:.7
+);
+
+
+ctx.fillStyle =
+`rgba(${r},${g},${b},${n.alpha*.28})`;
+
+
+ctx.beginPath();
+
+ctx.arc(
+n.x,
+n.y,
+size*4,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+ctx.fillStyle =
+`rgba(255,255,255,${n.alpha})`;
+
+
+ctx.beginPath();
+
+ctx.arc(
+n.x,
+n.y,
+size,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+});
+
+
+/* CORE */
+
+const core =
+5+
+pulse*2+
+pulse2*1.5+
+energy*2;
+
+
+ctx.fillStyle =
+`rgba(${r},${g},${b},.38)`;
+
+
+ctx.beginPath();
+
+ctx.arc(
+cx,
+cy,
+core*5,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+ctx.fillStyle =
+"#fff";
+
+
+ctx.beginPath();
+
+ctx.arc(
+cx,
+cy,
+core,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+}
+
+
+window.addEventListener(
+"resize",
+resize
+);
+
+
+resize();
+
+animate();
+
+input.focus();
+
+</script>
+
+</body>
+</html>

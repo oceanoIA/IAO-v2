@@ -1,17 +1,11 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
+<!DOCTYPE html><html lang="it">
+<head><meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
 
-<meta charset="UTF-8">
+«»
 
-<meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
->
-
-<title>JARVIS — NEURAL CORE</title>
-
-<style>
+<title>JARVIS — NEURAL CORE</title><style>
 
 *{
     box-sizing:border-box;
@@ -459,7 +453,7 @@ body.mapMode #mapHud{
 
 
 /* =====================================================
-   NUOVA CASELLA CHAT
+   CASELLA CHAT
    VETRO NERO + ROTONDA
 ===================================================== */
 
@@ -471,20 +465,12 @@ body.mapMode #mapHud{
 
     padding:7px;
 
-    /*
-       Vetro nero trasparente
-    */
-
     background:
         linear-gradient(
             135deg,
             rgba(10,12,16,.72),
             rgba(0,0,0,.52)
         );
-
-    /*
-       Trasparenza + effetto vetro
-    */
 
     backdrop-filter:
         blur(22px)
@@ -494,23 +480,11 @@ body.mapMode #mapHud{
         blur(22px)
         saturate(130%);
 
-    /*
-       Bordo futuristico
-    */
-
     border:
         1px solid
         rgba(255,200,0,.28);
 
-    /*
-       CASSETTA COMPLETAMENTE ROTONDA
-    */
-
     border-radius:28px;
-
-    /*
-       Ombra molto morbida
-    */
 
     box-shadow:
         0 0 25px rgba(0,0,0,.5),
@@ -521,11 +495,6 @@ body.mapMode #mapHud{
         border-color .3s ease,
         box-shadow .3s ease;
 }
-
-
-/*
-   Quando tocchi/scrivi
-*/
 
 .inputBox:focus-within{
 
@@ -575,7 +544,7 @@ input::placeholder{
 
 
 /* =====================================================
-   PULSANTI
+   PULSANTI FUTURISTICI
 ===================================================== */
 
 button{
@@ -593,7 +562,7 @@ button{
 
     color:#ffd000;
 
-    font-family:monospace;
+    font-family:Arial,sans-serif;
 
     font-weight:bold;
 
@@ -601,6 +570,14 @@ button{
 
     transition:
         .25s ease;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:0;
 
 }
 
@@ -617,15 +594,81 @@ button:hover{
 }
 
 
+/* =====================================================
+   ICON BUTTONS
+===================================================== */
+
 #mic,
 #conversation{
 
     width:48px;
 
-    font-size:17px;
+}
+
+
+/* =====================================================
+   SVG ICON
+===================================================== */
+
+.icon{
+
+    width:21px;
+
+    height:21px;
+
+    display:block;
+
+    fill:none;
+
+    stroke:currentColor;
+
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+
+    stroke-linejoin:round;
+
+    transition:
+        transform .25s ease,
+        filter .25s ease;
+}
+
+button:hover .icon{
+
+    transform:scale(1.08);
+
+    filter:
+        drop-shadow(
+            0 0 5px
+            currentColor
+        );
 
 }
 
+
+/* Microfono */
+
+#mic .icon{
+
+    width:20px;
+    height:20px;
+
+}
+
+
+/* Altoparlante */
+
+#conversation .icon{
+
+    width:21px;
+    height:21px;
+
+}
+
+
+/* =====================================================
+   SEND
+===================================================== */
 
 #send{
 
@@ -650,6 +693,39 @@ button:hover{
 
     box-shadow:
         0 0 20px #168cff;
+}
+
+.active .icon{
+
+    filter:
+        drop-shadow(
+            0 0 6px
+            #fff
+        );
+
+}
+
+
+/* =====================================================
+   ANIMAZIONE ICONA MICROFONO
+===================================================== */
+
+#mic.active .icon{
+
+    animation:
+        micPulse 1s infinite ease-in-out;
+}
+
+@keyframes micPulse{
+
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.12);
+    }
+
 }
 
 
@@ -870,10 +946,7 @@ body.mapMode #mapCrosshair{
 
 }
 
-</style>
-
-
-<script>
+</style><script>
 
 setTimeout(function(){
 
@@ -888,152 +961,167 @@ setTimeout(function(){
 
 },1800);
 
-</script>
-
-</head>
-
-
-<body>
-
-
-<div id="loading">
+</script></head><body><div id="loading">
     JARVIS NEURAL CORE
-</div>
+</div><canvas id="neuralCanvas"></canvas>
 
+<div id="earthContainer"><canvas id="earthCanvas"></canvas>
 
-<canvas id="neuralCanvas"></canvas>
+</div><div class="header"><h1>J.A.R.V.I.S.</h1>
 
+<div class="status">
 
-<div id="earthContainer">
+    <span id="dot">●</span>
 
-    <canvas id="earthCanvas"></canvas>
-
-</div>
-
-
-<div class="header">
-
-    <h1>J.A.R.V.I.S.</h1>
-
-    <div class="status">
-
-        <span id="dot">●</span>
-
-        <span id="statusText">
-            NEURAL INTERFACE ONLINE
-        </span>
-
-    </div>
+    <span id="statusText">
+        NEURAL INTERFACE ONLINE
+    </span>
 
 </div>
 
-
-<!-- =====================================================
+</div><!-- =====================================================
      OROLOGIO
-===================================================== -->
-
-<div id="clockPanel">
-
-    <div id="clock">
-        --:--:--
-    </div>
-
-    <div id="date">
-        --
-    </div>
-
+===================================================== --><div id="clockPanel"><div id="clock">
+    --:--:--
 </div>
 
+<div id="date">
+    --
+</div>
 
-<!-- =====================================================
+</div><!-- =====================================================
      MAP HUD
-===================================================== -->
-
-<div id="mapHud">
-
-    <div id="mapTitle">
-        EARTH NAVIGATION
-    </div>
-
-    <div id="coordinates">
-        GLOBAL POSITIONING SYSTEM ONLINE
-    </div>
-
+===================================================== --><div id="mapHud"><div id="mapTitle">
+    EARTH NAVIGATION
 </div>
 
-
-<div id="mapCrosshair"></div>
-
-
-<div id="locationInfo">
-
-    <div id="locationName">
-        LOCATION
-    </div>
-
-    <div id="locationCoords">
-        --°
-    </div>
-
+<div id="coordinates">
+    GLOBAL POSITIONING SYSTEM ONLINE
 </div>
 
+</div><div id="mapCrosshair"></div><div id="locationInfo"><div id="locationName">
+    LOCATION
+</div>
 
-<!-- =====================================================
+<div id="locationCoords">
+    --°
+</div>
+
+</div><!-- =====================================================
      CHAT
-===================================================== -->
+===================================================== --><div id="chat"><div class="message jarvis">
 
-<div id="chat">
-
-    <div class="message jarvis">
-
-        JARVIS online.<br>
-        Neural Core inizializzato.<br><br>
-        Pronto a elaborare.
-
-    </div>
+    JARVIS online.<br>
+    Neural Core inizializzato.<br><br>
+    Pronto a elaborare.
 
 </div>
 
-
-<!-- =====================================================
+</div><!-- =====================================================
      INPUT
-===================================================== -->
+===================================================== --><div class="inputArea"><div class="inputBox">
 
-<div class="inputArea">
+    <input
+        id="input"
+        type="text"
+        placeholder="Comunica con JARVIS..."
+        autocomplete="off"
+    >
 
-    <div class="inputBox">
 
-        <input
-            id="input"
-            type="text"
-            placeholder="Comunica con JARVIS..."
-            autocomplete="off"
+    <!-- =============================================
+         PULSANTE VOCE
+    ============================================== -->
+
+    <button
+        id="conversation"
+        title="Modalità conversazione"
+        aria-label="Modalità conversazione"
+    >
+
+        <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
         >
 
-        <button
-            id="conversation"
-            title="Modalità conversazione"
+            <path
+                d="M4 9v6"
+            />
+
+            <path
+                d="M8 6v12"
+            />
+
+            <path
+                d="M12 4v16"
+            />
+
+            <path
+                d="M16 7v10"
+            />
+
+            <path
+                d="M20 9v6"
+            />
+
+        </svg>
+
+    </button>
+
+
+    <!-- =============================================
+         MICROFONO
+    ============================================== -->
+
+    <button
+        id="mic"
+        title="Microfono"
+        aria-label="Microfono"
+    >
+
+        <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
         >
-            🔊
-        </button>
 
-        <button
-            id="mic"
-            title="Microfono"
-        >
-            🎙
-        </button>
+            <rect
+                x="8"
+                y="3"
+                width="8"
+                height="12"
+                rx="4"
+            />
 
-        <button id="send">
-            INVIA
-        </button>
+            <path
+                d="M5 11v1a7 7 0 0 0 14 0v-1"
+            />
 
-    </div>
+            <path
+                d="M12 19v3"
+            />
+
+            <path
+                d="M8 22h8"
+            />
+
+        </svg>
+
+    </button>
+
+
+    <!-- =============================================
+         INVIA
+    ============================================== -->
+
+    <button id="send">
+        INVIA
+    </button>
 
 </div>
 
-
-<script type="importmap">
+</div><script type="importmap">
 
 {
     "imports":{
@@ -1042,10 +1130,7 @@ setTimeout(function(){
     }
 }
 
-</script>
-
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -2186,11 +2271,6 @@ function createNeuralNodes(){
         i++
     ){
 
-        /*
-           Circa 15% dei nodi
-           avranno un colore alternativo.
-        */
-
         const special =
             Math.random() < .15;
 
@@ -2660,13 +2740,6 @@ function animateNeural(){
             );
 
 
-        /*
-           COLORE DINAMICO DEI NODI SPECIALI
-
-           Non sono fissi:
-           il colore cambia continuamente.
-        */
-
         let particleR=r;
         let particleG=g;
         let particleB=b;
@@ -2682,13 +2755,6 @@ function animateNeural(){
                     )+1
                 )/2;
 
-
-            /*
-               Transizione tra:
-               giallo/oro
-               viola/fucsia
-               blu
-            */
 
             if(colorWave<.5){
 
@@ -2743,10 +2809,6 @@ function animateNeural(){
         }
 
 
-        /*
-           Glow del singolo nodo
-        */
-
         neuralCtx.fillStyle =
             `rgba(${particleR},${particleG},${particleB},${n.alpha*.28})`;
 
@@ -2765,10 +2827,6 @@ function animateNeural(){
 
         neuralCtx.fill();
 
-
-        /*
-           Centro del nodo
-        */
 
         neuralCtx.fillStyle =
             `rgba(${particleR},${particleG},${particleB},${n.alpha})`;
@@ -3507,8 +3565,34 @@ conversation.onclick=()=>{
         );
 
 
-        conversation.textContent =
-            "🔵";
+        /*
+           ICONA VOCE ATTIVA
+           Niente emoji
+        */
+
+        conversation.innerHTML = `
+
+            <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+
+                <path d="M3 10v4"/>
+
+                <path d="M7 7v10"/>
+
+                <path d="M11 5v14"/>
+
+                <path d="M15 7v10"/>
+
+                <path d="M19 10v4"/>
+
+                <path d="M22 11v2"/>
+
+            </svg>
+
+        `;
 
 
         setState(
@@ -3529,8 +3613,31 @@ conversation.onclick=()=>{
         );
 
 
-        conversation.textContent =
-            "🔊";
+        /*
+           ICONA VOCE NORMALE
+        */
+
+        conversation.innerHTML = `
+
+            <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+
+                <path d="M4 9v6"/>
+
+                <path d="M8 6v12"/>
+
+                <path d="M12 4v16"/>
+
+                <path d="M16 7v10"/>
+
+                <path d="M20 9v6"/>
+
+            </svg>
+
+        `;
 
 
         stopWakeWord();
@@ -3589,8 +3696,42 @@ if(Recognition){
         );
 
 
-        mic.textContent =
-            "■";
+        /*
+           MICROFONO ATTIVO
+           Niente emoji
+        */
+
+        mic.innerHTML = `
+
+            <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+
+                <rect
+                    x="8"
+                    y="3"
+                    width="8"
+                    height="12"
+                    rx="4"
+                />
+
+                <path
+                    d="M5 11v1a7 7 0 0 0 14 0v-1"
+                />
+
+                <path
+                    d="M12 19v3"
+                />
+
+                <path
+                    d="M8 22h8"
+                />
+
+            </svg>
+
+        `;
 
 
         input.placeholder =
@@ -3675,8 +3816,41 @@ if(Recognition){
         );
 
 
-        mic.textContent =
-            "🎙";
+        /*
+           MICROFONO NORMALE
+        */
+
+        mic.innerHTML = `
+
+            <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+
+                <rect
+                    x="8"
+                    y="3"
+                    width="8"
+                    height="12"
+                    rx="4"
+                />
+
+                <path
+                    d="M5 11v1a7 7 0 0 0 14 0v-1"
+                />
+
+                <path
+                    d="M12 19v3"
+                />
+
+                <path
+                    d="M8 22h8"
+                />
+
+            </svg>
+
+        `;
 
 
         input.placeholder =
@@ -3709,8 +3883,29 @@ if(Recognition){
         );
 
 
-        conversation.textContent =
-            "🔵";
+        conversation.innerHTML = `
+
+            <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+
+                <path d="M3 10v4"/>
+
+                <path d="M7 7v10"/>
+
+                <path d="M11 5v14"/>
+
+                <path d="M15 7v10"/>
+
+                <path d="M19 10v4"/>
+
+                <path d="M22 11v2"/>
+
+            </svg>
+
+        `;
 
 
         if(listening){
@@ -3996,7 +4191,5 @@ window.JARVIS_EARTH={
 
 };
 
-</script>
-
-</body>
+</script></body>
 </html>

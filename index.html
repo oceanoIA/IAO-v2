@@ -28,7 +28,8 @@ z-index:1
 
 .header{
 position:fixed;
-top:22px;
+top:20px;
+left:0;
 width:100%;
 text-align:center;
 z-index:10;
@@ -54,43 +55,48 @@ color:#ffd000;
 text-shadow:0 0 10px currentColor
 }
 
-.info{
+.panel{
 position:fixed;
-top:24px;
-left:24px;
+top:25px;
 z-index:10;
 font:10px monospace;
 line-height:1.8;
 letter-spacing:2px;
-color:rgba(255,210,0,.55);
-border-left:2px solid rgba(255,210,0,.6);
+color:rgba(255,210,0,.65)
+}
+
+.left{
+left:22px;
+border-left:2px solid rgba(255,210,0,.5);
 padding-left:10px
 }
 
-.info.right{
-left:auto;
-right:24px;
+.right{
+right:22px;
 text-align:right;
-border-left:0;
-border-right:2px solid rgba(255,210,0,.6);
-padding-left:0;
+border-right:2px solid rgba(255,210,0,.5);
 padding-right:10px
+}
+
+#clock{
+font-size:15px;
+color:#fff
 }
 
 #chat{
 position:fixed;
 z-index:20;
 left:50%;
-bottom:110px;
+bottom:115px;
 transform:translateX(-50%);
 width:100%;
 max-width:700px;
-max-height:25vh;
+max-height:27vh;
 overflow-y:auto;
 padding:0 20px;
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:9px;
 scrollbar-width:none
 }
 
@@ -100,11 +106,10 @@ display:none
 
 .message{
 max-width:85%;
-padding:11px 15px;
-border-radius:5px;
+padding:10px 14px;
+border-radius:6px;
 font-size:14px;
 line-height:1.5;
-word-wrap:break-word;
 backdrop-filter:blur(10px)
 }
 
@@ -117,7 +122,7 @@ border-right:3px solid #ffd000
 
 .jarvis{
 align-self:flex-start;
-background:rgba(5,10,18,.85);
+background:rgba(5,10,18,.82);
 border:1px solid rgba(30,140,255,.25);
 border-left:3px solid #168cff;
 color:#dcecff
@@ -126,12 +131,12 @@ color:#dcecff
 .inputArea{
 position:fixed;
 z-index:30;
-bottom:20px;
+bottom:18px;
 left:50%;
 transform:translateX(-50%);
 width:100%;
 max-width:700px;
-padding:0 20px
+padding:0 15px
 }
 
 .inputBox{
@@ -140,7 +145,8 @@ gap:7px;
 padding:5px;
 background:rgba(5,7,10,.96);
 border:1px solid rgba(255,190,0,.4);
-border-radius:7px
+border-radius:8px;
+box-shadow:0 0 25px rgba(255,190,0,.06)
 }
 
 input{
@@ -175,7 +181,7 @@ background:#ffd000;
 color:#000
 }
 
-#mic{
+#mic,#conversation,#voiceButton{
 width:48px;
 font-size:17px
 }
@@ -184,23 +190,23 @@ font-size:17px
 width:70px
 }
 
-#mic.active{
-background:#168cff;
-border-color:#168cff;
-color:#fff;
+.active{
+background:#168cff!important;
+border-color:#168cff!important;
+color:#fff!important;
 box-shadow:0 0 20px #168cff
 }
 
 #voicePanel{
 position:fixed;
-z-index:40;
+z-index:50;
 right:20px;
-bottom:80px;
+bottom:75px;
 display:none;
 padding:12px;
-background:rgba(5,8,12,.96);
-border:1px solid rgba(30,140,255,.4);
-border-radius:6px
+background:rgba(5,8,12,.97);
+border:1px solid rgba(30,140,255,.5);
+border-radius:7px
 }
 
 #voiceSelect{
@@ -208,25 +214,43 @@ background:#05080c;
 color:#fff;
 border:1px solid #168cff;
 padding:7px;
-max-width:220px
+max-width:230px
 }
 
 #voiceButton{
 position:fixed;
 right:20px;
-bottom:20px;
-z-index:40;
-width:42px;
-font-size:16px
+bottom:18px;
+z-index:50
+}
+
+#conversation{
+font-size:15px
 }
 
 @media(max-width:600px){
-.info{display:none}
+
+.panel{
+display:none
+}
+
 .header h1{
 font-size:20px;
 letter-spacing:8px
 }
-.message{max-width:90%}
+
+.message{
+max-width:90%
+}
+
+#chat{
+max-height:30vh
+}
+
+#send{
+width:62px
+}
+
 }
 </style>
 </head>
@@ -235,19 +259,21 @@ letter-spacing:8px
 
 <canvas id="canvas"></canvas>
 
-<div class="info">
-JARVIS CORE V8<br>
+<div class="panel left">
+JARVIS CORE V9<br>
 NEURAL ENGINE: ONLINE<br>
-SYSTEM: ACTIVE
+MEMORY: <span id="memoryCount">0</span>
 </div>
 
-<div class="info right">
-MEMORY: <span id="memoryCount">0</span><br>
+<div class="panel right">
+<div id="clock">--:--:--</div>
+<div id="date">--</div>
 STATE: <span id="state">IDLE</span>
 </div>
 
 <div class="header">
 <h1>J.A.R.V.I.S.</h1>
+
 <div class="status">
 <span id="dot">●</span>
 NEURAL INTERFACE ONLINE
@@ -255,18 +281,21 @@ NEURAL INTERFACE ONLINE
 </div>
 
 <div id="chat">
+
 <div class="message jarvis">
-JARVIS online. Memoria neurale inizializzata.
+JARVIS online. Neural Core inizializzato.
 </div>
+
 </div>
 
 <div id="voicePanel">
 <select id="voiceSelect"></select>
 </div>
 
-<button id="voiceButton">⚙</button>
+<button id="voiceButton" title="Impostazioni voce">⚙</button>
 
 <div class="inputArea">
+
 <div class="inputBox">
 
 <input
@@ -275,136 +304,324 @@ type="text"
 placeholder="Comunica con JARVIS..."
 autocomplete="off">
 
-<button id="mic">🎙</button>
+<button
+id="conversation"
+title="Modalità conversazione">
+🔊
+</button>
 
-<button id="send">INVIA</button>
+<button
+id="mic"
+title="Microfono">
+🎙
+</button>
+
+<button id="send">
+INVIA
+</button>
 
 </div>
+
 </div>
+
 
 <script>
 
-const API="https://iao-ai-v3.oceano-masoud.workers.dev/";
+/* =====================================================
+   CONFIGURAZIONE
+===================================================== */
 
-const canvas=document.getElementById("canvas");
-const ctx=canvas.getContext("2d");
+const API =
+"https://iao-ai-v3.oceano-masoud.workers.dev/";
 
-const input=document.getElementById("input");
-const send=document.getElementById("send");
-const mic=document.getElementById("mic");
-const chat=document.getElementById("chat");
 
-const stateEl=document.getElementById("state");
-const dot=document.getElementById("dot");
+/* =====================================================
+   ELEMENTI
+===================================================== */
 
-const memoryCount=document.getElementById("memoryCount");
+const canvas =
+document.getElementById("canvas");
 
-const voiceButton=document.getElementById("voiceButton");
-const voicePanel=document.getElementById("voicePanel");
-const voiceSelect=document.getElementById("voiceSelect");
+const ctx =
+canvas.getContext("2d");
 
-let state="idle";
-let busy=false;
-let listening=false;
+const input =
+document.getElementById("input");
 
-let memory=[];
+const send =
+document.getElementById("send");
+
+const mic =
+document.getElementById("mic");
+
+const conversation =
+document.getElementById("conversation");
+
+const chat =
+document.getElementById("chat");
+
+const stateEl =
+document.getElementById("state");
+
+const dot =
+document.getElementById("dot");
+
+const memoryCount =
+document.getElementById("memoryCount");
+
+const clock =
+document.getElementById("clock");
+
+const date =
+document.getElementById("date");
+
+const voiceButton =
+document.getElementById("voiceButton");
+
+const voicePanel =
+document.getElementById("voicePanel");
+
+const voiceSelect =
+document.getElementById("voiceSelect");
+
+
+/* =====================================================
+   STATO
+===================================================== */
+
+let state = "idle";
+let busy = false;
+let listening = false;
+
+let conversationMode = false;
+let wakeMode = false;
+
+let recognition = null;
+let wakeRecognition = null;
+
+
+/* =====================================================
+   MEMORIA LOCALE
+===================================================== */
+
+let memory = [];
 
 try{
-memory=JSON.parse(localStorage.getItem("jarvis_memory")||"[]");
-}catch(e){
-memory=[];
+
+memory =
+JSON.parse(
+localStorage.getItem("jarvis_memory") || "[]"
+);
+
+}catch(error){
+
+memory = [];
+
 }
 
-memory=memory.slice(-30);
+memory =
+memory.slice(-30);
+
 
 function saveMemory(){
 
+memory =
+memory.slice(-30);
+
 localStorage.setItem(
 "jarvis_memory",
-JSON.stringify(memory.slice(-30))
+JSON.stringify(memory)
 );
 
-memoryCount.textContent=memory.length;
+memoryCount.textContent =
+memory.length;
+
 }
+
 
 function remember(role,content){
 
 memory.push({
-role,
-content
+role:role,
+content:content,
+time:Date.now()
 });
 
-memory=memory.slice(-30);
-
 saveMemory();
+
 }
 
+
 saveMemory();
 
 
-function setState(s){
+/* =====================================================
+   STATO
+===================================================== */
 
-state=s;
+function setState(newState){
 
-stateEl.textContent=s.toUpperCase();
+state =
+newState;
 
-if(s==="listening"||s==="thinking"){
+stateEl.textContent =
+newState.toUpperCase();
 
-dot.style.color="#168cff";
+if(
+newState === "listening" ||
+newState === "thinking" ||
+newState === "speaking"
+){
+
+dot.style.color =
+"#168cff";
 
 }else{
 
-dot.style.color="#ffd000";
+dot.style.color =
+"#ffd000";
 
 }
+
 }
 
+
+/* =====================================================
+   OROLOGIO
+===================================================== */
+
+function updateClock(){
+
+const now =
+new Date();
+
+clock.textContent =
+now.toLocaleTimeString(
+"it-IT"
+);
+
+date.textContent =
+now.toLocaleDateString(
+"it-IT",
+{
+weekday:"short",
+day:"2-digit",
+month:"short"
+}
+).toUpperCase();
+
+}
+
+updateClock();
+
+setInterval(
+updateClock,
+1000
+);
+
+
+/* =====================================================
+   CHAT
+===================================================== */
 
 function addMessage(type,text){
 
-const el=document.createElement("div");
+const element =
+document.createElement("div");
 
-el.className="message "+type;
+element.className =
+"message " + type;
 
-el.textContent=text;
+element.textContent =
+text;
 
-chat.appendChild(el);
+chat.appendChild(
+element
+);
 
-chat.scrollTop=chat.scrollHeight;
+chat.scrollTop =
+chat.scrollHeight;
 
-return el;
+return element;
+
 }
 
 
+/* =====================================================
+   COMANDI LOCALI
+===================================================== */
+
 function localCommand(text){
 
-const t=text.toLowerCase();
+const t =
+text.toLowerCase();
 
 if(
-t.includes("che ore sono")||
-t.includes("che ora è")||
+t.includes("che ore sono") ||
+t.includes("che ora è") ||
 t.includes("che ora e")
 ){
 
-return "Sono le "+
+return (
+"Sono le " +
 new Date().toLocaleTimeString(
 "it-IT",
-{hour:"2-digit",minute:"2-digit"}
-)+".";
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+) +
+"."
+);
+
+}
+
+if(
+t.includes("che giorno è") ||
+t.includes("che giorno e")
+){
+
+return (
+"Oggi è " +
+new Date().toLocaleDateString(
+"it-IT",
+{
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric"
+}
+) +
+"."
+);
 
 }
 
 return null;
+
 }
 
 
-send.onclick=sendMessage;
+/* =====================================================
+   INVIO
+===================================================== */
 
-input.addEventListener("keydown",e=>{
+send.onclick =
+sendMessage;
 
-if(e.key==="Enter"){
-e.preventDefault();
+
+input.addEventListener(
+"keydown",
+event => {
+
+if(
+event.key === "Enter"
+){
+
+event.preventDefault();
+
 sendMessage();
+
 }
 
 });
@@ -412,41 +629,90 @@ sendMessage();
 
 async function sendMessage(){
 
-const text=input.value.trim();
+const text =
+input.value.trim();
 
-if(!text||busy)return;
+if(
+!text ||
+busy
+){
 
-busy=true;
+return;
 
-input.value="";
+}
 
-addMessage("user",text);
 
-remember("user",text);
+busy = true;
 
-input.disabled=true;
-send.disabled=true;
-mic.disabled=true;
+input.value = "";
 
-setState("thinking");
+addMessage(
+"user",
+text
+);
 
-const local=localCommand(text);
+remember(
+"user",
+text
+);
+
+
+input.disabled = true;
+send.disabled = true;
+mic.disabled = true;
+conversation.disabled = true;
+
+
+setState(
+"thinking"
+);
+
+
+/* COMANDO LOCALE */
+
+const local =
+localCommand(text);
+
 
 if(local){
 
-addMessage("jarvis",local);
+addMessage(
+"jarvis",
+local
+);
 
-remember("assistant",local);
+remember(
+"assistant",
+local
+);
+
+
+/*
+   La voce viene usata SOLO
+   in modalità conversazione.
+*/
+
+if(conversationMode){
 
 speak(local);
+
+}else{
+
+setState("idle");
+
+}
 
 finish();
 
 return;
+
 }
 
 
-const answer=addMessage(
+/* RISPOSTA */
+
+const answer =
+addMessage(
 "jarvis",
 "Elaborazione neurale..."
 );
@@ -454,19 +720,24 @@ const answer=addMessage(
 
 try{
 
-const response=await fetch(API,{
+const response =
+await fetch(
+API,
+{
 
 method:"POST",
 
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
 
 body:JSON.stringify({
 
 message:text,
 
-memory:memory.slice(-20)
+memory:
+memory.slice(-20)
 
 })
 
@@ -474,27 +745,52 @@ memory:memory.slice(-20)
 
 
 if(!response.ok){
-throw new Error("HTTP "+response.status);
+
+throw new Error(
+"HTTP " +
+response.status
+);
+
 }
 
 
-const data=await response.json();
+const data =
+await response.json();
 
 
 if(!data.reply){
-throw new Error("Risposta mancante");
+
+throw new Error(
+"Risposta mancante"
+);
+
 }
 
 
-answer.textContent=data.reply;
+answer.textContent =
+data.reply;
+
 
 remember(
 "assistant",
 data.reply
 );
 
-if (conversationMode) {
-    speak(data.reply);
+
+/*
+   IMPORTANTE:
+   testo = nessuna voce
+   conversazione = voce
+*/
+
+if(conversationMode){
+
+speak(data.reply);
+
+}else{
+
+setState("idle");
+
 }
 
 
@@ -502,8 +798,8 @@ if (conversationMode) {
 
 console.error(error);
 
-answer.textContent=
-"Errore di connessione al Neural Core.";
+answer.textContent =
+"Non riesco a raggiungere il Neural Core.";
 
 setState("idle");
 
@@ -515,70 +811,117 @@ finish();
 }
 
 
+/* =====================================================
+   FINE RICHIESTA
+===================================================== */
+
 function finish(){
 
-busy=false;
+busy = false;
 
-input.disabled=false;
-send.disabled=false;
-mic.disabled=false;
+input.disabled = false;
+send.disabled = false;
+mic.disabled = false;
+conversation.disabled = false;
 
 input.focus();
 
 }
 
 
-/* VOCE */
+/* =====================================================
+   VOCI
+===================================================== */
 
-let voices=[];
+let voices = [];
+
 
 function loadVoices(){
 
-voices=speechSynthesis.getVoices();
+if(
+!("speechSynthesis" in window)
+){
 
-voiceSelect.innerHTML="";
+return;
 
-voices.forEach((voice,index)=>{
+}
 
-const option=document.createElement("option");
 
-option.value=index;
+voices =
+speechSynthesis.getVoices();
 
-option.textContent=
-voice.name+
-" — "+
+voiceSelect.innerHTML =
+"";
+
+
+voices.forEach(
+(voice,index) => {
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+index;
+
+option.textContent =
+voice.name +
+" — " +
 voice.lang;
 
-voiceSelect.appendChild(option);
+voiceSelect.appendChild(
+option
+);
 
 });
 
-const saved=
-localStorage.getItem("jarvis_voice");
 
-if(saved!==null&&voices[saved]){
-voiceSelect.value=saved;
+const saved =
+localStorage.getItem(
+"jarvis_voice"
+);
+
+
+if(
+saved !== null &&
+voices[saved]
+){
+
+voiceSelect.value =
+saved;
+
 }
 
 }
 
 
-speechSynthesis.onvoiceschanged=loadVoices;
+if(
+"speechSynthesis" in window
+){
+
+speechSynthesis.onvoiceschanged =
+loadVoices;
 
 loadVoices();
 
+}
 
-voiceButton.onclick=()=>{
 
-voicePanel.style.display=
-voicePanel.style.display==="block"
-?"none"
-:"block";
+voiceButton.onclick =
+() => {
+
+voicePanel.style.display =
+voicePanel.style.display ===
+"block"
+? "none"
+: "block";
 
 };
 
 
-voiceSelect.onchange=()=>{
+voiceSelect.onchange =
+() => {
 
 localStorage.setItem(
 "jarvis_voice",
@@ -590,78 +933,218 @@ voiceSelect.value
 
 function speak(text){
 
-if(!("speechSynthesis" in window)){
+if(
+!("speechSynthesis" in window)
+){
+
 setState("idle");
+
 return;
+
 }
+
 
 speechSynthesis.cancel();
 
-const u=
-new SpeechSynthesisUtterance(text);
 
-u.lang="it-IT";
-u.rate=.88;
-u.pitch=.65;
-u.volume=1;
+const utterance =
+new SpeechSynthesisUtterance(
+text
+);
 
-const index=
-parseInt(voiceSelect.value);
 
-if(voices[index]){
-u.voice=voices[index];
+utterance.lang =
+"it-IT";
+
+utterance.rate =
+0.88;
+
+utterance.pitch =
+0.65;
+
+utterance.volume =
+1;
+
+
+const selected =
+parseInt(
+voiceSelect.value
+);
+
+
+if(
+voices[selected]
+){
+
+utterance.voice =
+voices[selected];
+
 }
 
-u.onstart=()=>{
-setState("speaking");
+
+utterance.onstart =
+() => {
+
+setState(
+"speaking"
+);
+
 };
 
-u.onend=()=>{
-setState("idle");
+
+utterance.onend =
+() => {
+
+setState(
+"idle"
+);
+
+if(
+conversationMode &&
+wakeMode
+){
+
+setTimeout(
+startWakeWord,
+600
+);
+
+}
+
 };
 
-u.onerror=()=>{
-setState("idle");
+
+utterance.onerror =
+() => {
+
+setState(
+"idle"
+);
+
 };
 
-speechSynthesis.speak(u);
+
+speechSynthesis.speak(
+utterance
+);
 
 }
 
 
-/* MICROFONO */
+/* =====================================================
+   MODALITÀ CONVERSAZIONE
+===================================================== */
 
-const Recognition=
-window.SpeechRecognition||
+conversation.onclick =
+() => {
+
+conversationMode =
+!conversationMode;
+
+
+if(
+conversationMode
+){
+
+wakeMode =
+true;
+
+conversation.classList.add(
+"active"
+);
+
+conversation.textContent =
+"🔵";
+
+setState(
+"listening"
+);
+
+startWakeWord();
+
+}else{
+
+wakeMode =
+false;
+
+conversation.classList.remove(
+"active"
+);
+
+conversation.textContent =
+"🔊";
+
+stopWakeWord();
+
+if(
+speechSynthesis
+){
+
+speechSynthesis.cancel();
+
+}
+
+setState(
+"idle"
+);
+
+}
+
+};
+
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
+const Recognition =
+window.SpeechRecognition ||
 window.webkitSpeechRecognition;
 
-let recognition=null;
 
 if(Recognition){
 
-recognition=new Recognition();
+recognition =
+new Recognition();
 
-recognition.lang="it-IT";
-recognition.continuous=false;
-recognition.interimResults=true;
+recognition.lang =
+"it-IT";
 
-recognition.onstart=()=>{
+recognition.continuous =
+false;
 
-listening=true;
+recognition.interimResults =
+true;
 
-mic.classList.add("active");
-mic.textContent="■";
 
-input.placeholder="JARVIS sta ascoltando...";
+recognition.onstart =
+() => {
 
-setState("listening");
+listening =
+true;
+
+mic.classList.add(
+"active"
+);
+
+mic.textContent =
+"■";
+
+input.placeholder =
+"JARVIS ti sta ascoltando...";
+
+setState(
+"listening"
+);
 
 };
 
 
-recognition.onresult=event=>{
+recognition.onresult =
+event => {
 
-let text="";
+let transcript = "";
+
 
 for(
 let i=event.resultIndex;
@@ -669,32 +1152,48 @@ i<event.results.length;
 i++
 ){
 
-text+=
+transcript +=
 event.results[i][0].transcript;
 
 }
 
-input.value=text;
+
+input.value =
+transcript;
+
+
+const last =
+event.results[
+event.results.length-1
+];
+
 
 if(
-event.results[event.results.length-1]
-.isFinal
+last.isFinal
 ){
 
-setTimeout(()=>{
+setTimeout(
+() => {
 
-if(input.value.trim()){
+if(
+input.value.trim()
+){
+
 sendMessage();
+
 }
 
-},250);
+},
+250
+);
 
 }
 
 };
 
 
-recognition.onerror=event=>{
+recognition.onerror =
+event => {
 
 console.log(
 "Speech recognition:",
@@ -704,90 +1203,359 @@ event.error
 };
 
 
-recognition.onend=()=>{
+recognition.onend =
+() => {
 
-listening=false;
+listening =
+false;
 
-mic.classList.remove("active");
-mic.textContent="🎙";
+mic.classList.remove(
+"active"
+);
 
-input.placeholder=
+mic.textContent =
+"🎙";
+
+input.placeholder =
 "Comunica con JARVIS...";
 
-if(state==="listening"){
-setState("idle");
+if(
+state === "listening"
+){
+
+setState(
+"idle"
+);
+
 }
 
 };
 
 
-mic.onclick=()=>{
+mic.onclick =
+() => {
 
-if(busy)return;
+if(busy)
+return;
 
-if(listening){
+
+conversationMode =
+true;
+
+wakeMode =
+false;
+
+conversation.classList.add(
+"active"
+);
+
+conversation.textContent =
+"🔵";
+
+
+if(
+listening
+){
 
 recognition.stop();
 
-}else{
+return;
+
+}
+
 
 try{
+
 recognition.start();
-}catch(e){
-console.log(e);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+};
+
+
+}else{
+
+mic.disabled =
+true;
+
+}
+
+
+/* =====================================================
+   WAKE WORD
+===================================================== */
+
+function startWakeWord(){
+
+if(
+!Recognition ||
+!conversationMode ||
+!wakeMode ||
+busy ||
+listening ||
+wakeRecognition
+){
+
+return;
+
+}
+
+
+wakeRecognition =
+new Recognition();
+
+wakeRecognition.lang =
+"it-IT";
+
+wakeRecognition.continuous =
+true;
+
+wakeRecognition.interimResults =
+true;
+
+
+wakeRecognition.onresult =
+event => {
+
+for(
+let i=event.resultIndex;
+i<event.results.length;
+i++
+){
+
+const text =
+event.results[i][0]
+.transcript
+.toLowerCase();
+
+
+if(
+text.includes("jarvis")
+){
+
+try{
+
+wakeRecognition.stop();
+
+}catch(e){}
+
+wakeRecognition =
+null;
+
+activateJarvis();
+
+return;
+
 }
 
 }
 
 };
 
-}else{
 
-mic.disabled=true;
+wakeRecognition.onerror =
+() => {
 
-mic.title=
-"Il browser non supporta il riconoscimento vocale.";
+wakeRecognition =
+null;
+
+if(
+conversationMode &&
+wakeMode &&
+!busy &&
+!listening
+){
+
+setTimeout(
+startWakeWord,
+1200
+);
+
+}
+
+};
+
+
+wakeRecognition.onend =
+() => {
+
+wakeRecognition =
+null;
+
+if(
+conversationMode &&
+wakeMode &&
+!busy &&
+!listening
+){
+
+setTimeout(
+startWakeWord,
+600
+);
+
+}
+
+};
+
+
+try{
+
+wakeRecognition.start();
+
+}catch(error){
+
+wakeRecognition =
+null;
+
+}
 
 }
 
 
-/* SFERA */
+function stopWakeWord(){
 
-let width=innerWidth;
-let height=innerHeight;
+if(
+wakeRecognition
+){
 
-let cx=width/2;
-let cy=height/2;
+try{
 
-let radius=Math.min(width,height)*.22;
+wakeRecognition.stop();
 
-let rotation=0;
+}catch(e){}
 
-let nodes=[];
+wakeRecognition =
+null;
+
+}
+
+}
+
+
+function activateJarvis(){
+
+if(
+busy ||
+listening
+){
+
+return;
+
+}
+
+
+setState(
+"listening"
+);
+
+input.placeholder =
+"JARVIS ti ascolta...";
+
+
+setTimeout(
+() => {
+
+try{
+
+recognition.start();
+
+}catch(error){
+
+console.log(error);
+
+}
+
+},
+250
+);
+
+}
+
+
+/* =====================================================
+   SFERA NEURALE
+===================================================== */
+
+let width =
+innerWidth;
+
+let height =
+innerHeight;
+
+let cx =
+width/2;
+
+let cy =
+height/2;
+
+let radius =
+Math.min(
+width,
+height
+)*.22;
+
+let rotation =
+0;
+
+let nodes = [];
 
 
 function resize(){
 
-width=innerWidth;
-height=innerHeight;
+width =
+innerWidth;
 
-const dpr=
-Math.min(devicePixelRatio||1,2);
+height =
+innerHeight;
 
-canvas.width=width*dpr;
-canvas.height=height*dpr;
 
-canvas.style.width=width+"px";
-canvas.style.height=height+"px";
-
-ctx.setTransform(
-dpr,0,0,dpr,0,0
+const dpr =
+Math.min(
+devicePixelRatio || 1,
+2
 );
 
-cx=width/2;
-cy=height/2;
 
-radius=Math.min(width,height)*.22;
+canvas.width =
+width*dpr;
+
+canvas.height =
+height*dpr;
+
+canvas.style.width =
+width+"px";
+
+canvas.style.height =
+height+"px";
+
+
+ctx.setTransform(
+dpr,
+0,
+0,
+dpr,
+0,
+0
+);
+
+
+cx =
+width/2;
+
+cy =
+height/2;
+
+radius =
+Math.min(
+width,
+height
+)*.22;
+
 
 createNodes();
 
@@ -796,25 +1564,40 @@ createNodes();
 
 function createNodes(){
 
-nodes=[];
+nodes = [];
 
-for(let i=0;i<145;i++){
+
+for(
+let i=0;
+i<165;
+i++
+){
 
 nodes.push({
 
-theta:Math.random()*Math.PI*2,
+theta:
+Math.random() *
+Math.PI*2,
 
-phi:Math.acos(
+phi:
+Math.acos(
 2*Math.random()-1
 ),
 
-r:radius*(
-.7+Math.random()*.5
+r:
+radius *
+(
+.72+
+Math.random()*.55
 ),
 
-size:.8+Math.random()*1.7,
+size:
+.7+
+Math.random()*1.8,
 
-phase:Math.random()*Math.PI*2
+phase:
+Math.random()*
+Math.PI*2
 
 });
 
@@ -825,45 +1608,74 @@ phase:Math.random()*Math.PI*2
 
 function animate(){
 
-requestAnimationFrame(animate);
+requestAnimationFrame(
+animate
+);
 
-const time=performance.now()/1000;
 
-let speed=1;
-let energy=.2;
+const time =
+performance.now()/1000;
 
-if(state==="listening"){
-speed=3;
-energy=.9;
+
+let speed = 1;
+let energy = .2;
+
+
+if(
+state === "listening"
+){
+
+speed = 4;
+energy = 1.2;
+
 }
 
-if(state==="thinking"){
-speed=5;
-energy=1.5;
+
+if(
+state === "thinking"
+){
+
+speed = 7;
+energy = 2;
+
 }
 
-if(state==="speaking"){
-speed=3;
-energy=.7;
+
+if(
+state === "speaking"
+){
+
+speed = 5;
+energy = 1.5;
+
 }
 
-rotation+=.004*speed;
 
-ctx.fillStyle="rgba(0,0,0,.25)";
+rotation +=
+.004*speed;
+
+
+ctx.fillStyle =
+"rgba(0,0,0,.28)";
 
 ctx.fillRect(
-0,0,width,height
+0,
+0,
+width,
+height
 );
 
 
 let target;
 
+
 if(
-state==="listening"||
-state==="thinking"
+state === "listening" ||
+state === "thinking" ||
+state === "speaking"
 ){
 
-target={
+target = {
 r:25,
 g:140,
 b:255
@@ -871,7 +1683,7 @@ b:255
 
 }else{
 
-target={
+target = {
 r:255,
 g:195,
 b:0
@@ -880,57 +1692,96 @@ b:0
 }
 
 
-window.jarvisColor=
-window.jarvisColor||{
+window.jarvisColor =
+window.jarvisColor ||
+{
 r:255,
 g:195,
 b:0
 };
 
 
-jarvisColor.r+=
-(target.r-jarvisColor.r)*.05;
-
-jarvisColor.g+=
-(target.g-jarvisColor.g)*.05;
-
-jarvisColor.b+=
-(target.b-jarvisColor.b)*.05;
-
-
-const r=Math.round(jarvisColor.r);
-const g=Math.round(jarvisColor.g);
-const b=Math.round(jarvisColor.b);
-
-
-const pulse=
-(Math.sin(time*4)+1)/2;
-
-
-const glow=
-radius*
+jarvisColor.r +=
 (
-1.1+
-energy*.6+
-pulse*.15
+target.r -
+jarvisColor.r
+)*.055;
+
+jarvisColor.g +=
+(
+target.g -
+jarvisColor.g
+)*.055;
+
+jarvisColor.b +=
+(
+target.b -
+jarvisColor.b
+)*.055;
+
+
+const r =
+Math.round(
+jarvisColor.r
+);
+
+const g =
+Math.round(
+jarvisColor.g
+);
+
+const b =
+Math.round(
+jarvisColor.b
 );
 
 
-const gradient=
+const pulse =
+(
+Math.sin(
+time*4
+)+1
+)/2;
+
+
+const pulse2 =
+(
+Math.sin(
+time*8
+)+1
+)/2;
+
+
+const glow =
+radius *
+(
+1.05+
+energy*.7+
+pulse*.18
+);
+
+
+/* GLOW */
+
+const gradient =
 ctx.createRadialGradient(
-cx,cy,0,
-cx,cy,glow
+cx,
+cy,
+0,
+cx,
+cy,
+glow
 );
 
 
 gradient.addColorStop(
 0,
-`rgba(${r},${g},${b},.45)`
+`rgba(${r},${g},${b},.48)`
 );
 
 gradient.addColorStop(
 .35,
-`rgba(${r},${g},${b},.14)`
+`rgba(${r},${g},${b},.15)`
 );
 
 gradient.addColorStop(
@@ -939,88 +1790,125 @@ gradient.addColorStop(
 );
 
 
-ctx.fillStyle=gradient;
+ctx.fillStyle =
+gradient;
+
 
 ctx.beginPath();
 
 ctx.arc(
-cx,cy,glow,0,Math.PI*2
+cx,
+cy,
+glow,
+0,
+Math.PI*2
 );
 
 ctx.fill();
 
 
-const projected=[];
+/* NODI */
+
+const projected = [];
 
 
-nodes.forEach(n=>{
+nodes.forEach(
+n => {
 
-const rr=
+const rr =
 n.r+
-Math.sin(time*3+n.phase)*
-energy*5;
+Math.sin(
+time*3+n.phase
+)*
+energy*7;
 
-let x=
+
+let x =
 rr*
 Math.sin(n.phi)*
-Math.cos(n.theta+rotation);
+Math.cos(
+n.theta+
+rotation
+);
 
-let y=
+
+let y =
 rr*
 Math.cos(n.phi);
 
-let z=
+
+let z =
 rr*
 Math.sin(n.phi)*
-Math.sin(n.theta+rotation);
+Math.sin(
+n.theta+
+rotation
+);
 
 
-if(state!=="idle"){
+if(
+state !== "idle"
+){
 
-x+=Math.sin(
+x +=
+Math.sin(
 time*2+n.phase
-)*energy*5;
+)*
+energy*7;
 
-y+=Math.cos(
+y +=
+Math.cos(
 time*2.5+n.phase
-)*energy*5;
+)*
+energy*7;
 
 }
 
 
-const perspective=
-430/(430+z);
+const perspective =
+430/
+(
+430+z
+);
 
 
 projected.push({
 
-x:cx+x*perspective,
+x:
+cx+x*perspective,
 
-y:cy+y*perspective,
+y:
+cy+y*perspective,
 
 z:z,
 
-size:n.size*perspective,
+size:
+n.size*perspective,
 
-alpha:Math.max(
-.12,
+alpha:
+Math.max(
+.1,
 Math.min(
 1,
-(z+radius)/(radius*2)
+(z+radius)/
+(radius*2)
 )
 ),
 
-phase:n.phase
+phase:
+n.phase
 
 });
 
 });
 
 
-const maxDist=
-state==="thinking"
-?105
-:78;
+/* RETI */
+
+const maxDist =
+state === "thinking"
+?110
+:82;
 
 
 for(
@@ -1035,35 +1923,60 @@ j<projected.length;
 j++
 ){
 
-const a=projected[i];
-const c=projected[j];
+const a =
+projected[i];
 
-const dx=a.x-c.x;
-const dy=a.y-c.y;
-
-const dist=
-Math.sqrt(dx*dx+dy*dy);
+const c =
+projected[j];
 
 
-if(dist<maxDist){
+const dx =
+a.x-c.x;
 
-const alpha=
-(1-dist/maxDist)*
-.28*
+const dy =
+a.y-c.y;
+
+
+const dist =
+Math.sqrt(
+dx*dx+
+dy*dy
+);
+
+
+if(
+dist < maxDist
+){
+
+const alpha =
+(
+1-
+dist/maxDist
+)*
+.3*
 a.alpha;
+
 
 ctx.beginPath();
 
-ctx.moveTo(a.x,a.y);
-ctx.lineTo(c.x,c.y);
+ctx.moveTo(
+a.x,
+a.y
+);
 
-ctx.strokeStyle=
+ctx.lineTo(
+c.x,
+c.y
+);
+
+
+ctx.strokeStyle =
 `rgba(${r},${g},${b},${alpha})`;
 
-ctx.lineWidth=
-state==="thinking"
-?.9
-:.65;
+ctx.lineWidth =
+state === "thinking"
+? .9
+: .65;
 
 ctx.stroke();
 
@@ -1074,25 +1987,32 @@ ctx.stroke();
 }
 
 
-projected.forEach(n=>{
+/* PARTICELLE */
 
-const p=
-(Math.sin(
-time*6+n.phase
-)+1)/2;
+projected.forEach(
+n => {
 
-const size=
-n.size+
-p*
+const flicker =
 (
-state==="thinking"
-?1.5
-:.6
+Math.sin(
+time*7+n.phase
+)+1
+)/2;
+
+
+const size =
+n.size+
+flicker*
+(
+state === "thinking"
+?1.8
+:.7
 );
 
 
-ctx.fillStyle=
-`rgba(${r},${g},${b},${n.alpha*.25})`;
+ctx.fillStyle =
+`rgba(${r},${g},${b},${n.alpha*.28})`;
+
 
 ctx.beginPath();
 
@@ -1107,8 +2027,9 @@ Math.PI*2
 ctx.fill();
 
 
-ctx.fillStyle=
-`rgba(255,255,245,${n.alpha})`;
+ctx.fillStyle =
+`rgba(255,255,255,${n.alpha})`;
+
 
 ctx.beginPath();
 
@@ -1125,14 +2046,18 @@ ctx.fill();
 });
 
 
-const core=
+/* CORE */
+
+const core =
 5+
 pulse*2+
+pulse2*1.5+
 energy*2;
 
 
-ctx.fillStyle=
-`rgba(${r},${g},${b},.35)`;
+ctx.fillStyle =
+`rgba(${r},${g},${b},.38)`;
+
 
 ctx.beginPath();
 
@@ -1147,7 +2072,9 @@ Math.PI*2
 ctx.fill();
 
 
-ctx.fillStyle="white";
+ctx.fillStyle =
+"#fff";
+
 
 ctx.beginPath();
 
@@ -1169,6 +2096,7 @@ window.addEventListener(
 resize
 );
 
+
 resize();
 
 animate();
@@ -1178,4 +2106,4 @@ input.focus();
 </script>
 
 </body>
-</html>
+    </html>

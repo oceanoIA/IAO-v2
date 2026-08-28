@@ -83,21 +83,23 @@ font-size:15px;
 color:#fff
 }
 
+/* CHAT DISCRETA */
 #chat{
 position:fixed;
 z-index:20;
 left:50%;
-bottom:115px;
+bottom:105px;
 transform:translateX(-50%);
 width:100%;
-max-width:700px;
-max-height:27vh;
-overflow-y:auto;
+max-width:650px;
+max-height:75px;
+overflow:hidden;
 padding:0 20px;
 display:flex;
 flex-direction:column;
-gap:9px;
-scrollbar-width:none
+gap:6px;
+scrollbar-width:none;
+pointer-events:none
 }
 
 #chat::-webkit-scrollbar{
@@ -105,29 +107,43 @@ display:none
 }
 
 .message{
-max-width:85%;
-padding:10px 14px;
-border-radius:6px;
-font-size:14px;
-line-height:1.5;
-backdrop-filter:blur(10px)
+max-width:90%;
+padding:7px 12px;
+border-radius:4px;
+font-size:12px;
+line-height:1.4;
+backdrop-filter:blur(8px);
+opacity:.72;
+animation:messageIn .25s ease
 }
 
 .user{
 align-self:flex-end;
-background:rgba(255,190,0,.08);
-border:1px solid rgba(255,190,0,.35);
-border-right:3px solid #ffd000
+background:rgba(255,190,0,.04);
+border:1px solid rgba(255,190,0,.15);
+border-right:2px solid rgba(255,210,0,.6)
 }
 
 .jarvis{
 align-self:flex-start;
-background:rgba(5,10,18,.82);
-border:1px solid rgba(30,140,255,.25);
-border-left:3px solid #168cff;
+background:rgba(5,10,18,.4);
+border:1px solid rgba(30,140,255,.12);
+border-left:2px solid rgba(30,140,255,.6);
 color:#dcecff
 }
 
+@keyframes messageIn{
+from{
+opacity:0;
+transform:translateY(8px)
+}
+to{
+opacity:.72;
+transform:translateY(0)
+}
+}
+
+/* INPUT */
 .inputArea{
 position:fixed;
 z-index:30;
@@ -197,6 +213,7 @@ color:#fff!important;
 box-shadow:0 0 20px #168cff
 }
 
+/* VOCE */
 #voicePanel{
 position:fixed;
 z-index:50;
@@ -239,67 +256,16 @@ font-size:20px;
 letter-spacing:8px
 }
 
-.message{
-max-width:90%
-}
-
 #chat{
-position:fixed;
-z-index:20;
-left:50%;
 bottom:105px;
-transform:translateX(-50%);
-width:100%;
-max-width:650px;
-max-height:80px;
-overflow:hidden;
-padding:0 20px;
-display:flex;
-flex-direction:column;
-gap:6px;
-scrollbar-width:none;
-pointer-events:none;
-}
-
-#chat::-webkit-scrollbar{
-display:none;
+max-height:70px;
+padding:0 12px
 }
 
 .message{
 max-width:90%;
-padding:7px 12px;
-border-radius:4px;
-font-size:12px;
-line-height:1.4;
-backdrop-filter:blur(8px);
-opacity:.75;
-animation:messageIn .25s ease;
-}
-
-.user{
-align-self:flex-end;
-background:rgba(255,190,0,.04);
-border:1px solid rgba(255,190,0,.15);
-border-right:2px solid rgba(255,210,0,.6);
-}
-
-.jarvis{
-align-self:flex-start;
-background:rgba(5,10,18,.45);
-border:1px solid rgba(30,140,255,.12);
-border-left:2px solid rgba(30,140,255,.6);
-color:#dcecff;
-}
-
-@keyframes messageIn{
-from{
-opacity:0;
-transform:translateY(8px);
-}
-to{
-opacity:.75;
-transform:translateY(0);
-}
+font-size:11px;
+padding:6px 10px
 }
 
 #send{
@@ -315,7 +281,7 @@ width:62px
 <canvas id="canvas"></canvas>
 
 <div class="panel left">
-JARVIS CORE V9<br>
+JARVIS CORE V10<br>
 NEURAL ENGINE: ONLINE<br>
 MEMORY: <span id="memoryCount">0</span>
 </div>
@@ -335,13 +301,7 @@ NEURAL INTERFACE ONLINE
 </div>
 </div>
 
-<div id="chat">
-
-<div class="message jarvis">
-JARVIS online. Neural Core inizializzato.
-</div>
-
-</div>
+<div id="chat"></div>
 
 <div id="voicePanel">
 <select id="voiceSelect"></select>
@@ -350,7 +310,6 @@ JARVIS online. Neural Core inizializzato.
 <button id="voiceButton" title="Impostazioni voce">⚙</button>
 
 <div class="inputArea">
-
 <div class="inputBox">
 
 <input
@@ -376,9 +335,7 @@ INVIA
 </button>
 
 </div>
-
 </div>
-
 
 <script>
 
@@ -456,7 +413,7 @@ let wakeRecognition = null;
 
 
 /* =====================================================
-   MEMORIA LOCALE
+   MEMORIA
 ===================================================== */
 
 let memory = [];
@@ -505,7 +462,6 @@ time:Date.now()
 saveMemory();
 
 }
-
 
 saveMemory();
 
@@ -590,20 +546,35 @@ element.className =
 element.textContent =
 text;
 
-chat.appendChild(element);
+chat.appendChild(
+element
+);
 
 chat.scrollTop =
 chat.scrollHeight;
 
-/* Mantiene soltanto gli ultimi 2 messaggi visibili */
-while(chat.children.length > 2){
-chat.removeChild(chat.firstChild);
+
+/* massimo 2 messaggi visibili */
+
+while(
+chat.children.length > 2
+){
+
+chat.removeChild(
+chat.firstChild
+);
+
 }
 
-/* Dopo 6 secondi il messaggio scompare */
-setTimeout(() => {
 
-if(element.parentNode){
+/* scompare automaticamente */
+
+setTimeout(
+() => {
+
+if(
+element.parentNode
+){
 
 element.style.transition =
 "opacity .6s, transform .6s";
@@ -614,37 +585,26 @@ element.style.opacity =
 element.style.transform =
 "translateY(8px)";
 
-setTimeout(() => {
+setTimeout(
+() => {
 
-if(element.parentNode){
+if(
+element.parentNode
+){
+
 element.remove();
-}
-
-},600);
 
 }
 
-},6000);
-
-return element;
-
-}
-
-const element =
-document.createElement("div");
-
-element.className =
-"message " + type;
-
-element.textContent =
-text;
-
-chat.appendChild(
-element
+},
+600
 );
 
-chat.scrollTop =
-chat.scrollHeight;
+}
+
+},
+6000
+);
 
 return element;
 
@@ -745,7 +705,6 @@ return;
 
 }
 
-
 busy = true;
 
 input.value = "";
@@ -760,12 +719,10 @@ remember(
 text
 );
 
-
 input.disabled = true;
 send.disabled = true;
 mic.disabled = true;
 conversation.disabled = true;
-
 
 setState(
 "thinking"
@@ -776,7 +733,6 @@ setState(
 
 const local =
 localCommand(text);
-
 
 if(local){
 
@@ -790,13 +746,9 @@ remember(
 local
 );
 
-
-/*
-   La voce viene usata SOLO
-   in modalità conversazione.
-*/
-
-if(conversationMode){
+if(
+conversationMode
+){
 
 speak(local);
 
@@ -848,7 +800,9 @@ memory.slice(-20)
 });
 
 
-if(!response.ok){
+if(
+!response.ok
+){
 
 throw new Error(
 "HTTP " +
@@ -862,7 +816,9 @@ const data =
 await response.json();
 
 
-if(!data.reply){
+if(
+!data.reply
+){
 
 throw new Error(
 "Risposta mancante"
@@ -874,29 +830,29 @@ throw new Error(
 answer.textContent =
 data.reply;
 
-
 remember(
 "assistant",
 data.reply
 );
 
 
-/*
-   IMPORTANTE:
-   testo = nessuna voce
-   conversazione = voce
-*/
+/* voce solo in conversazione */
 
-if(conversationMode){
+if(
+conversationMode
+){
 
-speak(data.reply);
+speak(
+data.reply
+);
 
 }else{
 
-setState("idle");
+setState(
+"idle"
+);
 
 }
-
 
 }catch(error){
 
@@ -905,10 +861,11 @@ console.error(error);
 answer.textContent =
 "Non riesco a raggiungere il Neural Core.";
 
-setState("idle");
+setState(
+"idle"
+);
 
 }
-
 
 finish();
 
@@ -950,7 +907,6 @@ return;
 
 }
 
-
 voices =
 speechSynthesis.getVoices();
 
@@ -985,7 +941,6 @@ const saved =
 localStorage.getItem(
 "jarvis_voice"
 );
-
 
 if(
 saved !== null &&
@@ -1056,7 +1011,6 @@ new SpeechSynthesisUtterance(
 text
 );
 
-
 utterance.lang =
 "it-IT";
 
@@ -1074,7 +1028,6 @@ const selected =
 parseInt(
 voiceSelect.value
 );
-
 
 if(
 voices[selected]
@@ -1181,7 +1134,7 @@ conversation.textContent =
 stopWakeWord();
 
 if(
-speechSynthesis
+"speechSynthesis" in window
 ){
 
 speechSynthesis.cancel();
@@ -1206,7 +1159,9 @@ window.SpeechRecognition ||
 window.webkitSpeechRecognition;
 
 
-if(Recognition){
+if(
+Recognition
+){
 
 recognition =
 new Recognition();
@@ -1339,8 +1294,13 @@ setState(
 mic.onclick =
 () => {
 
-if(busy)
+if(
+busy
+){
+
 return;
+
+}
 
 
 conversationMode =
@@ -1545,7 +1505,8 @@ function activateJarvis(){
 
 if(
 busy ||
-listening
+listening ||
+!recognition
 ){
 
 return;
@@ -1710,6 +1671,10 @@ Math.PI*2
 }
 
 
+/* =====================================================
+   ANIMAZIONE
+===================================================== */
+
 function animate(){
 
 requestAnimationFrame(
@@ -1769,6 +1734,8 @@ width,
 height
 );
 
+
+/* COLORE */
 
 let target;
 
@@ -1896,7 +1863,6 @@ gradient.addColorStop(
 
 ctx.fillStyle =
 gradient;
-
 
 ctx.beginPath();
 
@@ -2057,7 +2023,7 @@ const alpha =
 1-
 dist/maxDist
 )*
-.3*
+.28*
 a.alpha;
 
 
@@ -2072,7 +2038,6 @@ ctx.lineTo(
 c.x,
 c.y
 );
-
 
 ctx.strokeStyle =
 `rgba(${r},${g},${b},${alpha})`;
@@ -2096,27 +2061,26 @@ ctx.stroke();
 projected.forEach(
 n => {
 
-const flicker =
+const p =
 (
 Math.sin(
-time*7+n.phase
+time*6+n.phase
 )+1
 )/2;
 
 
 const size =
 n.size+
-flicker*
+p*
 (
 state === "thinking"
-?1.8
-:.7
+?1.5
+:.6
 );
 
 
 ctx.fillStyle =
-`rgba(${r},${g},${b},${n.alpha*.28})`;
-
+`rgba(${r},${g},${b},${n.alpha*.25})`;
 
 ctx.beginPath();
 
@@ -2132,8 +2096,7 @@ ctx.fill();
 
 
 ctx.fillStyle =
-`rgba(255,255,255,${n.alpha})`;
-
+`rgba(255,255,245,${n.alpha})`;
 
 ctx.beginPath();
 
@@ -2155,59 +2118,13 @@ ctx.fill();
 const core =
 5+
 pulse*2+
-pulse2*1.5+
 energy*2;
 
 
 ctx.fillStyle =
-`rgba(${r},${g},${b},.38)`;
-
-
-ctx.beginPath();
-
-ctx.arc(
-cx,
-cy,
-core*5,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-
-ctx.fillStyle =
-"#fff";
-
+`rgba(${r},${g},${b},.35)`;
 
 ctx.beginPath();
 
 ctx.arc(
-cx,
-cy,
-core,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-}
-
-
-window.addEventListener(
-"resize",
-resize
-);
-
-
-resize();
-
-animate();
-
-input.focus();
-
-</script>
-
-</body>
-</html>
+cx

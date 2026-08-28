@@ -120,9 +120,13 @@ body.mapMode #earthContainer{
 
 .header h1{
     margin:0;
-    font-size:30px;
+
+    /* JARVIS PIÙ GRANDE */
+    font-size:35px;
+
     font-weight:300;
     letter-spacing:12px;
+
     text-shadow:
         0 0 15px #ffd000,
         0 0 35px rgba(255,200,0,.35);
@@ -459,7 +463,7 @@ body.mapMode #mapCrosshair{
     }
 
     .header h1{
-        font-size:20px;
+        font-size:25px;
         letter-spacing:8px;
     }
 
@@ -514,6 +518,11 @@ body.mapMode #mapCrosshair{
 ===================================================== */
 
 @media(max-width:430px){
+
+    .header h1{
+        font-size:22px;
+        letter-spacing:7px;
+    }
 
     #conversation,
     #mic{
@@ -728,9 +737,6 @@ document.getElementById("conversation");
 const chat =
 document.getElementById("chat");
 
-const stateEl =
-document.createElement("span");
-
 const dot =
 document.getElementById("dot");
 
@@ -742,9 +748,6 @@ document.getElementById("clock");
 
 const date =
 document.getElementById("date");
-
-const mapButton =
-null;
 
 const coordinates =
 document.getElementById("coordinates");
@@ -1796,11 +1799,6 @@ function resizeNeural(){
         neuralHeight/2;
 
 
-    /*
-       CORE PIÙ GRANDE ANCHE
-       DOPO IL RESIZE
-    */
-
     neuralRadius=
         Math.min(
             neuralWidth,
@@ -1822,16 +1820,19 @@ function createNeuralNodes(){
     nodes=[];
 
 
-    /*
-       Ridotti leggermente per mantenere
-       l'interfaccia pulita.
-    */
-
     for(
         let i=0;
         i<145;
         i++
     ){
+
+        /*
+           12% CIRCA DI NODI VIOLA
+        */
+
+        const isPurple=
+            Math.random()<.12;
+
 
         nodes.push({
 
@@ -1863,7 +1864,9 @@ function createNeuralNodes(){
                 *
                 Math.PI
                 *
-                2
+                2,
+
+            isPurple
 
         });
 
@@ -2170,7 +2173,9 @@ function animateNeural(){
                     )
                 ),
 
-            phase:n.phase
+            phase:n.phase,
+
+            isPurple:n.isPurple
 
         });
 
@@ -2279,42 +2284,95 @@ function animateNeural(){
             );
 
 
-        neuralCtx.fillStyle=
-            `rgba(${r},${g},${b},${n.alpha*.28})`;
+        /*
+           COLORE DEL NODO
+           GIALLO = NORMALE
+           VIOLA = 12% CIRCA
+        */
+
+        if(n.isPurple){
+
+            /*
+               GLOW VIOLA
+            */
+
+            neuralCtx.fillStyle=
+                `rgba(180,60,255,${n.alpha*.42})`;
+
+            neuralCtx.beginPath();
+
+            neuralCtx.arc(
+                n.x,
+                n.y,
+                size*5,
+                0,
+                Math.PI*2
+            );
+
+            neuralCtx.fill();
 
 
-        neuralCtx.beginPath();
+            /*
+               PUNTO VIOLA
+            */
+
+            neuralCtx.fillStyle=
+                `rgba(210,100,255,${n.alpha})`;
+
+            neuralCtx.beginPath();
+
+            neuralCtx.arc(
+                n.x,
+                n.y,
+                size*1.15,
+                0,
+                Math.PI*2
+            );
+
+            neuralCtx.fill();
+
+        }else{
+
+            /*
+               GLOW NORMALE
+            */
+
+            neuralCtx.fillStyle=
+                `rgba(${r},${g},${b},${n.alpha*.28})`;
+
+            neuralCtx.beginPath();
+
+            neuralCtx.arc(
+                n.x,
+                n.y,
+                size*4,
+                0,
+                Math.PI*2
+            );
+
+            neuralCtx.fill();
 
 
-        neuralCtx.arc(
-            n.x,
-            n.y,
-            size*4,
-            0,
-            Math.PI*2
-        );
+            /*
+               PUNTO BIANCO
+            */
 
+            neuralCtx.fillStyle=
+                `rgba(255,255,255,${n.alpha})`;
 
-        neuralCtx.fill();
+            neuralCtx.beginPath();
 
+            neuralCtx.arc(
+                n.x,
+                n.y,
+                size,
+                0,
+                Math.PI*2
+            );
 
-        neuralCtx.fillStyle=
-            `rgba(255,255,255,${n.alpha})`;
+            neuralCtx.fill();
 
-
-        neuralCtx.beginPath();
-
-
-        neuralCtx.arc(
-            n.x,
-            n.y,
-            size,
-            0,
-            Math.PI*2
-        );
-
-
-        neuralCtx.fill();
+        }
 
     });
 

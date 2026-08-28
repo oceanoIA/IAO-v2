@@ -590,6 +590,55 @@ element.className =
 element.textContent =
 text;
 
+chat.appendChild(element);
+
+chat.scrollTop =
+chat.scrollHeight;
+
+/* Mantiene soltanto gli ultimi 2 messaggi visibili */
+while(chat.children.length > 2){
+chat.removeChild(chat.firstChild);
+}
+
+/* Dopo 6 secondi il messaggio scompare */
+setTimeout(() => {
+
+if(element.parentNode){
+
+element.style.transition =
+"opacity .6s, transform .6s";
+
+element.style.opacity =
+"0";
+
+element.style.transform =
+"translateY(8px)";
+
+setTimeout(() => {
+
+if(element.parentNode){
+element.remove();
+}
+
+},600);
+
+}
+
+},6000);
+
+return element;
+
+}
+
+const element =
+document.createElement("div");
+
+element.className =
+"message " + type;
+
+element.textContent =
+text;
+
 chat.appendChild(
 element
 );

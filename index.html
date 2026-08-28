@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
 
 <meta charset="UTF-8">
@@ -8,6 +9,7 @@
 content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
 <title>JARVIS — NEURAL CORE</title>
+
 
 <style>
 
@@ -20,12 +22,16 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 }
 
 html,body{
+
     margin:0;
     width:100%;
     height:100%;
+
     overflow:hidden;
+
     background:#000;
     color:#fff;
+
     font-family:Arial,sans-serif;
 }
 
@@ -39,9 +45,12 @@ body{
 ===================================================== */
 
 #loading{
+
     position:fixed;
     inset:0;
+
     z-index:1000;
+
     background:#000;
 
     display:flex;
@@ -49,15 +58,19 @@ body{
     justify-content:center;
 
     font:11px monospace;
+
     letter-spacing:4px;
+
     color:#ffd000;
 
     transition:opacity 1s ease;
 }
 
 #loading.hidden{
+
     opacity:0;
     pointer-events:none;
+
 }
 
 
@@ -66,6 +79,7 @@ body{
 ===================================================== */
 
 #neuralCanvas{
+
     position:fixed;
     inset:0;
 
@@ -81,9 +95,13 @@ body{
 }
 
 body.mapMode #neuralCanvas{
+
     opacity:0;
+
     transform:scale(.45);
+
     filter:blur(15px);
+
     pointer-events:none;
 }
 
@@ -93,6 +111,7 @@ body.mapMode #neuralCanvas{
 ===================================================== */
 
 #earthContainer{
+
     position:fixed;
     inset:0;
 
@@ -109,13 +128,18 @@ body.mapMode #neuralCanvas{
 }
 
 body.mapMode #earthContainer{
+
     opacity:1;
+
     transform:scale(1);
+
     pointer-events:auto;
 }
 
 #earthCanvas{
+
     position:absolute;
+
     inset:0;
 
     width:100%;
@@ -128,6 +152,7 @@ body.mapMode #earthContainer{
 ===================================================== */
 
 .header{
+
     position:fixed;
 
     top:20px;
@@ -143,9 +168,11 @@ body.mapMode #earthContainer{
 }
 
 .header h1{
+
     margin:0;
 
-    font-size:30px;
+    font-size:35px;
+
     font-weight:300;
 
     letter-spacing:12px;
@@ -156,6 +183,7 @@ body.mapMode #earthContainer{
 }
 
 .status{
+
     margin-top:7px;
 
     font:10px monospace;
@@ -164,6 +192,7 @@ body.mapMode #earthContainer{
 }
 
 #dot{
+
     color:#ffd000;
 
     text-shadow:
@@ -171,6 +200,7 @@ body.mapMode #earthContainer{
 }
 
 body.mapMode .header h1{
+
     text-shadow:
         0 0 15px #168cff,
         0 0 35px rgba(30,140,255,.4);
@@ -178,10 +208,11 @@ body.mapMode .header h1{
 
 
 /* =====================================================
-   CLOCK
+   OROLOGIO
 ===================================================== */
 
 #clockPanel{
+
     position:fixed;
 
     top:22px;
@@ -197,30 +228,37 @@ body.mapMode .header h1{
 }
 
 #clock{
+
     font-size:15px;
+
     letter-spacing:2px;
+
     color:#fff;
 }
 
 #date{
+
     margin-top:3px;
 
     font-size:9px;
+
     letter-spacing:2px;
 
     color:rgba(255,210,0,.65);
 }
 
 body.mapMode #date{
+
     color:rgba(80,170,255,.8);
 }
 
 
 /* =====================================================
-   CHAT MESSAGGI
+   CHAT — NUOVO DESIGN
 ===================================================== */
 
 #chat{
+
     position:fixed;
 
     z-index:25;
@@ -228,87 +266,188 @@ body.mapMode #date{
     left:22px;
     top:125px;
 
-    width:330px;
+    width:350px;
 
     max-height:calc(100vh - 245px);
 
     overflow-y:auto;
 
     display:flex;
+
     flex-direction:column;
 
-    gap:9px;
+    gap:10px;
 
-    padding:8px 4px 8px 0;
+    padding:18px;
 
     scrollbar-width:none;
 
-    mask-image:linear-gradient(
-        to bottom,
-        transparent 0,
-        black 12px,
-        black 92%,
-        transparent 100%
-    );
+
+    /* ==============================================
+       VETRO NERO
+    ============================================== */
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(5,7,10,.78),
+            rgba(0,0,0,.58)
+        );
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+
+    /* ==============================================
+       FORMA ROTONDA
+    ============================================== */
+
+    border-radius:30px;
+
+
+    /* ==============================================
+       BORDO
+    ============================================== */
+
+    border:
+        1px solid
+        rgba(255,208,0,.25);
+
+
+    /* ==============================================
+       BAGLIORE
+    ============================================== */
+
+    box-shadow:
+
+        0 0 30px
+        rgba(0,0,0,.9),
+
+        0 0 60px
+        rgba(255,208,0,.035),
+
+        inset 0 0 30px
+        rgba(255,255,255,.025);
+
+    
+    /* ==============================================
+       EFFETTO SFUMATURA
+    ============================================== */
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            transparent 0,
+            black 15px,
+            black 92%,
+            transparent 100%
+        );
 }
 
 #chat::-webkit-scrollbar{
+
     display:none;
 }
 
+
+/* =====================================================
+   MESSAGGI
+===================================================== */
+
 .message{
+
     max-width:100%;
 
-    padding:10px 13px;
+    padding:11px 15px;
 
-    border-radius:12px;
+    border-radius:20px;
 
     font-size:13px;
 
     line-height:1.5;
 
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
+    backdrop-filter:blur(14px);
 
-    animation:messageIn .3s ease;
+    -webkit-backdrop-filter:blur(14px);
+
+    animation:
+        messageIn .3s ease;
 }
 
 @keyframes messageIn{
 
     from{
+
         opacity:0;
-        transform:translateX(-12px);
+
+        transform:
+            translateX(-12px)
+            scale(.97);
     }
 
     to{
-        opacity:1;
-        transform:translateX(0);
-    }
 
+        opacity:1;
+
+        transform:
+            translateX(0)
+            scale(1);
+    }
 }
+
+
+/* =====================================================
+   MESSAGGIO UTENTE
+===================================================== */
 
 .user{
+
     align-self:flex-end;
 
-    background:rgba(255,190,0,.08);
+    background:
+        rgba(255,190,0,.07);
 
-    border:1px solid rgba(255,190,0,.3);
+    border:
+        1px solid
+        rgba(255,190,0,.28);
 
-    border-left:2px solid #ffd000;
+    border-right:
+        2px solid
+        #ffd000;
 
     color:#fff;
+
+    box-shadow:
+        0 0 15px
+        rgba(255,190,0,.035);
 }
 
+
+/* =====================================================
+   MESSAGGIO JARVIS
+===================================================== */
+
 .jarvis{
+
     align-self:flex-start;
 
-    background:rgba(4,9,17,.72);
+    background:
+        rgba(2,7,13,.72);
 
-    border:1px solid rgba(30,140,255,.2);
+    border:
+        1px solid
+        rgba(30,140,255,.18);
 
-    border-left:2px solid #168cff;
+    border-left:
+        2px solid
+        #168cff;
 
     color:#dcecff;
+
+    box-shadow:
+        0 0 18px
+        rgba(30,140,255,.035);
 }
 
 
@@ -317,6 +456,7 @@ body.mapMode #date{
 ===================================================== */
 
 #mapHud{
+
     position:fixed;
 
     z-index:15;
@@ -346,6 +486,7 @@ body.mapMode #date{
 }
 
 body.mapMode #mapHud{
+
     opacity:1;
 
     transform:
@@ -354,6 +495,7 @@ body.mapMode #mapHud{
 }
 
 #mapTitle{
+
     font-size:16px;
 
     letter-spacing:5px;
@@ -365,9 +507,11 @@ body.mapMode #mapHud{
 }
 
 #coordinates{
+
     font-size:10px;
 
-    color:rgba(180,220,255,.85);
+    color:
+        rgba(180,220,255,.85);
 }
 
 
@@ -376,6 +520,7 @@ body.mapMode #mapHud{
 ===================================================== */
 
 #locationInfo{
+
     position:fixed;
 
     z-index:18;
@@ -392,11 +537,14 @@ body.mapMode #mapHud{
 
     padding:10px 18px;
 
-    background:rgba(0,10,20,.75);
+    background:
+        rgba(0,10,20,.75);
 
-    border:1px solid rgba(40,160,255,.5);
+    border:
+        1px solid
+        rgba(40,160,255,.5);
 
-    border-radius:8px;
+    border-radius:18px;
 
     font:11px monospace;
 
@@ -405,7 +553,8 @@ body.mapMode #mapHud{
     text-align:center;
 
     box-shadow:
-        0 0 25px rgba(0,130,255,.15);
+        0 0 25px
+        rgba(0,130,255,.15);
 
     transition:
         opacity .7s ease,
@@ -413,6 +562,7 @@ body.mapMode #mapHud{
 }
 
 #locationInfo.visible{
+
     opacity:1;
 
     transform:
@@ -420,6 +570,7 @@ body.mapMode #mapHud{
 }
 
 #locationName{
+
     font-size:14px;
 
     color:#fff;
@@ -428,117 +579,65 @@ body.mapMode #mapHud{
 }
 
 #locationCoords{
+
     color:#4faaff;
-}
-
-
-/* =====================================================
-   INPUT AREA
-===================================================== */
-
-.inputArea{
-    position:fixed;
-
-    z-index:40;
-
-    bottom:18px;
-    left:50%;
-
-    transform:
-        translateX(-50%);
-
-    width:min(
-        700px,
-        calc(100% - 40px)
-    );
-}
-
-
-/* =====================================================
-   NUOVA CASELLA FUTURISTICA
-===================================================== */
-
-.inputBox{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    padding:
-        7px
-        8px
-        7px
-        16px;
-
-    /*
-       NERO EFFETTO VETRO
-    */
-
-    background:
-        rgba(0,0,0,.72);
-
-    backdrop-filter:
-        blur(22px);
-
-    -webkit-backdrop-filter:
-        blur(22px);
-
-    /*
-       BORDO
-    */
-
-    border:
-        1px solid
-        rgba(255,208,0,.35);
-
-    /*
-       COMPLETAMENTE ROTONDA
-    */
-
-    border-radius:50px;
-
-    /*
-       BAGLIORE
-    */
-
-    box-shadow:
-
-        0 0 25px
-        rgba(255,208,0,.08),
-
-        inset 0 0 20px
-        rgba(255,255,255,.025);
-
-    transition:
-        border-color .3s ease,
-        box-shadow .3s ease;
-}
-
-
-/*
-   QUANDO SCRIVI
-*/
-
-.inputBox:focus-within{
-
-    border-color:
-        rgba(255,208,0,.7);
-
-    box-shadow:
-
-        0 0 30px
-        rgba(255,208,0,.15),
-
-        inset 0 0 25px
-        rgba(255,255,255,.03);
 }
 
 
 /* =====================================================
    INPUT
 ===================================================== */
+
+.inputArea{
+
+    position:fixed;
+
+    z-index:40;
+
+    bottom:18px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    width:
+        min(
+            700px,
+            calc(100% - 40px)
+        );
+}
+
+.inputBox{
+
+    display:flex;
+
+    gap:7px;
+
+    padding:5px;
+
+    background:
+        rgba(0,0,0,.82);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    border:
+        1px solid
+        rgba(255,190,0,.4);
+
+    border-radius:18px;
+
+    box-shadow:
+        0 0 25px
+        rgba(255,190,0,.06),
+
+        inset 0 0 20px
+        rgba(255,255,255,.02);
+}
 
 input{
 
@@ -549,7 +648,7 @@ input{
     height:44px;
 
     padding:
-        0 8px;
+        0 14px;
 
     background:transparent;
 
@@ -565,26 +664,21 @@ input{
 input::placeholder{
 
     color:
-        rgba(255,255,255,.35);
+        rgba(255,255,255,.3);
 }
-
-
-/* =====================================================
-   PULSANTI ROTONDI
-===================================================== */
 
 button{
 
     height:44px;
 
-    border-radius:50%;
+    border-radius:12px;
 
     border:
         1px solid
-        rgba(255,190,0,.45);
+        rgba(255,190,0,.5);
 
     background:
-        rgba(255,190,0,.07);
+        rgba(255,190,0,.1);
 
     color:#ffd000;
 
@@ -595,10 +689,7 @@ button{
     cursor:pointer;
 
     transition:
-        background .25s ease,
-        color .25s ease,
-        box-shadow .25s ease,
-        transform .2s ease;
+        .2s ease;
 }
 
 button:hover{
@@ -608,55 +699,26 @@ button:hover{
     color:#000;
 
     box-shadow:
-        0 0 15px #ffd000;
-
-    transform:scale(1.05);
+        0 0 15px
+        rgba(255,208,0,.5);
 }
-
-button:active{
-
-    transform:
-        scale(.94);
-}
-
-
-/* =====================================================
-   MICROFONO / CONVERSAZIONE
-===================================================== */
 
 #mic,
 #conversation{
 
-    width:44px;
-
-    min-width:44px;
-
-    font-size:16px;
-}
-
-
-/* =====================================================
-   INVIA
-===================================================== */
-
-#send{
-
     width:48px;
-
-    min-width:48px;
 
     font-size:17px;
 }
 
+#send{
 
-/* =====================================================
-   ACTIVE
-===================================================== */
+    width:70px;
+}
 
 .active{
 
-    background:
-        #168cff !important;
+    background:#168cff !important;
 
     border-color:
         #168cff !important;
@@ -664,7 +726,8 @@ button:active{
     color:#fff !important;
 
     box-shadow:
-        0 0 20px #168cff;
+        0 0 20px
+        #168cff;
 }
 
 
@@ -696,6 +759,7 @@ button:active{
 }
 
 body.mapMode #mapCrosshair{
+
     opacity:.35;
 }
 
@@ -709,7 +773,8 @@ body.mapMode #mapCrosshair{
     background:#168cff;
 
     box-shadow:
-        0 0 8px #168cff;
+        0 0 8px
+        #168cff;
 }
 
 #mapCrosshair::before{
@@ -738,12 +803,13 @@ body.mapMode #mapCrosshair{
 @media(max-width:700px){
 
     .header{
+
         top:15px;
     }
 
     .header h1{
 
-        font-size:20px;
+        font-size:22px;
 
         letter-spacing:8px;
     }
@@ -751,38 +817,49 @@ body.mapMode #mapCrosshair{
     #clockPanel{
 
         top:15px;
+
         right:12px;
     }
 
     #clock{
+
         font-size:13px;
     }
 
     #date{
+
         font-size:8px;
     }
 
     #mapHud{
+
         top:65px;
     }
 
     #mapTitle{
+
         font-size:13px;
     }
 
+
+    /* CHAT MOBILE */
+
     #chat{
 
-        left:12px;
-        right:12px;
+        left:10px;
+        right:10px;
 
         top:auto;
+
         bottom:105px;
 
         width:auto;
 
-        max-height:23vh;
+        max-height:27vh;
 
-        padding:0;
+        padding:14px;
+
+        border-radius:26px;
     }
 
     .message{
@@ -798,6 +875,11 @@ body.mapMode #mapCrosshair{
             calc(100% - 20px);
     }
 
+    #locationInfo{
+
+        top:60%;
+    }
+
 }
 
 
@@ -811,27 +893,18 @@ body.mapMode #mapCrosshair{
     #mic{
 
         width:42px;
-
-        min-width:42px;
     }
 
     #send{
 
-        width:44px;
+        width:58px;
 
-        min-width:44px;
-
-        font-size:15px;
+        font-size:10px;
     }
 
     input{
 
         font-size:13px;
-    }
-
-    .inputBox{
-
-        padding-left:13px;
     }
 
 }
@@ -888,7 +961,9 @@ setTimeout(function(){
         <span id="dot">●</span>
 
         <span id="statusText">
+
             NEURAL INTERFACE ONLINE
+
         </span>
 
     </div>
@@ -914,11 +989,15 @@ setTimeout(function(){
 <div id="mapHud">
 
     <div id="mapTitle">
+
         EARTH NAVIGATION
+
     </div>
 
     <div id="coordinates">
+
         GLOBAL POSITIONING SYSTEM ONLINE
+
     </div>
 
 </div>
@@ -930,15 +1009,23 @@ setTimeout(function(){
 <div id="locationInfo">
 
     <div id="locationName">
+
         LOCATION
+
     </div>
 
     <div id="locationCoords">
+
         --°
+
     </div>
 
 </div>
 
+
+<!-- =====================================================
+     CHAT
+===================================================== -->
 
 <div id="chat">
 
@@ -972,18 +1059,24 @@ setTimeout(function(){
             id="conversation"
             title="Modalità conversazione"
         >
+
             🔊
+
         </button>
 
         <button
             id="mic"
             title="Microfono"
         >
+
             🎙
+
         </button>
 
         <button id="send">
-            ➤
+
+            INVIA
+
         </button>
 
     </div>
@@ -994,6 +1087,7 @@ setTimeout(function(){
 <script type="importmap">
 
 {
+
     "imports":{
 
         "three":
@@ -1003,6 +1097,7 @@ setTimeout(function(){
         "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
 
     }
+
 }
 
 </script>
@@ -1032,17 +1127,13 @@ const API =
 ===================================================== */
 
 const neuralCanvas =
-document.getElementById(
-    "neuralCanvas"
-);
+document.getElementById("neuralCanvas");
 
 const neuralCtx =
 neuralCanvas.getContext("2d");
 
 const earthCanvas =
-document.getElementById(
-    "earthCanvas"
-);
+document.getElementById("earthCanvas");
 
 const input =
 document.getElementById("input");
@@ -1054,9 +1145,7 @@ const mic =
 document.getElementById("mic");
 
 const conversation =
-document.getElementById(
-    "conversation"
-);
+document.getElementById("conversation");
 
 const chat =
 document.getElementById("chat");
@@ -1065,9 +1154,7 @@ const dot =
 document.getElementById("dot");
 
 const statusText =
-document.getElementById(
-    "statusText"
-);
+document.getElementById("statusText");
 
 const clock =
 document.getElementById("clock");
@@ -1076,24 +1163,16 @@ const date =
 document.getElementById("date");
 
 const coordinates =
-document.getElementById(
-    "coordinates"
-);
+document.getElementById("coordinates");
 
 const locationInfo =
-document.getElementById(
-    "locationInfo"
-);
+document.getElementById("locationInfo");
 
 const locationName =
-document.getElementById(
-    "locationName"
-);
+document.getElementById("locationName");
 
 const locationCoords =
-document.getElementById(
-    "locationCoords"
-);
+document.getElementById("locationCoords");
 
 
 /* =====================================================
@@ -1137,14 +1216,12 @@ try{
 
 }
 
-memory=
-memory.slice(-40);
+memory=memory.slice(-40);
 
 
 function saveMemory(){
 
-    memory=
-        memory.slice(-40);
+    memory=memory.slice(-40);
 
     localStorage.setItem(
         "jarvis_memory",
@@ -1164,9 +1241,7 @@ function remember(
     memory.push({
 
         role,
-
         content,
-
         time:Date.now()
 
     });
@@ -1187,27 +1262,21 @@ function setState(
     newState
 ){
 
-    state=
-        newState;
-
+    state=newState;
 
     if(
 
         newState==="listening" ||
-
         newState==="thinking" ||
-
         newState==="speaking"
 
     ){
 
-        dot.style.color=
-            "#168cff";
+        dot.style.color="#168cff";
 
     }else{
 
-        dot.style.color=
-            "#ffd000";
+        dot.style.color="#ffd000";
 
     }
 
@@ -1215,13 +1284,12 @@ function setState(
 
 
 /* =====================================================
-   CLOCK
+   OROLOGIO
 ===================================================== */
 
 function updateClock(){
 
-    const now=
-        new Date();
+    const now=new Date();
 
     clock.textContent=
         now.toLocaleTimeString(
@@ -1234,9 +1302,7 @@ function updateClock(){
             {
 
                 weekday:"short",
-
                 day:"2-digit",
-
                 month:"short"
 
             }
@@ -1267,7 +1333,7 @@ function addMessage(
         );
 
     element.className =
-        "message "+type;
+        "message " + type;
 
     element.textContent =
         text;
@@ -1277,7 +1343,7 @@ function addMessage(
     );
 
     while(
-        chat.children.length>20
+        chat.children.length > 20
     ){
 
         chat.removeChild(
@@ -1307,7 +1373,7 @@ const earthCamera =
 
         45,
 
-        innerWidth/
+        innerWidth /
         innerHeight,
 
         .1,
@@ -1327,8 +1393,7 @@ earthCamera.position.set(
 const earthRenderer =
     new THREE.WebGLRenderer({
 
-        canvas:
-            earthCanvas,
+        canvas:earthCanvas,
 
         antialias:true,
 
@@ -1362,11 +1427,8 @@ earthRenderer.setSize(
 
 const ambientLight =
     new THREE.AmbientLight(
-
         0x7890aa,
-
         1.1
-
     );
 
 earthScene.add(
@@ -1376,11 +1438,8 @@ earthScene.add(
 
 const sun =
     new THREE.DirectionalLight(
-
         0xffffff,
-
         3
-
     );
 
 sun.position.set(
@@ -1408,13 +1467,9 @@ earthScene.add(
 
 const earthGeometry =
     new THREE.SphereGeometry(
-
         1,
-
         128,
-
         128
-
     );
 
 
@@ -1433,8 +1488,7 @@ const earthTexture =
 const earthMaterial =
     new THREE.MeshPhongMaterial({
 
-        map:
-            earthTexture,
+        map:earthTexture,
 
         shininess:18,
 
@@ -1454,6 +1508,7 @@ const earth =
         earthMaterial
 
     );
+
 
 earthGroup.add(
     earth
@@ -1487,6 +1542,7 @@ const atmosphere =
 
     );
 
+
 earthGroup.add(
     atmosphere
 );
@@ -1519,6 +1575,7 @@ const glow =
 
     );
 
+
 earthGroup.add(
     glow
 );
@@ -1545,6 +1602,7 @@ const marker =
 
     );
 
+
 marker.visible=false;
 
 earthGroup.add(
@@ -1569,12 +1627,12 @@ const markerRing =
 
             opacity:.95,
 
-            side:
-                THREE.DoubleSide
+            side:THREE.DoubleSide
 
         })
 
     );
+
 
 markerRing.visible=false;
 
@@ -1621,7 +1679,7 @@ function openMap(){
         "mapMode"
     );
 
-    statusText.textContent=
+    statusText.textContent =
         "EARTH NAVIGATION ONLINE";
 
     setState("idle");
@@ -1637,7 +1695,7 @@ function closeMap(){
         "mapMode"
     );
 
-    statusText.textContent=
+    statusText.textContent =
         "NEURAL INTERFACE ONLINE";
 
     locationInfo.classList.remove(
@@ -1659,11 +1717,9 @@ function closeMap(){
    COMANDO MAPPA
 ===================================================== */
 
-function isMapCommand(
-    text
-){
+function isMapCommand(text){
 
-    const t=
+    const t =
         text.toLowerCase();
 
     return(
@@ -1719,16 +1775,15 @@ function extractLocation(
 
     ];
 
-    const lower=
+    const lower =
         text.toLowerCase();
 
 
     for(
-        const prefix
-        of patterns
+        const prefix of patterns
     ){
 
-        const index=
+        const index =
             lower.indexOf(
                 prefix
             );
@@ -1739,13 +1794,13 @@ function extractLocation(
             let place =
                 text.substring(
 
-                    index+
+                    index +
                     prefix.length
 
                 ).trim();
 
 
-            place=
+            place =
                 place.replace(
 
                     /^(la|il|lo|un|una|a|ad)\s+/i,
@@ -1778,18 +1833,15 @@ async function searchPlace(
     place
 ){
 
-    setState(
-        "thinking"
-    );
+    setState("thinking");
 
-    coordinates.textContent=
+    coordinates.textContent =
         "SEARCHING LOCATION...";
 
 
     try{
 
-        const url=
-
+        const url =
             "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=it&q="
             +
             encodeURIComponent(
@@ -1798,9 +1850,7 @@ async function searchPlace(
 
 
         const response =
-            await fetch(
-                url
-            );
+            await fetch(url);
 
 
         if(!response.ok){
@@ -1858,9 +1908,7 @@ async function searchPlace(
         return{
 
             name,
-
             lat,
-
             lon
 
         };
@@ -1868,16 +1916,12 @@ async function searchPlace(
 
     }catch(error){
 
-        console.error(
-            error
-        );
+        console.error(error);
 
-        coordinates.textContent=
+        coordinates.textContent =
             "LOCATION NOT FOUND";
 
-        setState(
-            "idle"
-        );
+        setState("idle");
 
         addMessage(
 
@@ -1916,32 +1960,18 @@ function formatCoordinates(
 
     return(
 
-        Math.abs(lat)
-        .toFixed(4)
-
+        Math.abs(lat).toFixed(4)
         +
-
         "° "
-
         +
-
         latDir
-
         +
-
         "   |   "
-
         +
-
-        Math.abs(lon)
-        .toFixed(4)
-
+        Math.abs(lon).toFixed(4)
         +
-
         "° "
-
         +
-
         lonDir
 
     );
@@ -1961,16 +1991,16 @@ function showLocation(
 
 ){
 
-    locationName.textContent=
+    locationName.textContent =
         name;
 
-    locationCoords.textContent=
+    locationCoords.textContent =
         formatCoordinates(
             lat,
             lon
         );
 
-    coordinates.textContent=
+    coordinates.textContent =
         formatCoordinates(
             lat,
             lon
@@ -1994,9 +2024,7 @@ function showLocation(
 
 function showMyLocation(){
 
-    if(
-        !navigator.geolocation
-    ){
+    if(!navigator.geolocation){
 
         addMessage(
 
@@ -2015,7 +2043,7 @@ function showMyLocation(){
         "thinking"
     );
 
-    coordinates.textContent=
+    coordinates.textContent =
         "ACQUISIZIONE POSIZIONE...";
 
 
@@ -2054,16 +2082,12 @@ function showMyLocation(){
 
         error=>{
 
-            console.log(
-                error
-            );
+            console.log(error);
 
-            coordinates.textContent=
+            coordinates.textContent =
                 "POSITION UNAVAILABLE";
 
-            setState(
-                "idle"
-            );
+            setState("idle");
 
             addMessage(
 
@@ -2116,14 +2140,12 @@ function latLonToVector3(
 ){
 
     const phi =
-
         (90-lat)
         *
         Math.PI/180;
 
 
     const theta =
-
         (lon+180)
         *
         Math.PI/180;
@@ -2133,4 +2155,2211 @@ function latLonToVector3(
 
         -radius *
         Math.sin(phi) *
-        Math.cos
+        Math.cos(theta),
+
+        radius *
+        Math.cos(phi),
+
+        radius *
+        Math.sin(phi) *
+        Math.sin(theta)
+
+    );
+
+}
+
+
+function focusEarth(
+
+    lat,
+    lon
+
+){
+
+    openMap();
+
+
+    const target =
+        latLonToVector3(
+
+            lat,
+            lon,
+            1
+
+        );
+
+
+    marker.position.copy(
+
+        target
+        .clone()
+        .multiplyScalar(
+            1.025
+        )
+
+    );
+
+
+    marker.visible=true;
+
+    markerRing.visible=true;
+
+
+    const direction =
+        target
+        .clone()
+        .normalize();
+
+
+    const front =
+        new THREE.Vector3(
+            0,
+            0,
+            1
+        );
+
+
+    targetQuaternion =
+        new THREE.Quaternion();
+
+
+    targetQuaternion.setFromUnitVectors(
+
+        direction,
+
+        front
+
+    );
+
+
+    zoomStart =
+        earthCamera.position.length();
+
+
+    if(zoomStart<2){
+
+        zoomStart=3.3;
+
+        earthCamera.position.set(
+
+            0,
+            0,
+            zoomStart
+
+        );
+
+    }
+
+
+    zoomEnd=1.55;
+
+    zoomProgress=0;
+
+    zoomAnimating=true;
+
+    controls.enabled=false;
+
+    setState("thinking");
+
+}
+
+
+/* =====================================================
+   RETE NEURALE
+===================================================== */
+
+let neuralWidth =
+    innerWidth;
+
+let neuralHeight =
+    innerHeight;
+
+let neuralCx =
+    neuralWidth/2;
+
+let neuralCy =
+    neuralHeight/2;
+
+
+let neuralRadius =
+    Math.min(
+
+        neuralWidth,
+
+        neuralHeight
+
+    )*.30;
+
+
+let neuralRotation=0;
+
+let nodes=[];
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+function resizeNeural(){
+
+    neuralWidth =
+        innerWidth;
+
+    neuralHeight =
+        innerHeight;
+
+
+    const dpr =
+        Math.min(
+
+            devicePixelRatio || 1,
+
+            2
+
+        );
+
+
+    neuralCanvas.width =
+        neuralWidth*dpr;
+
+    neuralCanvas.height =
+        neuralHeight*dpr;
+
+
+    neuralCanvas.style.width =
+        neuralWidth+"px";
+
+    neuralCanvas.style.height =
+        neuralHeight+"px";
+
+
+    neuralCtx.setTransform(
+
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+
+    );
+
+
+    neuralCx =
+        neuralWidth/2;
+
+    neuralCy =
+        neuralHeight/2;
+
+
+    neuralRadius =
+        Math.min(
+
+            neuralWidth,
+
+            neuralHeight
+
+        )*.30;
+
+
+    createNeuralNodes();
+
+}
+
+
+/* =====================================================
+   NODI
+===================================================== */
+
+function createNeuralNodes(){
+
+    nodes=[];
+
+
+    for(
+        let i=0;
+        i<145;
+        i++
+    ){
+
+        nodes.push({
+
+            theta:
+                Math.random()
+                *
+                Math.PI
+                *
+                2,
+
+            phi:
+                Math.acos(
+                    2*Math.random()-1
+                ),
+
+            r:
+                neuralRadius *
+                (
+                    .72+
+                    Math.random()*.55
+                ),
+
+            size:
+                .7+
+                Math.random()*1.8,
+
+            phase:
+                Math.random()
+                *
+                Math.PI
+                *
+                2,
+
+            /* ==========================================
+               COLORE DINAMICO
+               CIRCA 12% DEI NODI SONO VIOLA
+            ========================================== */
+
+            special:
+                Math.random()<.12
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+   ANIMAZIONE RETE NEURALE
+===================================================== */
+
+function animateNeural(){
+
+    requestAnimationFrame(
+        animateNeural
+    );
+
+
+    const time =
+        performance.now()/1000;
+
+
+    let speed=1;
+
+    let energy=.2;
+
+
+    if(state==="listening"){
+
+        speed=4;
+
+        energy=1.2;
+
+    }
+
+
+    if(state==="thinking"){
+
+        speed=7;
+
+        energy=2;
+
+    }
+
+
+    if(state==="speaking"){
+
+        speed=5;
+
+        energy=1.5;
+
+    }
+
+
+    neuralRotation +=
+        .004*speed;
+
+
+    neuralCtx.fillStyle =
+        "rgba(0,0,0,.28)";
+
+
+    neuralCtx.fillRect(
+
+        0,
+        0,
+        neuralWidth,
+        neuralHeight
+
+    );
+
+
+    let targetColor;
+
+
+    if(
+
+        state==="listening" ||
+
+        state==="thinking" ||
+
+        state==="speaking"
+
+    ){
+
+        targetColor={
+
+            r:25,
+            g:140,
+            b:255
+
+        };
+
+    }else{
+
+        targetColor={
+
+            r:255,
+            g:195,
+            b:0
+
+        };
+
+    }
+
+
+    window.jarvisColor =
+        window.jarvisColor ||
+        {
+
+            r:255,
+            g:195,
+            b:0
+
+        };
+
+
+    jarvisColor.r +=
+        (
+            targetColor.r -
+            jarvisColor.r
+        )*.055;
+
+
+    jarvisColor.g +=
+        (
+            targetColor.g -
+            jarvisColor.g
+        )*.055;
+
+
+    jarvisColor.b +=
+        (
+            targetColor.b -
+            jarvisColor.b
+        )*.055;
+
+
+    const r =
+        Math.round(
+            jarvisColor.r
+        );
+
+    const g =
+        Math.round(
+            jarvisColor.g
+        );
+
+    const b =
+        Math.round(
+            jarvisColor.b
+        );
+
+
+    const pulse =
+        (
+            Math.sin(time*4)+1
+        )/2;
+
+
+    const glowSize =
+        neuralRadius *
+        (
+            1.05+
+            energy*.7+
+            pulse*.18
+        );
+
+
+    const gradient =
+        neuralCtx.createRadialGradient(
+
+            neuralCx,
+            neuralCy,
+            0,
+
+            neuralCx,
+            neuralCy,
+            glowSize
+
+        );
+
+
+    gradient.addColorStop(
+
+        0,
+
+        `rgba(${r},${g},${b},.48)`
+
+    );
+
+
+    gradient.addColorStop(
+
+        .35,
+
+        `rgba(${r},${g},${b},.15)`
+
+    );
+
+
+    gradient.addColorStop(
+
+        1,
+
+        "rgba(0,0,0,0)"
+
+    );
+
+
+    neuralCtx.fillStyle =
+        gradient;
+
+
+    neuralCtx.beginPath();
+
+
+    neuralCtx.arc(
+
+        neuralCx,
+        neuralCy,
+        glowSize,
+        0,
+        Math.PI*2
+
+    );
+
+
+    neuralCtx.fill();
+
+
+    const projected=[];
+
+
+    nodes.forEach(n=>{
+
+        const rr =
+            n.r +
+            Math.sin(
+
+                time*3+
+                n.phase
+
+            )
+            *
+            energy*
+            7;
+
+
+        let x =
+            rr *
+            Math.sin(n.phi) *
+            Math.cos(
+
+                n.theta+
+                neuralRotation
+
+            );
+
+
+        let y =
+            rr *
+            Math.cos(n.phi);
+
+
+        let z =
+            rr *
+            Math.sin(n.phi) *
+            Math.sin(
+
+                n.theta+
+                neuralRotation
+
+            );
+
+
+        if(state!=="idle"){
+
+            x +=
+                Math.sin(
+
+                    time*2+
+                    n.phase
+
+                )
+                *
+                energy*
+                7;
+
+
+            y +=
+                Math.cos(
+
+                    time*2.5+
+                    n.phase
+
+                )
+                *
+                energy*
+                7;
+
+        }
+
+
+        const perspective =
+            430 /
+            (
+                430+z
+            );
+
+
+        projected.push({
+
+            x:
+                neuralCx+
+                x*perspective,
+
+            y:
+                neuralCy+
+                y*perspective,
+
+            z,
+
+            size:
+                n.size*
+                perspective,
+
+            alpha:
+                Math.max(
+
+                    .1,
+
+                    Math.min(
+
+                        1,
+
+                        (z+neuralRadius)/
+                        (neuralRadius*2)
+
+                    )
+
+                ),
+
+            phase:n.phase,
+
+            special:n.special
+
+        });
+
+    });
+
+
+    const maxDist =
+        state==="thinking"
+        ? 110
+        : 82;
+
+
+    for(
+
+        let i=0;
+
+        i<projected.length;
+
+        i++
+
+    ){
+
+        for(
+
+            let j=i+1;
+
+            j<projected.length;
+
+            j++
+
+        ){
+
+            const a =
+                projected[i];
+
+            const c =
+                projected[j];
+
+
+            const dx =
+                a.x-c.x;
+
+            const dy =
+                a.y-c.y;
+
+
+            const dist =
+                Math.sqrt(
+
+                    dx*dx+
+                    dy*dy
+
+                );
+
+
+            if(dist<maxDist){
+
+                const alpha =
+                    (
+                        1-
+                        dist/maxDist
+                    )
+                    *
+                    .3*
+                    a.alpha;
+
+
+                neuralCtx.beginPath();
+
+
+                neuralCtx.moveTo(
+
+                    a.x,
+                    a.y
+
+                );
+
+
+                neuralCtx.lineTo(
+
+                    c.x,
+                    c.y
+
+                );
+
+
+                neuralCtx.strokeStyle =
+
+                    `rgba(${r},${g},${b},${alpha})`;
+
+
+                neuralCtx.lineWidth=.65;
+
+
+                neuralCtx.stroke();
+
+            }
+
+        }
+
+    }
+
+
+    projected.forEach(n=>{
+
+        const flicker =
+            (
+                Math.sin(
+
+                    time*7+
+                    n.phase
+
+                )+1
+
+            )/2;
+
+
+        const size =
+            n.size+
+            flicker*
+            (
+
+                state==="thinking"
+                ? 1.8
+                : .7
+
+            );
+
+
+        /* ============================================
+           COLORE DINAMICO
+        ============================================ */
+
+        let particleColor;
+
+
+        if(n.special){
+
+            const wave =
+                (
+                    Math.sin(
+                        time*2.2+
+                        n.phase
+                    )+1
+                )/2;
+
+
+            /* Viola che cambia intensità */
+
+            particleColor={
+
+                r:180+
+                    wave*60,
+
+                g:45+
+                    wave*35,
+
+                b:220+
+                    wave*35
+
+            };
+
+        }else{
+
+            particleColor={
+
+                r:r,
+                g:g,
+                b:b
+
+            };
+
+        }
+
+
+        const pr =
+            Math.round(
+                particleColor.r
+            );
+
+        const pg =
+            Math.round(
+                particleColor.g
+            );
+
+        const pb =
+            Math.round(
+                particleColor.b
+            );
+
+
+        /* GLOW */
+
+        neuralCtx.fillStyle =
+
+            `rgba(${pr},${pg},${pb},${n.alpha*.28})`;
+
+
+        neuralCtx.beginPath();
+
+
+        neuralCtx.arc(
+
+            n.x,
+            n.y,
+            size*4,
+
+            0,
+            Math.PI*2
+
+        );
+
+
+        neuralCtx.fill();
+
+
+        /* PALLINA */
+
+        neuralCtx.fillStyle =
+
+            `rgba(${pr},${pg},${pb},${n.alpha})`;
+
+
+        neuralCtx.beginPath();
+
+
+        neuralCtx.arc(
+
+            n.x,
+            n.y,
+            size,
+
+            0,
+            Math.PI*2
+
+        );
+
+
+        neuralCtx.fill();
+
+    });
+
+
+    const core =
+        5+
+        pulse*2+
+        energy*2;
+
+
+    neuralCtx.fillStyle =
+
+        `rgba(${r},${g},${b},.38)`;
+
+
+    neuralCtx.beginPath();
+
+
+    neuralCtx.arc(
+
+        neuralCx,
+        neuralCy,
+        core*5,
+
+        0,
+        Math.PI*2
+
+    );
+
+
+    neuralCtx.fill();
+
+
+    neuralCtx.fillStyle =
+        "#fff";
+
+
+    neuralCtx.beginPath();
+
+
+    neuralCtx.arc(
+
+        neuralCx,
+        neuralCy,
+        core,
+
+        0,
+        Math.PI*2
+
+    );
+
+
+    neuralCtx.fill();
+
+}
+
+
+/* =====================================================
+   TERRA ANIMATA
+===================================================== */
+
+let markerPulse=0;
+
+
+function animateEarth(){
+
+    requestAnimationFrame(
+        animateEarth
+    );
+
+
+    if(
+
+        mapMode &&
+        zoomAnimating
+
+    ){
+
+        zoomProgress += .012;
+
+
+        if(zoomProgress>=1){
+
+            zoomProgress=1;
+
+            zoomAnimating=false;
+
+            controls.enabled=true;
+
+            setState("idle");
+
+        }
+
+
+        const eased =
+            1-
+            Math.pow(
+
+                1-zoomProgress,
+                3
+
+            );
+
+
+        const distance =
+            zoomStart+
+            (
+
+                zoomEnd-
+                zoomStart
+
+            )
+            *
+            eased;
+
+
+        const cameraDirection =
+            earthCamera.position
+            .clone()
+            .normalize();
+
+
+        earthCamera.position.copy(
+
+            cameraDirection
+            .multiplyScalar(
+                distance
+            )
+
+        );
+
+
+        earthGroup.quaternion.slerp(
+
+            targetQuaternion,
+
+            .045
+
+        );
+
+    }
+
+
+    controls.update();
+
+
+    if(marker.visible){
+
+        markerPulse += .08;
+
+
+        const scale =
+            1+
+            Math.sin(
+                markerPulse
+            )*.3;
+
+
+        marker.scale.set(
+
+            scale,
+            scale,
+            scale
+
+        );
+
+
+        markerRing.visible=true;
+
+
+        markerRing.position.copy(
+            marker.position
+        );
+
+
+        markerRing.lookAt(
+            earthCamera.position
+        );
+
+
+        markerRing.scale.set(
+
+            scale,
+            scale,
+            scale
+
+        );
+
+    }
+
+
+    earthRenderer.render(
+
+        earthScene,
+        earthCamera
+
+    );
+
+}
+
+
+/* =====================================================
+   COMANDI LOCALI
+===================================================== */
+
+function localCommand(text){
+
+    const t =
+        text.toLowerCase();
+
+
+    if(
+
+        t.includes(
+            "che ore sono"
+        ) ||
+
+        t.includes(
+            "che ora è"
+        ) ||
+
+        t.includes(
+            "che ora e"
+        )
+
+    ){
+
+        return(
+
+            "Sono le "
+            +
+            new Date()
+            .toLocaleTimeString(
+
+                "it-IT",
+
+                {
+
+                    hour:"2-digit",
+                    minute:"2-digit"
+
+                }
+
+            )
+            +
+            "."
+
+        );
+
+    }
+
+
+    if(
+
+        t.includes(
+            "che giorno è"
+        ) ||
+
+        t.includes(
+            "che giorno e"
+        )
+
+    ){
+
+        return(
+
+            "Oggi è "
+            +
+            new Date()
+            .toLocaleDateString(
+
+                "it-IT",
+
+                {
+
+                    weekday:"long",
+                    day:"numeric",
+                    month:"long",
+                    year:"numeric"
+
+                }
+
+            )
+            +
+            "."
+
+        );
+
+    }
+
+
+    if(
+
+        t.includes(
+            "mia posizione"
+        ) ||
+
+        t.includes(
+            "dove sono"
+        )
+
+    ){
+
+        showMyLocation();
+
+        return "__LOCATION__";
+
+    }
+
+
+    if(isMapCommand(t)){
+
+        openMap();
+
+        return "Mappa terrestre attivata.";
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   INVIO
+===================================================== */
+
+send.onclick =
+    sendMessage;
+
+
+input.addEventListener(
+
+    "keydown",
+
+    event=>{
+
+        if(event.key==="Enter"){
+
+            event.preventDefault();
+
+            input.blur();
+
+            sendMessage();
+
+        }
+
+    }
+
+);
+
+
+async function sendMessage(){
+
+    const text =
+        input.value.trim();
+
+
+    if(
+        !text ||
+        busy
+    ){
+
+        return;
+
+    }
+
+
+    busy=true;
+
+
+    input.blur();
+
+    input.value="";
+
+
+    addMessage(
+
+        "user",
+
+        text
+
+    );
+
+
+    remember(
+
+        "user",
+
+        text
+
+    );
+
+
+    const place =
+        extractLocation(
+            text
+        );
+
+
+    if(place){
+
+        openMap();
+
+
+        const answer =
+            addMessage(
+
+                "jarvis",
+
+                "Localizzazione di "
+                +
+                place
+                +
+                "..."
+
+            );
+
+
+        const result =
+            await searchPlace(
+                place
+            );
+
+
+        if(result){
+
+            answer.textContent =
+
+                "Ho individuato "
+                +
+                result.name
+                +
+                ".";
+
+
+            remember(
+
+                "assistant",
+
+                answer.textContent
+
+            );
+
+        }
+
+
+        finish();
+
+        return;
+
+    }
+
+
+    const local =
+        localCommand(
+            text
+        );
+
+
+    if(local){
+
+        if(
+            local !==
+            "__LOCATION__"
+        ){
+
+            addMessage(
+
+                "jarvis",
+
+                local
+
+            );
+
+
+            remember(
+
+                "assistant",
+
+                local
+
+            );
+
+
+            if(conversationMode){
+
+                speak(local);
+
+            }else{
+
+                setState("idle");
+
+            }
+
+        }
+
+
+        finish();
+
+        return;
+
+    }
+
+
+    input.disabled=true;
+
+    send.disabled=true;
+
+    mic.disabled=true;
+
+    conversation.disabled=true;
+
+
+    setState(
+        "thinking"
+    );
+
+
+    const answer =
+        addMessage(
+
+            "jarvis",
+
+            "Analisi del Neural Core..."
+
+        );
+
+
+    const recentMemory =
+        memory.slice(-24);
+
+
+    const intelligentContext={
+
+        assistantName:
+            "JARVIS",
+
+        language:
+            "it-IT",
+
+        currentTime:
+            new Date()
+            .toLocaleTimeString(
+                "it-IT"
+            ),
+
+        currentDate:
+            new Date()
+            .toLocaleDateString(
+                "it-IT"
+            ),
+
+        mapMode:
+            mapMode,
+
+        recentConversation:
+            recentMemory,
+
+        instructions:[
+
+            "Rispondi sempre in italiano salvo richiesta diversa.",
+
+            "Comprendi il significato della domanda e non limitarti a ripetere parole chiave.",
+
+            "Se hai abbastanza informazioni, rispondi direttamente.",
+
+            "Se una domanda è ambigua, fai una domanda breve per capire meglio.",
+
+            "Usa la memoria della conversazione quando è utile.",
+
+            "Non inventare informazioni quando non sei sicuro.",
+
+            "Spiega le cose in modo naturale e intelligente.",
+
+            "Per domande complesse, ragiona per passaggi ma presenta una risposta chiara.",
+
+            "Non dire continuamente che sei un'intelligenza artificiale.",
+
+            "Comportati come un assistente personale chiamato JARVIS."
+
+        ]
+
+    };
+
+
+    try{
+
+        const response =
+            await fetch(
+
+                API,
+
+                {
+
+                    method:"POST",
+
+                    headers:{
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+
+                        JSON.stringify({
+
+                            message:text,
+
+                            memory:
+                                recentMemory,
+
+                            context:
+                                intelligentContext
+
+                        })
+
+                }
+
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+
+                "HTTP "
+                +
+                response.status
+
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(!data.reply){
+
+            throw new Error(
+                "Risposta mancante"
+            );
+
+        }
+
+
+        answer.textContent =
+            data.reply;
+
+
+        remember(
+
+            "assistant",
+
+            data.reply
+
+        );
+
+
+        if(conversationMode){
+
+            speak(
+                data.reply
+            );
+
+        }else{
+
+            setState(
+                "idle"
+            );
+
+        }
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        answer.textContent =
+
+            "Neural Core non raggiungibile. Controlla la connessione o il server AI.";
+
+
+        setState(
+            "idle"
+        );
+
+    }
+
+
+    finish();
+
+}
+
+
+/* =====================================================
+   FINE
+===================================================== */
+
+function finish(){
+
+    busy=false;
+
+    input.disabled=false;
+
+    send.disabled=false;
+
+    mic.disabled=false;
+
+    conversation.disabled=false;
+
+}
+
+
+/* =====================================================
+   VOCI
+===================================================== */
+
+function speak(text){
+
+    if(
+        !("speechSynthesis" in window)
+    ){
+
+        setState("idle");
+
+        return;
+
+    }
+
+
+    speechSynthesis.cancel();
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    utterance.lang =
+        "it-IT";
+
+    utterance.rate =
+        .88;
+
+    utterance.pitch =
+        .65;
+
+    utterance.volume =
+        1;
+
+
+    utterance.onstart = ()=>{
+
+        setState(
+            "speaking"
+        );
+
+    };
+
+
+    utterance.onend = ()=>{
+
+        setState(
+            "idle"
+        );
+
+
+        if(
+
+            conversationMode &&
+            wakeMode
+
+        ){
+
+            setTimeout(
+
+                startWakeWord,
+
+                600
+
+            );
+
+        }
+
+    };
+
+
+    utterance.onerror = ()=>{
+
+        setState(
+            "idle"
+        );
+
+    };
+
+
+    speechSynthesis.speak(
+        utterance
+    );
+
+}
+
+
+/* =====================================================
+   CONVERSAZIONE
+===================================================== */
+
+conversation.onclick = ()=>{
+
+    conversationMode =
+        !conversationMode;
+
+
+    if(conversationMode){
+
+        wakeMode=true;
+
+
+        conversation.classList.add(
+            "active"
+        );
+
+
+        conversation.textContent =
+            "🔵";
+
+
+        setState(
+            "listening"
+        );
+
+
+        startWakeWord();
+
+
+    }else{
+
+        wakeMode=false;
+
+
+        conversation.classList.remove(
+            "active"
+        );
+
+
+        conversation.textContent =
+            "🔊";
+
+
+        stopWakeWord();
+
+
+        if(speechSynthesis){
+
+            speechSynthesis.cancel();
+
+        }
+
+
+        setState(
+            "idle"
+        );
+
+    }
+
+};
+
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if(Recognition){
+
+    recognition =
+        new Recognition();
+
+
+    recognition.lang =
+        "it-IT";
+
+
+    recognition.continuous =
+        false;
+
+
+    recognition.interimResults =
+        true;
+
+
+    recognition.onstart = ()=>{
+
+        listening=true;
+
+
+        mic.classList.add(
+            "active"
+        );
+
+
+        mic.textContent =
+            "■";
+
+
+        input.placeholder =
+            "JARVIS ti sta ascoltando...";
+
+
+        setState(
+            "listening"
+        );
+
+    };
+
+
+    recognition.onresult =
+        event=>{
+
+            let transcript="";
+
+
+            for(
+
+                let i=event.resultIndex;
+
+                i<event.results.length;
+
+                i++
+
+            ){
+
+                transcript +=
+
+                    event.results[i][0]
+                    .transcript;
+
+            }
+
+
+            input.value =
+                transcript;
+
+
+            const last =
+                event.results[
+                    event.results.length-1
+                ];
+
+
+            if(last.isFinal){
+
+                setTimeout(()=>{
+
+                    if(
+                        input.value.trim()
+                    ){
+
+                        input.blur();
+
+                        sendMessage();
+
+                    }
+
+                },250);
+
+            }
+
+        };
+
+
+    recognition.onerror =
+        event=>{
+
+            console.log(
+
+                "Speech recognition:",
+
+                event.error
+
+            );
+
+        };
+
+
+    recognition.onend = ()=>{
+
+        listening=false;
+
+
+        mic.classList.remove(
+            "active"
+        );
+
+
+        mic.textContent =
+            "🎙";
+
+
+        input.placeholder =
+            "Comunica con JARVIS...";
+
+
+        if(
+            state==="listening"
+        ){
+
+            setState(
+                "idle"
+            );
+
+        }
+
+    };
+
+
+    mic.onclick = ()=>{
+
+        if(busy)return;
+
+
+        conversationMode=true;
+
+        wakeMode=false;
+
+
+        conversation.classList.add(
+            "active"
+        );
+
+
+        conversation.textContent =
+            "🔵";
+
+
+        if(listening){
+
+            recognition.stop();
+
+            return;
+
+        }
+
+
+        try{
+
+            recognition.start();
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    };
+
+
+}else{
+
+    mic.disabled=true;
+
+}
+
+
+/* =====================================================
+   WAKE WORD
+===================================================== */
+
+function startWakeWord(){
+
+    if(
+
+        !Recognition ||
+        !conversationMode ||
+        !wakeMode ||
+        busy ||
+        listening ||
+        wakeRecognition
+
+    ){
+
+        return;
+
+    }
+
+
+    wakeRecognition =
+        new Recognition();
+
+
+    wakeRecognition.lang =
+        "it-IT";
+
+
+    wakeRecognition.continuous =
+        true;
+
+
+    wakeRecognition.interimResults =
+        true;
+
+
+    wakeRecognition.onresult =
+        event=>{
+
+            for(
+
+                let i=event.resultIndex;
+
+                i<event.results.length;
+
+                i++
+
+            ){
+
+                const text =
+                    event.results[i][0]
+                    .transcript
+                    .toLowerCase();
+
+
+                if(
+                    text.includes(
+                        "jarvis"
+                    )
+                ){
+
+                    try{
+
+                        wakeRecognition.stop();
+
+                    }catch{}
+
+
+                    wakeRecognition=null;
+
+                    activateJarvis();
+
+                    return;
+
+                }
+
+            }
+
+        };
+
+
+    wakeRecognition.onerror = ()=>{
+
+        wakeRecognition=null;
+
+
+        if(
+
+            conversationMode &&
+            wakeMode &&
+            !busy &&
+            !listening
+
+        ){
+
+            setTimeout(
+
+                startWakeWord,
+
+                1200
+
+            );
+
+        }
+
+    };
+
+
+    wakeRecognition.onend = ()=>{
+
+        wakeRecognition=null;
+
+
+        if(
+
+            conversationMode &&
+            wakeMode &&
+            !busy &&
+            !listening
+
+        ){
+
+            setTimeout(
+
+                startWakeWord,
+
+                600
+
+            );
+
+        }
+
+    };
+
+
+    try{
+
+        wakeRecognition.start();
+
+    }catch{
+
+        wakeRecognition=null;
+
+    }
+
+}
+
+
+function stopWakeWord(){
+
+    if(wakeRecognition){
+
+        try{
+
+            wakeRecognition.stop();
+
+        }catch{}
+
+
+        wakeRecognition=null;
+
+    }
+
+}
+
+
+function activateJarvis(){
+
+    if(
+
+        busy ||
+        listening
+
+    ){
+
+        return;
+
+    }
+
+
+    setState(
+        "listening"
+    );
+
+
+    input.placeholder =
+        "JARVIS ti ascolta...";
+
+
+    setTimeout(()=>{
+
+        try{
+
+            recognition.start();
+
+        }catch{}
+
+    },250);
+
+}
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+window.addEventListener(
+
+    "resize",
+
+    ()=>{
+
+        resizeNeural();
+
+
+        earthCamera.aspect =
+            innerWidth /
+            innerHeight;
+
+
+        earthCamera.updateProjectionMatrix();
+
+
+        earthRenderer.setSize(
+
+            innerWidth,
+
+            innerHeight
+
+        );
+
+    }
+
+);
+
+
+/* =====================================================
+   START
+===================================================== */
+
+resizeNeural();
+
+animateNeural();
+
+animateEarth();
+
+
+setTimeout(()=>{
+
+    document
+        .getElementById("loading")
+        .classList.add("hidden");
+
+},800);
+
+
+/* =====================================================
+   API PUBBLICA
+===================================================== */
+
+window.JARVIS_EARTH={
+
+    openMap,
+
+    closeMap,
+
+    searchPlace,
+
+    showMyLocation,
+
+    focusEarth
+
+};
+
+</script>
+
+</body>
+
+</html>

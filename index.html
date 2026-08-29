@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS Interface</title>
+<title>JARVIS — Neural Core</title>
 <style>
     * {
         box-sizing: border-box;
@@ -14,182 +14,294 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background-color: #121316;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: #050608;
+        font-family: monospace;
         color: #ffffff;
     }
 
-    /* SFONDO MAPPA HUD (PER MODALITÀ MAPPA) */
-    #mapBackground {
+    #webgl-container {
         position: absolute;
         inset: 0;
-        background-size: cover;
-        background-position: center;
-        opacity: 0;
-        transition: opacity 0.8s ease;
         z-index: 1;
-        filter: brightness(0.7) contrast(1.2);
-    }
-    body.map-active #mapBackground {
-        opacity: 1;
     }
 
-    /* CONTAINER CENTRALE / HUD */
-    #mainUi {
+    /* HUD UI ELEMENTS */
+    .hud-top-left {
         position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        top: 25px;
+        left: 25px;
         z-index: 10;
-        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-hud {
+        background: rgba(15, 25, 40, 0.6);
+        border: 1px solid rgba(0, 150, 255, 0.4);
+        color: #88c8ff;
+        padding: 6px 14px;
+        font-size: 11px;
+        letter-spacing: 2px;
+        border-radius: 4px;
+        cursor: pointer;
     }
 
-    /* POSIZIONAMENTO IN BASSO A DESTRA (FOTO 2 E 3) */
-    body.map-active #mainUi {
-        align-items: flex-end;
-        justify-content: flex-end;
-        padding: 40px;
-    }
-
-    /* CORE WRAPPER */
-    .core-wrapper {
-        position: relative;
-        width: 220px;
-        height: 220px;
+    .hud-top-right {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        z-index: 10;
         display: flex;
         align-items: center;
-        justify-content: center;
-        transition: transform 0.8s ease;
+        gap: 8px;
+        font-size: 11px;
+        letter-spacing: 1px;
+        color: #00ffaa;
+    }
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        background-color: #00ffaa;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #00ffaa;
     }
 
-    body.map-active .core-wrapper {
-        transform: scale(0.8);
-    }
-
-    canvas#coreCanvas {
+    .hud-bottom {
         position: absolute;
-        width: 100%;
-        height: 100%;
-    }
-
-    .jarvis-text {
-        position: absolute;
-        font-size: 14px;
-        font-weight: 700;
-        letter-spacing: 4px;
-        color: #ffffff;
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
-        z-index: 15;
-    }
-
-    /* OROLOGIO E DATA */
-    .clock-container {
-        margin-top: 25px;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
         text-align: center;
-        transition: opacity 0.5s ease;
+    }
+    #statusText {
+        font-size: 12px;
+        letter-spacing: 3px;
+        color: rgba(255, 255, 255, 0.5);
     }
 
-    body.map-active .clock-container {
-        opacity: 0;
+    #chat {
+        position: absolute;
+        bottom: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        width: min(500px, 90%);
+        text-align: center;
         pointer-events: none;
     }
-
-    .clock-time {
-        font-size: 44px;
-        font-weight: 600;
-        letter-spacing: 3px;
-        color: #ffffff;
-        text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
-    }
-
-    .clock-date {
-        margin-top: 5px;
-        font-size: 9px;
-        font-weight: 600;
-        letter-spacing: 3px;
-        color: rgba(255, 255, 255, 0.4);
-        text-transform: uppercase;
+    .msg {
+        background: rgba(10, 20, 35, 0.8);
+        border: 1px solid rgba(0, 140, 255, 0.3);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        color: #d0e8ff;
+        margin-top: 6px;
     }
 </style>
 </head>
 <body>
 
-<div id="mapBackground"></div>
-
-<div id="mainUi">
-    <div class="core-wrapper">
-        <canvas id="coreCanvas" width="300" height="300"></canvas>
-        <div class="jarvis-text">JARVIS</div>
-    </div>
-
-    <div class="clock-container">
-        <div class="clock-time" id="timeDisplay">22:30</div>
-        <div class="clock-date" id="dateDisplay">FRIDAY 28 APRIL</div>
-    </div>
+<div class="hud-top-left">
+    <button class="btn-hud" id="micBtn">MUTE</button>
 </div>
 
-<script>
-    // --- OROLOGIO REALTIME ---
-    function updateClock() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('timeDisplay').textContent = `${hours}:${minutes}`;
+<div class="hud-top-right">
+    <div class="status-dot"></div>
+    <span>connected</span>
+</div>
 
-        const options = { weekday: 'long', day: 'numeric', month: 'long' };
-        document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-US', options).toUpperCase();
+<div id="webgl-container"></div>
+
+<div id="chat"></div>
+
+<div class="hud-bottom">
+    <div id="statusText">listening...</div>
+</div>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
     }
-    setInterval(updateClock, 1000);
-    updateClock();
+}
+</script>
 
-    // --- ANIMAZIONE CORE BLU E PARTICELLE ---
-    const canvas = document.getElementById('coreCanvas');
-    const ctx = canvas.getContext('2d');
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = 65;
+<script type="module">
+import * as THREE from 'three';
 
-    let particles = [];
-    for (let i = 0; i < 120; i++) {
-        particles.push({
-            angle: Math.random() * Math.PI * 2,
-            distance: radius + (Math.random() - 0.5) * 30,
-            size: Math.random() * 1.5 + 0.5,
-            speed: (Math.random() - 0.5) * 0.02,
-            alpha: Math.random() * 0.8 + 0.2
+const API = "https://iao-ai-v3.oceano-masoud.workers.dev/";
+
+// SCENA THREE.JS
+const container = document.getElementById('webgl-container');
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+container.appendChild(renderer.domElement);
+
+// GEOMETRIA PARTICELLE "NEURONI"
+const count = 1500;
+const geometry = new THREE.BufferGeometry();
+const spherePositions = new Float32Array(count * 3);
+const ringPositions = new Float32Array(count * 3);
+const currentPositions = new Float32Array(count * 3);
+
+for(let i = 0; i < count; i++) {
+    // 1. Posizioni Sfera (Listening)
+    const r = 1.6 * Math.cbrt(Math.random());
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    
+    spherePositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    spherePositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    spherePositions[i*3+2] = r * Math.cos(phi);
+
+    // 2. Posizioni Anello/Toroide (Speaking/Thinking)
+    const ringR = 1.8 + (Math.random() - 0.5) * 0.4;
+    const ringAngle = Math.random() * Math.PI * 2;
+    const tubeR = (Math.random() - 0.5) * 0.3;
+    const tubeAngle = Math.random() * Math.PI * 2;
+
+    ringPositions[i*3] = (ringR + tubeR * Math.cos(tubeAngle)) * Math.cos(ringAngle);
+    ringPositions[i*3+1] = (ringR + tubeR * Math.cos(tubeAngle)) * Math.sin(ringAngle);
+    ringPositions[i*3+2] = tubeR * Math.sin(tubeAngle);
+
+    // Inizializza
+    currentPositions[i*3] = spherePositions[i*3];
+    currentPositions[i*3+1] = spherePositions[i*3+1];
+    currentPositions[i*3+2] = spherePositions[i*3+2];
+}
+
+geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
+
+// MATERIALE PARTICELLE
+const pMaterial = new THREE.PointsMaterial({
+    color: 0x22aaff,
+    size: 0.025,
+    transparent: true,
+    opacity: 0.85,
+    blending: THREE.AdditiveBlending
+});
+
+const particleSystem = new THREE.Points(geometry, pMaterial);
+scene.add(particleSystem);
+
+// NUCLEO CENTRALE LUMINOSO
+const coreGeo = new THREE.SphereGeometry(0.25, 32, 32);
+const coreMat = new THREE.MeshBasicMaterial({
+    color: 0x88ddff,
+    transparent: true,
+    opacity: 0.9
+});
+const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+scene.add(coreMesh);
+
+// STATO ANIMAZIONE (0 = Sfera, 1 = Anello)
+let morphTarget = 0; 
+let morphProgress = 0;
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    // Transizione Morphing tra Sfera e Anello
+    morphProgress += (morphTarget - morphProgress) * 0.05;
+
+    const pos = geometry.attributes.position.array;
+    for(let i = 0; i < count * 3; i++) {
+        pos[i] = spherePositions[i] + (ringPositions[i] - spherePositions[i]) * morphProgress;
+    }
+    geometry.attributes.position.needsUpdate = true;
+
+    // Rotazione
+    particleSystem.rotation.y += 0.003;
+    if(morphTarget === 1) {
+        particleSystem.rotation.x = THREE.MathUtils.lerp(particleSystem.rotation.x, 0.8, 0.05);
+    } else {
+        particleSystem.rotation.x = THREE.MathUtils.lerp(particleSystem.rotation.x, 0.0, 0.05);
+    }
+
+    // Effetto pulsazione nucleo
+    const time = performance.now() * 0.003;
+    coreMesh.scale.setScalar(1 + Math.sin(time * 2) * 0.1);
+    coreMesh.visible = morphProgress < 0.5; // Scompare quando diventa anello
+
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// LOGICA E VOCALE
+const statusText = document.getElementById("statusText");
+const chat = document.getElementById("chat");
+const micBtn = document.getElementById("micBtn");
+
+function setJarvisState(state) {
+    if(state === "listening") {
+        morphTarget = 0; // Sfera
+        statusText.textContent = "listening...";
+    } else if(state === "speaking" || state === "thinking") {
+        morphTarget = 1; // Anello 3D
+        statusText.textContent = state === "thinking" ? "thinking..." : "speaking...";
+    }
+}
+
+function addMsg(text, type) {
+    chat.innerHTML = `<div class="msg">${text}</div>`;
+}
+
+// RICONOSCIMENTO VOCALE
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(Recognition) {
+    const rec = new Recognition();
+    rec.lang = 'it-IT';
+
+    rec.onstart = () => setJarvisState("listening");
+    rec.onresult = (e) => {
+        const text = e.results[0][0].transcript;
+        addMsg(text, "user");
+        processAi(text);
+    };
+    rec.onend = () => {};
+
+    micBtn.onclick = () => {
+        try { rec.start(); } catch{}
+    };
+}
+
+async function processAi(text) {
+    setJarvisState("thinking");
+    try {
+        const res = await fetch(API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text })
         });
+        const data = await res.json();
+        const reply = data.reply || "Elaborazione completata.";
+        addMsg(reply, "jarvis");
+        speak(reply);
+    } catch {
+        speak("Errore di connessione.");
     }
+}
 
-    function drawCore() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+function speak(text) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "it-IT";
+    u.onstart = () => setJarvisState("speaking");
+    u.onend = () => setJarvisState("listening");
+    speechSynthesis.speak(u);
+}
 
-        // Anello blu esterno brillante
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        ctx.strokeStyle = '#0066ff';
-        ctx.lineWidth = 3;
-        ctx.shadowColor = '#0088ff';
-        ctx.shadowBlur = 18;
-        ctx.stroke();
-
-        // Particelle fluttuanti
-        particles.forEach(p => {
-            p.angle += p.speed;
-            const x = centerX + Math.cos(p.angle) * p.distance;
-            const y = centerY + Math.sin(p.angle) * p.distance;
-
-            ctx.beginPath();
-            ctx.arc(x, y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(0, 180, 255, ${p.alpha})`;
-            ctx.shadowBlur = 6;
-            ctx.fill();
-        });
-
-        requestAnimationFrame(drawCore);
-    }
-    drawCore();
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
 </script>
 </body>
 </html>

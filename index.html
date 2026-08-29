@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>JARVIS</title>
+
+<title>JARVIS — NEURAL CORE</title>
 
 <style>
 *{
@@ -15,26 +16,24 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#0b0d12;
+    background:#08090d;
     color:#fff;
-    font-family: Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
     touch-action:none;
-    display:flex;
-    justify-content:center;
-    align-items:center;
 }
 
 /* =====================================================
    LOADING
 ===================================================== */
+
 #loading{
     position:fixed;
     inset:0;
     z-index:1000;
-    background:#0b0d12;
+    background:#08090d;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -50,84 +49,271 @@ body{
 }
 
 /* =====================================================
-   NEURAL CANVAS
+   GRID OVERLAY (HUD MAP)
 ===================================================== */
-#neuralCanvas{
+
+#gridBg{
     position:fixed;
     inset:0;
+    z-index:1;
+    background-image: 
+        linear-gradient(to right, rgba(30, 140, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 140, 255, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 1.2s ease;
+}
+
+body.mapMode #gridBg{
+    opacity:1;
+}
+
+/* =====================================================
+   NEURAL CANVAS & HUD RING
+===================================================== */
+
+#coreContainer{
+    position:fixed;
+    top:50%;
+    left:50%;
+    width:300px;
+    height:300px;
+    transform:translate(-50%, -60%);
+    z-index:10;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:
+        top 1.2s ease,
+        left 1.2s ease,
+        transform 1.2s ease,
+        width 1.2s ease,
+        height 1.2s ease;
+}
+
+body.mapMode #coreContainer{
+    top:calc(100% - 130px);
+    left:calc(100% - 130px);
+    transform:translate(0, 0);
+    width:180px;
+    height:180px;
+}
+
+#neuralCanvas{
+    position:absolute;
     width:100%;
     height:100%;
-    z-index:1;
+    z-index:2;
     filter:none !important;
 }
 
-/* =====================================================
-   CENTER CONTAINER (JARVIS + CLOCK)
-===================================================== */
-#centerInterface {
-    position: absolute;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+#hudRing{
+    position:absolute;
+    inset:-20px;
+    border:1px dashed rgba(22, 140, 255, 0.3);
+    border-radius:50%;
+    z-index:1;
+    opacity:0;
+    transition:opacity 1.2s ease;
+    animation: spinRing 20s linear infinite;
 }
 
-.jarvis-label {
-    position: absolute;
-    top: calc(50% - 65px);
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    color: #ffffff;
-    text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-    z-index: 12;
+#hudRing::before{
+    content:"";
+    position:absolute;
+    inset:-10px;
+    border:1px solid rgba(22, 140, 255, 0.15);
+    border-radius:50%;
+}
+
+@keyframes spinRing {
+    100% { transform: rotate(360deg); }
+}
+
+body.mapMode #hudRing{
+    opacity:1;
+}
+
+.jarvisLabel{
+    position:absolute;
+    z-index:5;
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:5px;
+    color:#fff;
+    text-shadow:0 0 12px rgba(255,255,255,0.8);
+    pointer-events:none;
+    transition:font-size 1.2s ease;
+}
+
+body.mapMode .jarvisLabel{
+    font-size:12px;
+    letter-spacing:3px;
 }
 
 /* =====================================================
-   CLOCK BELOW CORE
+   CLOCK PANEL
 ===================================================== */
+
 #clockPanel{
-    margin-top: 260px;
-    text-align: center;
-    font-family: monospace;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, 90px);
+    z-index:10;
+    text-align:center;
+    font-family:monospace;
+    pointer-events:none;
+    transition:
+        top 1.2s ease,
+        left 1.2s ease,
+        transform 1.2s ease;
+}
+
+body.mapMode #clockPanel{
+    top:30px;
+    left:40px;
+    transform:translate(0, 0);
+    text-align:left;
 }
 
 #clock{
-    font-size: 52px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    color: #ffffff;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    font-size:48px;
+    font-weight:600;
+    letter-spacing:3px;
+    color:#fff;
+    text-shadow:0 0 16px rgba(255,255,255,0.4);
+    transition:font-size 1.2s ease;
+}
+
+body.mapMode #clock{
+    font-size:24px;
 }
 
 #date{
-    margin-top: 6px;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: rgba(255, 255, 255, 0.5);
+    margin-top:4px;
+    font-size:10px;
+    letter-spacing:3px;
+    color:rgba(255,255,255,0.5);
+}
+
+/* =====================================================
+   EARTH CANVAS & HUD
+===================================================== */
+
+#earthContainer{
+    position:fixed;
+    inset:0;
+    z-index:2;
+    opacity:0;
+    pointer-events:none;
+    transform:scale(.65);
+    transition:
+        opacity 1.3s ease,
+        transform 1.3s ease;
+}
+
+body.mapMode #earthContainer{
+    opacity:1;
+    transform:scale(1);
+    pointer-events:auto;
+}
+
+#earthCanvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+#mapCrosshair{
+    position:fixed;
+    z-index:12;
+    left:50%;
+    top:50%;
+    width:30px;
+    height:30px;
+    transform:translate(-50%,-50%);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .8s ease;
+}
+
+body.mapMode #mapCrosshair{
+    opacity:.4;
+}
+
+#mapCrosshair::before,
+#mapCrosshair::after{
+    content:"";
+    position:absolute;
+    background:#168cff;
+    box-shadow:0 0 8px #168cff;
+}
+
+#mapCrosshair::before{
+    width:30px;
+    height:1px;
+    top:14px;
+    left:0;
+}
+
+#mapCrosshair::after{
+    width:1px;
+    height:30px;
+    left:14px;
+    top:0;
+}
+
+#locationInfo{
+    position:fixed;
+    z-index:18;
+    left:40px;
+    bottom:40px;
+    opacity:0;
+    pointer-events:none;
+    padding:12px 20px;
+    background:rgba(8,12,22,.85);
+    border:1px solid rgba(50,160,255,.4);
+    border-radius:6px;
+    font:11px monospace;
+    letter-spacing:2px;
+    box-shadow:0 0 25px rgba(0,130,255,.15);
+    transition:opacity .8s ease, transform .8s ease;
+}
+
+#locationInfo.visible{
+    opacity:1;
+}
+
+#locationName{
+    font-size:13px;
+    color:#fff;
+    margin-bottom:4px;
+}
+
+#locationCoords{
+    color:#4faaff;
 }
 
 /* =====================================================
    CHAT VOCALE
 ===================================================== */
+
 #chat{
     position:fixed;
     z-index:25;
     left:50%;
-    bottom:40px;
+    bottom:30px;
     transform:translateX(-50%);
-    width:min(600px, calc(100% - 40px));
+    width:min(550px, calc(100% - 40px));
     max-height:100px;
     overflow:hidden;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:7px;
+    gap:6px;
     pointer-events:none;
 }
 
@@ -138,18 +324,64 @@ body{
     line-height:1.4;
     text-align:center;
     max-width:90%;
+    backdrop-filter:blur(10px);
 }
 
 .user{
-    background:rgba(20,130,255,.15);
+    background:rgba(20,130,255,.12);
     border:1px solid rgba(30,150,255,.3);
     color:#dff2ff;
 }
 
 .jarvis{
-    background:rgba(10, 15, 25, 0.75);
-    border:1px solid rgba(40,150,255,.3);
+    background:rgba(5,10,20,.7);
+    border:1px solid rgba(40,150,255,.25);
+    border-left:2px solid #168cff;
     color:#dcecff;
+}
+
+/* =====================================================
+   VOICE CORE BUTTON
+===================================================== */
+
+#voiceCore{
+    position:fixed;
+    right:30px;
+    top:30px;
+    width:46px;
+    height:46px;
+    z-index:40;
+    border-radius:50%;
+    border:1px solid rgba(30,150,255,.4);
+    background:rgba(10,20,35,.6);
+    color:#4da8ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all .5s ease;
+}
+
+#voiceCore:hover{
+    transform:scale(1.08);
+    border-color:#168cff;
+}
+
+#voiceCore.active{
+    background:rgba(20,100,255,.3);
+    border-color:#168cff;
+    box-shadow:0 0 20px rgba(20,140,255,.6);
+}
+
+.icon{
+    width:20px;
+    height:20px;
+    stroke:currentColor;
+    fill:none;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    pointer-events:none;
 }
 </style>
 </head>
@@ -157,35 +389,117 @@ body{
 <body>
 
 <div id="loading">
-    JARVIS INITIALIZING
+    JARVIS SYSTEM INITIALIZING
 </div>
 
-<canvas id="neuralCanvas"></canvas>
+<div id="gridBg"></div>
 
-<div id="centerInterface">
-    <div class="jarvis-label">JARVIS</div>
-    <div id="clockPanel">
-        <div id="clock">--:--</div>
-        <div id="date">--</div>
-    </div>
+<div id="coreContainer">
+    <div id="hudRing"></div>
+    <canvas id="neuralCanvas"></canvas>
+    <div class="jarvisLabel">JARVIS</div>
+</div>
+
+<div id="clockPanel">
+    <div id="clock">--:--</div>
+    <div id="date">--</div>
+</div>
+
+<div id="earthContainer">
+    <canvas id="earthCanvas"></canvas>
+</div>
+
+<div id="mapCrosshair"></div>
+
+<div id="locationInfo">
+    <div id="locationName">LOCATION</div>
+    <div id="locationCoords">--</div>
 </div>
 
 <div id="chat"></div>
 
+<button id="voiceCore" title="Attiva JARVIS" aria-label="Attiva JARVIS">
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="9" y="3" width="6" height="11" rx="3"></rect>
+        <path d="M5 11a7 7 0 0 0 14 0"></path>
+        <path d="M12 18v3"></path>
+        <path d="M8 21h8"></path>
+    </svg>
+</button>
+
+<script type="importmap">
+{
+    "imports":{
+        "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+        "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+    }
+}
+</script>
+
 <script type="module">
 
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+/* =====================================================
+   API
+===================================================== */
+const API = "https://iao-ai-v3.oceano-masoud.workers.dev/";
+
+/* =====================================================
+   ELEMENTI DOM
+===================================================== */
 const neuralCanvas = document.getElementById("neuralCanvas");
 const neuralCtx = neuralCanvas.getContext("2d");
+const earthCanvas = document.getElementById("earthCanvas");
+const voiceCore = document.getElementById("voiceCore");
 const chat = document.getElementById("chat");
 const clock = document.getElementById("clock");
 const date = document.getElementById("date");
+const locationInfo = document.getElementById("locationInfo");
+const locationName = document.getElementById("locationName");
+const locationCoords = document.getElementById("locationCoords");
 
 /* =====================================================
    STATO & MEMORIA
 ===================================================== */
 let state = "idle";
+let busy = false;
+let listening = false;
+let wakeMode = true;
+let recognition = null;
+let wakeRecognition = null;
+
 let voiceEnergy = 0;
 let targetVoiceEnergy = 0;
+
+let memory = [];
+try {
+    memory = JSON.parse(localStorage.getItem("jarvis_memory") || "[]");
+} catch {
+    memory = [];
+}
+memory = memory.slice(-40);
+
+function saveMemory(){
+    memory = memory.slice(-40);
+    localStorage.setItem("jarvis_memory", JSON.stringify(memory));
+}
+
+function remember(role, content){
+    if(!content) return;
+    memory.push({ role, content, time: Date.now() });
+    saveMemory();
+}
+
+function setState(newState){
+    state = newState;
+    if(newState === "listening" || newState === "thinking" || newState === "speaking"){
+        voiceCore.classList.add("active");
+    } else {
+        voiceCore.classList.remove("active");
+    }
+}
 
 /* =====================================================
    OROLOGIO
@@ -193,40 +507,197 @@ let targetVoiceEnergy = 0;
 function updateClock(){
     const now = new Date();
     clock.textContent = now.toLocaleTimeString("it-IT", { hour: '2-digit', minute: '2-digit' });
-    date.textContent = now.toLocaleDateString("it-IT", { weekday: "long", day: "2-digit", month: "long" }).toUpperCase();
+    date.textContent = now.toLocaleDateString("it-IT", { weekday: "short", day: "2-digit", month: "short" }).toUpperCase();
 }
 updateClock();
 setInterval(updateClock, 1000);
 
 /* =====================================================
-   NEURAL CANVAS (SFERA BLU CENTRALE)
+   CHAT UI
 ===================================================== */
-let neuralWidth = innerWidth;
-let neuralHeight = innerHeight;
+function addMessage(type, text){
+    const element = document.createElement("div");
+    element.className = "message " + type;
+    element.textContent = text;
+    chat.appendChild(element);
+    while(chat.children.length > 3){
+        chat.removeChild(chat.firstChild);
+    }
+    return element;
+}
+
+/* =====================================================
+   THREE.JS (EARTH MAP)
+===================================================== */
+const earthScene = new THREE.Scene();
+const earthCamera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 100);
+earthCamera.position.set(0, 0, 3.3);
+
+const earthRenderer = new THREE.WebGLRenderer({ canvas: earthCanvas, antialias: true, alpha: true });
+earthRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+earthRenderer.setSize(innerWidth, innerHeight);
+
+const ambientLight = new THREE.AmbientLight(0x7890aa, 1.1);
+earthScene.add(ambientLight);
+
+const sun = new THREE.DirectionalLight(0xffffff, 3);
+sun.position.set(5, 3, 5);
+earthScene.add(sun);
+
+const earthGroup = new THREE.Group();
+earthScene.add(earthGroup);
+
+const earthGeometry = new THREE.SphereGeometry(1, 128, 128);
+const textureLoader = new THREE.TextureLoader();
+const earthTexture = textureLoader.load("https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg");
+
+const earthMaterial = new THREE.MeshPhongMaterial({
+    map: earthTexture,
+    shininess: 18,
+    specular: new THREE.Color(0x333333)
+});
+const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+earthGroup.add(earth);
+
+const marker = new THREE.Mesh(
+    new THREE.SphereGeometry(0.022, 24, 24),
+    new THREE.MeshBasicMaterial({ color: 0x168cff })
+);
+marker.visible = false;
+earthGroup.add(marker);
+
+const controls = new OrbitControls(earthCamera, earthCanvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.enablePan = false;
+controls.minDistance = 1.25;
+controls.maxDistance = 6;
+
+let mapMode = false;
+
+function openMap(){
+    if(mapMode) return;
+    mapMode = true;
+    document.body.classList.add("mapMode");
+}
+
+function closeMap(){
+    mapMode = false;
+    document.body.classList.remove("mapMode");
+    locationInfo.classList.remove("visible");
+    marker.visible = false;
+}
+
+function isMapCommand(text){
+    const t = text.toLowerCase();
+    return t.includes("apri la mappa") || t.includes("apri mappa") || t.includes("mostrami la mappa") || t === "mappa";
+}
+
+function extractLocation(text){
+    const patterns = ["mostrami ", "mostra ", "portami a ", "portami ad ", "fammi vedere ", "cerca ", "trova ", "vai a ", "localizza "];
+    const lower = text.toLowerCase();
+    for(const prefix of patterns){
+        const index = lower.indexOf(prefix);
+        if(index !== -1){
+            let place = text.substring(index + prefix.length).trim();
+            place = place.replace(/^(la|il|lo|un|una|a|ad)\s+/i, "");
+            if(place.length > 1) return place;
+        }
+    }
+    return null;
+}
+
+async function searchPlace(place){
+    setState("thinking");
+    try{
+        const url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=it&q=" + encodeURIComponent(place);
+        const response = await fetch(url);
+        if(!response.ok) throw new Error("Geocoding error");
+        const results = await response.json();
+        if(!results.length) throw new Error("Luogo non trovato");
+        const result = results[0];
+        const lat = parseFloat(result.lat);
+        const lon = parseFloat(result.lon);
+        const name = result.display_name.split(",").slice(0, 3).join(", ");
+        showLocation(name, lat, lon);
+        return { name, lat, lon };
+    } catch(error){
+        console.error(error);
+        setState("idle");
+        return null;
+    }
+}
+
+function showLocation(name, lat, lon){
+    locationName.textContent = name;
+    locationCoords.textContent = `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'} | ${Math.abs(lon).toFixed(4)}° ${lon >= 0 ? 'E' : 'W'}`;
+    locationInfo.classList.add("visible");
+    focusEarth(lat, lon);
+}
+
+let zoomAnimating = false, zoomProgress = 1, zoomStart = 3.3, zoomEnd = 1.55;
+let targetQuaternion = new THREE.Quaternion();
+
+function latLonToVector3(lat, lon, radius){
+    const phi = (90 - lat) * Math.PI / 180;
+    const theta = (lon + 180) * Math.PI / 180;
+    return new THREE.Vector3(
+        -radius * Math.sin(phi) * Math.cos(theta),
+        radius * Math.cos(phi),
+        radius * Math.sin(phi) * Math.sin(theta)
+    );
+}
+
+function focusEarth(lat, lon){
+    openMap();
+    const target = latLonToVector3(lat, lon, 1);
+    marker.position.copy(target.clone().multiplyScalar(1.025));
+    marker.visible = true;
+
+    const direction = target.clone().normalize();
+    targetQuaternion.setFromUnitVectors(direction, new THREE.Vector3(0, 0, 1));
+    zoomStart = earthCamera.position.length();
+    if(zoomStart < 2){
+        zoomStart = 3.3;
+        earthCamera.position.set(0, 0, zoomStart);
+    }
+    zoomProgress = 0;
+    zoomAnimating = true;
+    controls.enabled = false;
+    setState("thinking");
+}
+
+/* =====================================================
+   NEURAL CANVAS (SFERA CORE ANIMATA)
+===================================================== */
+let containerRect = document.getElementById("coreContainer").getBoundingClientRect();
+let neuralWidth = containerRect.width;
+let neuralHeight = containerRect.height;
 let neuralCx = neuralWidth / 2;
-let neuralCy = (neuralHeight / 2) - 65;
-let neuralRadius = 75;
+let neuralCy = neuralHeight / 2;
+let neuralRadius = 65;
 let neuralRotation = 0;
 let nodes = [];
 
 function createNeuralNodes(){
     nodes = [];
-    const amount = 300;
+    const amount = 350;
     for(let i = 0; i < amount; i++){
         nodes.push({
             theta: Math.random() * Math.PI * 2,
             phi: Math.acos(2 * Math.random() - 1),
-            r: neuralRadius * (0.85 + Math.random() * 0.3),
-            size: 0.5 + Math.random() * 1.2,
+            r: neuralRadius * (0.75 + Math.random() * 0.45),
+            size: 0.4 + Math.random() * 0.8,
             phase: Math.random() * Math.PI * 2,
-            frequency: 0.8 + Math.random() * 1.5
+            frequency: 0.5 + Math.random() * 2
         });
     }
 }
 
 function resizeNeural(){
-    neuralWidth = innerWidth;
-    neuralHeight = innerHeight;
+    const rect = document.getElementById("coreContainer").getBoundingClientRect();
+    neuralWidth = rect.width;
+    neuralHeight = rect.height;
     const dpr = Math.min(devicePixelRatio || 1, 2);
     neuralCanvas.width = neuralWidth * dpr;
     neuralCanvas.height = neuralHeight * dpr;
@@ -235,7 +706,8 @@ function resizeNeural(){
     neuralCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     neuralCx = neuralWidth / 2;
-    neuralCy = (neuralHeight / 2) - 65;
+    neuralCy = neuralHeight / 2;
+    neuralRadius = mapMode ? 40 : 65;
     createNeuralNodes();
 }
 
@@ -243,59 +715,274 @@ function animateNeural(){
     requestAnimationFrame(animateNeural);
     const time = performance.now() / 1000;
 
-    let baseEnergy = 0.05;
-    if(state === "listening") baseEnergy = 0.35;
-    if(state === "speaking") baseEnergy = 0.45;
+    let baseEnergy = 0.04;
+    if(state === "listening") baseEnergy = 0.3;
+    if(state === "thinking") baseEnergy = 0.45;
+    if(state === "speaking") baseEnergy = 0.35;
 
-    targetVoiceEnergy = baseEnergy;
-    voiceEnergy += (targetVoiceEnergy - voiceEnergy) * 0.1;
+    targetVoiceEnergy = Math.max(baseEnergy, voiceEnergy);
+    voiceEnergy += (targetVoiceEnergy - voiceEnergy) * 0.12;
 
-    neuralRotation += 0.005 + voiceEnergy * 0.01;
+    neuralRotation += 0.002 + voiceEnergy * 0.008;
 
     neuralCtx.clearRect(0, 0, neuralWidth, neuralHeight);
 
-    const r = 20, g = 140, b = 255;
+    const r = 22, g = 140, b = 255;
 
-    // Glowing Ring Outer
+    // Glowing outer ring
     neuralCtx.beginPath();
-    neuralCtx.arc(neuralCx, neuralCy, neuralRadius + 2 + (voiceEnergy * 10), 0, Math.PI * 2);
-    neuralCtx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.8)`;
-    neuralCtx.lineWidth = 3;
-    neuralCtx.shadowColor = `rgba(${r}, ${g}, ${b}, 1)`;
-    neuralCtx.shadowBlur = 15;
+    neuralCtx.arc(neuralCx, neuralCy, neuralRadius + (voiceEnergy * 8), 0, Math.PI * 2);
+    neuralCtx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.85)`;
+    neuralCtx.lineWidth = 2.5;
     neuralCtx.stroke();
-    neuralCtx.shadowBlur = 0;
 
-    // Inner Nodes & Connections
+    // Neural Nodes
     nodes.forEach(n => {
         const wave = Math.sin(time * n.frequency + n.phase);
-        const rr = n.r + (voiceEnergy * 12 * wave);
+        const rr = n.r + (voiceEnergy * 10 * wave);
         const angle = n.theta + neuralRotation;
 
         let x = rr * Math.sin(n.phi) * Math.cos(angle);
         let y = rr * Math.cos(n.phi);
         let z = rr * Math.sin(n.phi) * Math.sin(angle);
 
-        const perspective = 400 / (400 + z);
+        const perspective = 350 / (350 + z);
         const px = neuralCx + x * perspective;
         const py = neuralCy + y * perspective;
-        const alpha = Math.max(0.1, (z + neuralRadius) / (neuralRadius * 2));
+        const alpha = Math.max(0.15, (z + neuralRadius) / (neuralRadius * 2));
 
-        neuralCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        neuralCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.9})`;
         neuralCtx.beginPath();
         neuralCtx.arc(px, py, n.size * perspective, 0, Math.PI * 2);
         neuralCtx.fill();
     });
 }
 
-window.addEventListener("resize", resizeNeural);
+function animateEarth(){
+    requestAnimationFrame(animateEarth);
+    if(mapMode && zoomAnimating){
+        zoomProgress += 0.009;
+        if(zoomProgress >= 1){
+            zoomProgress = 1;
+            zoomAnimating = false;
+            controls.enabled = true;
+            setState("idle");
+        }
+        const eased = 1 - Math.pow(1 - zoomProgress, 3);
+        const distance = zoomStart + (zoomEnd - zoomStart) * eased;
+        const cameraDirection = earthCamera.position.clone().normalize();
+        earthCamera.position.copy(cameraDirection.multiplyScalar(distance));
+        earthGroup.quaternion.slerp(targetQuaternion, 0.025);
+    }
+    controls.update();
+    earthRenderer.render(earthScene, earthCamera);
+}
 
+/* =====================================================
+   COMANDI & LOGICA AI
+===================================================== */
+function localCommand(text){
+    const t = text.toLowerCase();
+    if(t.includes("che ore sono") || t.includes("che ora è")){
+        return "Sono le " + new Date().toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" }) + ".";
+    }
+    if(t.includes("che giorno è")){
+        return "Oggi è " + new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" }) + ".";
+    }
+    if(isMapCommand(t)){
+        openMap();
+        resizeNeural();
+        return "Mappa terrestre attivata.";
+    }
+    return null;
+}
+
+async function sendMessage(text){
+    if(!text || busy) return;
+    busy = true;
+
+    addMessage("user", text);
+    remember("user", text);
+
+    const place = extractLocation(text);
+    if(place){
+        openMap();
+        resizeNeural();
+        const answer = addMessage("jarvis", "Localizzazione di " + place + "...");
+        const result = await searchPlace(place);
+        if(result){
+            answer.textContent = "Ho individuato " + result.name + ".";
+            remember("assistant", answer.textContent);
+            speak(answer.textContent);
+        }
+        finish();
+        return;
+    }
+
+    const local = localCommand(text);
+    if(local){
+        addMessage("jarvis", local);
+        remember("assistant", local);
+        speak(local);
+        finish();
+        return;
+    }
+
+    setState("thinking");
+    const answer = addMessage("jarvis", "Elaborazione...");
+
+    const recentMemory = memory.slice(-24);
+    const intelligentContext = {
+        assistantName: "JARVIS",
+        language: "it-IT",
+        mapMode: mapMode,
+        recentConversation: recentMemory
+    };
+
+    try {
+        const response = await fetch(API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text, memory: recentMemory, context: intelligentContext })
+        });
+        if(!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        if(!data.reply) throw new Error("Risposta mancante");
+
+        answer.textContent = data.reply;
+        remember("assistant", data.reply);
+        speak(data.reply);
+    } catch(error) {
+        console.error(error);
+        answer.textContent = "Errore di connessione con il Neural Core.";
+        speak("Non riesco a raggiungere il server AI.");
+        setState("idle");
+    }
+    finish();
+}
+
+function finish(){ busy = false; }
+
+/* =====================================================
+   SPEECH SYNTHESIS & RECOGNITION
+===================================================== */
+function speak(text){
+    if(!("speechSynthesis" in window)){
+        setState("idle");
+        return;
+    }
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "it-IT";
+    utterance.rate = 0.85;
+    utterance.pitch = 0.6;
+
+    utterance.onstart = () => {
+        setState("speaking");
+        targetVoiceEnergy = 0.45;
+    };
+    utterance.onend = () => {
+        targetVoiceEnergy = 0.04;
+        setState("idle");
+        if(wakeMode && !busy) setTimeout(startWakeWord, 900);
+    };
+    utterance.onerror = () => {
+        targetVoiceEnergy = 0.04;
+        setState("idle");
+    };
+
+    speechSynthesis.speak(utterance);
+}
+
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(Recognition){
+    recognition = new Recognition();
+    recognition.lang = "it-IT";
+    recognition.continuous = false;
+    recognition.interimResults = true;
+
+    recognition.onstart = () => { listening = true; setState("listening"); };
+    recognition.onresult = event => {
+        let transcript = "";
+        for(let i = event.resultIndex; i < event.results.length; i++){
+            transcript += event.results[i][0].transcript;
+        }
+        targetVoiceEnergy = Math.min(0.85, 0.18 + transcript.length / 45);
+        if(event.results[event.results.length - 1].isFinal){
+            const text = transcript.trim();
+            if(text) sendMessage(text);
+        }
+    };
+    recognition.onend = () => {
+        listening = false;
+        targetVoiceEnergy = 0.04;
+        if(state === "listening") setState("idle");
+    };
+}
+
+function startWakeWord(){
+    if(!Recognition || !wakeMode || busy || listening || wakeRecognition) return;
+    wakeRecognition = new Recognition();
+    wakeRecognition.lang = "it-IT";
+    wakeRecognition.continuous = true;
+    wakeRecognition.interimResults = true;
+
+    wakeRecognition.onresult = event => {
+        for(let i = event.resultIndex; i < event.results.length; i++){
+            const text = event.results[i][0].transcript.toLowerCase().trim();
+            if(text.includes("jarvis")){
+                try { wakeRecognition.stop(); } catch{}
+                wakeRecognition = null;
+                activateJarvis();
+                return;
+            }
+        }
+    };
+    wakeRecognition.onend = () => {
+        wakeRecognition = null;
+        if(wakeMode && !busy && !listening) setTimeout(startWakeWord, 700);
+    };
+    try { wakeRecognition.start(); } catch { wakeRecognition = null; }
+}
+
+function activateJarvis(){
+    if(busy || listening) return;
+    setState("listening");
+    targetVoiceEnergy = 0.5;
+    setTimeout(() => {
+        try { recognition.start(); } catch(e){ console.log(e); }
+    }, 450);
+}
+
+voiceCore.onclick = () => {
+    if(busy || !recognition) return;
+    if(listening){
+        recognition.stop();
+        return;
+    }
+    try { recognition.start(); } catch(e){ console.log(e); }
+};
+
+window.addEventListener("resize", () => {
+    resizeNeural();
+    earthCamera.aspect = innerWidth / innerHeight;
+    earthCamera.updateProjectionMatrix();
+    earthRenderer.setSize(innerWidth, innerHeight);
+});
+
+/* =====================================================
+   INIZIALIZZAZIONE
+===================================================== */
 resizeNeural();
 animateNeural();
+animateEarth();
 
 setTimeout(() => {
     document.getElementById("loading").classList.add("hidden");
-}, 800);
+    setTimeout(startWakeWord, 700);
+}, 900);
+
+window.JARVIS_EARTH = { openMap, closeMap, searchPlace, focusEarth };
 
 </script>
 </body>

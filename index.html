@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS — Fluid Neural Core</title>
+<title>JARVIS — Structured Neural Core</title>
 <style>
     * {
         box-sizing: border-box;
@@ -198,24 +198,26 @@ const container = document.getElementById('webgl-container');
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 4.8;
+camera.position.z = 5.0;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 container.appendChild(renderer.domElement);
 
-// TEXTURE CIRCOLARE SOFT
-function createCircleTexture() {
+// TEXTURE NEURONI NITIDI E LUMINOSI
+function createParticleTexture() {
     const canvas = document.createElement('canvas');
     canvas.width = 64;
     canvas.height = 64;
     const ctx = canvas.getContext('2d');
     
+    // Cerchio ben definito con centro brillante
     const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.8)');
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    gradient.addColorStop(0.3, 'rgba(0, 200, 255, 0.9)');
+    gradient.addColorStop(0.7, 'rgba(0, 100, 255, 0.4)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 64, 64);
@@ -223,19 +225,22 @@ function createCircleTexture() {
     return new THREE.CanvasTexture(canvas);
 }
 
-// SISTEMA PARTICELLARE FLUIDO
-const count = 6000;
+// PARTICELLE ORGANIZZATE (3500 neuroni ben visibili)
+const count = 3500;
 const geometry = new THREE.BufferGeometry();
 const basePositions = new Float32Array(count * 3);
 const currentPositions = new Float32Array(count * 3);
-const phases = new Float32Array(count * 3);
-const frequencies = new Float32Array(count * 3);
+const sphereRadius = new Float32Array(count);
+const sphereAngles = new Float32Array(count * 2); // theta, phi
 
 for(let i = 0; i < count; i++) {
-    // Distribuzione sferica iniziale
-    const r = 1.6 * Math.cbrt(Math.random());
+    const r = 1.8 * Math.cbrt(Math.random());
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
+
+    sphereRadius[i] = r;
+    sphereAngles[i*2] = theta;
+    sphereAngles[i*2+1] = phi;
 
     basePositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
     basePositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
@@ -244,86 +249,80 @@ for(let i = 0; i < count; i++) {
     currentPositions[i*3] = basePositions[i*3];
     currentPositions[i*3+1] = basePositions[i*3+1];
     currentPositions[i*3+2] = basePositions[i*3+2];
-
-    // Fasi e frequenze uniche per far fluire ogni particella autonomamente
-    phases[i*3] = Math.random() * Math.PI * 2;
-    phases[i*3+1] = Math.random() * Math.PI * 2;
-    phases[i*3+2] = Math.random() * Math.PI * 2;
-
-    frequencies[i*3] = 0.5 + Math.random() * 1.5;
-    frequencies[i*3+1] = 0.5 + Math.random() * 1.5;
-    frequencies[i*3+2] = 0.5 + Math.random() * 1.5;
 }
 
 geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
+// MATERIALE PIÙ GRANDE E VISIBILE
 const pMaterial = new THREE.PointsMaterial({
-    color: new THREE.Color(0x0066ff),
-    size: 0.016,
-    map: createCircleTexture(),
+    color: new THREE.Color(0x0077ff),
+    size: 0.038, // Neuroni più grandi e definiti
+    map: createParticleTexture(),
     transparent: true,
     alphaTest: 0.001,
-    opacity: 0.85,
+    opacity: 0.9,
     blending: THREE.AdditiveBlending
 });
 
 const particleSystem = new THREE.Points(geometry, pMaterial);
 scene.add(particleSystem);
 
-// VALORI PER LA FLUIDITÀ DINAMICA
-let targetEnergy = 0; // 0 = calmo/ascolto, 1 = attivo/parla/pensa
+// CONTROLLO ENERGIA E TRANSIZIONI ARMONICHE
+let targetEnergy = 0; 
 let currentEnergy = 0;
-let baseColor = new THREE.Color(0x0044cc);
+let baseColor = new THREE.Color(0x0055ff);
 let activeColor = new THREE.Color(0x00f0ff);
 let currentColor = baseColor.clone();
 
 function animate() {
     requestAnimationFrame(animate);
-    const time = performance.now() * 0.001;
+    const time = performance.now() * 0.0012;
 
-    // Transizione fluida del livello di energia dell'IA
+    // Transizione energia fluida
     currentEnergy += (targetEnergy - currentEnergy) * 0.03;
 
-    // Colore dinamico dal blu scuro al brillante azzurro neon
-    currentColor.lerp(targetEnergy > 0.1 ? activeColor : baseColor, 0.05);
+    // Cambio colore graduale
+    currentColor.lerp(targetEnergy > 0.1 ? activeColor : baseColor, 0.04);
     pMaterial.color = currentColor;
 
     const pos = geometry.attributes.position.array;
-    
-    // Velocità e ampiezza del fluido variano in base all'energia
-    const speed = 1.0 + currentEnergy * 2.5;
-    const waveAmp = 0.1 + currentEnergy * 0.45;
-    const morphFreq = 0.8 + currentEnergy * 1.2;
 
     for(let i = 0; i < count; i++) {
         const idx = i * 3;
-        const bx = basePositions[idx];
-        const by = basePositions[idx+1];
-        const bz = basePositions[idx+2];
+        const r = sphereRadius[i];
+        const theta = sphereAngles[i*2];
+        const phi = sphereAngles[i*2+1];
 
-        // Campo di forze fluido tridimensionale
-        const waveX = Math.sin(time * speed * frequencies[idx] + phases[idx] + by * morphFreq);
-        const waveY = Math.cos(time * speed * frequencies[idx+1] + phases[idx+1] + bz * morphFreq);
-        const waveZ = Math.sin(time * speed * frequencies[idx+2] + phases[idx+2] + bx * morphFreq);
+        if(currentEnergy < 0.1) {
+            // STATO 1: ASCOLTO (Respiro sferico elegante e sincronizzato)
+            const pulse = 1 + Math.sin(time * 2 + r * 3) * 0.06;
+            pos[idx] = basePositions[idx] * pulse;
+            pos[idx+1] = basePositions[idx+1] * pulse;
+            pos[idx+2] = basePositions[idx+2] * pulse;
+        } else {
+            // STATO 2: PARLA / PENSA (Onde armoniche ordinate e fluide)
+            const waveX = Math.sin(time * 2.5 + phi * 4) * 0.25 * currentEnergy;
+            const waveY = Math.cos(time * 2.0 + theta * 3) * 0.25 * currentEnergy;
+            const waveZ = Math.sin(time * 3.0 + r * 2) * 0.15 * currentEnergy;
 
-        // Deformazione organica che plasma nuove forme continuamente
-        pos[idx] = bx + waveX * waveAmp * (1 + currentEnergy * Math.sin(time + bx));
-        pos[idx+1] = by + waveY * waveAmp * (1 + currentEnergy * Math.cos(time + by));
-        pos[idx+2] = bz + waveZ * waveAmp * (1 + currentEnergy * Math.sin(time + bz));
+            pos[idx] = (r + waveX) * Math.sin(phi) * Math.cos(theta + waveY);
+            pos[idx+1] = (r + waveY) * Math.sin(phi) * Math.sin(theta);
+            pos[idx+2] = (r + waveZ) * Math.cos(phi + waveX);
+        }
     }
+
     geometry.attributes.position.needsUpdate = true;
 
-    // Rotazione dello spazio tridimensionale
-    particleSystem.rotation.y += 0.002 + currentEnergy * 0.008;
-    particleSystem.rotation.x = Math.sin(time * 0.4) * (0.2 + currentEnergy * 0.3);
-    particleSystem.rotation.z = Math.cos(time * 0.3) * (0.1 + currentEnergy * 0.2);
+    // Rotazione fluida e composta dell'intera struttura
+    particleSystem.rotation.y += 0.002 + currentEnergy * 0.004;
+    particleSystem.rotation.x = Math.sin(time * 0.5) * 0.12;
 
     renderer.render(scene, camera);
 }
 
 animate();
 
-// INTERFACCIA E VOCALE
+// LOGICA INTERFACCIA E VOCALE
 const statusText = document.getElementById("statusText");
 const chat = document.getElementById("chat");
 const micBtn = document.getElementById("micBtn");

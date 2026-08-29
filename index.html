@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS — Fine Hologram Neural Core</title>
+<title>JARVIS — Dynamic Neural Hologram</title>
 <style>
     * {
         box-sizing: border-box;
@@ -198,14 +198,14 @@ const container = document.getElementById('webgl-container');
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5.0;
+camera.position.z = 5.2;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 container.appendChild(renderer.domElement);
 
-// TEXTURE NEURONE OLOGRAFICO (Centro bianco/ambra con aureola soffusa)
+// TEXTURE NEURONE OLOGRAFICO BRILLANTE
 function createBioNeuronTexture() {
     const canvas = document.createElement('canvas');
     canvas.width = 64;
@@ -213,9 +213,9 @@ function createBioNeuronTexture() {
     const ctx = canvas.getContext('2d');
     
     const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    gradient.addColorStop(0, 'rgba(255, 255, 240, 1)');     // Nucleo sinaptico bianco puro
-    gradient.addColorStop(0.25, 'rgba(255, 180, 90, 0.9)');  // Bagliore oro/ambra
-    gradient.addColorStop(0.65, 'rgba(160, 80, 40, 0.35)');  // Tonalità organica
+    gradient.addColorStop(0, 'rgba(255, 255, 240, 1)');     // Nucleo bianco puro
+    gradient.addColorStop(0.2, 'rgba(255, 185, 80, 0.9)');   // Alone oro/ambra
+    gradient.addColorStop(0.55, 'rgba(160, 75, 25, 0.35)');  // Tonalità organica
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
     ctx.fillStyle = gradient;
@@ -224,38 +224,39 @@ function createBioNeuronTexture() {
     return new THREE.CanvasTexture(canvas);
 }
 
-// STRUTTURA NEURAL CORE
-const count = 650; 
+// STRUTTURA AD ALTA DENSITÀ NEURONALE (3000 NEURONI SENZA FORMA FISSA)
+const count = 3000; 
 const geometry = new THREE.BufferGeometry();
 const basePositions = new Float32Array(count * 3);
 const currentPositions = new Float32Array(count * 3);
-const sphereRadius = new Float32Array(count);
-const sphereAngles = new Float32Array(count * 2);
+const seeds = new Float32Array(count * 3);
 
 for(let i = 0; i < count; i++) {
-    const r = 1.65 * Math.cbrt(Math.random());
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
+    // Distribuzione casuale asimmetrica in uno spazio organico 3D
+    const x = (Math.random() - 0.5) * 3.2;
+    const y = (Math.random() - 0.5) * 3.2;
+    const z = (Math.random() - 0.5) * 3.2;
 
-    sphereRadius[i] = r;
-    sphereAngles[i*2] = theta;
-    sphereAngles[i*2+1] = phi;
+    basePositions[i*3] = x;
+    basePositions[i*3+1] = y;
+    basePositions[i*3+2] = z;
 
-    basePositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
-    basePositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
-    basePositions[i*3+2] = r * Math.cos(phi);
+    currentPositions[i*3] = x;
+    currentPositions[i*3+1] = y;
+    currentPositions[i*3+2] = z;
 
-    currentPositions[i*3] = basePositions[i*3];
-    currentPositions[i*3+1] = basePositions[i*3+1];
-    currentPositions[i*3+2] = basePositions[i*3+2];
+    // Fasi uniche per consentire mutazioni di forma continue
+    seeds[i*3] = Math.random() * Math.PI * 2;
+    seeds[i*3+1] = Math.random() * Math.PI * 2;
+    seeds[i*3+2] = Math.random() * Math.PI * 2;
 }
 
 geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-// MATERIALE NODI NEURONALI OLOGRAFICI
+// MATERIALE OLOGRAFICO AMBRA/ORO
 const pMaterial = new THREE.PointsMaterial({
     color: new THREE.Color(0xffb755),
-    size: 0.07, 
+    size: 0.055, 
     map: createBioNeuronTexture(),
     transparent: true,
     alphaTest: 0.001,
@@ -266,23 +267,7 @@ const pMaterial = new THREE.PointsMaterial({
 const particleSystem = new THREE.Points(geometry, pMaterial);
 scene.add(particleSystem);
 
-// LINEE FINE PER GLI ASSONI/SINAPSI
-const maxLines = count * 5;
-const lineGeometry = new THREE.BufferGeometry();
-const linePositions = new Float32Array(maxLines * 6);
-lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-
-const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0xff9d3b,
-    transparent: true,
-    opacity: 0.22,
-    blending: THREE.AdditiveBlending
-});
-
-const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
-scene.add(linesMesh);
-
-// STATO ENERGETICO E DINAMICA
+// CONTROLLO DINAMICO DELL'ENERGIA E MUTAZIONE DELLA FORMA
 let targetEnergy = 0; 
 let currentEnergy = 0;
 let baseColor = new THREE.Color(0xff9d3b);
@@ -291,73 +276,43 @@ let currentColor = baseColor.clone();
 
 function animate() {
     requestAnimationFrame(animate);
-    const time = performance.now() * 0.0012;
+    const time = performance.now() * 0.001;
 
     currentEnergy += (targetEnergy - currentEnergy) * 0.03;
 
-    // Colore olografico dinamico
+    // Transizione del colore olografico
     currentColor.lerp(targetEnergy > 0.1 ? activeColor : baseColor, 0.04);
     pMaterial.color = currentColor;
-    lineMaterial.color = currentColor;
-    lineMaterial.opacity = 0.18 + currentEnergy * 0.3;
 
     const pos = geometry.attributes.position.array;
+    const speed = 0.6 + currentEnergy * 1.8;
 
-    // Movimento continuo e fluido
+    // Mutazione continua della struttura neurale nel tempo (senza rimanere una sfera)
     for(let i = 0; i < count; i++) {
         const idx = i * 3;
-        const r = sphereRadius[i];
-        const theta = sphereAngles[i*2];
-        const phi = sphereAngles[i*2+1];
+        const bx = basePositions[idx];
+        const by = basePositions[idx+1];
+        const bz = basePositions[idx+2];
+        const sx = seeds[idx];
+        const sy = seeds[idx+1];
+        const sz = seeds[idx+2];
 
-        if(currentEnergy < 0.1) {
-            const pulse = 1 + Math.sin(time * 2 + r * 3) * 0.04;
-            pos[idx] = basePositions[idx] * pulse;
-            pos[idx+1] = basePositions[idx+1] * pulse;
-            pos[idx+2] = basePositions[idx+2] * pulse;
-        } else {
-            const waveX = Math.sin(time * 2.2 + phi * 4) * 0.2 * currentEnergy;
-            const waveY = Math.cos(time * 1.8 + theta * 3) * 0.2 * currentEnergy;
-            const waveZ = Math.sin(time * 2.6 + r * 2) * 0.1 * currentEnergy;
+        // Onde di distorsione armonica tridimensionale
+        const morphX = Math.sin(time * speed * 0.7 + sy + by * 1.2) * (0.35 + currentEnergy * 0.45);
+        const morphY = Math.cos(time * speed * 0.8 + sz + bz * 1.2) * (0.35 + currentEnergy * 0.45);
+        const morphZ = Math.sin(time * speed * 0.6 + sx + bx * 1.2) * (0.35 + currentEnergy * 0.45);
 
-            pos[idx] = (r + waveX) * Math.sin(phi) * Math.cos(theta + waveY);
-            pos[idx+1] = (r + waveY) * Math.sin(phi) * Math.sin(theta);
-            pos[idx+2] = (r + waveZ) * Math.cos(phi + waveX);
-        }
+        pos[idx] = bx + morphX;
+        pos[idx+1] = by + morphY;
+        pos[idx+2] = bz + morphZ;
     }
+    
     geometry.attributes.position.needsUpdate = true;
 
-    // COLLEGAMENTO CON FINE LINEE SINAPTICHE IN TEMPO REALE
-    let lineIdx = 0;
-    const linePos = lineGeometry.attributes.position.array;
-    const connectDistance = 0.58 + currentEnergy * 0.18;
-
-    for(let i = 0; i < count; i++) {
-        for(let j = i + 1; j < count; j++) {
-            const dx = pos[i*3] - pos[j*3];
-            const dy = pos[i*3+1] - pos[j*3+1];
-            const dz = pos[i*3+2] - pos[j*3+2];
-            const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-
-            if(dist < connectDistance && lineIdx < maxLines * 6) {
-                linePos[lineIdx++] = pos[i*3];
-                linePos[lineIdx++] = pos[i*3+1];
-                linePos[lineIdx++] = pos[i*3+2];
-
-                linePos[lineIdx++] = pos[j*3];
-                linePos[lineIdx++] = pos[j*3+1];
-                linePos[lineIdx++] = pos[j*3+2];
-            }
-        }
-    }
-    lineGeometry.setDrawRange(0, lineIdx / 3);
-    lineGeometry.attributes.position.needsUpdate = true;
-
-    // Rotazione composta dell'intera rete neurale
-    particleSystem.rotation.y += 0.002 + currentEnergy * 0.004;
-    linesMesh.rotation.y = particleSystem.rotation.y;
-    particleSystem.rotation.x = Math.sin(time * 0.5) * 0.1;
-    linesMesh.rotation.x = particleSystem.rotation.x;
+    // Rotazione composta e fluida nello spazio 3D
+    particleSystem.rotation.y = Math.sin(time * 0.2) * 0.5 + time * 0.05;
+    particleSystem.rotation.x = Math.cos(time * 0.15) * 0.3;
+    particleSystem.rotation.z = Math.sin(time * 0.1) * 0.2;
 
     renderer.render(scene, camera);
 }

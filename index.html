@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS — Dynamic Neural Hologram</title>
+<title>JARVIS — High-Density Hologram Core</title>
 <style>
     * {
         box-sizing: border-box;
@@ -14,7 +14,7 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background-color: #020304;
+        background-color: #020205;
         font-family: monospace;
         color: #ffffff;
     }
@@ -33,9 +33,9 @@
         z-index: 10;
     }
     .btn-hud {
-        background: rgba(25, 18, 12, 0.7);
-        border: 1px solid rgba(255, 180, 100, 0.35);
-        color: #ffca90;
+        background: rgba(20, 10, 30, 0.7);
+        border: 1px solid rgba(220, 100, 255, 0.35);
+        color: #f0abff;
         padding: 6px 14px;
         font-size: 11px;
         letter-spacing: 2px;
@@ -45,8 +45,8 @@
         transition: all 0.3s ease;
     }
     .btn-hud:hover {
-        border-color: #ffaa44;
-        box-shadow: 0 0 12px rgba(255, 170, 68, 0.4);
+        border-color: #e055ff;
+        box-shadow: 0 0 12px rgba(220, 85, 255, 0.4);
     }
 
     .hud-top-right {
@@ -59,15 +59,15 @@
         gap: 8px;
         font-size: 11px;
         letter-spacing: 1px;
-        color: #ffaa44;
-        text-shadow: 0 0 8px rgba(255, 170, 68, 0.6);
+        color: #e055ff;
+        text-shadow: 0 0 8px rgba(224, 85, 255, 0.6);
     }
     .status-dot {
         width: 6px;
         height: 6px;
-        background-color: #ffaa44;
+        background-color: #e055ff;
         border-radius: 50%;
-        box-shadow: 0 0 10px #ffaa44;
+        box-shadow: 0 0 10px #e055ff;
     }
 
     .hud-bottom {
@@ -97,13 +97,13 @@
         pointer-events: none;
     }
     .msg {
-        background: rgba(20, 14, 8, 0.85);
-        border: 1px solid rgba(255, 170, 68, 0.4);
-        box-shadow: 0 0 15px rgba(255, 150, 50, 0.2);
+        background: rgba(18, 8, 28, 0.85);
+        border: 1px solid rgba(220, 100, 255, 0.4);
+        box-shadow: 0 0 15px rgba(200, 50, 255, 0.2);
         padding: 10px 18px;
         border-radius: 20px;
         font-size: 12px;
-        color: #fff2e0;
+        color: #fce8ff;
         backdrop-filter: blur(8px);
     }
 
@@ -120,8 +120,8 @@
     }
     .input-field {
         flex: 1;
-        background: rgba(20, 14, 8, 0.8);
-        border: 1px solid rgba(255, 170, 68, 0.35);
+        background: rgba(18, 8, 28, 0.8);
+        border: 1px solid rgba(220, 100, 255, 0.35);
         border-radius: 20px;
         padding: 10px 18px;
         color: #ffffff;
@@ -132,16 +132,16 @@
         transition: all 0.3s ease;
     }
     .input-field:focus {
-        border-color: #ffaa44;
-        box-shadow: 0 0 12px rgba(255, 170, 68, 0.3);
+        border-color: #e055ff;
+        box-shadow: 0 0 12px rgba(224, 85, 255, 0.3);
     }
     .input-field::placeholder {
         color: rgba(255, 255, 255, 0.3);
     }
     .btn-send {
-        background: rgba(255, 140, 0, 0.2);
-        border: 1px solid rgba(255, 170, 68, 0.5);
-        color: #ffaa44;
+        background: rgba(200, 50, 255, 0.2);
+        border: 1px solid rgba(220, 100, 255, 0.5);
+        color: #e055ff;
         padding: 0 18px;
         border-radius: 20px;
         font-family: monospace;
@@ -152,8 +152,8 @@
         transition: all 0.3s ease;
     }
     .btn-send:hover {
-        background: rgba(255, 170, 68, 0.4);
-        box-shadow: 0 0 12px rgba(255, 170, 68, 0.4);
+        background: rgba(220, 100, 255, 0.4);
+        box-shadow: 0 0 12px rgba(224, 85, 255, 0.4);
     }
 </style>
 </head>
@@ -198,24 +198,24 @@ const container = document.getElementById('webgl-container');
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5.2;
+camera.position.z = 5.0;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 container.appendChild(renderer.domElement);
 
-// TEXTURE NEURONE OLOGRAFICO BRILLANTE
-function createBioNeuronTexture() {
+// TEXTURE OLOGRAFICA PER I NEURONI (Magenta/Viola brillante)
+function createHoloTexture() {
     const canvas = document.createElement('canvas');
     canvas.width = 64;
     canvas.height = 64;
     const ctx = canvas.getContext('2d');
     
     const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    gradient.addColorStop(0, 'rgba(255, 255, 240, 1)');     // Nucleo bianco puro
-    gradient.addColorStop(0.2, 'rgba(255, 185, 80, 0.9)');   // Alone oro/ambra
-    gradient.addColorStop(0.55, 'rgba(160, 75, 25, 0.35)');  // Tonalità organica
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');     // Centro bianco ultra brillante
+    gradient.addColorStop(0.25, 'rgba(255, 110, 240, 0.95)'); // Alone magenta/rosa neon
+    gradient.addColorStop(0.65, 'rgba(130, 20, 200, 0.4)');   // Sfumatura viola profondo
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
     ctx.fillStyle = gradient;
@@ -224,40 +224,39 @@ function createBioNeuronTexture() {
     return new THREE.CanvasTexture(canvas);
 }
 
-// STRUTTURA AD ALTA DENSITÀ NEURONALE (3000 NEURONI SENZA FORMA FISSA)
-const count = 3000; 
+// AUMENTATO IL NUMERO DI NEURONI (3500 nodi)
+const count = 3500; 
 const geometry = new THREE.BufferGeometry();
 const basePositions = new Float32Array(count * 3);
 const currentPositions = new Float32Array(count * 3);
-const seeds = new Float32Array(count * 3);
+const sphereRadius = new Float32Array(count);
+const sphereAngles = new Float32Array(count * 2);
 
 for(let i = 0; i < count; i++) {
-    // Distribuzione casuale asimmetrica in uno spazio organico 3D
-    const x = (Math.random() - 0.5) * 3.2;
-    const y = (Math.random() - 0.5) * 3.2;
-    const z = (Math.random() - 0.5) * 3.2;
+    const r = 1.7 * Math.cbrt(Math.random());
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
 
-    basePositions[i*3] = x;
-    basePositions[i*3+1] = y;
-    basePositions[i*3+2] = z;
+    sphereRadius[i] = r;
+    sphereAngles[i*2] = theta;
+    sphereAngles[i*2+1] = phi;
 
-    currentPositions[i*3] = x;
-    currentPositions[i*3+1] = y;
-    currentPositions[i*3+2] = z;
+    basePositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    basePositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    basePositions[i*3+2] = r * Math.cos(phi);
 
-    // Fasi uniche per consentire mutazioni di forma continue
-    seeds[i*3] = Math.random() * Math.PI * 2;
-    seeds[i*3+1] = Math.random() * Math.PI * 2;
-    seeds[i*3+2] = Math.random() * Math.PI * 2;
+    currentPositions[i*3] = basePositions[i*3];
+    currentPositions[i*3+1] = basePositions[i*3+1];
+    currentPositions[i*3+2] = basePositions[i*3+2];
 }
 
 geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-// MATERIALE OLOGRAFICO AMBRA/ORO
+// MATERIALE NEURONI (Senza linee di collegamento)
 const pMaterial = new THREE.PointsMaterial({
-    color: new THREE.Color(0xffb755),
-    size: 0.055, 
-    map: createBioNeuronTexture(),
+    color: new THREE.Color(0xd946ef),
+    size: 0.045, 
+    map: createHoloTexture(),
     transparent: true,
     alphaTest: 0.001,
     opacity: 0.95,
@@ -267,52 +266,52 @@ const pMaterial = new THREE.PointsMaterial({
 const particleSystem = new THREE.Points(geometry, pMaterial);
 scene.add(particleSystem);
 
-// CONTROLLO DINAMICO DELL'ENERGIA E MUTAZIONE DELLA FORMA
+// CONTROLLO DINAMICO E COLORE
 let targetEnergy = 0; 
 let currentEnergy = 0;
-let baseColor = new THREE.Color(0xff9d3b);
-let activeColor = new THREE.Color(0xffe299);
+let baseColor = new THREE.Color(0xa855f7);   // Viola intenso
+let activeColor = new THREE.Color(0xf472b6); // Rosa/Magenta brillante
 let currentColor = baseColor.clone();
 
 function animate() {
     requestAnimationFrame(animate);
-    const time = performance.now() * 0.001;
+    const time = performance.now() * 0.0012;
 
     currentEnergy += (targetEnergy - currentEnergy) * 0.03;
 
-    // Transizione del colore olografico
+    // Transizione fluida di colore
     currentColor.lerp(targetEnergy > 0.1 ? activeColor : baseColor, 0.04);
     pMaterial.color = currentColor;
 
     const pos = geometry.attributes.position.array;
-    const speed = 0.6 + currentEnergy * 1.8;
 
-    // Mutazione continua della struttura neurale nel tempo (senza rimanere una sfera)
+    // Movimento fluido strutturato
     for(let i = 0; i < count; i++) {
         const idx = i * 3;
-        const bx = basePositions[idx];
-        const by = basePositions[idx+1];
-        const bz = basePositions[idx+2];
-        const sx = seeds[idx];
-        const sy = seeds[idx+1];
-        const sz = seeds[idx+2];
+        const r = sphereRadius[i];
+        const theta = sphereAngles[i*2];
+        const phi = sphereAngles[i*2+1];
 
-        // Onde di distorsione armonica tridimensionale
-        const morphX = Math.sin(time * speed * 0.7 + sy + by * 1.2) * (0.35 + currentEnergy * 0.45);
-        const morphY = Math.cos(time * speed * 0.8 + sz + bz * 1.2) * (0.35 + currentEnergy * 0.45);
-        const morphZ = Math.sin(time * speed * 0.6 + sx + bx * 1.2) * (0.35 + currentEnergy * 0.45);
+        if(currentEnergy < 0.1) {
+            const pulse = 1 + Math.sin(time * 2 + r * 3) * 0.04;
+            pos[idx] = basePositions[idx] * pulse;
+            pos[idx+1] = basePositions[idx+1] * pulse;
+            pos[idx+2] = basePositions[idx+2] * pulse;
+        } else {
+            const waveX = Math.sin(time * 2.2 + phi * 4) * 0.22 * currentEnergy;
+            const waveY = Math.cos(time * 1.8 + theta * 3) * 0.22 * currentEnergy;
+            const waveZ = Math.sin(time * 2.6 + r * 2) * 0.12 * currentEnergy;
 
-        pos[idx] = bx + morphX;
-        pos[idx+1] = by + morphY;
-        pos[idx+2] = bz + morphZ;
+            pos[idx] = (r + waveX) * Math.sin(phi) * Math.cos(theta + waveY);
+            pos[idx+1] = (r + waveY) * Math.sin(phi) * Math.sin(theta);
+            pos[idx+2] = (r + waveZ) * Math.cos(phi + waveX);
+        }
     }
-    
     geometry.attributes.position.needsUpdate = true;
 
-    // Rotazione composta e fluida nello spazio 3D
-    particleSystem.rotation.y = Math.sin(time * 0.2) * 0.5 + time * 0.05;
-    particleSystem.rotation.x = Math.cos(time * 0.15) * 0.3;
-    particleSystem.rotation.z = Math.sin(time * 0.1) * 0.2;
+    // Rotazione dello spazio 3D
+    particleSystem.rotation.y += 0.002 + currentEnergy * 0.004;
+    particleSystem.rotation.x = Math.sin(time * 0.5) * 0.1;
 
     renderer.render(scene, camera);
 }
@@ -335,8 +334,8 @@ function setJarvisState(state) {
     } else if(state === "speaking" || state === "thinking") {
         targetEnergy = 1;
         statusText.textContent = state === "thinking" ? "thinking..." : "speaking...";
-        statusText.style.color = "#ffaa44";
-        statusText.style.textShadow = "0 0 10px rgba(255, 170, 68, 0.8)";
+        statusText.style.color = "#e055ff";
+        statusText.style.textShadow = "0 0 10px rgba(224, 85, 255, 0.8)";
     }
 }
 

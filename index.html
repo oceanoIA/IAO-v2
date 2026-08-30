@@ -15,7 +15,6 @@
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
-
 <style>
 
 /* =====================================================
@@ -41,7 +40,6 @@ body{
     font-family:Arial,sans-serif;
 }
 
-
 body{
 
     background:
@@ -55,12 +53,13 @@ body{
 
 
 /* =====================================================
-   WEBGL
+   THREE.JS
 ===================================================== */
 
 #webgl-container{
 
     position:fixed;
+
     inset:0;
 
     z-index:1;
@@ -74,6 +73,7 @@ body{
 .vignette{
 
     position:fixed;
+
     inset:0;
 
     z-index:3;
@@ -123,11 +123,63 @@ body{
         rgba(255,255,255,.12);
 
     pointer-events:none;
+
+    transition:
+        opacity .35s ease,
+        transform .35s ease;
 }
 
 
 /* =====================================================
-   ORA
+   TITOLO TACTICAL MAP
+===================================================== */
+
+.tactical-title{
+
+    position:absolute;
+
+    top:4%;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:530;
+
+    color:rgba(220,255,255,.9);
+
+    font-family:monospace;
+
+    font-size:
+        clamp(26px,5vw,58px);
+
+    font-weight:300;
+
+    letter-spacing:
+        clamp(6px,1.5vw,14px);
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 0 10px rgba(0,255,255,.35),
+        0 0 30px rgba(0,255,255,.15);
+
+    pointer-events:none;
+
+    opacity:0;
+
+    transition:
+        opacity .35s ease;
+}
+
+#tacticalMap.active .tactical-title{
+
+    opacity:1;
+}
+
+
+/* =====================================================
+   DATA E ORA
 ===================================================== */
 
 .datetime{
@@ -135,6 +187,7 @@ body{
     position:fixed;
 
     top:18px;
+
     right:24px;
 
     z-index:30;
@@ -184,6 +237,7 @@ body{
     position:fixed;
 
     left:50%;
+
     bottom:92px;
 
     transform:translateX(-50%);
@@ -215,6 +269,7 @@ body{
         rgba(4,20,23,.4);
 
     backdrop-filter:blur(14px);
+
     -webkit-backdrop-filter:blur(14px);
 
     color:
@@ -237,6 +292,7 @@ body{
     position:fixed;
 
     left:50%;
+
     bottom:23px;
 
     transform:translateX(-50%);
@@ -261,6 +317,7 @@ body{
         rgba(5,20,23,.38);
 
     backdrop-filter:blur(20px);
+
     -webkit-backdrop-filter:blur(20px);
 
     box-shadow:
@@ -312,6 +369,7 @@ body{
 #micBtn{
 
     width:34px;
+
     height:34px;
 
     margin-right:7px;
@@ -327,12 +385,14 @@ body{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 }
 
 .mic-icon{
 
     width:8px;
+
     height:14px;
 
     border:
@@ -351,9 +411,11 @@ body{
     position:absolute;
 
     left:50%;
+
     bottom:-6px;
 
     width:12px;
+
     height:7px;
 
     transform:translateX(-50%);
@@ -433,19 +495,10 @@ body{
 
     display:none;
 
-    background:
-        radial-gradient(
-            circle at center,
-            #081719 0%,
-            #020708 65%,
-            #000000 100%
-        );
+    background:#020506;
+
+    overflow:hidden;
 }
-
-
-/* =====================================================
-   MAPPA ATTIVA
-===================================================== */
 
 #tacticalMap.active{
 
@@ -454,7 +507,6 @@ body{
     animation:
         mapIn .45s ease;
 }
-
 
 @keyframes mapIn{
 
@@ -475,74 +527,58 @@ body{
 
 
 /* =====================================================
-   TITOLO TACTICAL MAP
+   CONTENITORE MAPPA
 ===================================================== */
 
-.map-header{
+.map-frame{
 
     position:absolute;
 
-    top:2.4%;
+    top:2cm;
 
-    left:50%;
+    left:2cm;
 
-    transform:
-        translateX(-50%);
+    right:2cm;
 
-    z-index:600;
+    bottom:2cm;
 
-    color:
-        rgba(220,255,255,.9);
+    overflow:hidden;
 
-    font-family:Arial,sans-serif;
+    border-radius:28px;
 
-    font-size:
-        clamp(24px,4vw,42px);
+    background:#071014;
 
-    font-weight:300;
+    border:
+        1px solid
+        rgba(0,255,255,.2);
 
-    letter-spacing:
-        clamp(6px,1.3vw,12px);
+    box-shadow:
 
-    white-space:nowrap;
+        0 0 30px
+        rgba(0,0,0,.5),
 
-    text-shadow:
-        0 0 12px
-        rgba(0,255,255,.25);
+        0 0 60px
+        rgba(0,255,255,.04);
 
-    pointer-events:none;
+    z-index:100;
 }
 
 
 /* =====================================================
-   CONTENITORE MAPPA
+   MAPPA
 ===================================================== */
 
 #map{
 
     position:absolute;
 
-    top:20px;
-    right:20px;
-    bottom:20px;
-    left:20px;
+    inset:0;
 
-    width:auto;
-    height:auto;
+    width:100%;
 
-    overflow:hidden;
+    height:100%;
 
-    border-radius:28px;
-
-    background:#071012;
-
-    box-shadow:
-        0 0 35px rgba(0,0,0,.65),
-        0 0 70px rgba(0,255,255,.035);
-
-    border:
-        1px solid
-        rgba(0,255,255,.10);
+    background:#071014;
 }
 
 
@@ -550,88 +586,26 @@ body{
    NESSUN FILTRO SULLA MAPPA
 ===================================================== */
 
-.map-filter{
+#map .leaflet-tile{
 
-    display:none;
-}
-
-
-/* =====================================================
-   NESSUNA LINEA DI SCANSIONE
-===================================================== */
-
-.scan-line{
-
-    display:none;
-}
-
-
-/* =====================================================
-   NESSUNA CORNICE HUD
-===================================================== */
-
-.map-corner{
-
-    display:none;
-}
-
-
-/* =====================================================
-   CHIUDI MAPPA
-===================================================== */
-
-#closeMap{
-
-    position:absolute;
-
-    top:28px;
-    left:34px;
-
-    z-index:700;
-
-    width:38px;
-    height:38px;
-
-    border:
-        1px solid
-        rgba(0,255,255,.35);
-
-    border-radius:50%;
-
-    background:
-        rgba(0,15,18,.85);
-
-    color:
-        rgba(200,255,255,.85);
-
-    cursor:pointer;
-
-    font-size:19px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    backdrop-filter:blur(10px);
-
-    transition:.2s;
-}
-
-#closeMap:hover{
-
-    color:white;
-
-    border-color:#00ffff;
-
-    box-shadow:
-        0 0 15px
-        rgba(0,255,255,.3);
+    filter:none !important;
 }
 
 
 /* =====================================================
    LEAFLET
+===================================================== */
+
+.leaflet-container{
+
+    background:#071014 !important;
+
+    font-family:Arial,sans-serif;
+}
+
+
+/* =====================================================
+   NASCONDI ZOOM
 ===================================================== */
 
 .leaflet-control-zoom{
@@ -640,21 +614,28 @@ body{
 }
 
 
+/* =====================================================
+   ATTRIBUTION
+===================================================== */
+
 .leaflet-control-attribution{
 
     background:
         rgba(0,8,10,.65)!important;
 
     color:
-        rgba(180,255,255,.35)!important;
+        rgba(180,255,255,.4)!important;
 
     font-size:8px!important;
+
+    border-radius:
+        6px 0 0 0;
 }
 
 .leaflet-control-attribution a{
 
     color:
-        rgba(150,240,255,.45)!important;
+        rgba(150,240,255,.5)!important;
 }
 
 
@@ -665,6 +646,7 @@ body{
 .jarvis-marker{
 
     width:18px;
+
     height:18px;
 
     border-radius:50%;
@@ -690,9 +672,11 @@ body{
     position:absolute;
 
     left:50%;
+
     top:50%;
 
     width:5px;
+
     height:5px;
 
     transform:
@@ -704,6 +688,65 @@ body{
 
     box-shadow:
         0 0 8px #00ffff;
+}
+
+
+/* =====================================================
+   PULSANTE CHIUDI
+===================================================== */
+
+#closeMap{
+
+    position:absolute;
+
+    top:calc(2cm + 18px);
+
+    left:calc(2cm + 18px);
+
+    z-index:550;
+
+    width:38px;
+
+    height:38px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.4);
+
+    border-radius:50%;
+
+    background:
+        rgba(0,20,23,.8);
+
+    color:
+        rgba(200,255,255,.85);
+
+    cursor:pointer;
+
+    font-size:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    backdrop-filter:blur(10px);
+
+    -webkit-backdrop-filter:blur(10px);
+
+    transition:.2s ease;
+}
+
+#closeMap:hover{
+
+    color:white;
+
+    border-color:#00ffff;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.25);
 }
 
 
@@ -722,7 +765,6 @@ body{
         letter-spacing:5px;
     }
 
-
     .datetime{
 
         top:12px;
@@ -730,18 +772,15 @@ body{
         right:13px;
     }
 
-
     .time{
 
         font-size:10px;
     }
 
-
     .date{
 
         font-size:7px;
     }
-
 
     .command-wrapper{
 
@@ -751,12 +790,10 @@ body{
         bottom:17px;
     }
 
-
     #textInput{
 
         font-size:13px;
     }
-
 
     #chat{
 
@@ -764,71 +801,44 @@ body{
     }
 
 
-    #map{
+    /* MAPPA MOBILE */
 
-        top:15px;
-        right:15px;
-        bottom:15px;
-        left:15px;
+    .map-frame{
+
+        top:75px;
+
+        left:14px;
+
+        right:14px;
+
+        bottom:14px;
 
         border-radius:22px;
     }
 
+    .tactical-title{
 
-    .map-header{
+        top:18px;
 
-        top:2.5%;
-
-        font-size:23px;
+        font-size:27px;
 
         letter-spacing:5px;
     }
 
-
     #closeMap{
 
-        top:24px;
-        left:25px;
+        top:88px;
+
+        left:27px;
 
         width:34px;
+
         height:34px;
+
+        font-size:18px;
     }
 
 }
-
-
-/* =====================================================
-   POPUP LEAFLET
-===================================================== */
-
-.leaflet-popup-content-wrapper{
-
-    background:
-        rgba(3,15,18,.95);
-
-    color:
-        rgba(220,255,255,.9);
-
-    border:
-        1px solid
-        rgba(0,255,255,.25);
-}
-
-.leaflet-popup-tip{
-
-    background:
-        rgba(3,15,18,.95);
-}
-
-.leaflet-popup-close-button{
-
-    color:#00ffff!important;
-}
-
-
-/* =====================================================
-   FINE CSS
-===================================================== */
 
 </style>
 
@@ -839,7 +849,7 @@ body{
 
 
 <!-- =====================================================
-     WEBGL
+     SFONDO JARVIS
 ===================================================== -->
 
 <div id="webgl-container"></div>
@@ -848,10 +858,13 @@ body{
 
 
 <!-- =====================================================
-     TITOLO
+     TITOLO NORMALE
 ===================================================== -->
 
-<div class="jarvis-title" id="jarvisTitle">
+<div
+    id="jarvisTitle"
+    class="jarvis-title"
+>
     J.A.R.V.I.S
 </div>
 
@@ -862,11 +875,17 @@ body{
 
 <div class="datetime">
 
-    <div id="clock" class="time">
+    <div
+        id="clock"
+        class="time"
+    >
         00:00:00
     </div>
 
-    <div id="date" class="date">
+    <div
+        id="date"
+        class="date"
+    >
         00 AGO 2026
     </div>
 
@@ -874,32 +893,29 @@ body{
 
 
 <!-- =====================================================
-     MAPPA TATTICA
+     MAPPA
 ===================================================== -->
 
 <div id="tacticalMap">
 
 
-    <div
-        id="map">
-    </div>
+    <!-- TITOLO MAPPA -->
 
-
-    <div class="map-filter"></div>
-
-    <div class="scan-line"></div>
-
-
-    <div class="map-corner corner-tl"></div>
-    <div class="map-corner corner-tr"></div>
-    <div class="map-corner corner-bl"></div>
-    <div class="map-corner corner-br"></div>
-
-
-    <div class="map-header">
+    <div class="tactical-title">
         TACTICAL MAP
     </div>
 
+
+    <!-- CONTENITORE MAPPA -->
+
+    <div class="map-frame">
+
+        <div id="map"></div>
+
+    </div>
+
+
+    <!-- CHIUDI -->
 
     <button
         id="closeMap"
@@ -932,16 +948,12 @@ body{
         placeholder="Chiedi qualcosa a JARVIS..."
     >
 
-
     <button
         id="micBtn"
         aria-label="Microfono"
     >
-
         <span class="mic-icon"></span>
-
     </button>
-
 
     <button id="sendBtn">
         INVIA
@@ -960,15 +972,17 @@ body{
 
 
 <!-- =====================================================
-     THREE
+     THREE IMPORTMAP
 ===================================================== -->
 
 <script type="importmap">
 
 {
     "imports":{
+
         "three":
         "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
+
     }
 }
 
@@ -987,31 +1001,29 @@ import * as THREE from "three";
 const API =
     "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
-
 const MEMORY_KEY =
     "jarvis_memory_v1";
-
 
 const MAX_MEMORY =
     30;
 
 
+/* =====================================================
+   MAPTILER
+===================================================== */
+
 /*
-=====================================================
-MAPTILER
-=====================================================
+   INCOLLA QUI LA TUA API KEY MAPTILER.
 
-INSERISCI QUI LA TUA API KEY MAPTILER.
+   Esempio:
 
-Esempio:
-
-const MAPTILER_KEY =
-    "la-tua-api-key";
+   const MAPTILER_KEY =
+       "abc123...";
 
 */
 
 const MAPTILER_KEY =
-    "INSERISCI_LA_TUA_API_KEY";
+    "INCOLLA_LA_TUA_MAPTILER_KEY_QUI";
 
 
 /* =====================================================
@@ -1023,64 +1035,49 @@ const container =
         "webgl-container"
     );
 
-
 const chat =
     document.getElementById(
         "chat"
     );
-
 
 const textInput =
     document.getElementById(
         "textInput"
     );
 
-
 const sendBtn =
     document.getElementById(
         "sendBtn"
     );
-
 
 const micBtn =
     document.getElementById(
         "micBtn"
     );
 
-
 const clock =
     document.getElementById(
         "clock"
     );
-
 
 const date =
     document.getElementById(
         "date"
     );
 
-
 const tacticalMap =
     document.getElementById(
         "tacticalMap"
     );
-
 
 const closeMap =
     document.getElementById(
         "closeMap"
     );
 
-
 const jarvisTitle =
     document.getElementById(
         "jarvisTitle"
-    );
-
-
-const mapHeader =
-    document.querySelector(
-        ".map-header"
     );
 
 
@@ -1090,7 +1087,6 @@ const mapHeader =
 
 let memory = [];
 
-
 try{
 
     const saved =
@@ -1098,12 +1094,10 @@ try{
             MEMORY_KEY
         );
 
-
     if(saved){
 
         const parsed =
             JSON.parse(saved);
-
 
         if(
             Array.isArray(parsed)
@@ -1113,9 +1107,7 @@ try{
                 parsed.slice(
                     -MAX_MEMORY
                 );
-
         }
-
     }
 
 }catch(error){
@@ -1124,7 +1116,6 @@ try{
         "Memoria:",
         error
     );
-
 }
 
 
@@ -1147,9 +1138,7 @@ function saveMemory(){
             "Salvataggio memoria:",
             error
         );
-
     }
-
 }
 
 
@@ -1159,19 +1148,19 @@ function addMemory(
 ){
 
     memory.push({
-        role,
-        content
-    });
 
+        role,
+
+        content
+
+    });
 
     memory =
         memory.slice(
             -MAX_MEMORY
         );
 
-
     saveMemory();
-
 }
 
 
@@ -1202,24 +1191,20 @@ function updateClock(){
     const now =
         new Date();
 
-
     const h =
         String(
             now.getHours()
         ).padStart(2,"0");
-
 
     const m =
         String(
             now.getMinutes()
         ).padStart(2,"0");
 
-
     const s =
         String(
             now.getSeconds()
         ).padStart(2,"0");
-
 
     clock.textContent =
         `${h}:${m}:${s}`;
@@ -1230,25 +1215,20 @@ function updateClock(){
             now.getDate()
         ).padStart(2,"0");
 
-
     const month =
         months[
             now.getMonth()
         ];
 
-
     const year =
         now.getFullYear();
 
-
     date.textContent =
         `${d} ${month} ${year}`;
-
 }
 
 
 updateClock();
-
 
 setInterval(
     updateClock,
@@ -1266,11 +1246,16 @@ const scene =
 
 const camera =
     new THREE.PerspectiveCamera(
+
         55,
+
         window.innerWidth /
         window.innerHeight,
+
         .1,
+
         1000
+
     );
 
 
@@ -1282,27 +1267,38 @@ const renderer =
     new THREE.WebGLRenderer({
 
         antialias:true,
+
         alpha:true
 
     });
 
 
 renderer.setSize(
+
     window.innerWidth,
+
     window.innerHeight
+
 );
 
 
 renderer.setPixelRatio(
+
     Math.min(
+
         window.devicePixelRatio,
+
         2
+
     )
+
 );
 
 
 container.appendChild(
+
     renderer.domElement
+
 );
 
 
@@ -1317,74 +1313,92 @@ function createGlow(){
             "canvas"
         );
 
+    canvas.width =
+        64;
 
-    canvas.width = 64;
-    canvas.height = 64;
-
+    canvas.height =
+        64;
 
     const ctx =
         canvas.getContext(
             "2d"
         );
 
-
     const gradient =
         ctx.createRadialGradient(
+
             32,
             32,
             0,
+
             32,
             32,
             32
+
         );
 
 
     gradient.addColorStop(
+
         0,
+
         "rgba(255,255,255,1)"
+
     );
 
 
     gradient.addColorStop(
+
         .2,
+
         "rgba(220,255,255,1)"
+
     );
 
 
     gradient.addColorStop(
+
         .4,
+
         "rgba(0,255,255,.9)"
+
     );
 
 
     gradient.addColorStop(
+
         .7,
+
         "rgba(0,150,190,.25)"
+
     );
 
 
     gradient.addColorStop(
+
         1,
+
         "rgba(0,0,0,0)"
+
     );
 
 
     ctx.fillStyle =
         gradient;
 
-
     ctx.fillRect(
+
         0,
         0,
         64,
         64
+
     );
 
 
     return new THREE.CanvasTexture(
         canvas
     );
-
 }
 
 
@@ -1434,12 +1448,10 @@ for(
         1.10 +
         Math.random()*.70;
 
-
     const theta =
         Math.random() *
         Math.PI *
         2;
-
 
     const phi =
         Math.acos(
@@ -1483,11 +1495,17 @@ for(
 
 
 geometry.setAttribute(
+
     "position",
+
     new THREE.BufferAttribute(
+
         positions,
+
         3
+
     )
+
 );
 
 
@@ -1499,9 +1517,11 @@ const material =
                 0x00cfe8
             ),
 
-        size:.034,
+        size:
+            .034,
 
-        map:createGlow(),
+        map:
+            createGlow(),
 
         transparent:true,
 
@@ -1517,8 +1537,11 @@ const material =
 
 const particles =
     new THREE.Points(
+
         geometry,
+
         material
+
     );
 
 
@@ -1533,7 +1556,6 @@ scene.add(
 
 let targetEnergy =
     .15;
-
 
 let energy =
     .15;
@@ -1563,7 +1585,8 @@ function setState(
         state === "thinking"
     ){
 
-        targetEnergy = 1;
+        targetEnergy =
+            1;
 
     }
 
@@ -1571,7 +1594,8 @@ function setState(
         state === "speaking"
     ){
 
-        targetEnergy = .8;
+        targetEnergy =
+            .8;
 
     }
 
@@ -1579,16 +1603,17 @@ function setState(
         state === "listening"
     ){
 
-        targetEnergy = .55;
+        targetEnergy =
+            .55;
 
     }
 
     else{
 
-        targetEnergy = .15;
+        targetEnergy =
+            .15;
 
     }
-
 }
 
 
@@ -1657,18 +1682,14 @@ function animate(){
         const index =
             i*3;
 
-
         const r =
             radii[i];
-
 
         const theta =
             angles[i*2];
 
-
         const phi =
             angles[i*2+1];
-
 
         const seed =
             seeds[i];
@@ -1747,10 +1768,8 @@ function animate(){
         pos[index] =
             x;
 
-
         pos[index+1] =
             y;
-
 
         pos[index+2] =
             z;
@@ -1802,12 +1821,33 @@ let map = null;
 let currentMarker = null;
 
 
+/* =====================================================
+   INIZIALIZZA MAPPA MAPTILER
+===================================================== */
+
 function initializeMap(){
 
     if(map){
 
         return;
+    }
 
+
+    if(
+        !MAPTILER_KEY ||
+        MAPTILER_KEY ===
+        "INCOLLA_LA_TUA_MAPTILER_KEY_QUI"
+    ){
+
+        console.error(
+            "API KEY MAPTILER NON INSERITA"
+        );
+
+        addMsg(
+            "API key MapTiler non configurata."
+        );
+
+        return;
     }
 
 
@@ -1820,58 +1860,65 @@ function initializeMap(){
 
                 attributionControl:true,
 
-                zoomAnimation:true,
+                minZoom:1,
 
-                fadeAnimation:true
+                maxZoom:19
 
             }
         );
 
 
     map.setView(
+
         [45.5416,10.2118],
+
         10
+
     );
 
 
     /*
-    =====================================================
-    MAPTILER DARK
-    =====================================================
+       MAPTILER DARK
+
+       Nessun filtro CSS:
+       lo stile scuro viene direttamente
+       dalla mappa MapTiler.
     */
 
-    const mapTilerUrl =
-        "https://api.maptiler.com/maps/streets-v2-dark/{z}/{x}/{y}.png?key="
-        +
-        MAPTILER_KEY;
-
-
     L.tileLayer(
-        mapTilerUrl,
+
+        `https://api.maptiler.com/maps/streets-v4/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`,
+
         {
 
             tileSize:512,
 
             zoomOffset:-1,
 
-            maxZoom:20,
+            minZoom:1,
+
+            maxZoom:19,
 
             attribution:
-                '&copy; MapTiler &copy; OpenStreetMap contributors'
+                '&copy; MapTiler &copy; OpenStreetMap contributors',
+
+            crossOrigin:true
 
         }
-    ).addTo(
-        map
-    );
+
+    ).addTo(map);
 
 
     setTimeout(
+
         () => {
 
             map.invalidateSize();
 
         },
+
         150
+
     );
 
 }
@@ -1889,26 +1936,19 @@ function openTacticalMap(){
 
 
     /*
-    Nasconde JARVIS
+       Nasconde visivamente
+       il titolo J.A.R.V.I.S.
     */
 
-    jarvisTitle.style.display =
-        "none";
-
-
-    /*
-    TACTICAL MAP prende
-    il posto del titolo
-    */
-
-    mapHeader.style.display =
-        "block";
+    jarvisTitle.style.opacity =
+        "0";
 
 
     initializeMap();
 
 
     setTimeout(
+
         () => {
 
             if(map){
@@ -1918,7 +1958,9 @@ function openTacticalMap(){
             }
 
         },
-        400
+
+        350
+
     );
 
 }
@@ -1936,18 +1978,22 @@ function closeTacticalMap(){
 
 
     /*
-    Ricompare JARVIS
+       Fa ricomparire
+       J.A.R.V.I.S.
     */
 
-    jarvisTitle.style.display =
-        "block";
+    jarvisTitle.style.opacity =
+        "1";
 
 }
 
 
 closeMap.addEventListener(
+
     "click",
+
     closeTacticalMap
+
 );
 
 
@@ -1956,9 +2002,11 @@ closeMap.addEventListener(
 ===================================================== */
 
 function createJarvisMarker(
+
     lat,
     lon,
     name
+
 ){
 
     if(currentMarker){
@@ -1989,16 +2037,21 @@ function createJarvisMarker(
 
     currentMarker =
         L.marker(
+
             [lat,lon],
+
             {
                 icon
             }
+
         )
         .addTo(map);
 
 
     currentMarker.bindPopup(
+
         `<b style="color:#00ffff">${name}</b>`
+
     );
 
 
@@ -2038,7 +2091,9 @@ async function searchLocation(
 
         const response =
             await fetch(
+
                 url,
+
                 {
 
                     headers:{
@@ -2049,6 +2104,7 @@ async function searchLocation(
                     }
 
                 }
+
             );
 
 
@@ -2072,13 +2128,14 @@ async function searchLocation(
         ){
 
             addMsg(
+
                 "Non riesco a trovare " +
                 place +
                 "."
+
             );
 
             return;
-
         }
 
 
@@ -2099,41 +2156,54 @@ async function searchLocation(
 
 
         map.flyTo(
+
             [lat,lon],
+
             12,
+
             {
 
                 duration:1.8
 
             }
+
         );
 
 
         createJarvisMarker(
+
             lat,
             lon,
             place
+
         );
 
 
         addMsg(
+
             "Posizione acquisita: " +
             place
+
         );
 
 
     }catch(error){
 
         console.error(
+
             "MAP ERROR:",
+
             error
+
         );
 
 
         addMsg(
+
             "Impossibile localizzare " +
             place +
             "."
+
         );
 
     }
@@ -2159,33 +2229,23 @@ function handleMapCommand(
 
         normalized.includes(
             "apri la mappa"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "apri mappa"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "mappa tattica"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "modalità tattica"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "modalita tattica"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "attiva la mappa"
@@ -2210,27 +2270,19 @@ function handleMapCommand(
 
         normalized.includes(
             "chiudi la mappa"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "chiudi mappa"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "esci dalla mappa"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "torna alla modalità normale"
-        )
-
-        ||
+        ) ||
 
         normalized.includes(
             "torna alla modalita normale"
@@ -2265,13 +2317,17 @@ function handleMapCommand(
 
 
     for(
+
         const pattern of patterns
+
     ){
 
         if(
+
             normalized.startsWith(
                 pattern
             )
+
         ){
 
             const place =
@@ -2353,38 +2409,51 @@ function getTimeData(){
 
         currentTime:
             now.toLocaleTimeString(
+
                 "it-IT",
+
                 {
 
                     hour:"2-digit",
+
                     minute:"2-digit",
+
                     second:"2-digit"
 
                 }
+
             ),
 
 
         currentDate:
             now.toLocaleDateString(
+
                 "it-IT",
+
                 {
 
                     day:"2-digit",
+
                     month:"2-digit",
+
                     year:"numeric"
 
                 }
+
             ),
 
 
         dayOfWeek:
             now.toLocaleDateString(
+
                 "it-IT",
+
                 {
 
                     weekday:"long"
 
                 }
+
             ),
 
 
@@ -2436,7 +2505,9 @@ async function processAi(
 
         const response =
             await fetch(
+
                 API,
+
                 {
 
                     method:"POST",
@@ -2448,7 +2519,9 @@ async function processAi(
 
                     },
 
+
                     body:
+
                         JSON.stringify({
 
                             message:
@@ -2472,6 +2545,7 @@ async function processAi(
                         })
 
                 }
+
             );
 
 
@@ -2484,14 +2558,19 @@ async function processAi(
 
 
             console.error(
+
                 "Worker:",
+
                 errorText
+
             );
 
 
             throw new Error(
+
                 "HTTP " +
                 response.status
+
             );
 
         }
@@ -2502,7 +2581,9 @@ async function processAi(
         ){
 
             throw new Error(
+
                 "Streaming non disponibile"
+
             );
 
         }
@@ -2546,8 +2627,11 @@ async function processAi(
         while(true){
 
             const {
+
                 value,
+
                 done
+
             } =
                 await reader.read();
 
@@ -2561,10 +2645,15 @@ async function processAi(
 
             buffer +=
                 decoder.decode(
+
                     value,
+
                     {
+
                         stream:true
+
                     }
+
                 );
 
 
@@ -2579,7 +2668,9 @@ async function processAi(
 
 
             for(
+
                 const line of lines
+
             ){
 
                 const trimmed =
@@ -2608,15 +2699,16 @@ async function processAi(
 
                 const raw =
                     trimmed
-                        .substring(
-                            5
-                        )
+                        .substring(5)
                         .trim();
 
 
                 if(
+
                     !raw ||
+
                     raw === "[DONE]"
+
                 ){
 
                     continue;
@@ -2637,8 +2729,10 @@ async function processAi(
 
 
                     if(
+
                         typeof json.response ===
                         "string"
+
                     ){
 
                         piece =
@@ -2648,8 +2742,11 @@ async function processAi(
 
 
                     else if(
+
                         json.choices &&
+
                         json.choices[0]
+
                     ){
 
                         const choice =
@@ -2657,9 +2754,12 @@ async function processAi(
 
 
                         if(
+
                             choice.delta &&
+
                             typeof choice.delta.content ===
                             "string"
+
                         ){
 
                             piece =
@@ -2669,9 +2769,12 @@ async function processAi(
 
 
                         else if(
+
                             choice.message &&
+
                             typeof choice.message.content ===
                             "string"
+
                         ){
 
                             piece =
@@ -2681,8 +2784,10 @@ async function processAi(
 
 
                         else if(
+
                             typeof choice.text ===
                             "string"
+
                         ){
 
                             piece =
@@ -2713,8 +2818,11 @@ async function processAi(
                 }catch(error){
 
                     console.warn(
+
                         "Stream JSON:",
+
                         raw
+
                     );
 
                 }
@@ -2753,14 +2861,19 @@ async function processAi(
     }catch(error){
 
         console.error(
+
             "JARVIS ERROR:",
+
             error
+
         );
 
 
         addMsg(
+
             "ERRORE: " +
             error.message
+
         );
 
 
@@ -2809,13 +2922,18 @@ function sendMessage(){
 
 
 sendBtn.addEventListener(
+
     "click",
+
     sendMessage
+
 );
 
 
 textInput.addEventListener(
+
     "keydown",
+
     event => {
 
         if(
@@ -2829,6 +2947,7 @@ textInput.addEventListener(
         }
 
     }
+
 );
 
 
@@ -2994,8 +3113,11 @@ if(
         error => {
 
             console.error(
+
                 "Microfono:",
+
                 error
+
             );
 
 
@@ -3030,7 +3152,9 @@ if(
 
 
     micBtn.addEventListener(
+
         "click",
+
         () => {
 
             if(listening){
@@ -3054,6 +3178,7 @@ if(
             }
 
         }
+
     );
 
 }else{
@@ -3069,7 +3194,9 @@ if(
 ===================================================== */
 
 window.addEventListener(
+
     "resize",
+
     () => {
 
         camera.aspect =
@@ -3081,8 +3208,11 @@ window.addEventListener(
 
 
         renderer.setSize(
+
             window.innerWidth,
+
             window.innerHeight
+
         );
 
 
@@ -3093,6 +3223,7 @@ window.addEventListener(
         }
 
     }
+
 );
 
 
@@ -3113,7 +3244,9 @@ window.clearJarvisMemory =
 
 
         console.log(
+
             "Memoria JARVIS cancellata."
+
         );
 
     };
@@ -3130,4 +3263,5 @@ setState(
 </script>
 
 </body>
+
 </html>

@@ -62,13 +62,9 @@ body{
 
 .jarvis-title{
     position:fixed;
-
-    /* LEGGERMENTE PIÙ IN BASSO */
     top:2.4%;
-
     left:50%;
     transform:translateX(-50%);
-
     z-index:30;
 
     color:rgba(255,255,255,.86);
@@ -322,13 +318,7 @@ body{
 
     display:none;
 
-    background:
-        radial-gradient(
-            ellipse at center,
-            #071719 0%,
-            #020708 45%,
-            #000000 100%
-        );
+    background:#000;
 
     overflow:hidden;
 }
@@ -337,14 +327,14 @@ body{
     display:block;
 
     animation:
-        mapIn .5s ease;
+        mapIn .55s ease;
 }
 
 @keyframes mapIn{
 
     from{
         opacity:0;
-        transform:scale(1.03);
+        transform:scale(1.04);
     }
 
     to{
@@ -354,41 +344,65 @@ body{
 }
 
 
-/* MAPPA 3D */
+/* =====================================================
+   MAPPA 3D NERA
+===================================================== */
 
 #map{
     position:absolute;
-    inset:0;
+    inset:-5%;
 
-    width:100%;
-    height:100%;
+    width:110%;
+    height:110%;
 
-    background:#020506;
+    background:#000;
 
-    /*
-       Effetto profondità:
-       la mappa viene leggermente inclinata
-       e resa più cinematografica.
-    */
     transform:
-        perspective(1200px)
-        rotateX(2deg)
-        scale(1.015);
+        perspective(1400px)
+        rotateX(7deg)
+        scale(1.08);
 
     transform-origin:center center;
 
     filter:
-        brightness(.42)
-        contrast(1.25)
-        saturate(.55);
+        brightness(.28)
+        contrast(1.65)
+        saturate(.15);
 
     box-shadow:
-        inset 0 0 100px rgba(0,0,0,.9),
-        inset 0 0 35px rgba(0,255,255,.08);
+        inset 0 0 180px rgba(0,0,0,1),
+        inset 0 0 60px rgba(0,255,255,.04);
 }
 
 
-/* Oscuramento cinematico */
+/* =====================================================
+   EFFETTO PROFONDITÀ
+===================================================== */
+
+#map::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.8),
+            transparent 22%,
+            transparent 72%,
+            rgba(0,0,0,.9)
+        );
+
+    z-index:400;
+}
+
+
+/* =====================================================
+   OSCURAMENTO CINEMATICO
+===================================================== */
 
 #tacticalMap::after{
     content:"";
@@ -403,18 +417,21 @@ body{
     background:
         radial-gradient(
             ellipse at center,
-            transparent 25%,
-            rgba(0,0,0,.15) 55%,
-            rgba(0,0,0,.72) 100%
+            transparent 20%,
+            rgba(0,0,0,.18) 48%,
+            rgba(0,0,0,.65) 78%,
+            rgba(0,0,0,.95) 100%
         );
 
     box-shadow:
-        inset 0 0 120px
-        rgba(0,0,0,.75);
+        inset 0 0 150px
+        rgba(0,0,0,.95);
 }
 
 
-/* Griglia HUD */
+/* =====================================================
+   GRIGLIA HUD
+===================================================== */
 
 .map-filter{
     position:absolute;
@@ -426,25 +443,27 @@ body{
     background:
 
         linear-gradient(
-            rgba(0,255,255,.035) 1px,
+            rgba(0,255,255,.025) 1px,
             transparent 1px
         ),
 
         linear-gradient(
             90deg,
-            rgba(0,255,255,.035) 1px,
+            rgba(0,255,255,.025) 1px,
             transparent 1px
         );
 
-    background-size:45px 45px;
+    background-size:55px 55px;
 
     mix-blend-mode:screen;
 
-    opacity:.75;
+    opacity:.65;
 }
 
 
-/* Linea di scansione */
+/* =====================================================
+   SCAN LINE
+===================================================== */
 
 .scan-line{
     position:absolute;
@@ -467,13 +486,13 @@ body{
         );
 
     box-shadow:
-        0 0 15px
-        rgba(0,255,255,.4);
+        0 0 18px
+        rgba(0,255,255,.5);
 
     animation:
         scan 5s linear infinite;
 
-    opacity:.35;
+    opacity:.28;
 }
 
 @keyframes scan{
@@ -488,7 +507,9 @@ body{
 }
 
 
-/* Angoli HUD */
+/* =====================================================
+   ANGOLI HUD
+===================================================== */
 
 .map-corner{
     position:absolute;
@@ -548,7 +569,9 @@ body{
 }
 
 
-/* Header */
+/* =====================================================
+   HEADER
+===================================================== */
 
 .map-header{
     position:absolute;
@@ -579,7 +602,7 @@ body{
 
 
 /* =====================================================
-   CORE TATTICO 3D
+   CORE TATTICO
 ===================================================== */
 
 .tactical-core{
@@ -700,7 +723,9 @@ body{
 }
 
 
-/* Chiudi */
+/* =====================================================
+   CHIUDI
+===================================================== */
 
 #closeMap{
     position:absolute;
@@ -747,7 +772,9 @@ body{
 }
 
 
-/* Marker */
+/* =====================================================
+   MARKER
+===================================================== */
 
 .jarvis-marker{
     width:18px;
@@ -786,7 +813,9 @@ body{
 }
 
 
-/* Leaflet */
+/* =====================================================
+   LEAFLET
+===================================================== */
 
 .leaflet-control-zoom{
     border:
@@ -836,8 +865,6 @@ body{
 @media(max-width:600px){
 
     .jarvis-title{
-
-        /* leggermente più in basso anche su telefono */
         top:2.2%;
 
         font-size:23px;
@@ -895,19 +922,15 @@ body{
 
 </head>
 
-
 <body>
-
 
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
 
-
 <div class="jarvis-title">
     J.A.R.V.I.S
 </div>
-
 
 <div class="datetime">
 
@@ -929,7 +952,7 @@ body{
 
 
 <!-- =====================================================
-     MAPPA
+     MAPPA TATTICA
 ===================================================== -->
 
 <div id="tacticalMap">
@@ -1735,7 +1758,10 @@ function initializeMap(){
             "map",
             {
                 zoomControl:true,
-                attributionControl:true
+                attributionControl:true,
+
+                zoomAnimation:true,
+                fadeAnimation:true
             }
         );
 
@@ -1744,17 +1770,31 @@ function initializeMap(){
         10
     );
 
+
+    /*
+       MAPPA SCURA
+       CartoDB Dark Matter
+       scelta perché è molto più vicina
+       alla mappa nera stile JARVIS.
+    */
+
     L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
         {
-            maxZoom:19,
+            maxZoom:20,
+
+            subdomains:"abcd",
 
             attribution:
-                '&copy; OpenStreetMap contributors'
+                '&copy; OpenStreetMap contributors &copy; CARTO',
+
+            className:
+                "jarvis-dark-map"
         }
     ).addTo(
         map
     );
+
 
     setTimeout(
         () => {

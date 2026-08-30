@@ -1716,38 +1716,40 @@ function initializeMap(){
 
 
     /* =================================================
-       MAPTILER - MAPPA PERSONALIZZATA
-    ================================================= */
+   MAPTILER - MAPPA PERSONALIZZATA
+================================================= */
 
-    const mapTiles =
-        `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
-
-
-    L.tileLayer(
-        mapTiles,
-        {
-            tileSize:512,
-
-            zoomOffset:-1,
-
-            minZoom:1,
-
-            maxZoom:19,
-
-            attribution:
-                '&copy; MapTiler &copy; OpenStreetMap contributors',
-
-            crossOrigin:true
-        }
-    ).addTo(map);
+const mapTiles =
+    `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
 
 
-    setTimeout(
-        () => {
-            map.invalidateSize();
-        },
-        150
-    );
+L.tileLayer(
+    mapTiles,
+    {
+        tileSize: 512,
+
+        zoomOffset: -1,
+
+        minZoom: 1,
+
+        maxZoom: 19,
+
+        attribution:
+            '&copy; MapTiler &copy; OpenStreetMap contributors',
+
+        crossOrigin: true
+    }
+).addTo(map);
+
+
+setTimeout(
+    () => {
+
+        map.invalidateSize();
+
+    },
+    150
+);
 
 }
 

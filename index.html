@@ -2621,10 +2621,168 @@ async function speak(
    PROCESS AI
 ===================================================== */
 
-async function processAi(
-    text
-){
+async function processAi(text){
 
+    if(
+        handleMapCommand(text)
+    ){
+
+        return;
+
+    }
+
+
+    setState(
+        "thinking"
+    );
+
+
+    try{
+
+        const temporal =
+            getTimeData();
+
+
+        addMemory(
+            "user",
+            text
+        );
+
+
+        const response =
+            await fetch(
+                API,
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                text,
+
+                            memory:
+                                memory.slice(-4),
+
+                            currentTime:
+                                temporal.currentTime,
+
+                            currentDate:
+                                temporal.currentDate,
+
+                            dayOfWeek:
+                                temporal.dayOfWeek,
+
+                            timezone:
+                                temporal.timezone
+
+                        })
+
+                }
+            );
+
+
+        /*
+           Il Worker restituisce JSON,
+           NON streaming.
+        */
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "JARVIS RESPONSE:",
+            data
+        );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const reply =
+            typeof data.response === "string"
+                ? data.response.trim()
+                : "";
+
+
+        if(!reply){
+
+            console.error(
+                "Risposta Worker senza response:",
+                data
+            );
+
+            throw new Error(
+                "Risposta AI vuota"
+            );
+
+        }
+
+
+        /*
+           Mostra risposta
+        */
+
+        addMsg(
+            reply
+        );
+
+
+        /*
+           Salva memoria
+        */
+
+        addMemory(
+            "assistant",
+            reply
+        );
+
+
+        /*
+           Parla con ElevenLabs
+        */
+
+        await speak(
+            reply
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "JARVIS ERROR:",
+            error
+        );
+
+
+        addMsg(
+            "ERRORE: " +
+            error.message
+        );
+
+
+        setState(
+            "idle"
+        );
+
+    }
+
+}
     if(
         handleMapCommand(
             text

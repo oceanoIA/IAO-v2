@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link
+<title>J.A.R.V.I.S.</title><!-- =====================================================
+     MAPLIBRE GL JS
+===================================================== --><link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-
-
-<style>
+    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
+/><style>
 
 /* =====================================================
    BASE
@@ -40,7 +30,6 @@ body{
 
     font-family:Arial,sans-serif;
 }
-
 
 body{
 
@@ -376,6 +365,12 @@ body{
 #micBtn.active{
 
     color:#8fffff;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(0,255,255,.7)
+        );
 }
 
 
@@ -547,32 +542,24 @@ body{
 
 
 /* =====================================================
-   NESSUN FILTRO SULLA MAPPA
+   OVERLAY MAPPA
 ===================================================== */
 
-.map-filter{
+.map-overlay{
 
-    display:none;
-}
+    position:absolute;
 
+    inset:0;
 
-/* =====================================================
-   NESSUNA LINEA DI SCANSIONE
-===================================================== */
+    z-index:400;
 
-.scan-line{
+    pointer-events:none;
 
-    display:none;
-}
+    border-radius:28px;
 
-
-/* =====================================================
-   NESSUNA CORNICE HUD
-===================================================== */
-
-.map-corner{
-
-    display:none;
+    box-shadow:
+        inset 0 0 80px
+        rgba(0,0,0,.28);
 }
 
 
@@ -631,16 +618,38 @@ body{
 
 
 /* =====================================================
-   LEAFLET
+   MAPLIBRE CONTROLLI
 ===================================================== */
 
-.leaflet-control-zoom{
+.maplibregl-ctrl-group{
 
-    display:none !important;
+    background:
+        rgba(0,15,18,.85)!important;
+
+    border:
+        1px solid
+        rgba(0,255,255,.18)!important;
+
+    border-radius:12px!important;
+
+    overflow:hidden;
 }
 
+.maplibregl-ctrl-group button{
 
-.leaflet-control-attribution{
+    background:
+        transparent!important;
+
+    color:#bfffff!important;
+}
+
+.maplibregl-ctrl-group button:hover{
+
+    background:
+        rgba(0,255,255,.08)!important;
+}
+
+.maplibregl-ctrl-attrib{
 
     background:
         rgba(0,8,10,.65)!important;
@@ -651,7 +660,7 @@ body{
     font-size:8px!important;
 }
 
-.leaflet-control-attribution a{
+.maplibregl-ctrl-attrib a{
 
     color:
         rgba(150,240,255,.45)!important;
@@ -662,10 +671,10 @@ body{
    MARKER JARVIS
 ===================================================== */
 
-.jarvis-marker{
+.jarvis-map-marker{
 
-    width:18px;
-    height:18px;
+    width:20px;
+    height:20px;
 
     border-radius:50%;
 
@@ -674,16 +683,21 @@ body{
         #00ffff;
 
     background:
-        rgba(0,255,255,.15);
+        rgba(0,255,255,.16);
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.8);
+        rgba(0,255,255,.9),
+        0 0 35px
+        rgba(0,255,255,.4);
 
     position:relative;
+
+    animation:
+        markerPulse 1.5s infinite;
 }
 
-.jarvis-marker::after{
+.jarvis-map-marker::after{
 
     content:"";
 
@@ -700,10 +714,78 @@ body{
 
     border-radius:50%;
 
-    background:#bfffff;
+    background:#dfffff;
 
     box-shadow:
         0 0 8px #00ffff;
+}
+
+@keyframes markerPulse{
+
+    0%,
+    100%{
+
+        transform:scale(1);
+
+        box-shadow:
+            0 0 15px
+            rgba(0,255,255,.9),
+            0 0 35px
+            rgba(0,255,255,.4);
+    }
+
+    50%{
+
+        transform:scale(1.18);
+
+        box-shadow:
+            0 0 22px
+            rgba(0,255,255,1),
+            0 0 50px
+            rgba(0,255,255,.55);
+    }
+}
+
+
+/* =====================================================
+   POPUP MAPLIBRE
+===================================================== */
+
+.maplibregl-popup-content{
+
+    background:
+        rgba(3,15,18,.96)!important;
+
+    color:
+        rgba(220,255,255,.9)!important;
+
+    border:
+        1px solid
+        rgba(0,255,255,.25);
+
+    border-radius:10px;
+
+    padding:10px 14px;
+
+    box-shadow:
+        0 0 20px
+        rgba(0,255,255,.12);
+}
+
+.maplibregl-popup-tip{
+
+    border-top-color:
+        rgba(3,15,18,.96)!important;
+
+    border-bottom-color:
+        rgba(3,15,18,.96)!important;
+}
+
+.maplibregl-popup-close-button{
+
+    color:#00ffff!important;
+
+    font-size:18px;
 }
 
 
@@ -775,6 +857,12 @@ body{
     }
 
 
+    .map-overlay{
+
+        border-radius:22px;
+    }
+
+
     .map-header{
 
         top:2.5%;
@@ -796,174 +884,79 @@ body{
 
 }
 
-
-/* =====================================================
-   POPUP LEAFLET
-===================================================== */
-
-.leaflet-popup-content-wrapper{
-
-    background:
-        rgba(3,15,18,.95);
-
-    color:
-        rgba(220,255,255,.9);
-
-    border:
-        1px solid
-        rgba(0,255,255,.25);
-}
-
-.leaflet-popup-tip{
-
-    background:
-        rgba(3,15,18,.95);
-}
-
-.leaflet-popup-close-button{
-
-    color:#00ffff!important;
-}
-
-
-/* =====================================================
-   FINE CSS
-===================================================== */
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<!-- =====================================================
+</style></head><body><!-- =====================================================
      WEBGL
-===================================================== -->
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-
-<!-- =====================================================
+===================================================== --><div id="webgl-container"></div><div class="vignette"></div><!-- =====================================================
      TITOLO
-===================================================== -->
-
-<div class="jarvis-title" id="jarvisTitle">
+===================================================== --><div
+    class="jarvis-title"
+    id="jarvisTitle"
+>
     J.A.R.V.I.S
-</div>
-
-
-<!-- =====================================================
+</div><!-- =====================================================
      ORA
-===================================================== -->
-
-<div class="datetime">
-
-    <div id="clock" class="time">
-        00:00:00
-    </div>
-
-    <div id="date" class="date">
-        00 AGO 2026
-    </div>
-
+===================================================== --><div class="datetime"><div id="clock" class="time">
+    00:00:00
 </div>
 
+<div id="date" class="date">
+    00 AGO 2026
+</div>
 
-<!-- =====================================================
+</div><!-- =====================================================
      MAPPA TATTICA
-===================================================== -->
-
-<div id="tacticalMap">
+===================================================== --><div id="tacticalMap"><div id="map"></div>
 
 
-    <div
-        id="map">
-    </div>
+<div class="map-overlay"></div>
 
 
-    <div class="map-filter"></div>
-
-    <div class="scan-line"></div>
-
-
-    <div class="map-corner corner-tl"></div>
-    <div class="map-corner corner-tr"></div>
-    <div class="map-corner corner-bl"></div>
-    <div class="map-corner corner-br"></div>
-
-
-    <div class="map-header">
-        TACTICAL MAP
-    </div>
-
-
-    <button
-        id="closeMap"
-        title="Chiudi mappa"
-    >
-        ×
-    </button>
-
-
+<div class="map-header">
+    TACTICAL MAP
 </div>
 
 
-<!-- =====================================================
+<button
+    id="closeMap"
+    title="Chiudi mappa"
+    aria-label="Chiudi mappa"
+>
+    ×
+</button>
+
+</div><!-- =====================================================
      CHAT
-===================================================== -->
-
-<div id="chat"></div>
-
-
-<!-- =====================================================
+===================================================== --><div id="chat"></div><!-- =====================================================
      INPUT
-===================================================== -->
-
-<div class="command-wrapper">
-
-    <input
-        id="textInput"
-        type="text"
-        autocomplete="off"
-        placeholder="Chiedi qualcosa a JARVIS..."
-    >
+===================================================== --><div class="command-wrapper"><input
+    id="textInput"
+    type="text"
+    autocomplete="off"
+    placeholder="Chiedi qualcosa a JARVIS..."
+>
 
 
-    <button
-        id="micBtn"
-        aria-label="Microfono"
-    >
+<button
+    id="micBtn"
+    aria-label="Microfono"
+>
 
-        <span class="mic-icon"></span>
+    <span class="mic-icon"></span>
 
-    </button>
-
-
-    <button id="sendBtn">
-        INVIA
-    </button>
-
-</div>
+</button>
 
 
-<!-- =====================================================
-     LEAFLET
-===================================================== -->
+<button id="sendBtn">
+    INVIA
+</button>
 
-<script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-
-
-<!-- =====================================================
-     THREE
-===================================================== -->
-
-<script type="importmap">
+</div><!-- =====================================================
+     MAPLIBRE GL JS
+===================================================== --><script
+    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
+</script><!-- =====================================================
+     THREE.JS
+===================================================== --><script type="importmap">
 
 {
     "imports":{
@@ -972,10 +965,7 @@ body{
     }
 }
 
-</script>
-
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -996,22 +986,18 @@ const MAX_MEMORY =
     30;
 
 
-/*
-=====================================================
-MAPTILER
-=====================================================
-
-INSERISCI QUI LA TUA API KEY MAPTILER.
-
-Esempio:
-
-const MAPTILER_KEY =
-    "la-tua-api-key";
-
-*/
+/* =====================================================
+   MAPTILER
+===================================================== */
 
 const MAPTILER_KEY =
     "NmSlgtsAdQyEWy7t0OJf";
+
+
+const MAPTILER_STYLE =
+    "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
+    +
+    MAPTILER_KEY;
 
 
 /* =====================================================
@@ -1102,7 +1088,9 @@ try{
     if(saved){
 
         const parsed =
-            JSON.parse(saved);
+            JSON.parse(
+                saved
+            );
 
 
         if(
@@ -1206,19 +1194,28 @@ function updateClock(){
     const h =
         String(
             now.getHours()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const m =
         String(
             now.getMinutes()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const s =
         String(
             now.getSeconds()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     clock.textContent =
@@ -1228,7 +1225,10 @@ function updateClock(){
     const d =
         String(
             now.getDate()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const month =
@@ -1318,8 +1318,11 @@ function createGlow(){
         );
 
 
-    canvas.width = 64;
-    canvas.height = 64;
+    canvas.width =
+        64;
+
+    canvas.height =
+        64;
 
 
     const ctx =
@@ -1563,7 +1566,8 @@ function setState(
         state === "thinking"
     ){
 
-        targetEnergy = 1;
+        targetEnergy =
+            1;
 
     }
 
@@ -1571,7 +1575,8 @@ function setState(
         state === "speaking"
     ){
 
-        targetEnergy = .8;
+        targetEnergy =
+            .8;
 
     }
 
@@ -1579,13 +1584,15 @@ function setState(
         state === "listening"
     ){
 
-        targetEnergy = .55;
+        targetEnergy =
+            .55;
 
     }
 
     else{
 
-        targetEnergy = .15;
+        targetEnergy =
+            .15;
 
     }
 
@@ -1794,12 +1801,15 @@ animate();
 
 
 /* =====================================================
-   MAPPA TATTICA
+   MAPTILER / MAPLIBRE
 ===================================================== */
 
-let map = null;
+let map =
+    null;
 
-let currentMarker = null;
+
+let currentMarker =
+    null;
 
 
 function initializeMap(){
@@ -1811,67 +1821,89 @@ function initializeMap(){
     }
 
 
-    map =
-        L.map(
-            "map",
-            {
+    if(
+        typeof maplibregl ===
+        "undefined"
+    ){
 
-                zoomControl:false,
-
-                attributionControl:true,
-
-                zoomAnimation:true,
-
-                fadeAnimation:true
-
-            }
+        console.error(
+            "MapLibre GL JS non disponibile."
         );
 
+        addMsg(
+            "Errore: MapTiler non disponibile."
+        );
 
-    map.setView(
-        [45.5416,10.2118],
-        10
+        return;
+
+    }
+
+
+    map =
+        new maplibregl.Map({
+
+            container:
+                "map",
+
+            style:
+                MAPTILER_STYLE,
+
+            center:
+                [10.2118,45.5416],
+
+            zoom:
+                10,
+
+            attributionControl:
+                true,
+
+            antialias:
+                true
+
+        });
+
+
+    /*
+    CONTROLLI ZOOM
+    */
+
+    map.addControl(
+        new maplibregl.NavigationControl({
+            showCompass:true,
+            showZoom:true
+        }),
+        "bottom-right"
     );
 
 
     /*
-    =====================================================
-    MAPTILER DARK
-    =====================================================
+    QUANDO LA MAPPA È PRONTA
     */
 
-    const mapTilerUrl =
-        "https://api.maptiler.com/maps/streets-v2-dark/{z}/{x}/{y}.png?key="
-        +
-        MAPTILER_KEY;
+    map.on(
+        "load",
+        () => {
 
-
-    L.tileLayer(
-        mapTilerUrl,
-        {
-
-            tileSize:512,
-
-            zoomOffset:-1,
-
-            maxZoom:20,
-
-            attribution:
-                '&copy; MapTiler &copy; OpenStreetMap contributors'
+            map.resize();
 
         }
-    ).addTo(
-        map
     );
 
 
-    setTimeout(
-        () => {
+    /*
+    ERRORI MAPPA
+    */
 
-            map.invalidateSize();
+    map.on(
+        "error",
+        event => {
 
-        },
-        150
+            console.warn(
+                "MapTiler:",
+                event
+            );
+
+        }
     );
 
 }
@@ -1888,18 +1920,9 @@ function openTacticalMap(){
     );
 
 
-    /*
-    Nasconde JARVIS
-    */
-
     jarvisTitle.style.display =
         "none";
 
-
-    /*
-    TACTICAL MAP prende
-    il posto del titolo
-    */
 
     mapHeader.style.display =
         "block";
@@ -1913,7 +1936,7 @@ function openTacticalMap(){
 
             if(map){
 
-                map.invalidateSize();
+                map.resize();
 
             }
 
@@ -1935,10 +1958,6 @@ function closeTacticalMap(){
     );
 
 
-    /*
-    Ricompare JARVIS
-    */
-
     jarvisTitle.style.display =
         "block";
 
@@ -1952,7 +1971,7 @@ closeMap.addEventListener(
 
 
 /* =====================================================
-   MARKER
+   MARKER JARVIS
 ===================================================== */
 
 function createJarvisMarker(
@@ -1961,48 +1980,103 @@ function createJarvisMarker(
     name
 ){
 
-    if(currentMarker){
+    if(
+        !map
+    ){
 
-        map.removeLayer(
-            currentMarker
-        );
+        return;
 
     }
 
 
-    const icon =
-        L.divIcon({
+    if(
+        currentMarker
+    ){
 
-            className:"",
+        currentMarker.remove();
 
-            html:
-                '<div class="jarvis-marker"></div>',
+        currentMarker =
+            null;
 
-            iconSize:
-                [18,18],
+    }
 
-            iconAnchor:
-                [9,9]
 
-        });
+    const markerElement =
+        document.createElement(
+            "div"
+        );
+
+
+    markerElement.className =
+        "jarvis-map-marker";
 
 
     currentMarker =
-        L.marker(
-            [lat,lon],
-            {
-                icon
-            }
+        new maplibregl.Marker({
+
+            element:
+                markerElement,
+
+            anchor:
+                "center"
+
+        })
+
+        .setLngLat(
+            [lon,lat]
         )
-        .addTo(map);
+
+        .setPopup(
+
+            new maplibregl.Popup({
+                offset:15
+            })
+
+            .setHTML(
+                `<b style="color:#00ffff">${escapeHtml(name)}</b>`
+            )
+
+        )
+
+        .addTo(
+            map
+        );
 
 
-    currentMarker.bindPopup(
-        `<b style="color:#00ffff">${name}</b>`
-    );
+    currentMarker.togglePopup();
+
+}
 
 
-    currentMarker.openPopup();
+/* =====================================================
+   SICUREZZA TESTO
+===================================================== */
+
+function escapeHtml(
+    text
+){
+
+    return String(text)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -2098,15 +2172,35 @@ async function searchLocation(
             );
 
 
-        map.flyTo(
-            [lat,lon],
-            12,
-            {
+        if(
+            !map
+        ){
 
-                duration:1.8
+            throw new Error(
+                "Mappa non inizializzata"
+            );
 
-            }
-        );
+        }
+
+
+        map.flyTo({
+
+            center:
+                [lon,lat],
+
+            zoom:
+                12,
+
+            speed:
+                0.8,
+
+            curve:
+                1.5,
+
+            essential:
+                true
+
+        });
 
 
         createJarvisMarker(
@@ -3088,7 +3182,7 @@ window.addEventListener(
 
         if(map){
 
-            map.invalidateSize();
+            map.resize();
 
         }
 
@@ -3127,7 +3221,5 @@ setState(
     "idle"
 );
 
-</script>
-
-</body>
+</script></body>
 </html>

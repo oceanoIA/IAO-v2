@@ -1,12 +1,21 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
 
-<title>J.A.R.V.I.S.</title><!-- =====================================================
-     MAPLIBRE GL JS
-===================================================== --><link
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link
     rel="stylesheet"
-    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-/><style>
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
 
 /* =====================================================
    BASE
@@ -42,7 +51,6 @@ body{
         );
 }
 
-
 /* =====================================================
    WEBGL
 ===================================================== */
@@ -54,7 +62,6 @@ body{
 
     z-index:1;
 }
-
 
 /* =====================================================
    VIGNETTE
@@ -77,7 +84,6 @@ body{
             rgba(0,0,0,.8) 100%
         );
 }
-
 
 /* =====================================================
    TITOLO JARVIS
@@ -113,7 +119,6 @@ body{
 
     pointer-events:none;
 }
-
 
 /* =====================================================
    ORA
@@ -162,7 +167,6 @@ body{
 
     letter-spacing:1px;
 }
-
 
 /* =====================================================
    CHAT
@@ -215,7 +219,6 @@ body{
 
     white-space:pre-wrap;
 }
-
 
 /* =====================================================
    INPUT
@@ -293,7 +296,6 @@ body{
     color:rgba(255,255,255,.3);
 }
 
-
 /* =====================================================
    MICROFONO
 ===================================================== */
@@ -365,14 +367,7 @@ body{
 #micBtn.active{
 
     color:#8fffff;
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(0,255,255,.7)
-        );
 }
-
 
 /* =====================================================
    INVIA
@@ -413,7 +408,6 @@ body{
         rgba(0,255,255,.1);
 }
 
-
 /* =====================================================
    MAPPA TATTICA
 ===================================================== */
@@ -437,7 +431,6 @@ body{
         );
 }
 
-
 /* =====================================================
    MAPPA ATTIVA
 ===================================================== */
@@ -449,7 +442,6 @@ body{
     animation:
         mapIn .45s ease;
 }
-
 
 @keyframes mapIn{
 
@@ -467,7 +459,6 @@ body{
         transform:scale(1);
     }
 }
-
 
 /* =====================================================
    TITOLO TACTICAL MAP
@@ -508,7 +499,6 @@ body{
     pointer-events:none;
 }
 
-
 /* =====================================================
    CONTENITORE MAPPA
 ===================================================== */
@@ -517,10 +507,11 @@ body{
 
     position:absolute;
 
-    top:20px;
-    right:20px;
-    bottom:20px;
-    left:20px;
+    /* MARGINE 3 CM */
+    top:3cm;
+    right:3cm;
+    bottom:3cm;
+    left:3cm;
 
     width:auto;
     height:auto;
@@ -540,28 +531,32 @@ body{
         rgba(0,255,255,.10);
 }
 
-
 /* =====================================================
-   OVERLAY MAPPA
+   NESSUN FILTRO SULLA MAPPA
 ===================================================== */
 
-.map-overlay{
+.map-filter{
 
-    position:absolute;
-
-    inset:0;
-
-    z-index:400;
-
-    pointer-events:none;
-
-    border-radius:28px;
-
-    box-shadow:
-        inset 0 0 80px
-        rgba(0,0,0,.28);
+    display:none;
 }
 
+/* =====================================================
+   NESSUNA LINEA DI SCANSIONE
+===================================================== */
+
+.scan-line{
+
+    display:none;
+}
+
+/* =====================================================
+   NESSUNA CORNICE HUD
+===================================================== */
+
+.map-corner{
+
+    display:none;
+}
 
 /* =====================================================
    CHIUDI MAPPA
@@ -616,40 +611,16 @@ body{
         rgba(0,255,255,.3);
 }
 
-
 /* =====================================================
-   MAPLIBRE CONTROLLI
+   LEAFLET
 ===================================================== */
 
-.maplibregl-ctrl-group{
+.leaflet-control-zoom{
 
-    background:
-        rgba(0,15,18,.85)!important;
-
-    border:
-        1px solid
-        rgba(0,255,255,.18)!important;
-
-    border-radius:12px!important;
-
-    overflow:hidden;
+    display:none !important;
 }
 
-.maplibregl-ctrl-group button{
-
-    background:
-        transparent!important;
-
-    color:#bfffff!important;
-}
-
-.maplibregl-ctrl-group button:hover{
-
-    background:
-        rgba(0,255,255,.08)!important;
-}
-
-.maplibregl-ctrl-attrib{
+.leaflet-control-attribution{
 
     background:
         rgba(0,8,10,.65)!important;
@@ -660,21 +631,20 @@ body{
     font-size:8px!important;
 }
 
-.maplibregl-ctrl-attrib a{
+.leaflet-control-attribution a{
 
     color:
         rgba(150,240,255,.45)!important;
 }
 
-
 /* =====================================================
    MARKER JARVIS
 ===================================================== */
 
-.jarvis-map-marker{
+.jarvis-marker{
 
-    width:20px;
-    height:20px;
+    width:18px;
+    height:18px;
 
     border-radius:50%;
 
@@ -683,21 +653,16 @@ body{
         #00ffff;
 
     background:
-        rgba(0,255,255,.16);
+        rgba(0,255,255,.15);
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.9),
-        0 0 35px
-        rgba(0,255,255,.4);
+        rgba(0,255,255,.8);
 
     position:relative;
-
-    animation:
-        markerPulse 1.5s infinite;
 }
 
-.jarvis-map-marker::after{
+.jarvis-marker::after{
 
     content:"";
 
@@ -714,80 +679,11 @@ body{
 
     border-radius:50%;
 
-    background:#dfffff;
+    background:#bfffff;
 
     box-shadow:
         0 0 8px #00ffff;
 }
-
-@keyframes markerPulse{
-
-    0%,
-    100%{
-
-        transform:scale(1);
-
-        box-shadow:
-            0 0 15px
-            rgba(0,255,255,.9),
-            0 0 35px
-            rgba(0,255,255,.4);
-    }
-
-    50%{
-
-        transform:scale(1.18);
-
-        box-shadow:
-            0 0 22px
-            rgba(0,255,255,1),
-            0 0 50px
-            rgba(0,255,255,.55);
-    }
-}
-
-
-/* =====================================================
-   POPUP MAPLIBRE
-===================================================== */
-
-.maplibregl-popup-content{
-
-    background:
-        rgba(3,15,18,.96)!important;
-
-    color:
-        rgba(220,255,255,.9)!important;
-
-    border:
-        1px solid
-        rgba(0,255,255,.25);
-
-    border-radius:10px;
-
-    padding:10px 14px;
-
-    box-shadow:
-        0 0 20px
-        rgba(0,255,255,.12);
-}
-
-.maplibregl-popup-tip{
-
-    border-top-color:
-        rgba(3,15,18,.96)!important;
-
-    border-bottom-color:
-        rgba(3,15,18,.96)!important;
-}
-
-.maplibregl-popup-close-button{
-
-    color:#00ffff!important;
-
-    font-size:18px;
-}
-
 
 /* =====================================================
    MOBILE
@@ -804,7 +700,6 @@ body{
         letter-spacing:5px;
     }
 
-
     .datetime{
 
         top:12px;
@@ -812,18 +707,15 @@ body{
         right:13px;
     }
 
-
     .time{
 
         font-size:10px;
     }
 
-
     .date{
 
         font-size:7px;
     }
-
 
     .command-wrapper{
 
@@ -833,35 +725,26 @@ body{
         bottom:17px;
     }
 
-
     #textInput{
 
         font-size:13px;
     }
-
 
     #chat{
 
         bottom:80px;
     }
 
-
     #map{
 
-        top:15px;
-        right:15px;
-        bottom:15px;
-        left:15px;
+        /* MARGINE 3 CM ANCHE SU MOBILE */
+        top:3cm;
+        right:3cm;
+        bottom:3cm;
+        left:3cm;
 
         border-radius:22px;
     }
-
-
-    .map-overlay{
-
-        border-radius:22px;
-    }
-
 
     .map-header{
 
@@ -871,7 +754,6 @@ body{
 
         letter-spacing:5px;
     }
-
 
     #closeMap{
 
@@ -884,79 +766,153 @@ body{
 
 }
 
-</style></head><body><!-- =====================================================
+/* =====================================================
+   POPUP LEAFLET
+===================================================== */
+
+.leaflet-popup-content-wrapper{
+
+    background:
+        rgba(3,15,18,.95);
+
+    color:
+        rgba(220,255,255,.9);
+
+    border:
+        1px solid
+        rgba(0,255,255,.25);
+}
+
+.leaflet-popup-tip{
+
+    background:
+        rgba(3,15,18,.95);
+}
+
+.leaflet-popup-close-button{
+
+    color:#00ffff!important;
+}
+
+/* =====================================================
+   FINE CSS
+===================================================== */
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
      WEBGL
-===================================================== --><div id="webgl-container"></div><div class="vignette"></div><!-- =====================================================
+===================================================== -->
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+<!-- =====================================================
      TITOLO
-===================================================== --><div
-    class="jarvis-title"
-    id="jarvisTitle"
->
+===================================================== -->
+
+<div class="jarvis-title" id="jarvisTitle">
     J.A.R.V.I.S
-</div><!-- =====================================================
+</div>
+
+<!-- =====================================================
      ORA
-===================================================== --><div class="datetime"><div id="clock" class="time">
-    00:00:00
+===================================================== -->
+
+<div class="datetime">
+
+    <div id="clock" class="time">
+        00:00:00
+    </div>
+
+    <div id="date" class="date">
+        00 AGO 2026
+    </div>
+
 </div>
 
-<div id="date" class="date">
-    00 AGO 2026
-</div>
-
-</div><!-- =====================================================
+<!-- =====================================================
      MAPPA TATTICA
-===================================================== --><div id="tacticalMap"><div id="map"></div>
+===================================================== -->
 
+<div id="tacticalMap">
 
-<div class="map-overlay"></div>
+    <div id="map"></div>
 
+    <div class="map-filter"></div>
 
-<div class="map-header">
-    TACTICAL MAP
+    <div class="scan-line"></div>
+
+    <div class="map-corner corner-tl"></div>
+    <div class="map-corner corner-tr"></div>
+    <div class="map-corner corner-bl"></div>
+    <div class="map-corner corner-br"></div>
+
+    <div class="map-header">
+        TACTICAL MAP
+    </div>
+
+    <button
+        id="closeMap"
+        title="Chiudi mappa"
+    >
+        ×
+    </button>
+
 </div>
 
-
-<button
-    id="closeMap"
-    title="Chiudi mappa"
-    aria-label="Chiudi mappa"
->
-    ×
-</button>
-
-</div><!-- =====================================================
+<!-- =====================================================
      CHAT
-===================================================== --><div id="chat"></div><!-- =====================================================
+===================================================== -->
+
+<div id="chat"></div>
+
+<!-- =====================================================
      INPUT
-===================================================== --><div class="command-wrapper"><input
-    id="textInput"
-    type="text"
-    autocomplete="off"
-    placeholder="Chiedi qualcosa a JARVIS..."
->
+===================================================== -->
 
+<div class="command-wrapper">
 
-<button
-    id="micBtn"
-    aria-label="Microfono"
->
+    <input
+        id="textInput"
+        type="text"
+        autocomplete="off"
+        placeholder="Chiedi qualcosa a JARVIS..."
+    >
 
-    <span class="mic-icon"></span>
+    <button
+        id="micBtn"
+        aria-label="Microfono"
+    >
 
-</button>
+        <span class="mic-icon"></span>
 
+    </button>
 
-<button id="sendBtn">
-    INVIA
-</button>
+    <button id="sendBtn">
+        INVIA
+    </button>
 
-</div><!-- =====================================================
-     MAPLIBRE GL JS
-===================================================== --><script
-    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script><!-- =====================================================
-     THREE.JS
-===================================================== --><script type="importmap">
+</div>
+
+<!-- =====================================================
+     LEAFLET
+===================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<!-- =====================================================
+     THREE
+===================================================== -->
+
+<script type="importmap">
 
 {
     "imports":{
@@ -965,10 +921,11 @@ body{
     }
 }
 
-</script><script type="module">
+</script>
+
+<script type="module">
 
 import * as THREE from "three";
-
 
 /* =====================================================
    CONFIGURAZIONE
@@ -977,28 +934,22 @@ import * as THREE from "three";
 const API =
     "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
-
 const MEMORY_KEY =
     "jarvis_memory_v1";
-
 
 const MAX_MEMORY =
     30;
 
+/*
+=====================================================
+MAPTILER
+=====================================================
 
-/* =====================================================
-   MAPTILER
-===================================================== */
+La tua API Key MapTiler.
+*/
 
 const MAPTILER_KEY =
     "NmSlgtsAdQyEWy7t0OJf";
-
-
-const MAPTILER_STYLE =
-    "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
-    +
-    MAPTILER_KEY;
-
 
 /* =====================================================
    ELEMENTI
@@ -1009,73 +960,61 @@ const container =
         "webgl-container"
     );
 
-
 const chat =
     document.getElementById(
         "chat"
     );
-
 
 const textInput =
     document.getElementById(
         "textInput"
     );
 
-
 const sendBtn =
     document.getElementById(
         "sendBtn"
     );
-
 
 const micBtn =
     document.getElementById(
         "micBtn"
     );
 
-
 const clock =
     document.getElementById(
         "clock"
     );
-
 
 const date =
     document.getElementById(
         "date"
     );
 
-
 const tacticalMap =
     document.getElementById(
         "tacticalMap"
     );
-
 
 const closeMap =
     document.getElementById(
         "closeMap"
     );
 
-
 const jarvisTitle =
     document.getElementById(
         "jarvisTitle"
     );
-
 
 const mapHeader =
     document.querySelector(
         ".map-header"
     );
 
-
 /* =====================================================
    MEMORIA
 ===================================================== */
 
 let memory = [];
-
 
 try{
 
@@ -1084,14 +1023,10 @@ try{
             MEMORY_KEY
         );
 
-
     if(saved){
 
         const parsed =
-            JSON.parse(
-                saved
-            );
-
+            JSON.parse(saved);
 
         if(
             Array.isArray(parsed)
@@ -1114,7 +1049,6 @@ try{
     );
 
 }
-
 
 function saveMemory(){
 
@@ -1140,7 +1074,6 @@ function saveMemory(){
 
 }
 
-
 function addMemory(
     role,
     content
@@ -1151,17 +1084,14 @@ function addMemory(
         content
     });
 
-
     memory =
         memory.slice(
             -MAX_MEMORY
         );
 
-
     saveMemory();
 
 }
-
 
 /* =====================================================
    ORA
@@ -1184,77 +1114,53 @@ const months = [
 
 ];
 
-
 function updateClock(){
 
     const now =
         new Date();
 
-
     const h =
         String(
             now.getHours()
-        ).padStart(
-            2,
-            "0"
-        );
-
+        ).padStart(2,"0");
 
     const m =
         String(
             now.getMinutes()
-        ).padStart(
-            2,
-            "0"
-        );
-
+        ).padStart(2,"0");
 
     const s =
         String(
             now.getSeconds()
-        ).padStart(
-            2,
-            "0"
-        );
-
+        ).padStart(2,"0");
 
     clock.textContent =
         `${h}:${m}:${s}`;
 
-
     const d =
         String(
             now.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
+        ).padStart(2,"0");
 
     const month =
         months[
             now.getMonth()
         ];
 
-
     const year =
         now.getFullYear();
-
 
     date.textContent =
         `${d} ${month} ${year}`;
 
 }
 
-
 updateClock();
-
 
 setInterval(
     updateClock,
     1000
 );
-
 
 /* =====================================================
    THREE.JS
@@ -1262,7 +1168,6 @@ setInterval(
 
 const scene =
     new THREE.Scene();
-
 
 const camera =
     new THREE.PerspectiveCamera(
@@ -1273,10 +1178,8 @@ const camera =
         1000
     );
 
-
 camera.position.z =
     5.2;
-
 
 const renderer =
     new THREE.WebGLRenderer({
@@ -1286,12 +1189,10 @@ const renderer =
 
     });
 
-
 renderer.setSize(
     window.innerWidth,
     window.innerHeight
 );
-
 
 renderer.setPixelRatio(
     Math.min(
@@ -1300,11 +1201,9 @@ renderer.setPixelRatio(
     )
 );
 
-
 container.appendChild(
     renderer.domElement
 );
-
 
 /* =====================================================
    GLOW
@@ -1317,19 +1216,13 @@ function createGlow(){
             "canvas"
         );
 
-
-    canvas.width =
-        64;
-
-    canvas.height =
-        64;
-
+    canvas.width = 64;
+    canvas.height = 64;
 
     const ctx =
         canvas.getContext(
             "2d"
         );
-
 
     const gradient =
         ctx.createRadialGradient(
@@ -1341,40 +1234,33 @@ function createGlow(){
             32
         );
 
-
     gradient.addColorStop(
         0,
         "rgba(255,255,255,1)"
     );
-
 
     gradient.addColorStop(
         .2,
         "rgba(220,255,255,1)"
     );
 
-
     gradient.addColorStop(
         .4,
         "rgba(0,255,255,.9)"
     );
-
 
     gradient.addColorStop(
         .7,
         "rgba(0,150,190,.25)"
     );
 
-
     gradient.addColorStop(
         1,
         "rgba(0,0,0,0)"
     );
 
-
     ctx.fillStyle =
         gradient;
-
 
     ctx.fillRect(
         0,
@@ -1383,13 +1269,11 @@ function createGlow(){
         64
     );
 
-
     return new THREE.CanvasTexture(
         canvas
     );
 
 }
-
 
 /* =====================================================
    PARTICELLE
@@ -1398,34 +1282,28 @@ function createGlow(){
 const COUNT =
     3000;
 
-
 const geometry =
     new THREE.BufferGeometry();
-
 
 const positions =
     new Float32Array(
         COUNT * 3
     );
 
-
 const radii =
     new Float32Array(
         COUNT
     );
-
 
 const angles =
     new Float32Array(
         COUNT * 2
     );
 
-
 const seeds =
     new Float32Array(
         COUNT
     );
-
 
 for(
     let i=0;
@@ -1437,53 +1315,43 @@ for(
         1.10 +
         Math.random()*.70;
 
-
     const theta =
         Math.random() *
         Math.PI *
         2;
-
 
     const phi =
         Math.acos(
             2*Math.random()-1
         );
 
-
     radii[i] =
         r;
-
 
     angles[i*2] =
         theta;
 
-
     angles[i*2+1] =
         phi;
 
-
     seeds[i] =
         Math.random()*100;
-
 
     positions[i*3] =
         r *
         Math.sin(phi) *
         Math.cos(theta);
 
-
     positions[i*3+1] =
         r *
         Math.sin(phi) *
         Math.sin(theta);
-
 
     positions[i*3+2] =
         r *
         Math.cos(phi);
 
 }
-
 
 geometry.setAttribute(
     "position",
@@ -1492,7 +1360,6 @@ geometry.setAttribute(
         3
     )
 );
-
 
 const material =
     new THREE.PointsMaterial({
@@ -1517,18 +1384,15 @@ const material =
 
     });
 
-
 const particles =
     new THREE.Points(
         geometry,
         material
     );
 
-
 scene.add(
     particles
 );
-
 
 /* =====================================================
    ENERGIA
@@ -1537,26 +1401,21 @@ scene.add(
 let targetEnergy =
     .15;
 
-
 let energy =
     .15;
-
 
 const normalColor =
     new THREE.Color(
         0x00cfe8
     );
 
-
 const activeColor =
     new THREE.Color(
         0x8fffff
     );
 
-
 const currentColor =
     normalColor.clone();
-
 
 function setState(
     state
@@ -1566,8 +1425,7 @@ function setState(
         state === "thinking"
     ){
 
-        targetEnergy =
-            1;
+        targetEnergy = 1;
 
     }
 
@@ -1575,8 +1433,7 @@ function setState(
         state === "speaking"
     ){
 
-        targetEnergy =
-            .8;
+        targetEnergy = .8;
 
     }
 
@@ -1584,20 +1441,17 @@ function setState(
         state === "listening"
     ){
 
-        targetEnergy =
-            .55;
+        targetEnergy = .55;
 
     }
 
     else{
 
-        targetEnergy =
-            .15;
+        targetEnergy = .15;
 
     }
 
 }
-
 
 /* =====================================================
    ANIMAZIONE
@@ -1609,10 +1463,8 @@ function animate(){
         animate
     );
 
-
     const time =
         performance.now()*.001;
-
 
     energy +=
         (
@@ -1620,12 +1472,10 @@ function animate(){
             energy
         )*.045;
 
-
     currentColor.lerp(
         activeColor,
         energy*.04
     );
-
 
     if(
         energy < .3
@@ -1638,22 +1488,18 @@ function animate(){
 
     }
 
-
     material.color =
         currentColor;
-
 
     material.size =
         .032 +
         energy*.008;
-
 
     const pos =
         geometry
             .attributes
             .position
             .array;
-
 
     for(
         let i=0;
@@ -1664,29 +1510,23 @@ function animate(){
         const index =
             i*3;
 
-
         const r =
             radii[i];
-
 
         const theta =
             angles[i*2];
 
-
         const phi =
             angles[i*2+1];
 
-
         const seed =
             seeds[i];
-
 
         const pulse =
             Math.sin(
                 time*2 +
                 seed
             )*.035;
-
 
         const strangeShape =
             Math.sin(
@@ -1695,7 +1535,6 @@ function animate(){
                 seed
             )*.18*energy;
 
-
         const wave =
             Math.cos(
                 phi*7 -
@@ -1703,30 +1542,25 @@ function animate(){
                 seed
             )*.12*energy;
 
-
         const rr =
             r +
             pulse +
             strangeShape +
             wave;
 
-
         let x =
             rr *
             Math.sin(phi) *
             Math.cos(theta);
-
 
         let y =
             rr *
             Math.sin(phi) *
             Math.sin(theta);
 
-
         let z =
             rr *
             Math.cos(phi);
-
 
         x +=
             Math.sin(
@@ -1735,7 +1569,6 @@ function animate(){
                 seed
             )*.08*energy;
 
-
         y +=
             Math.cos(
                 time*2.1 +
@@ -1743,27 +1576,22 @@ function animate(){
                 seed
             )*.08*energy;
 
-
         z +=
             Math.sin(
                 time*2.7 +
                 (theta+phi)*7
             )*.10*energy;
 
-
         pos[index] =
             x;
 
-
         pos[index+1] =
             y;
-
 
         pos[index+2] =
             z;
 
     }
-
 
     geometry
         .attributes
@@ -1771,23 +1599,19 @@ function animate(){
         .needsUpdate =
             true;
 
-
     particles.rotation.y +=
         .0005 +
         energy*.0008;
-
 
     particles.rotation.x =
         Math.sin(
             time*.25
         )*.04;
 
-
     particles.rotation.z =
         Math.cos(
             time*.18
         )*.025;
-
 
     renderer.render(
         scene,
@@ -1796,21 +1620,15 @@ function animate(){
 
 }
 
-
 animate();
 
-
 /* =====================================================
-   MAPTILER / MAPLIBRE
+   MAPPA TATTICA
 ===================================================== */
 
-let map =
-    null;
+let map = null;
 
-
-let currentMarker =
-    null;
-
+let currentMarker = null;
 
 function initializeMap(){
 
@@ -1820,94 +1638,66 @@ function initializeMap(){
 
     }
 
-
-    if(
-        typeof maplibregl ===
-        "undefined"
-    ){
-
-        console.error(
-            "MapLibre GL JS non disponibile."
-        );
-
-        addMsg(
-            "Errore: MapTiler non disponibile."
-        );
-
-        return;
-
-    }
-
-
     map =
-        new maplibregl.Map({
+        L.map(
+            "map",
+            {
 
-            container:
-                "map",
+                zoomControl:false,
 
-            style:
-                MAPTILER_STYLE,
+                attributionControl:true,
 
-            center:
-                [10.2118,45.5416],
+                zoomAnimation:true,
 
-            zoom:
-                10,
+                fadeAnimation:true
 
-            attributionControl:
-                true,
+            }
+        );
 
-            antialias:
-                true
-
-        });
-
-
-    /*
-    CONTROLLI ZOOM
-    */
-
-    map.addControl(
-        new maplibregl.NavigationControl({
-            showCompass:true,
-            showZoom:true
-        }),
-        "bottom-right"
+    map.setView(
+        [45.5416,10.2118],
+        10
     );
 
-
     /*
-    QUANDO LA MAPPA È PRONTA
+    =====================================================
+    MAPTILER
+    =====================================================
     */
 
-    map.on(
-        "load",
+    const mapTilerUrl =
+        "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key="
+        +
+        MAPTILER_KEY;
+
+    L.tileLayer(
+        mapTilerUrl,
+        {
+
+            tileSize:512,
+
+            zoomOffset:-1,
+
+            maxZoom:20,
+
+            attribution:
+                '&copy; MapTiler &copy; OpenStreetMap contributors'
+
+        }
+    ).addTo(
+        map
+    );
+
+    setTimeout(
         () => {
 
-            map.resize();
+            map.invalidateSize();
 
-        }
-    );
-
-
-    /*
-    ERRORI MAPPA
-    */
-
-    map.on(
-        "error",
-        event => {
-
-            console.warn(
-                "MapTiler:",
-                event
-            );
-
-        }
+        },
+        150
     );
 
 }
-
 
 /* =====================================================
    APERTURA MAPPA
@@ -1919,24 +1709,20 @@ function openTacticalMap(){
         "active"
     );
 
-
     jarvisTitle.style.display =
         "none";
-
 
     mapHeader.style.display =
         "block";
 
-
     initializeMap();
-
 
     setTimeout(
         () => {
 
             if(map){
 
-                map.resize();
+                map.invalidateSize();
 
             }
 
@@ -1945,7 +1731,6 @@ function openTacticalMap(){
     );
 
 }
-
 
 /* =====================================================
    CHIUSURA MAPPA
@@ -1957,21 +1742,18 @@ function closeTacticalMap(){
         "active"
     );
 
-
     jarvisTitle.style.display =
         "block";
 
 }
-
 
 closeMap.addEventListener(
     "click",
     closeTacticalMap
 );
 
-
 /* =====================================================
-   MARKER JARVIS
+   MARKER
 ===================================================== */
 
 function createJarvisMarker(
@@ -1980,106 +1762,46 @@ function createJarvisMarker(
     name
 ){
 
-    if(
-        !map
-    ){
+    if(currentMarker){
 
-        return;
-
-    }
-
-
-    if(
-        currentMarker
-    ){
-
-        currentMarker.remove();
-
-        currentMarker =
-            null;
-
-    }
-
-
-    const markerElement =
-        document.createElement(
-            "div"
+        map.removeLayer(
+            currentMarker
         );
 
+    }
 
-    markerElement.className =
-        "jarvis-map-marker";
+    const icon =
+        L.divIcon({
 
+            className:"",
+
+            html:
+                '<div class="jarvis-marker"></div>',
+
+            iconSize:
+                [18,18],
+
+            iconAnchor:
+                [9,9]
+
+        });
 
     currentMarker =
-        new maplibregl.Marker({
-
-            element:
-                markerElement,
-
-            anchor:
-                "center"
-
-        })
-
-        .setLngLat(
-            [lon,lat]
+        L.marker(
+            [lat,lon],
+            {
+                icon
+            }
         )
+        .addTo(map);
 
-        .setPopup(
+    currentMarker.bindPopup(
+        `<b style="color:#00ffff">${name}</b>`
+    );
 
-            new maplibregl.Popup({
-                offset:15
-            })
-
-            .setHTML(
-                `<b style="color:#00ffff">${escapeHtml(name)}</b>`
-            )
-
-        )
-
-        .addTo(
-            map
-        );
-
-
-    currentMarker.togglePopup();
+    currentMarker.openPopup();
 
 }
-
-
-/* =====================================================
-   SICUREZZA TESTO
-===================================================== */
-
-function escapeHtml(
-    text
-){
-
-    return String(text)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
 
 /* =====================================================
    RICERCA POSIZIONE
@@ -2093,12 +1815,10 @@ async function searchLocation(
 
         openTacticalMap();
 
-
         addMsg(
             "Ricerca posizione: " +
             place
         );
-
 
         const url =
             "https://nominatim.openstreetmap.org/search" +
@@ -2108,7 +1828,6 @@ async function searchLocation(
             encodeURIComponent(
                 place
             );
-
 
         const response =
             await fetch(
@@ -2125,7 +1844,6 @@ async function searchLocation(
                 }
             );
 
-
         if(
             !response.ok
         ){
@@ -2136,10 +1854,8 @@ async function searchLocation(
 
         }
 
-
         const results =
             await response.json();
-
 
         if(
             !results.length
@@ -2155,53 +1871,28 @@ async function searchLocation(
 
         }
 
-
         const result =
             results[0];
-
 
         const lat =
             parseFloat(
                 result.lat
             );
 
-
         const lon =
             parseFloat(
                 result.lon
             );
 
+        map.flyTo(
+            [lat,lon],
+            12,
+            {
 
-        if(
-            !map
-        ){
+                duration:1.8
 
-            throw new Error(
-                "Mappa non inizializzata"
-            );
-
-        }
-
-
-        map.flyTo({
-
-            center:
-                [lon,lat],
-
-            zoom:
-                12,
-
-            speed:
-                0.8,
-
-            curve:
-                1.5,
-
-            essential:
-                true
-
-        });
-
+            }
+        );
 
         createJarvisMarker(
             lat,
@@ -2209,12 +1900,10 @@ async function searchLocation(
             place
         );
 
-
         addMsg(
             "Posizione acquisita: " +
             place
         );
-
 
     }catch(error){
 
@@ -2222,7 +1911,6 @@ async function searchLocation(
             "MAP ERROR:",
             error
         );
-
 
         addMsg(
             "Impossibile localizzare " +
@@ -2233,7 +1921,6 @@ async function searchLocation(
     }
 
 }
-
 
 /* =====================================================
    COMANDI MAPPA
@@ -2247,7 +1934,6 @@ function handleMapCommand(
         text
             .toLowerCase()
             .trim();
-
 
     if(
 
@@ -2289,16 +1975,13 @@ function handleMapCommand(
 
         openTacticalMap();
 
-
         addMsg(
             "Mappa tattica attivata."
         );
 
-
         return true;
 
     }
-
 
     if(
 
@@ -2334,16 +2017,13 @@ function handleMapCommand(
 
         closeTacticalMap();
 
-
         addMsg(
             "Modalità tattica disattivata."
         );
 
-
         return true;
 
     }
-
 
     const patterns = [
 
@@ -2356,7 +2036,6 @@ function handleMapCommand(
         "visualizza "
 
     ];
-
 
     for(
         const pattern of patterns
@@ -2376,7 +2055,6 @@ function handleMapCommand(
                     )
                     .trim();
 
-
             if(
                 place.length > 1
             ){
@@ -2384,7 +2062,6 @@ function handleMapCommand(
                 searchLocation(
                     place
                 );
-
 
                 return true;
 
@@ -2394,11 +2071,9 @@ function handleMapCommand(
 
     }
 
-
     return false;
 
 }
-
 
 /* =====================================================
    MESSAGGIO
@@ -2411,27 +2086,22 @@ function addMsg(
     chat.innerHTML =
         "";
 
-
     const element =
         document.createElement(
             "div"
         );
 
-
     element.className =
         "msg";
 
-
     element.textContent =
         text;
-
 
     chat.appendChild(
         element
     );
 
 }
-
 
 /* =====================================================
    CONTESTO TEMPORALE
@@ -2441,7 +2111,6 @@ function getTimeData(){
 
     const now =
         new Date();
-
 
     return {
 
@@ -2457,7 +2126,6 @@ function getTimeData(){
                 }
             ),
 
-
         currentDate:
             now.toLocaleDateString(
                 "it-IT",
@@ -2470,7 +2138,6 @@ function getTimeData(){
                 }
             ),
 
-
         dayOfWeek:
             now.toLocaleDateString(
                 "it-IT",
@@ -2481,7 +2148,6 @@ function getTimeData(){
                 }
             ),
 
-
         timezone:
             Intl.DateTimeFormat()
                 .resolvedOptions()
@@ -2490,7 +2156,6 @@ function getTimeData(){
     };
 
 }
-
 
 /* =====================================================
    PROCESS AI
@@ -2510,23 +2175,19 @@ async function processAi(
 
     }
 
-
     setState(
         "thinking"
     );
-
 
     try{
 
         const temporal =
             getTimeData();
 
-
         addMemory(
             "user",
             text
         );
-
 
         const response =
             await fetch(
@@ -2568,7 +2229,6 @@ async function processAi(
                 }
             );
 
-
         if(
             !response.ok
         ){
@@ -2576,12 +2236,10 @@ async function processAi(
             const errorText =
                 await response.text();
 
-
             console.error(
                 "Worker:",
                 errorText
             );
-
 
             throw new Error(
                 "HTTP " +
@@ -2589,7 +2247,6 @@ async function processAi(
             );
 
         }
-
 
         if(
             !response.body
@@ -2601,41 +2258,32 @@ async function processAi(
 
         }
 
-
         chat.innerHTML =
             "";
-
 
         const element =
             document.createElement(
                 "div"
             );
 
-
         element.className =
             "msg";
-
 
         chat.appendChild(
             element
         );
 
-
         const reader =
             response.body.getReader();
-
 
         const decoder =
             new TextDecoder();
 
-
         let buffer =
             "";
 
-
         let reply =
             "";
-
 
         while(true){
 
@@ -2645,13 +2293,11 @@ async function processAi(
             } =
                 await reader.read();
 
-
             if(done){
 
                 break;
 
             }
-
 
             buffer +=
                 decoder.decode(
@@ -2661,16 +2307,13 @@ async function processAi(
                     }
                 );
 
-
             const lines =
                 buffer.split(
                     "\n"
                 );
 
-
             buffer =
                 lines.pop() || "";
-
 
             for(
                 const line of lines
@@ -2679,7 +2322,6 @@ async function processAi(
                 const trimmed =
                     line.trim();
 
-
                 if(
                     !trimmed
                 ){
@@ -2687,7 +2329,6 @@ async function processAi(
                     continue;
 
                 }
-
 
                 if(
                     !trimmed.startsWith(
@@ -2699,14 +2340,12 @@ async function processAi(
 
                 }
 
-
                 const raw =
                     trimmed
                         .substring(
                             5
                         )
                         .trim();
-
 
                 if(
                     !raw ||
@@ -2717,7 +2356,6 @@ async function processAi(
 
                 }
 
-
                 try{
 
                     const json =
@@ -2725,10 +2363,8 @@ async function processAi(
                             raw
                         );
 
-
                     let piece =
                         "";
-
 
                     if(
                         typeof json.response ===
@@ -2740,7 +2376,6 @@ async function processAi(
 
                     }
 
-
                     else if(
                         json.choices &&
                         json.choices[0]
@@ -2748,7 +2383,6 @@ async function processAi(
 
                         const choice =
                             json.choices[0];
-
 
                         if(
                             choice.delta &&
@@ -2761,7 +2395,6 @@ async function processAi(
 
                         }
 
-
                         else if(
                             choice.message &&
                             typeof choice.message.content ===
@@ -2772,7 +2405,6 @@ async function processAi(
                                 choice.message.content;
 
                         }
-
 
                         else if(
                             typeof choice.text ===
@@ -2786,23 +2418,19 @@ async function processAi(
 
                     }
 
-
                     if(piece){
 
                         reply +=
                             piece;
 
-
                         element.textContent =
                             reply;
-
 
                         setState(
                             "speaking"
                         );
 
                     }
-
 
                 }catch(error){
 
@@ -2817,10 +2445,8 @@ async function processAi(
 
         }
 
-
         reply =
             reply.trim();
-
 
         if(
             !reply
@@ -2832,17 +2458,14 @@ async function processAi(
 
         }
 
-
         addMemory(
             "assistant",
             reply
         );
 
-
         speak(
             reply
         );
-
 
     }catch(error){
 
@@ -2851,12 +2474,10 @@ async function processAi(
             error
         );
 
-
         addMsg(
             "ERRORE: " +
             error.message
         );
-
 
         setState(
             "idle"
@@ -2865,7 +2486,6 @@ async function processAi(
     }
 
 }
-
 
 /* =====================================================
    INVIO
@@ -2876,7 +2496,6 @@ function sendMessage(){
     const text =
         textInput.value.trim();
 
-
     if(
         !text
     ){
@@ -2885,15 +2504,12 @@ function sendMessage(){
 
     }
 
-
     textInput.value =
         "";
-
 
     addMsg(
         text
     );
-
 
     processAi(
         text
@@ -2901,12 +2517,10 @@ function sendMessage(){
 
 }
 
-
 sendBtn.addEventListener(
     "click",
     sendMessage
 );
-
 
 textInput.addEventListener(
     "keydown",
@@ -2924,7 +2538,6 @@ textInput.addEventListener(
 
     }
 );
-
 
 /* =====================================================
    VOCE
@@ -2946,27 +2559,21 @@ function speak(
 
     }
 
-
     speechSynthesis.cancel();
-
 
     const utterance =
         new SpeechSynthesisUtterance(
             text
         );
 
-
     utterance.lang =
         "it-IT";
-
 
     utterance.rate =
         .95;
 
-
     utterance.pitch =
         .85;
-
 
     utterance.onstart =
         () => {
@@ -2977,7 +2584,6 @@ function speak(
 
         };
 
-
     utterance.onend =
         () => {
 
@@ -2986,7 +2592,6 @@ function speak(
             );
 
         };
-
 
     utterance.onerror =
         () => {
@@ -2997,13 +2602,11 @@ function speak(
 
         };
 
-
     speechSynthesis.speak(
         utterance
     );
 
 }
-
 
 /* =====================================================
    MICROFONO
@@ -3013,14 +2616,11 @@ const Recognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-
 let recognition =
     null;
 
-
 let listening =
     false;
-
 
 if(
     Recognition
@@ -3029,18 +2629,14 @@ if(
     recognition =
         new Recognition();
 
-
     recognition.lang =
         "it-IT";
-
 
     recognition.continuous =
         false;
 
-
     recognition.interimResults =
         false;
-
 
     recognition.onstart =
         () => {
@@ -3048,18 +2644,15 @@ if(
             listening =
                 true;
 
-
             micBtn.classList.add(
                 "active"
             );
-
 
             setState(
                 "listening"
             );
 
         };
-
 
     recognition.onresult =
         event => {
@@ -3070,19 +2663,16 @@ if(
                     .transcript
                     .trim();
 
-
             if(text){
 
                 textInput.value =
                     text;
-
 
                 sendMessage();
 
             }
 
         };
-
 
     recognition.onerror =
         error => {
@@ -3092,15 +2682,12 @@ if(
                 error
             );
 
-
             listening =
                 false;
-
 
             micBtn.classList.remove(
                 "active"
             );
-
 
             setState(
                 "idle"
@@ -3108,20 +2695,17 @@ if(
 
         };
 
-
     recognition.onend =
         () => {
 
             listening =
                 false;
 
-
             micBtn.classList.remove(
                 "active"
             );
 
         };
-
 
     micBtn.addEventListener(
         "click",
@@ -3157,7 +2741,6 @@ if(
 
 }
 
-
 /* =====================================================
    RESIZE
 ===================================================== */
@@ -3170,25 +2753,21 @@ window.addEventListener(
             window.innerWidth /
             window.innerHeight;
 
-
         camera.updateProjectionMatrix();
-
 
         renderer.setSize(
             window.innerWidth,
             window.innerHeight
         );
 
-
         if(map){
 
-            map.resize();
+            map.invalidateSize();
 
         }
 
     }
 );
-
 
 /* =====================================================
    CANCELLA MEMORIA
@@ -3200,18 +2779,15 @@ window.clearJarvisMemory =
         memory =
             [];
 
-
         localStorage.removeItem(
             MEMORY_KEY
         );
-
 
         console.log(
             "Memoria JARVIS cancellata."
         );
 
     };
-
 
 /* =====================================================
    AVVIO
@@ -3221,5 +2797,7 @@ setState(
     "idle"
 );
 
-</script></body>
+</script>
+
+</body>
 </html>

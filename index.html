@@ -1625,89 +1625,52 @@ let currentMarker = null;
 
 
 /* =====================================================
+   MAPTILER
+===================================================== */
+
+const MAPTILER_KEY = "NmSlgtsAdQyEWy7t0OJf";
+
+
+/* =====================================================
    INIZIALIZZA MAPPA
 ===================================================== */
 
 function initializeMap(){
 
     if(map){
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
         return;
     }
 
+    map = L.map("map", {
+        zoomControl: false,
+        attributionControl: true,
+        minZoom: 1,
+        maxZoom: 19
+    });
 
-    if(!MAPTILER_KEY){
-
-        console.error(
-            "API KEY MAPTILER NON INSERITA"
-        );
-
-
-        addMsg(
-            "API key MapTiler non configurata."
-        );
-
-
-        return;
-
-    }
-
-
-    map =
-        L.map(
-            "map",
-            {
-                zoomControl:false,
-                attributionControl:true,
-                minZoom:1,
-                maxZoom:19
-            }
-        );
-
-
-    map.setView(
-        [45.5416,10.2118],
-        10
-    );
-
-
-    /* =================================================
-       MAPTILER
-    ================================================= */
+    map.setView([45.5416, 10.2118], 10);
 
     const mapTiles =
         `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
 
+    L.tileLayer(mapTiles, {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 1,
+        maxZoom: 19,
 
-    L.tileLayer(
-        mapTiles,
-        {
+        attribution:
+            '&copy; MapTiler &copy; OpenStreetMap contributors',
 
-            tileSize:512,
+        crossOrigin: true
+    }).addTo(map);
 
-            zoomOffset:-1,
-
-            minZoom:1,
-
-            maxZoom:19,
-
-            attribution:
-                '&copy; MapTiler &copy; OpenStreetMap contributors',
-
-            crossOrigin:true
-
-        }
-    ).addTo(map);
-
-
-    setTimeout(
-        () => {
-
-            map.invalidateSize();
-
-        },
-        150
-    );
-
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 300);
 }
 
 

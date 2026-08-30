@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link
+<title>J.A.R.V.I.S.</title><link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-
-<style>
+/><style>
 
 /* =====================================================
    BASE
@@ -86,7 +75,9 @@ body{
     position:fixed;
     top:2.4%;
     left:50%;
+
     transform:translateX(-50%);
+
     z-index:30;
 
     color:rgba(255,255,255,.86);
@@ -740,106 +731,67 @@ body{
 
 }
 
-</style>
-
-</head>
-
-
-<body>
-
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-
-<div
+</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
     id="jarvisTitle"
     class="jarvis-title"
 >
     J.A.R.V.I.S
+</div><div class="datetime"><div
+    id="clock"
+    class="time"
+>
+    00:00:00
 </div>
 
-
-<div class="datetime">
-
-    <div
-        id="clock"
-        class="time"
-    >
-        00:00:00
-    </div>
-
-    <div
-        id="date"
-        class="date"
-    >
-        00 AGO 2026
-    </div>
-
+<div
+    id="date"
+    class="date"
+>
+    00 AGO 2026
 </div>
 
-
-<!-- =====================================================
+</div><!-- =====================================================
      MAPPA TATTICA
-===================================================== -->
-
-<div id="tacticalMap">
-
-    <div class="tactical-title">
-        TACTICAL MAP
-    </div>
+===================================================== --><div id="tacticalMap"><div class="tactical-title">
+    TACTICAL MAP
+</div>
 
 
-    <div class="map-frame">
+<div class="map-frame">
 
-        <div id="map"></div>
-
-    </div>
-
-
-    <button
-        id="closeMap"
-        title="Chiudi mappa"
-    >
-        ×
-    </button>
+    <div id="map"></div>
 
 </div>
 
 
-<div id="chat"></div>
+<button
+    id="closeMap"
+    title="Chiudi mappa"
+>
+    ×
+</button>
 
+</div><div id="chat"></div><div class="command-wrapper"><input
+    id="textInput"
+    type="text"
+    autocomplete="off"
+    placeholder="Chiedi qualcosa a JARVIS..."
+>
 
-<div class="command-wrapper">
+<button
+    id="micBtn"
+    aria-label="Microfono"
+>
+    <span class="mic-icon"></span>
+</button>
 
-    <input
-        id="textInput"
-        type="text"
-        autocomplete="off"
-        placeholder="Chiedi qualcosa a JARVIS..."
-    >
+<button id="sendBtn">
+    INVIA
+</button>
 
-    <button
-        id="micBtn"
-        aria-label="Microfono"
-    >
-        <span class="mic-icon"></span>
-    </button>
-
-    <button id="sendBtn">
-        INVIA
-    </button>
-
-</div>
-
-
-<script
+</div><script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-
-
-<script type="importmap">
+</script><script type="importmap">
 
 {
     "imports":{
@@ -848,10 +800,7 @@ body{
     }
 }
 
-</script>
-
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -874,12 +823,8 @@ const MAX_MEMORY =
    MAPTILER
 ===================================================== */
 
-/*
-   CHIAVE MAPTILER
-*/
-
 const MAPTILER_KEY =
-    "NmSlgtsAdQyEWy7t0OJf";
+    "1NmSlgtsAdQyEWy7t0OJf";
 
 
 /* =====================================================
@@ -1726,12 +1671,11 @@ function initializeMap(){
 
 
     /* =================================================
-       MAPTILER - MAPPA PERSONALIZZATA
+       MAPTILER
     ================================================= */
 
     const mapTiles =
-        const mapTiles =
-    `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
+        `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
 
 
     L.tileLayer(
@@ -2951,8 +2895,4 @@ setState(
     "idle"
 );
 
-</script>
-
-</body>
-
-</html>
+</script></body></html>

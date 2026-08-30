@@ -1,7 +1,10 @@
 <!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>J.A.R.V.I.S.</title><style>
+<title>J.A.R.V.I.S.</title><link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/><style>
 
 /* =====================================================
    BASE
@@ -65,14 +68,16 @@ body{
 
 
 /* =====================================================
-   TITOLO
+   TITOLO JARVIS
 ===================================================== */
 
 .jarvis-title{
     position:fixed;
     top:2.4%;
     left:50%;
+
     transform:translateX(-50%);
+
     z-index:30;
 
     color:rgba(255,255,255,.86);
@@ -88,11 +93,59 @@ body{
     white-space:nowrap;
 
     text-shadow:
-        0 0 10px rgba(255,255,255,.12);
+        0 0 10px
+        rgba(255,255,255,.12);
 
     pointer-events:none;
 
-    transition:opacity .35s ease;
+    transition:
+        opacity .35s ease,
+        transform .35s ease;
+}
+
+
+/* =====================================================
+   TITOLO TACTICAL MAP
+===================================================== */
+
+.tactical-title{
+    position:absolute;
+
+    top:4%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:530;
+
+    color:rgba(220,255,255,.9);
+
+    font-family:monospace;
+
+    font-size:
+        clamp(26px,5vw,58px);
+
+    font-weight:300;
+
+    letter-spacing:
+        clamp(6px,1.5vw,14px);
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 0 10px rgba(0,255,255,.35),
+        0 0 30px rgba(0,255,255,.15);
+
+    pointer-events:none;
+
+    opacity:0;
+
+    transition:
+        opacity .35s ease;
+}
+
+#tacticalMap.active .tactical-title{
+    opacity:1;
 }
 
 
@@ -127,7 +180,8 @@ body{
     letter-spacing:2px;
 
     text-shadow:
-        0 0 8px rgba(0,255,255,.2);
+        0 0 8px
+        rgba(0,255,255,.2);
 }
 
 .date{
@@ -168,7 +222,8 @@ body{
     padding:10px 18px;
 
     border:
-        1px solid rgba(0,255,255,.22);
+        1px solid
+        rgba(0,255,255,.22);
 
     border-radius:24px;
 
@@ -211,7 +266,8 @@ body{
     padding:6px 7px 6px 20px;
 
     border:
-        1px solid rgba(100,255,255,.28);
+        1px solid
+        rgba(100,255,255,.28);
 
     border-radius:40px;
 
@@ -222,7 +278,8 @@ body{
     -webkit-backdrop-filter:blur(20px);
 
     box-shadow:
-        0 0 30px rgba(0,255,255,.05);
+        0 0 30px
+        rgba(0,255,255,.05);
 }
 
 .command-wrapper:focus-within{
@@ -230,7 +287,8 @@ body{
         rgba(0,255,255,.6);
 
     box-shadow:
-        0 0 25px rgba(0,255,255,.12);
+        0 0 25px
+        rgba(0,255,255,.12);
 }
 
 #textInput{
@@ -285,7 +343,8 @@ body{
     height:14px;
 
     border:
-        1.3px solid currentColor;
+        1.3px solid
+        currentColor;
 
     border-radius:6px;
 
@@ -306,7 +365,8 @@ body{
     transform:translateX(-50%);
 
     border:
-        1.3px solid currentColor;
+        1.3px solid
+        currentColor;
 
     border-top:none;
 
@@ -320,9 +380,6 @@ body{
 
 #micBtn.active{
     color:#8fffff;
-
-    text-shadow:
-        0 0 10px #00ffff;
 }
 
 
@@ -336,7 +393,8 @@ body{
     padding:0 17px;
 
     border:
-        1px solid rgba(0,255,255,.28);
+        1px solid
+        rgba(0,255,255,.28);
 
     border-radius:22px;
 
@@ -351,8 +409,6 @@ body{
     letter-spacing:2px;
 
     cursor:pointer;
-
-    transition:.2s ease;
 }
 
 #sendBtn:hover{
@@ -374,7 +430,7 @@ body{
 
     inset:0;
 
-    z-index:100;
+    z-index:20;
 
     display:none;
 
@@ -405,42 +461,6 @@ body{
 
 
 /* =====================================================
-   TITOLO TACTICAL MAP
-===================================================== */
-
-.tactical-title{
-    position:absolute;
-
-    top:4%;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    z-index:530;
-
-    color:rgba(220,255,255,.9);
-
-    font-family:monospace;
-
-    font-size:
-        clamp(26px,5vw,58px);
-
-    font-weight:300;
-
-    letter-spacing:
-        clamp(6px,1.5vw,14px);
-
-    white-space:nowrap;
-
-    text-shadow:
-        0 0 10px rgba(0,255,255,.35),
-        0 0 30px rgba(0,255,255,.15);
-
-    pointer-events:none;
-}
-
-
-/* =====================================================
    CONTENITORE MAPPA
 ===================================================== */
 
@@ -459,22 +479,25 @@ body{
     background:#071014;
 
     border:
-        1px solid rgba(0,255,255,.2);
+        1px solid
+        rgba(0,255,255,.2);
 
     box-shadow:
-        0 0 30px rgba(0,0,0,.5),
-        0 0 60px rgba(0,255,255,.04);
+        0 0 30px
+        rgba(0,0,0,.5),
+
+        0 0 60px
+        rgba(0,255,255,.04);
 
     z-index:100;
 }
 
 
 /* =====================================================
-   MAPTILER IFRAME
+   MAPPA
 ===================================================== */
 
-#tacticalMap iframe{
-
+#map{
     position:absolute;
 
     inset:0;
@@ -482,11 +505,106 @@ body{
     width:100%;
     height:100%;
 
-    border:none;
-
-    display:block;
-
     background:#071014;
+}
+
+
+/* =====================================================
+   TILE
+===================================================== */
+
+#map .leaflet-tile{
+    filter:none !important;
+}
+
+
+/* =====================================================
+   LEAFLET
+===================================================== */
+
+.leaflet-container{
+    background:#071014 !important;
+
+    font-family:Arial,sans-serif;
+}
+
+
+/* =====================================================
+   NASCONDI ZOOM
+===================================================== */
+
+.leaflet-control-zoom{
+    display:none !important;
+}
+
+
+/* =====================================================
+   ATTRIBUTION
+===================================================== */
+
+.leaflet-control-attribution{
+    background:
+        rgba(0,8,10,.65)!important;
+
+    color:
+        rgba(180,255,255,.4)!important;
+
+    font-size:8px!important;
+
+    border-radius:
+        6px 0 0 0;
+}
+
+.leaflet-control-attribution a{
+    color:
+        rgba(150,240,255,.5)!important;
+}
+
+
+/* =====================================================
+   MARKER JARVIS
+===================================================== */
+
+.jarvis-marker{
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    border:
+        2px solid
+        #00ffff;
+
+    background:
+        rgba(0,255,255,.15);
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.8);
+
+    position:relative;
+}
+
+.jarvis-marker::after{
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:5px;
+    height:5px;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:#bfffff;
+
+    box-shadow:
+        0 0 8px #00ffff;
 }
 
 
@@ -506,12 +624,13 @@ body{
     height:38px;
 
     border:
-        1px solid rgba(0,255,255,.4);
+        1px solid
+        rgba(0,255,255,.4);
 
     border-radius:50%;
 
     background:
-        rgba(0,20,23,.85);
+        rgba(0,20,23,.8);
 
     color:
         rgba(200,255,255,.85);
@@ -536,7 +655,8 @@ body{
     border-color:#00ffff;
 
     box-shadow:
-        0 0 15px rgba(0,255,255,.25);
+        0 0 15px
+        rgba(0,255,255,.25);
 }
 
 
@@ -639,12 +759,7 @@ body{
 
 <div class="map-frame">
 
-    <iframe
-        id="mapFrame"
-        title="JARVIS Tactical Map"
-        allow="geolocation"
-        src="https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/?key=NmSlgtsAdQyEWy7t0OJf#10/45.5416/10.2118">
-    </iframe>
+    <div id="map"></div>
 
 </div>
 
@@ -652,7 +767,6 @@ body{
 <button
     id="closeMap"
     title="Chiudi mappa"
-    aria-label="Chiudi mappa"
 >
     ×
 </button>
@@ -667,19 +781,17 @@ body{
 <button
     id="micBtn"
     aria-label="Microfono"
-    type="button"
 >
     <span class="mic-icon"></span>
 </button>
 
-<button
-    id="sendBtn"
-    type="button"
->
+<button id="sendBtn">
     INVIA
 </button>
 
-</div><script type="importmap">
+</div><script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script><script type="importmap">
 
 {
     "imports":{
@@ -705,6 +817,14 @@ const MEMORY_KEY =
 
 const MAX_MEMORY =
     30;
+
+
+/* =====================================================
+   MAPTILER
+===================================================== */
+
+const MAPTILER_KEY =
+    "1NmSlgtsAdQyEWy7t0OJf";
 
 
 /* =====================================================
@@ -759,11 +879,6 @@ const closeMap =
 const jarvisTitle =
     document.getElementById(
         "jarvisTitle"
-    );
-
-const mapFrame =
-    document.getElementById(
-        "mapFrame"
     );
 
 
@@ -1237,6 +1352,7 @@ scene.add(
 let targetEnergy =
     .15;
 
+
 let energy =
     .15;
 
@@ -1440,4 +1556,1343 @@ function animate(){
                 time*2.1 +
                 theta*9 +
                 seed
-            )*.0
+            )*.08*energy;
+
+
+        z +=
+            Math.sin(
+                time*2.7 +
+                (theta+phi)*7
+            )*.10*energy;
+
+
+        pos[index] =
+            x;
+
+
+        pos[index+1] =
+            y;
+
+
+        pos[index+2] =
+            z;
+
+    }
+
+
+    geometry
+        .attributes
+        .position
+        .needsUpdate =
+            true;
+
+
+    particles.rotation.y +=
+        .0005 +
+        energy*.0008;
+
+
+    particles.rotation.x =
+        Math.sin(
+            time*.25
+        )*.04;
+
+
+    particles.rotation.z =
+        Math.cos(
+            time*.18
+        )*.025;
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+
+animate();
+
+
+/* =====================================================
+   MAPPA TATTICA
+===================================================== */
+
+let map = null;
+
+let currentMarker = null;
+
+
+/* =====================================================
+   INIZIALIZZA MAPPA
+===================================================== */
+
+function initializeMap(){
+
+    if(map){
+        return;
+    }
+
+
+    if(!MAPTILER_KEY){
+
+        console.error(
+            "API KEY MAPTILER NON INSERITA"
+        );
+
+
+        addMsg(
+            "API key MapTiler non configurata."
+        );
+
+
+        return;
+
+    }
+
+
+    map =
+        L.map(
+            "map",
+            {
+                zoomControl:false,
+                attributionControl:true,
+                minZoom:1,
+                maxZoom:19
+            }
+        );
+
+
+    map.setView(
+        [45.5416,10.2118],
+        10
+    );
+
+
+    /* =================================================
+       MAPTILER
+    ================================================= */
+
+    const mapTiles =
+        `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
+
+
+    L.tileLayer(
+        mapTiles,
+        {
+
+            tileSize:512,
+
+            zoomOffset:-1,
+
+            minZoom:1,
+
+            maxZoom:19,
+
+            attribution:
+                '&copy; MapTiler &copy; OpenStreetMap contributors',
+
+            crossOrigin:true
+
+        }
+    ).addTo(map);
+
+
+    setTimeout(
+        () => {
+
+            map.invalidateSize();
+
+        },
+        150
+    );
+
+}
+
+
+/* =====================================================
+   APERTURA MAPPA
+===================================================== */
+
+function openTacticalMap(){
+
+    tacticalMap.classList.add(
+        "active"
+    );
+
+
+    jarvisTitle.style.opacity =
+        "0";
+
+
+    initializeMap();
+
+
+    setTimeout(
+        () => {
+
+            if(map){
+
+                map.invalidateSize();
+
+            }
+
+        },
+        350
+    );
+
+}
+
+
+/* =====================================================
+   CHIUSURA MAPPA
+===================================================== */
+
+function closeTacticalMap(){
+
+    tacticalMap.classList.remove(
+        "active"
+    );
+
+
+    jarvisTitle.style.opacity =
+        "1";
+
+}
+
+
+closeMap.addEventListener(
+    "click",
+    closeTacticalMap
+);
+
+
+/* =====================================================
+   MARKER
+===================================================== */
+
+function createJarvisMarker(
+    lat,
+    lon,
+    name
+){
+
+    if(currentMarker){
+
+        map.removeLayer(
+            currentMarker
+        );
+
+    }
+
+
+    const icon =
+        L.divIcon({
+
+            className:"",
+
+            html:
+                '<div class="jarvis-marker"></div>',
+
+            iconSize:
+                [18,18],
+
+            iconAnchor:
+                [9,9]
+
+        });
+
+
+    currentMarker =
+        L.marker(
+            [lat,lon],
+            {
+                icon
+            }
+        )
+        .addTo(map);
+
+
+    currentMarker.bindPopup(
+        `<b style="color:#00ffff">${name}</b>`
+    );
+
+
+    currentMarker.openPopup();
+
+}
+
+
+/* =====================================================
+   RICERCA POSIZIONE
+===================================================== */
+
+async function searchLocation(
+    place
+){
+
+    try{
+
+        openTacticalMap();
+
+
+        addMsg(
+            "Ricerca posizione: " +
+            place
+        );
+
+
+        const url =
+            "https://nominatim.openstreetmap.org/search" +
+            "?format=json" +
+            "&limit=1" +
+            "&q=" +
+            encodeURIComponent(
+                place
+            );
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if(
+            !response.ok
+        ){
+
+            throw new Error(
+                "Ricerca posizione fallita"
+            );
+
+        }
+
+
+        const results =
+            await response.json();
+
+
+        if(
+            !results.length
+        ){
+
+            addMsg(
+                "Non riesco a trovare " +
+                place +
+                "."
+            );
+
+
+            return;
+
+        }
+
+
+        const result =
+            results[0];
+
+
+        const lat =
+            parseFloat(
+                result.lat
+            );
+
+
+        const lon =
+            parseFloat(
+                result.lon
+            );
+
+
+        map.flyTo(
+            [lat,lon],
+            12,
+            {
+                duration:1.8
+            }
+        );
+
+
+        createJarvisMarker(
+            lat,
+            lon,
+            place
+        );
+
+
+        addMsg(
+            "Posizione acquisita: " +
+            place
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "MAP ERROR:",
+            error
+        );
+
+
+        addMsg(
+            "Impossibile localizzare " +
+            place +
+            "."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   COMANDI MAPPA
+===================================================== */
+
+function handleMapCommand(
+    text
+){
+
+    const normalized =
+        text
+            .toLowerCase()
+            .trim();
+
+
+    if(
+
+        normalized.includes(
+            "apri la mappa"
+        ) ||
+
+        normalized.includes(
+            "apri mappa"
+        ) ||
+
+        normalized.includes(
+            "mappa tattica"
+        ) ||
+
+        normalized.includes(
+            "modalità tattica"
+        ) ||
+
+        normalized.includes(
+            "modalita tattica"
+        ) ||
+
+        normalized.includes(
+            "attiva la mappa"
+        )
+
+    ){
+
+        openTacticalMap();
+
+
+        addMsg(
+            "Mappa tattica attivata."
+        );
+
+
+        return true;
+
+    }
+
+
+    if(
+
+        normalized.includes(
+            "chiudi la mappa"
+        ) ||
+
+        normalized.includes(
+            "chiudi mappa"
+        ) ||
+
+        normalized.includes(
+            "esci dalla mappa"
+        ) ||
+
+        normalized.includes(
+            "torna alla modalità normale"
+        ) ||
+
+        normalized.includes(
+            "torna alla modalita normale"
+        )
+
+    ){
+
+        closeTacticalMap();
+
+
+        addMsg(
+            "Modalità tattica disattivata."
+        );
+
+
+        return true;
+
+    }
+
+
+    const patterns = [
+
+        "mostrami ",
+        "mostra ",
+        "vai a ",
+        "portami a ",
+        "localizza ",
+        "cerca ",
+        "visualizza "
+
+    ];
+
+
+    for(
+        const pattern of patterns
+    ){
+
+        if(
+            normalized.startsWith(
+                pattern
+            )
+        ){
+
+            const place =
+                text
+                    .trim()
+                    .substring(
+                        pattern.length
+                    )
+                    .trim();
+
+
+            if(
+                place.length > 1
+            ){
+
+                searchLocation(
+                    place
+                );
+
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =====================================================
+   MESSAGGIO
+===================================================== */
+
+function addMsg(
+    text
+){
+
+    chat.innerHTML =
+        "";
+
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.className =
+        "msg";
+
+
+    element.textContent =
+        text;
+
+
+    chat.appendChild(
+        element
+    );
+
+}
+
+
+/* =====================================================
+   CONTESTO TEMPORALE
+===================================================== */
+
+function getTimeData(){
+
+    const now =
+        new Date();
+
+
+    return {
+
+        currentTime:
+            now.toLocaleTimeString(
+                "it-IT",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit",
+                    second:"2-digit"
+                }
+            ),
+
+        currentDate:
+            now.toLocaleDateString(
+                "it-IT",
+                {
+                    day:"2-digit",
+                    month:"2-digit",
+                    year:"numeric"
+                }
+            ),
+
+        dayOfWeek:
+            now.toLocaleDateString(
+                "it-IT",
+                {
+                    weekday:"long"
+                }
+            ),
+
+        timezone:
+            Intl.DateTimeFormat()
+                .resolvedOptions()
+                .timeZone
+
+    };
+
+}
+
+
+/* =====================================================
+   PROCESS AI
+===================================================== */
+
+async function processAi(
+    text
+){
+
+    if(
+        handleMapCommand(
+            text
+        )
+    ){
+
+        return;
+
+    }
+
+
+    setState(
+        "thinking"
+    );
+
+
+    try{
+
+        const temporal =
+            getTimeData();
+
+
+        addMemory(
+            "user",
+            text
+        );
+
+
+        const response =
+            await fetch(
+                API,
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                text,
+
+                            memory:
+                                memory.slice(-4),
+
+                            currentTime:
+                                temporal.currentTime,
+
+                            currentDate:
+                                temporal.currentDate,
+
+                            dayOfWeek:
+                                temporal.dayOfWeek,
+
+                            timezone:
+                                temporal.timezone
+
+                        })
+
+                }
+            );
+
+
+        if(
+            !response.ok
+        ){
+
+            const errorText =
+                await response.text();
+
+
+            console.error(
+                "Worker:",
+                errorText
+            );
+
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        if(
+            !response.body
+        ){
+
+            throw new Error(
+                "Streaming non disponibile"
+            );
+
+        }
+
+
+        chat.innerHTML =
+            "";
+
+
+        const element =
+            document.createElement(
+                "div"
+            );
+
+
+        element.className =
+            "msg";
+
+
+        chat.appendChild(
+            element
+        );
+
+
+        const reader =
+            response.body.getReader();
+
+
+        const decoder =
+            new TextDecoder();
+
+
+        let buffer =
+            "";
+
+
+        let reply =
+            "";
+
+
+        while(true){
+
+            const {
+                value,
+                done
+            } =
+                await reader.read();
+
+
+            if(done){
+                break;
+            }
+
+
+            buffer +=
+                decoder.decode(
+                    value,
+                    {
+                        stream:true
+                    }
+                );
+
+
+            const lines =
+                buffer.split(
+                    "\n"
+                );
+
+
+            buffer =
+                lines.pop() || "";
+
+
+            for(
+                const line of lines
+            ){
+
+                const trimmed =
+                    line.trim();
+
+
+                if(
+                    !trimmed
+                ){
+                    continue;
+                }
+
+
+                if(
+                    !trimmed.startsWith(
+                        "data:"
+                    )
+                ){
+                    continue;
+                }
+
+
+                const raw =
+                    trimmed
+                        .substring(5)
+                        .trim();
+
+
+                if(
+                    !raw ||
+                    raw === "[DONE]"
+                ){
+                    continue;
+                }
+
+
+                try{
+
+                    const json =
+                        JSON.parse(
+                            raw
+                        );
+
+
+                    let piece =
+                        "";
+
+
+                    if(
+                        typeof json.response ===
+                        "string"
+                    ){
+
+                        piece =
+                            json.response;
+
+                    }
+
+                    else if(
+                        json.choices &&
+                        json.choices[0]
+                    ){
+
+                        const choice =
+                            json.choices[0];
+
+
+                        if(
+                            choice.delta &&
+                            typeof choice.delta.content ===
+                            "string"
+                        ){
+
+                            piece =
+                                choice.delta.content;
+
+                        }
+
+                        else if(
+                            choice.message &&
+                            typeof choice.message.content ===
+                            "string"
+                        ){
+
+                            piece =
+                                choice.message.content;
+
+                        }
+
+                        else if(
+                            typeof choice.text ===
+                            "string"
+                        ){
+
+                            piece =
+                                choice.text;
+
+                        }
+
+                    }
+
+
+                    if(piece){
+
+                        reply +=
+                            piece;
+
+
+                        element.textContent =
+                            reply;
+
+
+                        setState(
+                            "speaking"
+                        );
+
+                    }
+
+
+                }catch(error){
+
+                    console.warn(
+                        "Stream JSON:",
+                        raw
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        reply =
+            reply.trim();
+
+
+        if(
+            !reply
+        ){
+
+            throw new Error(
+                "Risposta AI vuota"
+            );
+
+        }
+
+
+        addMemory(
+            "assistant",
+            reply
+        );
+
+
+        speak(
+            reply
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "JARVIS ERROR:",
+            error
+        );
+
+
+        addMsg(
+            "ERRORE: " +
+            error.message
+        );
+
+
+        setState(
+            "idle"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   INVIO
+===================================================== */
+
+function sendMessage(){
+
+    const text =
+        textInput.value.trim();
+
+
+    if(
+        !text
+    ){
+        return;
+    }
+
+
+    textInput.value =
+        "";
+
+
+    addMsg(
+        text
+    );
+
+
+    processAi(
+        text
+    );
+
+}
+
+
+sendBtn.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+textInput.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   VOCE
+===================================================== */
+
+function speak(
+    text
+){
+
+    if(
+        !window.speechSynthesis
+    ){
+
+        setState(
+            "idle"
+        );
+
+        return;
+
+    }
+
+
+    speechSynthesis.cancel();
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    utterance.lang =
+        "it-IT";
+
+
+    utterance.rate =
+        .95;
+
+
+    utterance.pitch =
+        .85;
+
+
+    utterance.onstart =
+        () => {
+
+            setState(
+                "speaking"
+            );
+
+        };
+
+
+    utterance.onend =
+        () => {
+
+            setState(
+                "idle"
+            );
+
+        };
+
+
+    utterance.onerror =
+        () => {
+
+            setState(
+                "idle"
+            );
+
+        };
+
+
+    speechSynthesis.speak(
+        utterance
+    );
+
+}
+
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+let recognition =
+    null;
+
+
+let listening =
+    false;
+
+
+if(
+    Recognition
+){
+
+    recognition =
+        new Recognition();
+
+
+    recognition.lang =
+        "it-IT";
+
+
+    recognition.continuous =
+        false;
+
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.onstart =
+        () => {
+
+            listening =
+                true;
+
+
+            micBtn.classList.add(
+                "active"
+            );
+
+
+            setState(
+                "listening"
+            );
+
+        };
+
+
+    recognition.onresult =
+        event => {
+
+            const text =
+                event
+                    .results[0][0]
+                    .transcript
+                    .trim();
+
+
+            if(text){
+
+                textInput.value =
+                    text;
+
+
+                sendMessage();
+
+            }
+
+        };
+
+
+    recognition.onerror =
+        error => {
+
+            console.error(
+                "Microfono:",
+                error
+            );
+
+
+            listening =
+                false;
+
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+
+            setState(
+                "idle"
+            );
+
+        };
+
+
+    recognition.onend =
+        () => {
+
+            listening =
+                false;
+
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+        };
+
+
+    micBtn.addEventListener(
+        "click",
+        () => {
+
+            if(listening){
+
+                recognition.stop();
+
+            }else{
+
+                try{
+
+                    recognition.start();
+
+                }catch(error){
+
+                    console.warn(
+                        error
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+}else{
+
+    micBtn.style.opacity =
+        ".3";
+
+}
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+
+        if(map){
+
+            map.invalidateSize();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   CANCELLA MEMORIA
+===================================================== */
+
+window.clearJarvisMemory =
+    function(){
+
+        memory =
+            [];
+
+
+        localStorage.removeItem(
+            MEMORY_KEY
+        );
+
+
+        console.log(
+            "Memoria JARVIS cancellata."
+        );
+
+    };
+
+
+/* =====================================================
+   AVVIO
+===================================================== */
+
+setState(
+    "idle"
+);
+
+</script></body></html>

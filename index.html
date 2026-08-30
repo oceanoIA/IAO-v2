@@ -15,6 +15,7 @@
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
+
 <style>
 
 /* =====================================================
@@ -29,14 +30,20 @@
 
 html,
 body{
+
     width:100%;
     height:100%;
+
     overflow:hidden;
+
     background:#010405;
+
     font-family:Arial,sans-serif;
 }
 
+
 body{
+
     background:
         radial-gradient(
             circle at center,
@@ -48,12 +55,14 @@ body{
 
 
 /* =====================================================
-   THREE.JS
+   WEBGL
 ===================================================== */
 
 #webgl-container{
+
     position:fixed;
     inset:0;
+
     z-index:1;
 }
 
@@ -63,9 +72,12 @@ body{
 ===================================================== */
 
 .vignette{
+
     position:fixed;
     inset:0;
+
     z-index:3;
+
     pointer-events:none;
 
     background:
@@ -83,9 +95,11 @@ body{
 ===================================================== */
 
 .jarvis-title{
+
     position:fixed;
 
     top:2.4%;
+
     left:50%;
 
     transform:translateX(-50%);
@@ -109,17 +123,15 @@ body{
         rgba(255,255,255,.12);
 
     pointer-events:none;
-
-    transition:
-        opacity .35s ease;
 }
 
 
 /* =====================================================
-   DATA E ORA
+   ORA
 ===================================================== */
 
 .datetime{
+
     position:fixed;
 
     top:18px;
@@ -141,6 +153,7 @@ body{
 }
 
 .time{
+
     color:rgba(150,255,255,.6);
 
     font-size:11px;
@@ -153,6 +166,7 @@ body{
 }
 
 .date{
+
     color:rgba(150,255,255,.38);
 
     font-size:8px;
@@ -166,6 +180,7 @@ body{
 ===================================================== */
 
 #chat{
+
     position:fixed;
 
     left:50%;
@@ -180,12 +195,10 @@ body{
     text-align:center;
 
     pointer-events:none;
-
-    transition:
-        opacity .3s ease;
 }
 
 .msg{
+
     display:inline-block;
 
     max-width:100%;
@@ -220,6 +233,7 @@ body{
 ===================================================== */
 
 .command-wrapper{
+
     position:fixed;
 
     left:50%;
@@ -235,8 +249,7 @@ body{
 
     align-items:center;
 
-    padding:
-        6px 7px 6px 20px;
+    padding:6px 7px 6px 20px;
 
     border:
         1px solid
@@ -253,12 +266,10 @@ body{
     box-shadow:
         0 0 30px
         rgba(0,255,255,.05);
-
-    transition:
-        opacity .3s ease;
 }
 
 .command-wrapper:focus-within{
+
     border-color:
         rgba(0,255,255,.6);
 
@@ -268,11 +279,13 @@ body{
 }
 
 #textInput{
+
     flex:1;
 
     min-width:0;
 
     border:none;
+
     outline:none;
 
     background:transparent;
@@ -287,6 +300,7 @@ body{
 }
 
 #textInput::placeholder{
+
     color:rgba(255,255,255,.3);
 }
 
@@ -296,6 +310,7 @@ body{
 ===================================================== */
 
 #micBtn{
+
     width:34px;
     height:34px;
 
@@ -316,6 +331,7 @@ body{
 }
 
 .mic-icon{
+
     width:8px;
     height:14px;
 
@@ -329,6 +345,7 @@ body{
 }
 
 .mic-icon::after{
+
     content:"";
 
     position:absolute;
@@ -352,15 +369,13 @@ body{
 }
 
 #micBtn:hover{
+
     color:#00ffff;
 }
 
 #micBtn.active{
-    color:#8fffff;
 
-    text-shadow:
-        0 0 10px
-        rgba(0,255,255,.7);
+    color:#8fffff;
 }
 
 
@@ -369,6 +384,7 @@ body{
 ===================================================== */
 
 #sendBtn{
+
     height:39px;
 
     padding:0 17px;
@@ -390,21 +406,16 @@ body{
     letter-spacing:2px;
 
     cursor:pointer;
-
-    transition:.2s ease;
 }
 
 #sendBtn:hover{
+
     color:white;
 
     border-color:#00ffff;
 
     background:
         rgba(0,255,255,.1);
-
-    box-shadow:
-        0 0 15px
-        rgba(0,255,255,.12);
 }
 
 
@@ -413,6 +424,7 @@ body{
 ===================================================== */
 
 #tacticalMap{
+
     position:fixed;
 
     inset:0;
@@ -424,30 +436,39 @@ body{
     background:
         radial-gradient(
             circle at center,
-            #071519 0%,
-            #020708 55%,
+            #081719 0%,
+            #020708 65%,
             #000000 100%
         );
-
-    overflow:hidden;
 }
 
+
+/* =====================================================
+   MAPPA ATTIVA
+===================================================== */
+
 #tacticalMap.active{
+
     display:block;
 
     animation:
         mapIn .45s ease;
 }
 
+
 @keyframes mapIn{
 
     from{
+
         opacity:0;
+
         transform:scale(1.015);
     }
 
     to{
+
         opacity:1;
+
         transform:scale(1);
     }
 }
@@ -457,37 +478,37 @@ body{
    TITOLO TACTICAL MAP
 ===================================================== */
 
-.tactical-title{
+.map-header{
+
     position:absolute;
 
-    top:2.7%;
+    top:2.4%;
+
     left:50%;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
-    z-index:530;
+    z-index:600;
 
     color:
         rgba(220,255,255,.9);
 
-    font-family:monospace;
+    font-family:Arial,sans-serif;
 
     font-size:
-        clamp(26px,5vw,58px);
+        clamp(24px,4vw,42px);
 
     font-weight:300;
 
     letter-spacing:
-        clamp(6px,1.5vw,14px);
+        clamp(6px,1.3vw,12px);
 
     white-space:nowrap;
 
     text-shadow:
-        0 0 10px
-        rgba(0,255,255,.35),
-
-        0 0 30px
-        rgba(0,255,255,.15);
+        0 0 12px
+        rgba(0,255,255,.25);
 
     pointer-events:none;
 }
@@ -497,89 +518,143 @@ body{
    CONTENITORE MAPPA
 ===================================================== */
 
-.map-frame{
+#map{
+
     position:absolute;
 
-    top:2cm;
-    left:2cm;
-    right:2cm;
-    bottom:2cm;
+    top:20px;
+    right:20px;
+    bottom:20px;
+    left:20px;
+
+    width:auto;
+    height:auto;
 
     overflow:hidden;
 
     border-radius:28px;
 
-    background:#071014;
+    background:#071012;
+
+    box-shadow:
+        0 0 35px rgba(0,0,0,.65),
+        0 0 70px rgba(0,255,255,.035);
 
     border:
         1px solid
-        rgba(0,255,255,.22);
-
-    box-shadow:
-
-        0 0 30px
-        rgba(0,0,0,.55),
-
-        0 0 60px
-        rgba(0,255,255,.05),
-
-        inset 0 0 35px
-        rgba(0,255,255,.035);
-
-    z-index:100;
+        rgba(0,255,255,.10);
 }
 
 
 /* =====================================================
-   MAPPA LEAFLET
+   NESSUN FILTRO SULLA MAPPA
 ===================================================== */
 
-#map{
+.map-filter{
+
+    display:none;
+}
+
+
+/* =====================================================
+   NESSUNA LINEA DI SCANSIONE
+===================================================== */
+
+.scan-line{
+
+    display:none;
+}
+
+
+/* =====================================================
+   NESSUNA CORNICE HUD
+===================================================== */
+
+.map-corner{
+
+    display:none;
+}
+
+
+/* =====================================================
+   CHIUDI MAPPA
+===================================================== */
+
+#closeMap{
+
     position:absolute;
 
-    inset:0;
+    top:28px;
+    left:34px;
 
-    width:100%;
-    height:100%;
+    z-index:700;
 
-    background:#071014;
+    width:38px;
+    height:38px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.35);
+
+    border-radius:50%;
+
+    background:
+        rgba(0,15,18,.85);
+
+    color:
+        rgba(200,255,255,.85);
+
+    cursor:pointer;
+
+    font-size:19px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    backdrop-filter:blur(10px);
+
+    transition:.2s;
 }
 
-#map .leaflet-tile{
-    filter:none !important;
+#closeMap:hover{
+
+    color:white;
+
+    border-color:#00ffff;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.3);
 }
 
-.leaflet-container{
-    background:#071014 !important;
 
-    font-family:Arial,sans-serif;
-}
+/* =====================================================
+   LEAFLET
+===================================================== */
 
 .leaflet-control-zoom{
+
     display:none !important;
 }
 
 
-/* =====================================================
-   ATTRIBUTION
-===================================================== */
-
 .leaflet-control-attribution{
+
     background:
         rgba(0,8,10,.65)!important;
 
     color:
-        rgba(180,255,255,.4)!important;
+        rgba(180,255,255,.35)!important;
 
     font-size:8px!important;
-
-    border-radius:
-        6px 0 0 0;
 }
 
 .leaflet-control-attribution a{
+
     color:
-        rgba(150,240,255,.5)!important;
+        rgba(150,240,255,.45)!important;
 }
 
 
@@ -588,6 +663,7 @@ body{
 ===================================================== */
 
 .jarvis-marker{
+
     width:18px;
     height:18px;
 
@@ -601,21 +677,14 @@ body{
         rgba(0,255,255,.15);
 
     box-shadow:
-        0 0 8px
-        rgba(0,255,255,.9),
-
-        0 0 20px
-        rgba(0,255,255,.55);
+        0 0 15px
+        rgba(0,255,255,.8);
 
     position:relative;
-
-    animation:
-        markerPulse 1.5s
-        ease-in-out
-        infinite;
 }
 
 .jarvis-marker::after{
+
     content:"";
 
     position:absolute;
@@ -637,280 +706,6 @@ body{
         0 0 8px #00ffff;
 }
 
-@keyframes markerPulse{
-
-    0%,
-    100%{
-        transform:scale(1);
-        opacity:.85;
-    }
-
-    50%{
-        transform:scale(1.35);
-        opacity:1;
-    }
-}
-
-
-/* =====================================================
-   PULSANTE CHIUDI
-===================================================== */
-
-#closeMap{
-    position:absolute;
-
-    top:calc(2cm + 18px);
-    left:calc(2cm + 18px);
-
-    z-index:550;
-
-    width:38px;
-    height:38px;
-
-    border:
-        1px solid
-        rgba(0,255,255,.4);
-
-    border-radius:50%;
-
-    background:
-        rgba(0,20,23,.85);
-
-    color:
-        rgba(200,255,255,.85);
-
-    cursor:pointer;
-
-    font-size:20px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-
-    transition:.2s ease;
-}
-
-#closeMap:hover{
-    color:white;
-
-    border-color:#00ffff;
-
-    box-shadow:
-        0 0 15px
-        rgba(0,255,255,.25);
-}
-
-
-/* =====================================================
-   HUD TATTICO
-===================================================== */
-
-.map-hud{
-    position:absolute;
-
-    inset:0;
-
-    z-index:400;
-
-    pointer-events:none;
-}
-
-
-/* =====================================================
-   GRIGLIA HUD
-===================================================== */
-
-.map-hud::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background-image:
-
-        linear-gradient(
-            rgba(0,255,255,.055) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(0,255,255,.055) 1px,
-            transparent 1px
-        );
-
-    background-size:
-        50px 50px;
-
-    mix-blend-mode:screen;
-
-    opacity:.5;
-}
-
-
-/* =====================================================
-   VIGNETTE MAPPA
-===================================================== */
-
-.map-hud::after{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-        radial-gradient(
-            circle at center,
-            transparent 45%,
-            rgba(0,0,0,.12) 70%,
-            rgba(0,0,0,.5) 100%
-        );
-}
-
-
-/* =====================================================
-   SCANNER
-===================================================== */
-
-.scan-line{
-
-    position:absolute;
-
-    left:0;
-    right:0;
-
-    top:-10%;
-
-    height:2px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(0,255,255,.0),
-            rgba(0,255,255,.55),
-            rgba(0,255,255,.0),
-            transparent
-        );
-
-    box-shadow:
-        0 0 15px
-        rgba(0,255,255,.35);
-
-    animation:
-        scanMove 5s
-        linear
-        infinite;
-}
-
-@keyframes scanMove{
-
-    0%{
-        top:-10%;
-        opacity:0;
-    }
-
-    10%{
-        opacity:1;
-    }
-
-    90%{
-        opacity:1;
-    }
-
-    100%{
-        top:110%;
-        opacity:0;
-    }
-}
-
-
-/* =====================================================
-   ANGOLI HUD
-===================================================== */
-
-.hud-corner{
-    position:absolute;
-
-    width:55px;
-    height:55px;
-
-    border-color:
-        rgba(0,255,255,.55);
-
-    border-style:solid;
-}
-
-.hud-tl{
-    top:18px;
-    left:18px;
-
-    border-width:2px 0 0 2px;
-}
-
-.hud-tr{
-    top:18px;
-    right:18px;
-
-    border-width:2px 2px 0 0;
-}
-
-.hud-bl{
-    bottom:18px;
-    left:18px;
-
-    border-width:0 0 2px 2px;
-}
-
-.hud-br{
-    bottom:18px;
-    right:18px;
-
-    border-width:0 2px 2px 0;
-}
-
-
-/* =====================================================
-   INFO TATTICA
-===================================================== */
-
-.tactical-info{
-
-    position:absolute;
-
-    top:22px;
-    right:25px;
-
-    z-index:450;
-
-    color:
-        rgba(180,255,255,.65);
-
-    font-family:monospace;
-
-    font-size:9px;
-
-    letter-spacing:1.5px;
-
-    text-align:right;
-
-    line-height:1.7;
-
-    pointer-events:none;
-
-    text-shadow:
-        0 0 8px
-        rgba(0,255,255,.2);
-}
-
 
 /* =====================================================
    MOBILE
@@ -919,6 +714,7 @@ body{
 @media(max-width:600px){
 
     .jarvis-title{
+
         top:2.2%;
 
         font-size:23px;
@@ -926,100 +722,113 @@ body{
         letter-spacing:5px;
     }
 
+
     .datetime{
+
         top:12px;
+
         right:13px;
     }
 
+
     .time{
+
         font-size:10px;
     }
 
+
     .date{
+
         font-size:7px;
     }
 
+
     .command-wrapper{
+
         width:
             calc(100% - 24px);
 
         bottom:17px;
     }
 
+
     #textInput{
+
         font-size:13px;
     }
 
+
     #chat{
+
         bottom:80px;
     }
 
 
-    /* MAPPA MOBILE */
+    #map{
 
-    .map-frame{
-        top:75px;
-        left:14px;
-        right:14px;
-        bottom:14px;
+        top:15px;
+        right:15px;
+        bottom:15px;
+        left:15px;
 
         border-radius:22px;
     }
 
-    .tactical-title{
-        top:18px;
 
-        font-size:27px;
+    .map-header{
+
+        top:2.5%;
+
+        font-size:23px;
 
         letter-spacing:5px;
     }
 
+
     #closeMap{
-        top:88px;
-        left:27px;
+
+        top:24px;
+        left:25px;
 
         width:34px;
         height:34px;
-
-        font-size:18px;
-    }
-
-    .tactical-info{
-        top:88px;
-        right:22px;
-
-        font-size:7px;
-    }
-
-    .hud-corner{
-        width:35px;
-        height:35px;
-    }
-
-    .hud-corner{
-        opacity:.7;
     }
 
 }
 
 
 /* =====================================================
-   MODALITÀ TATTICA
+   POPUP LEAFLET
 ===================================================== */
 
-body.tactical-active #chat{
-    opacity:0;
+.leaflet-popup-content-wrapper{
+
+    background:
+        rgba(3,15,18,.95);
+
+    color:
+        rgba(220,255,255,.9);
+
+    border:
+        1px solid
+        rgba(0,255,255,.25);
 }
 
-body.tactical-active .command-wrapper{
-    opacity:0;
+.leaflet-popup-tip{
 
-    pointer-events:none;
+    background:
+        rgba(3,15,18,.95);
 }
 
-body.tactical-active .datetime{
-    z-index:540;
+.leaflet-popup-close-button{
+
+    color:#00ffff!important;
 }
+
+
+/* =====================================================
+   FINE CSS
+===================================================== */
 
 </style>
 
@@ -1030,25 +839,19 @@ body.tactical-active .datetime{
 
 
 <!-- =====================================================
-     SFONDO JARVIS
+     WEBGL
 ===================================================== -->
 
 <div id="webgl-container"></div>
 
-<div class="vignette">
-
-
-</div>
+<div class="vignette"></div>
 
 
 <!-- =====================================================
-     TITOLO NORMALE
+     TITOLO
 ===================================================== -->
 
-<div
-    id="jarvisTitle"
-    class="jarvis-title"
->
+<div class="jarvis-title" id="jarvisTitle">
     J.A.R.V.I.S
 </div>
 
@@ -1059,17 +862,11 @@ body.tactical-active .datetime{
 
 <div class="datetime">
 
-    <div
-        id="clock"
-        class="time"
-    >
+    <div id="clock" class="time">
         00:00:00
     </div>
 
-    <div
-        id="date"
-        class="date"
-    >
+    <div id="date" class="date">
         00 AGO 2026
     </div>
 
@@ -1083,40 +880,24 @@ body.tactical-active .datetime{
 <div id="tacticalMap">
 
 
-    <div class="tactical-title">
-        TACTICAL MAP
+    <div
+        id="map">
     </div>
 
 
-    <div class="map-frame">
+    <div class="map-filter"></div>
 
-        <div id="map"></div>
-
-
-        <div class="map-hud">
-
-            <div class="scan-line"></div>
-
-            <div class="hud-corner hud-tl"></div>
-
-            <div class="hud-corner hud-tr"></div>
-
-            <div class="hud-corner hud-bl"></div>
-
-            <div class="hud-corner hud-br"></div>
-
-        </div>
+    <div class="scan-line"></div>
 
 
-        <div class="tactical-info">
+    <div class="map-corner corner-tl"></div>
+    <div class="map-corner corner-tr"></div>
+    <div class="map-corner corner-bl"></div>
+    <div class="map-corner corner-br"></div>
 
-            J.A.R.V.I.S SYSTEM<br>
-            TACTICAL NAVIGATION<br>
-            MAP STATUS: ONLINE<br>
-            SENSOR: ACTIVE
 
-        </div>
-
+    <div class="map-header">
+        TACTICAL MAP
     </div>
 
 
@@ -1163,9 +944,7 @@ body.tactical-active .datetime{
 
 
     <button id="sendBtn">
-
         INVIA
-
     </button>
 
 </div>
@@ -1181,7 +960,7 @@ body.tactical-active .datetime{
 
 
 <!-- =====================================================
-     THREE IMPORTMAP
+     THREE
 ===================================================== -->
 
 <script type="importmap">
@@ -1208,26 +987,31 @@ import * as THREE from "three";
 const API =
     "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
+
 const MEMORY_KEY =
     "jarvis_memory_v1";
+
 
 const MAX_MEMORY =
     30;
 
 
-/* =====================================================
-   MAPTILER
-===================================================== */
-
 /*
-   IMPORTANTE:
-   INSERISCI QUI LA TUA NUOVA API KEY MAPTILER.
+=====================================================
+MAPTILER
+=====================================================
 
-   NON USARE LA VECCHIA CHIAVE CHE HAI CONDIVISO.
+INSERISCI QUI LA TUA API KEY MAPTILER.
+
+Esempio:
+
+const MAPTILER_KEY =
+    "la-tua-api-key";
+
 */
 
 const MAPTILER_KEY =
-    "INSERISCI_LA_TUA_NUOVA_API_KEY";
+    "INSERISCI_LA_TUA_API_KEY";
 
 
 /* =====================================================
@@ -1239,49 +1023,64 @@ const container =
         "webgl-container"
     );
 
+
 const chat =
     document.getElementById(
         "chat"
     );
+
 
 const textInput =
     document.getElementById(
         "textInput"
     );
 
+
 const sendBtn =
     document.getElementById(
         "sendBtn"
     );
+
 
 const micBtn =
     document.getElementById(
         "micBtn"
     );
 
+
 const clock =
     document.getElementById(
         "clock"
     );
+
 
 const date =
     document.getElementById(
         "date"
     );
 
+
 const tacticalMap =
     document.getElementById(
         "tacticalMap"
     );
+
 
 const closeMap =
     document.getElementById(
         "closeMap"
     );
 
+
 const jarvisTitle =
     document.getElementById(
         "jarvisTitle"
+    );
+
+
+const mapHeader =
+    document.querySelector(
+        ".map-header"
     );
 
 
@@ -1303,9 +1102,7 @@ try{
     if(saved){
 
         const parsed =
-            JSON.parse(
-                saved
-            );
+            JSON.parse(saved);
 
 
         if(
@@ -1362,10 +1159,8 @@ function addMemory(
 ){
 
     memory.push({
-
         role,
         content
-
     });
 
 
@@ -1411,28 +1206,19 @@ function updateClock(){
     const h =
         String(
             now.getHours()
-        ).padStart(
-            2,
-            "0"
-        );
+        ).padStart(2,"0");
 
 
     const m =
         String(
             now.getMinutes()
-        ).padStart(
-            2,
-            "0"
-        );
+        ).padStart(2,"0");
 
 
     const s =
         String(
             now.getSeconds()
-        ).padStart(
-            2,
-            "0"
-        );
+        ).padStart(2,"0");
 
 
     clock.textContent =
@@ -1442,10 +1228,7 @@ function updateClock(){
     const d =
         String(
             now.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
+        ).padStart(2,"0");
 
 
     const month =
@@ -1483,16 +1266,11 @@ const scene =
 
 const camera =
     new THREE.PerspectiveCamera(
-
         55,
-
         window.innerWidth /
         window.innerHeight,
-
         .1,
-
         1000
-
     );
 
 
@@ -1504,28 +1282,22 @@ const renderer =
     new THREE.WebGLRenderer({
 
         antialias:true,
-
         alpha:true
 
     });
 
 
 renderer.setSize(
-
     window.innerWidth,
-
     window.innerHeight
-
 );
 
 
 renderer.setPixelRatio(
-
     Math.min(
         window.devicePixelRatio,
         2
     )
-
 );
 
 
@@ -1546,12 +1318,8 @@ function createGlow(){
         );
 
 
-    canvas.width =
-        64;
-
-
-    canvas.height =
-        64;
+    canvas.width = 64;
+    canvas.height = 64;
 
 
     const ctx =
@@ -1562,15 +1330,12 @@ function createGlow(){
 
     const gradient =
         ctx.createRadialGradient(
-
             32,
             32,
             0,
-
             32,
             32,
             32
-
         );
 
 
@@ -1660,14 +1425,14 @@ const seeds =
 
 
 for(
-    let i = 0;
-    i < COUNT;
+    let i=0;
+    i<COUNT;
     i++
 ){
 
     const r =
         1.10 +
-        Math.random() * .70;
+        Math.random()*.70;
 
 
     const theta =
@@ -1678,7 +1443,7 @@ for(
 
     const phi =
         Math.acos(
-            2 * Math.random() - 1
+            2*Math.random()-1
         );
 
 
@@ -1686,31 +1451,31 @@ for(
         r;
 
 
-    angles[i * 2] =
+    angles[i*2] =
         theta;
 
 
-    angles[i * 2 + 1] =
+    angles[i*2+1] =
         phi;
 
 
     seeds[i] =
-        Math.random() * 100;
+        Math.random()*100;
 
 
-    positions[i * 3] =
+    positions[i*3] =
         r *
         Math.sin(phi) *
         Math.cos(theta);
 
 
-    positions[i * 3 + 1] =
+    positions[i*3+1] =
         r *
         Math.sin(phi) *
         Math.sin(theta);
 
 
-    positions[i * 3 + 2] =
+    positions[i*3+2] =
         r *
         Math.cos(phi);
 
@@ -1718,14 +1483,11 @@ for(
 
 
 geometry.setAttribute(
-
     "position",
-
     new THREE.BufferAttribute(
         positions,
         3
     )
-
 );
 
 
@@ -1737,11 +1499,9 @@ const material =
                 0x00cfe8
             ),
 
-        size:
-            .034,
+        size:.034,
 
-        map:
-            createGlow(),
+        map:createGlow(),
 
         transparent:true,
 
@@ -1803,8 +1563,7 @@ function setState(
         state === "thinking"
     ){
 
-        targetEnergy =
-            1;
+        targetEnergy = 1;
 
     }
 
@@ -1812,8 +1571,7 @@ function setState(
         state === "speaking"
     ){
 
-        targetEnergy =
-            .8;
+        targetEnergy = .8;
 
     }
 
@@ -1821,15 +1579,13 @@ function setState(
         state === "listening"
     ){
 
-        targetEnergy =
-            .55;
+        targetEnergy = .55;
 
     }
 
     else{
 
-        targetEnergy =
-            .15;
+        targetEnergy = .15;
 
     }
 
@@ -1848,21 +1604,19 @@ function animate(){
 
 
     const time =
-        performance.now() *
-        .001;
+        performance.now()*.001;
 
 
     energy +=
         (
             targetEnergy -
             energy
-        ) *
-        .045;
+        )*.045;
 
 
     currentColor.lerp(
         activeColor,
-        energy * .04
+        energy*.04
     );
 
 
@@ -1884,7 +1638,7 @@ function animate(){
 
     material.size =
         .032 +
-        energy * .008;
+        energy*.008;
 
 
     const pos =
@@ -1895,13 +1649,13 @@ function animate(){
 
 
     for(
-        let i = 0;
-        i < COUNT;
+        let i=0;
+        i<COUNT;
         i++
     ){
 
         const index =
-            i * 3;
+            i*3;
 
 
         const r =
@@ -1909,11 +1663,11 @@ function animate(){
 
 
         const theta =
-            angles[i * 2];
+            angles[i*2];
 
 
         const phi =
-            angles[i * 2 + 1];
+            angles[i*2+1];
 
 
         const seed =
@@ -1922,29 +1676,25 @@ function animate(){
 
         const pulse =
             Math.sin(
-                time * 2 +
+                time*2 +
                 seed
-            ) * .035;
+            )*.035;
 
 
         const strangeShape =
             Math.sin(
-                theta * 6 +
-                time * 2 +
+                theta*6 +
+                time*2 +
                 seed
-            ) *
-            .18 *
-            energy;
+            )*.18*energy;
 
 
         const wave =
             Math.cos(
-                phi * 7 -
-                time * 1.8 +
+                phi*7 -
+                time*1.8 +
                 seed
-            ) *
-            .12 *
-            energy;
+            )*.12*energy;
 
 
         const rr =
@@ -1973,42 +1723,36 @@ function animate(){
 
         x +=
             Math.sin(
-                time * 2.4 +
-                phi * 8 +
+                time*2.4 +
+                phi*8 +
                 seed
-            ) *
-            .08 *
-            energy;
+            )*.08*energy;
 
 
         y +=
             Math.cos(
-                time * 2.1 +
-                theta * 9 +
+                time*2.1 +
+                theta*9 +
                 seed
-            ) *
-            .08 *
-            energy;
+            )*.08*energy;
 
 
         z +=
             Math.sin(
-                time * 2.7 +
-                (theta + phi) * 7
-            ) *
-            .10 *
-            energy;
+                time*2.7 +
+                (theta+phi)*7
+            )*.10*energy;
 
 
         pos[index] =
             x;
 
 
-        pos[index + 1] =
+        pos[index+1] =
             y;
 
 
-        pos[index + 2] =
+        pos[index+2] =
             z;
 
     }
@@ -2023,21 +1767,19 @@ function animate(){
 
     particles.rotation.y +=
         .0005 +
-        energy * .0008;
+        energy*.0008;
 
 
     particles.rotation.x =
         Math.sin(
-            time * .25
-        ) *
-        .04;
+            time*.25
+        )*.04;
 
 
     particles.rotation.z =
         Math.cos(
-            time * .18
-        ) *
-        .025;
+            time*.18
+        )*.025;
 
 
     renderer.render(
@@ -2055,67 +1797,16 @@ animate();
    MAPPA TATTICA
 ===================================================== */
 
-let map =
-    null;
+let map = null;
 
+let currentMarker = null;
 
-let currentMarker =
-    null;
-
-
-/* =====================================================
-   CONTROLLO API KEY
-===================================================== */
-
-function hasValidMapKey(){
-
-    return (
-
-        typeof MAPTILER_KEY ===
-        "string"
-
-        &&
-
-        MAPTILER_KEY.trim().length > 10
-
-        &&
-
-        MAPTILER_KEY !==
-        "INSERISCI_LA_TUA_NUOVA_API_KEY"
-
-    );
-
-}
-
-
-/* =====================================================
-   INIZIALIZZA MAPPA
-===================================================== */
 
 function initializeMap(){
 
     if(map){
 
-        return true;
-
-    }
-
-
-    if(
-        !hasValidMapKey()
-    ){
-
-        console.error(
-            "API KEY MAPTILER NON CONFIGURATA"
-        );
-
-
-        addMsg(
-            "API key MapTiler non configurata."
-        );
-
-
-        return false;
+        return;
 
     }
 
@@ -2129,80 +1820,59 @@ function initializeMap(){
 
                 attributionControl:true,
 
-                minZoom:1,
+                zoomAnimation:true,
 
-                maxZoom:19,
-
-                worldCopyJump:true
+                fadeAnimation:true
 
             }
         );
 
 
     map.setView(
-
-        [
-            45.5416,
-            10.2118
-        ],
-
+        [45.5416,10.2118],
         10
-
     );
 
 
-    /* =================================================
-       MAPTILER
-    ================================================= */
+    /*
+    =====================================================
+    MAPTILER DARK
+    =====================================================
+    */
 
-    const mapTiles =
-        `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
+    const mapTilerUrl =
+        "https://api.maptiler.com/maps/streets-v2-dark/{z}/{x}/{y}.png?key="
+        +
+        MAPTILER_KEY;
 
 
     L.tileLayer(
-
-        mapTiles,
-
+        mapTilerUrl,
         {
 
             tileSize:512,
 
             zoomOffset:-1,
 
-            minZoom:1,
-
-            maxZoom:19,
+            maxZoom:20,
 
             attribution:
-                '&copy; MapTiler &copy; OpenStreetMap contributors',
-
-            crossOrigin:true
+                '&copy; MapTiler &copy; OpenStreetMap contributors'
 
         }
-
     ).addTo(
         map
     );
 
 
     setTimeout(
-
         () => {
 
-            if(map){
-
-                map.invalidateSize();
-
-            }
+            map.invalidateSize();
 
         },
-
-        200
-
+        150
     );
-
-
-    return true;
 
 }
 
@@ -2213,36 +1883,32 @@ function initializeMap(){
 
 function openTacticalMap(){
 
-    const initialized =
-        initializeMap();
-
-
-    if(
-        !initialized &&
-        !map
-    ){
-
-        return;
-
-    }
-
-
     tacticalMap.classList.add(
         "active"
     );
 
 
-    document.body.classList.add(
-        "tactical-active"
-    );
+    /*
+    Nasconde JARVIS
+    */
+
+    jarvisTitle.style.display =
+        "none";
 
 
-    jarvisTitle.style.opacity =
-        "0";
+    /*
+    TACTICAL MAP prende
+    il posto del titolo
+    */
+
+    mapHeader.style.display =
+        "block";
+
+
+    initializeMap();
 
 
     setTimeout(
-
         () => {
 
             if(map){
@@ -2252,26 +1918,7 @@ function openTacticalMap(){
             }
 
         },
-
-        100
-
-    );
-
-
-    setTimeout(
-
-        () => {
-
-            if(map){
-
-                map.invalidateSize();
-
-            }
-
-        },
-
-        500
-
+        400
     );
 
 }
@@ -2288,27 +1935,19 @@ function closeTacticalMap(){
     );
 
 
-    document.body.classList.remove(
-        "tactical-active"
-    );
+    /*
+    Ricompare JARVIS
+    */
 
-
-    jarvisTitle.style.opacity =
-        "1";
+    jarvisTitle.style.display =
+        "block";
 
 }
 
 
-/* =====================================================
-   PULSANTE CHIUSURA
-===================================================== */
-
 closeMap.addEventListener(
-
     "click",
-
     closeTacticalMap
-
 );
 
 
@@ -2321,13 +1960,6 @@ function createJarvisMarker(
     lon,
     name
 ){
-
-    if(!map){
-
-        return;
-
-    }
-
 
     if(currentMarker){
 
@@ -2357,68 +1989,20 @@ function createJarvisMarker(
 
     currentMarker =
         L.marker(
-
-            [
-                lat,
-                lon
-            ],
-
+            [lat,lon],
             {
                 icon
             }
-
         )
-        .addTo(
-            map
-        );
+        .addTo(map);
 
 
     currentMarker.bindPopup(
-
-        `<b style="color:#00ffff">${escapeHtml(name)}</b>`
-
+        `<b style="color:#00ffff">${name}</b>`
     );
 
 
     currentMarker.openPopup();
-
-}
-
-
-/* =====================================================
-   SICUREZZA HTML
-===================================================== */
-
-function escapeHtml(
-    text
-){
-
-    return String(text)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
 
 }
 
@@ -2433,19 +2017,6 @@ async function searchLocation(
 
     try{
 
-        if(
-            !hasValidMapKey()
-        ){
-
-            addMsg(
-                "API key MapTiler non configurata."
-            );
-
-            return;
-
-        }
-
-
         openTacticalMap();
 
 
@@ -2457,13 +2028,9 @@ async function searchLocation(
 
         const url =
             "https://nominatim.openstreetmap.org/search" +
-
             "?format=json" +
-
             "&limit=1" +
-
             "&q=" +
-
             encodeURIComponent(
                 place
             );
@@ -2471,18 +2038,17 @@ async function searchLocation(
 
         const response =
             await fetch(
-
                 url,
-
                 {
 
                     headers:{
+
                         "Accept":
                             "application/json"
+
                     }
 
                 }
-
             );
 
 
@@ -2532,47 +2098,21 @@ async function searchLocation(
             );
 
 
-        if(
-            !Number.isFinite(lat) ||
-            !Number.isFinite(lon)
-        ){
-
-            throw new Error(
-                "Coordinate non valide"
-            );
-
-        }
-
-
-        if(!map){
-
-            return;
-
-        }
-
-
         map.flyTo(
-
-            [
-                lat,
-                lon
-            ],
-
+            [lat,lon],
             12,
-
             {
-                duration:1.8
-            }
 
+                duration:1.8
+
+            }
         );
 
 
         createJarvisMarker(
-
             lat,
             lon,
             place
-
         );
 
 
@@ -2615,16 +2155,7 @@ function handleMapCommand(
             .trim();
 
 
-    /* =================================================
-       APRI
-    ================================================= */
-
     if(
-
-        normalized ===
-        "mappa"
-
-        ||
 
         normalized.includes(
             "apri la mappa"
@@ -2675,10 +2206,6 @@ function handleMapCommand(
     }
 
 
-    /* =================================================
-       CHIUDI
-    ================================================= */
-
     if(
 
         normalized.includes(
@@ -2724,32 +2251,21 @@ function handleMapCommand(
     }
 
 
-    /* =================================================
-       RICERCA
-    ================================================= */
-
     const patterns = [
 
         "mostrami ",
-
         "mostra ",
-
         "vai a ",
-
         "portami a ",
-
         "localizza ",
-
         "cerca ",
-
         "visualizza "
 
     ];
 
 
     for(
-        const pattern
-        of patterns
+        const pattern of patterns
     ){
 
         if(
@@ -2836,64 +2352,45 @@ function getTimeData(){
     return {
 
         currentTime:
-
             now.toLocaleTimeString(
-
                 "it-IT",
-
                 {
 
                     hour:"2-digit",
-
                     minute:"2-digit",
-
                     second:"2-digit"
 
                 }
-
             ),
 
 
         currentDate:
-
             now.toLocaleDateString(
-
                 "it-IT",
-
                 {
 
                     day:"2-digit",
-
                     month:"2-digit",
-
                     year:"numeric"
 
                 }
-
             ),
 
 
         dayOfWeek:
-
             now.toLocaleDateString(
-
                 "it-IT",
-
                 {
 
                     weekday:"long"
 
                 }
-
             ),
 
 
         timezone:
-
             Intl.DateTimeFormat()
-
                 .resolvedOptions()
-
                 .timeZone
 
     };
@@ -2939,9 +2436,7 @@ async function processAi(
 
         const response =
             await fetch(
-
                 API,
-
                 {
 
                     method:"POST",
@@ -2954,16 +2449,13 @@ async function processAi(
                     },
 
                     body:
-
                         JSON.stringify({
 
                             message:
                                 text,
 
                             memory:
-                                memory.slice(
-                                    -4
-                                ),
+                                memory.slice(-4),
 
                             currentTime:
                                 temporal.currentTime,
@@ -2980,7 +2472,6 @@ async function processAi(
                         })
 
                 }
-
             );
 
 
@@ -3070,13 +2561,10 @@ async function processAi(
 
             buffer +=
                 decoder.decode(
-
                     value,
-
                     {
                         stream:true
                     }
-
                 );
 
 
@@ -3091,8 +2579,7 @@ async function processAi(
 
 
             for(
-                const line
-                of lines
+                const line of lines
             ){
 
                 const trimmed =
@@ -3161,11 +2648,8 @@ async function processAi(
 
 
                     else if(
-
                         json.choices &&
-
                         json.choices[0]
-
                     ){
 
                         const choice =
@@ -3173,12 +2657,9 @@ async function processAi(
 
 
                         if(
-
                             choice.delta &&
-
                             typeof choice.delta.content ===
                             "string"
-
                         ){
 
                             piece =
@@ -3188,12 +2669,9 @@ async function processAi(
 
 
                         else if(
-
                             choice.message &&
-
                             typeof choice.message.content ===
                             "string"
-
                         ){
 
                             piece =
@@ -3203,10 +2681,8 @@ async function processAi(
 
 
                         else if(
-
                             typeof choice.text ===
                             "string"
-
                         ){
 
                             piece =
@@ -3339,25 +2815,20 @@ sendBtn.addEventListener(
 
 
 textInput.addEventListener(
-
     "keydown",
-
     event => {
 
         if(
-            event.key ===
-            "Enter"
+            event.key === "Enter"
         ){
 
             event.preventDefault();
-
 
             sendMessage();
 
         }
 
     }
-
 );
 
 
@@ -3559,9 +3030,7 @@ if(
 
 
     micBtn.addEventListener(
-
         "click",
-
         () => {
 
             if(listening){
@@ -3585,7 +3054,6 @@ if(
             }
 
         }
-
     );
 
 }else{
@@ -3601,9 +3069,7 @@ if(
 ===================================================== */
 
 window.addEventListener(
-
     "resize",
-
     () => {
 
         camera.aspect =
@@ -3615,11 +3081,8 @@ window.addEventListener(
 
 
         renderer.setSize(
-
             window.innerWidth,
-
             window.innerHeight
-
         );
 
 
@@ -3630,7 +3093,6 @@ window.addEventListener(
         }
 
     }
-
 );
 
 
@@ -3668,5 +3130,4 @@ setState(
 </script>
 
 </body>
-
 </html>

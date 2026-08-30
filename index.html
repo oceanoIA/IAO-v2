@@ -3,57 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>J.A.R.V.I.S.</title>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
 }
 
-html,body{
+html,
+body{
+
     width:100%;
     height:100%;
+
     overflow:hidden;
+
     background:#010405;
+
     font-family:Arial,sans-serif;
 }
 
 body{
+
     background:
         radial-gradient(
             circle at center,
             #071719 0%,
             #020708 45%,
-            #000 100%
-        );
-}
-
-#webgl-container{
-    position:fixed;
-    inset:0;
-    z-index:1;
-}
-
-.vignette{
-    position:fixed;
-    inset:0;
-    z-index:3;
-    pointer-events:none;
-
-    background:
-        radial-gradient(
-            circle at center,
-            transparent 32%,
-            rgba(0,0,0,.20) 68%,
-            rgba(0,0,0,.72) 100%
+            #000000 100%
         );
 }
 
 
 /* =====================================================
-   TITOLO J.A.R.V.I.S.
+   THREE.JS
+===================================================== */
+
+#webgl-container{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:1;
+}
+
+
+.vignette{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:3;
+
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            circle at center,
+            transparent 30%,
+            rgba(0,0,0,.18) 65%,
+            rgba(0,0,0,.75) 100%
+        );
+}
+
+
+/* =====================================================
+   TITOLO
 ===================================================== */
 
 .jarvis-title{
@@ -61,11 +82,14 @@ body{
     position:fixed;
 
     left:50%;
+
     top:2.5%;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
     z-index:8;
+
     pointer-events:none;
 
     font-size:
@@ -80,6 +104,7 @@ body{
         rgba(255,255,255,.86);
 
     text-shadow:
+
         0 0 8px
         rgba(255,255,255,.12),
 
@@ -91,7 +116,7 @@ body{
 
 
 /* =====================================================
-   ORA E DATA
+   DATA E ORA
 ===================================================== */
 
 .datetime{
@@ -99,6 +124,7 @@ body{
     position:fixed;
 
     top:22px;
+
     right:25px;
 
     z-index:10;
@@ -125,12 +151,14 @@ body{
     user-select:none;
 }
 
+
 .time{
 
     font-size:12px;
 
     letter-spacing:2px;
 }
+
 
 .date{
 
@@ -152,9 +180,11 @@ body{
     position:fixed;
 
     left:50%;
+
     bottom:92px;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
     z-index:15;
 
@@ -164,6 +194,7 @@ body{
 
     pointer-events:none;
 }
+
 
 .msg{
 
@@ -182,9 +213,11 @@ body{
     background:
         rgba(4,20,23,.38);
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:
+        blur(14px);
 
-    -webkit-backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:
+        blur(14px);
 
     color:
         rgba(235,255,255,.88);
@@ -197,22 +230,29 @@ body{
         messageIn .3s ease;
 }
 
+
 @keyframes messageIn{
 
     from{
+
         opacity:0;
-        transform:translateY(8px);
+
+        transform:
+            translateY(8px);
     }
 
     to{
+
         opacity:1;
-        transform:translateY(0);
+
+        transform:
+            translateY(0);
     }
 }
 
 
 /* =====================================================
-   CASELLA COMANDO
+   BARRA COMANDO
 ===================================================== */
 
 .command-wrapper{
@@ -220,9 +260,11 @@ body{
     position:fixed;
 
     left:50%;
+
     bottom:25px;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
     z-index:20;
 
@@ -251,6 +293,7 @@ body{
         blur(20px);
 
     box-shadow:
+
         0 0 30px
         rgba(0,255,255,.055),
 
@@ -260,12 +303,14 @@ body{
     transition:.3s ease;
 }
 
+
 .command-wrapper:focus-within{
 
     border-color:
         rgba(0,255,255,.65);
 
     box-shadow:
+
         0 0 25px
         rgba(0,255,255,.13),
 
@@ -285,6 +330,7 @@ body{
     min-width:0;
 
     border:none;
+
     outline:none;
 
     background:transparent;
@@ -295,8 +341,10 @@ body{
 
     font-size:14px;
 
-    padding:12px 5px;
+    padding:
+        12px 5px;
 }
+
 
 #textInput::placeholder{
 
@@ -306,7 +354,7 @@ body{
 
 
 /* =====================================================
-   MICROFONO MINIMAL
+   MICROFONO
 ===================================================== */
 
 #micBtn{
@@ -314,6 +362,7 @@ body{
     flex-shrink:0;
 
     width:34px;
+
     height:34px;
 
     margin-right:7px;
@@ -334,18 +383,19 @@ body{
     justify-content:center;
 
     transition:
+
         color .25s ease,
+
         transform .25s ease;
 }
 
-
-/* semplice microfono */
 
 .mic-icon{
 
     position:relative;
 
     width:8px;
+
     height:14px;
 
     border:
@@ -355,6 +405,7 @@ body{
     border-radius:6px;
 }
 
+
 .mic-icon::after{
 
     content:"";
@@ -362,9 +413,11 @@ body{
     position:absolute;
 
     left:50%;
+
     bottom:-6px;
 
     width:12px;
+
     height:7px;
 
     transform:
@@ -380,18 +433,23 @@ body{
         0 0 8px 8px;
 }
 
+
 #micBtn:hover{
 
     color:#00ffff;
 
-    transform:scale(1.08);
+    transform:
+        scale(1.08);
 }
+
 
 #micBtn.active{
 
     color:#8fffff;
 
-    transform:scale(1.12);
+    transform:
+        scale(1.12);
+
 }
 
 
@@ -431,6 +489,7 @@ body{
     transition:.25s ease;
 }
 
+
 #sendBtn:hover{
 
     color:white;
@@ -461,12 +520,14 @@ body{
         letter-spacing:5px;
     }
 
+
     .datetime{
 
         top:14px;
 
         right:14px;
     }
+
 
     .time{
 
@@ -475,12 +536,14 @@ body{
         letter-spacing:1.5px;
     }
 
+
     .date{
 
         font-size:8px;
 
         letter-spacing:1px;
     }
+
 
     .command-wrapper{
 
@@ -492,15 +555,19 @@ body{
         padding-left:15px;
     }
 
+
     #textInput{
 
         font-size:13px;
     }
 
+
     #sendBtn{
 
-        padding:0 12px;
+        padding:
+            0 12px;
     }
+
 
     #chat{
 
@@ -509,20 +576,20 @@ body{
         width:88%;
     }
 
+
     .msg{
 
         font-size:11px;
     }
+
 }
+
 </style>
 </head>
 
+
 <body>
 
-
-<!-- =====================================================
-     THREE.JS
-===================================================== -->
 
 <div id="webgl-container"></div>
 
@@ -530,7 +597,7 @@ body{
 
 
 <!-- =====================================================
-     TITOLO
+     JARVIS
 ===================================================== -->
 
 <div class="jarvis-title">
@@ -539,7 +606,7 @@ body{
 
 
 <!-- =====================================================
-     ORA E DATA
+     ORA / DATA
 ===================================================== -->
 
 <div class="datetime">
@@ -569,7 +636,7 @@ body{
 
 
 <!-- =====================================================
-     CASELLA COMANDO
+     INPUT
 ===================================================== -->
 
 <div class="command-wrapper">
@@ -581,12 +648,18 @@ body{
         placeholder="Chiedi qualcosa a JARVIS..."
     >
 
+
     <button
         id="micBtn"
         aria-label="Microfono"
     >
-        <span class="mic-icon"></span>
+
+        <span
+            class="mic-icon"
+        ></span>
+
     </button>
+
 
     <button
         id="sendBtn"
@@ -598,7 +671,7 @@ body{
 
 
 <!-- =====================================================
-     THREE.JS IMPORT
+     THREE.JS
 ===================================================== -->
 
 <script type="importmap">
@@ -617,11 +690,19 @@ import * as THREE from "three";
 
 
 /* =====================================================
-   API JARVIS
+   CONFIGURAZIONE
 ===================================================== */
 
 const API =
     "https://iao-ai-v3.oceano-masoud.workers.dev/";
+
+
+const MEMORY_KEY =
+    "jarvis_memory_v1";
+
+
+const MAX_MEMORY =
+    30;
 
 
 /* =====================================================
@@ -633,35 +714,145 @@ const container =
         "webgl-container"
     );
 
+
 const chat =
     document.getElementById(
         "chat"
     );
+
 
 const textInput =
     document.getElementById(
         "textInput"
     );
 
+
 const sendBtn =
     document.getElementById(
         "sendBtn"
     );
+
 
 const micBtn =
     document.getElementById(
         "micBtn"
     );
 
+
 const clock =
     document.getElementById(
         "clock"
     );
 
+
 const date =
     document.getElementById(
         "date"
     );
+
+
+/* =====================================================
+   MEMORIA LOCALE
+===================================================== */
+
+let memory = [];
+
+
+try{
+
+    const saved =
+        localStorage.getItem(
+            MEMORY_KEY
+        );
+
+
+    if(saved){
+
+        const parsed =
+            JSON.parse(saved);
+
+
+        if(
+            Array.isArray(parsed)
+        ){
+
+            memory =
+                parsed
+                    .filter(item =>
+                        item &&
+                        (
+                            item.role === "user" ||
+                            item.role === "assistant"
+                        ) &&
+                        typeof item.content === "string"
+                    )
+                    .slice(-MAX_MEMORY);
+        }
+    }
+
+}catch(error){
+
+    console.warn(
+        "Memoria non disponibile:",
+        error
+    );
+
+}
+
+
+function saveMemory(){
+
+    try{
+
+        localStorage.setItem(
+            MEMORY_KEY,
+            JSON.stringify(
+                memory.slice(-MAX_MEMORY)
+            )
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Impossibile salvare la memoria:",
+            error
+        );
+    }
+}
+
+
+function addMemory(
+    role,
+    content
+){
+
+    if(
+        !content ||
+        typeof content !== "string"
+    ){
+
+        return;
+    }
+
+
+    memory.push({
+
+        role,
+
+        content:
+            content.slice(0,5000)
+
+    });
+
+
+    memory =
+        memory.slice(
+            -MAX_MEMORY
+        );
+
+
+    saveMemory();
+}
 
 
 /* =====================================================
@@ -745,7 +936,7 @@ setInterval(
 
 
 /* =====================================================
-   SCENA 3D
+   SCENA
 ===================================================== */
 
 const scene =
@@ -763,6 +954,7 @@ const camera =
         .1,
 
         1000
+
     );
 
 
@@ -799,7 +991,7 @@ container.appendChild(
 
 
 /* =====================================================
-   TEXTURE GLOW
+   TEXTURE
 ===================================================== */
 
 function createGlowTexture(){
@@ -810,9 +1002,12 @@ function createGlowTexture(){
         );
 
 
-    canvas.width=64;
+    canvas.width =
+        64;
 
-    canvas.height=64;
+
+    canvas.height =
+        64;
 
 
     const ctx =
@@ -824,9 +1019,14 @@ function createGlowTexture(){
     const gradient =
         ctx.createRadialGradient(
 
-            32,32,0,
+            32,
+            32,
+            0,
 
-            32,32,32
+            32,
+            32,
+            32
+
         );
 
 
@@ -835,6 +1035,7 @@ function createGlowTexture(){
         0,
 
         "rgba(255,255,255,1)"
+
     );
 
 
@@ -843,6 +1044,7 @@ function createGlowTexture(){
         .16,
 
         "rgba(220,255,255,1)"
+
     );
 
 
@@ -851,6 +1053,7 @@ function createGlowTexture(){
         .35,
 
         "rgba(0,255,255,.95)"
+
     );
 
 
@@ -859,6 +1062,7 @@ function createGlowTexture(){
         .68,
 
         "rgba(0,170,210,.30)"
+
     );
 
 
@@ -867,6 +1071,7 @@ function createGlowTexture(){
         1,
 
         "rgba(0,0,0,0)"
+
     );
 
 
@@ -875,10 +1080,12 @@ function createGlowTexture(){
 
 
     ctx.fillRect(
+
         0,
         0,
         64,
         64
+
     );
 
 
@@ -889,7 +1096,7 @@ function createGlowTexture(){
 
 
 /* =====================================================
-   RETE NEURALE
+   PARTICELLE
 ===================================================== */
 
 const COUNT =
@@ -902,7 +1109,7 @@ const geometry =
 
 const positions =
     new Float32Array(
-        COUNT*3
+        COUNT * 3
     );
 
 
@@ -946,7 +1153,8 @@ for(
 
     const t =
         Math.random() *
-        Math.PI*2;
+        Math.PI *
+        2;
 
 
     const p =
@@ -955,13 +1163,19 @@ for(
         );
 
 
-    radii[i]=r;
+    radii[i] =
+        r;
 
-    theta[i]=t;
 
-    phi[i]=p;
+    theta[i] =
+        t;
 
-    seed[i]=
+
+    phi[i] =
+        p;
+
+
+    seed[i] =
         Math.random()*100;
 
 
@@ -980,6 +1194,7 @@ for(
     positions[i*3+2] =
         r *
         Math.cos(p);
+
 }
 
 
@@ -992,7 +1207,9 @@ geometry.setAttribute(
         positions,
 
         3
+
     )
+
 );
 
 
@@ -1022,6 +1239,7 @@ const particleMaterial =
 
         blending:
             THREE.AdditiveBlending
+
     });
 
 
@@ -1031,6 +1249,7 @@ const particles =
         geometry,
 
         particleMaterial
+
     );
 
 
@@ -1040,7 +1259,7 @@ scene.add(
 
 
 /* =====================================================
-   ENERGIA
+   STATI
 ===================================================== */
 
 let targetEnergy =
@@ -1105,12 +1324,14 @@ function setState(
 
         targetEnergy =
             .12;
+
     }
+
 }
 
 
 /* =====================================================
-   FORMA A PUNTE
+   FORMA ORGANICA
 ===================================================== */
 
 function spikeField(
@@ -1188,8 +1409,7 @@ function animate(){
 
 
     /*
-       Il colore rimane SEMPRE
-       nella stessa scala ciano/blu.
+       SOLO BLU / CIANO.
     */
 
     currentColor.lerp(
@@ -1199,25 +1419,20 @@ function animate(){
 
 
     if(
-        energy<.3
+        energy < .3
     ){
 
         currentColor.lerp(
             baseCyan,
             .025
         );
+
     }
 
 
     particleMaterial.color =
         currentColor;
 
-
-    /*
-       I punti diventano appena
-       più grandi quando il core
-       è attivo.
-    */
 
     particleMaterial.size =
         .032 +
@@ -1230,8 +1445,10 @@ function animate(){
 
 
     const pos =
-        geometry.attributes
-        .position.array;
+        geometry
+            .attributes
+            .position
+            .array;
 
 
     for(
@@ -1260,19 +1477,11 @@ function animate(){
             seed[i];
 
 
-        /*
-           Respirazione.
-        */
-
         const breathing =
             Math.sin(
                 time*2+s
             )*.035;
 
-
-        /*
-           Punte.
-        */
 
         const spikes =
             spikeField(
@@ -1285,10 +1494,6 @@ function animate(){
         const spikeStrength =
             energy*.58;
 
-
-        /*
-           Onde 3D.
-        */
 
         const waveX =
             Math.sin(
@@ -1338,11 +1543,6 @@ function animate(){
             Math.cos(p);
 
 
-        /*
-           Movimento indipendente
-           su X Y Z.
-        */
-
         x +=
             waveY *
             Math.cos(
@@ -1364,36 +1564,32 @@ function animate(){
             );
 
 
-        /*
-           Deformazioni extra
-           quando è attivo.
-        */
-
         if(
-            energy>.3
+            energy > .3
         ){
 
             x +=
                 Math.sin(
-                    time*2.4+
-                    p*8+
+                    time*2.4 +
+                    p*8 +
                     s
                 )*.09*energy;
 
 
             y +=
                 Math.cos(
-                    time*2.1+
-                    t*9+
+                    time*2.1 +
+                    t*9 +
                     s
                 )*.09*energy;
 
 
             z +=
                 Math.sin(
-                    time*2.8+
+                    time*2.8 +
                     (t+p)*7
                 )*.11*energy;
+
         }
 
 
@@ -1407,18 +1603,16 @@ function animate(){
 
         pos[index+2] =
             z;
+
     }
 
 
-    geometry.attributes
+    geometry
+        .attributes
         .position
-        .needsUpdate=true;
+        .needsUpdate =
+            true;
 
-
-    /*
-       Rotazione quasi invisibile.
-       La forma si muove realmente.
-    */
 
     particles.rotation.y +=
         .0005 +
@@ -1441,6 +1635,7 @@ function animate(){
         scene,
         camera
     );
+
 }
 
 
@@ -1455,7 +1650,7 @@ function addMsg(
     text
 ){
 
-    chat.innerHTML="";
+    chat.innerHTML = "";
 
 
     const msg =
@@ -1475,6 +1670,60 @@ function addMsg(
     chat.appendChild(
         msg
     );
+
+}
+
+
+/* =====================================================
+   COSTRUZIONE CONTESTO TEMPORALE
+===================================================== */
+
+function getTimeContext(){
+
+    const now =
+        new Date();
+
+
+    return {
+
+        currentTime:
+            now.toLocaleTimeString(
+                "it-IT",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit",
+                    second:"2-digit"
+                }
+            ),
+
+        currentDate:
+            now.toLocaleDateString(
+                "it-IT",
+                {
+                    day:"2-digit",
+                    month:"2-digit",
+                    year:"numeric"
+                }
+            ),
+
+        dayOfWeek:
+            now.toLocaleDateString(
+                "it-IT",
+                {
+                    weekday:"long"
+                }
+            ),
+
+        timezone:
+            Intl.DateTimeFormat()
+                .resolvedOptions()
+                .timeZone,
+
+        timezoneOffset:
+            -now.getTimezoneOffset()
+
+    };
+
 }
 
 
@@ -1493,23 +1742,67 @@ async function processAi(
 
     try{
 
+        const temporal =
+            getTimeContext();
+
+
+        /*
+           Salviamo la domanda
+           nella memoria prima
+           di inviarla.
+        */
+
+        addMemory(
+            "user",
+            text
+        );
+
+
         const response =
             await fetch(
+
                 API,
+
                 {
 
                     method:"POST",
 
                     headers:{
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
+
                         JSON.stringify({
-                            message:text
+
+                            message:
+                                text,
+
+                            memory:
+                                memory,
+
+                            currentTime:
+                                temporal.currentTime,
+
+                            currentDate:
+                                temporal.currentDate,
+
+                            dayOfWeek:
+                                temporal.dayOfWeek,
+
+                            timezone:
+                                temporal.timezone,
+
+                            timezoneOffset:
+                                temporal.timezoneOffset
+
                         })
+
                 }
+
             );
 
 
@@ -1520,6 +1813,7 @@ async function processAi(
             throw new Error(
                 "API error"
             );
+
         }
 
 
@@ -1528,8 +1822,19 @@ async function processAi(
 
 
         const reply =
-            data.reply ||
-            "Elaborazione completata.";
+            typeof data.reply === "string"
+                ? data.reply.trim()
+                : "Non ho ricevuto una risposta.";
+
+
+        /*
+           Salviamo la risposta.
+        */
+
+        addMemory(
+            "assistant",
+            reply
+        );
 
 
         addMsg(
@@ -1545,8 +1850,29 @@ async function processAi(
     }catch(error){
 
         console.error(
+            "JARVIS:",
             error
         );
+
+
+        /*
+           Se l'API fallisce,
+           eliminiamo l'ultimo
+           messaggio utente dalla
+           memoria per non lasciare
+           una conversazione falsa.
+        */
+
+        if(
+            memory.length &&
+            memory[memory.length-1].role === "user" &&
+            memory[memory.length-1].content === text
+        ){
+
+            memory.pop();
+
+            saveMemory();
+        }
 
 
         addMsg(
@@ -1554,15 +1880,17 @@ async function processAi(
         );
 
 
-        speak(
-            "Errore di connessione."
+        setState(
+            "idle"
         );
+
     }
+
 }
 
 
 /* =====================================================
-   INVIO TESTO
+   INVIO
 ===================================================== */
 
 function sendMessage(){
@@ -1577,7 +1905,8 @@ function sendMessage(){
         return;
 
 
-    textInput.value="";
+    textInput.value =
+        "";
 
 
     addMsg(
@@ -1588,6 +1917,7 @@ function sendMessage(){
     processAi(
         text
     );
+
 }
 
 
@@ -1599,17 +1929,18 @@ sendBtn.addEventListener(
 
 textInput.addEventListener(
     "keydown",
-    event=>{
+    event => {
 
         if(
-            event.key ===
-            "Enter"
+            event.key === "Enter"
         ){
 
             event.preventDefault();
 
             sendMessage();
+
         }
+
     }
 );
 
@@ -1623,10 +1954,19 @@ function speak(
 ){
 
     if(
-        !("speechSynthesis"
-        in window)
-    )
+        !(
+            "speechSynthesis"
+            in window
+        )
+    ){
+
+        setState(
+            "idle"
+        );
+
         return;
+
+    }
 
 
     speechSynthesis.cancel();
@@ -1655,29 +1995,44 @@ function speak(
 
 
     utterance.onstart =
-        ()=>{
+        () => {
+
             setState(
                 "speaking"
             );
+
         };
 
 
     utterance.onend =
-        ()=>{
+        () => {
+
             setState(
                 "idle"
             );
+
+        };
+
+
+    utterance.onerror =
+        () => {
+
+            setState(
+                "idle"
+            );
+
         };
 
 
     speechSynthesis.speak(
         utterance
     );
+
 }
 
 
 /* =====================================================
-   RICONOSCIMENTO VOCALE
+   MICROFONO
 ===================================================== */
 
 const Recognition =
@@ -1714,7 +2069,7 @@ if(
 
 
     recognition.onstart =
-        ()=>{
+        () => {
 
             listening =
                 true;
@@ -1728,17 +2083,18 @@ if(
             setState(
                 "listening"
             );
+
         };
 
 
     recognition.onresult =
-        event=>{
+        event => {
 
             const text =
                 event
-                .results[0][0]
-                .transcript
-                .trim();
+                    .results[0][0]
+                    .transcript
+                    .trim();
 
 
             if(
@@ -1750,13 +2106,21 @@ if(
 
 
                 sendMessage();
+
             }
+
         };
 
 
     recognition.onerror =
-        ()=>{
-            
+        error => {
+
+            console.warn(
+                "Speech recognition:",
+                error
+            );
+
+
             listening =
                 false;
 
@@ -1769,11 +2133,12 @@ if(
             setState(
                 "idle"
             );
+
         };
 
 
     recognition.onend =
-        ()=>{
+        () => {
 
             listening =
                 false;
@@ -1791,13 +2156,15 @@ if(
                 setState(
                     "idle"
                 );
+
             }
+
         };
 
 
     micBtn.addEventListener(
         "click",
-        ()=>{
+        () => {
 
             if(
                 listening
@@ -1811,11 +2178,16 @@ if(
 
                     recognition.start();
 
-                }catch(e){
+                }catch(error){
 
-                    console.log(e);
+                    console.warn(
+                        error
+                    );
+
                 }
+
             }
+
         }
     );
 
@@ -1827,16 +2199,17 @@ if(
 
     micBtn.style.opacity =
         ".3";
+
 }
 
 
 /* =====================================================
-   RESIZE
+   RIDIMENSIONAMENTO
 ===================================================== */
 
 window.addEventListener(
     "resize",
-    ()=>{
+    () => {
 
         camera.aspect =
             window.innerWidth /
@@ -1850,8 +2223,38 @@ window.addEventListener(
             window.innerWidth,
             window.innerHeight
         );
+
     }
 );
+
+
+/* =====================================================
+   COMANDI MEMORIA
+===================================================== */
+
+/*
+   Puoi usare dalla console:
+
+   clearJarvisMemory()
+
+   per cancellare completamente
+   la memoria locale.
+*/
+
+window.clearJarvisMemory =
+    function(){
+
+        memory = [];
+
+        localStorage.removeItem(
+            MEMORY_KEY
+        );
+
+        console.log(
+            "Memoria JARVIS cancellata."
+        );
+
+    };
 
 
 /* =====================================================

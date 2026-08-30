@@ -10,22 +10,12 @@
 
 <title>J.A.R.V.I.S.</title>
 
-
-<!-- =====================================================
-     MAPLIBRE GL JS
-===================================================== -->
-
 <link
     rel="stylesheet"
     href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
 />
 
-
 <style>
-
-/* =====================================================
-   BASE
-===================================================== */
 
 *{
     box-sizing:border-box;
@@ -52,21 +42,11 @@ body{
         );
 }
 
-
-/* =====================================================
-   WEBGL
-===================================================== */
-
 #webgl-container{
     position:fixed;
     inset:0;
     z-index:1;
 }
-
-
-/* =====================================================
-   VIGNETTE
-===================================================== */
 
 .vignette{
     position:fixed;
@@ -83,20 +63,11 @@ body{
         );
 }
 
-
-/* =====================================================
-   TITOLO
-===================================================== */
-
 .jarvis-title{
-
     position:fixed;
-
     top:2.4%;
     left:50%;
-
     transform:translateX(-50%);
-
     z-index:30;
 
     color:rgba(255,255,255,.86);
@@ -118,25 +89,15 @@ body{
     pointer-events:none;
 }
 
-
-/* =====================================================
-   ORA
-===================================================== */
-
 .datetime{
-
     position:fixed;
-
     top:18px;
     right:24px;
-
     z-index:30;
 
     display:flex;
     flex-direction:column;
-
     align-items:flex-end;
-
     gap:3px;
 
     font-family:monospace;
@@ -145,11 +106,8 @@ body{
 }
 
 .time{
-
     color:rgba(150,255,255,.6);
-
     font-size:11px;
-
     letter-spacing:2px;
 
     text-shadow:
@@ -158,28 +116,16 @@ body{
 }
 
 .date{
-
     color:rgba(150,255,255,.38);
-
     font-size:8px;
-
     letter-spacing:1px;
 }
 
-
-/* =====================================================
-   CHAT
-===================================================== */
-
 #chat{
-
     position:fixed;
-
     left:50%;
     bottom:92px;
-
     transform:translateX(-50%);
-
     z-index:40;
 
     width:min(620px,88%);
@@ -190,9 +136,7 @@ body{
 }
 
 .msg{
-
     display:inline-block;
-
     max-width:100%;
 
     padding:10px 18px;
@@ -213,32 +157,21 @@ body{
         rgba(235,255,255,.9);
 
     font-size:12px;
-
     line-height:1.45;
 
     white-space:pre-wrap;
 }
 
-
-/* =====================================================
-   INPUT
-===================================================== */
-
 .command-wrapper{
-
     position:fixed;
-
     left:50%;
     bottom:23px;
-
     transform:translateX(-50%);
-
     z-index:50;
 
     width:min(650px,90%);
 
     display:flex;
-
     align-items:center;
 
     padding:6px 7px 6px 20px;
@@ -261,7 +194,6 @@ body{
 }
 
 .command-wrapper:focus-within{
-
     border-color:
         rgba(0,255,255,.6);
 
@@ -271,9 +203,7 @@ body{
 }
 
 #textInput{
-
     flex:1;
-
     min-width:0;
 
     border:none;
@@ -284,7 +214,6 @@ body{
     color:white;
 
     font-family:Arial,sans-serif;
-
     font-size:14px;
 
     padding:12px 5px;
@@ -294,13 +223,7 @@ body{
     color:rgba(255,255,255,.3);
 }
 
-
-/* =====================================================
-   MICROFONO
-===================================================== */
-
 #micBtn{
-
     width:34px;
     height:34px;
 
@@ -315,13 +238,11 @@ body{
     cursor:pointer;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 }
 
 .mic-icon{
-
     width:8px;
     height:14px;
 
@@ -335,7 +256,6 @@ body{
 }
 
 .mic-icon::after{
-
     content:"";
 
     position:absolute;
@@ -363,7 +283,6 @@ body{
 }
 
 #micBtn.active{
-
     color:#8fffff;
 
     filter:
@@ -373,13 +292,7 @@ body{
         );
 }
 
-
-/* =====================================================
-   INVIA
-===================================================== */
-
 #sendBtn{
-
     height:39px;
 
     padding:0 17px;
@@ -397,14 +310,12 @@ body{
         rgba(220,255,255,.78);
 
     font-size:10px;
-
     letter-spacing:2px;
 
     cursor:pointer;
 }
 
 #sendBtn:hover{
-
     color:white;
 
     border-color:#00ffff;
@@ -413,13 +324,7 @@ body{
         rgba(0,255,255,.1);
 }
 
-
-/* =====================================================
-   PULSANTE VOCE
-===================================================== */
-
 #voiceBtn{
-
     position:fixed;
 
     right:22px;
@@ -444,7 +349,6 @@ body{
         rgba(210,255,255,.7);
 
     font-size:10px;
-
     letter-spacing:1.5px;
 
     cursor:pointer;
@@ -455,7 +359,6 @@ body{
 }
 
 #voiceBtn:hover{
-
     color:white;
 
     border-color:#00ffff;
@@ -465,13 +368,7 @@ body{
         rgba(0,255,255,.2);
 }
 
-
-/* =====================================================
-   MENU VOCI
-===================================================== */
-
 #voicePanel{
-
     position:fixed;
 
     right:22px;
@@ -506,19 +403,16 @@ body{
 }
 
 .voice-title{
-
     color:
         rgba(220,255,255,.9);
 
     font-size:11px;
-
     letter-spacing:2px;
 
     margin-bottom:10px;
 }
 
 #voiceSelector{
-
     width:100%;
 
     padding:11px;
@@ -541,7 +435,6 @@ body{
 }
 
 #voiceTest{
-
     width:100%;
 
     margin-top:10px;
@@ -563,26 +456,16 @@ body{
     cursor:pointer;
 
     font-size:10px;
-
     letter-spacing:1px;
 }
 
 #voiceTest:hover{
-
     border-color:#00ffff;
-
     color:white;
 }
 
-
-/* =====================================================
-   MAPPA TATTICA
-===================================================== */
-
 #tacticalMap{
-
     position:fixed;
-
     inset:0;
 
     z-index:20;
@@ -599,7 +482,6 @@ body{
 }
 
 #tacticalMap.active{
-
     display:block;
 
     animation:
@@ -607,7 +489,6 @@ body{
 }
 
 @keyframes mapIn{
-
     from{
         opacity:0;
         transform:scale(1.015);
@@ -619,13 +500,7 @@ body{
     }
 }
 
-
-/* =====================================================
-   TITOLO MAPPA
-===================================================== */
-
 .map-header{
-
     position:absolute;
 
     top:2.4%;
@@ -658,14 +533,7 @@ body{
     pointer-events:none;
 }
 
-
-/* =====================================================
-   CONTENITORE MAPPA
-   MARGINE 3 CM
-===================================================== */
-
 #map{
-
     position:absolute;
 
     top:3cm;
@@ -688,13 +556,7 @@ body{
         rgba(0,255,255,.10);
 }
 
-
-/* =====================================================
-   OVERLAY MAPPA
-===================================================== */
-
 .map-overlay{
-
     position:absolute;
 
     inset:0;
@@ -710,13 +572,7 @@ body{
         rgba(0,0,0,.28);
 }
 
-
-/* =====================================================
-   CHIUDI MAPPA
-===================================================== */
-
 #closeMap{
-
     position:absolute;
 
     top:28px;
@@ -754,7 +610,6 @@ body{
 }
 
 #closeMap:hover{
-
     color:white;
 
     border-color:#00ffff;
@@ -764,13 +619,7 @@ body{
         rgba(0,255,255,.3);
 }
 
-
-/* =====================================================
-   MAPLIBRE
-===================================================== */
-
 .maplibregl-ctrl-group{
-
     background:
         rgba(0,15,18,.85)!important;
 
@@ -784,7 +633,6 @@ body{
 }
 
 .maplibregl-ctrl-group button{
-
     background:
         transparent!important;
 
@@ -792,13 +640,11 @@ body{
 }
 
 .maplibregl-ctrl-group button:hover{
-
     background:
         rgba(0,255,255,.08)!important;
 }
 
 .maplibregl-ctrl-attrib{
-
     background:
         rgba(0,8,10,.65)!important;
 
@@ -809,18 +655,11 @@ body{
 }
 
 .maplibregl-ctrl-attrib a{
-
     color:
         rgba(150,240,255,.45)!important;
 }
 
-
-/* =====================================================
-   MARKER
-===================================================== */
-
 .jarvis-map-marker{
-
     width:20px;
     height:20px;
 
@@ -846,7 +685,6 @@ body{
 }
 
 .jarvis-map-marker::after{
-
     content:"";
 
     position:absolute;
@@ -869,9 +707,7 @@ body{
 }
 
 @keyframes markerPulse{
-
     0%,100%{
-
         transform:scale(1);
 
         box-shadow:
@@ -882,7 +718,6 @@ body{
     }
 
     50%{
-
         transform:scale(1.18);
 
         box-shadow:
@@ -893,13 +728,7 @@ body{
     }
 }
 
-
-/* =====================================================
-   POPUP
-===================================================== */
-
 .maplibregl-popup-content{
-
     background:
         rgba(3,15,18,.96)!important;
 
@@ -920,30 +749,19 @@ body{
 }
 
 .maplibregl-popup-close-button{
-
     color:#00ffff!important;
-
     font-size:18px;
 }
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
 
 @media(max-width:600px){
 
     .jarvis-title{
-
         top:2.2%;
-
         font-size:23px;
-
         letter-spacing:5px;
     }
 
     .datetime{
-
         top:12px;
         right:13px;
     }
@@ -957,7 +775,6 @@ body{
     }
 
     .command-wrapper{
-
         width:
             calc(100% - 24px);
 
@@ -972,13 +789,7 @@ body{
         bottom:80px;
     }
 
-
-    /*
-       3 CM ANCHE SU MOBILE
-    */
-
     #map{
-
         top:3cm;
         right:3cm;
         bottom:3cm;
@@ -992,16 +803,12 @@ body{
     }
 
     .map-header{
-
         top:2.5%;
-
         font-size:23px;
-
         letter-spacing:5px;
     }
 
     #closeMap{
-
         top:24px;
         left:25px;
 
@@ -1010,9 +817,7 @@ body{
     }
 
     #voiceBtn{
-
         right:12px;
-
         bottom:70px;
 
         height:34px;
@@ -1023,9 +828,7 @@ body{
     }
 
     #voicePanel{
-
         right:12px;
-
         bottom:112px;
 
         width:
@@ -1034,15 +837,9 @@ body{
 
 }
 
-
-/* =====================================================
-   MAPPA MOBILE: evita una mappa troppo piccola
-===================================================== */
-
 @media(max-width:430px){
 
     #map{
-
         top:2.2cm;
         right:2.2cm;
         bottom:2.2cm;
@@ -1055,22 +852,11 @@ body{
 
 </head>
 
-
 <body>
-
-
-<!-- =====================================================
-     WEBGL
-===================================================== -->
 
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
-
-
-<!-- =====================================================
-     TITOLO
-===================================================== -->
 
 <div
     class="jarvis-title"
@@ -1078,11 +864,6 @@ body{
 >
     J.A.R.V.I.S
 </div>
-
-
-<!-- =====================================================
-     ORA
-===================================================== -->
 
 <div class="datetime">
 
@@ -1095,11 +876,6 @@ body{
     </div>
 
 </div>
-
-
-<!-- =====================================================
-     MAPPA
-===================================================== -->
 
 <div id="tacticalMap">
 
@@ -1121,17 +897,7 @@ body{
 
 </div>
 
-
-<!-- =====================================================
-     CHAT
-===================================================== -->
-
 <div id="chat"></div>
-
-
-<!-- =====================================================
-     INPUT
-===================================================== -->
 
 <div class="command-wrapper">
 
@@ -1146,9 +912,7 @@ body{
         id="micBtn"
         aria-label="Microfono"
     >
-
         <span class="mic-icon"></span>
-
     </button>
 
     <button id="sendBtn">
@@ -1157,19 +921,9 @@ body{
 
 </div>
 
-
-<!-- =====================================================
-     PULSANTE VOCE
-===================================================== -->
-
 <button id="voiceBtn">
     ⚙ VOCE
 </button>
-
-
-<!-- =====================================================
-     PANNELLO VOCE
-===================================================== -->
 
 <div id="voicePanel">
 
@@ -1178,9 +932,11 @@ body{
     </div>
 
     <select id="voiceSelector">
-        <option>
-            Caricamento voci...
+
+        <option value="a7vno2SJkTdglAq4liNI">
+            ElevenLabs — J.A.R.V.I.S.
         </option>
+
     </select>
 
     <button id="voiceTest">
@@ -1189,19 +945,9 @@ body{
 
 </div>
 
-
-<!-- =====================================================
-     MAPLIBRE
-===================================================== -->
-
 <script
     src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
 </script>
-
-
-<!-- =====================================================
-     THREE.JS
-===================================================== -->
 
 <script type="importmap">
 
@@ -1213,7 +959,6 @@ body{
 }
 
 </script>
-
 
 <script type="module">
 
@@ -1232,6 +977,34 @@ const MEMORY_KEY =
 
 const MAX_MEMORY =
     30;
+
+
+/* =====================================================
+   ELEVENLABS
+===================================================== */
+
+/*
+   IMPORTANTE:
+   QUI NON VA MESSA LA API KEY.
+
+   La API Key rimane nel Secret del Worker.
+
+   Questo è il Voice ID ElevenLabs.
+*/
+
+const ELEVEN_VOICE_ID =
+    "a7vno2SJkTdglAq4liNI";
+
+
+/*
+   Audio J.A.R.V.I.S.
+*/
+
+let currentAudio =
+    null;
+
+let audioPlaying =
+    false;
 
 
 /* =====================================================
@@ -2595,6 +2368,257 @@ function getTimeData(){
 
 
 /* =====================================================
+   ELEVENLABS SPEAK
+===================================================== */
+
+/*
+   Questa funzione NON usa più speechSynthesis.
+
+   Chiede al Worker di generare l'audio ElevenLabs.
+*/
+
+async function speak(
+    text
+){
+
+    if(!text){
+        return;
+    }
+
+
+    /*
+       Ferma eventuale audio precedente
+    */
+
+    if(currentAudio){
+
+        try{
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+        }catch(error){
+            console.warn(error);
+        }
+
+        currentAudio =
+            null;
+
+    }
+
+    audioPlaying =
+        false;
+
+
+    setState(
+        "speaking"
+    );
+
+
+    try{
+
+        const response =
+            await fetch(
+                API,
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "tts",
+
+                            text:
+                                text,
+
+                            voiceId:
+                                ELEVEN_VOICE_ID
+
+                        })
+
+                }
+            );
+
+
+        if(!response.ok){
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "ElevenLabs Worker:",
+                errorText
+            );
+
+            throw new Error(
+                "Errore ElevenLabs HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const contentType =
+            response.headers.get(
+                "content-type"
+            ) || "";
+
+
+        /*
+           Il Worker deve restituire
+           direttamente l'audio.
+        */
+
+        if(
+            !contentType.includes(
+                "audio"
+            )
+        ){
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Risposta TTS:",
+                errorText
+            );
+
+            throw new Error(
+                "Il Worker non ha restituito audio."
+            );
+
+        }
+
+
+        const audioBlob =
+            await response.blob();
+
+
+        const audioUrl =
+            URL.createObjectURL(
+                audioBlob
+            );
+
+
+        const audio =
+            new Audio(
+                audioUrl
+            );
+
+
+        currentAudio =
+            audio;
+
+
+        audio.volume =
+            1;
+
+
+        audio.onplay =
+            () => {
+
+                audioPlaying =
+                    true;
+
+                setState(
+                    "speaking"
+                );
+
+            };
+
+
+        audio.onended =
+            () => {
+
+                audioPlaying =
+                    false;
+
+                setState(
+                    "idle"
+                );
+
+                URL.revokeObjectURL(
+                    audioUrl
+                );
+
+                if(
+                    currentAudio ===
+                    audio
+                ){
+
+                    currentAudio =
+                        null;
+
+                }
+
+            };
+
+
+        audio.onerror =
+            error => {
+
+                console.error(
+                    "Audio ElevenLabs:",
+                    error
+                );
+
+                audioPlaying =
+                    false;
+
+                setState(
+                    "idle"
+                );
+
+                URL.revokeObjectURL(
+                    audioUrl
+                );
+
+                if(
+                    currentAudio ===
+                    audio
+                ){
+
+                    currentAudio =
+                        null;
+
+                }
+
+            };
+
+
+        await audio.play();
+
+
+    }catch(error){
+
+        console.error(
+            "JARVIS TTS ERROR:",
+            error
+        );
+
+        audioPlaying =
+            false;
+
+        setState(
+            "idle"
+        );
+
+        addMsg(
+            "Errore voce J.A.R.V.I.S.: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
    PROCESS AI
 ===================================================== */
 
@@ -2903,6 +2927,10 @@ async function processAi(
         );
 
 
+        /*
+           ORA JARVIS USA ELEVENLABS
+        */
+
         speak(
             reply
         );
@@ -2982,145 +3010,8 @@ textInput.addEventListener(
 
 
 /* =====================================================
-   SISTEMA VOCI
+   PANNELLO VOCE ELEVENLABS
 ===================================================== */
-
-let selectedVoice =
-    null;
-
-
-/*
-   CARICA LE VOCI
-*/
-
-function loadVoices(){
-
-    const voices =
-        speechSynthesis.getVoices();
-
-
-    if(!voices.length){
-
-        voiceSelector.innerHTML =
-            "<option>Nessuna voce disponibile</option>";
-
-        return;
-
-    }
-
-
-    voiceSelector.innerHTML =
-        "";
-
-
-    /*
-       VOCE SALVATA
-    */
-
-    const savedVoice =
-        localStorage.getItem(
-            "jarvis_voice"
-        );
-
-
-    /*
-       PROVA A RECUPERARE
-       LA VOCE SALVATA
-    */
-
-    if(savedVoice){
-
-        selectedVoice =
-            voices.find(
-                voice =>
-                    voice.name ===
-                    savedVoice
-            ) || null;
-
-    }
-
-
-    /*
-       SE NON ESISTE,
-       CERCA UNA VOCE ITALIANA
-    */
-
-    if(!selectedVoice){
-
-        selectedVoice =
-            voices.find(
-                voice =>
-                    voice.lang
-                        .toLowerCase()
-                        .startsWith("it")
-            ) || voices[0];
-
-    }
-
-
-    /*
-       INSERISCE LE VOCI
-    */
-
-    voices.forEach(
-        voice => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            option.value =
-                voice.name;
-
-
-            option.textContent =
-                `${voice.name} — ${voice.lang}`;
-
-
-            if(
-                selectedVoice &&
-                voice.name ===
-                selectedVoice.name
-            ){
-
-                option.selected =
-                    true;
-
-            }
-
-
-            voiceSelector.appendChild(
-                option
-            );
-
-        }
-    );
-
-}
-
-
-/*
-   QUANDO IL BROWSER
-   RENDE DISPONIBILI LE VOCI
-*/
-
-if(
-    "speechSynthesis" in window
-){
-
-    loadVoices();
-
-    speechSynthesis.onvoiceschanged =
-        loadVoices;
-
-}
-
-
-/*
-   APERTURA PANNELLO
-*/
 
 voiceBtn.addEventListener(
     "click",
@@ -3130,37 +3021,26 @@ voiceBtn.addEventListener(
             "active"
         );
 
-        loadVoices();
-
     }
 );
 
 
-/*
-   CAMBIO VOCE
-*/
+/* =====================================================
+   CAMBIO VOICE ID
+===================================================== */
 
 voiceSelector.addEventListener(
     "change",
     () => {
 
-        const voices =
-            speechSynthesis.getVoices();
+        const selected =
+            voiceSelector.value;
 
-
-        selectedVoice =
-            voices.find(
-                voice =>
-                    voice.name ===
-                    voiceSelector.value
-            );
-
-
-        if(selectedVoice){
+        if(selected){
 
             localStorage.setItem(
-                "jarvis_voice",
-                selectedVoice.name
+                "jarvis_eleven_voice",
+                selected
             );
 
         }
@@ -3169,118 +3049,20 @@ voiceSelector.addEventListener(
 );
 
 
-/*
+/* =====================================================
    TEST VOCE
-*/
+===================================================== */
 
 voiceTest.addEventListener(
     "click",
     () => {
 
         speak(
-            "Voce J.A.R.V.I.S. configurata correttamente."
+            "Voce J.A.R.V.I.S. configurata correttamente. Sistema ElevenLabs operativo."
         );
 
     }
 );
-
-
-/* =====================================================
-   SPEAK
-===================================================== */
-
-function speak(
-    text
-){
-
-    if(
-        !window.speechSynthesis
-    ){
-
-        setState(
-            "idle"
-        );
-
-        return;
-
-    }
-
-
-    speechSynthesis.cancel();
-
-
-    const utterance =
-        new SpeechSynthesisUtterance(
-            text
-        );
-
-
-    /*
-       USA LA VOCE SELEZIONATA
-    */
-
-    if(selectedVoice){
-
-        utterance.voice =
-            selectedVoice;
-
-        utterance.lang =
-            selectedVoice.lang;
-
-    }else{
-
-        utterance.lang =
-            "it-IT";
-
-    }
-
-
-    /*
-       PARAMETRI VOCE
-    */
-
-    utterance.rate =
-        .95;
-
-    utterance.pitch =
-        .85;
-
-
-    utterance.onstart =
-        () => {
-
-            setState(
-                "speaking"
-            );
-
-        };
-
-
-    utterance.onend =
-        () => {
-
-            setState(
-                "idle"
-            );
-
-        };
-
-
-    utterance.onerror =
-        () => {
-
-            setState(
-                "idle"
-            );
-
-        };
-
-
-    speechSynthesis.speak(
-        utterance
-    );
-
-}
 
 
 /* =====================================================

@@ -3,473 +3,518 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS — Neural Holographic Core V2</title>
+
+<title>J.A.R.V.I.S.</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background:
-        radial-gradient(circle at center, #071015 0%, #020507 45%, #000000 100%);
-    font-family: monospace;
-    color: white;
-}
-
-/* =========================
-   WEBGL
-========================= */
-
-#webgl-container {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#010405;
+    font-family:Arial, sans-serif;
 }
 
 /* =========================
-   VIGNETTE
+   SFONDO
 ========================= */
 
-.vignette {
-    position: fixed;
-    inset: 0;
-    z-index: 3;
-    pointer-events: none;
+body{
     background:
         radial-gradient(
-            ellipse at center,
-            transparent 35%,
-            rgba(0,0,0,0.18) 65%,
-            rgba(0,0,0,0.72) 100%
+            circle at center,
+            #07171a 0%,
+            #020708 42%,
+            #000 100%
         );
 }
 
-/* =========================
-   SCANLINES
-========================= */
-
-.scanlines {
-    position: fixed;
-    inset: 0;
-    z-index: 4;
-    pointer-events: none;
-    opacity: 0.08;
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0px,
-            transparent 3px,
-            rgba(255,255,255,0.08) 4px
-        );
+#webgl-container{
+    position:fixed;
+    inset:0;
+    z-index:1;
 }
 
-/* =========================
-   HUD TOP
-========================= */
+/* Leggerissima vignettatura */
 
-.hud {
-    position: fixed;
-    z-index: 20;
-    pointer-events: none;
-}
-
-.top-left {
-    top: 24px;
-    left: 24px;
-}
-
-.top-right {
-    top: 24px;
-    right: 24px;
-    text-align: right;
-}
-
-.system-name {
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 7px;
-}
-
-.system-version {
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.3);
-}
-
-.connection {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: #cfffff;
-}
-
-.connection-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #00ffff;
-    box-shadow:
-        0 0 6px #00ffff,
-        0 0 18px #00ffff;
-}
-
-/* =========================
-   CORE LABEL
-========================= */
-
-.core-label {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 8;
-    pointer-events: none;
-    text-align: center;
-    opacity: 0.65;
-}
-
-.core-title {
-    font-size: 9px;
-    letter-spacing: 5px;
-    color: rgba(255,255,255,0.45);
-    margin-bottom: 5px;
-}
-
-.core-id {
-    font-size: 8px;
-    letter-spacing: 3px;
-    color: rgba(0,255,255,0.35);
-}
-
-/* =========================
-   STATUS
-========================= */
-
-.status-panel {
-    position: fixed;
-    left: 50%;
-    bottom: 112px;
-    transform: translateX(-50%);
-    z-index: 20;
-    text-align: center;
-    pointer-events: none;
-}
-
-#statusText {
-    font-size: 11px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.42);
-    transition: all 0.3s ease;
-}
-
-.status-line {
-    width: 110px;
-    height: 1px;
-    margin: 9px auto 0;
-    background: rgba(0,255,255,0.35);
-    box-shadow: 0 0 8px rgba(0,255,255,0.35);
-}
-
-/* =========================
-   CHAT
-========================= */
-
-#chat {
-    position: fixed;
-    left: 50%;
-    bottom: 150px;
-    transform: translateX(-50%);
-    z-index: 25;
-
-    width: min(620px, 88%);
-    max-height: 120px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    pointer-events: none;
-}
-
-.msg {
-    max-width: 100%;
-
-    padding: 12px 20px;
-
-    border: 1px solid rgba(0,255,255,0.28);
-    border-radius: 4px;
+.vignette{
+    position:fixed;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
 
     background:
-        linear-gradient(
-            135deg,
-            rgba(0,35,42,0.72),
-            rgba(0,10,14,0.82)
+        radial-gradient(
+            circle at center,
+            transparent 38%,
+            rgba(0,0,0,.22) 70%,
+            rgba(0,0,0,.7) 100%
         );
+}
+
+/* =========================
+   J.A.R.V.I.S.
+========================= */
+
+.jarvis-title{
+
+    position:fixed;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    z-index:8;
+
+    pointer-events:none;
+
+    font-family:Arial, sans-serif;
+
+    font-size:clamp(34px,7vw,72px);
+
+    font-weight:300;
+
+    letter-spacing:
+        clamp(8px,2vw,20px);
+
+    color:rgba(255,255,255,.82);
+
+    text-shadow:
+        0 0 8px rgba(255,255,255,.18),
+        0 0 25px rgba(0,255,255,.12);
+
+    white-space:nowrap;
+
+    transition:
+        opacity .4s ease,
+        transform .4s ease;
+}
+
+
+/* =========================
+   CASELLA COMANDO
+========================= */
+
+.command-wrapper{
+
+    position:fixed;
+
+    left:50%;
+    bottom:28px;
+
+    transform:translateX(-50%);
+
+    z-index:20;
+
+    width:min(620px,88%);
+
+    display:flex;
+    align-items:center;
+
+    padding:6px 7px 6px 20px;
+
+    border-radius:40px;
+
+    background:
+        rgba(5,20,23,.38);
+
+    border:
+        1px solid rgba(120,255,255,.28);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
 
     box-shadow:
-        0 0 20px rgba(0,255,255,0.08),
-        inset 0 0 20px rgba(0,255,255,0.025);
 
-    backdrop-filter: blur(12px);
+        0 0 25px
+        rgba(0,255,255,.06),
 
-    color: rgba(225,255,255,0.9);
-    font-size: 12px;
-    line-height: 1.5;
-    letter-spacing: 0.5px;
+        inset 0 0 20px
+        rgba(0,255,255,.025);
 
-    animation: messageIn 0.35s ease;
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease;
 }
 
-@keyframes messageIn {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
+.command-wrapper:focus-within{
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    border-color:
+        rgba(0,255,255,.65);
+
+    box-shadow:
+
+        0 0 25px
+        rgba(0,255,255,.12),
+
+        inset 0 0 25px
+        rgba(0,255,255,.035);
 }
+
 
 /* =========================
    INPUT
 ========================= */
 
-.input-container {
-    position: fixed;
-    left: 50%;
-    bottom: 25px;
-    transform: translateX(-50%);
-    z-index: 30;
+#textInput{
 
-    width: min(620px, 92%);
+    flex:1;
 
-    display: flex;
-    gap: 8px;
+    min-width:0;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    color:white;
+
+    font-family:Arial,sans-serif;
+
+    font-size:14px;
+
+    padding:12px 5px;
+
+    letter-spacing:.3px;
 }
 
-.input-field {
-    flex: 1;
+#textInput::placeholder{
 
-    min-width: 0;
+    color:
+        rgba(255,255,255,.32);
 
-    padding: 12px 18px;
-
-    background: rgba(0,12,16,0.78);
-
-    border: 1px solid rgba(0,255,255,0.25);
-    border-radius: 4px;
-
-    outline: none;
-
-    color: white;
-    font-family: monospace;
-    font-size: 12px;
-
-    backdrop-filter: blur(10px);
-
-    transition: 0.3s ease;
+    transition:
+        color .3s ease;
 }
 
-.input-field::placeholder {
-    color: rgba(255,255,255,0.25);
+.command-wrapper:focus-within
+#textInput::placeholder{
+
+    color:
+        rgba(255,255,255,.5);
 }
 
-.input-field:focus {
-    border-color: rgba(0,255,255,0.7);
-
-    box-shadow:
-        0 0 12px rgba(0,255,255,0.15),
-        inset 0 0 12px rgba(0,255,255,0.04);
-}
-
-.btn {
-    border: 1px solid rgba(0,255,255,0.35);
-    background: rgba(0,30,35,0.65);
-
-    color: #bfffff;
-
-    font-family: monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-
-    border-radius: 4px;
-
-    padding: 0 16px;
-
-    cursor: pointer;
-
-    transition: all 0.25s ease;
-
-    backdrop-filter: blur(10px);
-}
-
-.btn:hover {
-    border-color: #00ffff;
-
-    box-shadow:
-        0 0 15px rgba(0,255,255,0.2);
-
-    background: rgba(0,70,75,0.45);
-}
-
-.btn:active {
-    transform: scale(0.96);
-}
 
 /* =========================
-   MIC
+   MICROFONO MINIMAL
 ========================= */
 
-.mic-button {
-    position: fixed;
+#micBtn{
 
-    left: 25px;
-    bottom: 25px;
+    flex-shrink:0;
 
-    z-index: 30;
+    width:38px;
+    height:38px;
 
-    width: 44px;
-    height: 44px;
+    margin-right:5px;
 
-    border-radius: 50%;
+    border-radius:50%;
 
-    border: 1px solid rgba(0,255,255,0.35);
+    border:
+        1px solid
+        rgba(150,255,255,.22);
 
-    background: rgba(0,20,25,0.72);
+    background:
+        rgba(255,255,255,.035);
 
-    color: #bfffff;
+    color:
+        rgba(220,255,255,.75);
 
-    font-size: 17px;
+    cursor:pointer;
 
-    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    backdrop-filter: blur(8px);
-
-    transition: all 0.3s ease;
+    transition:
+        .25s ease;
 }
 
-.mic-button:hover {
-    border-color: #00ffff;
+/* Microfono disegnato con CSS */
+
+.mic-icon{
+
+    position:relative;
+
+    width:10px;
+    height:17px;
+
+    border:
+        1.5px solid
+        currentColor;
+
+    border-radius:7px;
+
+    display:block;
+}
+
+.mic-icon::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    bottom:-7px;
+
+    width:14px;
+    height:9px;
+
+    transform:
+        translateX(-50%);
+
+    border:
+        1.5px solid
+        currentColor;
+
+    border-top:none;
+
+    border-radius:
+        0 0 10px 10px;
+}
+
+.mic-icon::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    bottom:-11px;
+
+    width:1.5px;
+    height:5px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        currentColor;
 
     box-shadow:
-        0 0 15px rgba(0,255,255,0.25);
+        -4px 4px 0 -0.2px currentColor,
+         4px 4px 0 -0.2px currentColor;
 }
 
-.mic-button.active {
-    color: #fff700;
+#micBtn:hover{
 
-    border-color: rgba(255,247,0,0.7);
+    color:#00ffff;
+
+    border-color:
+        rgba(0,255,255,.7);
+
+    background:
+        rgba(0,255,255,.07);
 
     box-shadow:
-        0 0 10px rgba(255,247,0,0.35),
-        0 0 25px rgba(255,247,0,0.15);
+        0 0 15px
+        rgba(0,255,255,.18);
 }
+
+#micBtn.active{
+
+    color:#ffff00;
+
+    border-color:
+        rgba(255,255,0,.7);
+
+    box-shadow:
+        0 0 18px
+        rgba(255,255,0,.22);
+}
+
 
 /* =========================
-   BOTTOM INFO
+   INVIA
 ========================= */
 
-.bottom-info {
-    position: fixed;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
+#sendBtn{
 
-    z-index: 20;
+    flex-shrink:0;
 
-    font-size: 7px;
-    letter-spacing: 3px;
+    height:38px;
 
-    color: rgba(255,255,255,0.18);
+    padding:
+        0 17px;
 
-    white-space: nowrap;
+    border-radius:22px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.25);
+
+    background:
+        rgba(0,255,255,.055);
+
+    color:
+        rgba(220,255,255,.75);
+
+    font-family:Arial,sans-serif;
+
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    cursor:pointer;
+
+    transition:.25s ease;
 }
+
+#sendBtn:hover{
+
+    color:#fff;
+
+    border-color:
+        rgba(0,255,255,.7);
+
+    background:
+        rgba(0,255,255,.12);
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.15);
+}
+
+#sendBtn:active{
+
+    transform:scale(.95);
+}
+
+
+/* =========================
+   CHAT
+========================= */
+
+#chat{
+
+    position:fixed;
+
+    left:50%;
+    bottom:92px;
+
+    transform:translateX(-50%);
+
+    z-index:15;
+
+    width:min(600px,85%);
+
+    text-align:center;
+
+    pointer-events:none;
+}
+
+.msg{
+
+    display:inline-block;
+
+    max-width:100%;
+
+    padding:
+        10px 18px;
+
+    border-radius:25px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.2);
+
+    background:
+        rgba(5,20,23,.35);
+
+    backdrop-filter:
+        blur(12px);
+
+    color:
+        rgba(235,255,255,.85);
+
+    font-size:12px;
+
+    line-height:1.45;
+
+    animation:
+        messageIn .3s ease;
+}
+
+@keyframes messageIn{
+
+    from{
+        opacity:0;
+        transform:
+            translateY(8px);
+    }
+
+    to{
+        opacity:1;
+        transform:
+            translateY(0);
+    }
+}
+
 
 /* =========================
    MOBILE
 ========================= */
 
-@media(max-width:600px) {
+@media(max-width:600px){
 
-    .top-left {
-        top: 16px;
-        left: 16px;
+    .jarvis-title{
+
+        font-size:38px;
+
+        letter-spacing:8px;
     }
 
-    .top-right {
-        top: 16px;
-        right: 16px;
+    .command-wrapper{
+
+        width:calc(100% - 28px);
+
+        bottom:18px;
+
+        padding-left:16px;
     }
 
-    .system-name {
-        font-size: 9px;
-        letter-spacing: 3px;
+    #textInput{
+
+        font-size:13px;
     }
 
-    .system-version {
-        font-size: 7px;
+    #sendBtn{
+
+        padding:0 13px;
+
+        font-size:9px;
     }
 
-    .connection {
-        font-size: 8px;
+    #micBtn{
+
+        width:36px;
+        height:36px;
     }
 
-    #chat {
-        bottom: 140px;
-        width: 86%;
+    #chat{
+
+        bottom:82px;
+
+        width:88%;
     }
 
-    .msg {
-        font-size: 11px;
-        padding: 10px 14px;
-    }
+    .msg{
 
-    .status-panel {
-        bottom: 108px;
-    }
-
-    #statusText {
-        font-size: 9px;
-        letter-spacing: 4px;
-    }
-
-    .input-container {
-        width: calc(100% - 85px);
-        left: calc(50% + 20px);
-    }
-
-    .input-field {
-        font-size: 11px;
-    }
-
-    .btn {
-        padding: 0 12px;
-    }
-
-    .mic-button {
-        left: 18px;
-        bottom: 24px;
-        width: 42px;
-        height: 42px;
-    }
-
-    .bottom-info {
-        display: none;
+        font-size:11px;
     }
 }
+
 </style>
 </head>
 
@@ -478,81 +523,71 @@ html, body {
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
-<div class="scanlines"></div>
 
-<!-- HUD -->
 
-<div class="hud top-left">
-    <div class="system-name">JARVIS CORE</div>
-    <div class="system-version">NEURAL ENGINE // V2.0</div>
+<!-- =========================
+     TITOLO CENTRALE
+========================= -->
+
+<div class="jarvis-title">
+    J.A.R.V.I.S
 </div>
 
-<div class="hud top-right">
-    <div class="connection">
-        <div class="connection-dot"></div>
-        <span id="connectionText">CONNECTED</span>
-    </div>
-</div>
 
-<!-- CORE CENTER -->
-
-<div class="core-label">
-    <div class="core-title">NEURAL CORE</div>
-    <div class="core-id">JRV-01</div>
-</div>
-
-<!-- CHAT -->
+<!-- =========================
+     CHAT
+========================= -->
 
 <div id="chat"></div>
 
-<!-- STATUS -->
 
-<div class="status-panel">
-    <div id="statusText">IDLE</div>
-    <div class="status-line"></div>
-</div>
+<!-- =========================
+     COMANDO
+========================= -->
 
-<!-- MIC -->
-
-<button id="micBtn" class="mic-button" title="Microfono">
-    🎙
-</button>
-
-<!-- INPUT -->
-
-<div class="input-container">
+<div class="command-wrapper">
 
     <input
         id="textInput"
-        class="input-field"
         type="text"
         autocomplete="off"
-        placeholder="Scrivi un comando a JARVIS..."
+        placeholder="Chiedi qualcosa a JARVIS..."
     >
 
-    <button id="sendBtn" class="btn">
+    <button
+        id="micBtn"
+        aria-label="Microfono"
+    >
+        <span class="mic-icon"></span>
+    </button>
+
+    <button
+        id="sendBtn"
+    >
         INVIA
     </button>
 
 </div>
 
-<div class="bottom-info">
-    PERSONAL ARTIFICIAL INTELLIGENCE SYSTEM
-</div>
 
-<!-- THREE.JS -->
+<!-- =========================
+     THREE.JS
+========================= -->
 
 <script type="importmap">
 {
-    "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
+    "imports":{
+        "three":
+        "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
     }
 }
 </script>
 
+
 <script type="module">
 
 import * as THREE from 'three';
+
 
 /* =====================================================
    API
@@ -567,39 +602,50 @@ const API =
 ===================================================== */
 
 const container =
-    document.getElementById("webgl-container");
-
-const statusText =
-    document.getElementById("statusText");
+    document.getElementById(
+        "webgl-container"
+    );
 
 const chat =
-    document.getElementById("chat");
-
-const micBtn =
-    document.getElementById("micBtn");
+    document.getElementById(
+        "chat"
+    );
 
 const textInput =
-    document.getElementById("textInput");
+    document.getElementById(
+        "textInput"
+    );
 
 const sendBtn =
-    document.getElementById("sendBtn");
+    document.getElementById(
+        "sendBtn"
+    );
 
-const connectionText =
-    document.getElementById("connectionText");
+const micBtn =
+    document.getElementById(
+        "micBtn"
+    );
+
+const jarvisTitle =
+    document.querySelector(
+        ".jarvis-title"
+    );
 
 
 /* =====================================================
-   THREE SCENE
+   SCENA
 ===================================================== */
 
 const scene =
     new THREE.Scene();
 
+
 const camera =
     new THREE.PerspectiveCamera(
         55,
-        window.innerWidth / window.innerHeight,
-        0.1,
+        window.innerWidth /
+        window.innerHeight,
+        .1,
         1000
     );
 
@@ -608,8 +654,10 @@ camera.position.z = 5.2;
 
 const renderer =
     new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true
+
+        antialias:true,
+
+        alpha:true
     });
 
 renderer.setSize(
@@ -618,26 +666,35 @@ renderer.setSize(
 );
 
 renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio, 2)
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
 );
 
-container.appendChild(renderer.domElement);
+container.appendChild(
+    renderer.domElement
+);
 
 
 /* =====================================================
-   HOLOGRAM TEXTURE
+   TEXTURE PARTICELLA
 ===================================================== */
 
-function createGlowTexture() {
+function createGlowTexture(){
 
     const canvas =
-        document.createElement("canvas");
+        document.createElement(
+            "canvas"
+        );
 
     canvas.width = 64;
     canvas.height = 64;
 
     const ctx =
-        canvas.getContext("2d");
+        canvas.getContext(
+            "2d"
+        );
 
     const gradient =
         ctx.createRadialGradient(
@@ -651,18 +708,18 @@ function createGlowTexture() {
     );
 
     gradient.addColorStop(
-        0.15,
-        "rgba(255,255,150,1)"
+        .18,
+        "rgba(255,255,170,.98)"
     );
 
     gradient.addColorStop(
-        0.35,
-        "rgba(0,255,255,0.9)"
+        .4,
+        "rgba(0,255,255,.9)"
     );
 
     gradient.addColorStop(
-        0.7,
-        "rgba(0,150,180,0.35)"
+        .7,
+        "rgba(0,180,200,.35)"
     );
 
     gradient.addColorStop(
@@ -670,94 +727,118 @@ function createGlowTexture() {
         "rgba(0,0,0,0)"
     );
 
-    ctx.fillStyle = gradient;
+    ctx.fillStyle =
+        gradient;
 
     ctx.fillRect(
-        0,
-        0,
-        64,
-        64
+        0,0,64,64
     );
 
-    return new THREE.CanvasTexture(canvas);
+    return new THREE.CanvasTexture(
+        canvas
+    );
 }
 
 
 /* =====================================================
-   NEURAL PARTICLES
+   RETE NEURALE
 ===================================================== */
 
-const COUNT = 2800;
+const COUNT = 3000;
 
 const geometry =
     new THREE.BufferGeometry();
 
+
 const positions =
-    new Float32Array(COUNT * 3);
+    new Float32Array(
+        COUNT * 3
+    );
 
 const basePositions =
-    new Float32Array(COUNT * 3);
+    new Float32Array(
+        COUNT * 3
+    );
 
-const radius =
-    new Float32Array(COUNT);
+const radii =
+    new Float32Array(
+        COUNT
+    );
 
-const theta =
-    new Float32Array(COUNT);
-
-const phi =
-    new Float32Array(COUNT);
-
-const random =
-    new Float32Array(COUNT);
+const angles =
+    new Float32Array(
+        COUNT * 2
+    );
 
 
-for(let i = 0; i < COUNT; i++) {
+for(
+    let i=0;
+    i<COUNT;
+    i++
+){
 
     const r =
         1.55 +
-        Math.random() * 0.55;
+        Math.random() * .5;
 
-    const t =
-        Math.random() * Math.PI * 2;
+    const theta =
+        Math.random() *
+        Math.PI * 2;
 
-    const p =
+    const phi =
         Math.acos(
             2 * Math.random() - 1
         );
 
-    radius[i] = r;
-    theta[i] = t;
-    phi[i] = p;
 
-    random[i] =
-        Math.random();
+    radii[i] = r;
+
+    angles[i*2] =
+        theta;
+
+    angles[i*2+1] =
+        phi;
+
 
     const x =
         r *
-        Math.sin(p) *
-        Math.cos(t);
+        Math.sin(phi) *
+        Math.cos(theta);
 
     const y =
         r *
-        Math.sin(p) *
-        Math.sin(t);
+        Math.sin(phi) *
+        Math.sin(theta);
 
     const z =
         r *
-        Math.cos(p);
+        Math.cos(phi);
 
-    positions[i*3] = x;
-    positions[i*3+1] = y;
-    positions[i*3+2] = z;
 
-    basePositions[i*3] = x;
-    basePositions[i*3+1] = y;
-    basePositions[i*3+2] = z;
+    positions[i*3] =
+        x;
+
+    positions[i*3+1] =
+        y;
+
+    positions[i*3+2] =
+        z;
+
+
+    basePositions[i*3] =
+        x;
+
+    basePositions[i*3+1] =
+        y;
+
+    basePositions[i*3+2] =
+        z;
 }
 
 
 geometry.setAttribute(
     "position",
+
     new THREE.BufferAttribute(
         positions,
         3
@@ -766,17 +847,19 @@ geometry.setAttribute(
 
 
 /* =====================================================
-   PARTICLE MATERIAL
+   MATERIALE
 ===================================================== */
 
 const particleMaterial =
     new THREE.PointsMaterial({
 
         color:
-            new THREE.Color(0x00ffff),
+            new THREE.Color(
+                0x00ffff
+            ),
 
         size:
-            0.045,
+            .044,
 
         map:
             createGlowTexture(),
@@ -785,7 +868,7 @@ const particleMaterial =
             true,
 
         opacity:
-            0.92,
+            .9,
 
         depthWrite:
             false,
@@ -801,205 +884,83 @@ const particles =
         particleMaterial
     );
 
-scene.add(particles);
+scene.add(
+    particles
+);
 
 
 /* =====================================================
-   INNER CORE
+   STATO
 ===================================================== */
 
-const coreGeometry =
-    new THREE.SphereGeometry(
-        0.38,
-        32,
-        32
+let targetEnergy = .15;
+let currentEnergy = .15;
+
+
+const cyan =
+    new THREE.Color(
+        0x00ffff
     );
 
-const coreMaterial =
-    new THREE.MeshBasicMaterial({
-        color: 0x00ffff,
-        transparent: true,
-        opacity: 0.12,
-        blending: THREE.AdditiveBlending
-    });
-
-const core =
-    new THREE.Mesh(
-        coreGeometry,
-        coreMaterial
+const yellow =
+    new THREE.Color(
+        0xffff00
     );
 
-scene.add(core);
+const currentColor =
+    cyan.clone();
 
 
-/* =====================================================
-   ENERGY RINGS
-===================================================== */
+function setState(state){
 
-const rings = [];
-
-for(let i = 0; i < 5; i++) {
-
-    const ringGeometry =
-        new THREE.TorusGeometry(
-            1.72 + i * 0.11,
-            0.006,
-            8,
-            160
-        );
-
-    const ringMaterial =
-        new THREE.MeshBasicMaterial({
-            color:
-                i % 2 === 0
-                ? 0x00ffff
-                : 0xffff00,
-
-            transparent:
-                true,
-
-            opacity:
-                0.18,
-
-            blending:
-                THREE.AdditiveBlending
-        });
-
-    const ring =
-        new THREE.Mesh(
-            ringGeometry,
-            ringMaterial
-        );
-
-    ring.rotation.x =
-        Math.random() * Math.PI;
-
-    ring.rotation.y =
-        Math.random() * Math.PI;
-
-    ring.rotation.z =
-        Math.random() * Math.PI;
-
-    scene.add(ring);
-
-    rings.push(ring);
-}
-
-
-/* =====================================================
-   STATE SYSTEM
-===================================================== */
-
-let targetEnergy = 0;
-let currentEnergy = 0;
-
-let currentColor =
-    new THREE.Color(0x00ffff);
-
-const idleColor =
-    new THREE.Color(0x00ffff);
-
-const activeColor =
-    new THREE.Color(0xffff00);
-
-
-/* =====================================================
-   JARVIS STATE
-===================================================== */
-
-function setJarvisState(state) {
-
-    if(state === "idle") {
-
-        targetEnergy = 0.15;
-
-        statusText.textContent =
-            "IDLE";
-
-        statusText.style.color =
-            "rgba(255,255,255,0.42)";
-
-        statusText.style.textShadow =
-            "none";
-    }
-
-
-    if(state === "listening") {
-
-        targetEnergy = 0.55;
-
-        statusText.textContent =
-            "LISTENING";
-
-        statusText.style.color =
-            "#00ffff";
-
-        statusText.style.textShadow =
-            "0 0 12px rgba(0,255,255,0.8)";
-    }
-
-
-    if(state === "thinking") {
+    if(
+        state === "thinking" ||
+        state === "speaking"
+    ){
 
         targetEnergy = 1;
 
-        statusText.textContent =
-            "THINKING";
+        jarvisTitle.style.opacity =
+            ".95";
 
-        statusText.style.color =
-            "#ffff00";
+    }else{
 
-        statusText.style.textShadow =
-            "0 0 14px rgba(255,255,0,0.85)";
-    }
+        targetEnergy = .15;
 
-
-    if(state === "speaking") {
-
-        targetEnergy = 0.85;
-
-        statusText.textContent =
-            "SPEAKING";
-
-        statusText.style.color =
-            "#ffff00";
-
-        statusText.style.textShadow =
-            "0 0 14px rgba(255,255,0,0.85)";
+        jarvisTitle.style.opacity =
+            ".82";
     }
 }
 
 
 /* =====================================================
-   ANIMATION
+   ANIMAZIONE
 ===================================================== */
 
-function animate() {
+function animate(){
 
     requestAnimationFrame(
         animate
     );
 
+
     const time =
-        performance.now() * 0.001;
+        performance.now()
+        * .001;
 
 
     currentEnergy +=
         (
             targetEnergy -
             currentEnergy
-        ) * 0.035;
-
-
-    const desiredColor =
-        currentEnergy > 0.4
-        ? activeColor
-        : idleColor;
+        ) * .035;
 
 
     currentColor.lerp(
-        desiredColor,
-        0.035
+        currentEnergy > .35
+            ? yellow
+            : cyan,
+        .035
     );
 
 
@@ -1007,45 +968,47 @@ function animate() {
         currentColor;
 
 
-    /* PARTICLE MOTION */
-
     const pos =
-        geometry.attributes.position.array;
+        geometry.attributes
+        .position.array;
 
 
-    for(let i = 0; i < COUNT; i++) {
+    for(
+        let i=0;
+        i<COUNT;
+        i++
+    ){
 
-        const idx =
+        const index =
             i * 3;
 
+
         const r =
-            radius[i];
+            radii[i];
 
-        const t =
-            theta[i];
+        const theta =
+            angles[i*2];
 
-        const p =
-            phi[i];
-
-        const rnd =
-            random[i];
+        const phi =
+            angles[i*2+1];
 
 
         const wave =
             Math.sin(
                 time * 1.8 +
-                p * 5 +
-                rnd * 10
-            ) *
-            0.055;
+                phi * 5 +
+                i * .002
+            ) * .045;
 
 
         const energyWave =
             Math.sin(
                 time * 3 +
-                t * 4
-            ) *
-            0.16 *
+                theta * 5
+            )
+            *
+            .18
+            *
             currentEnergy;
 
 
@@ -1055,95 +1018,53 @@ function animate() {
             energyWave;
 
 
-        pos[idx] =
+        pos[index] =
             rr *
-            Math.sin(p) *
+            Math.sin(phi) *
             Math.cos(
-                t +
-                Math.sin(time + p) *
-                0.05 *
+                theta +
+                Math.sin(
+                    time + phi
+                ) *
+                .04 *
                 currentEnergy
             );
 
 
-        pos[idx+1] =
+        pos[index+1] =
             rr *
-            Math.sin(p) *
-            Math.sin(t);
+            Math.sin(phi) *
+            Math.sin(theta);
 
 
-        pos[idx+2] =
+        pos[index+2] =
             rr *
             Math.cos(
-                p +
-                Math.sin(time * 1.4 + t) *
-                0.035 *
+                phi +
+                Math.sin(
+                    time * 1.5 +
+                    theta
+                ) *
+                .03 *
                 currentEnergy
             );
     }
 
 
-    geometry.attributes.position.needsUpdate =
-        true;
+    geometry.attributes
+        .position
+        .needsUpdate = true;
 
-
-    /* SPHERE ROTATION */
 
     particles.rotation.y +=
-        0.0018 +
-        currentEnergy * 0.004;
+        .0018 +
+        currentEnergy *
+        .004;
 
     particles.rotation.x =
-        Math.sin(time * 0.35) *
-        0.08;
-
-
-    /* CORE PULSE */
-
-    const coreScale =
-        1 +
-        Math.sin(time * 3.5) *
-        0.07 *
-        (0.3 + currentEnergy);
-
-    core.scale.setScalar(
-        coreScale
-    );
-
-    coreMaterial.opacity =
-        0.07 +
-        currentEnergy * 0.13;
-
-
-    /* RINGS */
-
-    rings.forEach((ring, i) => {
-
-        ring.rotation.x +=
-            0.001 *
-            (i + 1);
-
-        ring.rotation.y +=
-            0.0015 *
-            (i % 2 ? -1 : 1);
-
-        ring.rotation.z +=
-            0.0007;
-
-        ring.scale.setScalar(
-            1 +
-            Math.sin(
-                time * 1.5 +
-                i
-            ) *
-            0.025 *
-            currentEnergy
-        );
-
-        ring.material.opacity =
-            0.10 +
-            currentEnergy * 0.18;
-    });
+        Math.sin(
+            time * .35
+        ) * .08;
 
 
     renderer.render(
@@ -1152,6 +1073,7 @@ function animate() {
     );
 }
 
+
 animate();
 
 
@@ -1159,12 +1081,14 @@ animate();
    CHAT
 ===================================================== */
 
-function addMsg(text) {
+function addMsg(text){
 
     chat.innerHTML = "";
 
     const msg =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     msg.className =
         "msg";
@@ -1172,177 +1096,9 @@ function addMsg(text) {
     msg.textContent =
         text;
 
-    chat.appendChild(msg);
-}
-
-
-/* =====================================================
-   SEND TEXT
-===================================================== */
-
-function handleUserSend() {
-
-    const text =
-        textInput.value.trim();
-
-    if(!text)
-        return;
-
-    textInput.value = "";
-
-    addMsg(text);
-
-    processAi(text);
-}
-
-
-sendBtn.addEventListener(
-    "click",
-    handleUserSend
-);
-
-
-textInput.addEventListener(
-    "keydown",
-    event => {
-
-        if(event.key === "Enter") {
-
-            event.preventDefault();
-
-            handleUserSend();
-        }
-    }
-);
-
-
-/* =====================================================
-   SPEECH RECOGNITION
-===================================================== */
-
-const Recognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-
-let recognition = null;
-let isListening = false;
-
-
-if(Recognition) {
-
-    recognition =
-        new Recognition();
-
-    recognition.lang =
-        "it-IT";
-
-    recognition.continuous =
-        false;
-
-    recognition.interimResults =
-        false;
-
-
-    recognition.onstart = () => {
-
-        isListening = true;
-
-        micBtn.classList.add(
-            "active"
-        );
-
-        setJarvisState(
-            "listening"
-        );
-    };
-
-
-    recognition.onresult =
-        event => {
-
-            const text =
-                event
-                    .results[0][0]
-                    .transcript
-                    .trim();
-
-            if(text) {
-
-                addMsg(text);
-
-                processAi(text);
-            }
-        };
-
-
-    recognition.onerror =
-        () => {
-
-            isListening =
-                false;
-
-            micBtn.classList.remove(
-                "active"
-            );
-
-            setJarvisState(
-                "idle"
-            );
-        };
-
-
-    recognition.onend =
-        () => {
-
-            isListening =
-                false;
-
-            micBtn.classList.remove(
-                "active"
-            );
-
-            if(
-                statusText.textContent ===
-                "LISTENING"
-            ) {
-
-                setJarvisState(
-                    "idle"
-                );
-            }
-        };
-
-
-    micBtn.addEventListener(
-        "click",
-        () => {
-
-            if(isListening) {
-
-                recognition.stop();
-
-                return;
-            }
-
-            try {
-
-                recognition.start();
-
-            } catch(error) {
-
-                console.log(error);
-            }
-        }
+    chat.appendChild(
+        msg
     );
-
-} else {
-
-    micBtn.disabled =
-        true;
-
-    micBtn.style.opacity =
-        "0.3";
 }
 
 
@@ -1350,40 +1106,36 @@ if(Recognition) {
    AI
 ===================================================== */
 
-async function processAi(text) {
+async function processAi(text){
 
-    setJarvisState(
+    setState(
         "thinking"
     );
 
 
-    try {
+    try{
 
         const response =
             await fetch(
                 API,
                 {
-                    method: "POST",
+                    method:"POST",
 
-                    headers: {
+                    headers:{
                         "Content-Type":
                             "application/json"
                     },
 
                     body:
                         JSON.stringify({
-                            message: text
+                            message:text
                         })
                 }
             );
 
 
-        if(!response.ok) {
-
-            throw new Error(
-                "API error"
-            );
-        }
+        if(!response.ok)
+            throw new Error();
 
 
         const data =
@@ -1395,32 +1147,91 @@ async function processAi(text) {
             "Elaborazione completata.";
 
 
-        addMsg(reply);
-
-        speak(reply);
-
-
-    } catch(error) {
-
-        console.error(error);
-
-        connectionText.textContent =
-            "CONNECTION ERROR";
+        addMsg(
+            reply
+        );
 
         speak(
-            "Errore di connessione al sistema."
+            reply
+        );
+
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+        addMsg(
+            "Errore di connessione."
+        );
+
+        speak(
+            "Errore di connessione."
         );
     }
 }
 
 
 /* =====================================================
-   VOICE
+   INVIO
 ===================================================== */
 
-function speak(text) {
+function sendMessage(){
 
-    if(!("speechSynthesis" in window))
+    const text =
+        textInput.value.trim();
+
+
+    if(!text)
+        return;
+
+
+    textInput.value = "";
+
+    addMsg(
+        text
+    );
+
+    processAi(
+        text
+    );
+}
+
+
+sendBtn.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+textInput.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key ===
+            "Enter"
+        ){
+
+            event.preventDefault();
+
+            sendMessage();
+        }
+    }
+);
+
+
+/* =====================================================
+   VOCE
+===================================================== */
+
+function speak(text){
+
+    if(
+        !("speechSynthesis"
+        in window)
+    )
         return;
 
 
@@ -1437,10 +1248,10 @@ function speak(text) {
         "it-IT";
 
     utterance.rate =
-        0.95;
+        .95;
 
     utterance.pitch =
-        0.85;
+        .85;
 
     utterance.volume =
         1;
@@ -1449,7 +1260,7 @@ function speak(text) {
     utterance.onstart =
         () => {
 
-            setJarvisState(
+            setState(
                 "speaking"
             );
         };
@@ -1458,7 +1269,7 @@ function speak(text) {
     utterance.onend =
         () => {
 
-            setJarvisState(
+            setState(
                 "idle"
             );
         };
@@ -1471,27 +1282,130 @@ function speak(text) {
 
 
 /* =====================================================
-   CONNECTION CHECK
+   MICROFONO
 ===================================================== */
 
-window.addEventListener(
-    "online",
-    () => {
-
-        connectionText.textContent =
-            "CONNECTED";
-    }
-);
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
 
-window.addEventListener(
-    "offline",
-    () => {
+let recognition = null;
 
-        connectionText.textContent =
-            "OFFLINE";
-    }
-);
+let listening = false;
+
+
+if(Recognition){
+
+    recognition =
+        new Recognition();
+
+
+    recognition.lang =
+        "it-IT";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.onstart =
+        () => {
+
+            listening = true;
+
+            micBtn.classList.add(
+                "active"
+            );
+
+            setState(
+                "listening"
+            );
+        };
+
+
+    recognition.onresult =
+        event => {
+
+            const text =
+                event
+                .results[0][0]
+                .transcript
+                .trim();
+
+
+            if(text){
+
+                textInput.value =
+                    text;
+
+                sendMessage();
+            }
+        };
+
+
+    recognition.onerror =
+        () => {
+
+            listening = false;
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+            setState(
+                "idle"
+            );
+        };
+
+
+    recognition.onend =
+        () => {
+
+            listening = false;
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+            setState(
+                "idle"
+            );
+        };
+
+
+    micBtn.addEventListener(
+        "click",
+        () => {
+
+            if(listening){
+
+                recognition.stop();
+
+            }else{
+
+                try{
+
+                    recognition.start();
+
+                }catch(e){
+
+                    console.log(e);
+                }
+            }
+        }
+    );
+
+}else{
+
+    micBtn.style.opacity =
+        ".3";
+
+    micBtn.disabled =
+        true;
+}
 
 
 /* =====================================================
@@ -1520,7 +1434,7 @@ window.addEventListener(
    START
 ===================================================== */
 
-setJarvisState(
+setState(
     "idle"
 );
 

@@ -29,19 +29,14 @@
 
 html,
 body{
-
     width:100%;
     height:100%;
-
     overflow:hidden;
-
     background:#010405;
-
     font-family:Arial,sans-serif;
 }
 
 body{
-
     background:
         radial-gradient(
             circle at center,
@@ -57,11 +52,8 @@ body{
 ===================================================== */
 
 #webgl-container{
-
     position:fixed;
-
     inset:0;
-
     z-index:1;
 }
 
@@ -71,13 +63,9 @@ body{
 ===================================================== */
 
 .vignette{
-
     position:fixed;
-
     inset:0;
-
     z-index:3;
-
     pointer-events:none;
 
     background:
@@ -95,15 +83,10 @@ body{
 ===================================================== */
 
 .jarvis-title{
-
     position:fixed;
-
     top:2.4%;
-
     left:50%;
-
     transform:translateX(-50%);
-
     z-index:30;
 
     color:rgba(255,255,255,.86);
@@ -135,11 +118,9 @@ body{
 ===================================================== */
 
 .tactical-title{
-
     position:absolute;
 
     top:4%;
-
     left:50%;
 
     transform:translateX(-50%);
@@ -173,7 +154,6 @@ body{
 }
 
 #tacticalMap.active .tactical-title{
-
     opacity:1;
 }
 
@@ -183,19 +163,15 @@ body{
 ===================================================== */
 
 .datetime{
-
     position:fixed;
 
     top:18px;
-
     right:24px;
 
     z-index:30;
 
     display:flex;
-
     flex-direction:column;
-
     align-items:flex-end;
 
     gap:3px;
@@ -206,7 +182,6 @@ body{
 }
 
 .time{
-
     color:rgba(150,255,255,.6);
 
     font-size:11px;
@@ -219,7 +194,6 @@ body{
 }
 
 .date{
-
     color:rgba(150,255,255,.38);
 
     font-size:8px;
@@ -233,11 +207,9 @@ body{
 ===================================================== */
 
 #chat{
-
     position:fixed;
 
     left:50%;
-
     bottom:92px;
 
     transform:translateX(-50%);
@@ -252,7 +224,6 @@ body{
 }
 
 .msg{
-
     display:inline-block;
 
     max-width:100%;
@@ -269,7 +240,6 @@ body{
         rgba(4,20,23,.4);
 
     backdrop-filter:blur(14px);
-
     -webkit-backdrop-filter:blur(14px);
 
     color:
@@ -288,11 +258,9 @@ body{
 ===================================================== */
 
 .command-wrapper{
-
     position:fixed;
 
     left:50%;
-
     bottom:23px;
 
     transform:translateX(-50%);
@@ -302,7 +270,6 @@ body{
     width:min(650px,90%);
 
     display:flex;
-
     align-items:center;
 
     padding:6px 7px 6px 20px;
@@ -317,7 +284,6 @@ body{
         rgba(5,20,23,.38);
 
     backdrop-filter:blur(20px);
-
     -webkit-backdrop-filter:blur(20px);
 
     box-shadow:
@@ -326,7 +292,6 @@ body{
 }
 
 .command-wrapper:focus-within{
-
     border-color:
         rgba(0,255,255,.6);
 
@@ -336,13 +301,11 @@ body{
 }
 
 #textInput{
-
     flex:1;
 
     min-width:0;
 
     border:none;
-
     outline:none;
 
     background:transparent;
@@ -357,7 +320,6 @@ body{
 }
 
 #textInput::placeholder{
-
     color:rgba(255,255,255,.3);
 }
 
@@ -367,9 +329,7 @@ body{
 ===================================================== */
 
 #micBtn{
-
     width:34px;
-
     height:34px;
 
     margin-right:7px;
@@ -383,16 +343,12 @@ body{
     cursor:pointer;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 }
 
 .mic-icon{
-
     width:8px;
-
     height:14px;
 
     border:
@@ -405,17 +361,14 @@ body{
 }
 
 .mic-icon::after{
-
     content:"";
 
     position:absolute;
 
     left:50%;
-
     bottom:-6px;
 
     width:12px;
-
     height:7px;
 
     transform:translateX(-50%);
@@ -431,12 +384,10 @@ body{
 }
 
 #micBtn:hover{
-
     color:#00ffff;
 }
 
 #micBtn.active{
-
     color:#8fffff;
 }
 
@@ -446,7 +397,6 @@ body{
 ===================================================== */
 
 #sendBtn{
-
     height:39px;
 
     padding:0 17px;
@@ -471,7 +421,6 @@ body{
 }
 
 #sendBtn:hover{
-
     color:white;
 
     border-color:#00ffff;
@@ -486,7 +435,6 @@ body{
 ===================================================== */
 
 #tacticalMap{
-
     position:fixed;
 
     inset:0;
@@ -501,7 +449,6 @@ body{
 }
 
 #tacticalMap.active{
-
     display:block;
 
     animation:
@@ -511,16 +458,12 @@ body{
 @keyframes mapIn{
 
     from{
-
         opacity:0;
-
         transform:scale(1.015);
     }
 
     to{
-
         opacity:1;
-
         transform:scale(1);
     }
 }
@@ -531,15 +474,11 @@ body{
 ===================================================== */
 
 .map-frame{
-
     position:absolute;
 
     top:2cm;
-
     left:2cm;
-
     right:2cm;
-
     bottom:2cm;
 
     overflow:hidden;
@@ -553,7 +492,6 @@ body{
         rgba(0,255,255,.2);
 
     box-shadow:
-
         0 0 30px
         rgba(0,0,0,.5),
 
@@ -569,13 +507,11 @@ body{
 ===================================================== */
 
 #map{
-
     position:absolute;
 
     inset:0;
 
     width:100%;
-
     height:100%;
 
     background:#071014;
@@ -583,11 +519,10 @@ body{
 
 
 /* =====================================================
-   NESSUN FILTRO SULLA MAPPA
+   NESSUN FILTRO CSS
 ===================================================== */
 
 #map .leaflet-tile{
-
     filter:none !important;
 }
 
@@ -597,7 +532,6 @@ body{
 ===================================================== */
 
 .leaflet-container{
-
     background:#071014 !important;
 
     font-family:Arial,sans-serif;
@@ -605,11 +539,10 @@ body{
 
 
 /* =====================================================
-   NASCONDI ZOOM
+   NASCONDI ZOOM +/-
 ===================================================== */
 
 .leaflet-control-zoom{
-
     display:none !important;
 }
 
@@ -619,7 +552,6 @@ body{
 ===================================================== */
 
 .leaflet-control-attribution{
-
     background:
         rgba(0,8,10,.65)!important;
 
@@ -633,7 +565,6 @@ body{
 }
 
 .leaflet-control-attribution a{
-
     color:
         rgba(150,240,255,.5)!important;
 }
@@ -644,9 +575,7 @@ body{
 ===================================================== */
 
 .jarvis-marker{
-
     width:18px;
-
     height:18px;
 
     border-radius:50%;
@@ -666,17 +595,14 @@ body{
 }
 
 .jarvis-marker::after{
-
     content:"";
 
     position:absolute;
 
     left:50%;
-
     top:50%;
 
     width:5px;
-
     height:5px;
 
     transform:
@@ -696,17 +622,14 @@ body{
 ===================================================== */
 
 #closeMap{
-
     position:absolute;
 
     top:calc(2cm + 18px);
-
     left:calc(2cm + 18px);
 
     z-index:550;
 
     width:38px;
-
     height:38px;
 
     border:
@@ -726,20 +649,16 @@ body{
     font-size:20px;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
     backdrop-filter:blur(10px);
-
     -webkit-backdrop-filter:blur(10px);
 
     transition:.2s ease;
 }
 
 #closeMap:hover{
-
     color:white;
 
     border-color:#00ffff;
@@ -757,7 +676,6 @@ body{
 @media(max-width:600px){
 
     .jarvis-title{
-
         top:2.2%;
 
         font-size:23px;
@@ -766,24 +684,19 @@ body{
     }
 
     .datetime{
-
         top:12px;
-
         right:13px;
     }
 
     .time{
-
         font-size:10px;
     }
 
     .date{
-
         font-size:7px;
     }
 
     .command-wrapper{
-
         width:
             calc(100% - 24px);
 
@@ -791,12 +704,10 @@ body{
     }
 
     #textInput{
-
         font-size:13px;
     }
 
     #chat{
-
         bottom:80px;
     }
 
@@ -804,20 +715,15 @@ body{
     /* MAPPA MOBILE */
 
     .map-frame{
-
         top:75px;
-
         left:14px;
-
         right:14px;
-
         bottom:14px;
 
         border-radius:22px;
     }
 
     .tactical-title{
-
         top:18px;
 
         font-size:27px;
@@ -826,13 +732,10 @@ body{
     }
 
     #closeMap{
-
         top:88px;
-
         left:27px;
 
         width:34px;
-
         height:34px;
 
         font-size:18px;
@@ -898,15 +801,10 @@ body{
 
 <div id="tacticalMap">
 
-
-    <!-- TITOLO MAPPA -->
-
     <div class="tactical-title">
         TACTICAL MAP
     </div>
 
-
-    <!-- CONTENITORE MAPPA -->
 
     <div class="map-frame">
 
@@ -915,15 +813,12 @@ body{
     </div>
 
 
-    <!-- CHIUDI -->
-
     <button
         id="closeMap"
         title="Chiudi mappa"
     >
         ×
     </button>
-
 
 </div>
 
@@ -979,10 +874,8 @@ body{
 
 {
     "imports":{
-
         "three":
         "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
-
     }
 }
 
@@ -1013,17 +906,11 @@ const MAX_MEMORY =
 ===================================================== */
 
 /*
-   INCOLLA QUI LA TUA API KEY MAPTILER.
-
-   Esempio:
-
-   const MAPTILER_KEY =
-       "abc123...";
-
+   INSERISCI QUI LA NUOVA API KEY MAPTILER.
 */
 
 const MAPTILER_KEY =
-    "XoCcQhEV25WXyBFAxU8s";
+    "INCOLLA_LA_NUOVA_API_KEY_QUI";
 
 
 /* =====================================================
@@ -1148,11 +1035,8 @@ function addMemory(
 ){
 
     memory.push({
-
         role,
-
         content
-
     });
 
     memory =
@@ -1285,20 +1169,15 @@ renderer.setSize(
 renderer.setPixelRatio(
 
     Math.min(
-
         window.devicePixelRatio,
-
         2
-
     )
 
 );
 
 
 container.appendChild(
-
     renderer.domElement
-
 );
 
 
@@ -1339,47 +1218,28 @@ function createGlow(){
 
 
     gradient.addColorStop(
-
         0,
-
         "rgba(255,255,255,1)"
-
     );
 
-
     gradient.addColorStop(
-
         .2,
-
         "rgba(220,255,255,1)"
-
     );
 
-
     gradient.addColorStop(
-
         .4,
-
         "rgba(0,255,255,.9)"
-
     );
 
-
     gradient.addColorStop(
-
         .7,
-
         "rgba(0,150,190,.25)"
-
     );
 
-
     gradient.addColorStop(
-
         1,
-
         "rgba(0,0,0,0)"
-
     );
 
 
@@ -1387,12 +1247,10 @@ function createGlow(){
         gradient;
 
     ctx.fillRect(
-
         0,
         0,
         64,
         64
-
     );
 
 
@@ -1462,14 +1320,11 @@ for(
     radii[i] =
         r;
 
-
     angles[i*2] =
         theta;
 
-
     angles[i*2+1] =
         phi;
-
 
     seeds[i] =
         Math.random()*100;
@@ -1480,12 +1335,10 @@ for(
         Math.sin(phi) *
         Math.cos(theta);
 
-
     positions[i*3+1] =
         r *
         Math.sin(phi) *
         Math.sin(theta);
-
 
     positions[i*3+2] =
         r *
@@ -1499,11 +1352,8 @@ geometry.setAttribute(
     "position",
 
     new THREE.BufferAttribute(
-
         positions,
-
         3
-
     )
 
 );
@@ -1537,11 +1387,8 @@ const material =
 
 const particles =
     new THREE.Points(
-
         geometry,
-
         material
-
     );
 
 
@@ -1828,7 +1675,6 @@ let currentMarker = null;
 function initializeMap(){
 
     if(map){
-
         return;
     }
 
@@ -1836,7 +1682,7 @@ function initializeMap(){
     if(
         !MAPTILER_KEY ||
         MAPTILER_KEY ===
-        "INCOLLA_LA_TUA_MAPTILER_KEY_QUI"
+        "INCOLLA_LA_NUOVA_API_KEY_QUI"
     ){
 
         console.error(
@@ -1855,42 +1701,31 @@ function initializeMap(){
         L.map(
             "map",
             {
-
                 zoomControl:false,
-
                 attributionControl:true,
-
                 minZoom:1,
-
                 maxZoom:19
-
             }
         );
 
 
     map.setView(
-
         [45.5416,10.2118],
-
         10
-
     );
 
 
-    /*
-       MAPTILER DARK
+    /* =================================================
+       MAPTILER - MAPPA PERSONALIZZATA
+    ================================================= */
 
-       Nessun filtro CSS:
-       lo stile scuro viene direttamente
-       dalla mappa MapTiler.
-    */
+    const mapTiles =
+        `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
+
 
     L.tileLayer(
-
-        `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/?key=XoCcQhEV25WXyBFAxU8s#1.0/-7.04215/10.91106`,
-      
+        mapTiles,
         {
-
             tileSize:512,
 
             zoomOffset:-1,
@@ -1903,22 +1738,15 @@ function initializeMap(){
                 '&copy; MapTiler &copy; OpenStreetMap contributors',
 
             crossOrigin:true
-
         }
-
     ).addTo(map);
 
 
     setTimeout(
-
         () => {
-
             map.invalidateSize();
-
         },
-
         150
-
     );
 
 }
@@ -1935,11 +1763,6 @@ function openTacticalMap(){
     );
 
 
-    /*
-       Nasconde visivamente
-       il titolo J.A.R.V.I.S.
-    */
-
     jarvisTitle.style.opacity =
         "0";
 
@@ -1948,7 +1771,6 @@ function openTacticalMap(){
 
 
     setTimeout(
-
         () => {
 
             if(map){
@@ -1958,9 +1780,7 @@ function openTacticalMap(){
             }
 
         },
-
         350
-
     );
 
 }
@@ -1977,11 +1797,6 @@ function closeTacticalMap(){
     );
 
 
-    /*
-       Fa ricomparire
-       J.A.R.V.I.S.
-    */
-
     jarvisTitle.style.opacity =
         "1";
 
@@ -1989,11 +1804,8 @@ function closeTacticalMap(){
 
 
 closeMap.addEventListener(
-
     "click",
-
     closeTacticalMap
-
 );
 
 
@@ -2002,11 +1814,9 @@ closeMap.addEventListener(
 ===================================================== */
 
 function createJarvisMarker(
-
     lat,
     lon,
     name
-
 ){
 
     if(currentMarker){
@@ -2037,21 +1847,16 @@ function createJarvisMarker(
 
     currentMarker =
         L.marker(
-
             [lat,lon],
-
             {
                 icon
             }
-
         )
         .addTo(map);
 
 
     currentMarker.bindPopup(
-
         `<b style="color:#00ffff">${name}</b>`
-
     );
 
 
@@ -2091,20 +1896,13 @@ async function searchLocation(
 
         const response =
             await fetch(
-
                 url,
-
                 {
-
                     headers:{
-
                         "Accept":
                             "application/json"
-
                     }
-
                 }
-
             );
 
 
@@ -2128,11 +1926,9 @@ async function searchLocation(
         ){
 
             addMsg(
-
                 "Non riesco a trovare " +
                 place +
                 "."
-
             );
 
             return;
@@ -2156,54 +1952,39 @@ async function searchLocation(
 
 
         map.flyTo(
-
             [lat,lon],
-
             12,
-
             {
-
                 duration:1.8
-
             }
-
         );
 
 
         createJarvisMarker(
-
             lat,
             lon,
             place
-
         );
 
 
         addMsg(
-
             "Posizione acquisita: " +
             place
-
         );
 
 
     }catch(error){
 
         console.error(
-
             "MAP ERROR:",
-
             error
-
         );
 
 
         addMsg(
-
             "Impossibile localizzare " +
             place +
             "."
-
         );
 
     }
@@ -2317,17 +2098,13 @@ function handleMapCommand(
 
 
     for(
-
         const pattern of patterns
-
     ){
 
         if(
-
             normalized.startsWith(
                 pattern
             )
-
         ){
 
             const place =
@@ -2409,53 +2186,31 @@ function getTimeData(){
 
         currentTime:
             now.toLocaleTimeString(
-
                 "it-IT",
-
                 {
-
                     hour:"2-digit",
-
                     minute:"2-digit",
-
                     second:"2-digit"
-
                 }
-
             ),
-
 
         currentDate:
             now.toLocaleDateString(
-
                 "it-IT",
-
                 {
-
                     day:"2-digit",
-
                     month:"2-digit",
-
                     year:"numeric"
-
                 }
-
             ),
-
 
         dayOfWeek:
             now.toLocaleDateString(
-
                 "it-IT",
-
                 {
-
                     weekday:"long"
-
                 }
-
             ),
-
 
         timezone:
             Intl.DateTimeFormat()
@@ -2505,23 +2260,16 @@ async function processAi(
 
         const response =
             await fetch(
-
                 API,
-
                 {
-
                     method:"POST",
 
                     headers:{
-
                         "Content-Type":
                             "application/json"
-
                     },
 
-
                     body:
-
                         JSON.stringify({
 
                             message:
@@ -2543,9 +2291,7 @@ async function processAi(
                                 temporal.timezone
 
                         })
-
                 }
-
             );
 
 
@@ -2558,19 +2304,14 @@ async function processAi(
 
 
             console.error(
-
                 "Worker:",
-
                 errorText
-
             );
 
 
             throw new Error(
-
                 "HTTP " +
                 response.status
-
             );
 
         }
@@ -2581,9 +2322,7 @@ async function processAi(
         ){
 
             throw new Error(
-
                 "Streaming non disponibile"
-
             );
 
         }
@@ -2619,7 +2358,6 @@ async function processAi(
         let buffer =
             "";
 
-
         let reply =
             "";
 
@@ -2627,33 +2365,23 @@ async function processAi(
         while(true){
 
             const {
-
                 value,
-
                 done
-
             } =
                 await reader.read();
 
 
             if(done){
-
                 break;
-
             }
 
 
             buffer +=
                 decoder.decode(
-
                     value,
-
                     {
-
                         stream:true
-
                     }
-
                 );
 
 
@@ -2668,9 +2396,7 @@ async function processAi(
 
 
             for(
-
                 const line of lines
-
             ){
 
                 const trimmed =
@@ -2680,9 +2406,7 @@ async function processAi(
                 if(
                     !trimmed
                 ){
-
                     continue;
-
                 }
 
 
@@ -2691,9 +2415,7 @@ async function processAi(
                         "data:"
                     )
                 ){
-
                     continue;
-
                 }
 
 
@@ -2704,15 +2426,10 @@ async function processAi(
 
 
                 if(
-
                     !raw ||
-
                     raw === "[DONE]"
-
                 ){
-
                     continue;
-
                 }
 
 
@@ -2729,10 +2446,8 @@ async function processAi(
 
 
                     if(
-
                         typeof json.response ===
                         "string"
-
                     ){
 
                         piece =
@@ -2740,13 +2455,9 @@ async function processAi(
 
                     }
 
-
                     else if(
-
                         json.choices &&
-
                         json.choices[0]
-
                     ){
 
                         const choice =
@@ -2754,12 +2465,9 @@ async function processAi(
 
 
                         if(
-
                             choice.delta &&
-
                             typeof choice.delta.content ===
                             "string"
-
                         ){
 
                             piece =
@@ -2767,14 +2475,10 @@ async function processAi(
 
                         }
 
-
                         else if(
-
                             choice.message &&
-
                             typeof choice.message.content ===
                             "string"
-
                         ){
 
                             piece =
@@ -2782,12 +2486,9 @@ async function processAi(
 
                         }
 
-
                         else if(
-
                             typeof choice.text ===
                             "string"
-
                         ){
 
                             piece =
@@ -2818,11 +2519,8 @@ async function processAi(
                 }catch(error){
 
                     console.warn(
-
                         "Stream JSON:",
-
                         raw
-
                     );
 
                 }
@@ -2861,19 +2559,14 @@ async function processAi(
     }catch(error){
 
         console.error(
-
             "JARVIS ERROR:",
-
             error
-
         );
 
 
         addMsg(
-
             "ERRORE: " +
             error.message
-
         );
 
 
@@ -2899,9 +2592,7 @@ function sendMessage(){
     if(
         !text
     ){
-
         return;
-
     }
 
 
@@ -2922,18 +2613,13 @@ function sendMessage(){
 
 
 sendBtn.addEventListener(
-
     "click",
-
     sendMessage
-
 );
 
 
 textInput.addEventListener(
-
     "keydown",
-
     event => {
 
         if(
@@ -2947,7 +2633,6 @@ textInput.addEventListener(
         }
 
     }
-
 );
 
 
@@ -3113,11 +2798,8 @@ if(
         error => {
 
             console.error(
-
                 "Microfono:",
-
                 error
-
             );
 
 
@@ -3152,9 +2834,7 @@ if(
 
 
     micBtn.addEventListener(
-
         "click",
-
         () => {
 
             if(listening){
@@ -3178,7 +2858,6 @@ if(
             }
 
         }
-
     );
 
 }else{
@@ -3194,9 +2873,7 @@ if(
 ===================================================== */
 
 window.addEventListener(
-
     "resize",
-
     () => {
 
         camera.aspect =
@@ -3208,11 +2885,8 @@ window.addEventListener(
 
 
         renderer.setSize(
-
             window.innerWidth,
-
             window.innerHeight
-
         );
 
 
@@ -3223,7 +2897,6 @@ window.addEventListener(
         }
 
     }
-
 );
 
 
@@ -3244,9 +2917,7 @@ window.clearJarvisMemory =
 
 
         console.log(
-
             "Memoria JARVIS cancellata."
-
         );
 
     };

@@ -983,22 +983,9 @@ const MAX_MEMORY =
    ELEVENLABS
 ===================================================== */
 
-/*
-   IMPORTANTE:
-   QUI NON VA MESSA LA API KEY.
-
-   La API Key rimane nel Secret del Worker.
-
-   Questo è il Voice ID ElevenLabs.
-*/
-
 const ELEVEN_VOICE_ID =
     "vkBFlAtUdZqNR4MqxSVr";
 
-
-/*
-   Audio J.A.R.V.I.S.
-*/
 
 let currentAudio =
     null;
@@ -2371,13 +2358,8 @@ function getTimeData(){
    ELEVENLABS SPEAK
 ===================================================== */
 
-/*
-   Questa funzione NON usa più speechSynthesis.
+async function speak(text){
 
-   Chiede al Worker di generare l'audio ElevenLabs.
-*/
-
-async function speak(
     if(!text){
         return;
     }
@@ -2390,10 +2372,16 @@ async function speak(
     if(currentAudio){
 
         try{
+
             currentAudio.pause();
-            currentAudio.currentTime = 0;
+
+            currentAudio.currentTime =
+                0;
+
         }catch(error){
+
             console.warn(error);
+
         }
 
         currentAudio =
@@ -2453,11 +2441,11 @@ async function speak(
             );
 
             throw new Error(
-    "ElevenLabs HTTP " +
-    response.status +
-    ": " +
-    errorText
-);
+                "ElevenLabs HTTP " +
+                response.status +
+                ": " +
+                errorText
+            );
 
         }
 
@@ -2775,335 +2763,6 @@ async function processAi(text){
             error.message
         );
 
-
-        setState(
-            "idle"
-        );
-
-    }
-
-}
-    if(
-        handleMapCommand(
-            text
-        )
-    ){
-
-        return;
-
-    }
-
-    setState(
-        "thinking"
-    );
-
-
-    try{
-
-        const temporal =
-            getTimeData();
-
-        addMemory(
-            "user",
-            text
-        );
-
-
-        const response =
-            await fetch(
-                API,
-                {
-
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            message:
-                                text,
-
-                            memory:
-                                memory.slice(-4),
-
-                            currentTime:
-                                temporal.currentTime,
-
-                            currentDate:
-                                temporal.currentDate,
-
-                            dayOfWeek:
-                                temporal.dayOfWeek,
-
-                            timezone:
-                                temporal.timezone
-
-                        })
-
-                }
-            );
-
-
-        if(!response.ok){
-
-            const errorText =
-                await response.text();
-
-            console.error(
-                "Worker:",
-                errorText
-            );
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-
-        if(!response.body){
-
-            throw new Error(
-                "Streaming non disponibile"
-            );
-
-        }
-
-
-        chat.innerHTML =
-            "";
-
-        const element =
-            document.createElement(
-                "div"
-            );
-
-        element.className =
-            "msg";
-
-        chat.appendChild(
-            element
-        );
-
-
-        const reader =
-            response.body.getReader();
-
-        const decoder =
-            new TextDecoder();
-
-        let buffer =
-            "";
-
-        let reply =
-            "";
-
-
-        while(true){
-
-            const {
-                value,
-                done
-            } =
-                await reader.read();
-
-            if(done){
-                break;
-            }
-
-
-            buffer +=
-                decoder.decode(
-                    value,
-                    {
-                        stream:true
-                    }
-                );
-
-
-            const lines =
-                buffer.split(
-                    "\n"
-                );
-
-
-            buffer =
-                lines.pop() || "";
-
-
-            for(
-                const line of lines
-            ){
-
-                const trimmed =
-                    line.trim();
-
-                if(!trimmed){
-                    continue;
-                }
-
-                if(
-                    !trimmed.startsWith(
-                        "data:"
-                    )
-                ){
-                    continue;
-                }
-
-
-                const raw =
-                    trimmed
-                        .substring(5)
-                        .trim();
-
-
-                if(
-                    !raw ||
-                    raw === "[DONE]"
-                ){
-                    continue;
-                }
-
-
-                try{
-
-                    const json =
-                        JSON.parse(
-                            raw
-                        );
-
-
-                    let piece =
-                        "";
-
-
-                    if(
-                        typeof json.response ===
-                        "string"
-                    ){
-
-                        piece =
-                            json.response;
-
-                    }
-
-                    else if(
-                        json.choices &&
-                        json.choices[0]
-                    ){
-
-                        const choice =
-                            json.choices[0];
-
-
-                        if(
-                            choice.delta &&
-                            typeof choice.delta.content ===
-                            "string"
-                        ){
-
-                            piece =
-                                choice.delta.content;
-
-                        }
-
-                        else if(
-                            choice.message &&
-                            typeof choice.message.content ===
-                            "string"
-                        ){
-
-                            piece =
-                                choice.message.content;
-
-                        }
-
-                        else if(
-                            typeof choice.text ===
-                            "string"
-                        ){
-
-                            piece =
-                                choice.text;
-
-                        }
-
-                    }
-
-
-                    if(piece){
-
-                        reply +=
-                            piece;
-
-                        element.textContent =
-                            reply;
-
-                        setState(
-                            "speaking"
-                        );
-
-                    }
-
-
-                }catch(error){
-
-                    console.warn(
-                        "Stream JSON:",
-                        raw
-                    );
-
-                }
-
-            }
-
-        }
-
-
-        reply =
-            reply.trim();
-
-
-        if(!reply){
-
-            throw new Error(
-                "Risposta AI vuota"
-            );
-
-        }
-
-
-        addMemory(
-            "assistant",
-            reply
-        );
-
-
-        /*
-           ORA JARVIS USA ELEVENLABS
-        */
-
-        speak(
-            reply
-        );
-
-
-    }catch(error){
-
-        console.error(
-            "JARVIS ERROR:",
-            error
-        );
-
-        addMsg(
-            "ERRORE: " +
-            error.message
-        );
 
         setState(
             "idle"

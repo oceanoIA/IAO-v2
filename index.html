@@ -1,10 +1,7 @@
 <!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>J.A.R.V.I.S.</title><link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/><style>
+<title>J.A.R.V.I.S.</title><style>
 
 /* =====================================================
    BASE
@@ -68,16 +65,14 @@ body{
 
 
 /* =====================================================
-   TITOLO JARVIS
+   TITOLO
 ===================================================== */
 
 .jarvis-title{
     position:fixed;
     top:2.4%;
     left:50%;
-
     transform:translateX(-50%);
-
     z-index:30;
 
     color:rgba(255,255,255,.86);
@@ -93,59 +88,11 @@ body{
     white-space:nowrap;
 
     text-shadow:
-        0 0 10px
-        rgba(255,255,255,.12);
+        0 0 10px rgba(255,255,255,.12);
 
     pointer-events:none;
 
-    transition:
-        opacity .35s ease,
-        transform .35s ease;
-}
-
-
-/* =====================================================
-   TITOLO TACTICAL MAP
-===================================================== */
-
-.tactical-title{
-    position:absolute;
-
-    top:4%;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    z-index:530;
-
-    color:rgba(220,255,255,.9);
-
-    font-family:monospace;
-
-    font-size:
-        clamp(26px,5vw,58px);
-
-    font-weight:300;
-
-    letter-spacing:
-        clamp(6px,1.5vw,14px);
-
-    white-space:nowrap;
-
-    text-shadow:
-        0 0 10px rgba(0,255,255,.35),
-        0 0 30px rgba(0,255,255,.15);
-
-    pointer-events:none;
-
-    opacity:0;
-
-    transition:
-        opacity .35s ease;
-}
-
-#tacticalMap.active .tactical-title{
-    opacity:1;
+    transition:opacity .35s ease;
 }
 
 
@@ -180,8 +127,7 @@ body{
     letter-spacing:2px;
 
     text-shadow:
-        0 0 8px
-        rgba(0,255,255,.2);
+        0 0 8px rgba(0,255,255,.2);
 }
 
 .date{
@@ -222,8 +168,7 @@ body{
     padding:10px 18px;
 
     border:
-        1px solid
-        rgba(0,255,255,.22);
+        1px solid rgba(0,255,255,.22);
 
     border-radius:24px;
 
@@ -266,8 +211,7 @@ body{
     padding:6px 7px 6px 20px;
 
     border:
-        1px solid
-        rgba(100,255,255,.28);
+        1px solid rgba(100,255,255,.28);
 
     border-radius:40px;
 
@@ -278,8 +222,7 @@ body{
     -webkit-backdrop-filter:blur(20px);
 
     box-shadow:
-        0 0 30px
-        rgba(0,255,255,.05);
+        0 0 30px rgba(0,255,255,.05);
 }
 
 .command-wrapper:focus-within{
@@ -287,8 +230,7 @@ body{
         rgba(0,255,255,.6);
 
     box-shadow:
-        0 0 25px
-        rgba(0,255,255,.12);
+        0 0 25px rgba(0,255,255,.12);
 }
 
 #textInput{
@@ -343,8 +285,7 @@ body{
     height:14px;
 
     border:
-        1.3px solid
-        currentColor;
+        1.3px solid currentColor;
 
     border-radius:6px;
 
@@ -365,8 +306,7 @@ body{
     transform:translateX(-50%);
 
     border:
-        1.3px solid
-        currentColor;
+        1.3px solid currentColor;
 
     border-top:none;
 
@@ -380,6 +320,9 @@ body{
 
 #micBtn.active{
     color:#8fffff;
+
+    text-shadow:
+        0 0 10px #00ffff;
 }
 
 
@@ -393,8 +336,7 @@ body{
     padding:0 17px;
 
     border:
-        1px solid
-        rgba(0,255,255,.28);
+        1px solid rgba(0,255,255,.28);
 
     border-radius:22px;
 
@@ -409,6 +351,8 @@ body{
     letter-spacing:2px;
 
     cursor:pointer;
+
+    transition:.2s ease;
 }
 
 #sendBtn:hover{
@@ -430,7 +374,7 @@ body{
 
     inset:0;
 
-    z-index:20;
+    z-index:100;
 
     display:none;
 
@@ -461,6 +405,42 @@ body{
 
 
 /* =====================================================
+   TITOLO TACTICAL MAP
+===================================================== */
+
+.tactical-title{
+    position:absolute;
+
+    top:4%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:530;
+
+    color:rgba(220,255,255,.9);
+
+    font-family:monospace;
+
+    font-size:
+        clamp(26px,5vw,58px);
+
+    font-weight:300;
+
+    letter-spacing:
+        clamp(6px,1.5vw,14px);
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 0 10px rgba(0,255,255,.35),
+        0 0 30px rgba(0,255,255,.15);
+
+    pointer-events:none;
+}
+
+
+/* =====================================================
    CONTENITORE MAPPA
 ===================================================== */
 
@@ -479,25 +459,22 @@ body{
     background:#071014;
 
     border:
-        1px solid
-        rgba(0,255,255,.2);
+        1px solid rgba(0,255,255,.2);
 
     box-shadow:
-        0 0 30px
-        rgba(0,0,0,.5),
-
-        0 0 60px
-        rgba(0,255,255,.04);
+        0 0 30px rgba(0,0,0,.5),
+        0 0 60px rgba(0,255,255,.04);
 
     z-index:100;
 }
 
 
 /* =====================================================
-   MAPPA
+   MAPTILER IFRAME
 ===================================================== */
 
-#map{
+#tacticalMap iframe{
+
     position:absolute;
 
     inset:0;
@@ -505,106 +482,11 @@ body{
     width:100%;
     height:100%;
 
+    border:none;
+
+    display:block;
+
     background:#071014;
-}
-
-
-/* =====================================================
-   TILE
-===================================================== */
-
-#map .leaflet-tile{
-    filter:none !important;
-}
-
-
-/* =====================================================
-   LEAFLET
-===================================================== */
-
-.leaflet-container{
-    background:#071014 !important;
-
-    font-family:Arial,sans-serif;
-}
-
-
-/* =====================================================
-   NASCONDI ZOOM
-===================================================== */
-
-.leaflet-control-zoom{
-    display:none !important;
-}
-
-
-/* =====================================================
-   ATTRIBUTION
-===================================================== */
-
-.leaflet-control-attribution{
-    background:
-        rgba(0,8,10,.65)!important;
-
-    color:
-        rgba(180,255,255,.4)!important;
-
-    font-size:8px!important;
-
-    border-radius:
-        6px 0 0 0;
-}
-
-.leaflet-control-attribution a{
-    color:
-        rgba(150,240,255,.5)!important;
-}
-
-
-/* =====================================================
-   MARKER JARVIS
-===================================================== */
-
-.jarvis-marker{
-    width:18px;
-    height:18px;
-
-    border-radius:50%;
-
-    border:
-        2px solid
-        #00ffff;
-
-    background:
-        rgba(0,255,255,.15);
-
-    box-shadow:
-        0 0 15px
-        rgba(0,255,255,.8);
-
-    position:relative;
-}
-
-.jarvis-marker::after{
-    content:"";
-
-    position:absolute;
-
-    left:50%;
-    top:50%;
-
-    width:5px;
-    height:5px;
-
-    transform:
-        translate(-50%,-50%);
-
-    border-radius:50%;
-
-    background:#bfffff;
-
-    box-shadow:
-        0 0 8px #00ffff;
 }
 
 
@@ -624,13 +506,12 @@ body{
     height:38px;
 
     border:
-        1px solid
-        rgba(0,255,255,.4);
+        1px solid rgba(0,255,255,.4);
 
     border-radius:50%;
 
     background:
-        rgba(0,20,23,.8);
+        rgba(0,20,23,.85);
 
     color:
         rgba(200,255,255,.85);
@@ -655,8 +536,7 @@ body{
     border-color:#00ffff;
 
     box-shadow:
-        0 0 15px
-        rgba(0,255,255,.25);
+        0 0 15px rgba(0,255,255,.25);
 }
 
 
@@ -759,7 +639,12 @@ body{
 
 <div class="map-frame">
 
-    <div id="map"></div>
+    <iframe
+        id="mapFrame"
+        title="JARVIS Tactical Map"
+        allow="geolocation"
+        src="<iframe width="500" height="300" allow="geolocation" src="https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/?key=NmSlgtsAdQyEWy7t0OJf#1.0/0.00000/0.00000"></iframe>">
+    </iframe>
 
 </div>
 
@@ -767,6 +652,7 @@ body{
 <button
     id="closeMap"
     title="Chiudi mappa"
+    aria-label="Chiudi mappa"
 >
     ×
 </button>
@@ -781,17 +667,19 @@ body{
 <button
     id="micBtn"
     aria-label="Microfono"
+    type="button"
 >
     <span class="mic-icon"></span>
 </button>
 
-<button id="sendBtn">
+<button
+    id="sendBtn"
+    type="button"
+>
     INVIA
 </button>
 
-</div><script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script><script type="importmap">
+</div><script type="importmap">
 
 {
     "imports":{
@@ -817,14 +705,6 @@ const MEMORY_KEY =
 
 const MAX_MEMORY =
     30;
-
-
-/* =====================================================
-   MAPTILER
-===================================================== */
-
-const MAPTILER_KEY =
-    "NmSlgtsAdQyEWy7t0OJf";
 
 
 /* =====================================================
@@ -879,6 +759,11 @@ const closeMap =
 const jarvisTitle =
     document.getElementById(
         "jarvisTitle"
+    );
+
+const mapFrame =
+    document.getElementById(
+        "mapFrame"
     );
 
 
@@ -1352,7 +1237,6 @@ scene.add(
 let targetEnergy =
     .15;
 
-
 let energy =
     .15;
 
@@ -1619,102 +1503,6 @@ animate();
    MAPPA TATTICA
 ===================================================== */
 
-let map = null;
-
-let currentMarker = null;
-
-
-/* =====================================================
-   INIZIALIZZA MAPPA
-===================================================== */
-
-function initializeMap(){
-
-    if(map){
-        return;
-    }
-
-
-    if(!MAPTILER_KEY){
-
-        console.error(
-            "API KEY MAPTILER NON INSERITA"
-        );
-
-
-        addMsg(
-            "API key MapTiler non configurata."
-        );
-
-
-        return;
-
-    }
-
-
-    map =
-        L.map(
-            "map",
-            {
-                zoomControl:false,
-                attributionControl:true,
-                minZoom:1,
-                maxZoom:19
-            }
-        );
-
-
-    map.setView(
-        [45.5416,10.2118],
-        10
-    );
-
-
-    /* =================================================
-       MAPTILER
-    ================================================= */
-
-    const mapTiles =
-        `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
-
-
-    L.tileLayer(
-        mapTiles,
-        {
-
-            tileSize:512,
-
-            zoomOffset:-1,
-
-            minZoom:1,
-
-            maxZoom:19,
-
-            attribution:
-                '&copy; MapTiler &copy; OpenStreetMap contributors',
-
-            crossOrigin:true
-
-        }
-    ).addTo(map);
-
-
-    setTimeout(
-        () => {
-
-            map.invalidateSize();
-
-        },
-        150
-    );
-
-}
-
-
-/* =====================================================
-   APERTURA MAPPA
-===================================================== */
-
 function openTacticalMap(){
 
     tacticalMap.classList.add(
@@ -1726,28 +1514,12 @@ function openTacticalMap(){
         "0";
 
 
-    initializeMap();
-
-
-    setTimeout(
-        () => {
-
-            if(map){
-
-                map.invalidateSize();
-
-            }
-
-        },
-        350
+    addMsg(
+        "Mappa tattica attivata."
     );
 
 }
 
-
-/* =====================================================
-   CHIUSURA MAPPA
-===================================================== */
 
 function closeTacticalMap(){
 
@@ -1766,62 +1538,6 @@ closeMap.addEventListener(
     "click",
     closeTacticalMap
 );
-
-
-/* =====================================================
-   MARKER
-===================================================== */
-
-function createJarvisMarker(
-    lat,
-    lon,
-    name
-){
-
-    if(currentMarker){
-
-        map.removeLayer(
-            currentMarker
-        );
-
-    }
-
-
-    const icon =
-        L.divIcon({
-
-            className:"",
-
-            html:
-                '<div class="jarvis-marker"></div>',
-
-            iconSize:
-                [18,18],
-
-            iconAnchor:
-                [9,9]
-
-        });
-
-
-    currentMarker =
-        L.marker(
-            [lat,lon],
-            {
-                icon
-            }
-        )
-        .addTo(map);
-
-
-    currentMarker.bindPopup(
-        `<b style="color:#00ffff">${name}</b>`
-    );
-
-
-    currentMarker.openPopup();
-
-}
 
 
 /* =====================================================
@@ -1890,7 +1606,6 @@ async function searchLocation(
                 "."
             );
 
-
             return;
 
         }
@@ -1912,20 +1627,20 @@ async function searchLocation(
             );
 
 
-        map.flyTo(
-            [lat,lon],
-            12,
-            {
-                duration:1.8
-            }
-        );
+        /*
+           Aggiorniamo l'URL dell'iframe
+           per centrare la mappa sul luogo.
+        */
 
-
-        createJarvisMarker(
-            lat,
-            lon,
-            place
-        );
+        mapFrame.src =
+            "https://api.maptiler.com/maps/" +
+            "01a050ff-ecff-7fb2-911f-81c59fc71217/" +
+            "?key=NmSlgtsAdQyEWy7t0OJf" +
+            "#" +
+            "12/" +
+            lat.toFixed(5) +
+            "/" +
+            lon.toFixed(5);
 
 
         addMsg(
@@ -1997,12 +1712,6 @@ function handleMapCommand(
 
         openTacticalMap();
 
-
-        addMsg(
-            "Mappa tattica attivata."
-        );
-
-
         return true;
 
     }
@@ -2033,12 +1742,6 @@ function handleMapCommand(
     ){
 
         closeTacticalMap();
-
-
-        addMsg(
-            "Modalità tattica disattivata."
-        );
-
 
         return true;
 
@@ -2084,7 +1787,6 @@ function handleMapCommand(
                 searchLocation(
                     place
                 );
-
 
                 return true;
 
@@ -2320,7 +2022,6 @@ async function processAi(
 
         let buffer =
             "";
-
 
         let reply =
             "";
@@ -2829,6 +2530,9 @@ if(
     micBtn.style.opacity =
         ".3";
 
+    micBtn.title =
+        "Riconoscimento vocale non supportato";
+
 }
 
 
@@ -2852,13 +2556,6 @@ window.addEventListener(
             window.innerWidth,
             window.innerHeight
         );
-
-
-        if(map){
-
-            map.invalidateSize();
-
-        }
 
     }
 );

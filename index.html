@@ -2456,9 +2456,11 @@ async function speak(
             );
 
             throw new Error(
-                "Errore ElevenLabs HTTP " +
-                response.status
-            );
+    "ElevenLabs HTTP " +
+    elevenResponse.status +
+    ": " +
+    errorText
+);
 
         }
 

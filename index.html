@@ -1,12 +1,21 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
 
-<title>J.A.R.V.I.S.</title><!-- =====================================================
-     MAPLIBRE GL JS
-===================================================== --><link
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link
     rel="stylesheet"
-    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-/><style>
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
 
 /* =====================================================
    BASE
@@ -42,7 +51,6 @@ body{
         );
 }
 
-
 /* =====================================================
    WEBGL
 ===================================================== */
@@ -54,7 +62,6 @@ body{
 
     z-index:1;
 }
-
 
 /* =====================================================
    VIGNETTE
@@ -77,53 +84,6 @@ body{
             rgba(0,0,0,.8) 100%
         );
 }
-
-
-/* =====================================================
-   FILTRO SORVEGLIANZA TATTICA
-===================================================== */
-
-.surveillance-filter{
-
-    position:fixed;
-    inset:0;
-
-    z-index:2;
-
-    pointer-events:none;
-
-    background:
-        radial-gradient(
-            circle at center,
-            transparent 0%,
-            rgba(0,60,80,.08) 50%,
-            rgba(0,40,60,.15) 100%
-        );
-
-    mix-blend-mode:multiply;
-}
-
-body::before{
-
-    content:"";
-
-    position:fixed;
-    inset:0;
-
-    z-index:2;
-
-    pointer-events:none;
-
-    background:
-        linear-gradient(
-            0deg,
-            rgba(0,120,150,.04),
-            rgba(0,80,120,.02)
-        );
-
-    mix-blend-mode:screen;
-}
-
 
 /* =====================================================
    TITOLO JARVIS
@@ -159,7 +119,6 @@ body::before{
 
     pointer-events:none;
 }
-
 
 /* =====================================================
    ORA
@@ -208,7 +167,6 @@ body::before{
 
     letter-spacing:1px;
 }
-
 
 /* =====================================================
    CHAT
@@ -261,7 +219,6 @@ body::before{
 
     white-space:pre-wrap;
 }
-
 
 /* =====================================================
    INPUT
@@ -339,7 +296,6 @@ body::before{
     color:rgba(255,255,255,.3);
 }
 
-
 /* =====================================================
    MICROFONO
 ===================================================== */
@@ -411,14 +367,7 @@ body::before{
 #micBtn.active{
 
     color:#8fffff;
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(0,255,255,.7)
-        );
 }
-
 
 /* =====================================================
    INVIA
@@ -459,7 +408,6 @@ body::before{
         rgba(0,255,255,.1);
 }
 
-
 /* =====================================================
    MAPPA TATTICA
 ===================================================== */
@@ -483,7 +431,6 @@ body::before{
         );
 }
 
-
 /* =====================================================
    MAPPA ATTIVA
 ===================================================== */
@@ -495,7 +442,6 @@ body::before{
     animation:
         mapIn .45s ease;
 }
-
 
 @keyframes mapIn{
 
@@ -513,7 +459,6 @@ body::before{
         transform:scale(1);
     }
 }
-
 
 /* =====================================================
    TITOLO TACTICAL MAP
@@ -554,7 +499,6 @@ body::before{
     pointer-events:none;
 }
 
-
 /* =====================================================
    CONTENITORE MAPPA
 ===================================================== */
@@ -563,10 +507,11 @@ body::before{
 
     position:absolute;
 
-    top:20px;
-    right:20px;
-    bottom:20px;
-    left:20px;
+    /* MARGINE 3 CM */
+    top:3cm;
+    right:3cm;
+    bottom:3cm;
+    left:3cm;
 
     width:auto;
     height:auto;
@@ -586,28 +531,32 @@ body::before{
         rgba(0,255,255,.10);
 }
 
-
 /* =====================================================
-   OVERLAY MAPPA
+   NESSUN FILTRO SULLA MAPPA
 ===================================================== */
 
-.map-overlay{
+.map-filter{
 
-    position:absolute;
-
-    inset:0;
-
-    z-index:400;
-
-    pointer-events:none;
-
-    border-radius:28px;
-
-    box-shadow:
-        inset 0 0 80px
-        rgba(0,0,0,.28);
+    display:none;
 }
 
+/* =====================================================
+   NESSUNA LINEA DI SCANSIONE
+===================================================== */
+
+.scan-line{
+
+    display:none;
+}
+
+/* =====================================================
+   NESSUNA CORNICE HUD
+===================================================== */
+
+.map-corner{
+
+    display:none;
+}
 
 /* =====================================================
    CHIUDI MAPPA
@@ -648,7 +597,7 @@ body::before{
 
     backdrop-filter:blur(10px);
 
-    transition:.5s;
+    transition:.2s;
 }
 
 #closeMap:hover{
@@ -662,40 +611,16 @@ body::before{
         rgba(0,255,255,.3);
 }
 
-
 /* =====================================================
-   MAPLIBRE CONTROLLI
+   LEAFLET
 ===================================================== */
 
-.maplibregl-ctrl-group{
+.leaflet-control-zoom{
 
-    background:
-        rgba(0,15,18,.85)!important;
-
-    border:
-        1px solid
-        rgba(0,255,255,.18)!important;
-
-    border-radius:12px!important;
-
-    overflow:hidden;
+    display:none !important;
 }
 
-.maplibregl-ctrl-group button{
-
-    background:
-        transparent!important;
-
-    color:#bfffff!important;
-}
-
-.maplibregl-ctrl-group button:hover{
-
-    background:
-        rgba(0,255,255,.08)!important;
-}
-
-.maplibregl-ctrl-attrib{
+.leaflet-control-attribution{
 
     background:
         rgba(0,8,10,.65)!important;
@@ -706,21 +631,20 @@ body::before{
     font-size:8px!important;
 }
 
-.maplibregl-ctrl-attrib a{
+.leaflet-control-attribution a{
 
     color:
         rgba(150,240,255,.45)!important;
 }
 
-
 /* =====================================================
    MARKER JARVIS
 ===================================================== */
 
-.jarvis-map-marker{
+.jarvis-marker{
 
-    width:20px;
-    height:20px;
+    width:18px;
+    height:18px;
 
     border-radius:50%;
 
@@ -729,21 +653,16 @@ body::before{
         #00ffff;
 
     background:
-        rgba(0,255,255,.16);
+        rgba(0,255,255,.15);
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.9),
-        0 0 35px
-        rgba(0,255,255,.4);
+        rgba(0,255,255,.8);
 
     position:relative;
-
-    animation:
-        markerPulse 1.5s infinite;
 }
 
-.jarvis-map-marker::after{
+.jarvis-marker::after{
 
     content:"";
 
@@ -760,80 +679,11 @@ body::before{
 
     border-radius:50%;
 
-    background:#dfffff;
+    background:#bfffff;
 
     box-shadow:
         0 0 8px #00ffff;
 }
-
-@keyframes markerPulse{
-
-    0%,
-    100%{
-
-        transform:scale(1);
-
-        box-shadow:
-            0 0 15px
-            rgba(0,255,255,.9),
-            0 0 35px
-            rgba(0,255,255,.4);
-    }
-
-    50%{
-
-        transform:scale(1.18);
-
-        box-shadow:
-            0 0 22px
-            rgba(0,255,255,1),
-            0 0 50px
-            rgba(0,255,255,.55);
-    }
-}
-
-
-/* =====================================================
-   POPUP MAPLIBRE
-===================================================== */
-
-.maplibregl-popup-content{
-
-    background:
-        rgba(3,15,18,.96)!important;
-
-    color:
-        rgba(220,255,255,.9)!important;
-
-    border:
-        1px solid
-        rgba(0,255,255,.25);
-
-    border-radius:10px;
-
-    padding:10px 14px;
-
-    box-shadow:
-        0 0 20px
-        rgba(0,255,255,.12);
-}
-
-.maplibregl-popup-tip{
-
-    border-top-color:
-        rgba(3,15,18,.96)!important;
-
-    border-bottom-color:
-        rgba(3,15,18,.96)!important;
-}
-
-.maplibregl-popup-close-button{
-
-    color:#00ffff!important;
-
-    font-size:18px;
-}
-
 
 /* =====================================================
    MOBILE
@@ -850,7 +700,6 @@ body::before{
         letter-spacing:5px;
     }
 
-
     .datetime{
 
         top:12px;
@@ -858,18 +707,15 @@ body::before{
         right:13px;
     }
 
-
     .time{
 
         font-size:10px;
     }
 
-
     .date{
 
         font-size:7px;
     }
-
 
     .command-wrapper{
 
@@ -879,35 +725,26 @@ body::before{
         bottom:17px;
     }
 
-
     #textInput{
 
         font-size:13px;
     }
-
 
     #chat{
 
         bottom:80px;
     }
 
-
     #map{
 
-        top:15px;
-        right:15px;
-        bottom:15px;
-        left:15px;
+        /* MARGINE 3 CM ANCHE SU MOBILE */
+        top:3cm;
+        right:3cm;
+        bottom:3cm;
+        left:3cm;
 
         border-radius:22px;
     }
-
-
-    .map-overlay{
-
-        border-radius:22px;
-    }
-
 
     .map-header{
 
@@ -917,7 +754,6 @@ body::before{
 
         letter-spacing:5px;
     }
-
 
     #closeMap{
 
@@ -930,81 +766,153 @@ body::before{
 
 }
 
-</style></head><body><!-- =====================================================
+/* =====================================================
+   POPUP LEAFLET
+===================================================== */
+
+.leaflet-popup-content-wrapper{
+
+    background:
+        rgba(3,15,18,.95);
+
+    color:
+        rgba(220,255,255,.9);
+
+    border:
+        1px solid
+        rgba(0,255,255,.25);
+}
+
+.leaflet-popup-tip{
+
+    background:
+        rgba(3,15,18,.95);
+}
+
+.leaflet-popup-close-button{
+
+    color:#00ffff!important;
+}
+
+/* =====================================================
+   FINE CSS
+===================================================== */
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
      WEBGL
-===================================================== --><div id="webgl-container"></div><div class="vignette"></div><!-- =====================================================
-     FILTRO SORVEGLIANZA
-===================================================== --><div class="surveillance-filter"></div><!-- =====================================================
+===================================================== -->
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+<!-- =====================================================
      TITOLO
-===================================================== --><div
-    class="jarvis-title"
-    id="jarvisTitle"
->
+===================================================== -->
+
+<div class="jarvis-title" id="jarvisTitle">
     J.A.R.V.I.S
-</div><!-- =====================================================
+</div>
+
+<!-- =====================================================
      ORA
-===================================================== --><div class="datetime"><div id="clock" class="time">
-    00:00:00
+===================================================== -->
+
+<div class="datetime">
+
+    <div id="clock" class="time">
+        00:00:00
+    </div>
+
+    <div id="date" class="date">
+        00 AGO 2026
+    </div>
+
 </div>
 
-<div id="date" class="date">
-    00 AGO 2026
-</div>
-
-</div><!-- =====================================================
+<!-- =====================================================
      MAPPA TATTICA
-===================================================== --><div id="tacticalMap"><div id="map"></div>
+===================================================== -->
 
+<div id="tacticalMap">
 
-<div class="map-overlay"></div>
+    <div id="map"></div>
 
+    <div class="map-filter"></div>
 
-<div class="map-header">
-    TACTICAL MAP
+    <div class="scan-line"></div>
+
+    <div class="map-corner corner-tl"></div>
+    <div class="map-corner corner-tr"></div>
+    <div class="map-corner corner-bl"></div>
+    <div class="map-corner corner-br"></div>
+
+    <div class="map-header">
+        TACTICAL MAP
+    </div>
+
+    <button
+        id="closeMap"
+        title="Chiudi mappa"
+    >
+        ×
+    </button>
+
 </div>
 
-
-<button
-    id="closeMap"
-    title="Chiudi mappa"
-    aria-label="Chiudi mappa"
->
-    ×
-</button>
-
-</div><!-- =====================================================
+<!-- =====================================================
      CHAT
-===================================================== --><div id="chat"></div><!-- =====================================================
+===================================================== -->
+
+<div id="chat"></div>
+
+<!-- =====================================================
      INPUT
-===================================================== --><div class="command-wrapper"><input
-    id="textInput"
-    type="text"
-    autocomplete="off"
-    placeholder="Chiedi qualcosa a JARVIS..."
->
+===================================================== -->
 
+<div class="command-wrapper">
 
-<button
-    id="micBtn"
-    aria-label="Microfono"
->
+    <input
+        id="textInput"
+        type="text"
+        autocomplete="off"
+        placeholder="Chiedi qualcosa a JARVIS..."
+    >
 
-    <span class="mic-icon"></span>
+    <button
+        id="micBtn"
+        aria-label="Microfono"
+    >
 
-</button>
+        <span class="mic-icon"></span>
 
+    </button>
 
-<button id="sendBtn">
-    INVIA
-</button>
+    <button id="sendBtn">
+        INVIA
+    </button>
 
-</div><!-- =====================================================
-     MAPLIBRE GL JS
-===================================================== --><script
-    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script><!-- =====================================================
-     THREE.JS
-===================================================== --><script type="importmap">
+</div>
+
+<!-- =====================================================
+     LEAFLET
+===================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<!-- =====================================================
+     THREE
+===================================================== -->
+
+<script type="importmap">
 
 {
     "imports":{
@@ -1013,10 +921,11 @@ body::before{
     }
 }
 
-</script><script type="module">
+</script>
+
+<script type="module">
 
 import * as THREE from "three";
-
 
 /* =====================================================
    CONFIGURAZIONE
@@ -1025,24 +934,1870 @@ import * as THREE from "three";
 const API =
     "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
-
 const MEMORY_KEY =
     "jarvis_memory_v1";
-
 
 const MAX_MEMORY =
     30;
 
+/*
+=====================================================
+MAPTILER
+=====================================================
 
-/* =====================================================
-   MAPTILER
-===================================================== */
+La tua API Key MapTiler.
+*/
 
 const MAPTILER_KEY =
     "NmSlgtsAdQyEWy7t0OJf";
 
+/* =====================================================
+   ELEMENTI
+===================================================== */
 
-const MAPTILER_STYLE =
-    "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
-    +
-    MAPTILER_KEY;
+const container =
+    document.getElementById(
+        "webgl-container"
+    );
+
+const chat =
+    document.getElementById(
+        "chat"
+    );
+
+const textInput =
+    document.getElementById(
+        "textInput"
+    );
+
+const sendBtn =
+    document.getElementById(
+        "sendBtn"
+    );
+
+const micBtn =
+    document.getElementById(
+        "micBtn"
+    );
+
+const clock =
+    document.getElementById(
+        "clock"
+    );
+
+const date =
+    document.getElementById(
+        "date"
+    );
+
+const tacticalMap =
+    document.getElementById(
+        "tacticalMap"
+    );
+
+const closeMap =
+    document.getElementById(
+        "closeMap"
+    );
+
+const jarvisTitle =
+    document.getElementById(
+        "jarvisTitle"
+    );
+
+const mapHeader =
+    document.querySelector(
+        ".map-header"
+    );
+
+/* =====================================================
+   MEMORIA
+===================================================== */
+
+let memory = [];
+
+try{
+
+    const saved =
+        localStorage.getItem(
+            MEMORY_KEY
+        );
+
+    if(saved){
+
+        const parsed =
+            JSON.parse(saved);
+
+        if(
+            Array.isArray(parsed)
+        ){
+
+            memory =
+                parsed.slice(
+                    -MAX_MEMORY
+                );
+
+        }
+
+    }
+
+}catch(error){
+
+    console.warn(
+        "Memoria:",
+        error
+    );
+
+}
+
+function saveMemory(){
+
+    try{
+
+        localStorage.setItem(
+            MEMORY_KEY,
+            JSON.stringify(
+                memory.slice(
+                    -MAX_MEMORY
+                )
+            )
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Salvataggio memoria:",
+            error
+        );
+
+    }
+
+}
+
+function addMemory(
+    role,
+    content
+){
+
+    memory.push({
+        role,
+        content
+    });
+
+    memory =
+        memory.slice(
+            -MAX_MEMORY
+        );
+
+    saveMemory();
+
+}
+
+/* =====================================================
+   ORA
+===================================================== */
+
+const months = [
+
+    "GEN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAG",
+    "GIU",
+    "LUG",
+    "AGO",
+    "SET",
+    "OTT",
+    "NOV",
+    "DIC"
+
+];
+
+function updateClock(){
+
+    const now =
+        new Date();
+
+    const h =
+        String(
+            now.getHours()
+        ).padStart(2,"0");
+
+    const m =
+        String(
+            now.getMinutes()
+        ).padStart(2,"0");
+
+    const s =
+        String(
+            now.getSeconds()
+        ).padStart(2,"0");
+
+    clock.textContent =
+        `${h}:${m}:${s}`;
+
+    const d =
+        String(
+            now.getDate()
+        ).padStart(2,"0");
+
+    const month =
+        months[
+            now.getMonth()
+        ];
+
+    const year =
+        now.getFullYear();
+
+    date.textContent =
+        `${d} ${month} ${year}`;
+
+}
+
+updateClock();
+
+setInterval(
+    updateClock,
+    1000
+);
+
+/* =====================================================
+   THREE.JS
+===================================================== */
+
+const scene =
+    new THREE.Scene();
+
+const camera =
+    new THREE.PerspectiveCamera(
+        55,
+        window.innerWidth /
+        window.innerHeight,
+        .1,
+        1000
+    );
+
+camera.position.z =
+    5.2;
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        antialias:true,
+        alpha:true
+
+    });
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+);
+
+container.appendChild(
+    renderer.domElement
+);
+
+/* =====================================================
+   GLOW
+===================================================== */
+
+function createGlow(){
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+    canvas.width = 64;
+    canvas.height = 64;
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+    const gradient =
+        ctx.createRadialGradient(
+            32,
+            32,
+            0,
+            32,
+            32,
+            32
+        );
+
+    gradient.addColorStop(
+        0,
+        "rgba(255,255,255,1)"
+    );
+
+    gradient.addColorStop(
+        .2,
+        "rgba(220,255,255,1)"
+    );
+
+    gradient.addColorStop(
+        .4,
+        "rgba(0,255,255,.9)"
+    );
+
+    gradient.addColorStop(
+        .7,
+        "rgba(0,150,190,.25)"
+    );
+
+    gradient.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+    ctx.fillStyle =
+        gradient;
+
+    ctx.fillRect(
+        0,
+        0,
+        64,
+        64
+    );
+
+    return new THREE.CanvasTexture(
+        canvas
+    );
+
+}
+
+/* =====================================================
+   PARTICELLE
+===================================================== */
+
+const COUNT =
+    3000;
+
+const geometry =
+    new THREE.BufferGeometry();
+
+const positions =
+    new Float32Array(
+        COUNT * 3
+    );
+
+const radii =
+    new Float32Array(
+        COUNT
+    );
+
+const angles =
+    new Float32Array(
+        COUNT * 2
+    );
+
+const seeds =
+    new Float32Array(
+        COUNT
+    );
+
+for(
+    let i=0;
+    i<COUNT;
+    i++
+){
+
+    const r =
+        1.10 +
+        Math.random()*.70;
+
+    const theta =
+        Math.random() *
+        Math.PI *
+        2;
+
+    const phi =
+        Math.acos(
+            2*Math.random()-1
+        );
+
+    radii[i] =
+        r;
+
+    angles[i*2] =
+        theta;
+
+    angles[i*2+1] =
+        phi;
+
+    seeds[i] =
+        Math.random()*100;
+
+    positions[i*3] =
+        r *
+        Math.sin(phi) *
+        Math.cos(theta);
+
+    positions[i*3+1] =
+        r *
+        Math.sin(phi) *
+        Math.sin(theta);
+
+    positions[i*3+2] =
+        r *
+        Math.cos(phi);
+
+}
+
+geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        positions,
+        3
+    )
+);
+
+const material =
+    new THREE.PointsMaterial({
+
+        color:
+            new THREE.Color(
+                0x00cfe8
+            ),
+
+        size:.034,
+
+        map:createGlow(),
+
+        transparent:true,
+
+        opacity:.82,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+
+    });
+
+const particles =
+    new THREE.Points(
+        geometry,
+        material
+    );
+
+scene.add(
+    particles
+);
+
+/* =====================================================
+   ENERGIA
+===================================================== */
+
+let targetEnergy =
+    .15;
+
+let energy =
+    .15;
+
+const normalColor =
+    new THREE.Color(
+        0x00cfe8
+    );
+
+const activeColor =
+    new THREE.Color(
+        0x8fffff
+    );
+
+const currentColor =
+    normalColor.clone();
+
+function setState(
+    state
+){
+
+    if(
+        state === "thinking"
+    ){
+
+        targetEnergy = 1;
+
+    }
+
+    else if(
+        state === "speaking"
+    ){
+
+        targetEnergy = .8;
+
+    }
+
+    else if(
+        state === "listening"
+    ){
+
+        targetEnergy = .55;
+
+    }
+
+    else{
+
+        targetEnergy = .15;
+
+    }
+
+}
+
+/* =====================================================
+   ANIMAZIONE
+===================================================== */
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+    const time =
+        performance.now()*.001;
+
+    energy +=
+        (
+            targetEnergy -
+            energy
+        )*.045;
+
+    currentColor.lerp(
+        activeColor,
+        energy*.04
+    );
+
+    if(
+        energy < .3
+    ){
+
+        currentColor.lerp(
+            normalColor,
+            .03
+        );
+
+    }
+
+    material.color =
+        currentColor;
+
+    material.size =
+        .032 +
+        energy*.008;
+
+    const pos =
+        geometry
+            .attributes
+            .position
+            .array;
+
+    for(
+        let i=0;
+        i<COUNT;
+        i++
+    ){
+
+        const index =
+            i*3;
+
+        const r =
+            radii[i];
+
+        const theta =
+            angles[i*2];
+
+        const phi =
+            angles[i*2+1];
+
+        const seed =
+            seeds[i];
+
+        const pulse =
+            Math.sin(
+                time*2 +
+                seed
+            )*.035;
+
+        const strangeShape =
+            Math.sin(
+                theta*6 +
+                time*2 +
+                seed
+            )*.18*energy;
+
+        const wave =
+            Math.cos(
+                phi*7 -
+                time*1.8 +
+                seed
+            )*.12*energy;
+
+        const rr =
+            r +
+            pulse +
+            strangeShape +
+            wave;
+
+        let x =
+            rr *
+            Math.sin(phi) *
+            Math.cos(theta);
+
+        let y =
+            rr *
+            Math.sin(phi) *
+            Math.sin(theta);
+
+        let z =
+            rr *
+            Math.cos(phi);
+
+        x +=
+            Math.sin(
+                time*2.4 +
+                phi*8 +
+                seed
+            )*.08*energy;
+
+        y +=
+            Math.cos(
+                time*2.1 +
+                theta*9 +
+                seed
+            )*.08*energy;
+
+        z +=
+            Math.sin(
+                time*2.7 +
+                (theta+phi)*7
+            )*.10*energy;
+
+        pos[index] =
+            x;
+
+        pos[index+1] =
+            y;
+
+        pos[index+2] =
+            z;
+
+    }
+
+    geometry
+        .attributes
+        .position
+        .needsUpdate =
+            true;
+
+    particles.rotation.y +=
+        .0005 +
+        energy*.0008;
+
+    particles.rotation.x =
+        Math.sin(
+            time*.25
+        )*.04;
+
+    particles.rotation.z =
+        Math.cos(
+            time*.18
+        )*.025;
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+animate();
+
+/* =====================================================
+   MAPPA TATTICA
+===================================================== */
+
+let map = null;
+
+let currentMarker = null;
+
+function initializeMap(){
+
+    if(map){
+
+        return;
+
+    }
+
+    map =
+        L.map(
+            "map",
+            {
+
+                zoomControl:false,
+
+                attributionControl:true,
+
+                zoomAnimation:true,
+
+                fadeAnimation:true
+
+            }
+        );
+
+    map.setView(
+        [45.5416,10.2118],
+        10
+    );
+
+    /*
+    =====================================================
+    MAPTILER
+    =====================================================
+    */
+
+    const mapTilerUrl =
+        "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key="
+        +
+        MAPTILER_KEY;
+
+    L.tileLayer(
+        mapTilerUrl,
+        {
+
+            tileSize:512,
+
+            zoomOffset:-1,
+
+            maxZoom:20,
+
+            attribution:
+                '&copy; MapTiler &copy; OpenStreetMap contributors'
+
+        }
+    ).addTo(
+        map
+    );
+
+    setTimeout(
+        () => {
+
+            map.invalidateSize();
+
+        },
+        150
+    );
+
+}
+
+/* =====================================================
+   APERTURA MAPPA
+===================================================== */
+
+function openTacticalMap(){
+
+    tacticalMap.classList.add(
+        "active"
+    );
+
+    jarvisTitle.style.display =
+        "none";
+
+    mapHeader.style.display =
+        "block";
+
+    initializeMap();
+
+    setTimeout(
+        () => {
+
+            if(map){
+
+                map.invalidateSize();
+
+            }
+
+        },
+        400
+    );
+
+}
+
+/* =====================================================
+   CHIUSURA MAPPA
+===================================================== */
+
+function closeTacticalMap(){
+
+    tacticalMap.classList.remove(
+        "active"
+    );
+
+    jarvisTitle.style.display =
+        "block";
+
+}
+
+closeMap.addEventListener(
+    "click",
+    closeTacticalMap
+);
+
+/* =====================================================
+   MARKER
+===================================================== */
+
+function createJarvisMarker(
+    lat,
+    lon,
+    name
+){
+
+    if(currentMarker){
+
+        map.removeLayer(
+            currentMarker
+        );
+
+    }
+
+    const icon =
+        L.divIcon({
+
+            className:"",
+
+            html:
+                '<div class="jarvis-marker"></div>',
+
+            iconSize:
+                [18,18],
+
+            iconAnchor:
+                [9,9]
+
+        });
+
+    currentMarker =
+        L.marker(
+            [lat,lon],
+            {
+                icon
+            }
+        )
+        .addTo(map);
+
+    currentMarker.bindPopup(
+        `<b style="color:#00ffff">${name}</b>`
+    );
+
+    currentMarker.openPopup();
+
+}
+
+/* =====================================================
+   RICERCA POSIZIONE
+===================================================== */
+
+async function searchLocation(
+    place
+){
+
+    try{
+
+        openTacticalMap();
+
+        addMsg(
+            "Ricerca posizione: " +
+            place
+        );
+
+        const url =
+            "https://nominatim.openstreetmap.org/search" +
+            "?format=json" +
+            "&limit=1" +
+            "&q=" +
+            encodeURIComponent(
+                place
+            );
+
+        const response =
+            await fetch(
+                url,
+                {
+
+                    headers:{
+
+                        "Accept":
+                            "application/json"
+
+                    }
+
+                }
+            );
+
+        if(
+            !response.ok
+        ){
+
+            throw new Error(
+                "Ricerca posizione fallita"
+            );
+
+        }
+
+        const results =
+            await response.json();
+
+        if(
+            !results.length
+        ){
+
+            addMsg(
+                "Non riesco a trovare " +
+                place +
+                "."
+            );
+
+            return;
+
+        }
+
+        const result =
+            results[0];
+
+        const lat =
+            parseFloat(
+                result.lat
+            );
+
+        const lon =
+            parseFloat(
+                result.lon
+            );
+
+        map.flyTo(
+            [lat,lon],
+            12,
+            {
+
+                duration:1.8
+
+            }
+        );
+
+        createJarvisMarker(
+            lat,
+            lon,
+            place
+        );
+
+        addMsg(
+            "Posizione acquisita: " +
+            place
+        );
+
+    }catch(error){
+
+        console.error(
+            "MAP ERROR:",
+            error
+        );
+
+        addMsg(
+            "Impossibile localizzare " +
+            place +
+            "."
+        );
+
+    }
+
+}
+
+/* =====================================================
+   COMANDI MAPPA
+===================================================== */
+
+function handleMapCommand(
+    text
+){
+
+    const normalized =
+        text
+            .toLowerCase()
+            .trim();
+
+    if(
+
+        normalized.includes(
+            "apri la mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "apri mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "mappa tattica"
+        )
+
+        ||
+
+        normalized.includes(
+            "modalità tattica"
+        )
+
+        ||
+
+        normalized.includes(
+            "modalita tattica"
+        )
+
+        ||
+
+        normalized.includes(
+            "attiva la mappa"
+        )
+
+    ){
+
+        openTacticalMap();
+
+        addMsg(
+            "Mappa tattica attivata."
+        );
+
+        return true;
+
+    }
+
+    if(
+
+        normalized.includes(
+            "chiudi la mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "chiudi mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "esci dalla mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "torna alla modalità normale"
+        )
+
+        ||
+
+        normalized.includes(
+            "torna alla modalita normale"
+        )
+
+    ){
+
+        closeTacticalMap();
+
+        addMsg(
+            "Modalità tattica disattivata."
+        );
+
+        return true;
+
+    }
+
+    const patterns = [
+
+        "mostrami ",
+        "mostra ",
+        "vai a ",
+        "portami a ",
+        "localizza ",
+        "cerca ",
+        "visualizza "
+
+    ];
+
+    for(
+        const pattern of patterns
+    ){
+
+        if(
+            normalized.startsWith(
+                pattern
+            )
+        ){
+
+            const place =
+                text
+                    .trim()
+                    .substring(
+                        pattern.length
+                    )
+                    .trim();
+
+            if(
+                place.length > 1
+            ){
+
+                searchLocation(
+                    place
+                );
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+    return false;
+
+}
+
+/* =====================================================
+   MESSAGGIO
+===================================================== */
+
+function addMsg(
+    text
+){
+
+    chat.innerHTML =
+        "";
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+    element.className =
+        "msg";
+
+    element.textContent =
+        text;
+
+    chat.appendChild(
+        element
+    );
+
+}
+
+/* =====================================================
+   CONTESTO TEMPORALE
+===================================================== */
+
+function getTimeData(){
+
+    const now =
+        new Date();
+
+    return {
+
+        currentTime:
+            now.toLocaleTimeString(
+                "it-IT",
+                {
+
+                    hour:"2-digit",
+                    minute:"2-digit",
+                    second:"2-digit"
+
+                }
+            ),
+
+        currentDate:
+            now.toLocaleDateString(
+                "it-IT",
+                {
+
+                    day:"2-digit",
+                    month:"2-digit",
+                    year:"numeric"
+
+                }
+            ),
+
+        dayOfWeek:
+            now.toLocaleDateString(
+                "it-IT",
+                {
+
+                    weekday:"long"
+
+                }
+            ),
+
+        timezone:
+            Intl.DateTimeFormat()
+                .resolvedOptions()
+                .timeZone
+
+    };
+
+}
+
+/* =====================================================
+   PROCESS AI
+===================================================== */
+
+async function processAi(
+    text
+){
+
+    if(
+        handleMapCommand(
+            text
+        )
+    ){
+
+        return;
+
+    }
+
+    setState(
+        "thinking"
+    );
+
+    try{
+
+        const temporal =
+            getTimeData();
+
+        addMemory(
+            "user",
+            text
+        );
+
+        const response =
+            await fetch(
+                API,
+                {
+
+                    method:"POST",
+
+                    headers:{
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                text,
+
+                            memory:
+                                memory.slice(-4),
+
+                            currentTime:
+                                temporal.currentTime,
+
+                            currentDate:
+                                temporal.currentDate,
+
+                            dayOfWeek:
+                                temporal.dayOfWeek,
+
+                            timezone:
+                                temporal.timezone
+
+                        })
+
+                }
+            );
+
+        if(
+            !response.ok
+        ){
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Worker:",
+                errorText
+            );
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+        if(
+            !response.body
+        ){
+
+            throw new Error(
+                "Streaming non disponibile"
+            );
+
+        }
+
+        chat.innerHTML =
+            "";
+
+        const element =
+            document.createElement(
+                "div"
+            );
+
+        element.className =
+            "msg";
+
+        chat.appendChild(
+            element
+        );
+
+        const reader =
+            response.body.getReader();
+
+        const decoder =
+            new TextDecoder();
+
+        let buffer =
+            "";
+
+        let reply =
+            "";
+
+        while(true){
+
+            const {
+                value,
+                done
+            } =
+                await reader.read();
+
+            if(done){
+
+                break;
+
+            }
+
+            buffer +=
+                decoder.decode(
+                    value,
+                    {
+                        stream:true
+                    }
+                );
+
+            const lines =
+                buffer.split(
+                    "\n"
+                );
+
+            buffer =
+                lines.pop() || "";
+
+            for(
+                const line of lines
+            ){
+
+                const trimmed =
+                    line.trim();
+
+                if(
+                    !trimmed
+                ){
+
+                    continue;
+
+                }
+
+                if(
+                    !trimmed.startsWith(
+                        "data:"
+                    )
+                ){
+
+                    continue;
+
+                }
+
+                const raw =
+                    trimmed
+                        .substring(
+                            5
+                        )
+                        .trim();
+
+                if(
+                    !raw ||
+                    raw === "[DONE]"
+                ){
+
+                    continue;
+
+                }
+
+                try{
+
+                    const json =
+                        JSON.parse(
+                            raw
+                        );
+
+                    let piece =
+                        "";
+
+                    if(
+                        typeof json.response ===
+                        "string"
+                    ){
+
+                        piece =
+                            json.response;
+
+                    }
+
+                    else if(
+                        json.choices &&
+                        json.choices[0]
+                    ){
+
+                        const choice =
+                            json.choices[0];
+
+                        if(
+                            choice.delta &&
+                            typeof choice.delta.content ===
+                            "string"
+                        ){
+
+                            piece =
+                                choice.delta.content;
+
+                        }
+
+                        else if(
+                            choice.message &&
+                            typeof choice.message.content ===
+                            "string"
+                        ){
+
+                            piece =
+                                choice.message.content;
+
+                        }
+
+                        else if(
+                            typeof choice.text ===
+                            "string"
+                        ){
+
+                            piece =
+                                choice.text;
+
+                        }
+
+                    }
+
+                    if(piece){
+
+                        reply +=
+                            piece;
+
+                        element.textContent =
+                            reply;
+
+                        setState(
+                            "speaking"
+                        );
+
+                    }
+
+                }catch(error){
+
+                    console.warn(
+                        "Stream JSON:",
+                        raw
+                    );
+
+                }
+
+            }
+
+        }
+
+        reply =
+            reply.trim();
+
+        if(
+            !reply
+        ){
+
+            throw new Error(
+                "Risposta AI vuota"
+            );
+
+        }
+
+        addMemory(
+            "assistant",
+            reply
+        );
+
+        speak(
+            reply
+        );
+
+    }catch(error){
+
+        console.error(
+            "JARVIS ERROR:",
+            error
+        );
+
+        addMsg(
+            "ERRORE: " +
+            error.message
+        );
+
+        setState(
+            "idle"
+        );
+
+    }
+
+}
+
+/* =====================================================
+   INVIO
+===================================================== */
+
+function sendMessage(){
+
+    const text =
+        textInput.value.trim();
+
+    if(
+        !text
+    ){
+
+        return;
+
+    }
+
+    textInput.value =
+        "";
+
+    addMsg(
+        text
+    );
+
+    processAi(
+        text
+    );
+
+}
+
+sendBtn.addEventListener(
+    "click",
+    sendMessage
+);
+
+textInput.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+/* =====================================================
+   VOCE
+===================================================== */
+
+function speak(
+    text
+){
+
+    if(
+        !window.speechSynthesis
+    ){
+
+        setState(
+            "idle"
+        );
+
+        return;
+
+    }
+
+    speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+    utterance.lang =
+        "it-IT";
+
+    utterance.rate =
+        .95;
+
+    utterance.pitch =
+        .85;
+
+    utterance.onstart =
+        () => {
+
+            setState(
+                "speaking"
+            );
+
+        };
+
+    utterance.onend =
+        () => {
+
+            setState(
+                "idle"
+            );
+
+        };
+
+    utterance.onerror =
+        () => {
+
+            setState(
+                "idle"
+            );
+
+        };
+
+    speechSynthesis.speak(
+        utterance
+    );
+
+}
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+let recognition =
+    null;
+
+let listening =
+    false;
+
+if(
+    Recognition
+){
+
+    recognition =
+        new Recognition();
+
+    recognition.lang =
+        "it-IT";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+    recognition.onstart =
+        () => {
+
+            listening =
+                true;
+
+            micBtn.classList.add(
+                "active"
+            );
+
+            setState(
+                "listening"
+            );
+
+        };
+
+    recognition.onresult =
+        event => {
+
+            const text =
+                event
+                    .results[0][0]
+                    .transcript
+                    .trim();
+
+            if(text){
+
+                textInput.value =
+                    text;
+
+                sendMessage();
+
+            }
+
+        };
+
+    recognition.onerror =
+        error => {
+
+            console.error(
+                "Microfono:",
+                error
+            );
+
+            listening =
+                false;
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+            setState(
+                "idle"
+            );
+
+        };
+
+    recognition.onend =
+        () => {
+
+            listening =
+                false;
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+        };
+
+    micBtn.addEventListener(
+        "click",
+        () => {
+
+            if(listening){
+
+                recognition.stop();
+
+            }else{
+
+                try{
+
+                    recognition.start();
+
+                }catch(error){
+
+                    console.warn(
+                        error
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+}else{
+
+    micBtn.style.opacity =
+        ".3";
+
+}
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+        if(map){
+
+            map.invalidateSize();
+
+        }
+
+    }
+);
+
+/* =====================================================
+   CANCELLA MEMORIA
+===================================================== */
+
+window.clearJarvisMemory =
+    function(){
+
+        memory =
+            [];
+
+        localStorage.removeItem(
+            MEMORY_KEY
+        );
+
+        console.log(
+            "Memoria JARVIS cancellata."
+        );
+
+    };
+
+/* =====================================================
+   AVVIO
+===================================================== */
+
+setState(
+    "idle"
+);
+
+</script>
+
+</body>
+</html>

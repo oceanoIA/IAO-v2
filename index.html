@@ -1,10 +1,21 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
 
-<title>J.A.R.V.I.S.</title><link
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/><style>
+/>
+
+<style>
 
 /* =====================================================
    BASE
@@ -73,6 +84,7 @@ body{
 
 .jarvis-title{
     position:fixed;
+
     top:2.4%;
     left:50%;
 
@@ -99,53 +111,7 @@ body{
     pointer-events:none;
 
     transition:
-        opacity .35s ease,
-        transform .35s ease;
-}
-
-
-/* =====================================================
-   TITOLO TACTICAL MAP
-===================================================== */
-
-.tactical-title{
-    position:absolute;
-
-    top:4%;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    z-index:530;
-
-    color:rgba(220,255,255,.9);
-
-    font-family:monospace;
-
-    font-size:
-        clamp(26px,5vw,58px);
-
-    font-weight:300;
-
-    letter-spacing:
-        clamp(6px,1.5vw,14px);
-
-    white-space:nowrap;
-
-    text-shadow:
-        0 0 10px rgba(0,255,255,.35),
-        0 0 30px rgba(0,255,255,.15);
-
-    pointer-events:none;
-
-    opacity:0;
-
-    transition:
         opacity .35s ease;
-}
-
-#tacticalMap.active .tactical-title{
-    opacity:1;
 }
 
 
@@ -162,7 +128,9 @@ body{
     z-index:30;
 
     display:flex;
+
     flex-direction:column;
+
     align-items:flex-end;
 
     gap:3px;
@@ -212,6 +180,9 @@ body{
     text-align:center;
 
     pointer-events:none;
+
+    transition:
+        opacity .3s ease;
 }
 
 .msg{
@@ -261,9 +232,11 @@ body{
     width:min(650px,90%);
 
     display:flex;
+
     align-items:center;
 
-    padding:6px 7px 6px 20px;
+    padding:
+        6px 7px 6px 20px;
 
     border:
         1px solid
@@ -280,6 +253,9 @@ body{
     box-shadow:
         0 0 30px
         rgba(0,255,255,.05);
+
+    transition:
+        opacity .3s ease;
 }
 
 .command-wrapper:focus-within{
@@ -334,6 +310,7 @@ body{
     cursor:pointer;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 }
@@ -380,6 +357,10 @@ body{
 
 #micBtn.active{
     color:#8fffff;
+
+    text-shadow:
+        0 0 10px
+        rgba(0,255,255,.7);
 }
 
 
@@ -409,6 +390,8 @@ body{
     letter-spacing:2px;
 
     cursor:pointer;
+
+    transition:.2s ease;
 }
 
 #sendBtn:hover{
@@ -418,6 +401,10 @@ body{
 
     background:
         rgba(0,255,255,.1);
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.12);
 }
 
 
@@ -434,7 +421,13 @@ body{
 
     display:none;
 
-    background:#020506;
+    background:
+        radial-gradient(
+            circle at center,
+            #071519 0%,
+            #020708 55%,
+            #000000 100%
+        );
 
     overflow:hidden;
 }
@@ -461,6 +454,46 @@ body{
 
 
 /* =====================================================
+   TITOLO TACTICAL MAP
+===================================================== */
+
+.tactical-title{
+    position:absolute;
+
+    top:2.7%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:530;
+
+    color:
+        rgba(220,255,255,.9);
+
+    font-family:monospace;
+
+    font-size:
+        clamp(26px,5vw,58px);
+
+    font-weight:300;
+
+    letter-spacing:
+        clamp(6px,1.5vw,14px);
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 0 10px
+        rgba(0,255,255,.35),
+
+        0 0 30px
+        rgba(0,255,255,.15);
+
+    pointer-events:none;
+}
+
+
+/* =====================================================
    CONTENITORE MAPPA
 ===================================================== */
 
@@ -480,21 +513,25 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.2);
+        rgba(0,255,255,.22);
 
     box-shadow:
+
         0 0 30px
-        rgba(0,0,0,.5),
+        rgba(0,0,0,.55),
 
         0 0 60px
-        rgba(0,255,255,.04);
+        rgba(0,255,255,.05),
+
+        inset 0 0 35px
+        rgba(0,255,255,.035);
 
     z-index:100;
 }
 
 
 /* =====================================================
-   MAPPA
+   MAPPA LEAFLET
 ===================================================== */
 
 #map{
@@ -508,30 +545,15 @@ body{
     background:#071014;
 }
 
-
-/* =====================================================
-   TILE
-===================================================== */
-
 #map .leaflet-tile{
     filter:none !important;
 }
-
-
-/* =====================================================
-   LEAFLET
-===================================================== */
 
 .leaflet-container{
     background:#071014 !important;
 
     font-family:Arial,sans-serif;
 }
-
-
-/* =====================================================
-   NASCONDI ZOOM
-===================================================== */
 
 .leaflet-control-zoom{
     display:none !important;
@@ -579,10 +601,18 @@ body{
         rgba(0,255,255,.15);
 
     box-shadow:
-        0 0 15px
-        rgba(0,255,255,.8);
+        0 0 8px
+        rgba(0,255,255,.9),
+
+        0 0 20px
+        rgba(0,255,255,.55);
 
     position:relative;
+
+    animation:
+        markerPulse 1.5s
+        ease-in-out
+        infinite;
 }
 
 .jarvis-marker::after{
@@ -605,6 +635,20 @@ body{
 
     box-shadow:
         0 0 8px #00ffff;
+}
+
+@keyframes markerPulse{
+
+    0%,
+    100%{
+        transform:scale(1);
+        opacity:.85;
+    }
+
+    50%{
+        transform:scale(1.35);
+        opacity:1;
+    }
 }
 
 
@@ -630,7 +674,7 @@ body{
     border-radius:50%;
 
     background:
-        rgba(0,20,23,.8);
+        rgba(0,20,23,.85);
 
     color:
         rgba(200,255,255,.85);
@@ -640,6 +684,7 @@ body{
     font-size:20px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
@@ -657,6 +702,213 @@ body{
     box-shadow:
         0 0 15px
         rgba(0,255,255,.25);
+}
+
+
+/* =====================================================
+   HUD TATTICO
+===================================================== */
+
+.map-hud{
+    position:absolute;
+
+    inset:0;
+
+    z-index:400;
+
+    pointer-events:none;
+}
+
+
+/* =====================================================
+   GRIGLIA HUD
+===================================================== */
+
+.map-hud::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+
+        linear-gradient(
+            rgba(0,255,255,.055) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(0,255,255,.055) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        50px 50px;
+
+    mix-blend-mode:screen;
+
+    opacity:.5;
+}
+
+
+/* =====================================================
+   VIGNETTE MAPPA
+===================================================== */
+
+.map-hud::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at center,
+            transparent 45%,
+            rgba(0,0,0,.12) 70%,
+            rgba(0,0,0,.5) 100%
+        );
+}
+
+
+/* =====================================================
+   SCANNER
+===================================================== */
+
+.scan-line{
+
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:-10%;
+
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0,255,255,.0),
+            rgba(0,255,255,.55),
+            rgba(0,255,255,.0),
+            transparent
+        );
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.35);
+
+    animation:
+        scanMove 5s
+        linear
+        infinite;
+}
+
+@keyframes scanMove{
+
+    0%{
+        top:-10%;
+        opacity:0;
+    }
+
+    10%{
+        opacity:1;
+    }
+
+    90%{
+        opacity:1;
+    }
+
+    100%{
+        top:110%;
+        opacity:0;
+    }
+}
+
+
+/* =====================================================
+   ANGOLI HUD
+===================================================== */
+
+.hud-corner{
+    position:absolute;
+
+    width:55px;
+    height:55px;
+
+    border-color:
+        rgba(0,255,255,.55);
+
+    border-style:solid;
+}
+
+.hud-tl{
+    top:18px;
+    left:18px;
+
+    border-width:2px 0 0 2px;
+}
+
+.hud-tr{
+    top:18px;
+    right:18px;
+
+    border-width:2px 2px 0 0;
+}
+
+.hud-bl{
+    bottom:18px;
+    left:18px;
+
+    border-width:0 0 2px 2px;
+}
+
+.hud-br{
+    bottom:18px;
+    right:18px;
+
+    border-width:0 2px 2px 0;
+}
+
+
+/* =====================================================
+   INFO TATTICA
+===================================================== */
+
+.tactical-info{
+
+    position:absolute;
+
+    top:22px;
+    right:25px;
+
+    z-index:450;
+
+    color:
+        rgba(180,255,255,.65);
+
+    font-family:monospace;
+
+    font-size:9px;
+
+    letter-spacing:1.5px;
+
+    text-align:right;
+
+    line-height:1.7;
+
+    pointer-events:none;
+
+    text-shadow:
+        0 0 8px
+        rgba(0,255,255,.2);
 }
 
 
@@ -702,6 +954,9 @@ body{
         bottom:80px;
     }
 
+
+    /* MAPPA MOBILE */
+
     .map-frame{
         top:75px;
         left:14px;
@@ -729,69 +984,207 @@ body{
         font-size:18px;
     }
 
+    .tactical-info{
+        top:88px;
+        right:22px;
+
+        font-size:7px;
+    }
+
+    .hud-corner{
+        width:35px;
+        height:35px;
+    }
+
+    .hud-corner{
+        opacity:.7;
+    }
+
 }
 
-</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
+
+/* =====================================================
+   MODALITÀ TATTICA
+===================================================== */
+
+body.tactical-active #chat{
+    opacity:0;
+}
+
+body.tactical-active .command-wrapper{
+    opacity:0;
+
+    pointer-events:none;
+}
+
+body.tactical-active .datetime{
+    z-index:540;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SFONDO JARVIS
+===================================================== -->
+
+<div id="webgl-container"></div>
+
+<div class="vignette">
+
+
+</div>
+
+
+<!-- =====================================================
+     TITOLO NORMALE
+===================================================== -->
+
+<div
     id="jarvisTitle"
     class="jarvis-title"
 >
     J.A.R.V.I.S
-</div><div class="datetime"><div
-    id="clock"
-    class="time"
->
-    00:00:00
 </div>
 
-<div
-    id="date"
-    class="date"
->
-    00 AGO 2026
+
+<!-- =====================================================
+     ORA
+===================================================== -->
+
+<div class="datetime">
+
+    <div
+        id="clock"
+        class="time"
+    >
+        00:00:00
+    </div>
+
+    <div
+        id="date"
+        class="date"
+    >
+        00 AGO 2026
+    </div>
+
 </div>
 
-</div><!-- =====================================================
+
+<!-- =====================================================
      MAPPA TATTICA
-===================================================== --><div id="tacticalMap"><div class="tactical-title">
-    TACTICAL MAP
+===================================================== -->
+
+<div id="tacticalMap">
+
+
+    <div class="tactical-title">
+        TACTICAL MAP
+    </div>
+
+
+    <div class="map-frame">
+
+        <div id="map"></div>
+
+
+        <div class="map-hud">
+
+            <div class="scan-line"></div>
+
+            <div class="hud-corner hud-tl"></div>
+
+            <div class="hud-corner hud-tr"></div>
+
+            <div class="hud-corner hud-bl"></div>
+
+            <div class="hud-corner hud-br"></div>
+
+        </div>
+
+
+        <div class="tactical-info">
+
+            J.A.R.V.I.S SYSTEM<br>
+            TACTICAL NAVIGATION<br>
+            MAP STATUS: ONLINE<br>
+            SENSOR: ACTIVE
+
+        </div>
+
+    </div>
+
+
+    <button
+        id="closeMap"
+        title="Chiudi mappa"
+    >
+        ×
+    </button>
+
+
 </div>
 
 
-<div class="map-frame">
+<!-- =====================================================
+     CHAT
+===================================================== -->
 
-    <div id="map"></div>
+<div id="chat"></div>
+
+
+<!-- =====================================================
+     INPUT
+===================================================== -->
+
+<div class="command-wrapper">
+
+    <input
+        id="textInput"
+        type="text"
+        autocomplete="off"
+        placeholder="Chiedi qualcosa a JARVIS..."
+    >
+
+
+    <button
+        id="micBtn"
+        aria-label="Microfono"
+    >
+
+        <span class="mic-icon"></span>
+
+    </button>
+
+
+    <button id="sendBtn">
+
+        INVIA
+
+    </button>
 
 </div>
 
 
-<button
-    id="closeMap"
-    title="Chiudi mappa"
->
-    ×
-</button>
+<!-- =====================================================
+     LEAFLET
+===================================================== -->
 
-</div><div id="chat"></div><div class="command-wrapper"><input
-    id="textInput"
-    type="text"
-    autocomplete="off"
-    placeholder="Chiedi qualcosa a JARVIS..."
->
-
-<button
-    id="micBtn"
-    aria-label="Microfono"
->
-    <span class="mic-icon"></span>
-</button>
-
-<button id="sendBtn">
-    INVIA
-</button>
-
-</div><script
+<script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script><script type="importmap">
+</script>
+
+
+<!-- =====================================================
+     THREE IMPORTMAP
+===================================================== -->
+
+<script type="importmap">
 
 {
     "imports":{
@@ -800,7 +1193,10 @@ body{
     }
 }
 
-</script><script type="module">
+</script>
+
+
+<script type="module">
 
 import * as THREE from "three";
 
@@ -823,8 +1219,15 @@ const MAX_MEMORY =
    MAPTILER
 ===================================================== */
 
+/*
+   IMPORTANTE:
+   INSERISCI QUI LA TUA NUOVA API KEY MAPTILER.
+
+   NON USARE LA VECCHIA CHIAVE CHE HAI CONDIVISO.
+*/
+
 const MAPTILER_KEY =
-    "NmSlgtsAdQyEWy7t0OJf";
+    "INSERISCI_LA_TUA_NUOVA_API_KEY";
 
 
 /* =====================================================
@@ -888,6 +1291,7 @@ const jarvisTitle =
 
 let memory = [];
 
+
 try{
 
     const saved =
@@ -895,10 +1299,14 @@ try{
             MEMORY_KEY
         );
 
+
     if(saved){
 
         const parsed =
-            JSON.parse(saved);
+            JSON.parse(
+                saved
+            );
+
 
         if(
             Array.isArray(parsed)
@@ -960,10 +1368,12 @@ function addMemory(
 
     });
 
+
     memory =
         memory.slice(
             -MAX_MEMORY
         );
+
 
     saveMemory();
 
@@ -1001,19 +1411,28 @@ function updateClock(){
     const h =
         String(
             now.getHours()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const m =
         String(
             now.getMinutes()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const s =
         String(
             now.getSeconds()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     clock.textContent =
@@ -1023,7 +1442,10 @@ function updateClock(){
     const d =
         String(
             now.getDate()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const month =
@@ -1238,14 +1660,14 @@ const seeds =
 
 
 for(
-    let i=0;
-    i<COUNT;
+    let i = 0;
+    i < COUNT;
     i++
 ){
 
     const r =
         1.10 +
-        Math.random()*.70;
+        Math.random() * .70;
 
 
     const theta =
@@ -1256,7 +1678,7 @@ for(
 
     const phi =
         Math.acos(
-            2*Math.random()-1
+            2 * Math.random() - 1
         );
 
 
@@ -1264,31 +1686,31 @@ for(
         r;
 
 
-    angles[i*2] =
+    angles[i * 2] =
         theta;
 
 
-    angles[i*2+1] =
+    angles[i * 2 + 1] =
         phi;
 
 
     seeds[i] =
-        Math.random()*100;
+        Math.random() * 100;
 
 
-    positions[i*3] =
+    positions[i * 3] =
         r *
         Math.sin(phi) *
         Math.cos(theta);
 
 
-    positions[i*3+1] =
+    positions[i * 3 + 1] =
         r *
         Math.sin(phi) *
         Math.sin(theta);
 
 
-    positions[i*3+2] =
+    positions[i * 3 + 2] =
         r *
         Math.cos(phi);
 
@@ -1426,19 +1848,21 @@ function animate(){
 
 
     const time =
-        performance.now()*.001;
+        performance.now() *
+        .001;
 
 
     energy +=
         (
             targetEnergy -
             energy
-        )*.045;
+        ) *
+        .045;
 
 
     currentColor.lerp(
         activeColor,
-        energy*.04
+        energy * .04
     );
 
 
@@ -1460,7 +1884,7 @@ function animate(){
 
     material.size =
         .032 +
-        energy*.008;
+        energy * .008;
 
 
     const pos =
@@ -1471,13 +1895,13 @@ function animate(){
 
 
     for(
-        let i=0;
-        i<COUNT;
+        let i = 0;
+        i < COUNT;
         i++
     ){
 
         const index =
-            i*3;
+            i * 3;
 
 
         const r =
@@ -1485,11 +1909,11 @@ function animate(){
 
 
         const theta =
-            angles[i*2];
+            angles[i * 2];
 
 
         const phi =
-            angles[i*2+1];
+            angles[i * 2 + 1];
 
 
         const seed =
@@ -1498,25 +1922,29 @@ function animate(){
 
         const pulse =
             Math.sin(
-                time*2 +
+                time * 2 +
                 seed
-            )*.035;
+            ) * .035;
 
 
         const strangeShape =
             Math.sin(
-                theta*6 +
-                time*2 +
+                theta * 6 +
+                time * 2 +
                 seed
-            )*.18*energy;
+            ) *
+            .18 *
+            energy;
 
 
         const wave =
             Math.cos(
-                phi*7 -
-                time*1.8 +
+                phi * 7 -
+                time * 1.8 +
                 seed
-            )*.12*energy;
+            ) *
+            .12 *
+            energy;
 
 
         const rr =
@@ -1545,36 +1973,42 @@ function animate(){
 
         x +=
             Math.sin(
-                time*2.4 +
-                phi*8 +
+                time * 2.4 +
+                phi * 8 +
                 seed
-            )*.08*energy;
+            ) *
+            .08 *
+            energy;
 
 
         y +=
             Math.cos(
-                time*2.1 +
-                theta*9 +
+                time * 2.1 +
+                theta * 9 +
                 seed
-            )*.08*energy;
+            ) *
+            .08 *
+            energy;
 
 
         z +=
             Math.sin(
-                time*2.7 +
-                (theta+phi)*7
-            )*.10*energy;
+                time * 2.7 +
+                (theta + phi) * 7
+            ) *
+            .10 *
+            energy;
 
 
         pos[index] =
             x;
 
 
-        pos[index+1] =
+        pos[index + 1] =
             y;
 
 
-        pos[index+2] =
+        pos[index + 2] =
             z;
 
     }
@@ -1589,19 +2023,21 @@ function animate(){
 
     particles.rotation.y +=
         .0005 +
-        energy*.0008;
+        energy * .0008;
 
 
     particles.rotation.x =
         Math.sin(
-            time*.25
-        )*.04;
+            time * .25
+        ) *
+        .04;
 
 
     particles.rotation.z =
         Math.cos(
-            time*.18
-        )*.025;
+            time * .18
+        ) *
+        .025;
 
 
     renderer.render(
@@ -1619,16 +2055,37 @@ animate();
    MAPPA TATTICA
 ===================================================== */
 
-let map = null;
+let map =
+    null;
 
-let currentMarker = null;
+
+let currentMarker =
+    null;
 
 
 /* =====================================================
-   MAPTILER
+   CONTROLLO API KEY
 ===================================================== */
 
-const MAPTILER_KEY = "NmSlgtsAdQyEWy7t0OJf";
+function hasValidMapKey(){
+
+    return (
+
+        typeof MAPTILER_KEY ===
+        "string"
+
+        &&
+
+        MAPTILER_KEY.trim().length > 10
+
+        &&
+
+        MAPTILER_KEY !==
+        "INSERISCI_LA_TUA_NUOVA_API_KEY"
+
+    );
+
+}
 
 
 /* =====================================================
@@ -1638,61 +2095,98 @@ const MAPTILER_KEY = "NmSlgtsAdQyEWy7t0OJf";
 function initializeMap(){
 
     if(map){
-        setTimeout(() => {
-            map.invalidateSize();
-        }, 100);
-        return;
+
+        return true;
+
     }
 
-    map = L.map("map", {
-        zoomControl: false,
-        attributionControl: true,
-        minZoom: 1,
-        maxZoom: 19
-    });
 
-    map.setView([45.5416, 10.2118], 10);
+    if(
+        !hasValidMapKey()
+    ){
+
+        console.error(
+            "API KEY MAPTILER NON CONFIGURATA"
+        );
+
+
+        addMsg(
+            "API key MapTiler non configurata."
+        );
+
+
+        return false;
+
+    }
+
+
+    map =
+        L.map(
+            "map",
+            {
+
+                zoomControl:false,
+
+                attributionControl:true,
+
+                minZoom:1,
+
+                maxZoom:19,
+
+                worldCopyJump:true
+
+            }
+        );
+
+
+    map.setView(
+
+        [
+            45.5416,
+            10.2118
+        ],
+
+        10
+
+    );
+
+
+    /* =================================================
+       MAPTILER
+    ================================================= */
 
     const mapTiles =
         `https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`;
 
-    L.tileLayer(mapTiles, {
-        tileSize: 512,
-        zoomOffset: -1,
-        minZoom: 1,
-        maxZoom: 19,
 
-        attribution:
-            '&copy; MapTiler &copy; OpenStreetMap contributors',
+    L.tileLayer(
 
-        crossOrigin: true
-    }).addTo(map);
+        mapTiles,
 
-    setTimeout(() => {
-        map.invalidateSize();
-    }, 300);
-}
+        {
 
+            tileSize:512,
 
-/* =====================================================
-   APERTURA MAPPA
-===================================================== */
+            zoomOffset:-1,
 
-function openTacticalMap(){
+            minZoom:1,
 
-    tacticalMap.classList.add(
-        "active"
+            maxZoom:19,
+
+            attribution:
+                '&copy; MapTiler &copy; OpenStreetMap contributors',
+
+            crossOrigin:true
+
+        }
+
+    ).addTo(
+        map
     );
 
 
-    jarvisTitle.style.opacity =
-        "0";
-
-
-    initializeMap();
-
-
     setTimeout(
+
         () => {
 
             if(map){
@@ -1702,7 +2196,82 @@ function openTacticalMap(){
             }
 
         },
-        350
+
+        200
+
+    );
+
+
+    return true;
+
+}
+
+
+/* =====================================================
+   APERTURA MAPPA
+===================================================== */
+
+function openTacticalMap(){
+
+    const initialized =
+        initializeMap();
+
+
+    if(
+        !initialized &&
+        !map
+    ){
+
+        return;
+
+    }
+
+
+    tacticalMap.classList.add(
+        "active"
+    );
+
+
+    document.body.classList.add(
+        "tactical-active"
+    );
+
+
+    jarvisTitle.style.opacity =
+        "0";
+
+
+    setTimeout(
+
+        () => {
+
+            if(map){
+
+                map.invalidateSize();
+
+            }
+
+        },
+
+        100
+
+    );
+
+
+    setTimeout(
+
+        () => {
+
+            if(map){
+
+                map.invalidateSize();
+
+            }
+
+        },
+
+        500
+
     );
 
 }
@@ -1719,15 +2288,27 @@ function closeTacticalMap(){
     );
 
 
+    document.body.classList.remove(
+        "tactical-active"
+    );
+
+
     jarvisTitle.style.opacity =
         "1";
 
 }
 
 
+/* =====================================================
+   PULSANTE CHIUSURA
+===================================================== */
+
 closeMap.addEventListener(
+
     "click",
+
     closeTacticalMap
+
 );
 
 
@@ -1740,6 +2321,13 @@ function createJarvisMarker(
     lon,
     name
 ){
+
+    if(!map){
+
+        return;
+
+    }
+
 
     if(currentMarker){
 
@@ -1769,20 +2357,68 @@ function createJarvisMarker(
 
     currentMarker =
         L.marker(
-            [lat,lon],
+
+            [
+                lat,
+                lon
+            ],
+
             {
                 icon
             }
+
         )
-        .addTo(map);
+        .addTo(
+            map
+        );
 
 
     currentMarker.bindPopup(
-        `<b style="color:#00ffff">${name}</b>`
+
+        `<b style="color:#00ffff">${escapeHtml(name)}</b>`
+
     );
 
 
     currentMarker.openPopup();
+
+}
+
+
+/* =====================================================
+   SICUREZZA HTML
+===================================================== */
+
+function escapeHtml(
+    text
+){
+
+    return String(text)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -1797,6 +2433,19 @@ async function searchLocation(
 
     try{
 
+        if(
+            !hasValidMapKey()
+        ){
+
+            addMsg(
+                "API key MapTiler non configurata."
+            );
+
+            return;
+
+        }
+
+
         openTacticalMap();
 
 
@@ -1808,9 +2457,13 @@ async function searchLocation(
 
         const url =
             "https://nominatim.openstreetmap.org/search" +
+
             "?format=json" +
+
             "&limit=1" +
+
             "&q=" +
+
             encodeURIComponent(
                 place
             );
@@ -1818,13 +2471,18 @@ async function searchLocation(
 
         const response =
             await fetch(
+
                 url,
+
                 {
+
                     headers:{
                         "Accept":
                             "application/json"
                     }
+
                 }
+
             );
 
 
@@ -1853,7 +2511,6 @@ async function searchLocation(
                 "."
             );
 
-
             return;
 
         }
@@ -1875,19 +2532,47 @@ async function searchLocation(
             );
 
 
+        if(
+            !Number.isFinite(lat) ||
+            !Number.isFinite(lon)
+        ){
+
+            throw new Error(
+                "Coordinate non valide"
+            );
+
+        }
+
+
+        if(!map){
+
+            return;
+
+        }
+
+
         map.flyTo(
-            [lat,lon],
+
+            [
+                lat,
+                lon
+            ],
+
             12,
+
             {
                 duration:1.8
             }
+
         );
 
 
         createJarvisMarker(
+
             lat,
             lon,
             place
+
         );
 
 
@@ -1930,27 +2615,46 @@ function handleMapCommand(
             .trim();
 
 
+    /* =================================================
+       APRI
+    ================================================= */
+
     if(
+
+        normalized ===
+        "mappa"
+
+        ||
 
         normalized.includes(
             "apri la mappa"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "apri mappa"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "mappa tattica"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "modalità tattica"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "modalita tattica"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "attiva la mappa"
@@ -1971,23 +2675,35 @@ function handleMapCommand(
     }
 
 
+    /* =================================================
+       CHIUDI
+    ================================================= */
+
     if(
 
         normalized.includes(
             "chiudi la mappa"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "chiudi mappa"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "esci dalla mappa"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "torna alla modalità normale"
-        ) ||
+        )
+
+        ||
 
         normalized.includes(
             "torna alla modalita normale"
@@ -2008,21 +2724,32 @@ function handleMapCommand(
     }
 
 
+    /* =================================================
+       RICERCA
+    ================================================= */
+
     const patterns = [
 
         "mostrami ",
+
         "mostra ",
+
         "vai a ",
+
         "portami a ",
+
         "localizza ",
+
         "cerca ",
+
         "visualizza "
 
     ];
 
 
     for(
-        const pattern of patterns
+        const pattern
+        of patterns
     ){
 
         if(
@@ -2109,36 +2836,64 @@ function getTimeData(){
     return {
 
         currentTime:
+
             now.toLocaleTimeString(
+
                 "it-IT",
+
                 {
+
                     hour:"2-digit",
+
                     minute:"2-digit",
+
                     second:"2-digit"
+
                 }
+
             ),
+
 
         currentDate:
+
             now.toLocaleDateString(
+
                 "it-IT",
+
                 {
+
                     day:"2-digit",
+
                     month:"2-digit",
+
                     year:"numeric"
+
                 }
+
             ),
+
 
         dayOfWeek:
+
             now.toLocaleDateString(
+
                 "it-IT",
+
                 {
+
                     weekday:"long"
+
                 }
+
             ),
 
+
         timezone:
+
             Intl.DateTimeFormat()
+
                 .resolvedOptions()
+
                 .timeZone
 
     };
@@ -2184,24 +2939,31 @@ async function processAi(
 
         const response =
             await fetch(
+
                 API,
+
                 {
 
                     method:"POST",
 
                     headers:{
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
+
                         JSON.stringify({
 
                             message:
                                 text,
 
                             memory:
-                                memory.slice(-4),
+                                memory.slice(
+                                    -4
+                                ),
 
                             currentTime:
                                 temporal.currentTime,
@@ -2218,6 +2980,7 @@ async function processAi(
                         })
 
                 }
+
             );
 
 
@@ -2299,16 +3062,21 @@ async function processAi(
 
 
             if(done){
+
                 break;
+
             }
 
 
             buffer +=
                 decoder.decode(
+
                     value,
+
                     {
                         stream:true
                     }
+
                 );
 
 
@@ -2323,7 +3091,8 @@ async function processAi(
 
 
             for(
-                const line of lines
+                const line
+                of lines
             ){
 
                 const trimmed =
@@ -2333,7 +3102,9 @@ async function processAi(
                 if(
                     !trimmed
                 ){
+
                     continue;
+
                 }
 
 
@@ -2342,13 +3113,17 @@ async function processAi(
                         "data:"
                     )
                 ){
+
                     continue;
+
                 }
 
 
                 const raw =
                     trimmed
-                        .substring(5)
+                        .substring(
+                            5
+                        )
                         .trim();
 
 
@@ -2356,7 +3131,9 @@ async function processAi(
                     !raw ||
                     raw === "[DONE]"
                 ){
+
                     continue;
+
                 }
 
 
@@ -2382,9 +3159,13 @@ async function processAi(
 
                     }
 
+
                     else if(
+
                         json.choices &&
+
                         json.choices[0]
+
                     ){
 
                         const choice =
@@ -2392,9 +3173,12 @@ async function processAi(
 
 
                         if(
+
                             choice.delta &&
+
                             typeof choice.delta.content ===
                             "string"
+
                         ){
 
                             piece =
@@ -2402,10 +3186,14 @@ async function processAi(
 
                         }
 
+
                         else if(
+
                             choice.message &&
+
                             typeof choice.message.content ===
                             "string"
+
                         ){
 
                             piece =
@@ -2413,9 +3201,12 @@ async function processAi(
 
                         }
 
+
                         else if(
+
                             typeof choice.text ===
                             "string"
+
                         ){
 
                             piece =
@@ -2519,7 +3310,9 @@ function sendMessage(){
     if(
         !text
     ){
+
         return;
+
     }
 
 
@@ -2546,20 +3339,25 @@ sendBtn.addEventListener(
 
 
 textInput.addEventListener(
+
     "keydown",
+
     event => {
 
         if(
-            event.key === "Enter"
+            event.key ===
+            "Enter"
         ){
 
             event.preventDefault();
+
 
             sendMessage();
 
         }
 
     }
+
 );
 
 
@@ -2761,7 +3559,9 @@ if(
 
 
     micBtn.addEventListener(
+
         "click",
+
         () => {
 
             if(listening){
@@ -2785,6 +3585,7 @@ if(
             }
 
         }
+
     );
 
 }else{
@@ -2800,7 +3601,9 @@ if(
 ===================================================== */
 
 window.addEventListener(
+
     "resize",
+
     () => {
 
         camera.aspect =
@@ -2812,8 +3615,11 @@ window.addEventListener(
 
 
         renderer.setSize(
+
             window.innerWidth,
+
             window.innerHeight
+
         );
 
 
@@ -2824,6 +3630,7 @@ window.addEventListener(
         }
 
     }
+
 );
 
 
@@ -2858,4 +3665,8 @@ setState(
     "idle"
 );
 
-</script></body></html>
+</script>
+
+</body>
+
+</html>

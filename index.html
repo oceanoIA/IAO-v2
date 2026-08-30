@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>J.A.R.V.I.S.</title>
 
+
 <style>
+
+/* =====================================================
+   BASE
+===================================================== */
 
 *{
     box-sizing:border-box;
@@ -25,6 +36,7 @@ body{
     background:#010405;
 
     font-family:Arial,sans-serif;
+
 }
 
 body{
@@ -33,14 +45,15 @@ body{
         radial-gradient(
             circle at center,
             #071719 0%,
-            #020708 45%,
+            #020708 48%,
             #000000 100%
         );
+
 }
 
 
 /* =====================================================
-   THREE.JS
+   THREE
 ===================================================== */
 
 #webgl-container{
@@ -50,6 +63,7 @@ body{
     inset:0;
 
     z-index:1;
+
 }
 
 
@@ -67,65 +81,63 @@ body{
         radial-gradient(
             circle at center,
             transparent 30%,
-            rgba(0,0,0,.18) 65%,
-            rgba(0,0,0,.75) 100%
+            rgba(0,0,0,.20) 65%,
+            rgba(0,0,0,.80) 100%
         );
+
 }
 
 
 /* =====================================================
-   TITOLO
+   JARVIS
 ===================================================== */
 
 .jarvis-title{
 
     position:fixed;
 
-    left:50%;
+    top:2%;
 
-    top:2.5%;
+    left:50%;
 
     transform:
         translateX(-50%);
 
-    z-index:8;
-
-    pointer-events:none;
-
-    font-size:
-        clamp(22px,3.5vw,38px);
-
-    font-weight:300;
-
-    letter-spacing:
-        clamp(5px,1vw,10px);
+    z-index:10;
 
     color:
         rgba(255,255,255,.86);
 
-    text-shadow:
+    font-size:
+        clamp(22px,3vw,34px);
 
-        0 0 8px
-        rgba(255,255,255,.12),
+    font-weight:300;
 
-        0 0 20px
-        rgba(0,255,255,.10);
+    letter-spacing:
+        clamp(5px,1vw,9px);
 
     white-space:nowrap;
+
+    text-shadow:
+        0 0 10px
+        rgba(255,255,255,.12);
+
+    pointer-events:none;
+
 }
 
 
 /* =====================================================
-   DATA E ORA
+   DATA / ORA
 ===================================================== */
 
 .datetime{
 
     position:fixed;
 
-    top:22px;
+    top:18px;
 
-    right:25px;
+    right:24px;
 
     z-index:10;
 
@@ -139,35 +151,36 @@ body{
 
     font-family:monospace;
 
-    color:
-        rgba(150,255,255,.58);
-
-    text-shadow:
-        0 0 8px
-        rgba(0,255,255,.18);
-
     pointer-events:none;
 
-    user-select:none;
 }
 
 
 .time{
 
-    font-size:12px;
+    color:
+        rgba(150,255,255,.60);
+
+    font-size:11px;
 
     letter-spacing:2px;
+
+    text-shadow:
+        0 0 8px
+        rgba(0,255,255,.20);
+
 }
 
 
 .date{
 
-    font-size:9px;
-
-    letter-spacing:1.5px;
-
     color:
         rgba(150,255,255,.38);
+
+    font-size:8px;
+
+    letter-spacing:1px;
+
 }
 
 
@@ -188,11 +201,12 @@ body{
 
     z-index:15;
 
-    width:min(620px,86%);
+    width:min(620px,88%);
 
     text-align:center;
 
     pointer-events:none;
+
 }
 
 
@@ -202,16 +216,17 @@ body{
 
     max-width:100%;
 
-    padding:10px 18px;
-
-    border-radius:24px;
+    padding:
+        10px 18px;
 
     border:
         1px solid
         rgba(0,255,255,.22);
 
+    border-radius:24px;
+
     background:
-        rgba(4,20,23,.38);
+        rgba(4,20,23,.40);
 
     backdrop-filter:
         blur(14px);
@@ -220,39 +235,17 @@ body{
         blur(14px);
 
     color:
-        rgba(235,255,255,.88);
+        rgba(235,255,255,.90);
 
     font-size:12px;
 
     line-height:1.45;
 
-    animation:
-        messageIn .3s ease;
-}
-
-
-@keyframes messageIn{
-
-    from{
-
-        opacity:0;
-
-        transform:
-            translateY(8px);
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-            translateY(0);
-    }
 }
 
 
 /* =====================================================
-   BARRA COMANDO
+   INPUT
 ===================================================== */
 
 .command-wrapper{
@@ -261,7 +254,7 @@ body{
 
     left:50%;
 
-    bottom:25px;
+    bottom:23px;
 
     transform:
         translateX(-50%);
@@ -275,16 +268,16 @@ body{
     align-items:center;
 
     padding:
-        6px 7px 6px 21px;
-
-    border-radius:40px;
-
-    background:
-        rgba(5,20,23,.35);
+        6px 7px 6px 20px;
 
     border:
         1px solid
         rgba(100,255,255,.28);
+
+    border-radius:40px;
+
+    background:
+        rgba(5,20,23,.38);
 
     backdrop-filter:
         blur(20px);
@@ -293,34 +286,26 @@ body{
         blur(20px);
 
     box-shadow:
-
         0 0 30px
-        rgba(0,255,255,.055),
+        rgba(0,255,255,.05);
 
-        inset 0 0 20px
-        rgba(0,255,255,.025);
-
-    transition:.3s ease;
 }
 
 
 .command-wrapper:focus-within{
 
     border-color:
-        rgba(0,255,255,.65);
+        rgba(0,255,255,.60);
 
     box-shadow:
-
         0 0 25px
-        rgba(0,255,255,.13),
+        rgba(0,255,255,.12);
 
-        inset 0 0 25px
-        rgba(0,255,255,.04);
 }
 
 
 /* =====================================================
-   INPUT
+   TEXT INPUT
 ===================================================== */
 
 #textInput{
@@ -343,6 +328,7 @@ body{
 
     padding:
         12px 5px;
+
 }
 
 
@@ -350,6 +336,7 @@ body{
 
     color:
         rgba(255,255,255,.30);
+
 }
 
 
@@ -358,8 +345,6 @@ body{
 ===================================================== */
 
 #micBtn{
-
-    flex-shrink:0;
 
     width:34px;
 
@@ -382,17 +367,10 @@ body{
 
     justify-content:center;
 
-    transition:
-
-        color .25s ease,
-
-        transform .25s ease;
 }
 
 
 .mic-icon{
-
-    position:relative;
 
     width:8px;
 
@@ -403,6 +381,9 @@ body{
         currentColor;
 
     border-radius:6px;
+
+    position:relative;
+
 }
 
 
@@ -431,6 +412,7 @@ body{
 
     border-radius:
         0 0 8px 8px;
+
 }
 
 
@@ -438,17 +420,12 @@ body{
 
     color:#00ffff;
 
-    transform:
-        scale(1.08);
 }
 
 
 #micBtn.active{
 
     color:#8fffff;
-
-    transform:
-        scale(1.12);
 
 }
 
@@ -459,26 +436,22 @@ body{
 
 #sendBtn{
 
-    flex-shrink:0;
-
     height:39px;
 
     padding:
         0 17px;
 
-    border-radius:22px;
-
     border:
         1px solid
         rgba(0,255,255,.28);
 
+    border-radius:22px;
+
     background:
-        rgba(0,255,255,.055);
+        rgba(0,255,255,.05);
 
     color:
         rgba(220,255,255,.78);
-
-    font-family:Arial,sans-serif;
 
     font-size:10px;
 
@@ -486,7 +459,6 @@ body{
 
     cursor:pointer;
 
-    transition:.25s ease;
 }
 
 
@@ -497,11 +469,8 @@ body{
     border-color:#00ffff;
 
     background:
-        rgba(0,255,255,.11);
+        rgba(0,255,255,.10);
 
-    box-shadow:
-        0 0 15px
-        rgba(0,255,255,.15);
 }
 
 
@@ -513,19 +482,21 @@ body{
 
     .jarvis-title{
 
-        top:2%;
+        top:1.5%;
 
-        font-size:25px;
+        font-size:24px;
 
         letter-spacing:5px;
+
     }
 
 
     .datetime{
 
-        top:14px;
+        top:12px;
 
-        right:14px;
+        right:13px;
+
     }
 
 
@@ -533,15 +504,13 @@ body{
 
         font-size:10px;
 
-        letter-spacing:1.5px;
     }
 
 
     .date{
 
-        font-size:8px;
+        font-size:7px;
 
-        letter-spacing:1px;
     }
 
 
@@ -552,44 +521,35 @@ body{
 
         bottom:17px;
 
-        padding-left:15px;
     }
 
 
     #textInput{
 
         font-size:13px;
-    }
 
-
-    #sendBtn{
-
-        padding:
-            0 12px;
     }
 
 
     #chat{
 
-        bottom:82px;
+        bottom:80px;
 
-        width:88%;
-    }
-
-
-    .msg{
-
-        font-size:11px;
     }
 
 }
 
 </style>
+
 </head>
 
 
 <body>
 
+
+<!-- =====================================================
+     SCENA
+===================================================== -->
 
 <div id="webgl-container"></div>
 
@@ -597,7 +557,7 @@ body{
 
 
 <!-- =====================================================
-     JARVIS
+     TITOLO
 ===================================================== -->
 
 <div class="jarvis-title">
@@ -606,23 +566,23 @@ body{
 
 
 <!-- =====================================================
-     ORA / DATA
+     ORA E DATA
 ===================================================== -->
 
 <div class="datetime">
 
     <div
-        class="time"
         id="clock"
+        class="time"
     >
         00:00:00
     </div>
 
     <div
-        class="date"
         id="date"
+        class="date"
     >
-        30 AGO 2026
+        00 AGO 2026
     </div>
 
 </div>
@@ -675,12 +635,14 @@ body{
 ===================================================== -->
 
 <script type="importmap">
+
 {
     "imports":{
         "three":
         "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
     }
 }
+
 </script>
 
 
@@ -752,7 +714,7 @@ const date =
 
 
 /* =====================================================
-   MEMORIA LOCALE
+   MEMORIA
 ===================================================== */
 
 let memory = [];
@@ -777,23 +739,18 @@ try{
         ){
 
             memory =
-                parsed
-                    .filter(item =>
-                        item &&
-                        (
-                            item.role === "user" ||
-                            item.role === "assistant"
-                        ) &&
-                        typeof item.content === "string"
-                    )
-                    .slice(-MAX_MEMORY);
+                parsed.slice(
+                    -MAX_MEMORY
+                );
+
         }
+
     }
 
 }catch(error){
 
     console.warn(
-        "Memoria non disponibile:",
+        "Memoria:",
         error
     );
 
@@ -807,17 +764,21 @@ function saveMemory(){
         localStorage.setItem(
             MEMORY_KEY,
             JSON.stringify(
-                memory.slice(-MAX_MEMORY)
+                memory.slice(
+                    -MAX_MEMORY
+                )
             )
         );
 
     }catch(error){
 
         console.warn(
-            "Impossibile salvare la memoria:",
+            "Salvataggio memoria:",
             error
         );
+
     }
+
 }
 
 
@@ -826,21 +787,13 @@ function addMemory(
     content
 ){
 
-    if(
-        !content ||
-        typeof content !== "string"
-    ){
-
-        return;
-    }
-
-
     memory.push({
 
-        role,
+        role:
+            role,
 
         content:
-            content.slice(0,5000)
+            content
 
     });
 
@@ -852,11 +805,12 @@ function addMemory(
 
 
     saveMemory();
+
 }
 
 
 /* =====================================================
-   ORA E DATA
+   ORA / DATA
 ===================================================== */
 
 const months = [
@@ -877,35 +831,35 @@ const months = [
 ];
 
 
-function updateDateTime(){
+function updateClock(){
 
     const now =
         new Date();
 
 
-    const hours =
+    const h =
         String(
             now.getHours()
         ).padStart(2,"0");
 
 
-    const minutes =
+    const m =
         String(
             now.getMinutes()
         ).padStart(2,"0");
 
 
-    const seconds =
+    const s =
         String(
             now.getSeconds()
         ).padStart(2,"0");
 
 
     clock.textContent =
-        `${hours}:${minutes}:${seconds}`;
+        `${h}:${m}:${s}`;
 
 
-    const day =
+    const d =
         String(
             now.getDate()
         ).padStart(2,"0");
@@ -922,21 +876,22 @@ function updateDateTime(){
 
 
     date.textContent =
-        `${day} ${month} ${year}`;
+        `${d} ${month} ${year}`;
+
 }
 
 
-updateDateTime();
+updateClock();
 
 
 setInterval(
-    updateDateTime,
+    updateClock,
     1000
 );
 
 
 /* =====================================================
-   SCENA
+   THREE SCENE
 ===================================================== */
 
 const scene =
@@ -968,6 +923,7 @@ const renderer =
         antialias:true,
 
         alpha:true
+
     });
 
 
@@ -994,7 +950,7 @@ container.appendChild(
    TEXTURE
 ===================================================== */
 
-function createGlowTexture(){
+function createGlow(){
 
     const canvas =
         document.createElement(
@@ -1018,60 +974,42 @@ function createGlowTexture(){
 
     const gradient =
         ctx.createRadialGradient(
-
             32,
             32,
             0,
-
             32,
             32,
             32
-
         );
 
 
     gradient.addColorStop(
-
         0,
-
         "rgba(255,255,255,1)"
-
     );
 
 
     gradient.addColorStop(
-
-        .16,
-
+        .2,
         "rgba(220,255,255,1)"
-
     );
 
 
     gradient.addColorStop(
-
-        .35,
-
-        "rgba(0,255,255,.95)"
-
+        .4,
+        "rgba(0,255,255,.9)"
     );
 
 
     gradient.addColorStop(
-
-        .68,
-
-        "rgba(0,170,210,.30)"
-
+        .7,
+        "rgba(0,150,190,.25)"
     );
 
 
     gradient.addColorStop(
-
         1,
-
         "rgba(0,0,0,0)"
-
     );
 
 
@@ -1080,18 +1018,17 @@ function createGlowTexture(){
 
 
     ctx.fillRect(
-
         0,
         0,
         64,
         64
-
     );
 
 
     return new THREE.CanvasTexture(
         canvas
     );
+
 }
 
 
@@ -1119,19 +1056,13 @@ const radii =
     );
 
 
-const theta =
+const angles =
     new Float32Array(
-        COUNT
+        COUNT * 2
     );
 
 
-const phi =
-    new Float32Array(
-        COUNT
-    );
-
-
-const seed =
+const seeds =
     new Float32Array(
         COUNT
     );
@@ -1144,20 +1075,17 @@ for(
 ){
 
     const r =
-        1.15 +
-        Math.pow(
-            Math.random(),
-            .72
-        )*.70;
+        1.10 +
+        Math.random()*.70;
 
 
-    const t =
+    const theta =
         Math.random() *
         Math.PI *
         2;
 
 
-    const p =
+    const phi =
         Math.acos(
             2*Math.random()-1
         );
@@ -1167,33 +1095,33 @@ for(
         r;
 
 
-    theta[i] =
-        t;
+    angles[i*2] =
+        theta;
 
 
-    phi[i] =
-        p;
+    angles[i*2+1] =
+        phi;
 
 
-    seed[i] =
+    seeds[i] =
         Math.random()*100;
 
 
     positions[i*3] =
         r *
-        Math.sin(p) *
-        Math.cos(t);
+        Math.sin(phi) *
+        Math.cos(theta);
 
 
     positions[i*3+1] =
         r *
-        Math.sin(p) *
-        Math.sin(t);
+        Math.sin(phi) *
+        Math.sin(theta);
 
 
     positions[i*3+2] =
         r *
-        Math.cos(p);
+        Math.cos(phi);
 
 }
 
@@ -1203,11 +1131,8 @@ geometry.setAttribute(
     "position",
 
     new THREE.BufferAttribute(
-
         positions,
-
         3
-
     )
 
 );
@@ -1217,7 +1142,7 @@ geometry.setAttribute(
    MATERIALE
 ===================================================== */
 
-const particleMaterial =
+const material =
     new THREE.PointsMaterial({
 
         color:
@@ -1229,11 +1154,11 @@ const particleMaterial =
             .034,
 
         map:
-            createGlowTexture(),
+            createGlow(),
 
         transparent:true,
 
-        opacity:.80,
+        opacity:.82,
 
         depthWrite:false,
 
@@ -1245,11 +1170,8 @@ const particleMaterial =
 
 const particles =
     new THREE.Points(
-
         geometry,
-
-        particleMaterial
-
+        material
     );
 
 
@@ -1259,31 +1181,31 @@ scene.add(
 
 
 /* =====================================================
-   STATI
+   ENERGIA
 ===================================================== */
 
 let targetEnergy =
-    .12;
+    .15;
 
 
 let energy =
-    .12;
+    .15;
 
 
-const baseCyan =
+const normalColor =
     new THREE.Color(
         0x00cfe8
     );
 
 
-const brightCyan =
+const activeColor =
     new THREE.Color(
         0x8fffff
     );
 
 
 const currentColor =
-    baseCyan.clone();
+    normalColor.clone();
 
 
 function setState(
@@ -1291,18 +1213,7 @@ function setState(
 ){
 
     if(
-        state ===
-        "listening"
-    ){
-
-        targetEnergy =
-            .55;
-
-    }
-
-    else if(
-        state ===
-        "thinking"
+        state === "thinking"
     ){
 
         targetEnergy =
@@ -1311,78 +1222,30 @@ function setState(
     }
 
     else if(
-        state ===
-        "speaking"
+        state === "speaking"
     ){
 
         targetEnergy =
-            .82;
+            .8;
+
+    }
+
+    else if(
+        state === "listening"
+    ){
+
+        targetEnergy =
+            .55;
 
     }
 
     else{
 
         targetEnergy =
-            .12;
+            .15;
 
     }
 
-}
-
-
-/* =====================================================
-   FORMA ORGANICA
-===================================================== */
-
-function spikeField(
-    t,
-    p,
-    time
-){
-
-    const a =
-        Math.sin(
-            t*5 +
-            time*1.7
-        );
-
-
-    const b =
-        Math.cos(
-            p*7 -
-            time*1.2
-        );
-
-
-    const c =
-        Math.sin(
-            t*9 +
-            p*4 +
-            time*2.1
-        );
-
-
-    const d =
-        Math.cos(
-            t*3 -
-            p*8 -
-            time*1.5
-        );
-
-
-    const value =
-        a*.30 +
-        b*.24 +
-        c*.22 +
-        d*.18;
-
-
-    return Math.sign(value) *
-
-        Math.pow(
-            Math.abs(value),
-            3
-        );
 }
 
 
@@ -1408,13 +1271,9 @@ function animate(){
         )*.045;
 
 
-    /*
-       SOLO BLU / CIANO.
-    */
-
     currentColor.lerp(
-        brightCyan,
-        energy*.055
+        activeColor,
+        energy*.04
     );
 
 
@@ -1423,25 +1282,20 @@ function animate(){
     ){
 
         currentColor.lerp(
-            baseCyan,
-            .025
+            normalColor,
+            .03
         );
 
     }
 
 
-    particleMaterial.color =
+    material.color =
         currentColor;
 
 
-    particleMaterial.size =
+    material.size =
         .032 +
-        energy*.009;
-
-
-    particleMaterial.opacity =
-        .76 +
-        energy*.20;
+        energy*.008;
 
 
     const pos =
@@ -1465,132 +1319,86 @@ function animate(){
             radii[i];
 
 
-        const t =
-            theta[i];
+        const theta =
+            angles[i*2];
 
 
-        const p =
-            phi[i];
+        const phi =
+            angles[i*2+1];
 
 
-        const s =
-            seed[i];
+        const seed =
+            seeds[i];
 
 
-        const breathing =
+        const pulse =
             Math.sin(
-                time*2+s
+                time*2 +
+                seed
             )*.035;
 
 
-        const spikes =
-            spikeField(
-                t,
-                p,
-                time
-            );
-
-
-        const spikeStrength =
-            energy*.58;
-
-
-        const waveX =
+        const strangeShape =
             Math.sin(
-                p*6 +
-                time*2.2 +
-                s
-            )*.10*energy;
+                theta*6 +
+                time*2 +
+                seed
+            )*.18*energy;
 
 
-        const waveY =
+        const wave =
             Math.cos(
-                t*7 -
-                time*1.7 +
-                s
-            )*.10*energy;
-
-
-        const waveZ =
-            Math.sin(
-                (t+p)*5 +
-                time*2.7
-            )*.08*energy;
+                phi*7 -
+                time*1.8 +
+                seed
+            )*.12*energy;
 
 
         const rr =
             r +
-            breathing +
-            spikes*spikeStrength +
-            waveX +
-            waveY;
+            pulse +
+            strangeShape +
+            wave;
 
 
         let x =
             rr *
-            Math.sin(p) *
-            Math.cos(t);
+            Math.sin(phi) *
+            Math.cos(theta);
 
 
         let y =
             rr *
-            Math.sin(p) *
-            Math.sin(t);
+            Math.sin(phi) *
+            Math.sin(theta);
 
 
         let z =
             rr *
-            Math.cos(p);
+            Math.cos(phi);
 
 
         x +=
-            waveY *
-            Math.cos(
-                time+s
-            );
+            Math.sin(
+                time*2.4 +
+                phi*8 +
+                seed
+            )*.08*energy;
 
 
         y +=
-            waveZ *
-            Math.sin(
-                time*1.3+s
-            );
+            Math.cos(
+                time*2.1 +
+                theta*9 +
+                seed
+            )*.08*energy;
 
 
         z +=
-            waveX *
-            Math.cos(
-                time*1.6+s
-            );
-
-
-        if(
-            energy > .3
-        ){
-
-            x +=
-                Math.sin(
-                    time*2.4 +
-                    p*8 +
-                    s
-                )*.09*energy;
-
-
-            y +=
-                Math.cos(
-                    time*2.1 +
-                    t*9 +
-                    s
-                )*.09*energy;
-
-
-            z +=
-                Math.sin(
-                    time*2.8 +
-                    (t+p)*7
-                )*.11*energy;
-
-        }
+            Math.sin(
+                time*2.7 +
+                (theta+phi)*7
+            )*.10*energy;
 
 
         pos[index] =
@@ -1622,7 +1430,7 @@ function animate(){
     particles.rotation.x =
         Math.sin(
             time*.25
-        )*.045;
+        )*.04;
 
 
     particles.rotation.z =
@@ -1643,42 +1451,43 @@ animate();
 
 
 /* =====================================================
-   MESSAGGI
+   MESSAGGIO
 ===================================================== */
 
 function addMsg(
     text
 ){
 
-    chat.innerHTML = "";
+    chat.innerHTML =
+        "";
 
 
-    const msg =
+    const element =
         document.createElement(
             "div"
         );
 
 
-    msg.className =
+    element.className =
         "msg";
 
 
-    msg.textContent =
+    element.textContent =
         text;
 
 
     chat.appendChild(
-        msg
+        element
     );
 
 }
 
 
 /* =====================================================
-   COSTRUZIONE CONTESTO TEMPORALE
+   CONTESTO TEMPORALE
 ===================================================== */
 
-function getTimeContext(){
+function getTimeData(){
 
     const now =
         new Date();
@@ -1717,10 +1526,7 @@ function getTimeContext(){
         timezone:
             Intl.DateTimeFormat()
                 .resolvedOptions()
-                .timeZone,
-
-        timezoneOffset:
-            -now.getTimezoneOffset()
+                .timeZone
 
     };
 
@@ -1728,7 +1534,7 @@ function getTimeContext(){
 
 
 /* =====================================================
-   AI
+   PROCESS AI
 ===================================================== */
 
 async function processAi(
@@ -1743,14 +1549,8 @@ async function processAi(
     try{
 
         const temporal =
-            getTimeContext();
+            getTimeData();
 
-
-        /*
-           Salviamo la domanda
-           nella memoria prima
-           di inviarla.
-        */
 
         addMemory(
             "user",
@@ -1758,24 +1558,29 @@ async function processAi(
         );
 
 
+        console.log(
+            "Invio a JARVIS:",
+            {
+                message:text,
+                memory:memory,
+                ...temporal
+            }
+        );
+
+
         const response =
             await fetch(
-
                 API,
-
                 {
 
                     method:"POST",
 
                     headers:{
-
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body:
-
                         JSON.stringify({
 
                             message:
@@ -1794,24 +1599,37 @@ async function processAi(
                                 temporal.dayOfWeek,
 
                             timezone:
-                                temporal.timezone,
-
-                            timezoneOffset:
-                                temporal.timezoneOffset
+                                temporal.timezone
 
                         })
 
                 }
-
             );
+
+
+        console.log(
+            "HTTP STATUS:",
+            response.status
+        );
 
 
         if(
             !response.ok
         ){
 
+            const error =
+                await response.text();
+
+
+            console.error(
+                "Worker:",
+                error
+            );
+
+
             throw new Error(
-                "API error"
+                "HTTP " +
+                response.status
             );
 
         }
@@ -1821,15 +1639,28 @@ async function processAi(
             await response.json();
 
 
+        console.log(
+            "Risposta JARVIS:",
+            data
+        );
+
+
+        if(
+            !data.reply
+        ){
+
+            throw new Error(
+                "Risposta non valida"
+            );
+
+        }
+
+
         const reply =
-            typeof data.reply === "string"
-                ? data.reply.trim()
-                : "Non ho ricevuto una risposta.";
+            String(
+                data.reply
+            ).trim();
 
-
-        /*
-           Salviamo la risposta.
-        */
 
         addMemory(
             "assistant",
@@ -1850,29 +1681,9 @@ async function processAi(
     }catch(error){
 
         console.error(
-            "JARVIS:",
+            "JARVIS ERROR:",
             error
         );
-
-
-        /*
-           Se l'API fallisce,
-           eliminiamo l'ultimo
-           messaggio utente dalla
-           memoria per non lasciare
-           una conversazione falsa.
-        */
-
-        if(
-            memory.length &&
-            memory[memory.length-1].role === "user" &&
-            memory[memory.length-1].content === text
-        ){
-
-            memory.pop();
-
-            saveMemory();
-        }
 
 
         addMsg(
@@ -1901,8 +1712,11 @@ function sendMessage(){
 
     if(
         !text
-    )
+    ){
+
         return;
+
+    }
 
 
     textInput.value =
@@ -1954,10 +1768,7 @@ function speak(
 ){
 
     if(
-        !(
-            "speechSynthesis"
-            in window
-        )
+        !window.speechSynthesis
     ){
 
         setState(
@@ -1988,10 +1799,6 @@ function speak(
 
     utterance.pitch =
         .85;
-
-
-    utterance.volume =
-        1;
 
 
     utterance.onstart =
@@ -2115,8 +1922,8 @@ if(
     recognition.onerror =
         error => {
 
-            console.warn(
-                "Speech recognition:",
+            console.error(
+                "Microfono:",
                 error
             );
 
@@ -2147,17 +1954,6 @@ if(
             micBtn.classList.remove(
                 "active"
             );
-
-
-            if(
-                !speechSynthesis.speaking
-            ){
-
-                setState(
-                    "idle"
-                );
-
-            }
 
         };
 
@@ -2193,10 +1989,6 @@ if(
 
 }else{
 
-    micBtn.disabled =
-        true;
-
-
     micBtn.style.opacity =
         ".3";
 
@@ -2204,7 +1996,7 @@ if(
 
 
 /* =====================================================
-   RIDIMENSIONAMENTO
+   RESIZE
 ===================================================== */
 
 window.addEventListener(
@@ -2229,26 +2021,20 @@ window.addEventListener(
 
 
 /* =====================================================
-   COMANDI MEMORIA
+   CANCELLA MEMORIA
 ===================================================== */
-
-/*
-   Puoi usare dalla console:
-
-   clearJarvisMemory()
-
-   per cancellare completamente
-   la memoria locale.
-*/
 
 window.clearJarvisMemory =
     function(){
 
-        memory = [];
+        memory =
+            [];
+
 
         localStorage.removeItem(
             MEMORY_KEY
         );
+
 
         console.log(
             "Memoria JARVIS cancellata."

@@ -3,182 +3,544 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS — High-Density Hologram Core</title>
+<title>JARVIS — Neural Holographic Core V2</title>
+
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-    body, html {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: #020205;
-        font-family: monospace;
-        color: #ffffff;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at center, #071015 0%, #020507 45%, #000000 100%);
+    font-family: monospace;
+    color: white;
+}
+
+/* =========================
+   WEBGL
+========================= */
+
+#webgl-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+}
+
+/* =========================
+   VIGNETTE
+========================= */
+
+.vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 35%,
+            rgba(0,0,0,0.18) 65%,
+            rgba(0,0,0,0.72) 100%
+        );
+}
+
+/* =========================
+   SCANLINES
+========================= */
+
+.scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0.08;
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 3px,
+            rgba(255,255,255,0.08) 4px
+        );
+}
+
+/* =========================
+   HUD TOP
+========================= */
+
+.hud {
+    position: fixed;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.top-left {
+    top: 24px;
+    left: 24px;
+}
+
+.top-right {
+    top: 24px;
+    right: 24px;
+    text-align: right;
+}
+
+.system-name {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 7px;
+}
+
+.system-version {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+}
+
+.connection {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #cfffff;
+}
+
+.connection-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #00ffff;
+    box-shadow:
+        0 0 6px #00ffff,
+        0 0 18px #00ffff;
+}
+
+/* =========================
+   CORE LABEL
+========================= */
+
+.core-label {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 8;
+    pointer-events: none;
+    text-align: center;
+    opacity: 0.65;
+}
+
+.core-title {
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 5px;
+}
+
+.core-id {
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: rgba(0,255,255,0.35);
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status-panel {
+    position: fixed;
+    left: 50%;
+    bottom: 112px;
+    transform: translateX(-50%);
+    z-index: 20;
+    text-align: center;
+    pointer-events: none;
+}
+
+#statusText {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.42);
+    transition: all 0.3s ease;
+}
+
+.status-line {
+    width: 110px;
+    height: 1px;
+    margin: 9px auto 0;
+    background: rgba(0,255,255,0.35);
+    box-shadow: 0 0 8px rgba(0,255,255,0.35);
+}
+
+/* =========================
+   CHAT
+========================= */
+
+#chat {
+    position: fixed;
+    left: 50%;
+    bottom: 150px;
+    transform: translateX(-50%);
+    z-index: 25;
+
+    width: min(620px, 88%);
+    max-height: 120px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    pointer-events: none;
+}
+
+.msg {
+    max-width: 100%;
+
+    padding: 12px 20px;
+
+    border: 1px solid rgba(0,255,255,0.28);
+    border-radius: 4px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,35,42,0.72),
+            rgba(0,10,14,0.82)
+        );
+
+    box-shadow:
+        0 0 20px rgba(0,255,255,0.08),
+        inset 0 0 20px rgba(0,255,255,0.025);
+
+    backdrop-filter: blur(12px);
+
+    color: rgba(225,255,255,0.9);
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+
+    animation: messageIn 0.35s ease;
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
     }
 
-    #webgl-container {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.input-container {
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    transform: translateX(-50%);
+    z-index: 30;
+
+    width: min(620px, 92%);
+
+    display: flex;
+    gap: 8px;
+}
+
+.input-field {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 12px 18px;
+
+    background: rgba(0,12,16,0.78);
+
+    border: 1px solid rgba(0,255,255,0.25);
+    border-radius: 4px;
+
+    outline: none;
+
+    color: white;
+    font-family: monospace;
+    font-size: 12px;
+
+    backdrop-filter: blur(10px);
+
+    transition: 0.3s ease;
+}
+
+.input-field::placeholder {
+    color: rgba(255,255,255,0.25);
+}
+
+.input-field:focus {
+    border-color: rgba(0,255,255,0.7);
+
+    box-shadow:
+        0 0 12px rgba(0,255,255,0.15),
+        inset 0 0 12px rgba(0,255,255,0.04);
+}
+
+.btn {
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(0,30,35,0.65);
+
+    color: #bfffff;
+
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+
+    border-radius: 4px;
+
+    padding: 0 16px;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+
+    backdrop-filter: blur(10px);
+}
+
+.btn:hover {
+    border-color: #00ffff;
+
+    box-shadow:
+        0 0 15px rgba(0,255,255,0.2);
+
+    background: rgba(0,70,75,0.45);
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+/* =========================
+   MIC
+========================= */
+
+.mic-button {
+    position: fixed;
+
+    left: 25px;
+    bottom: 25px;
+
+    z-index: 30;
+
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(0,255,255,0.35);
+
+    background: rgba(0,20,25,0.72);
+
+    color: #bfffff;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(8px);
+
+    transition: all 0.3s ease;
+}
+
+.mic-button:hover {
+    border-color: #00ffff;
+
+    box-shadow:
+        0 0 15px rgba(0,255,255,0.25);
+}
+
+.mic-button.active {
+    color: #fff700;
+
+    border-color: rgba(255,247,0,0.7);
+
+    box-shadow:
+        0 0 10px rgba(255,247,0,0.35),
+        0 0 25px rgba(255,247,0,0.15);
+}
+
+/* =========================
+   BOTTOM INFO
+========================= */
+
+.bottom-info {
+    position: fixed;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    z-index: 20;
+
+    font-size: 7px;
+    letter-spacing: 3px;
+
+    color: rgba(255,255,255,0.18);
+
+    white-space: nowrap;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px) {
+
+    .top-left {
+        top: 16px;
+        left: 16px;
     }
 
-    /* UI HUD */
-    .hud-top-left {
-        position: absolute;
-        top: 25px;
-        left: 25px;
-        z-index: 10;
-    }
-    .btn-hud {
-        background: rgba(20, 10, 30, 0.7);
-        border: 1px solid rgba(220, 100, 255, 0.35);
-        color: #f0abff;
-        padding: 6px 14px;
-        font-size: 11px;
-        letter-spacing: 2px;
-        border-radius: 4px;
-        cursor: pointer;
-        backdrop-filter: blur(5px);
-        transition: all 0.3s ease;
-    }
-    .btn-hud:hover {
-        border-color: #e055ff;
-        box-shadow: 0 0 12px rgba(220, 85, 255, 0.4);
+    .top-right {
+        top: 16px;
+        right: 16px;
     }
 
-    .hud-top-right {
-        position: absolute;
-        top: 25px;
-        right: 25px;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 11px;
-        letter-spacing: 1px;
-        color: #e055ff;
-        text-shadow: 0 0 8px rgba(224, 85, 255, 0.6);
-    }
-    .status-dot {
-        width: 6px;
-        height: 6px;
-        background-color: #e055ff;
-        border-radius: 50%;
-        box-shadow: 0 0 10px #e055ff;
+    .system-name {
+        font-size: 9px;
+        letter-spacing: 3px;
     }
 
-    .hud-bottom {
-        position: absolute;
-        bottom: 90px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
-        text-align: center;
+    .system-version {
+        font-size: 7px;
     }
-    #statusText {
-        font-size: 12px;
-        letter-spacing: 4px;
-        color: rgba(255, 255, 255, 0.4);
-        text-transform: uppercase;
-        transition: color 0.4s ease, text-shadow 0.4s ease;
+
+    .connection {
+        font-size: 8px;
     }
 
     #chat {
-        position: absolute;
-        bottom: 130px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
-        width: min(520px, 90%);
-        text-align: center;
-        pointer-events: none;
-    }
-    .msg {
-        background: rgba(18, 8, 28, 0.85);
-        border: 1px solid rgba(220, 100, 255, 0.4);
-        box-shadow: 0 0 15px rgba(200, 50, 255, 0.2);
-        padding: 10px 18px;
-        border-radius: 20px;
-        font-size: 12px;
-        color: #fce8ff;
-        backdrop-filter: blur(8px);
+        bottom: 140px;
+        width: 86%;
     }
 
-    /* BARRA DI DIGITAZIONE */
-    .input-container {
-        position: absolute;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
-        width: min(500px, 90%);
-        display: flex;
-        gap: 8px;
-    }
-    .input-field {
-        flex: 1;
-        background: rgba(18, 8, 28, 0.8);
-        border: 1px solid rgba(220, 100, 255, 0.35);
-        border-radius: 20px;
-        padding: 10px 18px;
-        color: #ffffff;
-        font-family: monospace;
-        font-size: 13px;
-        outline: none;
-        backdrop-filter: blur(5px);
-        transition: all 0.3s ease;
-    }
-    .input-field:focus {
-        border-color: #e055ff;
-        box-shadow: 0 0 12px rgba(224, 85, 255, 0.3);
-    }
-    .input-field::placeholder {
-        color: rgba(255, 255, 255, 0.3);
-    }
-    .btn-send {
-        background: rgba(200, 50, 255, 0.2);
-        border: 1px solid rgba(220, 100, 255, 0.5);
-        color: #e055ff;
-        padding: 0 18px;
-        border-radius: 20px;
-        font-family: monospace;
+    .msg {
         font-size: 11px;
-        letter-spacing: 1px;
-        cursor: pointer;
-        backdrop-filter: blur(5px);
-        transition: all 0.3s ease;
+        padding: 10px 14px;
     }
-    .btn-send:hover {
-        background: rgba(220, 100, 255, 0.4);
-        box-shadow: 0 0 12px rgba(224, 85, 255, 0.4);
+
+    .status-panel {
+        bottom: 108px;
     }
+
+    #statusText {
+        font-size: 9px;
+        letter-spacing: 4px;
+    }
+
+    .input-container {
+        width: calc(100% - 85px);
+        left: calc(50% + 20px);
+    }
+
+    .input-field {
+        font-size: 11px;
+    }
+
+    .btn {
+        padding: 0 12px;
+    }
+
+    .mic-button {
+        left: 18px;
+        bottom: 24px;
+        width: 42px;
+        height: 42px;
+    }
+
+    .bottom-info {
+        display: none;
+    }
+}
 </style>
 </head>
+
 <body>
 
-<div class="hud-top-left">
-    <button class="btn-hud" id="micBtn">MUTE</button>
-</div>
-
-<div class="hud-top-right">
-    <div class="status-dot"></div>
-    <span>connected</span>
-</div>
-
 <div id="webgl-container"></div>
+
+<div class="vignette"></div>
+<div class="scanlines"></div>
+
+<!-- HUD -->
+
+<div class="hud top-left">
+    <div class="system-name">JARVIS CORE</div>
+    <div class="system-version">NEURAL ENGINE // V2.0</div>
+</div>
+
+<div class="hud top-right">
+    <div class="connection">
+        <div class="connection-dot"></div>
+        <span id="connectionText">CONNECTED</span>
+    </div>
+</div>
+
+<!-- CORE CENTER -->
+
+<div class="core-label">
+    <div class="core-title">NEURAL CORE</div>
+    <div class="core-id">JRV-01</div>
+</div>
+
+<!-- CHAT -->
+
 <div id="chat"></div>
 
-<div class="hud-bottom">
-    <div id="statusText">listening...</div>
+<!-- STATUS -->
+
+<div class="status-panel">
+    <div id="statusText">IDLE</div>
+    <div class="status-line"></div>
 </div>
 
+<!-- MIC -->
+
+<button id="micBtn" class="mic-button" title="Microfono">
+    🎙
+</button>
+
+<!-- INPUT -->
+
 <div class="input-container">
-    <input type="text" id="textInput" class="input-field" placeholder="Scrivi un comando a JARVIS..." />
-    <button id="sendBtn" class="btn-send">INVIA</button>
+
+    <input
+        id="textInput"
+        class="input-field"
+        type="text"
+        autocomplete="off"
+        placeholder="Scrivi un comando a JARVIS..."
+    >
+
+    <button id="sendBtn" class="btn">
+        INVIA
+    </button>
+
 </div>
+
+<div class="bottom-info">
+    PERSONAL ARTIFICIAL INTELLIGENCE SYSTEM
+</div>
+
+<!-- THREE.JS -->
 
 <script type="importmap">
 {
@@ -189,222 +551,980 @@
 </script>
 
 <script type="module">
+
 import * as THREE from 'three';
 
-const API = "https://iao-ai-v3.oceano-masoud.workers.dev/";
+/* =====================================================
+   API
+===================================================== */
 
-// SCENA THREE.JS
-const container = document.getElementById('webgl-container');
-const scene = new THREE.Scene();
+const API =
+    "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5.0;
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+/* =====================================================
+   DOM
+===================================================== */
+
+const container =
+    document.getElementById("webgl-container");
+
+const statusText =
+    document.getElementById("statusText");
+
+const chat =
+    document.getElementById("chat");
+
+const micBtn =
+    document.getElementById("micBtn");
+
+const textInput =
+    document.getElementById("textInput");
+
+const sendBtn =
+    document.getElementById("sendBtn");
+
+const connectionText =
+    document.getElementById("connectionText");
+
+
+/* =====================================================
+   THREE SCENE
+===================================================== */
+
+const scene =
+    new THREE.Scene();
+
+const camera =
+    new THREE.PerspectiveCamera(
+        55,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+    );
+
+camera.position.z = 5.2;
+
+
+const renderer =
+    new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true
+    });
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio, 2)
+);
+
 container.appendChild(renderer.domElement);
 
-// TEXTURE OLOGRAFICA PER I NEURONI (Magenta/Viola brillante)
-function createHoloTexture() {
-    const canvas = document.createElement('canvas');
+
+/* =====================================================
+   HOLOGRAM TEXTURE
+===================================================== */
+
+function createGlowTexture() {
+
+    const canvas =
+        document.createElement("canvas");
+
     canvas.width = 64;
     canvas.height = 64;
-    const ctx = canvas.getContext('2d');
-    
-    const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');     // Centro bianco ultra brillante
-    gradient.addColorStop(0.25, 'rgba(255, 110, 240, 0.95)'); // Alone magenta/rosa neon
-    gradient.addColorStop(0.65, 'rgba(130, 20, 200, 0.4)');   // Sfumatura viola profondo
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+    const ctx =
+        canvas.getContext("2d");
+
+    const gradient =
+        ctx.createRadialGradient(
+            32,32,0,
+            32,32,32
+        );
+
+    gradient.addColorStop(
+        0,
+        "rgba(255,255,255,1)"
+    );
+
+    gradient.addColorStop(
+        0.15,
+        "rgba(255,255,150,1)"
+    );
+
+    gradient.addColorStop(
+        0.35,
+        "rgba(0,255,255,0.9)"
+    );
+
+    gradient.addColorStop(
+        0.7,
+        "rgba(0,150,180,0.35)"
+    );
+
+    gradient.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
 
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 64, 64);
+
+    ctx.fillRect(
+        0,
+        0,
+        64,
+        64
+    );
 
     return new THREE.CanvasTexture(canvas);
 }
 
-// AUMENTATO IL NUMERO DI NEURONI (3500 nodi)
-const count = 3500; 
-const geometry = new THREE.BufferGeometry();
-const basePositions = new Float32Array(count * 3);
-const currentPositions = new Float32Array(count * 3);
-const sphereRadius = new Float32Array(count);
-const sphereAngles = new Float32Array(count * 2);
 
-for(let i = 0; i < count; i++) {
-    const r = 1.7 * Math.cbrt(Math.random());
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
+/* =====================================================
+   NEURAL PARTICLES
+===================================================== */
 
-    sphereRadius[i] = r;
-    sphereAngles[i*2] = theta;
-    sphereAngles[i*2+1] = phi;
+const COUNT = 2800;
 
-    basePositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
-    basePositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
-    basePositions[i*3+2] = r * Math.cos(phi);
+const geometry =
+    new THREE.BufferGeometry();
 
-    currentPositions[i*3] = basePositions[i*3];
-    currentPositions[i*3+1] = basePositions[i*3+1];
-    currentPositions[i*3+2] = basePositions[i*3+2];
+const positions =
+    new Float32Array(COUNT * 3);
+
+const basePositions =
+    new Float32Array(COUNT * 3);
+
+const radius =
+    new Float32Array(COUNT);
+
+const theta =
+    new Float32Array(COUNT);
+
+const phi =
+    new Float32Array(COUNT);
+
+const random =
+    new Float32Array(COUNT);
+
+
+for(let i = 0; i < COUNT; i++) {
+
+    const r =
+        1.55 +
+        Math.random() * 0.55;
+
+    const t =
+        Math.random() * Math.PI * 2;
+
+    const p =
+        Math.acos(
+            2 * Math.random() - 1
+        );
+
+    radius[i] = r;
+    theta[i] = t;
+    phi[i] = p;
+
+    random[i] =
+        Math.random();
+
+    const x =
+        r *
+        Math.sin(p) *
+        Math.cos(t);
+
+    const y =
+        r *
+        Math.sin(p) *
+        Math.sin(t);
+
+    const z =
+        r *
+        Math.cos(p);
+
+    positions[i*3] = x;
+    positions[i*3+1] = y;
+    positions[i*3+2] = z;
+
+    basePositions[i*3] = x;
+    basePositions[i*3+1] = y;
+    basePositions[i*3+2] = z;
 }
 
-geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-// MATERIALE NEURONI (Senza linee di collegamento)
-const pMaterial = new THREE.PointsMaterial({
-    color: new THREE.Color(0xd946ef),
-    size: 0.045, 
-    map: createHoloTexture(),
-    transparent: true,
-    alphaTest: 0.001,
-    opacity: 0.95,
-    blending: THREE.AdditiveBlending
-});
+geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        positions,
+        3
+    )
+);
 
-const particleSystem = new THREE.Points(geometry, pMaterial);
-scene.add(particleSystem);
 
-// CONTROLLO DINAMICO E COLORE
-let targetEnergy = 0; 
+/* =====================================================
+   PARTICLE MATERIAL
+===================================================== */
+
+const particleMaterial =
+    new THREE.PointsMaterial({
+
+        color:
+            new THREE.Color(0x00ffff),
+
+        size:
+            0.045,
+
+        map:
+            createGlowTexture(),
+
+        transparent:
+            true,
+
+        opacity:
+            0.92,
+
+        depthWrite:
+            false,
+
+        blending:
+            THREE.AdditiveBlending
+    });
+
+
+const particles =
+    new THREE.Points(
+        geometry,
+        particleMaterial
+    );
+
+scene.add(particles);
+
+
+/* =====================================================
+   INNER CORE
+===================================================== */
+
+const coreGeometry =
+    new THREE.SphereGeometry(
+        0.38,
+        32,
+        32
+    );
+
+const coreMaterial =
+    new THREE.MeshBasicMaterial({
+        color: 0x00ffff,
+        transparent: true,
+        opacity: 0.12,
+        blending: THREE.AdditiveBlending
+    });
+
+const core =
+    new THREE.Mesh(
+        coreGeometry,
+        coreMaterial
+    );
+
+scene.add(core);
+
+
+/* =====================================================
+   ENERGY RINGS
+===================================================== */
+
+const rings = [];
+
+for(let i = 0; i < 5; i++) {
+
+    const ringGeometry =
+        new THREE.TorusGeometry(
+            1.72 + i * 0.11,
+            0.006,
+            8,
+            160
+        );
+
+    const ringMaterial =
+        new THREE.MeshBasicMaterial({
+            color:
+                i % 2 === 0
+                ? 0x00ffff
+                : 0xffff00,
+
+            transparent:
+                true,
+
+            opacity:
+                0.18,
+
+            blending:
+                THREE.AdditiveBlending
+        });
+
+    const ring =
+        new THREE.Mesh(
+            ringGeometry,
+            ringMaterial
+        );
+
+    ring.rotation.x =
+        Math.random() * Math.PI;
+
+    ring.rotation.y =
+        Math.random() * Math.PI;
+
+    ring.rotation.z =
+        Math.random() * Math.PI;
+
+    scene.add(ring);
+
+    rings.push(ring);
+}
+
+
+/* =====================================================
+   STATE SYSTEM
+===================================================== */
+
+let targetEnergy = 0;
 let currentEnergy = 0;
-let baseColor = new THREE.Color(0xa855f7);   // Viola intenso
-let activeColor = new THREE.Color(0xf472b6); // Rosa/Magenta brillante
-let currentColor = baseColor.clone();
+
+let currentColor =
+    new THREE.Color(0x00ffff);
+
+const idleColor =
+    new THREE.Color(0x00ffff);
+
+const activeColor =
+    new THREE.Color(0xffff00);
+
+
+/* =====================================================
+   JARVIS STATE
+===================================================== */
+
+function setJarvisState(state) {
+
+    if(state === "idle") {
+
+        targetEnergy = 0.15;
+
+        statusText.textContent =
+            "IDLE";
+
+        statusText.style.color =
+            "rgba(255,255,255,0.42)";
+
+        statusText.style.textShadow =
+            "none";
+    }
+
+
+    if(state === "listening") {
+
+        targetEnergy = 0.55;
+
+        statusText.textContent =
+            "LISTENING";
+
+        statusText.style.color =
+            "#00ffff";
+
+        statusText.style.textShadow =
+            "0 0 12px rgba(0,255,255,0.8)";
+    }
+
+
+    if(state === "thinking") {
+
+        targetEnergy = 1;
+
+        statusText.textContent =
+            "THINKING";
+
+        statusText.style.color =
+            "#ffff00";
+
+        statusText.style.textShadow =
+            "0 0 14px rgba(255,255,0,0.85)";
+    }
+
+
+    if(state === "speaking") {
+
+        targetEnergy = 0.85;
+
+        statusText.textContent =
+            "SPEAKING";
+
+        statusText.style.color =
+            "#ffff00";
+
+        statusText.style.textShadow =
+            "0 0 14px rgba(255,255,0,0.85)";
+    }
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
 
 function animate() {
-    requestAnimationFrame(animate);
-    const time = performance.now() * 0.0012;
 
-    currentEnergy += (targetEnergy - currentEnergy) * 0.03;
+    requestAnimationFrame(
+        animate
+    );
 
-    // Transizione fluida di colore
-    currentColor.lerp(targetEnergy > 0.1 ? activeColor : baseColor, 0.04);
-    pMaterial.color = currentColor;
+    const time =
+        performance.now() * 0.001;
 
-    const pos = geometry.attributes.position.array;
 
-    // Movimento fluido strutturato
-    for(let i = 0; i < count; i++) {
-        const idx = i * 3;
-        const r = sphereRadius[i];
-        const theta = sphereAngles[i*2];
-        const phi = sphereAngles[i*2+1];
+    currentEnergy +=
+        (
+            targetEnergy -
+            currentEnergy
+        ) * 0.035;
 
-        if(currentEnergy < 0.1) {
-            const pulse = 1 + Math.sin(time * 2 + r * 3) * 0.04;
-            pos[idx] = basePositions[idx] * pulse;
-            pos[idx+1] = basePositions[idx+1] * pulse;
-            pos[idx+2] = basePositions[idx+2] * pulse;
-        } else {
-            const waveX = Math.sin(time * 2.2 + phi * 4) * 0.22 * currentEnergy;
-            const waveY = Math.cos(time * 1.8 + theta * 3) * 0.22 * currentEnergy;
-            const waveZ = Math.sin(time * 2.6 + r * 2) * 0.12 * currentEnergy;
 
-            pos[idx] = (r + waveX) * Math.sin(phi) * Math.cos(theta + waveY);
-            pos[idx+1] = (r + waveY) * Math.sin(phi) * Math.sin(theta);
-            pos[idx+2] = (r + waveZ) * Math.cos(phi + waveX);
-        }
+    const desiredColor =
+        currentEnergy > 0.4
+        ? activeColor
+        : idleColor;
+
+
+    currentColor.lerp(
+        desiredColor,
+        0.035
+    );
+
+
+    particleMaterial.color =
+        currentColor;
+
+
+    /* PARTICLE MOTION */
+
+    const pos =
+        geometry.attributes.position.array;
+
+
+    for(let i = 0; i < COUNT; i++) {
+
+        const idx =
+            i * 3;
+
+        const r =
+            radius[i];
+
+        const t =
+            theta[i];
+
+        const p =
+            phi[i];
+
+        const rnd =
+            random[i];
+
+
+        const wave =
+            Math.sin(
+                time * 1.8 +
+                p * 5 +
+                rnd * 10
+            ) *
+            0.055;
+
+
+        const energyWave =
+            Math.sin(
+                time * 3 +
+                t * 4
+            ) *
+            0.16 *
+            currentEnergy;
+
+
+        const rr =
+            r +
+            wave +
+            energyWave;
+
+
+        pos[idx] =
+            rr *
+            Math.sin(p) *
+            Math.cos(
+                t +
+                Math.sin(time + p) *
+                0.05 *
+                currentEnergy
+            );
+
+
+        pos[idx+1] =
+            rr *
+            Math.sin(p) *
+            Math.sin(t);
+
+
+        pos[idx+2] =
+            rr *
+            Math.cos(
+                p +
+                Math.sin(time * 1.4 + t) *
+                0.035 *
+                currentEnergy
+            );
     }
-    geometry.attributes.position.needsUpdate = true;
 
-    // Rotazione dello spazio 3D
-    particleSystem.rotation.y += 0.002 + currentEnergy * 0.004;
-    particleSystem.rotation.x = Math.sin(time * 0.5) * 0.1;
 
-    renderer.render(scene, camera);
+    geometry.attributes.position.needsUpdate =
+        true;
+
+
+    /* SPHERE ROTATION */
+
+    particles.rotation.y +=
+        0.0018 +
+        currentEnergy * 0.004;
+
+    particles.rotation.x =
+        Math.sin(time * 0.35) *
+        0.08;
+
+
+    /* CORE PULSE */
+
+    const coreScale =
+        1 +
+        Math.sin(time * 3.5) *
+        0.07 *
+        (0.3 + currentEnergy);
+
+    core.scale.setScalar(
+        coreScale
+    );
+
+    coreMaterial.opacity =
+        0.07 +
+        currentEnergy * 0.13;
+
+
+    /* RINGS */
+
+    rings.forEach((ring, i) => {
+
+        ring.rotation.x +=
+            0.001 *
+            (i + 1);
+
+        ring.rotation.y +=
+            0.0015 *
+            (i % 2 ? -1 : 1);
+
+        ring.rotation.z +=
+            0.0007;
+
+        ring.scale.setScalar(
+            1 +
+            Math.sin(
+                time * 1.5 +
+                i
+            ) *
+            0.025 *
+            currentEnergy
+        );
+
+        ring.material.opacity =
+            0.10 +
+            currentEnergy * 0.18;
+    });
+
+
+    renderer.render(
+        scene,
+        camera
+    );
 }
 
 animate();
 
-// LOGICA INTERFACCIA E VOCALE
-const statusText = document.getElementById("statusText");
-const chat = document.getElementById("chat");
-const micBtn = document.getElementById("micBtn");
-const textInput = document.getElementById("textInput");
-const sendBtn = document.getElementById("sendBtn");
 
-function setJarvisState(state) {
-    if(state === "listening") {
-        targetEnergy = 0;
-        statusText.textContent = "listening...";
-        statusText.style.color = "rgba(255, 255, 255, 0.4)";
-        statusText.style.textShadow = "none";
-    } else if(state === "speaking" || state === "thinking") {
-        targetEnergy = 1;
-        statusText.textContent = state === "thinking" ? "thinking..." : "speaking...";
-        statusText.style.color = "#e055ff";
-        statusText.style.textShadow = "0 0 10px rgba(224, 85, 255, 0.8)";
-    }
-}
+/* =====================================================
+   CHAT
+===================================================== */
 
 function addMsg(text) {
-    chat.innerHTML = `<div class="msg">${text}</div>`;
+
+    chat.innerHTML = "";
+
+    const msg =
+        document.createElement("div");
+
+    msg.className =
+        "msg";
+
+    msg.textContent =
+        text;
+
+    chat.appendChild(msg);
 }
 
+
+/* =====================================================
+   SEND TEXT
+===================================================== */
+
 function handleUserSend() {
-    const text = textInput.value.trim();
-    if(!text) return;
+
+    const text =
+        textInput.value.trim();
+
+    if(!text)
+        return;
+
     textInput.value = "";
+
     addMsg(text);
+
     processAi(text);
 }
 
-sendBtn.onclick = handleUserSend;
-textInput.onkeydown = (e) => {
-    if(e.key === "Enter") handleUserSend();
-};
 
-const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+sendBtn.addEventListener(
+    "click",
+    handleUserSend
+);
+
+
+textInput.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Enter") {
+
+            event.preventDefault();
+
+            handleUserSend();
+        }
+    }
+);
+
+
+/* =====================================================
+   SPEECH RECOGNITION
+===================================================== */
+
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+let recognition = null;
+let isListening = false;
+
+
 if(Recognition) {
-    const rec = new Recognition();
-    rec.lang = 'it-IT';
 
-    rec.onstart = () => setJarvisState("listening");
-    rec.onresult = (e) => {
-        const text = e.results[0][0].transcript;
-        addMsg(text);
-        processAi(text);
-    };
-    rec.onend = () => {};
+    recognition =
+        new Recognition();
 
-    micBtn.onclick = () => {
-        try { rec.start(); } catch{}
+    recognition.lang =
+        "it-IT";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.onstart = () => {
+
+        isListening = true;
+
+        micBtn.classList.add(
+            "active"
+        );
+
+        setJarvisState(
+            "listening"
+        );
     };
+
+
+    recognition.onresult =
+        event => {
+
+            const text =
+                event
+                    .results[0][0]
+                    .transcript
+                    .trim();
+
+            if(text) {
+
+                addMsg(text);
+
+                processAi(text);
+            }
+        };
+
+
+    recognition.onerror =
+        () => {
+
+            isListening =
+                false;
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+            setJarvisState(
+                "idle"
+            );
+        };
+
+
+    recognition.onend =
+        () => {
+
+            isListening =
+                false;
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+            if(
+                statusText.textContent ===
+                "LISTENING"
+            ) {
+
+                setJarvisState(
+                    "idle"
+                );
+            }
+        };
+
+
+    micBtn.addEventListener(
+        "click",
+        () => {
+
+            if(isListening) {
+
+                recognition.stop();
+
+                return;
+            }
+
+            try {
+
+                recognition.start();
+
+            } catch(error) {
+
+                console.log(error);
+            }
+        }
+    );
+
+} else {
+
+    micBtn.disabled =
+        true;
+
+    micBtn.style.opacity =
+        "0.3";
 }
 
+
+/* =====================================================
+   AI
+===================================================== */
+
 async function processAi(text) {
-    setJarvisState("thinking");
+
+    setJarvisState(
+        "thinking"
+    );
+
+
     try {
-        const res = await fetch(API, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: text })
-        });
-        const data = await res.json();
-        const reply = data.reply || "Elaborazione completata.";
+
+        const response =
+            await fetch(
+                API,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            message: text
+                        })
+                }
+            );
+
+
+        if(!response.ok) {
+
+            throw new Error(
+                "API error"
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const reply =
+            data.reply ||
+            "Elaborazione completata.";
+
+
         addMsg(reply);
+
         speak(reply);
-    } catch {
-        speak("Errore di connessione.");
+
+
+    } catch(error) {
+
+        console.error(error);
+
+        connectionText.textContent =
+            "CONNECTION ERROR";
+
+        speak(
+            "Errore di connessione al sistema."
+        );
     }
 }
 
+
+/* =====================================================
+   VOICE
+===================================================== */
+
 function speak(text) {
+
+    if(!("speechSynthesis" in window))
+        return;
+
+
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "it-IT";
-    u.onstart = () => setJarvisState("speaking");
-    u.onend = () => setJarvisState("listening");
-    speechSynthesis.speak(u);
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    utterance.lang =
+        "it-IT";
+
+    utterance.rate =
+        0.95;
+
+    utterance.pitch =
+        0.85;
+
+    utterance.volume =
+        1;
+
+
+    utterance.onstart =
+        () => {
+
+            setJarvisState(
+                "speaking"
+            );
+        };
+
+
+    utterance.onend =
+        () => {
+
+            setJarvisState(
+                "idle"
+            );
+        };
+
+
+    speechSynthesis.speak(
+        utterance
+    );
 }
 
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
+
+/* =====================================================
+   CONNECTION CHECK
+===================================================== */
+
+window.addEventListener(
+    "online",
+    () => {
+
+        connectionText.textContent =
+            "CONNECTED";
+    }
+);
+
+
+window.addEventListener(
+    "offline",
+    () => {
+
+        connectionText.textContent =
+            "OFFLINE";
+    }
+);
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+    }
+);
+
+
+/* =====================================================
+   START
+===================================================== */
+
+setJarvisState(
+    "idle"
+);
+
 </script>
+
 </body>
 </html>

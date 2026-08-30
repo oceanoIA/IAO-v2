@@ -62,9 +62,13 @@ body{
 
 .jarvis-title{
     position:fixed;
-    top:1.2%;
+
+    /* LEGGERMENTE PIÙ IN BASSO */
+    top:2.4%;
+
     left:50%;
     transform:translateX(-50%);
+
     z-index:30;
 
     color:rgba(255,255,255,.86);
@@ -306,9 +310,9 @@ body{
 }
 
 
-/* ================================
-   MAPPA
-================================ */
+/* =====================================================
+   MAPPA TATTICA
+===================================================== */
 
 #tacticalMap{
     position:fixed;
@@ -318,7 +322,14 @@ body{
 
     display:none;
 
-    background:#020708;
+    background:
+        radial-gradient(
+            ellipse at center,
+            #071719 0%,
+            #020708 45%,
+            #000000 100%
+        );
+
     overflow:hidden;
 }
 
@@ -342,6 +353,9 @@ body{
     }
 }
 
+
+/* MAPPA 3D */
+
 #map{
     position:absolute;
     inset:0;
@@ -349,8 +363,58 @@ body{
     width:100%;
     height:100%;
 
-    background:#02080a;
+    background:#020506;
+
+    /*
+       Effetto profondità:
+       la mappa viene leggermente inclinata
+       e resa più cinematografica.
+    */
+    transform:
+        perspective(1200px)
+        rotateX(2deg)
+        scale(1.015);
+
+    transform-origin:center center;
+
+    filter:
+        brightness(.42)
+        contrast(1.25)
+        saturate(.55);
+
+    box-shadow:
+        inset 0 0 100px rgba(0,0,0,.9),
+        inset 0 0 35px rgba(0,255,255,.08);
 }
+
+
+/* Oscuramento cinematico */
+
+#tacticalMap::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    z-index:480;
+
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 25%,
+            rgba(0,0,0,.15) 55%,
+            rgba(0,0,0,.72) 100%
+        );
+
+    box-shadow:
+        inset 0 0 120px
+        rgba(0,0,0,.75);
+}
+
+
+/* Griglia HUD */
 
 .map-filter{
     position:absolute;
@@ -362,20 +426,25 @@ body{
     background:
 
         linear-gradient(
-            rgba(0,255,255,.025) 1px,
+            rgba(0,255,255,.035) 1px,
             transparent 1px
         ),
 
         linear-gradient(
             90deg,
-            rgba(0,255,255,.025) 1px,
+            rgba(0,255,255,.035) 1px,
             transparent 1px
         );
 
     background-size:45px 45px;
 
     mix-blend-mode:screen;
+
+    opacity:.75;
 }
+
+
+/* Linea di scansione */
 
 .scan-line{
     position:absolute;
@@ -418,6 +487,9 @@ body{
     }
 }
 
+
+/* Angoli HUD */
+
 .map-corner{
     position:absolute;
 
@@ -457,20 +529,26 @@ body{
 .corner-tr{
     top:18px;
     right:18px;
+
     transform:rotate(90deg);
 }
 
 .corner-bl{
     bottom:18px;
     left:18px;
+
     transform:rotate(-90deg);
 }
 
 .corner-br{
     bottom:18px;
     right:18px;
+
     transform:rotate(180deg);
 }
+
+
+/* Header */
 
 .map-header{
     position:absolute;
@@ -487,7 +565,9 @@ body{
         rgba(170,255,255,.7);
 
     font-family:monospace;
+
     font-size:10px;
+
     letter-spacing:4px;
 
     pointer-events:none;
@@ -496,6 +576,11 @@ body{
         0 0 10px
         rgba(0,255,255,.4);
 }
+
+
+/* =====================================================
+   CORE TATTICO 3D
+===================================================== */
 
 .tactical-core{
     position:absolute;
@@ -520,9 +605,9 @@ body{
 
         radial-gradient(
             circle,
-            rgba(0,255,255,.16),
-            rgba(0,30,35,.65) 55%,
-            rgba(0,0,0,.8) 100%
+            rgba(0,255,255,.18),
+            rgba(0,30,35,.72) 55%,
+            rgba(0,0,0,.92) 100%
         );
 
     border:
@@ -533,6 +618,9 @@ body{
 
         0 0 15px
         rgba(0,255,255,.25),
+
+        0 0 45px
+        rgba(0,255,255,.08),
 
         inset 0 0 20px
         rgba(0,255,255,.12);
@@ -594,15 +682,25 @@ body{
 
 .core-text{
     position:relative;
+
     z-index:2;
 
     color:
         rgba(220,255,255,.85);
 
     font-family:monospace;
+
     font-size:11px;
+
     letter-spacing:2px;
+
+    text-shadow:
+        0 0 8px
+        rgba(0,255,255,.5);
 }
+
+
+/* Chiudi */
 
 #closeMap{
     position:absolute;
@@ -622,12 +720,13 @@ body{
     border-radius:50%;
 
     background:
-        rgba(0,20,23,.65);
+        rgba(0,20,23,.75);
 
     color:
         rgba(200,255,255,.8);
 
     cursor:pointer;
+
     font-size:17px;
 
     display:flex;
@@ -639,12 +738,16 @@ body{
 
 #closeMap:hover{
     color:white;
+
     border-color:#00ffff;
 
     box-shadow:
         0 0 15px
         rgba(0,255,255,.25);
 }
+
+
+/* Marker */
 
 .jarvis-marker{
     width:18px;
@@ -682,6 +785,9 @@ body{
         0 0 8px #00ffff;
 }
 
+
+/* Leaflet */
+
 .leaflet-control-zoom{
     border:
         1px solid
@@ -690,7 +796,7 @@ body{
 
 .leaflet-control-zoom a{
     background:
-        rgba(2,15,18,.75)!important;
+        rgba(2,15,18,.85)!important;
 
     color:
         rgba(180,255,255,.75)!important;
@@ -709,7 +815,7 @@ body{
 
 .leaflet-control-attribution{
     background:
-        rgba(0,8,10,.65)!important;
+        rgba(0,8,10,.75)!important;
 
     color:
         rgba(180,255,255,.35)!important;
@@ -722,10 +828,18 @@ body{
         rgba(150,240,255,.45)!important;
 }
 
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
 @media(max-width:600px){
 
     .jarvis-title{
-        top:1.2%;
+
+        /* leggermente più in basso anche su telefono */
+        top:2.2%;
+
         font-size:23px;
         letter-spacing:5px;
     }
@@ -759,6 +873,7 @@ body{
     }
 
     .tactical-core{
+
         right:18px;
         bottom:90px;
 
@@ -768,24 +883,31 @@ body{
 
     .map-header{
         top:25px;
+
         font-size:8px;
+
         letter-spacing:3px;
     }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
 
+
 <div class="jarvis-title">
     J.A.R.V.I.S
 </div>
+
 
 <div class="datetime">
 
@@ -806,7 +928,9 @@ body{
 </div>
 
 
-<!-- MAPPA -->
+<!-- =====================================================
+     MAPPA
+===================================================== -->
 
 <div id="tacticalMap">
 
@@ -843,12 +967,16 @@ body{
 </div>
 
 
-<!-- CHAT -->
+<!-- =====================================================
+     CHAT
+===================================================== -->
 
 <div id="chat"></div>
 
 
-<!-- INPUT -->
+<!-- =====================================================
+     INPUT
+===================================================== -->
 
 <div class="command-wrapper">
 
@@ -1131,8 +1259,10 @@ camera.position.z =
 
 const renderer =
     new THREE.WebGLRenderer({
+
         antialias:true,
         alpha:true
+
     });
 
 renderer.setSize(
@@ -1618,6 +1748,7 @@ function initializeMap(){
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
             maxZoom:19,
+
             attribution:
                 '&copy; OpenStreetMap contributors'
         }
@@ -2130,10 +2261,6 @@ async function processAi(
         }
 
 
-        /* ======================================
-           CONTENITORE RISPOSTA
-        ====================================== */
-
         chat.innerHTML =
             "";
 
@@ -2163,10 +2290,6 @@ async function processAi(
             "";
 
 
-        /* ======================================
-           LETTURA STREAM
-        ====================================== */
-
         while(true){
 
             const {
@@ -2174,7 +2297,6 @@ async function processAi(
                 done
             } =
                 await reader.read();
-
 
             if(done){
                 break;
@@ -2190,19 +2312,10 @@ async function processAi(
                 );
 
 
-            /*
-             * Il Worker restituisce SSE:
-             *
-             * data: {...}
-             *
-             * quindi leggiamo le righe
-             */
-
             const lines =
                 buffer.split(
                     "\n"
                 );
-
 
             buffer =
                 lines.pop() || "";
@@ -2215,13 +2328,11 @@ async function processAi(
                 const trimmed =
                     line.trim();
 
-
                 if(
                     !trimmed
                 ){
                     continue;
                 }
-
 
                 if(
                     !trimmed.startsWith(
@@ -2255,7 +2366,6 @@ async function processAi(
                             raw
                         );
 
-
                     let piece =
                         "";
 
@@ -2269,7 +2379,6 @@ async function processAi(
                             json.response;
 
                     }
-
 
                     else if(
                         json.choices &&
@@ -2396,22 +2505,18 @@ function sendMessage(){
     const text =
         textInput.value.trim();
 
-
     if(
         !text
     ){
         return;
     }
 
-
     textInput.value =
         "";
-
 
     addMsg(
         text
     );
-
 
     processAi(
         text
@@ -2475,10 +2580,8 @@ function speak(
     utterance.lang =
         "it-IT";
 
-
     utterance.rate =
         .95;
-
 
     utterance.pitch =
         .85;

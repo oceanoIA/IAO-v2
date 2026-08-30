@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>J.A.R.V.I.S.</title>
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -19,19 +17,15 @@ html,body{
     height:100%;
     overflow:hidden;
     background:#010405;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
-
-/* =========================
-   SFONDO
-========================= */
 
 body{
     background:
         radial-gradient(
             circle at center,
-            #07171a 0%,
-            #020708 42%,
+            #071719 0%,
+            #020708 45%,
             #000 100%
         );
 }
@@ -42,8 +36,6 @@ body{
     z-index:1;
 }
 
-/* Leggerissima vignettatura */
-
 .vignette{
     position:fixed;
     inset:0;
@@ -53,99 +45,157 @@ body{
     background:
         radial-gradient(
             circle at center,
-            transparent 38%,
-            rgba(0,0,0,.22) 70%,
-            rgba(0,0,0,.7) 100%
+            transparent 32%,
+            rgba(0,0,0,.20) 68%,
+            rgba(0,0,0,.72) 100%
         );
 }
 
-/* =========================
-   J.A.R.V.I.S.
-========================= */
+
+/* =====================================================
+   TITOLO SOPRA IL CORE
+===================================================== */
 
 .jarvis-title{
-
     position:fixed;
 
     left:50%;
-    top:50%;
+    top:14%;
 
-    transform:translate(-50%,-50%);
+    transform:translateX(-50%);
 
     z-index:8;
-
     pointer-events:none;
 
-    font-family:Arial, sans-serif;
-
-    font-size:clamp(34px,7vw,72px);
-
+    font-size:clamp(30px,5vw,58px);
     font-weight:300;
 
     letter-spacing:
-        clamp(8px,2vw,20px);
+        clamp(7px,1.5vw,15px);
 
-    color:rgba(255,255,255,.82);
+    color:rgba(255,255,255,.86);
 
     text-shadow:
-        0 0 8px rgba(255,255,255,.18),
-        0 0 25px rgba(0,255,255,.12);
+        0 0 10px rgba(255,255,255,.15),
+        0 0 28px rgba(0,255,255,.13);
 
     white-space:nowrap;
 
     transition:
-        opacity .4s ease,
-        transform .4s ease;
+        color .4s ease,
+        text-shadow .4s ease;
 }
 
 
-/* =========================
-   CASELLA COMANDO
-========================= */
+/* =====================================================
+   CHAT
+===================================================== */
+
+#chat{
+    position:fixed;
+
+    left:50%;
+    bottom:92px;
+
+    transform:translateX(-50%);
+
+    z-index:15;
+
+    width:min(620px,86%);
+
+    text-align:center;
+
+    pointer-events:none;
+}
+
+.msg{
+    display:inline-block;
+
+    max-width:100%;
+
+    padding:10px 18px;
+
+    border-radius:24px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.22);
+
+    background:
+        rgba(4,20,23,.38);
+
+    backdrop-filter:blur(14px);
+
+    color:
+        rgba(235,255,255,.88);
+
+    font-size:12px;
+
+    line-height:1.45;
+
+    animation:
+        messageIn .3s ease;
+}
+
+@keyframes messageIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+/* =====================================================
+   COMANDO
+===================================================== */
 
 .command-wrapper{
 
     position:fixed;
 
     left:50%;
-    bottom:28px;
+    bottom:25px;
 
     transform:translateX(-50%);
 
     z-index:20;
 
-    width:min(620px,88%);
+    width:min(650px,90%);
 
     display:flex;
     align-items:center;
 
-    padding:6px 7px 6px 20px;
+    padding:
+        6px 7px 6px 21px;
 
     border-radius:40px;
 
     background:
-        rgba(5,20,23,.38);
+        rgba(5,20,23,.35);
 
     border:
-        1px solid rgba(120,255,255,.28);
+        1px solid
+        rgba(100,255,255,.28);
 
     backdrop-filter:
-        blur(18px);
+        blur(20px);
 
     -webkit-backdrop-filter:
-        blur(18px);
+        blur(20px);
 
     box-shadow:
-
-        0 0 25px
-        rgba(0,255,255,.06),
+        0 0 30px
+        rgba(0,255,255,.055),
 
         inset 0 0 20px
         rgba(0,255,255,.025);
 
-    transition:
-        border-color .3s ease,
-        box-shadow .3s ease;
+    transition:.3s ease;
 }
 
 .command-wrapper:focus-within{
@@ -154,18 +204,17 @@ body{
         rgba(0,255,255,.65);
 
     box-shadow:
-
         0 0 25px
-        rgba(0,255,255,.12),
+        rgba(0,255,255,.13),
 
         inset 0 0 25px
-        rgba(0,255,255,.035);
+        rgba(0,255,255,.04);
 }
 
 
-/* =========================
+/* =====================================================
    INPUT
-========================= */
+===================================================== */
 
 #textInput{
 
@@ -185,51 +234,38 @@ body{
     font-size:14px;
 
     padding:12px 5px;
-
-    letter-spacing:.3px;
 }
 
 #textInput::placeholder{
-
     color:
-        rgba(255,255,255,.32);
-
-    transition:
-        color .3s ease;
-}
-
-.command-wrapper:focus-within
-#textInput::placeholder{
-
-    color:
-        rgba(255,255,255,.5);
+        rgba(255,255,255,.30);
 }
 
 
-/* =========================
+/* =====================================================
    MICROFONO MINIMAL
-========================= */
+===================================================== */
 
 #micBtn{
 
     flex-shrink:0;
 
-    width:38px;
-    height:38px;
+    width:39px;
+    height:39px;
 
-    margin-right:5px;
+    margin-right:6px;
 
     border-radius:50%;
 
     border:
         1px solid
-        rgba(150,255,255,.22);
+        rgba(150,255,255,.25);
 
     background:
         rgba(255,255,255,.035);
 
     color:
-        rgba(220,255,255,.75);
+        rgba(220,255,255,.78);
 
     cursor:pointer;
 
@@ -237,26 +273,24 @@ body{
     align-items:center;
     justify-content:center;
 
-    transition:
-        .25s ease;
+    transition:.25s ease;
 }
 
-/* Microfono disegnato con CSS */
+
+/* Microfono CSS */
 
 .mic-icon{
 
     position:relative;
 
-    width:10px;
-    height:17px;
+    width:9px;
+    height:16px;
 
     border:
         1.5px solid
         currentColor;
 
-    border-radius:7px;
-
-    display:block;
+    border-radius:8px;
 }
 
 .mic-icon::before{
@@ -271,8 +305,7 @@ body{
     width:14px;
     height:9px;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
     border:
         1.5px solid
@@ -296,69 +329,57 @@ body{
     width:1.5px;
     height:5px;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
-    background:
-        currentColor;
-
-    box-shadow:
-        -4px 4px 0 -0.2px currentColor,
-         4px 4px 0 -0.2px currentColor;
+    background:currentColor;
 }
 
 #micBtn:hover{
 
     color:#00ffff;
 
-    border-color:
-        rgba(0,255,255,.7);
-
-    background:
-        rgba(0,255,255,.07);
+    border-color:#00ffff;
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.18);
+        rgba(0,255,255,.20);
 }
 
 #micBtn.active{
 
     color:#ffff00;
 
-    border-color:
-        rgba(255,255,0,.7);
+    border-color:#ffff00;
 
     box-shadow:
-        0 0 18px
-        rgba(255,255,0,.22);
+        0 0 20px
+        rgba(255,255,0,.25);
 }
 
 
-/* =========================
+/* =====================================================
    INVIA
-========================= */
+===================================================== */
 
 #sendBtn{
 
     flex-shrink:0;
 
-    height:38px;
+    height:39px;
 
-    padding:
-        0 17px;
+    padding:0 17px;
 
     border-radius:22px;
 
     border:
         1px solid
-        rgba(0,255,255,.25);
+        rgba(0,255,255,.28);
 
     background:
         rgba(0,255,255,.055);
 
     color:
-        rgba(220,255,255,.75);
+        rgba(220,255,255,.78);
 
     font-family:Arial,sans-serif;
 
@@ -373,148 +394,60 @@ body{
 
 #sendBtn:hover{
 
-    color:#fff;
+    color:white;
 
-    border-color:
-        rgba(0,255,255,.7);
+    border-color:#00ffff;
 
     background:
-        rgba(0,255,255,.12);
+        rgba(0,255,255,.11);
 
     box-shadow:
         0 0 15px
         rgba(0,255,255,.15);
 }
 
-#sendBtn:active{
 
-    transform:scale(.95);
-}
-
-
-/* =========================
-   CHAT
-========================= */
-
-#chat{
-
-    position:fixed;
-
-    left:50%;
-    bottom:92px;
-
-    transform:translateX(-50%);
-
-    z-index:15;
-
-    width:min(600px,85%);
-
-    text-align:center;
-
-    pointer-events:none;
-}
-
-.msg{
-
-    display:inline-block;
-
-    max-width:100%;
-
-    padding:
-        10px 18px;
-
-    border-radius:25px;
-
-    border:
-        1px solid
-        rgba(0,255,255,.2);
-
-    background:
-        rgba(5,20,23,.35);
-
-    backdrop-filter:
-        blur(12px);
-
-    color:
-        rgba(235,255,255,.85);
-
-    font-size:12px;
-
-    line-height:1.45;
-
-    animation:
-        messageIn .3s ease;
-}
-
-@keyframes messageIn{
-
-    from{
-        opacity:0;
-        transform:
-            translateY(8px);
-    }
-
-    to{
-        opacity:1;
-        transform:
-            translateY(0);
-    }
-}
-
-
-/* =========================
+/* =====================================================
    MOBILE
-========================= */
+===================================================== */
 
 @media(max-width:600px){
 
     .jarvis-title{
 
-        font-size:38px;
+        top:12%;
 
-        letter-spacing:8px;
+        font-size:34px;
+
+        letter-spacing:7px;
     }
 
     .command-wrapper{
 
-        width:calc(100% - 28px);
+        width:calc(100% - 24px);
 
-        bottom:18px;
+        bottom:17px;
 
-        padding-left:16px;
+        padding-left:15px;
     }
 
     #textInput{
-
         font-size:13px;
     }
 
     #sendBtn{
-
-        padding:0 13px;
-
-        font-size:9px;
-    }
-
-    #micBtn{
-
-        width:36px;
-        height:36px;
+        padding:0 12px;
     }
 
     #chat{
-
         bottom:82px;
-
         width:88%;
     }
 
     .msg{
-
         font-size:11px;
     }
 }
-
 </style>
 </head>
 
@@ -525,25 +458,19 @@ body{
 <div class="vignette"></div>
 
 
-<!-- =========================
-     TITOLO CENTRALE
-========================= -->
+<!-- TITOLO -->
 
 <div class="jarvis-title">
     J.A.R.V.I.S
 </div>
 
 
-<!-- =========================
-     CHAT
-========================= -->
+<!-- CHAT -->
 
 <div id="chat"></div>
 
 
-<!-- =========================
-     COMANDO
-========================= -->
+<!-- COMANDO -->
 
 <div class="command-wrapper">
 
@@ -561,18 +488,14 @@ body{
         <span class="mic-icon"></span>
     </button>
 
-    <button
-        id="sendBtn"
-    >
+    <button id="sendBtn">
         INVIA
     </button>
 
 </div>
 
 
-<!-- =========================
-     THREE.JS
-========================= -->
+<!-- THREE -->
 
 <script type="importmap">
 {
@@ -586,7 +509,7 @@ body{
 
 <script type="module">
 
-import * as THREE from 'three';
+import * as THREE from "three";
 
 
 /* =====================================================
@@ -626,7 +549,7 @@ const micBtn =
         "micBtn"
     );
 
-const jarvisTitle =
+const title =
     document.querySelector(
         ".jarvis-title"
     );
@@ -678,7 +601,7 @@ container.appendChild(
 
 
 /* =====================================================
-   TEXTURE PARTICELLA
+   GLOW PARTICELLA
 ===================================================== */
 
 function createGlowTexture(){
@@ -688,13 +611,11 @@ function createGlowTexture(){
             "canvas"
         );
 
-    canvas.width = 64;
-    canvas.height = 64;
+    canvas.width=64;
+    canvas.height=64;
 
     const ctx =
-        canvas.getContext(
-            "2d"
-        );
+        canvas.getContext("2d");
 
     const gradient =
         ctx.createRadialGradient(
@@ -708,18 +629,18 @@ function createGlowTexture(){
     );
 
     gradient.addColorStop(
-        .18,
-        "rgba(255,255,170,.98)"
+        .16,
+        "rgba(255,255,185,1)"
     );
 
     gradient.addColorStop(
-        .4,
-        "rgba(0,255,255,.9)"
+        .34,
+        "rgba(0,255,255,.95)"
     );
 
     gradient.addColorStop(
-        .7,
-        "rgba(0,180,200,.35)"
+        .68,
+        "rgba(0,180,210,.30)"
     );
 
     gradient.addColorStop(
@@ -741,14 +662,13 @@ function createGlowTexture(){
 
 
 /* =====================================================
-   RETE NEURALE
+   NEURAL CLOUD
 ===================================================== */
 
 const COUNT = 3000;
 
 const geometry =
     new THREE.BufferGeometry();
-
 
 const positions =
     new Float32Array(
@@ -765,11 +685,27 @@ const radii =
         COUNT
     );
 
-const angles =
+const theta =
     new Float32Array(
-        COUNT * 2
+        COUNT
     );
 
+const phi =
+    new Float32Array(
+        COUNT
+    );
+
+const seed =
+    new Float32Array(
+        COUNT
+    );
+
+
+/*
+    Distribuzione più concentrata:
+    permette alle punte di essere
+    più visibili.
+*/
 
 for(
     let i=0;
@@ -778,61 +714,57 @@ for(
 ){
 
     const r =
-        1.55 +
-        Math.random() * .5;
+        1.15 +
+        Math.pow(
+            Math.random(),
+            .72
+        ) * .70;
 
-    const theta =
+
+    const t =
         Math.random() *
         Math.PI * 2;
 
-    const phi =
+
+    const p =
         Math.acos(
-            2 * Math.random() - 1
+            2 *
+            Math.random() -
+            1
         );
 
 
-    radii[i] = r;
+    radii[i]=r;
+    theta[i]=t;
+    phi[i]=p;
 
-    angles[i*2] =
-        theta;
-
-    angles[i*2+1] =
-        phi;
+    seed[i]=
+        Math.random()*100;
 
 
     const x =
         r *
-        Math.sin(phi) *
-        Math.cos(theta);
+        Math.sin(p) *
+        Math.cos(t);
 
     const y =
         r *
-        Math.sin(phi) *
-        Math.sin(theta);
+        Math.sin(p) *
+        Math.sin(t);
 
     const z =
         r *
-        Math.cos(phi);
+        Math.cos(p);
 
 
-    positions[i*3] =
-        x;
-
-    positions[i*3+1] =
-        y;
-
-    positions[i*3+2] =
-        z;
+    positions[i*3]=x;
+    positions[i*3+1]=y;
+    positions[i*3+2]=z;
 
 
-    basePositions[i*3] =
-        x;
-
-    basePositions[i*3+1] =
-        y;
-
-    basePositions[i*3+2] =
-        z;
+    basePositions[i*3]=x;
+    basePositions[i*3+1]=y;
+    basePositions[i*3+2]=z;
 }
 
 
@@ -847,7 +779,7 @@ geometry.setAttribute(
 
 
 /* =====================================================
-   MATERIALE
+   PARTICELLE PIÙ PICCOLE
 ===================================================== */
 
 const particleMaterial =
@@ -859,7 +791,7 @@ const particleMaterial =
             ),
 
         size:
-            .044,
+            .034,
 
         map:
             createGlowTexture(),
@@ -868,7 +800,7 @@ const particleMaterial =
             true,
 
         opacity:
-            .9,
+            .92,
 
         depthWrite:
             false,
@@ -890,11 +822,14 @@ scene.add(
 
 
 /* =====================================================
-   STATO
+   STATI
 ===================================================== */
 
-let targetEnergy = .15;
-let currentEnergy = .15;
+let energyTarget=.12;
+
+let energy=.12;
+
+let state="idle";
 
 
 const cyan =
@@ -911,25 +846,126 @@ const currentColor =
     cyan.clone();
 
 
-function setState(state){
+function setState(newState){
+
+    state =
+        newState;
+
 
     if(
-        state === "thinking" ||
-        state === "speaking"
+        newState==="thinking"
     ){
 
-        targetEnergy = 1;
+        energyTarget=1;
 
-        jarvisTitle.style.opacity =
-            ".95";
+        title.style.color=
+            "#ffff00";
+
+        title.style.textShadow=
+            "0 0 10px rgba(255,255,0,.25),0 0 30px rgba(255,255,0,.18)";
+
+    }else if(
+        newState==="speaking"
+    ){
+
+        energyTarget=.85;
+
+        title.style.color=
+            "#ffff00";
+
+        title.style.textShadow=
+            "0 0 10px rgba(255,255,0,.25),0 0 30px rgba(255,255,0,.18)";
+
+    }else if(
+        newState==="listening"
+    ){
+
+        energyTarget=.65;
+
+        title.style.color=
+            "#00ffff";
+
+        title.style.textShadow=
+            "0 0 10px rgba(0,255,255,.25),0 0 30px rgba(0,255,255,.18)";
 
     }else{
 
-        targetEnergy = .15;
+        energyTarget=.12;
 
-        jarvisTitle.style.opacity =
-            ".82";
+        title.style.color=
+            "rgba(255,255,255,.86)";
+
+        title.style.textShadow=
+            "0 0 10px rgba(255,255,255,.15),0 0 28px rgba(0,255,255,.13)";
     }
+}
+
+
+/* =====================================================
+   FUNZIONE VIRUS / PUNTE
+===================================================== */
+
+function spikeField(
+    thetaValue,
+    phiValue,
+    time
+){
+
+    /*
+       Diverse armoniche creano
+       punte irregolari ma definite.
+    */
+
+    const a =
+        Math.sin(
+            thetaValue * 5 +
+            time * 1.7
+        );
+
+    const b =
+        Math.cos(
+            phiValue * 7 -
+            time * 1.2
+        );
+
+    const c =
+        Math.sin(
+            thetaValue * 9 +
+            phiValue * 4 +
+            time * 2.1
+        );
+
+    const d =
+        Math.cos(
+            thetaValue * 3 -
+            phiValue * 8 -
+            time * 1.5
+        );
+
+
+    let spikes =
+        (
+            a*.30 +
+            b*.24 +
+            c*.22 +
+            d*.18
+        );
+
+
+    /*
+       Rendiamo alcune zone
+       molto più appuntite.
+    */
+
+    spikes =
+        Math.sign(spikes) *
+        Math.pow(
+            Math.abs(spikes),
+            3.0
+        );
+
+
+    return spikes;
 }
 
 
@@ -949,18 +985,18 @@ function animate(){
         * .001;
 
 
-    currentEnergy +=
+    energy +=
         (
-            targetEnergy -
-            currentEnergy
-        ) * .035;
+            energyTarget -
+            energy
+        ) * .045;
 
 
     currentColor.lerp(
-        currentEnergy > .35
+        energy>.35
             ? yellow
             : cyan,
-        .035
+        .045
     );
 
 
@@ -980,91 +1016,216 @@ function animate(){
     ){
 
         const index =
-            i * 3;
+            i*3;
 
 
         const r =
             radii[i];
 
-        const theta =
-            angles[i*2];
+        const t =
+            theta[i];
 
-        const phi =
-            angles[i*2+1];
+        const p =
+            phi[i];
+
+        const s =
+            seed[i];
 
 
-        const wave =
+        /*
+           Movimento base.
+        */
+
+        const breathing =
             Math.sin(
-                time * 1.8 +
-                phi * 5 +
-                i * .002
-            ) * .045;
+                time*2 +
+                s
+            ) * .035;
 
 
-        const energyWave =
+        /*
+           Campo di punte.
+        */
+
+        const spikes =
+            spikeField(
+                t,
+                p,
+                time
+            );
+
+
+        /*
+           Quando JARVIS è attivo
+           le punte diventano molto
+           più evidenti.
+        */
+
+        const spikeStrength =
+            energy *
+            .58;
+
+
+        /*
+           Distorsione tridimensionale.
+        */
+
+        const wave1 =
             Math.sin(
-                time * 3 +
-                theta * 5
-            )
-            *
-            .18
-            *
-            currentEnergy;
+                p*6 +
+                time*2.2 +
+                s
+            ) *
+            .10 *
+            energy;
 
 
-        const rr =
+        const wave2 =
+            Math.cos(
+                t*7 -
+                time*1.7 +
+                s
+            ) *
+            .10 *
+            energy;
+
+
+        const wave3 =
+            Math.sin(
+                (t+p)*5 +
+                time*2.7
+            ) *
+            .08 *
+            energy;
+
+
+        /*
+           Raggio finale.
+        */
+
+        let rr =
             r +
-            wave +
-            energyWave;
+            breathing +
+            spikes *
+            spikeStrength +
+            wave1 +
+            wave2;
 
 
-        pos[index] =
+        /*
+           Movimento X/Y/Z
+           indipendente.
+        */
+
+        let x =
             rr *
-            Math.sin(phi) *
+            Math.sin(p) *
+            Math.cos(t);
+
+        let y =
+            rr *
+            Math.sin(p) *
+            Math.sin(t);
+
+        let z =
+            rr *
+            Math.cos(p);
+
+
+        /*
+           Onde tridimensionali.
+        */
+
+        x +=
+            wave2 *
             Math.cos(
-                theta +
-                Math.sin(
-                    time + phi
-                ) *
-                .04 *
-                currentEnergy
+                time +
+                s
+            );
+
+        y +=
+            wave3 *
+            Math.sin(
+                time*1.3 +
+                s
+            );
+
+        z +=
+            wave1 *
+            Math.cos(
+                time*1.6 +
+                s
             );
 
 
-        pos[index+1] =
-            rr *
-            Math.sin(phi) *
-            Math.sin(theta);
+        /*
+           Quando parla/pensa:
+           il nucleo cambia continuamente
+           forma.
+        */
 
+        if(
+            energy>.3
+        ){
 
-        pos[index+2] =
-            rr *
-            Math.cos(
-                phi +
+            x +=
                 Math.sin(
-                    time * 1.5 +
-                    theta
+                    time*2.4 +
+                    p*8 +
+                    s
                 ) *
-                .03 *
-                currentEnergy
-            );
+                .09 *
+                energy;
+
+            y +=
+                Math.cos(
+                    time*2.1 +
+                    t*9 +
+                    s
+                ) *
+                .09 *
+                energy;
+
+            z +=
+                Math.sin(
+                    time*2.8 +
+                    (t+p)*7
+                ) *
+                .11 *
+                energy;
+        }
+
+
+        pos[index]=x;
+        pos[index+1]=y;
+        pos[index+2]=z;
     }
 
 
     geometry.attributes
         .position
-        .needsUpdate = true;
+        .needsUpdate=true;
 
+
+    /*
+       Rotazione molto lenta:
+       il movimento principale
+       NON è più la rotazione.
+    */
 
     particles.rotation.y +=
-        .0018 +
-        currentEnergy *
-        .004;
+        .0006 +
+        energy*.001;
 
     particles.rotation.x =
         Math.sin(
-            time * .35
-        ) * .08;
+            time*.25
+        )*.045;
+
+    particles.rotation.z =
+        Math.cos(
+            time*.18
+        )*.025;
 
 
     renderer.render(
@@ -1083,18 +1244,16 @@ animate();
 
 function addMsg(text){
 
-    chat.innerHTML = "";
+    chat.innerHTML="";
 
     const msg =
         document.createElement(
             "div"
         );
 
-    msg.className =
-        "msg";
+    msg.className="msg";
 
-    msg.textContent =
-        text;
+    msg.textContent=text;
 
     chat.appendChild(
         msg
@@ -1135,7 +1294,9 @@ async function processAi(text){
 
 
         if(!response.ok)
-            throw new Error();
+            throw new Error(
+                "API error"
+            );
 
 
         const data =
@@ -1150,6 +1311,7 @@ async function processAi(text){
         addMsg(
             reply
         );
+
 
         speak(
             reply
@@ -1187,11 +1349,13 @@ function sendMessage(){
         return;
 
 
-    textInput.value = "";
+    textInput.value="";
+
 
     addMsg(
         text
     );
+
 
     processAi(
         text
@@ -1207,11 +1371,10 @@ sendBtn.addEventListener(
 
 textInput.addEventListener(
     "keydown",
-    event => {
+    event=>{
 
         if(
-            event.key ===
-            "Enter"
+            event.key==="Enter"
         ){
 
             event.preventDefault();
@@ -1244,21 +1407,21 @@ function speak(text){
         );
 
 
-    utterance.lang =
+    utterance.lang=
         "it-IT";
 
-    utterance.rate =
+    utterance.rate=
         .95;
 
-    utterance.pitch =
+    utterance.pitch=
         .85;
 
-    utterance.volume =
+    utterance.volume=
         1;
 
 
-    utterance.onstart =
-        () => {
+    utterance.onstart=
+        ()=>{
 
             setState(
                 "speaking"
@@ -1266,8 +1429,8 @@ function speak(text){
         };
 
 
-    utterance.onend =
-        () => {
+    utterance.onend=
+        ()=>{
 
             setState(
                 "idle"
@@ -1282,7 +1445,7 @@ function speak(text){
 
 
 /* =====================================================
-   MICROFONO
+   RICONOSCIMENTO VOCALE
 ===================================================== */
 
 const Recognition =
@@ -1290,9 +1453,9 @@ const Recognition =
     window.webkitSpeechRecognition;
 
 
-let recognition = null;
+let recognition=null;
 
-let listening = false;
+let listening=false;
 
 
 if(Recognition){
@@ -1301,20 +1464,20 @@ if(Recognition){
         new Recognition();
 
 
-    recognition.lang =
+    recognition.lang=
         "it-IT";
 
-    recognition.continuous =
+    recognition.continuous=
         false;
 
-    recognition.interimResults =
+    recognition.interimResults=
         false;
 
 
-    recognition.onstart =
-        () => {
+    recognition.onstart=
+        ()=>{
 
-            listening = true;
+            listening=true;
 
             micBtn.classList.add(
                 "active"
@@ -1326,8 +1489,8 @@ if(Recognition){
         };
 
 
-    recognition.onresult =
-        event => {
+    recognition.onresult=
+        event=>{
 
             const text =
                 event
@@ -1338,7 +1501,7 @@ if(Recognition){
 
             if(text){
 
-                textInput.value =
+                textInput.value=
                     text;
 
                 sendMessage();
@@ -1346,10 +1509,10 @@ if(Recognition){
         };
 
 
-    recognition.onerror =
-        () => {
+    recognition.onerror=
+        ()=>{
 
-            listening = false;
+            listening=false;
 
             micBtn.classList.remove(
                 "active"
@@ -1361,24 +1524,29 @@ if(Recognition){
         };
 
 
-    recognition.onend =
-        () => {
+    recognition.onend=
+        ()=>{
 
-            listening = false;
+            listening=false;
 
             micBtn.classList.remove(
                 "active"
             );
 
-            setState(
-                "idle"
-            );
+            if(
+                state==="listening"
+            ){
+
+                setState(
+                    "idle"
+                );
+            }
         };
 
 
     micBtn.addEventListener(
         "click",
-        () => {
+        ()=>{
 
             if(listening){
 
@@ -1400,11 +1568,9 @@ if(Recognition){
 
 }else{
 
-    micBtn.style.opacity =
-        ".3";
+    micBtn.disabled=true;
 
-    micBtn.disabled =
-        true;
+    micBtn.style.opacity=".3";
 }
 
 
@@ -1414,7 +1580,7 @@ if(Recognition){
 
 window.addEventListener(
     "resize",
-    () => {
+    ()=>{
 
         camera.aspect =
             window.innerWidth /

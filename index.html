@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link
+<title>J.A.R.V.I.S.</title><link
     rel="stylesheet"
     href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-/>
-
-<style>
+/><style>
 
 *{
     box-sizing:border-box;
@@ -848,108 +837,74 @@ body{
 
 }
 
-</style>
-
-</head>
-
-<body>
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-<div
+</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
     class="jarvis-title"
     id="jarvisTitle"
 >
     J.A.R.V.I.S
+</div><div class="datetime"><div id="clock" class="time">
+    00:00:00
 </div>
 
-<div class="datetime">
-
-    <div id="clock" class="time">
-        00:00:00
-    </div>
-
-    <div id="date" class="date">
-        00 AGO 2026
-    </div>
-
+<div id="date" class="date">
+    00 AGO 2026
 </div>
 
-<div id="tacticalMap">
+</div><div id="tacticalMap"><div id="map"></div>
 
-    <div id="map"></div>
+<div class="map-overlay"></div>
 
-    <div class="map-overlay"></div>
-
-    <div class="map-header">
-        TACTICAL MAP
-    </div>
-
-    <button
-        id="closeMap"
-        title="Chiudi mappa"
-        aria-label="Chiudi mappa"
-    >
-        ×
-    </button>
-
+<div class="map-header">
+    TACTICAL MAP
 </div>
 
-<div id="chat"></div>
-
-<div class="command-wrapper">
-
-    <input
-        id="textInput"
-        type="text"
-        autocomplete="off"
-        placeholder="Chiedi qualcosa a JARVIS..."
-    >
-
-    <button
-        id="micBtn"
-        aria-label="Microfono"
-    >
-        <span class="mic-icon"></span>
-    </button>
-
-    <button id="sendBtn">
-        INVIA
-    </button>
-
-</div>
-
-<button id="voiceBtn">
-    ⚙ VOCE
+<button
+    id="closeMap"
+    title="Chiudi mappa"
+    aria-label="Chiudi mappa"
+>
+    ×
 </button>
 
-<div id="voicePanel">
+</div><div id="chat"></div><div class="command-wrapper"><input
+    id="textInput"
+    type="text"
+    autocomplete="off"
+    placeholder="Chiedi qualcosa a JARVIS..."
+>
 
-    <div class="voice-title">
-        VOCE J.A.R.V.I.S.
-    </div>
+<button
+    id="micBtn"
+    aria-label="Microfono"
+>
+    <span class="mic-icon"></span>
+</button>
 
-    <select id="voiceSelector">
+<button id="sendBtn">
+    INVIA
+</button>
 
-        <option value="vkBFlAtUdZqNR4MqxSVr">
-            ElevenLabs — J.A.R.V.I.S.
-        </option>
-
-    </select>
-
-    <button id="voiceTest">
-        TESTA VOCE
-    </button>
-
+</div><button id="voiceBtn">
+    ⚙ VOCE
+</button><div id="voicePanel"><div class="voice-title">
+    VOCE J.A.R.V.I.S.
 </div>
 
-<script
-    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script>
+<select id="voiceSelector">
 
-<script type="importmap">
+    <option value="vkBFlAtUdZqNR4MqxSVr">
+        ElevenLabs — J.A.R.V.I.S.
+    </option>
+
+</select>
+
+<button id="voiceTest">
+    TESTA VOCE
+</button>
+
+</div><script
+    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
+</script><script type="importmap">
 
 {
     "imports":{
@@ -958,9 +913,7 @@ body{
     }
 }
 
-</script>
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -985,7 +938,6 @@ const MAX_MEMORY =
 
 const ELEVEN_VOICE_ID =
     "vkBFlAtUdZqNR4MqxSVr";
-
 
 let currentAudio =
     null;
@@ -2365,10 +2317,6 @@ async function speak(text){
     }
 
 
-    /*
-       Ferma eventuale audio precedente
-    */
-
     if(currentAudio){
 
         try{
@@ -2398,58 +2346,24 @@ async function speak(text){
     );
 
 
+    const controller =
+        new AbortController();
+
+    const timeout =
+        setTimeout(
+            () => {
+                controller.abort();
+            },
+            30000
+        );
+
+
     try{
 
-        const controller = new AbortController();
-
-const timeout = setTimeout(() => {
-    controller.abort();
-}, 30000);
-
-let response;
-
-try {
-
-    response = await fetch(
-        API,
-        {
-            method: "POST",
-
-            headers: {
-                "Content-Type":
-                    "application/json"
-            },
-
-            body: JSON.stringify({
-
-                message: text,
-
-                memory:
-                    memory.slice(-4),
-
-                currentTime:
-                    temporal.currentTime,
-
-                currentDate:
-                    temporal.currentDate,
-
-                dayOfWeek:
-                    temporal.dayOfWeek,
-
-                timezone:
-                    temporal.timezone
-
-            }),
-
-            signal: controller.signal
-        }
-    );
-
-} finally {
-
-    clearTimeout(timeout);
-
-}
+        const response =
+            await fetch(
+                API,
+                {
 
                     method:"POST",
 
@@ -2470,7 +2384,10 @@ try {
                             voiceId:
                                 ELEVEN_VOICE_ID
 
-                        })
+                        }),
+
+                    signal:
+                        controller.signal
 
                 }
             );
@@ -2488,9 +2405,7 @@ try {
 
             throw new Error(
                 "ElevenLabs HTTP " +
-                response.status +
-                ": " +
-                errorText
+                response.status
             );
 
         }
@@ -2501,11 +2416,6 @@ try {
                 "content-type"
             ) || "";
 
-
-        /*
-           Il Worker deve restituire
-           direttamente l'audio.
-        */
 
         if(
             !contentType.includes(
@@ -2641,9 +2551,15 @@ try {
             "idle"
         );
 
-        addMsg(
-            "Errore voce J.A.R.V.I.S.: " +
-            error.message
+        /*
+           Un errore TTS non deve
+           cancellare la risposta AI.
+        */
+
+    }finally{
+
+        clearTimeout(
+            timeout
         );
 
     }
@@ -2683,48 +2599,134 @@ async function processAi(text){
         );
 
 
-        const response =
-            await fetch(
-                API,
-                {
+        /*
+           Timeout della richiesta AI.
+           Se il Worker non risponde entro
+           30 secondi, la richiesta viene
+           interrotta invece di rimanere bloccata.
+        */
 
-                    method:"POST",
+        const controller =
+            new AbortController();
 
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            message:
-                                text,
-
-                            memory:
-                                memory.slice(-4),
-
-                            currentTime:
-                                temporal.currentTime,
-
-                            currentDate:
-                                temporal.currentDate,
-
-                            dayOfWeek:
-                                temporal.dayOfWeek,
-
-                            timezone:
-                                temporal.timezone
-
-                        })
-
-                }
+        const timeout =
+            setTimeout(
+                () => {
+                    controller.abort();
+                },
+                30000
             );
 
 
+        let response;
+
+
+        try{
+
+            response =
+                await fetch(
+                    API,
+                    {
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                message:
+                                    text,
+
+                                memory:
+                                    memory.slice(-4),
+
+                                currentTime:
+                                    temporal.currentTime,
+
+                                currentDate:
+                                    temporal.currentDate,
+
+                                dayOfWeek:
+                                    temporal.dayOfWeek,
+
+                                timezone:
+                                    temporal.timezone
+
+                            }),
+
+                        signal:
+                            controller.signal
+
+                    }
+                );
+
+        }finally{
+
+            clearTimeout(
+                timeout
+            );
+
+        }
+
+
         /*
-           Il Worker restituisce JSON,
-           NON streaming.
+           Controllo HTTP prima
+           di leggere la risposta.
+        */
+
+        if(!response.ok){
+
+            const errorText =
+                await response.text();
+
+            let errorMessage =
+                "HTTP " +
+                response.status;
+
+            try{
+
+                const errorData =
+                    JSON.parse(
+                        errorText
+                    );
+
+                if(
+                    errorData &&
+                    errorData.error
+                ){
+
+                    errorMessage =
+                        errorData.error;
+
+                }
+
+            }catch(parseError){
+
+                if(errorText){
+
+                    errorMessage =
+                        errorText.substring(
+                            0,
+                            200
+                        );
+
+                }
+
+            }
+
+            throw new Error(
+                errorMessage
+            );
+
+        }
+
+
+        /*
+           Il Worker restituisce JSON.
         */
 
         const data =
@@ -2735,17 +2737,6 @@ async function processAi(text){
             "JARVIS RESPONSE:",
             data
         );
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                "HTTP " +
-                response.status
-            );
-
-        }
 
 
         const reply =
@@ -2769,7 +2760,8 @@ async function processAi(text){
 
 
         /*
-           Mostra risposta
+           Mostra immediatamente
+           la risposta all'utente.
         */
 
         addMsg(
@@ -2778,7 +2770,7 @@ async function processAi(text){
 
 
         /*
-           Salva memoria
+           Salva la risposta nella memoria.
         */
 
         addMemory(
@@ -2788,12 +2780,34 @@ async function processAi(text){
 
 
         /*
-           Parla con ElevenLabs
+           ElevenLabs parte senza
+           bloccare processAi().
         */
 
-        speak(reply).catch(error => {
-    console.error("TTS:", error);
-});
+        speak(
+            reply
+        ).catch(
+            error => {
+
+                console.error(
+                    "TTS:",
+                    error
+                );
+
+            }
+        );
+
+
+        /*
+           La risposta AI è già stata
+           completata: non aspettiamo
+           la fine dell'audio.
+        */
+
+        setState(
+            "idle"
+        );
+
 
     }catch(error){
 
@@ -2803,9 +2817,35 @@ async function processAi(text){
         );
 
 
+        let message =
+            error.message ||
+            "Errore sconosciuto";
+
+
+        if(
+            error.name ===
+            "AbortError"
+        ){
+
+            message =
+                "Il server ha impiegato troppo tempo a rispondere.";
+
+        }
+
+        else if(
+            message ===
+            "Failed to fetch"
+        ){
+
+            message =
+                "Errore di connessione al server JARVIS.";
+
+        }
+
+
         addMsg(
             "ERRORE: " +
-            error.message
+            message
         );
 
 
@@ -3123,7 +3163,5 @@ setState(
     "idle"
 );
 
-</script>
-
-</body>
+</script></body>
 </html>

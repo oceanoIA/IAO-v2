@@ -1,21 +1,30 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link
+<title>J.A.R.V.I.S.</title><link
     rel="stylesheet"
     href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-/>
+/><style>
 
-<style>
+:root{
+
+    --jarvis-main:#0066FF;
+    --jarvis-bright:#00A8FF;
+    --jarvis-light:#9FD8FF;
+    --jarvis-dark:#001B4D;
+
+    --jarvis-glow:
+        rgba(0,102,255,.65);
+
+    --jarvis-glow-light:
+        rgba(0,168,255,.35);
+
+}
+
+
+/* =====================================================
+   BASE
+===================================================== */
 
 *{
     box-sizing:border-box;
@@ -28,7 +37,9 @@ body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#010405;
+
+    background:#01030A;
+
     font-family:Arial,sans-serif;
 }
 
@@ -36,11 +47,16 @@ body{
     background:
         radial-gradient(
             circle at center,
-            #071719 0%,
-            #020708 48%,
+            #07152B 0%,
+            #020817 48%,
             #000000 100%
         );
 }
+
+
+/* =====================================================
+   THREE.JS
+===================================================== */
 
 #webgl-container{
     position:fixed;
@@ -48,10 +64,17 @@ body{
     z-index:1;
 }
 
+
+/* =====================================================
+   VIGNETTE
+===================================================== */
+
 .vignette{
     position:fixed;
     inset:0;
+
     z-index:3;
+
     pointer-events:none;
 
     background:
@@ -63,14 +86,25 @@ body{
         );
 }
 
+
+/* =====================================================
+   TITOLO
+===================================================== */
+
 .jarvis-title{
+
     position:fixed;
+
     top:2.4%;
     left:50%;
-    transform:translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     z-index:30;
 
-    color:rgba(255,255,255,.86);
+    color:
+        rgba(220,240,255,.9);
 
     font-size:
         clamp(20px,2.8vw,31px);
@@ -84,20 +118,34 @@ body{
 
     text-shadow:
         0 0 10px
-        rgba(255,255,255,.12);
+        rgba(0,102,255,.45),
+
+        0 0 25px
+        rgba(0,168,255,.2);
 
     pointer-events:none;
 }
 
+
+/* =====================================================
+   DATA / ORA
+===================================================== */
+
 .datetime{
+
     position:fixed;
+
     top:18px;
     right:24px;
+
     z-index:30;
 
     display:flex;
+
     flex-direction:column;
+
     align-items:flex-end;
+
     gap:3px;
 
     font-family:monospace;
@@ -106,29 +154,48 @@ body{
 }
 
 .time{
-    color:rgba(150,255,255,.6);
+
+    color:
+        rgba(100,180,255,.8);
+
     font-size:11px;
+
     letter-spacing:2px;
 
     text-shadow:
         0 0 8px
-        rgba(0,255,255,.2);
+        rgba(0,102,255,.55);
 }
 
 .date{
-    color:rgba(150,255,255,.38);
+
+    color:
+        rgba(100,170,255,.5);
+
     font-size:8px;
+
     letter-spacing:1px;
 }
 
+
+/* =====================================================
+   CHAT
+===================================================== */
+
 #chat{
+
     position:fixed;
+
     left:50%;
     bottom:92px;
-    transform:translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     z-index:40;
 
-    width:min(620px,88%);
+    width:
+        min(620px,88%);
 
     text-align:center;
 
@@ -136,77 +203,119 @@ body{
 }
 
 .msg{
+
     display:inline-block;
+
     max-width:100%;
 
     padding:10px 18px;
 
     border:
         1px solid
-        rgba(0,255,255,.22);
+        rgba(0,102,255,.4);
 
     border-radius:24px;
 
     background:
-        rgba(4,20,23,.4);
+        rgba(2,12,28,.5);
 
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
+    backdrop-filter:
+        blur(14px);
+
+    -webkit-backdrop-filter:
+        blur(14px);
 
     color:
-        rgba(235,255,255,.9);
+        rgba(235,245,255,.94);
 
     font-size:12px;
+
     line-height:1.45;
 
     white-space:pre-wrap;
+
+    box-shadow:
+        0 0 18px
+        rgba(0,102,255,.08);
 }
 
+
+/* =====================================================
+   COMMAND BAR
+===================================================== */
+
 .command-wrapper{
+
     position:fixed;
+
     left:50%;
     bottom:23px;
-    transform:translateX(-50%);
+
+    transform:
+        translateX(-50%);
+
     z-index:50;
 
-    width:min(650px,90%);
+    width:
+        min(650px,90%);
 
     display:flex;
+
     align-items:center;
 
-    padding:6px 7px 6px 20px;
+    padding:
+        6px 7px 6px 20px;
 
     border:
         1px solid
-        rgba(100,255,255,.28);
+        rgba(0,102,255,.5);
 
     border-radius:40px;
 
     background:
-        rgba(5,20,23,.38);
+        rgba(2,10,24,.58);
 
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
 
     box-shadow:
         0 0 30px
-        rgba(0,255,255,.05);
+        rgba(0,102,255,.12),
+
+        inset 0 0 20px
+        rgba(0,102,255,.025);
 }
 
 .command-wrapper:focus-within{
+
     border-color:
-        rgba(0,255,255,.6);
+        var(--jarvis-bright);
 
     box-shadow:
+
         0 0 25px
-        rgba(0,255,255,.12);
+        rgba(0,102,255,.28),
+
+        0 0 55px
+        rgba(0,168,255,.08);
 }
 
+
+/* =====================================================
+   INPUT
+===================================================== */
+
 #textInput{
+
     flex:1;
+
     min-width:0;
 
     border:none;
+
     outline:none;
 
     background:transparent;
@@ -214,16 +323,25 @@ body{
     color:white;
 
     font-family:Arial,sans-serif;
+
     font-size:14px;
 
     padding:12px 5px;
 }
 
 #textInput::placeholder{
-    color:rgba(255,255,255,.3);
+
+    color:
+        rgba(150,190,230,.38);
 }
 
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
 #micBtn{
+
     width:34px;
     height:34px;
 
@@ -233,16 +351,19 @@ body{
 
     background:transparent;
 
-    color:rgba(210,255,255,.65);
+    color:
+        rgba(150,210,255,.8);
 
     cursor:pointer;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 }
 
 .mic-icon{
+
     width:8px;
     height:14px;
 
@@ -256,6 +377,7 @@ body{
 }
 
 .mic-icon::after{
+
     content:"";
 
     position:absolute;
@@ -266,7 +388,8 @@ body{
     width:12px;
     height:7px;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
     border:
         1.3px solid
@@ -279,52 +402,83 @@ body{
 }
 
 #micBtn:hover{
-    color:#00ffff;
-}
 
-#micBtn.active{
-    color:#8fffff;
+    color:
+        var(--jarvis-bright);
 
     filter:
         drop-shadow(
             0 0 8px
-            rgba(0,255,255,.7)
+            rgba(0,168,255,.7)
         );
 }
 
+#micBtn.active{
+
+    color:
+        #8CC8FF;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(0,102,255,.9)
+        );
+}
+
+
+/* =====================================================
+   INVIA
+===================================================== */
+
 #sendBtn{
+
     height:39px;
 
     padding:0 17px;
 
     border:
         1px solid
-        rgba(0,255,255,.28);
+        rgba(0,102,255,.5);
 
     border-radius:22px;
 
     background:
-        rgba(0,255,255,.05);
+        rgba(0,102,255,.08);
 
     color:
-        rgba(220,255,255,.78);
+        rgba(190,225,255,.88);
 
     font-size:10px;
+
     letter-spacing:2px;
 
     cursor:pointer;
+
+    transition:.2s;
 }
 
 #sendBtn:hover{
+
     color:white;
 
-    border-color:#00ffff;
+    border-color:
+        var(--jarvis-bright);
 
     background:
-        rgba(0,255,255,.1);
+        rgba(0,102,255,.18);
+
+    box-shadow:
+        0 0 15px
+        rgba(0,102,255,.25);
 }
 
+
+/* =====================================================
+   VOCE
+===================================================== */
+
 #voiceBtn{
+
     position:fixed;
 
     right:22px;
@@ -338,37 +492,47 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.25);
+        rgba(0,102,255,.5);
 
     border-radius:22px;
 
     background:
-        rgba(3,15,18,.72);
+        rgba(2,10,24,.82);
 
     color:
-        rgba(210,255,255,.7);
+        rgba(180,220,255,.82);
 
     font-size:10px;
+
     letter-spacing:1.5px;
 
     cursor:pointer;
 
-    backdrop-filter:blur(12px);
+    backdrop-filter:
+        blur(12px);
 
     transition:.2s;
 }
 
 #voiceBtn:hover{
+
     color:white;
 
-    border-color:#00ffff;
+    border-color:
+        var(--jarvis-bright);
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.2);
+        rgba(0,102,255,.4);
 }
 
+
+/* =====================================================
+   VOICE PANEL
+===================================================== */
+
 #voicePanel{
+
     position:fixed;
 
     right:22px;
@@ -376,7 +540,8 @@ body{
 
     z-index:100;
 
-    width:min(330px,calc(100% - 30px));
+    width:
+        min(330px,calc(100% - 30px));
 
     padding:15px;
 
@@ -384,57 +549,63 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.25);
+        rgba(0,102,255,.45);
 
     border-radius:18px;
 
     background:
-        rgba(2,13,16,.94);
+        rgba(1,8,20,.96);
 
-    backdrop-filter:blur(20px);
+    backdrop-filter:
+        blur(20px);
 
     box-shadow:
         0 0 35px
-        rgba(0,255,255,.12);
+        rgba(0,102,255,.25);
 }
 
 #voicePanel.active{
+
     display:block;
 }
 
 .voice-title{
+
     color:
-        rgba(220,255,255,.9);
+        rgba(210,235,255,.95);
 
     font-size:11px;
+
     letter-spacing:2px;
 
     margin-bottom:10px;
 }
 
 #voiceSelector{
+
     width:100%;
 
     padding:11px;
 
     border:
         1px solid
-        rgba(0,255,255,.2);
+        rgba(0,102,255,.35);
 
     border-radius:10px;
 
     outline:none;
 
     background:
-        rgba(0,20,23,.9);
+        rgba(0,15,38,.95);
 
     color:
-        rgba(220,255,255,.85);
+        rgba(215,235,255,.9);
 
     font-size:11px;
 }
 
 #voiceTest{
+
     width:100%;
 
     margin-top:10px;
@@ -443,29 +614,44 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.2);
+        rgba(0,102,255,.35);
 
     border-radius:10px;
 
     background:
-        rgba(0,255,255,.04);
+        rgba(0,102,255,.07);
 
     color:
-        rgba(210,255,255,.7);
+        rgba(190,225,255,.8);
 
     cursor:pointer;
 
     font-size:10px;
+
     letter-spacing:1px;
 }
 
 #voiceTest:hover{
-    border-color:#00ffff;
+
+    border-color:
+        var(--jarvis-bright);
+
     color:white;
+
+    box-shadow:
+        0 0 12px
+        rgba(0,102,255,.2);
 }
 
+
+/* =====================================================
+   MAPPA TATTICA
+===================================================== */
+
 #tacticalMap{
+
     position:fixed;
+
     inset:0;
 
     z-index:20;
@@ -473,15 +659,17 @@ body{
     display:none;
 
     background:
+
         radial-gradient(
             circle at center,
-            #081719 0%,
-            #020708 65%,
+            #08162D 0%,
+            #020817 65%,
             #000000 100%
         );
 }
 
 #tacticalMap.active{
+
     display:block;
 
     animation:
@@ -489,18 +677,31 @@ body{
 }
 
 @keyframes mapIn{
+
     from{
+
         opacity:0;
-        transform:scale(1.015);
+
+        transform:
+            scale(1.015);
     }
 
     to{
+
         opacity:1;
-        transform:scale(1);
+
+        transform:
+            scale(1);
     }
 }
 
+
+/* =====================================================
+   HEADER MAPPA
+===================================================== */
+
 .map-header{
+
     position:absolute;
 
     top:2.4%;
@@ -512,7 +713,7 @@ body{
     z-index:600;
 
     color:
-        rgba(220,255,255,.9);
+        rgba(210,235,255,.95);
 
     font-family:Arial,sans-serif;
 
@@ -527,13 +728,23 @@ body{
     white-space:nowrap;
 
     text-shadow:
+
         0 0 12px
-        rgba(0,255,255,.25);
+        rgba(0,102,255,.6),
+
+        0 0 30px
+        rgba(0,168,255,.25);
 
     pointer-events:none;
 }
 
+
+/* =====================================================
+   MAPPA
+===================================================== */
+
 #map{
+
     position:absolute;
 
     top:3cm;
@@ -548,15 +759,20 @@ body{
     background:#071012;
 
     box-shadow:
-        0 0 35px rgba(0,0,0,.65),
-        0 0 70px rgba(0,255,255,.035);
+
+        0 0 35px
+        rgba(0,0,0,.65),
+
+        0 0 70px
+        rgba(0,102,255,.12);
 
     border:
         1px solid
-        rgba(0,255,255,.10);
+        rgba(0,102,255,.3);
 }
 
 .map-overlay{
+
     position:absolute;
 
     inset:0;
@@ -568,11 +784,21 @@ body{
     border-radius:28px;
 
     box-shadow:
+
         inset 0 0 80px
-        rgba(0,0,0,.28);
+        rgba(0,0,0,.28),
+
+        inset 0 0 25px
+        rgba(0,102,255,.06);
 }
 
+
+/* =====================================================
+   CHIUSURA MAPPA
+===================================================== */
+
 #closeMap{
+
     position:absolute;
 
     top:28px;
@@ -585,15 +811,15 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.35);
+        rgba(0,102,255,.6);
 
     border-radius:50%;
 
     background:
-        rgba(0,15,18,.85);
+        rgba(0,10,25,.9);
 
     color:
-        rgba(200,255,255,.85);
+        rgba(190,225,255,.9);
 
     cursor:pointer;
 
@@ -604,62 +830,86 @@ body{
     align-items:center;
     justify-content:center;
 
-    backdrop-filter:blur(10px);
+    backdrop-filter:
+        blur(10px);
 
     transition:.2s;
 }
 
 #closeMap:hover{
+
     color:white;
 
-    border-color:#00ffff;
+    border-color:
+        var(--jarvis-bright);
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.3);
+        rgba(0,102,255,.5);
 }
 
+
+/* =====================================================
+   CONTROLLI MAPLIBRE
+===================================================== */
+
 .maplibregl-ctrl-group{
+
     background:
-        rgba(0,15,18,.85)!important;
+        rgba(0,10,25,.9)!important;
 
     border:
         1px solid
-        rgba(0,255,255,.18)!important;
+        rgba(0,102,255,.4)!important;
 
     border-radius:12px!important;
 
     overflow:hidden;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,102,255,.15);
 }
 
 .maplibregl-ctrl-group button{
+
     background:
         transparent!important;
 
-    color:#bfffff!important;
+    color:
+        #9FD8FF!important;
 }
 
 .maplibregl-ctrl-group button:hover{
+
     background:
-        rgba(0,255,255,.08)!important;
+        rgba(0,102,255,.15)!important;
 }
 
 .maplibregl-ctrl-attrib{
+
     background:
-        rgba(0,8,10,.65)!important;
+        rgba(0,5,15,.75)!important;
 
     color:
-        rgba(180,255,255,.35)!important;
+        rgba(150,200,255,.4)!important;
 
     font-size:8px!important;
 }
 
 .maplibregl-ctrl-attrib a{
+
     color:
-        rgba(150,240,255,.45)!important;
+        rgba(100,180,255,.55)!important;
 }
 
+
+/* =====================================================
+   MARKER JARVIS
+===================================================== */
+
 .jarvis-map-marker{
+
     width:20px;
     height:20px;
 
@@ -667,16 +917,18 @@ body{
 
     border:
         2px solid
-        #00ffff;
+        #008CFF;
 
     background:
-        rgba(0,255,255,.16);
+        rgba(0,102,255,.2);
 
     box-shadow:
+
         0 0 15px
-        rgba(0,255,255,.9),
+        rgba(0,102,255,1),
+
         0 0 35px
-        rgba(0,255,255,.4);
+        rgba(0,168,255,.5);
 
     position:relative;
 
@@ -685,6 +937,7 @@ body{
 }
 
 .jarvis-map-marker::after{
+
     content:"";
 
     position:absolute;
@@ -700,44 +953,58 @@ body{
 
     border-radius:50%;
 
-    background:#dfffff;
+    background:#E8F5FF;
 
     box-shadow:
-        0 0 8px #00ffff;
+        0 0 8px
+        #00A8FF;
 }
 
 @keyframes markerPulse{
+
     0%,100%{
+
         transform:scale(1);
 
         box-shadow:
+
             0 0 15px
-            rgba(0,255,255,.9),
+            rgba(0,102,255,.9),
+
             0 0 35px
-            rgba(0,255,255,.4);
+            rgba(0,168,255,.4);
     }
 
     50%{
+
         transform:scale(1.18);
 
         box-shadow:
+
             0 0 22px
-            rgba(0,255,255,1),
+            rgba(0,140,255,1),
+
             0 0 50px
-            rgba(0,255,255,.55);
+            rgba(0,168,255,.6);
     }
 }
 
+
+/* =====================================================
+   POPUP
+===================================================== */
+
 .maplibregl-popup-content{
+
     background:
-        rgba(3,15,18,.96)!important;
+        rgba(2,10,25,.97)!important;
 
     color:
-        rgba(220,255,255,.9)!important;
+        rgba(220,240,255,.95)!important;
 
     border:
         1px solid
-        rgba(0,255,255,.25);
+        rgba(0,102,255,.45);
 
     border-radius:10px;
 
@@ -745,11 +1012,14 @@ body{
 
     box-shadow:
         0 0 20px
-        rgba(0,255,255,.12);
+        rgba(0,102,255,.25);
 }
 
 .maplibregl-popup-close-button{
-    color:#00ffff!important;
+
+    color:
+        #00A8FF!important;
+
     font-size:18px;
 }
 
@@ -759,20 +1029,27 @@ body{
 ===================================================== */
 
 #webSearchPanel{
+
     position:fixed;
+
     inset:0;
+
     z-index:500;
 
     display:none;
 
     background:
-        rgba(0,5,7,.96);
+        rgba(0,5,15,.96);
 
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
 }
 
 #webSearchPanel.active{
+
     display:block;
 
     animation:
@@ -780,18 +1057,26 @@ body{
 }
 
 @keyframes webPanelIn{
+
     from{
+
         opacity:0;
-        transform:scale(.985);
+
+        transform:
+            scale(.985);
     }
 
     to{
+
         opacity:1;
-        transform:scale(1);
+
+        transform:
+            scale(1);
     }
 }
 
 .web-search-header{
+
     position:absolute;
 
     top:18px;
@@ -803,7 +1088,7 @@ body{
     z-index:520;
 
     color:
-        rgba(220,255,255,.9);
+        rgba(210,235,255,.95);
 
     font-size:13px;
 
@@ -812,24 +1097,33 @@ body{
     white-space:nowrap;
 
     text-shadow:
+
         0 0 12px
-        rgba(0,255,255,.3);
+        rgba(0,102,255,.6),
+
+        0 0 25px
+        rgba(0,168,255,.2);
 }
 
 #webSearchFrame{
+
     position:absolute;
 
     top:58px;
+
     left:3%;
     right:3%;
+
     bottom:3%;
 
     width:94%;
-    height:calc(97% - 58px);
+
+    height:
+        calc(97% - 58px);
 
     border:
         1px solid
-        rgba(0,255,255,.18);
+        rgba(0,102,255,.35);
 
     border-radius:20px;
 
@@ -837,10 +1131,11 @@ body{
 
     box-shadow:
         0 0 40px
-        rgba(0,255,255,.08);
+        rgba(0,102,255,.15);
 }
 
 #closeWebSearch{
+
     position:absolute;
 
     top:14px;
@@ -853,58 +1148,74 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.3);
+        rgba(0,102,255,.5);
 
     border-radius:50%;
 
     background:
-        rgba(0,15,18,.9);
+        rgba(0,10,25,.92);
 
     color:
-        rgba(210,255,255,.8);
+        rgba(190,225,255,.9);
 
     cursor:pointer;
 
     font-size:20px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
+
+    transition:.2s;
 }
 
 #closeWebSearch:hover{
+
     color:white;
 
-    border-color:#00ffff;
+    border-color:
+        #00A8FF;
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.3);
+        rgba(0,102,255,.5);
 }
 
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:600px){
 
     .jarvis-title{
+
         top:2.2%;
+
         font-size:23px;
+
         letter-spacing:5px;
     }
 
     .datetime{
+
         top:12px;
         right:13px;
     }
 
     .time{
+
         font-size:10px;
     }
 
     .date{
+
         font-size:7px;
     }
 
     .command-wrapper{
+
         width:
             calc(100% - 24px);
 
@@ -912,14 +1223,17 @@ body{
     }
 
     #textInput{
+
         font-size:13px;
     }
 
     #chat{
+
         bottom:80px;
     }
 
     #map{
+
         top:3cm;
         right:3cm;
         bottom:3cm;
@@ -929,16 +1243,21 @@ body{
     }
 
     .map-overlay{
+
         border-radius:22px;
     }
 
     .map-header{
+
         top:2.5%;
+
         font-size:23px;
+
         letter-spacing:5px;
     }
 
     #closeMap{
+
         top:24px;
         left:25px;
 
@@ -947,6 +1266,7 @@ body{
     }
 
     #voiceBtn{
+
         right:12px;
         bottom:70px;
 
@@ -958,6 +1278,7 @@ body{
     }
 
     #voicePanel{
+
         right:12px;
         bottom:112px;
 
@@ -970,6 +1291,7 @@ body{
 @media(max-width:430px){
 
     #map{
+
         top:2.2cm;
         right:2.2cm;
         bottom:2.2cm;
@@ -978,146 +1300,98 @@ body{
 
 }
 
-</style>
-
-</head>
-
-<body>
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-<div
+</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
     class="jarvis-title"
     id="jarvisTitle"
 >
     J.A.R.V.I.S
+</div><div class="datetime"><div id="clock" class="time">
+    00:00:00
 </div>
 
-<div class="datetime">
-
-    <div id="clock" class="time">
-        00:00:00
-    </div>
-
-    <div id="date" class="date">
-        00 AGO 2026
-    </div>
-
+<div id="date" class="date">
+    00 AGO 2026
 </div>
 
-
-<!-- =====================================================
+</div><!-- =====================================================
      MAPPA TATTICA
-===================================================== -->
+===================================================== --><div id="tacticalMap"><div id="map"></div>
 
-<div id="tacticalMap">
+<div class="map-overlay"></div>
 
-    <div id="map"></div>
-
-    <div class="map-overlay"></div>
-
-    <div class="map-header">
-        TACTICAL MAP
-    </div>
-
-    <button
-        id="closeMap"
-        title="Chiudi mappa"
-        aria-label="Chiudi mappa"
-    >
-        ×
-    </button>
-
+<div class="map-header">
+    TACTICAL MAP
 </div>
 
-
-<!-- =====================================================
-     WEB SEARCH
-===================================================== -->
-
-<div id="webSearchPanel">
-
-    <div class="web-search-header">
-        J.A.R.V.I.S. // WEB SEARCH
-    </div>
-
-    <button
-        id="closeWebSearch"
-        title="Torna a JARVIS"
-        aria-label="Chiudi ricerca web"
-    >
-        ×
-    </button>
-
-    <iframe
-        id="webSearchFrame"
-        title="Ricerca web JARVIS"
-        loading="lazy"
-    ></iframe>
-
-</div>
-
-
-<div id="chat"></div>
-
-
-<div class="command-wrapper">
-
-    <input
-        id="textInput"
-        type="text"
-        autocomplete="off"
-        placeholder="Chiedi qualcosa a JARVIS..."
-    >
-
-    <button
-        id="micBtn"
-        aria-label="Microfono"
-    >
-        <span class="mic-icon"></span>
-    </button>
-
-    <button id="sendBtn">
-        INVIA
-    </button>
-
-</div>
-
-
-<button id="voiceBtn">
-    ⚙ VOCE
+<button
+    id="closeMap"
+    title="Chiudi mappa"
+    aria-label="Chiudi mappa"
+>
+    ×
 </button>
 
-
-<div id="voicePanel">
-
-    <div class="voice-title">
-        VOCE J.A.R.V.I.S.
-    </div>
-
-    <select id="voiceSelector">
-
-        <option value="">
-            Voce dispositivo automatica
-        </option>
-
-    </select>
-
-    <button id="voiceTest">
-        TESTA VOCE
-    </button>
-
+</div><!-- =====================================================
+     WEB SEARCH
+===================================================== --><div id="webSearchPanel"><div class="web-search-header">
+    J.A.R.V.I.S. // WEB SEARCH
 </div>
 
+<button
+    id="closeWebSearch"
+    title="Torna a JARVIS"
+    aria-label="Chiudi ricerca web"
+>
+    ×
+</button>
 
-<script
+<iframe
+    id="webSearchFrame"
+    title="Ricerca web JARVIS"
+    loading="lazy"
+></iframe>
+
+</div><div id="chat"></div><!-- =====================================================
+     COMANDO
+===================================================== --><div class="command-wrapper"><input
+    id="textInput"
+    type="text"
+    autocomplete="off"
+    placeholder="Chiedi qualcosa a JARVIS..."
+>
+
+<button
+    id="micBtn"
+    aria-label="Microfono"
+>
+    <span class="mic-icon"></span>
+</button>
+
+<button id="sendBtn">
+    INVIA
+</button>
+
+</div><button id="voiceBtn">
+    ⚙ VOCE
+</button><div id="voicePanel"><div class="voice-title">
+    VOCE J.A.R.V.I.S.
+</div>
+
+<select id="voiceSelector">
+
+    <option value="">
+        Voce dispositivo automatica
+    </option>
+
+</select>
+
+<button id="voiceTest">
+    TESTA VOCE
+</button>
+
+</div><script
     src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script>
-
-
-<script type="importmap">
+</script><script type="importmap">
 
 {
     "imports":{
@@ -1126,10 +1400,7 @@ body{
     }
 }
 
-</script>
-
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -1472,7 +1743,7 @@ container.appendChild(
 
 
 /* =====================================================
-   GLOW
+   GLOW BLU ELETTRICO
 ===================================================== */
 
 function createGlow(){
@@ -1513,17 +1784,17 @@ function createGlow(){
 
     gradient.addColorStop(
         .2,
-        "rgba(220,255,255,1)"
+        "rgba(210,235,255,1)"
     );
 
     gradient.addColorStop(
         .4,
-        "rgba(0,255,255,.9)"
+        "rgba(0,168,255,.95)"
     );
 
     gradient.addColorStop(
         .7,
-        "rgba(0,150,190,.25)"
+        "rgba(0,102,255,.3)"
     );
 
     gradient.addColorStop(
@@ -1659,7 +1930,7 @@ const material =
 
         color:
             new THREE.Color(
-                0x00cfe8
+                0x0066FF
             ),
 
         size:.042,
@@ -1704,13 +1975,13 @@ let energy =
 
 const normalColor =
     new THREE.Color(
-        0x00cfe8
+        0x0066FF
     );
 
 
 const activeColor =
     new THREE.Color(
-        0x8fffff
+        0x00A8FF
     );
 
 
@@ -2188,7 +2459,7 @@ function createJarvisMarker(
             })
 
             .setHTML(
-                `<b style="color:#00ffff">${escapeHtml(name)}</b>`
+                `<b style="color:#00A8FF">${escapeHtml(name)}</b>`
             )
 
         )
@@ -2527,25 +2798,18 @@ const closeWebSearch =
     );
 
 
-function openWebSearch(
-    query
-){
+function openWebSearch(query){
 
     if(!query){
         return;
     }
 
-
     const url =
         "https://www.google.com/search?igu=1&q=" +
-        encodeURIComponent(
-            query
-        );
-
+        encodeURIComponent(query);
 
     webSearchFrame.src =
         url;
-
 
     webSearchPanel.classList.add(
         "active"
@@ -2584,9 +2848,7 @@ closeWebSearch.addEventListener(
    COMANDI RICERCA WEB
 ===================================================== */
 
-function handleWebCommand(
-    text
-){
+function handleWebCommand(text){
 
     const normalized =
         text
@@ -2636,169 +2898,16 @@ function handleWebCommand(
                     query
                 );
 
-
                 addMsg(
                     "Ricerca web: " +
                     query
                 );
-
 
                 return true;
 
             }
 
         }
-
-    }
-
-
-    return false;
-
-}
-
-
-/* =====================================================
-   FULLSCREEN J.A.R.V.I.S.
-===================================================== */
-
-async function enterJarvisFullscreen(){
-
-    try{
-
-        if(
-            !document.fullscreenElement
-        ){
-
-            await document
-                .documentElement
-                .requestFullscreen();
-
-            addMsg(
-                "Modalità fullscreen attivata."
-            );
-
-        }
-
-    }catch(error){
-
-        console.error(
-            "FULLSCREEN ERROR:",
-            error
-        );
-
-        addMsg(
-            "Impossibile attivare la modalità fullscreen."
-        );
-
-    }
-
-}
-
-
-async function exitJarvisFullscreen(){
-
-    try{
-
-        if(
-            document.fullscreenElement
-        ){
-
-            await document.exitFullscreen();
-
-            addMsg(
-                "Modalità fullscreen disattivata."
-            );
-
-        }
-
-    }catch(error){
-
-        console.error(
-            "EXIT FULLSCREEN ERROR:",
-            error
-        );
-
-    }
-
-}
-
-
-function handleFullscreenCommand(
-    text
-){
-
-    const normalized =
-        text
-            .toLowerCase()
-            .trim()
-            .replace(
-                /[.,!?]/g,
-                ""
-            );
-
-
-    const enterCommands = [
-
-        "jarvis modalità fullscreen",
-        "jarvis modalita fullscreen",
-
-        "modalità fullscreen",
-        "modalita fullscreen",
-
-        "attiva fullscreen",
-
-        "attiva modalità fullscreen",
-        "attiva modalita fullscreen",
-
-        "schermo intero",
-
-        "attiva schermo intero",
-
-        "fullscreen"
-
-    ];
-
-
-    const exitCommands = [
-
-        "esci dal fullscreen",
-
-        "esci da fullscreen",
-
-        "disattiva fullscreen",
-
-        "disattiva modalità fullscreen",
-        "disattiva modalita fullscreen",
-
-        "esci da schermo intero",
-
-        "esci dallo schermo intero"
-
-    ];
-
-
-    if(
-        enterCommands.includes(
-            normalized
-        )
-    ){
-
-        enterJarvisFullscreen();
-
-        return true;
-
-    }
-
-
-    if(
-        exitCommands.includes(
-            normalized
-        )
-    ){
-
-        exitJarvisFullscreen();
-
-        return true;
 
     }
 
@@ -2974,7 +3083,6 @@ function loadDeviceVoices(){
         voiceSelector.value =
             savedVoice;
 
-
         selectedDeviceVoice =
             deviceVoices[
                 Number(savedVoice)
@@ -3148,8 +3256,7 @@ function speakDevice(
 
                         try{
 
-                            window.speechSynthesis
-                                .resume();
+                            window.speechSynthesis.resume();
 
                         }catch(error){
 
@@ -3425,7 +3532,7 @@ async function speakElevenLabs(
 
 
 /* =====================================================
-   SPEAK PRINCIPALE
+   SPEAK
 ===================================================== */
 
 async function speak(
@@ -3564,25 +3671,6 @@ async function processAi(
     text
 ){
 
-    /* =================================================
-       1. FULLSCREEN
-    ================================================= */
-
-    if(
-        handleFullscreenCommand(
-            text
-        )
-    ){
-
-        return;
-
-    }
-
-
-    /* =================================================
-       2. RICERCA WEB
-    ================================================= */
-
     if(
         handleWebCommand(
             text
@@ -3594,10 +3682,6 @@ async function processAi(
     }
 
 
-    /* =================================================
-       3. MAPPA
-    ================================================= */
-
     if(
         handleMapCommand(
             text
@@ -3608,10 +3692,6 @@ async function processAi(
 
     }
 
-
-    /* =================================================
-       4. AI
-    ================================================= */
 
     setState(
         "thinking"
@@ -4125,7 +4205,5 @@ setState(
     "idle"
 );
 
-</script>
-
-</body>
+</script></body>
 </html>

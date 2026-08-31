@@ -1,26 +1,28 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
+<head>
 
-<title>J.A.R.V.I.S.</title><link
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link
     rel="stylesheet"
     href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-/><style>
+/>
+
+<style>
 
 :root{
+    --jarvis-main:#D6A900;
+    --jarvis-bright:#FFD84A;
+    --jarvis-light:#FFF2A6;
+    --jarvis-dark:#3A2A00;
 
-    --jarvis-main:#0066FF;
-    --jarvis-bright:#00A8FF;
-    --jarvis-light:#9FD8FF;
-    --jarvis-dark:#001B4D;
-
-    --jarvis-glow:
-        rgba(0,102,255,.65);
-
-    --jarvis-glow-light:
-        rgba(0,168,255,.35);
-
+    --jarvis-glow:rgba(255,190,0,.65);
+    --jarvis-glow-light:rgba(255,220,80,.32);
 }
-
 
 /* =====================================================
    BASE
@@ -37,9 +39,7 @@ body{
     width:100%;
     height:100%;
     overflow:hidden;
-
-    background:#01030A;
-
+    background:#010100;
     font-family:Arial,sans-serif;
 }
 
@@ -47,15 +47,14 @@ body{
     background:
         radial-gradient(
             circle at center,
-            #07152B 0%,
-            #020817 48%,
+            #171300 0%,
+            #080700 42%,
             #000000 100%
         );
 }
 
-
 /* =====================================================
-   THREE.JS
+   HOLOGRAM
 ===================================================== */
 
 #webgl-container{
@@ -64,6 +63,9 @@ body{
     z-index:1;
 }
 
+#webgl-container canvas{
+    display:block;
+}
 
 /* =====================================================
    VIGNETTE
@@ -72,67 +74,76 @@ body{
 .vignette{
     position:fixed;
     inset:0;
-
     z-index:3;
-
     pointer-events:none;
 
     background:
         radial-gradient(
             circle at center,
-            transparent 30%,
-            rgba(0,0,0,.2) 65%,
-            rgba(0,0,0,.8) 100%
+            transparent 22%,
+            rgba(0,0,0,.25) 58%,
+            rgba(0,0,0,.9) 100%
         );
 }
 
+/* =====================================================
+   SCANLINES
+===================================================== */
+
+.vignette::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,215,80,.018) 0px,
+            rgba(255,215,80,.018) 1px,
+            transparent 1px,
+            transparent 4px
+        );
+
+    opacity:.7;
+}
 
 /* =====================================================
    TITOLO
 ===================================================== */
 
 .jarvis-title{
-
     position:fixed;
 
     top:2.4%;
     left:50%;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
     z-index:30;
 
-    color:
-        rgba(220,240,255,.9);
+    color:rgba(255,239,170,.94);
 
-    font-size:
-        clamp(20px,2.8vw,31px);
+    font-size:clamp(20px,2.8vw,31px);
 
     font-weight:300;
 
-    letter-spacing:
-        clamp(5px,1vw,8px);
+    letter-spacing:clamp(5px,1vw,8px);
 
     white-space:nowrap;
 
     text-shadow:
-        0 0 10px
-        rgba(0,102,255,.45),
-
-        0 0 25px
-        rgba(0,168,255,.2);
+        0 0 8px rgba(255,190,0,.7),
+        0 0 25px rgba(255,210,70,.35),
+        0 0 50px rgba(255,170,0,.12);
 
     pointer-events:none;
 }
-
 
 /* =====================================================
    DATA / ORA
 ===================================================== */
 
 .datetime{
-
     position:fixed;
 
     top:18px;
@@ -141,11 +152,8 @@ body{
     z-index:30;
 
     display:flex;
-
     flex-direction:column;
-
     align-items:flex-end;
-
     gap:3px;
 
     font-family:monospace;
@@ -154,48 +162,91 @@ body{
 }
 
 .time{
-
-    color:
-        rgba(100,180,255,.8);
+    color:rgba(255,218,85,.88);
 
     font-size:11px;
-
     letter-spacing:2px;
 
     text-shadow:
-        0 0 8px
-        rgba(0,102,255,.55);
+        0 0 8px rgba(255,190,0,.7);
 }
 
 .date{
-
-    color:
-        rgba(100,170,255,.5);
+    color:rgba(255,220,100,.5);
 
     font-size:8px;
-
     letter-spacing:1px;
 }
 
+/* =====================================================
+   HUD ORIZZONTALE
+===================================================== */
+
+.hud-left{
+    position:fixed;
+    left:25px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    z-index:20;
+
+    color:rgba(255,220,100,.42);
+
+    font-family:monospace;
+    font-size:8px;
+
+    line-height:2.1;
+
+    letter-spacing:2px;
+
+    pointer-events:none;
+
+    text-shadow:
+        0 0 8px rgba(255,190,0,.35);
+}
+
+.hud-right{
+    position:fixed;
+    right:25px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    z-index:20;
+
+    color:rgba(255,220,100,.42);
+
+    font-family:monospace;
+    font-size:8px;
+
+    line-height:2.1;
+
+    letter-spacing:2px;
+
+    text-align:right;
+
+    pointer-events:none;
+
+    text-shadow:
+        0 0 8px rgba(255,190,0,.35);
+}
 
 /* =====================================================
    CHAT
 ===================================================== */
 
 #chat{
-
     position:fixed;
 
     left:50%;
     bottom:92px;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
     z-index:40;
 
-    width:
-        min(620px,88%);
+    width:min(620px,88%);
 
     text-align:center;
 
@@ -203,7 +254,6 @@ body{
 }
 
 .msg{
-
     display:inline-block;
 
     max-width:100%;
@@ -212,110 +262,86 @@ body{
 
     border:
         1px solid
-        rgba(0,102,255,.4);
+        rgba(255,195,30,.38);
 
     border-radius:24px;
 
     background:
-        rgba(2,12,28,.5);
+        rgba(18,13,0,.52);
 
-    backdrop-filter:
-        blur(14px);
+    backdrop-filter:blur(14px);
 
-    -webkit-backdrop-filter:
-        blur(14px);
+    -webkit-backdrop-filter:blur(14px);
 
-    color:
-        rgba(235,245,255,.94);
+    color:rgba(255,247,210,.95);
 
     font-size:12px;
-
     line-height:1.45;
 
     white-space:pre-wrap;
 
     box-shadow:
-        0 0 18px
-        rgba(0,102,255,.08);
+        0 0 18px rgba(255,190,0,.09),
+        inset 0 0 15px rgba(255,200,50,.025);
 }
-
 
 /* =====================================================
    COMMAND BAR
 ===================================================== */
 
 .command-wrapper{
-
     position:fixed;
 
     left:50%;
     bottom:23px;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
     z-index:50;
 
-    width:
-        min(650px,90%);
+    width:min(650px,90%);
 
     display:flex;
-
     align-items:center;
 
-    padding:
-        6px 7px 6px 20px;
+    padding:6px 7px 6px 20px;
 
     border:
         1px solid
-        rgba(0,102,255,.5);
+        rgba(255,195,30,.5);
 
     border-radius:40px;
 
     background:
-        rgba(2,10,24,.58);
+        rgba(12,9,0,.68);
 
-    backdrop-filter:
-        blur(20px);
+    backdrop-filter:blur(20px);
 
-    -webkit-backdrop-filter:
-        blur(20px);
+    -webkit-backdrop-filter:blur(20px);
 
     box-shadow:
-        0 0 30px
-        rgba(0,102,255,.12),
-
-        inset 0 0 20px
-        rgba(0,102,255,.025);
+        0 0 30px rgba(255,190,0,.12),
+        inset 0 0 20px rgba(255,210,60,.025);
 }
 
 .command-wrapper:focus-within{
-
-    border-color:
-        var(--jarvis-bright);
+    border-color:var(--jarvis-bright);
 
     box-shadow:
-
-        0 0 25px
-        rgba(0,102,255,.28),
-
-        0 0 55px
-        rgba(0,168,255,.08);
+        0 0 25px rgba(255,190,0,.28),
+        0 0 55px rgba(255,220,80,.08);
 }
-
 
 /* =====================================================
    INPUT
 ===================================================== */
 
 #textInput{
-
     flex:1;
 
     min-width:0;
 
     border:none;
-
     outline:none;
 
     background:transparent;
@@ -330,18 +356,14 @@ body{
 }
 
 #textInput::placeholder{
-
-    color:
-        rgba(150,190,230,.38);
+    color:rgba(255,225,130,.38);
 }
-
 
 /* =====================================================
    MICROFONO
 ===================================================== */
 
 #micBtn{
-
     width:34px;
     height:34px;
 
@@ -351,8 +373,7 @@ body{
 
     background:transparent;
 
-    color:
-        rgba(150,210,255,.8);
+    color:rgba(255,220,120,.82);
 
     cursor:pointer;
 
@@ -363,7 +384,6 @@ body{
 }
 
 .mic-icon{
-
     width:8px;
     height:14px;
 
@@ -377,7 +397,6 @@ body{
 }
 
 .mic-icon::after{
-
     content:"";
 
     position:absolute;
@@ -388,8 +407,7 @@ body{
     width:12px;
     height:7px;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
     border:
         1.3px solid
@@ -397,56 +415,49 @@ body{
 
     border-top:none;
 
-    border-radius:
-        0 0 8px 8px;
+    border-radius:0 0 8px 8px;
 }
 
 #micBtn:hover{
-
-    color:
-        var(--jarvis-bright);
+    color:var(--jarvis-bright);
 
     filter:
         drop-shadow(
             0 0 8px
-            rgba(0,168,255,.7)
+            rgba(255,210,60,.8)
         );
 }
 
 #micBtn.active{
-
-    color:
-        #8CC8FF;
+    color:#FFF1A0;
 
     filter:
         drop-shadow(
             0 0 8px
-            rgba(0,102,255,.9)
+            rgba(255,190,0,.95)
         );
 }
-
 
 /* =====================================================
    INVIA
 ===================================================== */
 
 #sendBtn{
-
     height:39px;
 
     padding:0 17px;
 
     border:
         1px solid
-        rgba(0,102,255,.5);
+        rgba(255,195,30,.5);
 
     border-radius:22px;
 
     background:
-        rgba(0,102,255,.08);
+        rgba(255,190,0,.08);
 
     color:
-        rgba(190,225,255,.88);
+        rgba(255,230,150,.9);
 
     font-size:10px;
 
@@ -458,27 +469,24 @@ body{
 }
 
 #sendBtn:hover{
-
     color:white;
 
     border-color:
         var(--jarvis-bright);
 
     background:
-        rgba(0,102,255,.18);
+        rgba(255,190,0,.18);
 
     box-shadow:
         0 0 15px
-        rgba(0,102,255,.25);
+        rgba(255,190,0,.3);
 }
-
 
 /* =====================================================
    VOCE
 ===================================================== */
 
 #voiceBtn{
-
     position:fixed;
 
     right:22px;
@@ -492,15 +500,15 @@ body{
 
     border:
         1px solid
-        rgba(0,102,255,.5);
+        rgba(255,195,30,.5);
 
     border-radius:22px;
 
     background:
-        rgba(2,10,24,.82);
+        rgba(12,9,0,.84);
 
     color:
-        rgba(180,220,255,.82);
+        rgba(255,225,145,.84);
 
     font-size:10px;
 
@@ -508,14 +516,12 @@ body{
 
     cursor:pointer;
 
-    backdrop-filter:
-        blur(12px);
+    backdrop-filter:blur(12px);
 
     transition:.2s;
 }
 
 #voiceBtn:hover{
-
     color:white;
 
     border-color:
@@ -523,16 +529,14 @@ body{
 
     box-shadow:
         0 0 15px
-        rgba(0,102,255,.4);
+        rgba(255,190,0,.4);
 }
-
 
 /* =====================================================
    VOICE PANEL
 ===================================================== */
 
 #voicePanel{
-
     position:fixed;
 
     right:22px;
@@ -540,8 +544,7 @@ body{
 
     z-index:100;
 
-    width:
-        min(330px,calc(100% - 30px));
+    width:min(330px,calc(100% - 30px));
 
     padding:15px;
 
@@ -549,63 +552,56 @@ body{
 
     border:
         1px solid
-        rgba(0,102,255,.45);
+        rgba(255,195,30,.45);
 
     border-radius:18px;
 
     background:
-        rgba(1,8,20,.96);
+        rgba(8,6,0,.97);
 
-    backdrop-filter:
-        blur(20px);
+    backdrop-filter:blur(20px);
 
     box-shadow:
         0 0 35px
-        rgba(0,102,255,.25);
+        rgba(255,190,0,.25);
 }
 
 #voicePanel.active{
-
     display:block;
 }
 
 .voice-title{
-
-    color:
-        rgba(210,235,255,.95);
+    color:rgba(255,235,170,.95);
 
     font-size:11px;
-
     letter-spacing:2px;
 
     margin-bottom:10px;
 }
 
 #voiceSelector{
-
     width:100%;
 
     padding:11px;
 
     border:
         1px solid
-        rgba(0,102,255,.35);
+        rgba(255,195,30,.35);
 
     border-radius:10px;
 
     outline:none;
 
     background:
-        rgba(0,15,38,.95);
+        rgba(25,18,0,.95);
 
     color:
-        rgba(215,235,255,.9);
+        rgba(255,235,170,.9);
 
     font-size:11px;
 }
 
 #voiceTest{
-
     width:100%;
 
     margin-top:10px;
@@ -614,15 +610,15 @@ body{
 
     border:
         1px solid
-        rgba(0,102,255,.35);
+        rgba(255,195,30,.35);
 
     border-radius:10px;
 
     background:
-        rgba(0,102,255,.07);
+        rgba(255,190,0,.07);
 
     color:
-        rgba(190,225,255,.8);
+        rgba(255,225,145,.8);
 
     cursor:pointer;
 
@@ -632,7 +628,6 @@ body{
 }
 
 #voiceTest:hover{
-
     border-color:
         var(--jarvis-bright);
 
@@ -640,36 +635,32 @@ body{
 
     box-shadow:
         0 0 12px
-        rgba(0,102,255,.2);
+        rgba(255,190,0,.2);
 }
-
 
 /* =====================================================
    MAPPA TATTICA
 ===================================================== */
 
 #tacticalMap{
-
     position:fixed;
 
     inset:0;
 
-    z-index:20;
+    z-index:200;
 
     display:none;
 
     background:
-
         radial-gradient(
             circle at center,
-            #08162D 0%,
-            #020817 65%,
+            #171300 0%,
+            #050400 65%,
             #000000 100%
         );
 }
 
 #tacticalMap.active{
-
     display:block;
 
     animation:
@@ -677,45 +668,33 @@ body{
 }
 
 @keyframes mapIn{
-
     from{
-
         opacity:0;
-
-        transform:
-            scale(1.015);
+        transform:scale(1.015);
     }
 
     to{
-
         opacity:1;
-
-        transform:
-            scale(1);
+        transform:scale(1);
     }
 }
-
 
 /* =====================================================
    HEADER MAPPA
 ===================================================== */
 
 .map-header{
-
     position:absolute;
 
     top:2.4%;
     left:50%;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
     z-index:600;
 
     color:
-        rgba(210,235,255,.95);
-
-    font-family:Arial,sans-serif;
+        rgba(255,235,165,.95);
 
     font-size:
         clamp(24px,4vw,42px);
@@ -728,23 +707,17 @@ body{
     white-space:nowrap;
 
     text-shadow:
-
-        0 0 12px
-        rgba(0,102,255,.6),
-
-        0 0 30px
-        rgba(0,168,255,.25);
+        0 0 12px rgba(255,190,0,.65),
+        0 0 30px rgba(255,215,70,.25);
 
     pointer-events:none;
 }
-
 
 /* =====================================================
    MAPPA
 ===================================================== */
 
 #map{
-
     position:absolute;
 
     top:3cm;
@@ -759,20 +732,15 @@ body{
     background:#071012;
 
     box-shadow:
-
-        0 0 35px
-        rgba(0,0,0,.65),
-
-        0 0 70px
-        rgba(0,102,255,.12);
+        0 0 35px rgba(0,0,0,.65),
+        0 0 70px rgba(255,190,0,.12);
 
     border:
         1px solid
-        rgba(0,102,255,.3);
+        rgba(255,195,30,.3);
 }
 
 .map-overlay{
-
     position:absolute;
 
     inset:0;
@@ -784,21 +752,15 @@ body{
     border-radius:28px;
 
     box-shadow:
-
-        inset 0 0 80px
-        rgba(0,0,0,.28),
-
-        inset 0 0 25px
-        rgba(0,102,255,.06);
+        inset 0 0 80px rgba(0,0,0,.28),
+        inset 0 0 25px rgba(255,190,0,.06);
 }
-
 
 /* =====================================================
    CHIUSURA MAPPA
 ===================================================== */
 
 #closeMap{
-
     position:absolute;
 
     top:28px;
@@ -811,15 +773,15 @@ body{
 
     border:
         1px solid
-        rgba(0,102,255,.6);
+        rgba(255,195,30,.6);
 
     border-radius:50%;
 
     background:
-        rgba(0,10,25,.9);
+        rgba(12,9,0,.9);
 
     color:
-        rgba(190,225,255,.9);
+        rgba(255,225,145,.9);
 
     cursor:pointer;
 
@@ -830,14 +792,12 @@ body{
     align-items:center;
     justify-content:center;
 
-    backdrop-filter:
-        blur(10px);
+    backdrop-filter:blur(10px);
 
     transition:.2s;
 }
 
 #closeMap:hover{
-
     color:white;
 
     border-color:
@@ -845,22 +805,20 @@ body{
 
     box-shadow:
         0 0 15px
-        rgba(0,102,255,.5);
+        rgba(255,190,0,.5);
 }
 
-
 /* =====================================================
-   CONTROLLI MAPLIBRE
+   MAPLIBRE
 ===================================================== */
 
 .maplibregl-ctrl-group{
-
     background:
-        rgba(0,10,25,.9)!important;
+        rgba(12,9,0,.9)!important;
 
     border:
         1px solid
-        rgba(0,102,255,.4)!important;
+        rgba(255,195,30,.4)!important;
 
     border-radius:12px!important;
 
@@ -868,48 +826,42 @@ body{
 
     box-shadow:
         0 0 15px
-        rgba(0,102,255,.15);
+        rgba(255,190,0,.15);
 }
 
 .maplibregl-ctrl-group button{
-
     background:
         transparent!important;
 
     color:
-        #9FD8FF!important;
+        #FFE58A!important;
 }
 
 .maplibregl-ctrl-group button:hover{
-
     background:
-        rgba(0,102,255,.15)!important;
+        rgba(255,190,0,.15)!important;
 }
 
 .maplibregl-ctrl-attrib{
-
     background:
-        rgba(0,5,15,.75)!important;
+        rgba(0,0,0,.75)!important;
 
     color:
-        rgba(150,200,255,.4)!important;
+        rgba(255,220,130,.4)!important;
 
     font-size:8px!important;
 }
 
 .maplibregl-ctrl-attrib a{
-
     color:
-        rgba(100,180,255,.55)!important;
+        rgba(255,200,70,.55)!important;
 }
 
-
 /* =====================================================
-   MARKER JARVIS
+   MARKER
 ===================================================== */
 
 .jarvis-map-marker{
-
     width:20px;
     height:20px;
 
@@ -917,18 +869,14 @@ body{
 
     border:
         2px solid
-        #008CFF;
+        #FFD21C;
 
     background:
-        rgba(0,102,255,.2);
+        rgba(255,190,0,.2);
 
     box-shadow:
-
-        0 0 15px
-        rgba(0,102,255,1),
-
-        0 0 35px
-        rgba(0,168,255,.5);
+        0 0 15px rgba(255,190,0,1),
+        0 0 35px rgba(255,220,80,.5);
 
     position:relative;
 
@@ -937,7 +885,6 @@ body{
 }
 
 .jarvis-map-marker::after{
-
     content:"";
 
     position:absolute;
@@ -948,63 +895,50 @@ body{
     width:5px;
     height:5px;
 
-    transform:
-        translate(-50%,-50%);
+    transform:translate(-50%,-50%);
 
     border-radius:50%;
 
-    background:#E8F5FF;
+    background:#FFFBE0;
 
     box-shadow:
         0 0 8px
-        #00A8FF;
+        #FFD84A;
 }
 
 @keyframes markerPulse{
 
     0%,100%{
-
         transform:scale(1);
 
         box-shadow:
-
-            0 0 15px
-            rgba(0,102,255,.9),
-
-            0 0 35px
-            rgba(0,168,255,.4);
+            0 0 15px rgba(255,190,0,.9),
+            0 0 35px rgba(255,220,80,.4);
     }
 
     50%{
-
         transform:scale(1.18);
 
         box-shadow:
-
-            0 0 22px
-            rgba(0,140,255,1),
-
-            0 0 50px
-            rgba(0,168,255,.6);
+            0 0 22px rgba(255,200,0,1),
+            0 0 50px rgba(255,220,80,.6);
     }
 }
-
 
 /* =====================================================
    POPUP
 ===================================================== */
 
 .maplibregl-popup-content{
-
     background:
-        rgba(2,10,25,.97)!important;
+        rgba(12,9,0,.97)!important;
 
     color:
-        rgba(220,240,255,.95)!important;
+        rgba(255,240,190,.95)!important;
 
     border:
         1px solid
-        rgba(0,102,255,.45);
+        rgba(255,195,30,.45);
 
     border-radius:10px;
 
@@ -1012,24 +946,21 @@ body{
 
     box-shadow:
         0 0 20px
-        rgba(0,102,255,.25);
+        rgba(255,190,0,.25);
 }
 
 .maplibregl-popup-close-button{
-
     color:
-        #00A8FF!important;
+        #FFD84A!important;
 
     font-size:18px;
 }
-
 
 /* =====================================================
    WEB SEARCH
 ===================================================== */
 
 #webSearchPanel{
-
     position:fixed;
 
     inset:0;
@@ -1039,17 +970,14 @@ body{
     display:none;
 
     background:
-        rgba(0,5,15,.96);
+        rgba(5,4,0,.97);
 
-    backdrop-filter:
-        blur(18px);
+    backdrop-filter:blur(18px);
 
-    -webkit-backdrop-filter:
-        blur(18px);
+    -webkit-backdrop-filter:blur(18px);
 }
 
 #webSearchPanel.active{
-
     display:block;
 
     animation:
@@ -1057,38 +985,29 @@ body{
 }
 
 @keyframes webPanelIn{
-
     from{
-
         opacity:0;
-
-        transform:
-            scale(.985);
+        transform:scale(.985);
     }
 
     to{
-
         opacity:1;
-
-        transform:
-            scale(1);
+        transform:scale(1);
     }
 }
 
 .web-search-header{
-
     position:absolute;
 
     top:18px;
     left:50%;
 
-    transform:
-        translateX(-50%);
+    transform:translateX(-50%);
 
     z-index:520;
 
     color:
-        rgba(210,235,255,.95);
+        rgba(255,235,165,.95);
 
     font-size:13px;
 
@@ -1097,16 +1016,11 @@ body{
     white-space:nowrap;
 
     text-shadow:
-
-        0 0 12px
-        rgba(0,102,255,.6),
-
-        0 0 25px
-        rgba(0,168,255,.2);
+        0 0 12px rgba(255,190,0,.6),
+        0 0 25px rgba(255,215,70,.2);
 }
 
 #webSearchFrame{
-
     position:absolute;
 
     top:58px;
@@ -1118,12 +1032,11 @@ body{
 
     width:94%;
 
-    height:
-        calc(97% - 58px);
+    height:calc(97% - 58px);
 
     border:
         1px solid
-        rgba(0,102,255,.35);
+        rgba(255,195,30,.35);
 
     border-radius:20px;
 
@@ -1131,11 +1044,10 @@ body{
 
     box-shadow:
         0 0 40px
-        rgba(0,102,255,.15);
+        rgba(255,190,0,.15);
 }
 
 #closeWebSearch{
-
     position:absolute;
 
     top:14px;
@@ -1148,15 +1060,15 @@ body{
 
     border:
         1px solid
-        rgba(0,102,255,.5);
+        rgba(255,195,30,.5);
 
     border-radius:50%;
 
     background:
-        rgba(0,10,25,.92);
+        rgba(12,9,0,.92);
 
     color:
-        rgba(190,225,255,.9);
+        rgba(255,225,145,.9);
 
     cursor:pointer;
 
@@ -1171,17 +1083,15 @@ body{
 }
 
 #closeWebSearch:hover{
-
     color:white;
 
     border-color:
-        #00A8FF;
+        #FFD84A;
 
     box-shadow:
         0 0 15px
-        rgba(0,102,255,.5);
+        rgba(255,190,0,.5);
 }
-
 
 /* =====================================================
    MOBILE
@@ -1190,220 +1100,261 @@ body{
 @media(max-width:600px){
 
     .jarvis-title{
-
         top:2.2%;
-
         font-size:23px;
-
         letter-spacing:5px;
     }
 
     .datetime{
-
         top:12px;
         right:13px;
     }
 
     .time{
-
         font-size:10px;
     }
 
     .date{
-
         font-size:7px;
     }
 
     .command-wrapper{
-
-        width:
-            calc(100% - 24px);
-
+        width:calc(100% - 24px);
         bottom:17px;
     }
 
     #textInput{
-
         font-size:13px;
     }
 
     #chat{
-
         bottom:80px;
     }
 
-    #map{
+    .hud-left{
+        left:10px;
+        font-size:6px;
+    }
 
+    .hud-right{
+        right:10px;
+        font-size:6px;
+    }
+
+    #map{
         top:3cm;
         right:3cm;
         bottom:3cm;
         left:3cm;
-
         border-radius:22px;
     }
 
     .map-overlay{
-
         border-radius:22px;
     }
 
     .map-header{
-
         top:2.5%;
-
         font-size:23px;
-
         letter-spacing:5px;
     }
 
     #closeMap{
-
         top:24px;
         left:25px;
-
         width:34px;
         height:34px;
     }
 
     #voiceBtn{
-
         right:12px;
         bottom:70px;
-
         height:34px;
-
         font-size:9px;
-
         padding:0 11px;
     }
 
     #voicePanel{
-
         right:12px;
         bottom:112px;
-
-        width:
-            calc(100% - 24px);
+        width:calc(100% - 24px);
     }
-
 }
 
 @media(max-width:430px){
 
     #map{
-
         top:2.2cm;
         right:2.2cm;
         bottom:2.2cm;
         left:2.2cm;
     }
-
 }
 
-</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
+</style>
+</head>
+
+<body>
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+<div class="hud-left">
+    NEURAL SYSTEM<br>
+    HOLOGRAPHIC CORE<br>
+    OPTICAL ARRAY<br>
+    DEPTH MATRIX<br>
+    SENSOR LINK<br>
+    MEMORY ONLINE
+</div>
+
+<div class="hud-right">
+    JARVIS CORE<br>
+    HOLOGRAM ACTIVE<br>
+    SYSTEM ONLINE<br>
+    VOICE READY<br>
+    AI ENGINE<br>
+    V8.4
+</div>
+
+<div
     class="jarvis-title"
     id="jarvisTitle"
 >
     J.A.R.V.I.S
-</div><div class="datetime"><div id="clock" class="time">
-    00:00:00
 </div>
 
-<div id="date" class="date">
-    00 AGO 2026
+<div class="datetime">
+
+    <div id="clock" class="time">
+        00:00:00
+    </div>
+
+    <div id="date" class="date">
+        00 AGO 2026
+    </div>
+
 </div>
 
-</div><!-- =====================================================
+<!-- =====================================================
      MAPPA TATTICA
-===================================================== --><div id="tacticalMap"><div id="map"></div>
+===================================================== -->
 
-<div class="map-overlay"></div>
+<div id="tacticalMap">
 
-<div class="map-header">
-    TACTICAL MAP
+    <div id="map"></div>
+
+    <div class="map-overlay"></div>
+
+    <div class="map-header">
+        TACTICAL MAP
+    </div>
+
+    <button
+        id="closeMap"
+        title="Chiudi mappa"
+        aria-label="Chiudi mappa"
+    >
+        ×
+    </button>
+
 </div>
 
-<button
-    id="closeMap"
-    title="Chiudi mappa"
-    aria-label="Chiudi mappa"
->
-    ×
-</button>
-
-</div><!-- =====================================================
+<!-- =====================================================
      WEB SEARCH
-===================================================== --><div id="webSearchPanel"><div class="web-search-header">
-    J.A.R.V.I.S. // WEB SEARCH
+===================================================== -->
+
+<div id="webSearchPanel">
+
+    <div class="web-search-header">
+        J.A.R.V.I.S. // WEB SEARCH
+    </div>
+
+    <button
+        id="closeWebSearch"
+        title="Torna a JARVIS"
+        aria-label="Chiudi ricerca web"
+    >
+        ×
+    </button>
+
+    <iframe
+        id="webSearchFrame"
+        title="Ricerca web JARVIS"
+        loading="lazy"
+    ></iframe>
+
 </div>
 
-<button
-    id="closeWebSearch"
-    title="Torna a JARVIS"
-    aria-label="Chiudi ricerca web"
->
-    ×
-</button>
+<div id="chat"></div>
 
-<iframe
-    id="webSearchFrame"
-    title="Ricerca web JARVIS"
-    loading="lazy"
-></iframe>
-
-</div><div id="chat"></div><!-- =====================================================
+<!-- =====================================================
      COMANDO
-===================================================== --><div class="command-wrapper"><input
-    id="textInput"
-    type="text"
-    autocomplete="off"
-    placeholder="Chiedi qualcosa a JARVIS..."
->
+===================================================== -->
 
-<button
-    id="micBtn"
-    aria-label="Microfono"
->
-    <span class="mic-icon"></span>
-</button>
+<div class="command-wrapper">
 
-<button id="sendBtn">
-    INVIA
-</button>
+    <input
+        id="textInput"
+        type="text"
+        autocomplete="off"
+        placeholder="Chiedi qualcosa a JARVIS..."
+    >
 
-</div><button id="voiceBtn">
-    ⚙ VOCE
-</button><div id="voicePanel"><div class="voice-title">
-    VOCE J.A.R.V.I.S.
+    <button
+        id="micBtn"
+        aria-label="Microfono"
+    >
+        <span class="mic-icon"></span>
+    </button>
+
+    <button id="sendBtn">
+        INVIA
+    </button>
+
 </div>
 
-<select id="voiceSelector">
-
-    <option value="">
-        Voce dispositivo automatica
-    </option>
-
-</select>
-
-<button id="voiceTest">
-    TESTA VOCE
+<button id="voiceBtn">
+    ⚙ VOCE
 </button>
 
-</div><script
-    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script><script type="importmap">
+<div id="voicePanel">
 
+    <div class="voice-title">
+        VOCE J.A.R.V.I.S.
+    </div>
+
+    <select id="voiceSelector">
+
+        <option value="">
+            Voce dispositivo automatica
+        </option>
+
+    </select>
+
+    <button id="voiceTest">
+        TESTA VOCE
+    </button>
+
+</div>
+
+<script
+    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
+</script>
+
+<script type="importmap">
 {
     "imports":{
         "three":
         "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
     }
 }
+</script>
 
-</script><script type="module">
+<script type="module">
 
 import * as THREE from "three";
-
 
 /* =====================================================
    CONFIGURAZIONE
@@ -1418,110 +1369,63 @@ const MEMORY_KEY =
 const MAX_MEMORY =
     30;
 
-
-/* =====================================================
-   ELEVENLABS
-===================================================== */
-
 const ELEVEN_VOICE_ID =
     "vkBFlAtUdZqNR4MqxSVr";
 
-
-let currentAudio =
-    null;
-
-let audioPlaying =
-    false;
-
-
-/* =====================================================
-   VOCE DISPOSITIVO
-===================================================== */
+let currentAudio = null;
+let audioPlaying = false;
 
 let deviceVoices = [];
-
 let selectedDeviceVoice = null;
-
 
 /* =====================================================
    ELEMENTI
 ===================================================== */
 
 const container =
-    document.getElementById(
-        "webgl-container"
-    );
+    document.getElementById("webgl-container");
 
 const chat =
-    document.getElementById(
-        "chat"
-    );
+    document.getElementById("chat");
 
 const textInput =
-    document.getElementById(
-        "textInput"
-    );
+    document.getElementById("textInput");
 
 const sendBtn =
-    document.getElementById(
-        "sendBtn"
-    );
+    document.getElementById("sendBtn");
 
 const micBtn =
-    document.getElementById(
-        "micBtn"
-    );
+    document.getElementById("micBtn");
 
 const clock =
-    document.getElementById(
-        "clock"
-    );
+    document.getElementById("clock");
 
 const date =
-    document.getElementById(
-        "date"
-    );
+    document.getElementById("date");
 
 const tacticalMap =
-    document.getElementById(
-        "tacticalMap"
-    );
+    document.getElementById("tacticalMap");
 
 const closeMap =
-    document.getElementById(
-        "closeMap"
-    );
+    document.getElementById("closeMap");
 
 const jarvisTitle =
-    document.getElementById(
-        "jarvisTitle"
-    );
+    document.getElementById("jarvisTitle");
 
 const mapHeader =
-    document.querySelector(
-        ".map-header"
-    );
+    document.querySelector(".map-header");
 
 const voiceBtn =
-    document.getElementById(
-        "voiceBtn"
-    );
+    document.getElementById("voiceBtn");
 
 const voicePanel =
-    document.getElementById(
-        "voicePanel"
-    );
+    document.getElementById("voicePanel");
 
 const voiceSelector =
-    document.getElementById(
-        "voiceSelector"
-    );
+    document.getElementById("voiceSelector");
 
 const voiceTest =
-    document.getElementById(
-        "voiceTest"
-    );
-
+    document.getElementById("voiceTest");
 
 /* =====================================================
    MEMORIA
@@ -1532,9 +1436,7 @@ let memory = [];
 try{
 
     const saved =
-        localStorage.getItem(
-            MEMORY_KEY
-        );
+        localStorage.getItem(MEMORY_KEY);
 
     if(saved){
 
@@ -1544,9 +1446,7 @@ try{
         if(Array.isArray(parsed)){
 
             memory =
-                parsed.slice(
-                    -MAX_MEMORY
-                );
+                parsed.slice(-MAX_MEMORY);
 
         }
 
@@ -1554,13 +1454,9 @@ try{
 
 }catch(error){
 
-    console.warn(
-        "Memoria:",
-        error
-    );
+    console.warn("Memoria:",error);
 
 }
-
 
 function saveMemory(){
 
@@ -1569,9 +1465,7 @@ function saveMemory(){
         localStorage.setItem(
             MEMORY_KEY,
             JSON.stringify(
-                memory.slice(
-                    -MAX_MEMORY
-                )
+                memory.slice(-MAX_MEMORY)
             )
         );
 
@@ -1586,11 +1480,7 @@ function saveMemory(){
 
 }
 
-
-function addMemory(
-    role,
-    content
-){
+function addMemory(role,content){
 
     memory.push({
         role,
@@ -1598,82 +1488,47 @@ function addMemory(
     });
 
     memory =
-        memory.slice(
-            -MAX_MEMORY
-        );
+        memory.slice(-MAX_MEMORY);
 
     saveMemory();
 
 }
 
-
 /* =====================================================
-   ORA
+   OROLOGIO
 ===================================================== */
 
 const months = [
-
-    "GEN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAG",
-    "GIU",
-    "LUG",
-    "AGO",
-    "SET",
-    "OTT",
-    "NOV",
-    "DIC"
-
+    "GEN","FEB","MAR","APR",
+    "MAG","GIU","LUG","AGO",
+    "SET","OTT","NOV","DIC"
 ];
-
 
 function updateClock(){
 
-    const now =
-        new Date();
+    const now = new Date();
 
     const h =
-        String(
-            now.getHours()
-        ).padStart(
-            2,
-            "0"
-        );
+        String(now.getHours())
+        .padStart(2,"0");
 
     const m =
-        String(
-            now.getMinutes()
-        ).padStart(
-            2,
-            "0"
-        );
+        String(now.getMinutes())
+        .padStart(2,"0");
 
     const s =
-        String(
-            now.getSeconds()
-        ).padStart(
-            2,
-            "0"
-        );
+        String(now.getSeconds())
+        .padStart(2,"0");
 
     clock.textContent =
         `${h}:${m}:${s}`;
 
-
     const d =
-        String(
-            now.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
+        String(now.getDate())
+        .padStart(2,"0");
 
     const month =
-        months[
-            now.getMonth()
-        ];
+        months[now.getMonth()];
 
     const year =
         now.getFullYear();
@@ -1683,7 +1538,6 @@ function updateClock(){
 
 }
 
-
 updateClock();
 
 setInterval(
@@ -1691,43 +1545,38 @@ setInterval(
     1000
 );
 
-
 /* =====================================================
-   THREE.JS
+   THREE.JS SCENA
 ===================================================== */
 
 const scene =
     new THREE.Scene();
 
-
 const camera =
     new THREE.PerspectiveCamera(
-        55,
+        45,
         window.innerWidth /
         window.innerHeight,
         .1,
-        1000
+        100
     );
 
-
-camera.position.z =
-    5.2;
-
+camera.position.set(
+    0,
+    0.15,
+    5.5
+);
 
 const renderer =
     new THREE.WebGLRenderer({
-
         antialias:true,
         alpha:true
-
     });
-
 
 renderer.setSize(
     window.innerWidth,
     window.innerHeight
 );
-
 
 renderer.setPixelRatio(
     Math.min(
@@ -1736,302 +1585,692 @@ renderer.setPixelRatio(
     )
 );
 
-
 container.appendChild(
     renderer.domElement
 );
 
-
 /* =====================================================
-   GLOW BLU ELETTRICO
+   GRUPPO HOLOGRAMMA
 ===================================================== */
 
-function createGlow(){
+const hologram =
+    new THREE.Group();
 
-    const canvas =
-        document.createElement(
-            "canvas"
-        );
-
-    canvas.width =
-        64;
-
-    canvas.height =
-        64;
-
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    const gradient =
-        ctx.createRadialGradient(
-            32,
-            32,
-            0,
-            32,
-            32,
-            32
-        );
-
-
-    gradient.addColorStop(
-        0,
-        "rgba(255,255,255,1)"
-    );
-
-    gradient.addColorStop(
-        .2,
-        "rgba(210,235,255,1)"
-    );
-
-    gradient.addColorStop(
-        .4,
-        "rgba(0,168,255,.95)"
-    );
-
-    gradient.addColorStop(
-        .7,
-        "rgba(0,102,255,.3)"
-    );
-
-    gradient.addColorStop(
-        1,
-        "rgba(0,0,0,0)"
-    );
-
-
-    ctx.fillStyle =
-        gradient;
-
-
-    ctx.fillRect(
-        0,
-        0,
-        64,
-        64
-    );
-
-
-    return new THREE.CanvasTexture(
-        canvas
-    );
-
-}
-
+scene.add(hologram);
 
 /* =====================================================
-   PARTICELLE
+   MATERIALI
 ===================================================== */
 
-const COUNT =
-    3000;
+const hologramMaterial =
+    new THREE.MeshBasicMaterial({
 
-
-const geometry =
-    new THREE.BufferGeometry();
-
-
-const positions =
-    new Float32Array(
-        COUNT * 3
-    );
-
-
-const radii =
-    new Float32Array(
-        COUNT
-    );
-
-
-const angles =
-    new Float32Array(
-        COUNT * 2
-    );
-
-
-const seeds =
-    new Float32Array(
-        COUNT
-    );
-
-
-for(
-    let i=0;
-    i<COUNT;
-    i++
-){
-
-    const r =
-        1.10 +
-        Math.random()*.70;
-
-
-    const theta =
-        Math.random() *
-        Math.PI *
-        2;
-
-
-    const phi =
-        Math.acos(
-            2*Math.random()-1
-        );
-
-
-    radii[i] =
-        r;
-
-
-    angles[i*2] =
-        theta;
-
-
-    angles[i*2+1] =
-        phi;
-
-
-    seeds[i] =
-        Math.random()*100;
-
-
-    positions[i*3] =
-        r *
-        Math.sin(phi) *
-        Math.cos(theta);
-
-
-    positions[i*3+1] =
-        r *
-        Math.sin(phi) *
-        Math.sin(theta);
-
-
-    positions[i*3+2] =
-        r *
-        Math.cos(phi);
-
-}
-
-
-geometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        positions,
-        3
-    )
-);
-
-
-const material =
-    new THREE.PointsMaterial({
-
-        color:
-            new THREE.Color(
-                0x0066FF
-            ),
-
-        size:.042,
-
-        map:createGlow(),
+        color:0xFFD21F,
 
         transparent:true,
 
-        opacity:1,
+        opacity:.23,
 
-        depthWrite:false,
+        wireframe:true,
+
+        blending:
+            THREE.AdditiveBlending,
+
+        depthWrite:false
+
+    });
+
+const glowMaterial =
+    new THREE.MeshBasicMaterial({
+
+        color:0xFFE66A,
+
+        transparent:true,
+
+        opacity:.08,
+
+        blending:
+            THREE.AdditiveBlending,
+
+        depthWrite:false
+
+    });
+
+const lineMaterial =
+    new THREE.LineBasicMaterial({
+
+        color:0xFFD21F,
+
+        transparent:true,
+
+        opacity:.48,
 
         blending:
             THREE.AdditiveBlending
 
     });
 
+/* =====================================================
+   CORPO UMANOIDE
+===================================================== */
+
+function createPart(
+    geometry,
+    scale,
+    position
+){
+
+    const mesh =
+        new THREE.Mesh(
+            geometry,
+            hologramMaterial
+        );
+
+    mesh.scale.set(
+        scale[0],
+        scale[1],
+        scale[2]
+    );
+
+    mesh.position.set(
+        position[0],
+        position[1],
+        position[2]
+    );
+
+    hologram.add(mesh);
+
+    return mesh;
+
+}
+
+/* TESTA */
+
+const head =
+    createPart(
+        new THREE.SphereGeometry(
+            .43,
+            20,
+            16
+        ),
+        [1,1.12,.9],
+        [0,1.45,0]
+    );
+
+/* COLLO */
+
+const neck =
+    createPart(
+        new THREE.CylinderGeometry(
+            .17,
+            .21,
+            .32,
+            12
+        ),
+        [1,1,1],
+        [0,1.02,0]
+    );
+
+/* TORACE */
+
+const chest =
+    createPart(
+        new THREE.CylinderGeometry(
+            .62,
+            .48,
+            1.15,
+            16,
+            4,
+            true
+        ),
+        [1,1,1],
+        [0,.48,0]
+    );
+
+chest.rotation.z =
+    Math.PI;
+
+/* BACINO */
+
+const pelvis =
+    createPart(
+        new THREE.CylinderGeometry(
+            .46,
+            .36,
+            .55,
+            14,
+            3,
+            true
+        ),
+        [1,1,1],
+        [0,-.32,0]
+    );
+
+pelvis.rotation.z =
+    Math.PI;
+
+/* SPALLE */
+
+const shoulderLeft =
+    createPart(
+        new THREE.SphereGeometry(
+            .24,
+            12,
+            10
+        ),
+        [1.25,.8,1],
+        [-.66,.78,0]
+    );
+
+const shoulderRight =
+    createPart(
+        new THREE.SphereGeometry(
+            .24,
+            12,
+            10
+        ),
+        [1.25,.8,1],
+        [.66,.78,0]
+    );
+
+/* BRACCIA */
+
+const armGeometry =
+    new THREE.CylinderGeometry(
+        .13,
+        .10,
+        1.15,
+        10,
+        3,
+        true
+    );
+
+const leftArm =
+    createPart(
+        armGeometry,
+        [1,1,1],
+        [-.82,.15,0]
+    );
+
+leftArm.rotation.z =
+    -.10;
+
+const rightArm =
+    createPart(
+        armGeometry,
+        [1,1,1],
+        [.82,.15,0]
+    );
+
+rightArm.rotation.z =
+    .10;
+
+/* AVAMBRACCI */
+
+const forearmGeometry =
+    new THREE.CylinderGeometry(
+        .095,
+        .07,
+        .95,
+        10,
+        3,
+        true
+    );
+
+const leftForearm =
+    createPart(
+        forearmGeometry,
+        [1,1,1],
+        [-.86,-.78,0]
+    );
+
+leftForearm.rotation.z =
+    -.06;
+
+const rightForearm =
+    createPart(
+        forearmGeometry,
+        [1,1,1],
+        [.86,-.78,0]
+    );
+
+rightForearm.rotation.z =
+    .06;
+
+/* MANI */
+
+createPart(
+    new THREE.SphereGeometry(
+        .13,
+        10,
+        8
+    ),
+    [1.1,1.35,.8],
+    [-.88,-1.28,0]
+);
+
+createPart(
+    new THREE.SphereGeometry(
+        .13,
+        10,
+        8
+    ),
+    [1.1,1.35,.8],
+    [.88,-1.28,0]
+);
+
+/* GAMBE */
+
+const legGeometry =
+    new THREE.CylinderGeometry(
+        .17,
+        .13,
+        1.55,
+        10,
+        3,
+        true
+    );
+
+const leftLeg =
+    createPart(
+        legGeometry,
+        [1,1,1],
+        [-.29,-1.22,0]
+    );
+
+const rightLeg =
+    createPart(
+        legGeometry,
+        [1,1,1],
+        [.29,-1.22,0]
+    );
+
+/* PIEDI */
+
+createPart(
+    new THREE.BoxGeometry(
+        .30,
+        .18,
+        .52
+    ),
+    [1,1,1],
+    [-.29,-2.02,.08]
+);
+
+createPart(
+    new THREE.BoxGeometry(
+        .30,
+        .18,
+        .52
+    ),
+    [1,1,1],
+    [.29,-2.02,.08]
+);
+
+/* =====================================================
+   CORE CENTRALE
+===================================================== */
+
+const core =
+    new THREE.Mesh(
+
+        new THREE.SphereGeometry(
+            .17,
+            24,
+            24
+        ),
+
+        new THREE.MeshBasicMaterial({
+
+            color:0xFFF1A0,
+
+            transparent:true,
+
+            opacity:.9,
+
+            blending:
+                THREE.AdditiveBlending
+
+        })
+
+    );
+
+core.position.set(
+    0,
+    .55,
+    -.48
+);
+
+hologram.add(core);
+
+/* =====================================================
+   ANELLI ATTORNO AL CORE
+===================================================== */
+
+const rings = [];
+
+for(let i=0;i<5;i++){
+
+    const ring =
+        new THREE.Mesh(
+
+            new THREE.TorusGeometry(
+                .25 + i*.07,
+                .008,
+                8,
+                64
+            ),
+
+            lineMaterial.clone()
+
+        );
+
+    ring.rotation.x =
+        Math.PI/2;
+
+    ring.rotation.z =
+        i*.4;
+
+    ring.position.copy(
+        core.position
+    );
+
+    ring.material.opacity =
+        .35;
+
+    hologram.add(ring);
+
+    rings.push(ring);
+
+}
+
+/* =====================================================
+   LINEE DEL CORPO
+===================================================== */
+
+const bodyLines =
+    new THREE.Group();
+
+hologram.add(
+    bodyLines
+);
+
+function createLine(
+    points,
+    opacity=.3
+){
+
+    const geometry =
+        new THREE.BufferGeometry()
+        .setFromPoints(
+            points.map(
+                p =>
+                    new THREE.Vector3(
+                        p[0],
+                        p[1],
+                        p[2]
+                    )
+            )
+        );
+
+    const material =
+        lineMaterial.clone();
+
+    material.opacity =
+        opacity;
+
+    const line =
+        new THREE.Line(
+            geometry,
+            material
+        );
+
+    bodyLines.add(line);
+
+}
+
+/* LINEE VISO */
+
+createLine([
+    [-.22,1.53,.40],
+    [.22,1.53,.40]
+],.7);
+
+createLine([
+    [-.20,1.38,.40],
+    [.20,1.38,.40]
+],.45);
+
+createLine([
+    [0,1.80,.34],
+    [0,1.20,.43]
+],.35);
+
+/* LINEE TORACE */
+
+createLine([
+    [-.45,.78,.45],
+    [.45,.78,.45]
+],.45);
+
+createLine([
+    [-.40,.48,.48],
+    [.40,.48,.48]
+],.38);
+
+createLine([
+    [-.35,.18,.43],
+    [.35,.18,.43]
+],.35);
+
+/* LINEA CENTRALE */
+
+createLine([
+    [0,1.12,.42],
+    [0,-1.90,.22]
+],.25);
+
+/* =====================================================
+   PARTICELLE HOLOGRAFICHE
+===================================================== */
+
+const particleCount =
+    1400;
+
+const particleGeometry =
+    new THREE.BufferGeometry();
+
+const particlePositions =
+    new Float32Array(
+        particleCount*3
+    );
+
+for(
+    let i=0;
+    i<particleCount;
+    i++
+){
+
+    const x =
+        (Math.random()-.5)*2.1;
+
+    const y =
+        -2.2 +
+        Math.random()*4.2;
+
+    const z =
+        (Math.random()-.5)*.9;
+
+    particlePositions[i*3] =
+        x;
+
+    particlePositions[i*3+1] =
+        y;
+
+    particlePositions[i*3+2] =
+        z;
+}
+
+particleGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        particlePositions,
+        3
+    )
+);
+
+const particleMaterial =
+    new THREE.PointsMaterial({
+
+        color:0xFFD21F,
+
+        size:.018,
+
+        transparent:true,
+
+        opacity:.42,
+
+        blending:
+            THREE.AdditiveBlending,
+
+        depthWrite:false
+
+    });
 
 const particles =
     new THREE.Points(
-        geometry,
-        material
+        particleGeometry,
+        particleMaterial
     );
 
-
-scene.add(
+hologram.add(
     particles
 );
 
+/* =====================================================
+   SCANSIONE ORIZZONTALE
+===================================================== */
+
+const scan =
+    new THREE.Mesh(
+
+        new THREE.PlaneGeometry(
+            2.4,
+            .025
+        ),
+
+        new THREE.MeshBasicMaterial({
+
+            color:0xFFE45A,
+
+            transparent:true,
+
+            opacity:.45,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite:false
+
+        })
+
+    );
+
+scan.position.z =
+    .5;
+
+hologram.add(scan);
 
 /* =====================================================
-   ENERGIA
+   BASE OLOGRAFICA
+===================================================== */
+
+const base =
+    new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+            1.15,
+            1.15,
+            .025,
+            96
+        ),
+
+        new THREE.MeshBasicMaterial({
+
+            color:0xFFD21F,
+
+            transparent:true,
+
+            opacity:.18,
+
+            blending:
+                THREE.AdditiveBlending,
+
+            depthWrite:false
+
+        })
+
+    );
+
+base.position.y =
+    -2.12;
+
+hologram.add(base);
+
+const baseRing =
+    new THREE.Mesh(
+
+        new THREE.TorusGeometry(
+            1.15,
+            .015,
+            8,
+            96
+        ),
+
+        lineMaterial
+
+    );
+
+baseRing.rotation.x =
+    Math.PI/2;
+
+baseRing.position.y =
+    -2.10;
+
+hologram.add(baseRing);
+
+/* =====================================================
+   STATO ENERGIA
 ===================================================== */
 
 let targetEnergy =
     .15;
 
-
 let energy =
     .15;
 
+function setState(state){
 
-const normalColor =
-    new THREE.Color(
-        0x0066FF
-    );
-
-
-const activeColor =
-    new THREE.Color(
-        0x00A8FF
-    );
-
-
-const currentColor =
-    normalColor.clone();
-
-
-function setState(
-    state
-){
-
-    if(
-        state === "thinking"
-    ){
-
-        targetEnergy =
-            2;
-
+    if(state === "thinking"){
+        targetEnergy = 1.7;
     }
 
-    else if(
-        state === "speaking"
-    ){
-
-        targetEnergy =
-            .8;
-
+    else if(state === "speaking"){
+        targetEnergy = .8;
     }
 
-    else if(
-        state === "listening"
-    ){
-
-        targetEnergy =
-            .55;
-
+    else if(state === "listening"){
+        targetEnergy = .65;
     }
 
     else{
-
-        targetEnergy =
-            .15;
-
+        targetEnergy = .15;
     }
 
 }
 
-
 /* =====================================================
-   ANIMAZIONE
+   ANIMAZIONE OLOGRAMMA
 ===================================================== */
 
 function animate(){
@@ -2040,10 +2279,8 @@ function animate(){
         animate
     );
 
-
     const time =
         performance.now()*.001;
-
 
     energy +=
         (
@@ -2051,172 +2288,140 @@ function animate(){
             energy
         )*.045;
 
+    /* Movimento leggero */
 
-    currentColor.lerp(
-        activeColor,
-        energy*.04
+    hologram.position.y =
+        Math.sin(
+            time*1.2
+        )*.025;
+
+    hologram.rotation.y =
+        Math.sin(
+            time*.25
+        )*.055;
+
+    hologram.rotation.x =
+        Math.sin(
+            time*.18
+        )*.015;
+
+    /* Flicker realistico */
+
+    const flicker =
+        .82 +
+        Math.sin(time*17)*.04 +
+        Math.sin(time*31)*.025;
+
+    hologramMaterial.opacity =
+        (.16 + energy*.08) *
+        flicker;
+
+    lineMaterial.opacity =
+        (.30 + energy*.14) *
+        flicker;
+
+    particleMaterial.opacity =
+        (.25 + energy*.16) *
+        flicker;
+
+    /* Core */
+
+    const coreScale =
+        1 +
+        Math.sin(time*4)*
+        (.06 + energy*.035);
+
+    core.scale.set(
+        coreScale,
+        coreScale,
+        coreScale
     );
 
+    /* Anelli */
+
+    rings.forEach(
+        (ring,index)=>{
+
+            ring.rotation.z +=
+                .002 *
+                (index%2 ? -1 : 1);
+
+            ring.rotation.x =
+                Math.PI/2 +
+                Math.sin(
+                    time*.6+
+                    index
+                )*.25;
+
+        }
+    );
+
+    /* Scanner */
+
+    scan.position.y =
+        -2.05 +
+        (
+            (time*.8)%1
+        )*4.0;
 
     if(
-        energy < .3
+        scan.position.y >
+        2.0
     ){
-
-        currentColor.lerp(
-            normalColor,
-            .03
-        );
-
+        scan.position.y =
+            -2.05;
     }
 
+    scan.material.opacity =
+        .25 +
+        energy*.12;
 
-    material.color =
-        currentColor;
-
-
-    material.size =
-        .032 +
-        energy*.008;
-
+    /* Particelle */
 
     const pos =
-        geometry
+        particleGeometry
             .attributes
             .position
             .array;
 
-
     for(
         let i=0;
-        i<COUNT;
+        i<particleCount;
         i++
     ){
 
         const index =
             i*3;
 
+        pos[index+1] +=
+            .0015;
 
-        const r =
-            radii[i];
+        if(
+            pos[index+1] >
+            2.2
+        ){
 
+            pos[index+1] =
+                -2.2;
 
-        const theta =
-            angles[i*2];
-
-
-        const phi =
-            angles[i*2+1];
-
-
-        const seed =
-            seeds[i];
-
-
-        const pulse =
-            Math.sin(
-                time*2 +
-                seed
-            )*.035;
-
-
-        const strangeShape =
-            Math.sin(
-                theta*6 +
-                time*2 +
-                seed
-            )*.18*energy;
-
-
-        const wave =
-            Math.cos(
-                phi*7 -
-                time*1.8 +
-                seed
-            )*.12*energy;
-
-
-        const rr =
-            r +
-            pulse +
-            strangeShape +
-            wave;
-
-
-        let x =
-            rr *
-            Math.sin(phi) *
-            Math.cos(theta);
-
-
-        let y =
-            rr *
-            Math.sin(phi) *
-            Math.sin(theta);
-
-
-        let z =
-            rr *
-            Math.cos(phi);
-
-
-        x +=
-            Math.sin(
-                time*2.4 +
-                phi*8 +
-                seed
-            )*.08*energy;
-
-
-        y +=
-            Math.cos(
-                time*2.1 +
-                theta*9 +
-                seed
-            )*.08*energy;
-
-
-        z +=
-            Math.sin(
-                time*2.7 +
-                (theta+phi)*7
-            )*.10*energy;
-
-
-        pos[index] =
-            x;
-
-        pos[index+1] =
-            y;
-
-        pos[index+2] =
-            z;
+        }
 
     }
 
-
-    geometry
+    particleGeometry
         .attributes
         .position
         .needsUpdate =
             true;
 
+    /* Base */
 
-    particles.rotation.y +=
-        .0005 +
-        energy*.0008;
+    baseRing.rotation.z =
+        time*.15;
 
-
-    particles.rotation.x =
-        Math.sin(
-            time*.25
-        )*.04;
-
-
-    particles.rotation.z =
-        Math.cos(
-            time*.18
-        )*.025;
-
+    base.material.opacity =
+        .10 +
+        energy*.08;
 
     renderer.render(
         scene,
@@ -2225,9 +2430,7 @@ function animate(){
 
 }
 
-
 animate();
-
 
 /* =====================================================
    MAPLIBRE
@@ -2236,27 +2439,19 @@ animate();
 const MAPTILER_KEY =
     "NmSlgtsAdQyEWy7t0OJf";
 
-
 const MAPTILER_STYLE =
     "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
     +
     MAPTILER_KEY;
 
-
-let map =
-    null;
-
-
-let currentMarker =
-    null;
-
+let map = null;
+let currentMarker = null;
 
 function initializeMap(){
 
     if(map){
         return;
     }
-
 
     if(
         typeof maplibregl ===
@@ -2268,33 +2463,25 @@ function initializeMap(){
         );
 
         return;
-
     }
-
 
     map =
         new maplibregl.Map({
 
-            container:
-                "map",
+            container:"map",
 
-            style:
-                MAPTILER_STYLE,
+            style:MAPTILER_STYLE,
 
             center:
                 [10.2118,45.5416],
 
-            zoom:
-                10,
+            zoom:10,
 
-            attributionControl:
-                true,
+            attributionControl:true,
 
-            antialias:
-                true
+            antialias:true
 
         });
-
 
     map.addControl(
         new maplibregl.NavigationControl({
@@ -2304,18 +2491,14 @@ function initializeMap(){
         "bottom-right"
     );
 
-
     map.on(
         "load",
-        () => {
-
+        ()=>{
             map.resize();
-
         }
     );
 
 }
-
 
 function openTacticalMap(){
 
@@ -2323,31 +2506,24 @@ function openTacticalMap(){
         "active"
     );
 
-
     jarvisTitle.style.display =
         "none";
-
 
     mapHeader.style.display =
         "block";
 
-
     initializeMap();
 
-
     setTimeout(
-        () => {
-
+        ()=>{
             if(map){
                 map.resize();
             }
-
         },
         400
     );
 
 }
-
 
 function closeTacticalMap(){
 
@@ -2355,56 +2531,31 @@ function closeTacticalMap(){
         "active"
     );
 
-
     jarvisTitle.style.display =
         "block";
 
 }
-
 
 closeMap.addEventListener(
     "click",
     closeTacticalMap
 );
 
-
 /* =====================================================
    MARKER
 ===================================================== */
 
-function escapeHtml(
-    text
-){
+function escapeHtml(text){
 
     return String(text)
 
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
-
 
 function createJarvisMarker(
     lat,
@@ -2416,26 +2567,21 @@ function createJarvisMarker(
         return;
     }
 
-
     if(currentMarker){
 
         currentMarker.remove();
 
-        currentMarker =
-            null;
+        currentMarker = null;
 
     }
-
 
     const markerElement =
         document.createElement(
             "div"
         );
 
-
     markerElement.className =
         "jarvis-map-marker";
-
 
     currentMarker =
         new maplibregl.Marker({
@@ -2459,49 +2605,38 @@ function createJarvisMarker(
             })
 
             .setHTML(
-                `<b style="color:#00A8FF">${escapeHtml(name)}</b>`
+                `<b style="color:#FFD21F">${escapeHtml(name)}</b>`
             )
 
         )
 
-        .addTo(
-            map
-        );
-
+        .addTo(map);
 
     currentMarker.togglePopup();
 
 }
 
-
 /* =====================================================
    RICERCA POSIZIONE
 ===================================================== */
 
-async function searchLocation(
-    place
-){
+async function searchLocation(place){
 
     try{
 
         openTacticalMap();
-
 
         addMsg(
             "Ricerca posizione: " +
             place
         );
 
-
         const url =
             "https://nominatim.openstreetmap.org/search" +
             "?format=json" +
             "&limit=1" +
             "&q=" +
-            encodeURIComponent(
-                place
-            );
-
+            encodeURIComponent(place);
 
         const response =
             await fetch(
@@ -2514,19 +2649,14 @@ async function searchLocation(
                 }
             );
 
-
         if(!response.ok){
-
             throw new Error(
                 "Ricerca posizione fallita"
             );
-
         }
-
 
         const results =
             await response.json();
-
 
         if(!results.length){
 
@@ -2537,25 +2667,16 @@ async function searchLocation(
             );
 
             return;
-
         }
-
 
         const result =
             results[0];
 
-
         const lat =
-            parseFloat(
-                result.lat
-            );
-
+            parseFloat(result.lat);
 
         const lon =
-            parseFloat(
-                result.lon
-            );
-
+            parseFloat(result.lon);
 
         if(!map){
 
@@ -2565,26 +2686,20 @@ async function searchLocation(
 
         }
 
-
         map.flyTo({
 
             center:
                 [lon,lat],
 
-            zoom:
-                12,
+            zoom:12,
 
-            speed:
-                .8,
+            speed:.8,
 
-            curve:
-                1.5,
+            curve:1.5,
 
-            essential:
-                true
+            essential:true
 
         });
-
 
         createJarvisMarker(
             lat,
@@ -2592,12 +2707,10 @@ async function searchLocation(
             place
         );
 
-
         addMsg(
             "Posizione acquisita: " +
             place
         );
-
 
     }catch(error){
 
@@ -2605,7 +2718,6 @@ async function searchLocation(
             "MAP ERROR:",
             error
         );
-
 
         addMsg(
             "Impossibile localizzare " +
@@ -2617,20 +2729,14 @@ async function searchLocation(
 
 }
 
-
 /* =====================================================
    COMANDI MAPPA
 ===================================================== */
 
-function handleMapCommand(
-    text
-){
+function handleMapCommand(text){
 
     const normalized =
-        text
-            .toLowerCase()
-            .trim();
-
+        text.toLowerCase().trim();
 
     if(
 
@@ -2677,9 +2783,7 @@ function handleMapCommand(
         );
 
         return true;
-
     }
-
 
     if(
 
@@ -2720,12 +2824,9 @@ function handleMapCommand(
         );
 
         return true;
-
     }
 
-
     const patterns = [
-
         "mostrami ",
         "mostra ",
         "vai a ",
@@ -2733,9 +2834,7 @@ function handleMapCommand(
         "localizza ",
         "cerca ",
         "visualizza "
-
     ];
-
 
     for(
         const pattern of patterns
@@ -2755,7 +2854,6 @@ function handleMapCommand(
                     )
                     .trim();
 
-
             if(
                 place.length > 1
             ){
@@ -2772,14 +2870,12 @@ function handleMapCommand(
 
     }
 
-
     return false;
 
 }
 
-
 /* =====================================================
-   RICERCA WEB
+   WEB SEARCH
 ===================================================== */
 
 const webSearchPanel =
@@ -2796,7 +2892,6 @@ const closeWebSearch =
     document.getElementById(
         "closeWebSearch"
     );
-
 
 function openWebSearch(query){
 
@@ -2817,44 +2912,35 @@ function openWebSearch(query){
 
 }
 
-
 function closeWebSearchPanel(){
 
     webSearchPanel.classList.remove(
         "active"
     );
 
-
     setTimeout(
-        () => {
-
+        ()=>{
             webSearchFrame.src =
                 "about:blank";
-
         },
         250
     );
 
 }
 
-
 closeWebSearch.addEventListener(
     "click",
     closeWebSearchPanel
 );
 
-
 /* =====================================================
-   COMANDI RICERCA WEB
+   WEB COMMAND
 ===================================================== */
 
 function handleWebCommand(text){
 
     const normalized =
-        text
-            .toLowerCase()
-            .trim();
-
+        text.toLowerCase().trim();
 
     const patterns = [
 
@@ -2869,7 +2955,6 @@ function handleWebCommand(text){
         "fai una ricerca su "
 
     ];
-
 
     for(
         const pattern of patterns
@@ -2888,7 +2973,6 @@ function handleWebCommand(text){
                         pattern.length
                     )
                     .trim();
-
 
             if(
                 query.length > 1
@@ -2911,44 +2995,34 @@ function handleWebCommand(text){
 
     }
 
-
     return false;
 
 }
-
 
 /* =====================================================
    MESSAGGIO
 ===================================================== */
 
-function addMsg(
-    text
-){
+function addMsg(text){
 
-    chat.innerHTML =
-        "";
-
+    chat.innerHTML = "";
 
     const element =
         document.createElement(
             "div"
         );
 
-
     element.className =
         "msg";
 
-
     element.textContent =
         text;
-
 
     chat.appendChild(
         element
     );
 
 }
-
 
 /* =====================================================
    DATI TEMPORALI
@@ -2958,7 +3032,6 @@ function getTimeData(){
 
     const now =
         new Date();
-
 
     return {
 
@@ -2999,9 +3072,8 @@ function getTimeData(){
 
 }
 
-
 /* =====================================================
-   VOCE DISPOSITIVO
+   VOCI
 ===================================================== */
 
 function loadDeviceVoices(){
@@ -3009,56 +3081,42 @@ function loadDeviceVoices(){
     if(
         !("speechSynthesis" in window)
     ){
-
         return;
-
     }
-
 
     deviceVoices =
         window.speechSynthesis
             .getVoices();
 
-
-    voiceSelector.innerHTML =
-        "";
-
+    voiceSelector.innerHTML = "";
 
     const automatic =
         document.createElement(
             "option"
         );
 
-
-    automatic.value =
-        "";
-
+    automatic.value = "";
 
     automatic.textContent =
         "Voce dispositivo automatica";
-
 
     voiceSelector.appendChild(
         automatic
     );
 
-
     deviceVoices.forEach(
-        (voice,index) => {
+        (voice,index)=>{
 
             const option =
                 document.createElement(
                     "option"
                 );
 
-
             option.value =
                 String(index);
 
-
             option.textContent =
                 `${voice.name} — ${voice.lang}`;
-
 
             voiceSelector.appendChild(
                 option
@@ -3067,12 +3125,10 @@ function loadDeviceVoices(){
         }
     );
 
-
     const savedVoice =
         localStorage.getItem(
             "jarvis_device_voice"
         );
-
 
     if(
         savedVoice !== null &&
@@ -3092,13 +3148,11 @@ function loadDeviceVoices(){
 
 }
 
-
 if(
     "speechSynthesis" in window
 ){
 
     loadDeviceVoices();
-
 
     window.speechSynthesis
         .addEventListener(
@@ -3108,25 +3162,18 @@ if(
 
 }
 
-
 /* =====================================================
-   SPEECH SYNTHESIS
+   DEVICE SPEECH
 ===================================================== */
 
-function speakDevice(
-    text
-){
+function speakDevice(text){
 
     return new Promise(
-        resolve => {
+        resolve=>{
 
             if(
                 !("speechSynthesis" in window)
             ){
-
-                console.warn(
-                    "SpeechSynthesis non disponibile."
-                );
 
                 resolve(false);
 
@@ -3134,33 +3181,26 @@ function speakDevice(
 
             }
 
-
             try{
 
                 window.speechSynthesis.cancel();
-
 
                 const utterance =
                     new SpeechSynthesisUtterance(
                         text
                     );
 
-
                 utterance.lang =
                     "it-IT";
 
-
                 utterance.rate =
-                    0.95;
-
+                    .95;
 
                 utterance.pitch =
-                    0.9;
-
+                    .9;
 
                 utterance.volume =
                     1;
-
 
                 if(
                     selectedDeviceVoice
@@ -3178,97 +3218,42 @@ function speakDevice(
                             voice =>
                                 voice.lang
                                     .toLowerCase()
-                                    .startsWith(
-                                        "it"
-                                    )
+                                    .startsWith("it")
                         );
-
 
                     if(
                         italianVoice
                     ){
-
                         utterance.voice =
                             italianVoice;
-
                     }
 
                 }
 
-
                 utterance.onstart =
-                    () => {
-
-                        audioPlaying =
-                            true;
-
-                        setState(
-                            "speaking"
-                        );
-
+                    ()=>{
+                        audioPlaying = true;
+                        setState("speaking");
                     };
-
 
                 utterance.onend =
-                    () => {
-
-                        audioPlaying =
-                            false;
-
-                        setState(
-                            "idle"
-                        );
-
+                    ()=>{
+                        audioPlaying = false;
+                        setState("idle");
                         resolve(true);
-
                     };
-
 
                 utterance.onerror =
-                    error => {
-
-                        console.error(
-                            "DEVICE TTS ERROR:",
-                            error
-                        );
-
-
-                        audioPlaying =
-                            false;
-
-                        setState(
-                            "idle"
-                        );
-
+                    ()=>{
+                        audioPlaying = false;
+                        setState("idle");
                         resolve(false);
-
                     };
-
 
                 window.speechSynthesis
                     .speak(
                         utterance
                     );
-
-
-                setTimeout(
-                    () => {
-
-                        try{
-
-                            window.speechSynthesis.resume();
-
-                        }catch(error){
-
-                            console.warn(
-                                error
-                            );
-
-                        }
-
-                    },
-                    100
-                );
 
             }catch(error){
 
@@ -3286,60 +3271,36 @@ function speakDevice(
 
 }
 
-
 /* =====================================================
    ELEVENLABS
 ===================================================== */
 
-async function speakElevenLabs(
-    text
-){
+async function speakElevenLabs(text){
 
     if(!text){
         return false;
     }
 
-
     if(currentAudio){
 
         try{
-
             currentAudio.pause();
+            currentAudio.currentTime = 0;
+        }catch(error){}
 
-            currentAudio.currentTime =
-                0;
-
-        }catch(error){
-
-            console.warn(
-                error
-            );
-
-        }
-
-
-        currentAudio =
-            null;
-
+        currentAudio = null;
     }
-
-
-    audioPlaying =
-        false;
-
 
     const controller =
         new AbortController();
 
-
     const timeout =
         setTimeout(
-            () => {
+            ()=>{
                 controller.abort();
             },
             30000
         );
-
 
     try{
 
@@ -3358,11 +3319,9 @@ async function speakElevenLabs(
                     body:
                         JSON.stringify({
 
-                            action:
-                                "tts",
+                            action:"tts",
 
-                            text:
-                                text,
+                            text:text,
 
                             voiceId:
                                 ELEVEN_VOICE_ID
@@ -3375,140 +3334,79 @@ async function speakElevenLabs(
                 }
             );
 
-
         if(!response.ok){
-
-            console.warn(
-                "ElevenLabs HTTP:",
-                response.status
-            );
-
             return false;
-
         }
-
 
         const contentType =
             response.headers.get(
                 "content-type"
             ) || "";
 
-
         if(
-            !contentType.includes(
-                "audio"
-            )
+            !contentType.includes("audio")
         ){
-
             return false;
-
         }
-
 
         const audioBlob =
             await response.blob();
-
 
         if(
             !audioBlob ||
             audioBlob.size === 0
         ){
-
             return false;
-
         }
-
 
         const audioUrl =
             URL.createObjectURL(
                 audioBlob
             );
 
-
         const audio =
-            new Audio(
-                audioUrl
-            );
-
+            new Audio(audioUrl);
 
         currentAudio =
             audio;
 
-
-        audio.volume =
-            1;
-
+        audio.volume = 1;
 
         audio.onplay =
-            () => {
-
-                audioPlaying =
-                    true;
-
-                setState(
-                    "speaking"
-                );
-
+            ()=>{
+                audioPlaying = true;
+                setState("speaking");
             };
-
 
         audio.onended =
-            () => {
-
-                audioPlaying =
-                    false;
-
-                setState(
-                    "idle"
-                );
-
+            ()=>{
+                audioPlaying = false;
+                setState("idle");
 
                 URL.revokeObjectURL(
                     audioUrl
                 );
-
 
                 if(
-                    currentAudio ===
-                    audio
+                    currentAudio === audio
                 ){
-
-                    currentAudio =
-                        null;
-
+                    currentAudio = null;
                 }
-
             };
 
-
         audio.onerror =
-            error => {
-
-                console.warn(
-                    "ElevenLabs audio:",
-                    error
-                );
-
-                audioPlaying =
-                    false;
-
-                setState(
-                    "idle"
-                );
-
+            ()=>{
+                audioPlaying = false;
+                setState("idle");
 
                 URL.revokeObjectURL(
                     audioUrl
                 );
-
             };
-
 
         await audio.play();
 
-
         return true;
-
 
     }catch(error){
 
@@ -3519,50 +3417,32 @@ async function speakElevenLabs(
 
         return false;
 
-
     }finally{
 
-        clearTimeout(
-            timeout
-        );
+        clearTimeout(timeout);
 
     }
 
 }
 
-
 /* =====================================================
    SPEAK
 ===================================================== */
 
-async function speak(
-    text
-){
+async function speak(text){
 
     if(!text){
         return;
     }
-
 
     const elevenSuccess =
         await speakElevenLabs(
             text
         );
 
-
-    if(
-        elevenSuccess
-    ){
-
+    if(elevenSuccess){
         return;
-
     }
-
-
-    console.log(
-        "ElevenLabs non disponibile. Uso voce dispositivo."
-    );
-
 
     await speakDevice(
         text
@@ -3570,60 +3450,47 @@ async function speak(
 
 }
 
-
 /* =====================================================
-   TEST VOCE
+   VOICE TEST
 ===================================================== */
 
 voiceTest.addEventListener(
     "click",
-    async () => {
-
-        const testText =
-            "J.A.R.V.I.S. operativo. Sistema vocale funzionante.";
-
+    async ()=>{
 
         await speakDevice(
-            testText
+            "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
         );
 
     }
 );
 
-
 /* =====================================================
-   SELEZIONE VOCE
+   VOICE SELECT
 ===================================================== */
 
 voiceSelector.addEventListener(
     "change",
-    () => {
+    ()=>{
 
         const value =
             voiceSelector.value;
 
-
-        if(
-            value === ""
-        ){
+        if(value === ""){
 
             selectedDeviceVoice =
                 null;
-
 
             localStorage.removeItem(
                 "jarvis_device_voice"
             );
 
-
             return;
 
         }
 
-
         const index =
             Number(value);
-
 
         if(
             Number.isInteger(index) &&
@@ -3632,7 +3499,6 @@ voiceSelector.addEventListener(
 
             selectedDeviceVoice =
                 deviceVoices[index];
-
 
             localStorage.setItem(
                 "jarvis_device_voice",
@@ -3644,14 +3510,13 @@ voiceSelector.addEventListener(
     }
 );
 
-
 /* =====================================================
-   PANNELLO VOCE
+   VOICE PANEL
 ===================================================== */
 
 voiceBtn.addEventListener(
     "click",
-    () => {
+    ()=>{
 
         voicePanel.classList.toggle(
             "active"
@@ -3662,69 +3527,194 @@ voiceBtn.addEventListener(
     }
 );
 
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+async function enterFullscreen(){
+
+    try{
+
+        if(
+            !document.fullscreenElement
+        ){
+
+            await document.documentElement
+                .requestFullscreen();
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Fullscreen:",
+            error
+        );
+
+    }
+
+}
+
+async function exitFullscreen(){
+
+    try{
+
+        if(
+            document.fullscreenElement
+        ){
+
+            await document.exitFullscreen();
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Fullscreen:",
+            error
+        );
+
+    }
+
+}
+
+function handleFullscreenCommand(text){
+
+    const normalized =
+        text
+            .toLowerCase()
+            .trim();
+
+    if(
+
+        normalized.includes(
+            "modalità fullscreen"
+        )
+
+        ||
+
+        normalized.includes(
+            "modalita fullscreen"
+        )
+
+        ||
+
+        normalized.includes(
+            "modalità schermo intero"
+        )
+
+        ||
+
+        normalized.includes(
+            "modalita schermo intero"
+        )
+
+        ||
+
+        normalized.includes(
+            "entra in fullscreen"
+        )
+
+        ||
+
+        normalized.includes(
+            "schermo intero"
+        )
+
+    ){
+
+        enterFullscreen();
+
+        addMsg(
+            "Modalità fullscreen attivata."
+        );
+
+        return true;
+
+    }
+
+    if(
+
+        normalized.includes(
+            "esci dal fullscreen"
+        )
+
+        ||
+
+        normalized.includes(
+            "esci da fullscreen"
+        )
+
+        ||
+
+        normalized.includes(
+            "esci dallo schermo intero"
+        )
+
+    ){
+
+        exitFullscreen();
+
+        addMsg(
+            "Modalità fullscreen disattivata."
+        );
+
+        return true;
+
+    }
+
+    return false;
+
+}
 
 /* =====================================================
    PROCESS AI
 ===================================================== */
 
-async function processAi(
-    text
-){
+async function processAi(text){
 
     if(
-        handleWebCommand(
-            text
-        )
+        handleFullscreenCommand(text)
     ){
-
         return;
-
     }
-
 
     if(
-        handleMapCommand(
-            text
-        )
+        handleWebCommand(text)
     ){
-
         return;
-
     }
 
+    if(
+        handleMapCommand(text)
+    ){
+        return;
+    }
 
-    setState(
-        "thinking"
-    );
-
+    setState("thinking");
 
     try{
 
         const temporal =
             getTimeData();
 
-
         addMemory(
             "user",
             text
         );
 
-
         const controller =
             new AbortController();
 
-
         const timeout =
             setTimeout(
-                () => {
+                ()=>{
                     controller.abort();
                 },
                 30000
             );
 
-
         let response;
-
 
         try{
 
@@ -3743,8 +3733,7 @@ async function processAi(
                         body:
                             JSON.stringify({
 
-                                message:
-                                    text,
+                                message:text,
 
                                 memory:
                                     memory.slice(-4),
@@ -3777,17 +3766,14 @@ async function processAi(
 
         }
 
-
         if(!response.ok){
 
             const errorText =
                 await response.text();
 
-
             let errorMessage =
                 "HTTP " +
                 response.status;
-
 
             try{
 
@@ -3795,7 +3781,6 @@ async function processAi(
                     JSON.parse(
                         errorText
                     );
-
 
                 if(
                     errorData &&
@@ -3821,30 +3806,20 @@ async function processAi(
 
             }
 
-
             throw new Error(
                 errorMessage
             );
 
         }
 
-
         const data =
             await response.json();
-
-
-        console.log(
-            "JARVIS RESPONSE:",
-            data
-        );
-
 
         const reply =
             typeof data.response ===
                 "string"
                 ? data.response.trim()
                 : "";
-
 
         if(!reply){
 
@@ -3854,36 +3829,27 @@ async function processAi(
 
         }
 
-
         addMsg(
             reply
         );
-
 
         addMemory(
             "assistant",
             reply
         );
 
-
         speak(
             reply
         ).catch(
-            error => {
-
+            error=>{
                 console.error(
                     "TTS:",
                     error
                 );
-
             }
         );
 
-
-        setState(
-            "idle"
-        );
-
+        setState("idle");
 
     }catch(error){
 
@@ -3892,11 +3858,9 @@ async function processAi(
             error
         );
 
-
         let message =
             error.message ||
             "Errore sconosciuto";
-
 
         if(
             error.name ===
@@ -3918,21 +3882,16 @@ async function processAi(
 
         }
 
-
         addMsg(
             "ERRORE: " +
             message
         );
 
-
-        setState(
-            "idle"
-        );
+        setState("idle");
 
     }
 
 }
-
 
 /* =====================================================
    INVIO
@@ -3943,37 +3902,26 @@ function sendMessage(){
     const text =
         textInput.value.trim();
 
-
     if(!text){
         return;
     }
 
+    textInput.value = "";
 
-    textInput.value =
-        "";
+    addMsg(text);
 
-
-    addMsg(
-        text
-    );
-
-
-    processAi(
-        text
-    );
+    processAi(text);
 
 }
-
 
 sendBtn.addEventListener(
     "click",
     sendMessage
 );
 
-
 textInput.addEventListener(
     "keydown",
-    event => {
+    event=>{
 
         if(
             event.key ===
@@ -3989,7 +3937,6 @@ textInput.addEventListener(
     }
 );
 
-
 /* =====================================================
    MICROFONO
 ===================================================== */
@@ -3998,44 +3945,31 @@ const Recognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-
-let recognition =
-    null;
-
-
-let listening =
-    false;
-
+let recognition = null;
+let listening = false;
 
 if(Recognition){
 
     recognition =
         new Recognition();
 
-
     recognition.lang =
         "it-IT";
-
 
     recognition.continuous =
         false;
 
-
     recognition.interimResults =
         false;
 
-
     recognition.onstart =
-        () => {
+        ()=>{
 
-            listening =
-                true;
-
+            listening = true;
 
             micBtn.classList.add(
                 "active"
             );
-
 
             setState(
                 "listening"
@@ -4043,9 +3977,8 @@ if(Recognition){
 
         };
 
-
     recognition.onresult =
-        event => {
+        event=>{
 
             const text =
                 event
@@ -4053,12 +3986,10 @@ if(Recognition){
                     .transcript
                     .trim();
 
-
             if(text){
 
                 textInput.value =
                     text;
-
 
                 sendMessage();
 
@@ -4066,24 +3997,19 @@ if(Recognition){
 
         };
 
-
     recognition.onerror =
-        error => {
+        error=>{
 
             console.error(
                 "Microfono:",
                 error
             );
 
-
-            listening =
-                false;
-
+            listening = false;
 
             micBtn.classList.remove(
                 "active"
             );
-
 
             setState(
                 "idle"
@@ -4091,13 +4017,10 @@ if(Recognition){
 
         };
 
-
     recognition.onend =
-        () => {
+        ()=>{
 
-            listening =
-                false;
-
+            listening = false;
 
             micBtn.classList.remove(
                 "active"
@@ -4105,10 +4028,9 @@ if(Recognition){
 
         };
 
-
     micBtn.addEventListener(
         "click",
-        () => {
+        ()=>{
 
             if(listening){
 
@@ -4133,7 +4055,6 @@ if(Recognition){
         }
     );
 
-
 }else{
 
     micBtn.style.opacity =
@@ -4141,38 +4062,31 @@ if(Recognition){
 
 }
 
-
 /* =====================================================
    RESIZE
 ===================================================== */
 
 window.addEventListener(
     "resize",
-    () => {
+    ()=>{
 
         camera.aspect =
             window.innerWidth /
             window.innerHeight;
 
-
         camera.updateProjectionMatrix();
-
 
         renderer.setSize(
             window.innerWidth,
             window.innerHeight
         );
 
-
         if(map){
-
             map.resize();
-
         }
 
     }
 );
-
 
 /* =====================================================
    CANCELLA MEMORIA
@@ -4181,14 +4095,11 @@ window.addEventListener(
 window.clearJarvisMemory =
     function(){
 
-        memory =
-            [];
-
+        memory = [];
 
         localStorage.removeItem(
             MEMORY_KEY
         );
-
 
         console.log(
             "Memoria JARVIS cancellata."
@@ -4196,14 +4107,13 @@ window.clearJarvisMemory =
 
     };
 
-
 /* =====================================================
    AVVIO
 ===================================================== */
 
-setState(
-    "idle"
-);
+setState("idle");
 
-</script></body>
+</script>
+
+</body>
 </html>

@@ -1,4119 +1,4144 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"  content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S.</title><link  
+    rel="stylesheet"  
+    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"  
+/><style>  :root{
 
-<title>J.A.R.V.I.S.</title>
+--jarvis-main:#0066FF;  
+--jarvis-bright:#00A8FF;  
+--jarvis-light:#9FD8FF;  
+--jarvis-dark:#001B4D;  
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-/>
+--jarvis-glow:  
+    rgba(0,102,255,.65);  
 
-<style>
+--jarvis-glow-light:  
+    rgba(0,168,255,.35);
 
-:root{
-    --jarvis-main:#D6A900;
-    --jarvis-bright:#FFD84A;
-    --jarvis-light:#FFF2A6;
-    --jarvis-dark:#3A2A00;
-
-    --jarvis-glow:rgba(255,190,0,.65);
-    --jarvis-glow-light:rgba(255,220,80,.32);
 }
 
 /* =====================================================
-   BASE
+BASE
 ===================================================== */
 
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+box-sizing:border-box;
+margin:0;
+padding:0;
 }
 
 html,
 body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#010100;
-    font-family:Arial,sans-serif;
+width:100%;
+height:100%;
+overflow:hidden;
+
+background:#01030A;  
+
+font-family:Arial,sans-serif;
+
 }
 
 body{
-    background:
-        radial-gradient(
-            circle at center,
-            #171300 0%,
-            #080700 42%,
-            #000000 100%
-        );
+background:
+radial-gradient(
+circle at center,
+#07152B 0%,
+#020817 48%,
+#000000 100%
+);
 }
 
 /* =====================================================
-   HOLOGRAM
+THREE.JS
 ===================================================== */
 
 #webgl-container{
-    position:fixed;
-    inset:0;
-    z-index:1;
-}
-
-#webgl-container canvas{
-    display:block;
+position:fixed;
+inset:0;
+z-index:1;
 }
 
 /* =====================================================
-   VIGNETTE
+VIGNETTE
 ===================================================== */
 
 .vignette{
-    position:fixed;
-    inset:0;
-    z-index:3;
-    pointer-events:none;
+position:fixed;
+inset:0;
 
-    background:
-        radial-gradient(
-            circle at center,
-            transparent 22%,
-            rgba(0,0,0,.25) 58%,
-            rgba(0,0,0,.9) 100%
-        );
+z-index:3;  
+
+pointer-events:none;  
+
+background:  
+    radial-gradient(  
+        circle at center,  
+        transparent 30%,  
+        rgba(0,0,0,.2) 65%,  
+        rgba(0,0,0,.8) 100%  
+    );
+
 }
 
 /* =====================================================
-   SCANLINES
-===================================================== */
-
-.vignette::after{
-    content:"";
-    position:absolute;
-    inset:0;
-
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            rgba(255,215,80,.018) 0px,
-            rgba(255,215,80,.018) 1px,
-            transparent 1px,
-            transparent 4px
-        );
-
-    opacity:.7;
-}
-
-/* =====================================================
-   TITOLO
+TITOLO
 ===================================================== */
 
 .jarvis-title{
-    position:fixed;
 
-    top:2.4%;
-    left:50%;
+position:fixed;  
 
-    transform:translateX(-50%);
+top:2.4%;  
+left:50%;  
 
-    z-index:30;
+transform:  
+    translateX(-50%);  
 
-    color:rgba(255,239,170,.94);
+z-index:30;  
 
-    font-size:clamp(20px,2.8vw,31px);
+color:  
+    rgba(220,240,255,.9);  
 
-    font-weight:300;
+font-size:  
+    clamp(20px,2.8vw,31px);  
 
-    letter-spacing:clamp(5px,1vw,8px);
+font-weight:300;  
 
-    white-space:nowrap;
+letter-spacing:  
+    clamp(5px,1vw,8px);  
 
-    text-shadow:
-        0 0 8px rgba(255,190,0,.7),
-        0 0 25px rgba(255,210,70,.35),
-        0 0 50px rgba(255,170,0,.12);
+white-space:nowrap;  
 
-    pointer-events:none;
+text-shadow:  
+    0 0 10px  
+    rgba(0,102,255,.45),  
+
+    0 0 25px  
+    rgba(0,168,255,.2);  
+
+pointer-events:none;
+
 }
 
 /* =====================================================
-   DATA / ORA
+DATA / ORA
 ===================================================== */
 
 .datetime{
-    position:fixed;
 
-    top:18px;
-    right:24px;
+position:fixed;  
 
-    z-index:30;
+top:18px;  
+right:24px;  
 
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    gap:3px;
+z-index:30;  
 
-    font-family:monospace;
+display:flex;  
 
-    pointer-events:none;
+flex-direction:column;  
+
+align-items:flex-end;  
+
+gap:3px;  
+
+font-family:monospace;  
+
+pointer-events:none;
+
 }
 
 .time{
-    color:rgba(255,218,85,.88);
 
-    font-size:11px;
-    letter-spacing:2px;
+color:  
+    rgba(100,180,255,.8);  
 
-    text-shadow:
-        0 0 8px rgba(255,190,0,.7);
+font-size:11px;  
+
+letter-spacing:2px;  
+
+text-shadow:  
+    0 0 8px  
+    rgba(0,102,255,.55);
+
 }
 
 .date{
-    color:rgba(255,220,100,.5);
 
-    font-size:8px;
-    letter-spacing:1px;
+color:  
+    rgba(100,170,255,.5);  
+
+font-size:8px;  
+
+letter-spacing:1px;
+
 }
 
 /* =====================================================
-   HUD ORIZZONTALE
-===================================================== */
-
-.hud-left{
-    position:fixed;
-    left:25px;
-    top:50%;
-
-    transform:translateY(-50%);
-
-    z-index:20;
-
-    color:rgba(255,220,100,.42);
-
-    font-family:monospace;
-    font-size:8px;
-
-    line-height:2.1;
-
-    letter-spacing:2px;
-
-    pointer-events:none;
-
-    text-shadow:
-        0 0 8px rgba(255,190,0,.35);
-}
-
-.hud-right{
-    position:fixed;
-    right:25px;
-    top:50%;
-
-    transform:translateY(-50%);
-
-    z-index:20;
-
-    color:rgba(255,220,100,.42);
-
-    font-family:monospace;
-    font-size:8px;
-
-    line-height:2.1;
-
-    letter-spacing:2px;
-
-    text-align:right;
-
-    pointer-events:none;
-
-    text-shadow:
-        0 0 8px rgba(255,190,0,.35);
-}
-
-/* =====================================================
-   CHAT
+CHAT
 ===================================================== */
 
 #chat{
-    position:fixed;
 
-    left:50%;
-    bottom:92px;
+position:fixed;  
 
-    transform:translateX(-50%);
+left:50%;  
+bottom:92px;  
 
-    z-index:40;
+transform:  
+    translateX(-50%);  
 
-    width:min(620px,88%);
+z-index:40;  
 
-    text-align:center;
+width:  
+    min(620px,88%);  
 
-    pointer-events:none;
+text-align:center;  
+
+pointer-events:none;
+
 }
 
 .msg{
-    display:inline-block;
 
-    max-width:100%;
+display:inline-block;  
 
-    padding:10px 18px;
+max-width:100%;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.38);
+padding:10px 18px;  
 
-    border-radius:24px;
+border:  
+    1px solid  
+    rgba(0,102,255,.4);  
 
-    background:
-        rgba(18,13,0,.52);
+border-radius:24px;  
 
-    backdrop-filter:blur(14px);
+background:  
+    rgba(2,12,28,.5);  
 
-    -webkit-backdrop-filter:blur(14px);
+backdrop-filter:  
+    blur(14px);  
 
-    color:rgba(255,247,210,.95);
+-webkit-backdrop-filter:  
+    blur(14px);  
 
-    font-size:12px;
-    line-height:1.45;
+color:  
+    rgba(235,245,255,.94);  
 
-    white-space:pre-wrap;
+font-size:12px;  
 
-    box-shadow:
-        0 0 18px rgba(255,190,0,.09),
-        inset 0 0 15px rgba(255,200,50,.025);
+line-height:1.45;  
+
+white-space:pre-wrap;  
+
+box-shadow:  
+    0 0 18px  
+    rgba(0,102,255,.08);
+
 }
 
 /* =====================================================
-   COMMAND BAR
+COMMAND BAR
 ===================================================== */
 
 .command-wrapper{
-    position:fixed;
 
-    left:50%;
-    bottom:23px;
+position:fixed;  
 
-    transform:translateX(-50%);
+left:50%;  
+bottom:23px;  
 
-    z-index:50;
+transform:  
+    translateX(-50%);  
 
-    width:min(650px,90%);
+z-index:50;  
 
-    display:flex;
-    align-items:center;
+width:  
+    min(650px,90%);  
 
-    padding:6px 7px 6px 20px;
+display:flex;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.5);
+align-items:center;  
 
-    border-radius:40px;
+padding:  
+    6px 7px 6px 20px;  
 
-    background:
-        rgba(12,9,0,.68);
+border:  
+    1px solid  
+    rgba(0,102,255,.5);  
 
-    backdrop-filter:blur(20px);
+border-radius:40px;  
 
-    -webkit-backdrop-filter:blur(20px);
+background:  
+    rgba(2,10,24,.58);  
 
-    box-shadow:
-        0 0 30px rgba(255,190,0,.12),
-        inset 0 0 20px rgba(255,210,60,.025);
+backdrop-filter:  
+    blur(20px);  
+
+-webkit-backdrop-filter:  
+    blur(20px);  
+
+box-shadow:  
+    0 0 30px  
+    rgba(0,102,255,.12),  
+
+    inset 0 0 20px  
+    rgba(0,102,255,.025);
+
 }
 
 .command-wrapper:focus-within{
-    border-color:var(--jarvis-bright);
 
-    box-shadow:
-        0 0 25px rgba(255,190,0,.28),
-        0 0 55px rgba(255,220,80,.08);
+border-color:  
+    var(--jarvis-bright);  
+
+box-shadow:  
+
+    0 0 25px  
+    rgba(0,102,255,.28),  
+
+    0 0 55px  
+    rgba(0,168,255,.08);
+
 }
 
 /* =====================================================
-   INPUT
+INPUT
 ===================================================== */
 
 #textInput{
-    flex:1;
 
-    min-width:0;
+flex:1;  
 
-    border:none;
-    outline:none;
+min-width:0;  
 
-    background:transparent;
+border:none;  
 
-    color:white;
+outline:none;  
 
-    font-family:Arial,sans-serif;
+background:transparent;  
 
-    font-size:14px;
+color:white;  
 
-    padding:12px 5px;
+font-family:Arial,sans-serif;  
+
+font-size:14px;  
+
+padding:12px 5px;
+
 }
 
 #textInput::placeholder{
-    color:rgba(255,225,130,.38);
+
+color:  
+    rgba(150,190,230,.38);
+
 }
 
 /* =====================================================
-   MICROFONO
+MICROFONO
 ===================================================== */
 
 #micBtn{
-    width:34px;
-    height:34px;
 
-    margin-right:7px;
+width:34px;  
+height:34px;  
 
-    border:none;
+margin-right:7px;  
 
-    background:transparent;
+border:none;  
 
-    color:rgba(255,220,120,.82);
+background:transparent;  
 
-    cursor:pointer;
+color:  
+    rgba(150,210,255,.8);  
 
-    display:flex;
+cursor:pointer;  
 
-    align-items:center;
-    justify-content:center;
+display:flex;  
+
+align-items:center;  
+justify-content:center;
+
 }
 
 .mic-icon{
-    width:8px;
-    height:14px;
 
-    border:
-        1.3px solid
-        currentColor;
+width:8px;  
+height:14px;  
 
-    border-radius:60px;
+border:  
+    1.3px solid  
+    currentColor;  
 
-    position:relative;
+border-radius:60px;  
+
+position:relative;
+
 }
 
 .mic-icon::after{
-    content:"";
 
-    position:absolute;
+content:"";  
 
-    left:50%;
-    bottom:-6px;
+position:absolute;  
 
-    width:12px;
-    height:7px;
+left:50%;  
+bottom:-6px;  
 
-    transform:translateX(-50%);
+width:12px;  
+height:7px;  
 
-    border:
-        1.3px solid
-        currentColor;
+transform:  
+    translateX(-50%);  
 
-    border-top:none;
+border:  
+    1.3px solid  
+    currentColor;  
 
-    border-radius:0 0 8px 8px;
+border-top:none;  
+
+border-radius:  
+    0 0 8px 8px;
+
 }
 
 #micBtn:hover{
-    color:var(--jarvis-bright);
 
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(255,210,60,.8)
-        );
+color:  
+    var(--jarvis-bright);  
+
+filter:  
+    drop-shadow(  
+        0 0 8px  
+        rgba(0,168,255,.7)  
+    );
+
 }
 
 #micBtn.active{
-    color:#FFF1A0;
 
-    filter:
-        drop-shadow(
-            0 0 8px
-            rgba(255,190,0,.95)
-        );
+color:  
+    #8CC8FF;  
+
+filter:  
+    drop-shadow(  
+        0 0 8px  
+        rgba(0,102,255,.9)  
+    );
+
 }
 
 /* =====================================================
-   INVIA
+INVIA
 ===================================================== */
 
 #sendBtn{
-    height:39px;
 
-    padding:0 17px;
+height:39px;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.5);
+padding:0 17px;  
 
-    border-radius:22px;
+border:  
+    1px solid  
+    rgba(0,102,255,.5);  
 
-    background:
-        rgba(255,190,0,.08);
+border-radius:22px;  
 
-    color:
-        rgba(255,230,150,.9);
+background:  
+    rgba(0,102,255,.08);  
 
-    font-size:10px;
+color:  
+    rgba(190,225,255,.88);  
 
-    letter-spacing:2px;
+font-size:10px;  
 
-    cursor:pointer;
+letter-spacing:2px;  
 
-    transition:.2s;
+cursor:pointer;  
+
+transition:.2s;
+
 }
 
 #sendBtn:hover{
-    color:white;
 
-    border-color:
-        var(--jarvis-bright);
+color:white;  
 
-    background:
-        rgba(255,190,0,.18);
+border-color:  
+    var(--jarvis-bright);  
 
-    box-shadow:
-        0 0 15px
-        rgba(255,190,0,.3);
+background:  
+    rgba(0,102,255,.18);  
+
+box-shadow:  
+    0 0 15px  
+    rgba(0,102,255,.25);
+
 }
 
 /* =====================================================
-   VOCE
+VOCE
 ===================================================== */
 
 #voiceBtn{
-    position:fixed;
 
-    right:22px;
-    bottom:24px;
+position:fixed;  
 
-    z-index:60;
+right:22px;  
+bottom:24px;  
 
-    height:39px;
+z-index:60;  
 
-    padding:0 15px;
+height:39px;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.5);
+padding:0 15px;  
 
-    border-radius:22px;
+border:  
+    1px solid  
+    rgba(0,102,255,.5);  
 
-    background:
-        rgba(12,9,0,.84);
+border-radius:22px;  
 
-    color:
-        rgba(255,225,145,.84);
+background:  
+    rgba(2,10,24,.82);  
 
-    font-size:10px;
+color:  
+    rgba(180,220,255,.82);  
 
-    letter-spacing:1.5px;
+font-size:10px;  
 
-    cursor:pointer;
+letter-spacing:1.5px;  
 
-    backdrop-filter:blur(12px);
+cursor:pointer;  
 
-    transition:.2s;
+backdrop-filter:  
+    blur(12px);  
+
+transition:.2s;
+
 }
 
 #voiceBtn:hover{
-    color:white;
 
-    border-color:
-        var(--jarvis-bright);
+color:white;  
 
-    box-shadow:
-        0 0 15px
-        rgba(255,190,0,.4);
+border-color:  
+    var(--jarvis-bright);  
+
+box-shadow:  
+    0 0 15px  
+    rgba(0,102,255,.4);
+
 }
 
 /* =====================================================
-   VOICE PANEL
+VOICE PANEL
 ===================================================== */
 
 #voicePanel{
-    position:fixed;
 
-    right:22px;
-    bottom:72px;
+position:fixed;  
 
-    z-index:100;
+right:22px;  
+bottom:72px;  
 
-    width:min(330px,calc(100% - 30px));
+z-index:100;  
 
-    padding:15px;
+width:  
+    min(330px,calc(100% - 30px));  
 
-    display:none;
+padding:15px;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.45);
+display:none;  
 
-    border-radius:18px;
+border:  
+    1px solid  
+    rgba(0,102,255,.45);  
 
-    background:
-        rgba(8,6,0,.97);
+border-radius:18px;  
 
-    backdrop-filter:blur(20px);
+background:  
+    rgba(1,8,20,.96);  
 
-    box-shadow:
-        0 0 35px
-        rgba(255,190,0,.25);
+backdrop-filter:  
+    blur(20px);  
+
+box-shadow:  
+    0 0 35px  
+    rgba(0,102,255,.25);
+
 }
 
 #voicePanel.active{
-    display:block;
+
+display:block;
+
 }
 
 .voice-title{
-    color:rgba(255,235,170,.95);
 
-    font-size:11px;
-    letter-spacing:2px;
+color:  
+    rgba(210,235,255,.95);  
 
-    margin-bottom:10px;
+font-size:11px;  
+
+letter-spacing:2px;  
+
+margin-bottom:10px;
+
 }
 
 #voiceSelector{
-    width:100%;
 
-    padding:11px;
+width:100%;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.35);
+padding:11px;  
 
-    border-radius:10px;
+border:  
+    1px solid  
+    rgba(0,102,255,.35);  
 
-    outline:none;
+border-radius:10px;  
 
-    background:
-        rgba(25,18,0,.95);
+outline:none;  
 
-    color:
-        rgba(255,235,170,.9);
+background:  
+    rgba(0,15,38,.95);  
 
-    font-size:11px;
+color:  
+    rgba(215,235,255,.9);  
+
+font-size:11px;
+
 }
 
 #voiceTest{
-    width:100%;
 
-    margin-top:10px;
+width:100%;  
 
-    padding:9px;
+margin-top:10px;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.35);
+padding:9px;  
 
-    border-radius:10px;
+border:  
+    1px solid  
+    rgba(0,102,255,.35);  
 
-    background:
-        rgba(255,190,0,.07);
+border-radius:10px;  
 
-    color:
-        rgba(255,225,145,.8);
+background:  
+    rgba(0,102,255,.07);  
 
-    cursor:pointer;
+color:  
+    rgba(190,225,255,.8);  
 
-    font-size:10px;
+cursor:pointer;  
 
-    letter-spacing:1px;
+font-size:10px;  
+
+letter-spacing:1px;
+
 }
 
 #voiceTest:hover{
-    border-color:
-        var(--jarvis-bright);
 
-    color:white;
+border-color:  
+    var(--jarvis-bright);  
 
-    box-shadow:
-        0 0 12px
-        rgba(255,190,0,.2);
+color:white;  
+
+box-shadow:  
+    0 0 12px  
+    rgba(0,102,255,.2);
+
 }
 
 /* =====================================================
-   MAPPA TATTICA
+MAPPA TATTICA
 ===================================================== */
 
 #tacticalMap{
-    position:fixed;
 
-    inset:0;
+position:fixed;  
 
-    z-index:200;
+inset:0;  
 
-    display:none;
+z-index:20;  
 
-    background:
-        radial-gradient(
-            circle at center,
-            #171300 0%,
-            #050400 65%,
-            #000000 100%
-        );
+display:none;  
+
+background:  
+
+    radial-gradient(  
+        circle at center,  
+        #08162D 0%,  
+        #020817 65%,  
+        #000000 100%  
+    );
+
 }
 
 #tacticalMap.active{
-    display:block;
 
-    animation:
-        mapIn .45s ease;
+display:block;  
+
+animation:  
+    mapIn .45s ease;
+
 }
 
 @keyframes mapIn{
-    from{
-        opacity:0;
-        transform:scale(1.015);
-    }
 
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
+from{  
+
+    opacity:0;  
+
+    transform:  
+        scale(1.015);  
+}  
+
+to{  
+
+    opacity:1;  
+
+    transform:  
+        scale(1);  
+}
+
 }
 
 /* =====================================================
-   HEADER MAPPA
+HEADER MAPPA
 ===================================================== */
 
 .map-header{
-    position:absolute;
 
-    top:2.4%;
-    left:50%;
+position:absolute;  
 
-    transform:translateX(-50%);
+top:2.4%;  
+left:50%;  
 
-    z-index:600;
+transform:  
+    translateX(-50%);  
 
-    color:
-        rgba(255,235,165,.95);
+z-index:600;  
 
-    font-size:
-        clamp(24px,4vw,42px);
+color:  
+    rgba(210,235,255,.95);  
 
-    font-weight:300;
+font-family:Arial,sans-serif;  
 
-    letter-spacing:
-        clamp(6px,1.3vw,12px);
+font-size:  
+    clamp(24px,4vw,42px);  
 
-    white-space:nowrap;
+font-weight:300;  
 
-    text-shadow:
-        0 0 12px rgba(255,190,0,.65),
-        0 0 30px rgba(255,215,70,.25);
+letter-spacing:  
+    clamp(6px,1.3vw,12px);  
 
-    pointer-events:none;
+white-space:nowrap;  
+
+text-shadow:  
+
+    0 0 12px  
+    rgba(0,102,255,.6),  
+
+    0 0 30px  
+    rgba(0,168,255,.25);  
+
+pointer-events:none;
+
 }
 
 /* =====================================================
-   MAPPA
+MAPPA
 ===================================================== */
 
 #map{
-    position:absolute;
 
-    top:3cm;
-    right:3cm;
-    bottom:3cm;
-    left:3cm;
+position:absolute;  
 
-    overflow:hidden;
+top:3cm;  
+right:3cm;  
+bottom:3cm;  
+left:3cm;  
 
-    border-radius:28px;
+overflow:hidden;  
 
-    background:#071012;
+border-radius:28px;  
 
-    box-shadow:
-        0 0 35px rgba(0,0,0,.65),
-        0 0 70px rgba(255,190,0,.12);
+background:#071012;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.3);
+box-shadow:  
+
+    0 0 35px  
+    rgba(0,0,0,.65),  
+
+    0 0 70px  
+    rgba(0,102,255,.12);  
+
+border:  
+    1px solid  
+    rgba(0,102,255,.3);
+
 }
 
 .map-overlay{
-    position:absolute;
 
-    inset:0;
+position:absolute;  
 
-    z-index:400;
+inset:0;  
 
-    pointer-events:none;
+z-index:400;  
 
-    border-radius:28px;
+pointer-events:none;  
 
-    box-shadow:
-        inset 0 0 80px rgba(0,0,0,.28),
-        inset 0 0 25px rgba(255,190,0,.06);
+border-radius:28px;  
+
+box-shadow:  
+
+    inset 0 0 80px  
+    rgba(0,0,0,.28),  
+
+    inset 0 0 25px  
+    rgba(0,102,255,.06);
+
 }
 
 /* =====================================================
-   CHIUSURA MAPPA
+CHIUSURA MAPPA
 ===================================================== */
 
 #closeMap{
-    position:absolute;
 
-    top:28px;
-    left:34px;
+position:absolute;  
 
-    z-index:700;
+top:28px;  
+left:34px;  
 
-    width:38px;
-    height:38px;
+z-index:700;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.6);
+width:38px;  
+height:38px;  
 
-    border-radius:50%;
+border:  
+    1px solid  
+    rgba(0,102,255,.6);  
 
-    background:
-        rgba(12,9,0,.9);
+border-radius:50%;  
 
-    color:
-        rgba(255,225,145,.9);
+background:  
+    rgba(0,10,25,.9);  
 
-    cursor:pointer;
+color:  
+    rgba(190,225,255,.9);  
 
-    font-size:19px;
+cursor:pointer;  
 
-    display:flex;
+font-size:19px;  
 
-    align-items:center;
-    justify-content:center;
+display:flex;  
 
-    backdrop-filter:blur(10px);
+align-items:center;  
+justify-content:center;  
 
-    transition:.2s;
+backdrop-filter:  
+    blur(10px);  
+
+transition:.2s;
+
 }
 
 #closeMap:hover{
-    color:white;
 
-    border-color:
-        var(--jarvis-bright);
+color:white;  
 
-    box-shadow:
-        0 0 15px
-        rgba(255,190,0,.5);
+border-color:  
+    var(--jarvis-bright);  
+
+box-shadow:  
+    0 0 15px  
+    rgba(0,102,255,.5);
+
 }
 
 /* =====================================================
-   MAPLIBRE
+CONTROLLI MAPLIBRE
 ===================================================== */
 
 .maplibregl-ctrl-group{
-    background:
-        rgba(12,9,0,.9)!important;
 
-    border:
-        1px solid
-        rgba(255,195,30,.4)!important;
+background:  
+    rgba(0,10,25,.9)!important;  
 
-    border-radius:12px!important;
+border:  
+    1px solid  
+    rgba(0,102,255,.4)!important;  
 
-    overflow:hidden;
+border-radius:12px!important;  
 
-    box-shadow:
-        0 0 15px
-        rgba(255,190,0,.15);
+overflow:hidden;  
+
+box-shadow:  
+    0 0 15px  
+    rgba(0,102,255,.15);
+
 }
 
 .maplibregl-ctrl-group button{
-    background:
-        transparent!important;
 
-    color:
-        #FFE58A!important;
+background:  
+    transparent!important;  
+
+color:  
+    #9FD8FF!important;
+
 }
 
 .maplibregl-ctrl-group button:hover{
-    background:
-        rgba(255,190,0,.15)!important;
+
+background:  
+    rgba(0,102,255,.15)!important;
+
 }
 
 .maplibregl-ctrl-attrib{
-    background:
-        rgba(0,0,0,.75)!important;
 
-    color:
-        rgba(255,220,130,.4)!important;
+background:  
+    rgba(0,5,15,.75)!important;  
 
-    font-size:8px!important;
+color:  
+    rgba(150,200,255,.4)!important;  
+
+font-size:8px!important;
+
 }
 
 .maplibregl-ctrl-attrib a{
-    color:
-        rgba(255,200,70,.55)!important;
+
+color:  
+    rgba(100,180,255,.55)!important;
+
 }
 
 /* =====================================================
-   MARKER
+MARKER JARVIS
 ===================================================== */
 
 .jarvis-map-marker{
-    width:20px;
-    height:20px;
 
-    border-radius:50%;
+width:20px;  
+height:20px;  
 
-    border:
-        2px solid
-        #FFD21C;
+border-radius:50%;  
 
-    background:
-        rgba(255,190,0,.2);
+border:  
+    2px solid  
+    #008CFF;  
 
-    box-shadow:
-        0 0 15px rgba(255,190,0,1),
-        0 0 35px rgba(255,220,80,.5);
+background:  
+    rgba(0,102,255,.2);  
 
-    position:relative;
+box-shadow:  
 
-    animation:
-        markerPulse 1.5s infinite;
+    0 0 15px  
+    rgba(0,102,255,1),  
+
+    0 0 35px  
+    rgba(0,168,255,.5);  
+
+position:relative;  
+
+animation:  
+    markerPulse 1.5s infinite;
+
 }
 
 .jarvis-map-marker::after{
-    content:"";
 
-    position:absolute;
+content:"";  
 
-    left:50%;
-    top:50%;
+position:absolute;  
 
-    width:5px;
-    height:5px;
+left:50%;  
+top:50%;  
 
-    transform:translate(-50%,-50%);
+width:5px;  
+height:5px;  
 
-    border-radius:50%;
+transform:  
+    translate(-50%,-50%);  
 
-    background:#FFFBE0;
+border-radius:50%;  
 
-    box-shadow:
-        0 0 8px
-        #FFD84A;
+background:#E8F5FF;  
+
+box-shadow:  
+    0 0 8px  
+    #00A8FF;
+
 }
 
 @keyframes markerPulse{
 
-    0%,100%{
-        transform:scale(1);
+0%,100%{  
 
-        box-shadow:
-            0 0 15px rgba(255,190,0,.9),
-            0 0 35px rgba(255,220,80,.4);
-    }
+    transform:scale(1);  
 
-    50%{
-        transform:scale(1.18);
+    box-shadow:  
 
-        box-shadow:
-            0 0 22px rgba(255,200,0,1),
-            0 0 50px rgba(255,220,80,.6);
-    }
+        0 0 15px  
+        rgba(0,102,255,.9),  
+
+        0 0 35px  
+        rgba(0,168,255,.4);  
+}  
+
+50%{  
+
+    transform:scale(1.18);  
+
+    box-shadow:  
+
+        0 0 22px  
+        rgba(0,140,255,1),  
+
+        0 0 50px  
+        rgba(0,168,255,.6);  
+}
+
 }
 
 /* =====================================================
-   POPUP
+POPUP
 ===================================================== */
 
 .maplibregl-popup-content{
-    background:
-        rgba(12,9,0,.97)!important;
 
-    color:
-        rgba(255,240,190,.95)!important;
+background:  
+    rgba(2,10,25,.97)!important;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.45);
+color:  
+    rgba(220,240,255,.95)!important;  
 
-    border-radius:10px;
+border:  
+    1px solid  
+    rgba(0,102,255,.45);  
 
-    padding:10px 14px;
+border-radius:10px;  
 
-    box-shadow:
-        0 0 20px
-        rgba(255,190,0,.25);
+padding:10px 14px;  
+
+box-shadow:  
+    0 0 20px  
+    rgba(0,102,255,.25);
+
 }
 
 .maplibregl-popup-close-button{
-    color:
-        #FFD84A!important;
 
-    font-size:18px;
+color:  
+    #00A8FF!important;  
+
+font-size:18px;
+
 }
 
 /* =====================================================
-   WEB SEARCH
+WEB SEARCH
 ===================================================== */
 
 #webSearchPanel{
-    position:fixed;
 
-    inset:0;
+position:fixed;  
 
-    z-index:500;
+inset:0;  
 
-    display:none;
+z-index:500;  
 
-    background:
-        rgba(5,4,0,.97);
+display:none;  
 
-    backdrop-filter:blur(18px);
+background:  
+    rgba(0,5,15,.96);  
 
-    -webkit-backdrop-filter:blur(18px);
+backdrop-filter:  
+    blur(18px);  
+
+-webkit-backdrop-filter:  
+    blur(18px);
+
 }
 
 #webSearchPanel.active{
-    display:block;
 
-    animation:
-        webPanelIn .3s ease;
+display:block;  
+
+animation:  
+    webPanelIn .3s ease;
+
 }
 
 @keyframes webPanelIn{
-    from{
-        opacity:0;
-        transform:scale(.985);
-    }
 
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
+from{  
+
+    opacity:0;  
+
+    transform:  
+        scale(.985);  
+}  
+
+to{  
+
+    opacity:1;  
+
+    transform:  
+        scale(1);  
+}
+
 }
 
 .web-search-header{
-    position:absolute;
 
-    top:18px;
-    left:50%;
+position:absolute;  
 
-    transform:translateX(-50%);
+top:18px;  
+left:50%;  
 
-    z-index:520;
+transform:  
+    translateX(-50%);  
 
-    color:
-        rgba(255,235,165,.95);
+z-index:520;  
 
-    font-size:13px;
+color:  
+    rgba(210,235,255,.95);  
 
-    letter-spacing:4px;
+font-size:13px;  
 
-    white-space:nowrap;
+letter-spacing:4px;  
 
-    text-shadow:
-        0 0 12px rgba(255,190,0,.6),
-        0 0 25px rgba(255,215,70,.2);
+white-space:nowrap;  
+
+text-shadow:  
+
+    0 0 12px  
+    rgba(0,102,255,.6),  
+
+    0 0 25px  
+    rgba(0,168,255,.2);
+
 }
 
 #webSearchFrame{
-    position:absolute;
 
-    top:58px;
+position:absolute;  
 
-    left:3%;
-    right:3%;
+top:58px;  
 
-    bottom:3%;
+left:3%;  
+right:3%;  
 
-    width:94%;
+bottom:3%;  
 
-    height:calc(97% - 58px);
+width:94%;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.35);
+height:  
+    calc(97% - 58px);  
 
-    border-radius:20px;
+border:  
+    1px solid  
+    rgba(0,102,255,.35);  
 
-    background:#fff;
+border-radius:20px;  
 
-    box-shadow:
-        0 0 40px
-        rgba(255,190,0,.15);
+background:#fff;  
+
+box-shadow:  
+    0 0 40px  
+    rgba(0,102,255,.15);
+
 }
 
 #closeWebSearch{
-    position:absolute;
 
-    top:14px;
-    right:20px;
+position:absolute;  
 
-    z-index:530;
+top:14px;  
+right:20px;  
 
-    width:36px;
-    height:36px;
+z-index:530;  
 
-    border:
-        1px solid
-        rgba(255,195,30,.5);
+width:36px;  
+height:36px;  
 
-    border-radius:50%;
+border:  
+    1px solid  
+    rgba(0,102,255,.5);  
 
-    background:
-        rgba(12,9,0,.92);
+border-radius:50%;  
 
-    color:
-        rgba(255,225,145,.9);
+background:  
+    rgba(0,10,25,.92);  
 
-    cursor:pointer;
+color:  
+    rgba(190,225,255,.9);  
 
-    font-size:20px;
+cursor:pointer;  
 
-    display:flex;
+font-size:20px;  
 
-    align-items:center;
-    justify-content:center;
+display:flex;  
 
-    transition:.2s;
+align-items:center;  
+justify-content:center;  
+
+transition:.2s;
+
 }
 
 #closeWebSearch:hover{
-    color:white;
 
-    border-color:
-        #FFD84A;
+color:white;  
 
-    box-shadow:
-        0 0 15px
-        rgba(255,190,0,.5);
+border-color:  
+    #00A8FF;  
+
+box-shadow:  
+    0 0 15px  
+    rgba(0,102,255,.5);
+
 }
 
 /* =====================================================
-   MOBILE
+MOBILE
 ===================================================== */
 
 @media(max-width:600px){
 
-    .jarvis-title{
-        top:2.2%;
-        font-size:23px;
-        letter-spacing:5px;
-    }
+.jarvis-title{  
 
-    .datetime{
-        top:12px;
-        right:13px;
-    }
+    top:2.2%;  
 
-    .time{
-        font-size:10px;
-    }
+    font-size:23px;  
 
-    .date{
-        font-size:7px;
-    }
+    letter-spacing:5px;  
+}  
 
-    .command-wrapper{
-        width:calc(100% - 24px);
-        bottom:17px;
-    }
+.datetime{  
 
-    #textInput{
-        font-size:13px;
-    }
+    top:12px;  
+    right:13px;  
+}  
 
-    #chat{
-        bottom:80px;
-    }
+.time{  
 
-    .hud-left{
-        left:10px;
-        font-size:6px;
-    }
+    font-size:10px;  
+}  
 
-    .hud-right{
-        right:10px;
-        font-size:6px;
-    }
+.date{  
 
-    #map{
-        top:3cm;
-        right:3cm;
-        bottom:3cm;
-        left:3cm;
-        border-radius:22px;
-    }
+    font-size:7px;  
+}  
 
-    .map-overlay{
-        border-radius:22px;
-    }
+.command-wrapper{  
 
-    .map-header{
-        top:2.5%;
-        font-size:23px;
-        letter-spacing:5px;
-    }
+    width:  
+        calc(100% - 24px);  
 
-    #closeMap{
-        top:24px;
-        left:25px;
-        width:34px;
-        height:34px;
-    }
+    bottom:17px;  
+}  
 
-    #voiceBtn{
-        right:12px;
-        bottom:70px;
-        height:34px;
-        font-size:9px;
-        padding:0 11px;
-    }
+#textInput{  
 
-    #voicePanel{
-        right:12px;
-        bottom:112px;
-        width:calc(100% - 24px);
-    }
+    font-size:13px;  
+}  
+
+#chat{  
+
+    bottom:80px;  
+}  
+
+#map{  
+
+    top:3cm;  
+    right:3cm;  
+    bottom:3cm;  
+    left:3cm;  
+
+    border-radius:22px;  
+}  
+
+.map-overlay{  
+
+    border-radius:22px;  
+}  
+
+.map-header{  
+
+    top:2.5%;  
+
+    font-size:23px;  
+
+    letter-spacing:5px;  
+}  
+
+#closeMap{  
+
+    top:24px;  
+    left:25px;  
+
+    width:34px;  
+    height:34px;  
+}  
+
+#voiceBtn{  
+
+    right:12px;  
+    bottom:70px;  
+
+    height:34px;  
+
+    font-size:9px;  
+
+    padding:0 11px;  
+}  
+
+#voicePanel{  
+
+    right:12px;  
+    bottom:112px;  
+
+    width:  
+        calc(100% - 24px);  
+}
+
 }
 
 @media(max-width:430px){
 
-    #map{
-        top:2.2cm;
-        right:2.2cm;
-        bottom:2.2cm;
-        left:2.2cm;
-    }
+#map{  
+
+    top:2.2cm;  
+    right:2.2cm;  
+    bottom:2.2cm;  
+    left:2.2cm;  
 }
 
-</style>
-</head>
-
-<body>
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-<div class="hud-left">
-    NEURAL SYSTEM<br>
-    HOLOGRAPHIC CORE<br>
-    OPTICAL ARRAY<br>
-    DEPTH MATRIX<br>
-    SENSOR LINK<br>
-    MEMORY ONLINE
-</div>
-
-<div class="hud-right">
-    JARVIS CORE<br>
-    HOLOGRAM ACTIVE<br>
-    SYSTEM ONLINE<br>
-    VOICE READY<br>
-    AI ENGINE<br>
-    V8.4
-</div>
-
-<div
-    class="jarvis-title"
-    id="jarvisTitle"
->
-    J.A.R.V.I.S
-</div>
-
-<div class="datetime">
-
-    <div id="clock" class="time">
-        00:00:00
-    </div>
-
-    <div id="date" class="date">
-        00 AGO 2026
-    </div>
-
-</div>
-
-<!-- =====================================================
-     MAPPA TATTICA
-===================================================== -->
-
-<div id="tacticalMap">
-
-    <div id="map"></div>
-
-    <div class="map-overlay"></div>
-
-    <div class="map-header">
-        TACTICAL MAP
-    </div>
-
-    <button
-        id="closeMap"
-        title="Chiudi mappa"
-        aria-label="Chiudi mappa"
-    >
-        ×
-    </button>
-
-</div>
-
-<!-- =====================================================
-     WEB SEARCH
-===================================================== -->
-
-<div id="webSearchPanel">
-
-    <div class="web-search-header">
-        J.A.R.V.I.S. // WEB SEARCH
-    </div>
-
-    <button
-        id="closeWebSearch"
-        title="Torna a JARVIS"
-        aria-label="Chiudi ricerca web"
-    >
-        ×
-    </button>
-
-    <iframe
-        id="webSearchFrame"
-        title="Ricerca web JARVIS"
-        loading="lazy"
-    ></iframe>
-
-</div>
-
-<div id="chat"></div>
-
-<!-- =====================================================
-     COMANDO
-===================================================== -->
-
-<div class="command-wrapper">
-
-    <input
-        id="textInput"
-        type="text"
-        autocomplete="off"
-        placeholder="Chiedi qualcosa a JARVIS..."
-    >
-
-    <button
-        id="micBtn"
-        aria-label="Microfono"
-    >
-        <span class="mic-icon"></span>
-    </button>
-
-    <button id="sendBtn">
-        INVIA
-    </button>
-
-</div>
-
-<button id="voiceBtn">
-    ⚙ VOCE
-</button>
-
-<div id="voicePanel">
-
-    <div class="voice-title">
-        VOCE J.A.R.V.I.S.
-    </div>
-
-    <select id="voiceSelector">
-
-        <option value="">
-            Voce dispositivo automatica
-        </option>
-
-    </select>
-
-    <button id="voiceTest">
-        TESTA VOCE
-    </button>
-
-</div>
-
-<script
-    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script>
-
-<script type="importmap">
-{
-    "imports":{
-        "three":
-        "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
-    }
 }
-</script>
 
-<script type="module">
+</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
+class="jarvis-title"
+id="jarvisTitle"
+
+> 
+
+J.A.R.V.I.S
+
+</div><div class="datetime"><div id="clock" class="time">  
+    00:00:00  
+</div>  <div id="date" class="date">  
+    00 AGO 2026  
+</div>  </div><!-- =====================================================  
+     MAPPA TATTICA  
+===================================================== --><div id="tacticalMap"><div id="map"></div>  <div class="map-overlay"></div>  <div class="map-header">  
+    TACTICAL MAP  
+</div>  <button
+id="closeMap"
+title="Chiudi mappa"
+aria-label="Chiudi mappa"
+
+> 
+
+×
+
+</button>  </div><!-- =====================================================  
+     WEB SEARCH  
+===================================================== --><div id="webSearchPanel"><div class="web-search-header">  
+    J.A.R.V.I.S. // WEB SEARCH  
+</div>  <button
+id="closeWebSearch"
+title="Torna a JARVIS"
+aria-label="Chiudi ricerca web"
+
+> 
+
+×
+
+</button>  <iframe  
+    id="webSearchFrame"  
+    title="Ricerca web JARVIS"  
+    loading="lazy"  
+></iframe>  </div><div id="chat"></div><!-- =====================================================  
+     COMANDO  
+===================================================== --><div class="command-wrapper"><input  
+    id="textInput"  
+    type="text"  
+    autocomplete="off"  
+    placeholder="Chiedi qualcosa a JARVIS..."  
+>  <button
+id="micBtn"
+aria-label="Microfono"
+
+> 
+
+<span class="mic-icon"></span>
+
+</button>  <button id="sendBtn">  
+    INVIA  
+</button>  </div><button id="voiceBtn">  
+    ⚙ VOCE  
+</button><div id="voicePanel"><div class="voice-title">  
+    VOCE J.A.R.V.I.S.  
+</div>  <select id="voiceSelector">  <option value="">  
+    Voce dispositivo automatica  
+</option>
+
+</select>  <button id="voiceTest">  
+    TESTA VOCE  
+</button>  </div><script  
+    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">  
+</script><script type="importmap">  {
+"imports":{
+"three":
+"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
+}
+}
+
+</script><script type="module">
 
 import * as THREE from "three";
 
 /* =====================================================
-   CONFIGURAZIONE
+CONFIGURAZIONE
 ===================================================== */
 
 const API =
-    "https://iao-ai-v3.oceano-masoud.workers.dev/";
+"https://iao-ai-v3.oceano-masoud.workers.dev/";
 
 const MEMORY_KEY =
-    "jarvis_memory_v1";
+"jarvis_memory_v1";
 
 const MAX_MEMORY =
-    30;
+30;
+
+/* =====================================================
+ELEVENLABS
+===================================================== */
 
 const ELEVEN_VOICE_ID =
-    "vkBFlAtUdZqNR4MqxSVr";
+"vkBFlAtUdZqNR4MqxSVr";
 
-let currentAudio = null;
-let audioPlaying = false;
+let currentAudio =
+null;
+
+let audioPlaying =
+false;
+
+/* =====================================================
+VOCE DISPOSITIVO
+===================================================== */
 
 let deviceVoices = [];
+
 let selectedDeviceVoice = null;
 
 /* =====================================================
-   ELEMENTI
+ELEMENTI
 ===================================================== */
 
 const container =
-    document.getElementById("webgl-container");
+document.getElementById(
+"webgl-container"
+);
 
 const chat =
-    document.getElementById("chat");
+document.getElementById(
+"chat"
+);
 
 const textInput =
-    document.getElementById("textInput");
+document.getElementById(
+"textInput"
+);
 
 const sendBtn =
-    document.getElementById("sendBtn");
+document.getElementById(
+"sendBtn"
+);
 
 const micBtn =
-    document.getElementById("micBtn");
+document.getElementById(
+"micBtn"
+);
 
 const clock =
-    document.getElementById("clock");
+document.getElementById(
+"clock"
+);
 
 const date =
-    document.getElementById("date");
+document.getElementById(
+"date"
+);
 
 const tacticalMap =
-    document.getElementById("tacticalMap");
+document.getElementById(
+"tacticalMap"
+);
 
 const closeMap =
-    document.getElementById("closeMap");
+document.getElementById(
+"closeMap"
+);
 
 const jarvisTitle =
-    document.getElementById("jarvisTitle");
+document.getElementById(
+"jarvisTitle"
+);
 
 const mapHeader =
-    document.querySelector(".map-header");
+document.querySelector(
+".map-header"
+);
 
 const voiceBtn =
-    document.getElementById("voiceBtn");
+document.getElementById(
+"voiceBtn"
+);
 
 const voicePanel =
-    document.getElementById("voicePanel");
+document.getElementById(
+"voicePanel"
+);
 
 const voiceSelector =
-    document.getElementById("voiceSelector");
+document.getElementById(
+"voiceSelector"
+);
 
 const voiceTest =
-    document.getElementById("voiceTest");
+document.getElementById(
+"voiceTest"
+);
 
 /* =====================================================
-   MEMORIA
+MEMORIA
 ===================================================== */
 
 let memory = [];
 
 try{
 
-    const saved =
-        localStorage.getItem(MEMORY_KEY);
+const saved =  
+    localStorage.getItem(  
+        MEMORY_KEY  
+    );  
 
-    if(saved){
+if(saved){  
 
-        const parsed =
-            JSON.parse(saved);
+    const parsed =  
+        JSON.parse(saved);  
 
-        if(Array.isArray(parsed)){
+    if(Array.isArray(parsed)){  
 
-            memory =
-                parsed.slice(-MAX_MEMORY);
+        memory =  
+            parsed.slice(  
+                -MAX_MEMORY  
+            );  
 
-        }
+    }  
 
-    }
+}
 
 }catch(error){
 
-    console.warn("Memoria:",error);
+console.warn(  
+    "Memoria:",  
+    error  
+);
 
 }
 
 function saveMemory(){
 
-    try{
+try{  
 
-        localStorage.setItem(
-            MEMORY_KEY,
-            JSON.stringify(
-                memory.slice(-MAX_MEMORY)
-            )
-        );
+    localStorage.setItem(  
+        MEMORY_KEY,  
+        JSON.stringify(  
+            memory.slice(  
+                -MAX_MEMORY  
+            )  
+        )  
+    );  
 
-    }catch(error){
+}catch(error){  
 
-        console.warn(
-            "Salvataggio memoria:",
-            error
-        );
-
-    }
+    console.warn(  
+        "Salvataggio memoria:",  
+        error  
+    );  
 
 }
 
-function addMemory(role,content){
+}
 
-    memory.push({
-        role,
-        content
-    });
+function addMemory(
+role,
+content
+){
 
-    memory =
-        memory.slice(-MAX_MEMORY);
+memory.push({  
+    role,  
+    content  
+});  
 
-    saveMemory();
+memory =  
+    memory.slice(  
+        -MAX_MEMORY  
+    );  
+
+saveMemory();
 
 }
 
 /* =====================================================
-   OROLOGIO
+ORA
 ===================================================== */
 
 const months = [
-    "GEN","FEB","MAR","APR",
-    "MAG","GIU","LUG","AGO",
-    "SET","OTT","NOV","DIC"
+
+"GEN",  
+"FEB",  
+"MAR",  
+"APR",  
+"MAG",  
+"GIU",  
+"LUG",  
+"AGO",  
+"SET",  
+"OTT",  
+"NOV",  
+"DIC"
+
 ];
 
 function updateClock(){
 
-    const now = new Date();
+const now =  
+    new Date();  
 
-    const h =
-        String(now.getHours())
-        .padStart(2,"0");
+const h =  
+    String(  
+        now.getHours()  
+    ).padStart(  
+        2,  
+        "0"  
+    );  
 
-    const m =
-        String(now.getMinutes())
-        .padStart(2,"0");
+const m =  
+    String(  
+        now.getMinutes()  
+    ).padStart(  
+        2,  
+        "0"  
+    );  
 
-    const s =
-        String(now.getSeconds())
-        .padStart(2,"0");
+const s =  
+    String(  
+        now.getSeconds()  
+    ).padStart(  
+        2,  
+        "0"  
+    );  
 
-    clock.textContent =
-        `${h}:${m}:${s}`;
+clock.textContent =  
+    `${h}:${m}:${s}`;  
 
-    const d =
-        String(now.getDate())
-        .padStart(2,"0");
 
-    const month =
-        months[now.getMonth()];
+const d =  
+    String(  
+        now.getDate()  
+    ).padStart(  
+        2,  
+        "0"  
+    );  
 
-    const year =
-        now.getFullYear();
+const month =  
+    months[  
+        now.getMonth()  
+    ];  
 
-    date.textContent =
-        `${d} ${month} ${year}`;
+const year =  
+    now.getFullYear();  
+
+date.textContent =  
+    `${d} ${month} ${year}`;
 
 }
 
 updateClock();
 
 setInterval(
-    updateClock,
-    1000
+updateClock,
+1000
 );
 
 /* =====================================================
-   THREE.JS SCENA
+THREE.JS
 ===================================================== */
 
 const scene =
-    new THREE.Scene();
+new THREE.Scene();
 
 const camera =
-    new THREE.PerspectiveCamera(
-        45,
-        window.innerWidth /
-        window.innerHeight,
-        .1,
-        100
-    );
-
-camera.position.set(
-    0,
-    0.15,
-    5.5
+new THREE.PerspectiveCamera(
+55,
+window.innerWidth /
+window.innerHeight,
+.1,
+1000
 );
 
+camera.position.z =
+5.2;
+
 const renderer =
-    new THREE.WebGLRenderer({
-        antialias:true,
-        alpha:true
-    });
+new THREE.WebGLRenderer({
+
+antialias:true,  
+    alpha:true  
+
+});
 
 renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
+window.innerWidth,
+window.innerHeight
 );
 
 renderer.setPixelRatio(
-    Math.min(
-        window.devicePixelRatio,
-        2
-    )
+Math.min(
+window.devicePixelRatio,
+2
+)
 );
 
 container.appendChild(
-    renderer.domElement
+renderer.domElement
 );
 
 /* =====================================================
-   GRUPPO HOLOGRAMMA
+GLOW BLU ELETTRICO
 ===================================================== */
 
-const hologram =
-    new THREE.Group();
+function createGlow(){
 
-scene.add(hologram);
+const canvas =  
+    document.createElement(  
+        "canvas"  
+    );  
 
-/* =====================================================
-   MATERIALI
-===================================================== */
+canvas.width =  
+    64;  
 
-const hologramMaterial =
-    new THREE.MeshBasicMaterial({
+canvas.height =  
+    64;  
 
-        color:0xFFD21F,
 
-        transparent:true,
+const ctx =  
+    canvas.getContext(  
+        "2d"  
+    );  
 
-        opacity:.23,
 
-        wireframe:true,
+const gradient =  
+    ctx.createRadialGradient(  
+        32,  
+        32,  
+        0,  
+        32,  
+        32,  
+        32  
+    );  
 
-        blending:
-            THREE.AdditiveBlending,
 
-        depthWrite:false
+gradient.addColorStop(  
+    0,  
+    "rgba(255,255,255,1)"  
+);  
 
-    });
+gradient.addColorStop(  
+    .2,  
+    "rgba(210,235,255,1)"  
+);  
 
-const glowMaterial =
-    new THREE.MeshBasicMaterial({
+gradient.addColorStop(  
+    .4,  
+    "rgba(0,168,255,.95)"  
+);  
 
-        color:0xFFE66A,
+gradient.addColorStop(  
+    .7,  
+    "rgba(0,102,255,.3)"  
+);  
 
-        transparent:true,
+gradient.addColorStop(  
+    1,  
+    "rgba(0,0,0,0)"  
+);  
 
-        opacity:.08,
 
-        blending:
-            THREE.AdditiveBlending,
+ctx.fillStyle =  
+    gradient;  
 
-        depthWrite:false
 
-    });
+ctx.fillRect(  
+    0,  
+    0,  
+    64,  
+    64  
+);  
 
-const lineMaterial =
-    new THREE.LineBasicMaterial({
 
-        color:0xFFD21F,
-
-        transparent:true,
-
-        opacity:.48,
-
-        blending:
-            THREE.AdditiveBlending
-
-    });
-
-/* =====================================================
-   CORPO UMANOIDE
-===================================================== */
-
-function createPart(
-    geometry,
-    scale,
-    position
-){
-
-    const mesh =
-        new THREE.Mesh(
-            geometry,
-            hologramMaterial
-        );
-
-    mesh.scale.set(
-        scale[0],
-        scale[1],
-        scale[2]
-    );
-
-    mesh.position.set(
-        position[0],
-        position[1],
-        position[2]
-    );
-
-    hologram.add(mesh);
-
-    return mesh;
-
-}
-
-/* TESTA */
-
-const head =
-    createPart(
-        new THREE.SphereGeometry(
-            .43,
-            20,
-            16
-        ),
-        [1,1.12,.9],
-        [0,1.45,0]
-    );
-
-/* COLLO */
-
-const neck =
-    createPart(
-        new THREE.CylinderGeometry(
-            .17,
-            .21,
-            .32,
-            12
-        ),
-        [1,1,1],
-        [0,1.02,0]
-    );
-
-/* TORACE */
-
-const chest =
-    createPart(
-        new THREE.CylinderGeometry(
-            .62,
-            .48,
-            1.15,
-            16,
-            4,
-            true
-        ),
-        [1,1,1],
-        [0,.48,0]
-    );
-
-chest.rotation.z =
-    Math.PI;
-
-/* BACINO */
-
-const pelvis =
-    createPart(
-        new THREE.CylinderGeometry(
-            .46,
-            .36,
-            .55,
-            14,
-            3,
-            true
-        ),
-        [1,1,1],
-        [0,-.32,0]
-    );
-
-pelvis.rotation.z =
-    Math.PI;
-
-/* SPALLE */
-
-const shoulderLeft =
-    createPart(
-        new THREE.SphereGeometry(
-            .24,
-            12,
-            10
-        ),
-        [1.25,.8,1],
-        [-.66,.78,0]
-    );
-
-const shoulderRight =
-    createPart(
-        new THREE.SphereGeometry(
-            .24,
-            12,
-            10
-        ),
-        [1.25,.8,1],
-        [.66,.78,0]
-    );
-
-/* BRACCIA */
-
-const armGeometry =
-    new THREE.CylinderGeometry(
-        .13,
-        .10,
-        1.15,
-        10,
-        3,
-        true
-    );
-
-const leftArm =
-    createPart(
-        armGeometry,
-        [1,1,1],
-        [-.82,.15,0]
-    );
-
-leftArm.rotation.z =
-    -.10;
-
-const rightArm =
-    createPart(
-        armGeometry,
-        [1,1,1],
-        [.82,.15,0]
-    );
-
-rightArm.rotation.z =
-    .10;
-
-/* AVAMBRACCI */
-
-const forearmGeometry =
-    new THREE.CylinderGeometry(
-        .095,
-        .07,
-        .95,
-        10,
-        3,
-        true
-    );
-
-const leftForearm =
-    createPart(
-        forearmGeometry,
-        [1,1,1],
-        [-.86,-.78,0]
-    );
-
-leftForearm.rotation.z =
-    -.06;
-
-const rightForearm =
-    createPart(
-        forearmGeometry,
-        [1,1,1],
-        [.86,-.78,0]
-    );
-
-rightForearm.rotation.z =
-    .06;
-
-/* MANI */
-
-createPart(
-    new THREE.SphereGeometry(
-        .13,
-        10,
-        8
-    ),
-    [1.1,1.35,.8],
-    [-.88,-1.28,0]
+return new THREE.CanvasTexture(  
+    canvas  
 );
-
-createPart(
-    new THREE.SphereGeometry(
-        .13,
-        10,
-        8
-    ),
-    [1.1,1.35,.8],
-    [.88,-1.28,0]
-);
-
-/* GAMBE */
-
-const legGeometry =
-    new THREE.CylinderGeometry(
-        .17,
-        .13,
-        1.55,
-        10,
-        3,
-        true
-    );
-
-const leftLeg =
-    createPart(
-        legGeometry,
-        [1,1,1],
-        [-.29,-1.22,0]
-    );
-
-const rightLeg =
-    createPart(
-        legGeometry,
-        [1,1,1],
-        [.29,-1.22,0]
-    );
-
-/* PIEDI */
-
-createPart(
-    new THREE.BoxGeometry(
-        .30,
-        .18,
-        .52
-    ),
-    [1,1,1],
-    [-.29,-2.02,.08]
-);
-
-createPart(
-    new THREE.BoxGeometry(
-        .30,
-        .18,
-        .52
-    ),
-    [1,1,1],
-    [.29,-2.02,.08]
-);
-
-/* =====================================================
-   CORE CENTRALE
-===================================================== */
-
-const core =
-    new THREE.Mesh(
-
-        new THREE.SphereGeometry(
-            .17,
-            24,
-            24
-        ),
-
-        new THREE.MeshBasicMaterial({
-
-            color:0xFFF1A0,
-
-            transparent:true,
-
-            opacity:.9,
-
-            blending:
-                THREE.AdditiveBlending
-
-        })
-
-    );
-
-core.position.set(
-    0,
-    .55,
-    -.48
-);
-
-hologram.add(core);
-
-/* =====================================================
-   ANELLI ATTORNO AL CORE
-===================================================== */
-
-const rings = [];
-
-for(let i=0;i<5;i++){
-
-    const ring =
-        new THREE.Mesh(
-
-            new THREE.TorusGeometry(
-                .25 + i*.07,
-                .008,
-                8,
-                64
-            ),
-
-            lineMaterial.clone()
-
-        );
-
-    ring.rotation.x =
-        Math.PI/2;
-
-    ring.rotation.z =
-        i*.4;
-
-    ring.position.copy(
-        core.position
-    );
-
-    ring.material.opacity =
-        .35;
-
-    hologram.add(ring);
-
-    rings.push(ring);
 
 }
 
 /* =====================================================
-   LINEE DEL CORPO
+PARTICELLE
 ===================================================== */
 
-const bodyLines =
-    new THREE.Group();
+const COUNT =
+3000;
 
-hologram.add(
-    bodyLines
+const geometry =
+new THREE.BufferGeometry();
+
+const positions =
+new Float32Array(
+COUNT * 3
 );
 
-function createLine(
-    points,
-    opacity=.3
-){
+const radii =
+new Float32Array(
+COUNT
+);
 
-    const geometry =
-        new THREE.BufferGeometry()
-        .setFromPoints(
-            points.map(
-                p =>
-                    new THREE.Vector3(
-                        p[0],
-                        p[1],
-                        p[2]
-                    )
-            )
-        );
+const angles =
+new Float32Array(
+COUNT * 2
+);
 
-    const material =
-        lineMaterial.clone();
-
-    material.opacity =
-        opacity;
-
-    const line =
-        new THREE.Line(
-            geometry,
-            material
-        );
-
-    bodyLines.add(line);
-
-}
-
-/* LINEE VISO */
-
-createLine([
-    [-.22,1.53,.40],
-    [.22,1.53,.40]
-],.7);
-
-createLine([
-    [-.20,1.38,.40],
-    [.20,1.38,.40]
-],.45);
-
-createLine([
-    [0,1.80,.34],
-    [0,1.20,.43]
-],.35);
-
-/* LINEE TORACE */
-
-createLine([
-    [-.45,.78,.45],
-    [.45,.78,.45]
-],.45);
-
-createLine([
-    [-.40,.48,.48],
-    [.40,.48,.48]
-],.38);
-
-createLine([
-    [-.35,.18,.43],
-    [.35,.18,.43]
-],.35);
-
-/* LINEA CENTRALE */
-
-createLine([
-    [0,1.12,.42],
-    [0,-1.90,.22]
-],.25);
-
-/* =====================================================
-   PARTICELLE HOLOGRAFICHE
-===================================================== */
-
-const particleCount =
-    1400;
-
-const particleGeometry =
-    new THREE.BufferGeometry();
-
-const particlePositions =
-    new Float32Array(
-        particleCount*3
-    );
+const seeds =
+new Float32Array(
+COUNT
+);
 
 for(
-    let i=0;
-    i<particleCount;
-    i++
+let i=0;
+i<COUNT;
+i++
 ){
 
-    const x =
-        (Math.random()-.5)*2.1;
+const r =  
+    1.10 +  
+    Math.random()*.70;  
 
-    const y =
-        -2.2 +
-        Math.random()*4.2;
 
-    const z =
-        (Math.random()-.5)*.9;
+const theta =  
+    Math.random() *  
+    Math.PI *  
+    2;  
 
-    particlePositions[i*3] =
-        x;
 
-    particlePositions[i*3+1] =
-        y;
+const phi =  
+    Math.acos(  
+        2*Math.random()-1  
+    );  
 
-    particlePositions[i*3+2] =
-        z;
+
+radii[i] =  
+    r;  
+
+
+angles[i*2] =  
+    theta;  
+
+
+angles[i*2+1] =  
+    phi;  
+
+
+seeds[i] =  
+    Math.random()*100;  
+
+
+positions[i*3] =  
+    r *  
+    Math.sin(phi) *  
+    Math.cos(theta);  
+
+
+positions[i*3+1] =  
+    r *  
+    Math.sin(phi) *  
+    Math.sin(theta);  
+
+
+positions[i*3+2] =  
+    r *  
+    Math.cos(phi);
+
 }
 
-particleGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        particlePositions,
-        3
-    )
+geometry.setAttribute(
+"position",
+new THREE.BufferAttribute(
+positions,
+3
+)
 );
 
-const particleMaterial =
-    new THREE.PointsMaterial({
+const material =
+new THREE.PointsMaterial({
 
-        color:0xFFD21F,
+color:  
+        new THREE.Color(  
+            0x0066FF  
+        ),  
 
-        size:.018,
+    size:.042,  
 
-        transparent:true,
+    map:createGlow(),  
 
-        opacity:.42,
+    transparent:true,  
 
-        blending:
-            THREE.AdditiveBlending,
+    opacity:1,  
 
-        depthWrite:false
+    depthWrite:false,  
 
-    });
+    blending:  
+        THREE.AdditiveBlending  
+
+});
 
 const particles =
-    new THREE.Points(
-        particleGeometry,
-        particleMaterial
-    );
+new THREE.Points(
+geometry,
+material
+);
 
-hologram.add(
-    particles
+scene.add(
+particles
 );
 
 /* =====================================================
-   SCANSIONE ORIZZONTALE
-===================================================== */
-
-const scan =
-    new THREE.Mesh(
-
-        new THREE.PlaneGeometry(
-            2.4,
-            .025
-        ),
-
-        new THREE.MeshBasicMaterial({
-
-            color:0xFFE45A,
-
-            transparent:true,
-
-            opacity:.45,
-
-            blending:
-                THREE.AdditiveBlending,
-
-            depthWrite:false
-
-        })
-
-    );
-
-scan.position.z =
-    .5;
-
-hologram.add(scan);
-
-/* =====================================================
-   BASE OLOGRAFICA
-===================================================== */
-
-const base =
-    new THREE.Mesh(
-
-        new THREE.CylinderGeometry(
-            1.15,
-            1.15,
-            .025,
-            96
-        ),
-
-        new THREE.MeshBasicMaterial({
-
-            color:0xFFD21F,
-
-            transparent:true,
-
-            opacity:.18,
-
-            blending:
-                THREE.AdditiveBlending,
-
-            depthWrite:false
-
-        })
-
-    );
-
-base.position.y =
-    -2.12;
-
-hologram.add(base);
-
-const baseRing =
-    new THREE.Mesh(
-
-        new THREE.TorusGeometry(
-            1.15,
-            .015,
-            8,
-            96
-        ),
-
-        lineMaterial
-
-    );
-
-baseRing.rotation.x =
-    Math.PI/2;
-
-baseRing.position.y =
-    -2.10;
-
-hologram.add(baseRing);
-
-/* =====================================================
-   STATO ENERGIA
+ENERGIA
 ===================================================== */
 
 let targetEnergy =
-    .15;
+.15;
 
 let energy =
-    .15;
+.15;
 
-function setState(state){
+const normalColor =
+new THREE.Color(
+0x0066FF
+);
 
-    if(state === "thinking"){
-        targetEnergy = 1.7;
-    }
+const activeColor =
+new THREE.Color(
+0x00A8FF
+);
 
-    else if(state === "speaking"){
-        targetEnergy = .8;
-    }
+const currentColor =
+normalColor.clone();
 
-    else if(state === "listening"){
-        targetEnergy = .65;
-    }
+function setState(
+state
+){
 
-    else{
-        targetEnergy = .15;
-    }
+if(  
+    state === "thinking"  
+){  
+
+    targetEnergy =  
+        2;  
+
+}  
+
+else if(  
+    state === "speaking"  
+){  
+
+    targetEnergy =  
+        .8;  
+
+}  
+
+else if(  
+    state === "listening"  
+){  
+
+    targetEnergy =  
+        .55;  
+
+}  
+
+else{  
+
+    targetEnergy =  
+        .15;  
+
+}
 
 }
 
 /* =====================================================
-   ANIMAZIONE OLOGRAMMA
+ANIMAZIONE
 ===================================================== */
 
 function animate(){
 
-    requestAnimationFrame(
-        animate
-    );
+requestAnimationFrame(  
+    animate  
+);  
 
-    const time =
-        performance.now()*.001;
 
-    energy +=
-        (
-            targetEnergy -
-            energy
-        )*.045;
+const time =  
+    performance.now()*.001;  
 
-    /* Movimento leggero */
 
-    hologram.position.y =
-        Math.sin(
-            time*1.2
-        )*.025;
+energy +=  
+    (  
+        targetEnergy -  
+        energy  
+    )*.045;  
 
-    hologram.rotation.y =
-        Math.sin(
-            time*.25
-        )*.055;
 
-    hologram.rotation.x =
-        Math.sin(
-            time*.18
-        )*.015;
+currentColor.lerp(  
+    activeColor,  
+    energy*.04  
+);  
 
-    /* Flicker realistico */
 
-    const flicker =
-        .82 +
-        Math.sin(time*17)*.04 +
-        Math.sin(time*31)*.025;
+if(  
+    energy < .3  
+){  
 
-    hologramMaterial.opacity =
-        (.16 + energy*.08) *
-        flicker;
+    currentColor.lerp(  
+        normalColor,  
+        .03  
+    );  
 
-    lineMaterial.opacity =
-        (.30 + energy*.14) *
-        flicker;
+}  
 
-    particleMaterial.opacity =
-        (.25 + energy*.16) *
-        flicker;
 
-    /* Core */
+material.color =  
+    currentColor;  
 
-    const coreScale =
-        1 +
-        Math.sin(time*4)*
-        (.06 + energy*.035);
 
-    core.scale.set(
-        coreScale,
-        coreScale,
-        coreScale
-    );
+material.size =  
+    .032 +  
+    energy*.008;  
 
-    /* Anelli */
 
-    rings.forEach(
-        (ring,index)=>{
+const pos =  
+    geometry  
+        .attributes  
+        .position  
+        .array;  
 
-            ring.rotation.z +=
-                .002 *
-                (index%2 ? -1 : 1);
 
-            ring.rotation.x =
-                Math.PI/2 +
-                Math.sin(
-                    time*.6+
-                    index
-                )*.25;
+for(  
+    let i=0;  
+    i<COUNT;  
+    i++  
+){  
 
-        }
-    );
+    const index =  
+        i*3;  
 
-    /* Scanner */
 
-    scan.position.y =
-        -2.05 +
-        (
-            (time*.8)%1
-        )*4.0;
+    const r =  
+        radii[i];  
 
-    if(
-        scan.position.y >
-        2.0
-    ){
-        scan.position.y =
-            -2.05;
-    }
 
-    scan.material.opacity =
-        .25 +
-        energy*.12;
+    const theta =  
+        angles[i*2];  
 
-    /* Particelle */
 
-    const pos =
-        particleGeometry
-            .attributes
-            .position
-            .array;
+    const phi =  
+        angles[i*2+1];  
 
-    for(
-        let i=0;
-        i<particleCount;
-        i++
-    ){
 
-        const index =
-            i*3;
+    const seed =  
+        seeds[i];  
 
-        pos[index+1] +=
-            .0015;
 
-        if(
-            pos[index+1] >
-            2.2
-        ){
+    const pulse =  
+        Math.sin(  
+            time*2 +  
+            seed  
+        )*.035;  
 
-            pos[index+1] =
-                -2.2;
 
-        }
+    const strangeShape =  
+        Math.sin(  
+            theta*6 +  
+            time*2 +  
+            seed  
+        )*.18*energy;  
 
-    }
 
-    particleGeometry
-        .attributes
-        .position
-        .needsUpdate =
-            true;
+    const wave =  
+        Math.cos(  
+            phi*7 -  
+            time*1.8 +  
+            seed  
+        )*.12*energy;  
 
-    /* Base */
 
-    baseRing.rotation.z =
-        time*.15;
+    const rr =  
+        r +  
+        pulse +  
+        strangeShape +  
+        wave;  
 
-    base.material.opacity =
-        .10 +
-        energy*.08;
 
-    renderer.render(
-        scene,
-        camera
-    );
+    let x =  
+        rr *  
+        Math.sin(phi) *  
+        Math.cos(theta);  
+
+
+    let y =  
+        rr *  
+        Math.sin(phi) *  
+        Math.sin(theta);  
+
+
+    let z =  
+        rr *  
+        Math.cos(phi);  
+
+
+    x +=  
+        Math.sin(  
+            time*2.4 +  
+            phi*8 +  
+            seed  
+        )*.08*energy;  
+
+
+    y +=  
+        Math.cos(  
+            time*2.1 +  
+            theta*9 +  
+            seed  
+        )*.08*energy;  
+
+
+    z +=  
+        Math.sin(  
+            time*2.7 +  
+            (theta+phi)*7  
+        )*.10*energy;  
+
+
+    pos[index] =  
+        x;  
+
+    pos[index+1] =  
+        y;  
+
+    pos[index+2] =  
+        z;  
+
+}  
+
+
+geometry  
+    .attributes  
+    .position  
+    .needsUpdate =  
+        true;  
+
+
+particles.rotation.y +=  
+    .0005 +  
+    energy*.0008;  
+
+
+particles.rotation.x =  
+    Math.sin(  
+        time*.25  
+    )*.04;  
+
+
+particles.rotation.z =  
+    Math.cos(  
+        time*.18  
+    )*.025;  
+
+
+renderer.render(  
+    scene,  
+    camera  
+);
 
 }
 
 animate();
 
 /* =====================================================
-   MAPLIBRE
+MAPLIBRE
 ===================================================== */
 
 const MAPTILER_KEY =
-    "NmSlgtsAdQyEWy7t0OJf";
+"NmSlgtsAdQyEWy7t0OJf";
 
 const MAPTILER_STYLE =
-    "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
-    +
-    MAPTILER_KEY;
+"https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
++
+MAPTILER_KEY;
 
-let map = null;
-let currentMarker = null;
+let map =
+null;
+
+let currentMarker =
+null;
 
 function initializeMap(){
 
-    if(map){
-        return;
-    }
+if(map){  
+    return;  
+}  
 
-    if(
-        typeof maplibregl ===
-        "undefined"
-    ){
 
-        addMsg(
-            "Errore: MapTiler non disponibile."
-        );
+if(  
+    typeof maplibregl ===  
+    "undefined"  
+){  
 
-        return;
-    }
+    addMsg(  
+        "Errore: MapTiler non disponibile."  
+    );  
 
-    map =
-        new maplibregl.Map({
+    return;  
 
-            container:"map",
+}  
 
-            style:MAPTILER_STYLE,
 
-            center:
-                [10.2118,45.5416],
+map =  
+    new maplibregl.Map({  
 
-            zoom:10,
+        container:  
+            "map",  
 
-            attributionControl:true,
+        style:  
+            MAPTILER_STYLE,  
 
-            antialias:true
+        center:  
+            [10.2118,45.5416],  
 
-        });
+        zoom:  
+            10,  
 
-    map.addControl(
-        new maplibregl.NavigationControl({
-            showCompass:true,
-            showZoom:true
-        }),
-        "bottom-right"
-    );
+        attributionControl:  
+            true,  
 
-    map.on(
-        "load",
-        ()=>{
-            map.resize();
-        }
-    );
+        antialias:  
+            true  
+
+    });  
+
+
+map.addControl(  
+    new maplibregl.NavigationControl({  
+        showCompass:true,  
+        showZoom:true  
+    }),  
+    "bottom-right"  
+);  
+
+
+map.on(  
+    "load",  
+    () => {  
+
+        map.resize();  
+
+    }  
+);
 
 }
 
 function openTacticalMap(){
 
-    tacticalMap.classList.add(
-        "active"
-    );
+tacticalMap.classList.add(  
+    "active"  
+);  
 
-    jarvisTitle.style.display =
-        "none";
 
-    mapHeader.style.display =
-        "block";
+jarvisTitle.style.display =  
+    "none";  
 
-    initializeMap();
 
-    setTimeout(
-        ()=>{
-            if(map){
-                map.resize();
-            }
-        },
-        400
-    );
+mapHeader.style.display =  
+    "block";  
+
+
+initializeMap();  
+
+
+setTimeout(  
+    () => {  
+
+        if(map){  
+            map.resize();  
+        }  
+
+    },  
+    400  
+);
 
 }
 
 function closeTacticalMap(){
 
-    tacticalMap.classList.remove(
-        "active"
-    );
+tacticalMap.classList.remove(  
+    "active"  
+);  
 
-    jarvisTitle.style.display =
-        "block";
+
+jarvisTitle.style.display =  
+    "block";
 
 }
 
 closeMap.addEventListener(
-    "click",
-    closeTacticalMap
+"click",
+closeTacticalMap
 );
 
 /* =====================================================
-   MARKER
+MARKER
 ===================================================== */
 
-function escapeHtml(text){
+function escapeHtml(
+text
+){
 
-    return String(text)
+return String(text)  
 
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    .replace(  
+        /&/g,  
+        "&amp;"  
+    )  
+
+    .replace(  
+        /</g,  
+        "&lt;"  
+    )  
+
+    .replace(  
+        />/g,  
+        "&gt;"  
+    )  
+
+    .replace(  
+        /"/g,  
+        "&quot;"  
+    )  
+
+    .replace(  
+        /'/g,  
+        "&#039;"  
+    );
 
 }
 
 function createJarvisMarker(
-    lat,
-    lon,
-    name
+lat,
+lon,
+name
 ){
 
-    if(!map){
-        return;
-    }
+if(!map){  
+    return;  
+}  
 
-    if(currentMarker){
 
-        currentMarker.remove();
+if(currentMarker){  
 
-        currentMarker = null;
+    currentMarker.remove();  
 
-    }
+    currentMarker =  
+        null;  
 
-    const markerElement =
-        document.createElement(
-            "div"
-        );
+}  
 
-    markerElement.className =
-        "jarvis-map-marker";
 
-    currentMarker =
-        new maplibregl.Marker({
+const markerElement =  
+    document.createElement(  
+        "div"  
+    );  
 
-            element:
-                markerElement,
 
-            anchor:
-                "center"
+markerElement.className =  
+    "jarvis-map-marker";  
 
-        })
 
-        .setLngLat(
-            [lon,lat]
-        )
+currentMarker =  
+    new maplibregl.Marker({  
 
-        .setPopup(
+        element:  
+            markerElement,  
 
-            new maplibregl.Popup({
-                offset:15
-            })
+        anchor:  
+            "center"  
 
-            .setHTML(
-                `<b style="color:#FFD21F">${escapeHtml(name)}</b>`
-            )
+    })  
 
-        )
+    .setLngLat(  
+        [lon,lat]  
+    )  
 
-        .addTo(map);
+    .setPopup(  
 
-    currentMarker.togglePopup();
+        new maplibregl.Popup({  
+            offset:15  
+        })  
+
+        .setHTML(  
+            `<b style="color:#00A8FF">${escapeHtml(name)}</b>`  
+        )  
+
+    )  
+
+    .addTo(  
+        map  
+    );  
+
+
+currentMarker.togglePopup();
 
 }
 
 /* =====================================================
-   RICERCA POSIZIONE
+RICERCA POSIZIONE
 ===================================================== */
 
-async function searchLocation(place){
+async function searchLocation(
+place
+){
 
-    try{
+try{  
 
-        openTacticalMap();
+    openTacticalMap();  
 
-        addMsg(
-            "Ricerca posizione: " +
-            place
-        );
 
-        const url =
-            "https://nominatim.openstreetmap.org/search" +
-            "?format=json" +
-            "&limit=1" +
-            "&q=" +
-            encodeURIComponent(place);
+    addMsg(  
+        "Ricerca posizione: " +  
+        place  
+    );  
 
-        const response =
-            await fetch(
-                url,
-                {
-                    headers:{
-                        "Accept":
-                            "application/json"
-                    }
-                }
-            );
 
-        if(!response.ok){
-            throw new Error(
-                "Ricerca posizione fallita"
-            );
-        }
+    const url =  
+        "https://nominatim.openstreetmap.org/search" +  
+        "?format=json" +  
+        "&limit=1" +  
+        "&q=" +  
+        encodeURIComponent(  
+            place  
+        );  
 
-        const results =
-            await response.json();
 
-        if(!results.length){
+    const response =  
+        await fetch(  
+            url,  
+            {  
+                headers:{  
+                    "Accept":  
+                        "application/json"  
+                }  
+            }  
+        );  
 
-            addMsg(
-                "Non riesco a trovare " +
-                place +
-                "."
-            );
 
-            return;
-        }
+    if(!response.ok){  
 
-        const result =
-            results[0];
+        throw new Error(  
+            "Ricerca posizione fallita"  
+        );  
 
-        const lat =
-            parseFloat(result.lat);
+    }  
 
-        const lon =
-            parseFloat(result.lon);
 
-        if(!map){
+    const results =  
+        await response.json();  
 
-            throw new Error(
-                "Mappa non inizializzata"
-            );
 
-        }
+    if(!results.length){  
 
-        map.flyTo({
+        addMsg(  
+            "Non riesco a trovare " +  
+            place +  
+            "."  
+        );  
 
-            center:
-                [lon,lat],
+        return;  
 
-            zoom:12,
+    }  
 
-            speed:.8,
 
-            curve:1.5,
+    const result =  
+        results[0];  
 
-            essential:true
 
-        });
+    const lat =  
+        parseFloat(  
+            result.lat  
+        );  
 
-        createJarvisMarker(
-            lat,
-            lon,
-            place
-        );
 
-        addMsg(
-            "Posizione acquisita: " +
-            place
-        );
+    const lon =  
+        parseFloat(  
+            result.lon  
+        );  
 
-    }catch(error){
 
-        console.error(
-            "MAP ERROR:",
-            error
-        );
+    if(!map){  
 
-        addMsg(
-            "Impossibile localizzare " +
-            place +
-            "."
-        );
+        throw new Error(  
+            "Mappa non inizializzata"  
+        );  
 
-    }
+    }  
+
+
+    map.flyTo({  
+
+        center:  
+            [lon,lat],  
+
+        zoom:  
+            12,  
+
+        speed:  
+            .8,  
+
+        curve:  
+            1.5,  
+
+        essential:  
+            true  
+
+    });  
+
+
+    createJarvisMarker(  
+        lat,  
+        lon,  
+        place  
+    );  
+
+
+    addMsg(  
+        "Posizione acquisita: " +  
+        place  
+    );  
+
+
+}catch(error){  
+
+    console.error(  
+        "MAP ERROR:",  
+        error  
+    );  
+
+
+    addMsg(  
+        "Impossibile localizzare " +  
+        place +  
+        "."  
+    );  
+
+}
 
 }
 
 /* =====================================================
-   COMANDI MAPPA
+COMANDI MAPPA
 ===================================================== */
 
-function handleMapCommand(text){
+function handleMapCommand(
+text
+){
 
-    const normalized =
-        text.toLowerCase().trim();
+const normalized =  
+    text  
+        .toLowerCase()  
+        .trim();  
 
-    if(
 
-        normalized.includes(
-            "apri la mappa"
-        )
+if(  
 
-        ||
+    normalized.includes(  
+        "apri la mappa"  
+    )  
 
-        normalized.includes(
-            "apri mappa"
-        )
+    ||  
 
-        ||
+    normalized.includes(  
+        "apri mappa"  
+    )  
 
-        normalized.includes(
-            "mappa tattica"
-        )
+    ||  
 
-        ||
+    normalized.includes(  
+        "mappa tattica"  
+    )  
 
-        normalized.includes(
-            "modalità tattica"
-        )
+    ||  
 
-        ||
+    normalized.includes(  
+        "modalità tattica"  
+    )  
 
-        normalized.includes(
-            "modalita tattica"
-        )
+    ||  
 
-        ||
+    normalized.includes(  
+        "modalita tattica"  
+    )  
 
-        normalized.includes(
-            "attiva la mappa"
-        )
+    ||  
 
-    ){
+    normalized.includes(  
+        "attiva la mappa"  
+    )  
 
-        openTacticalMap();
+){  
 
-        addMsg(
-            "Mappa tattica attivata."
-        );
+    openTacticalMap();  
 
-        return true;
-    }
+    addMsg(  
+        "Mappa tattica attivata."  
+    );  
 
-    if(
+    return true;  
 
-        normalized.includes(
-            "chiudi la mappa"
-        )
+}  
 
-        ||
 
-        normalized.includes(
-            "chiudi mappa"
-        )
+if(  
 
-        ||
+    normalized.includes(  
+        "chiudi la mappa"  
+    )  
 
-        normalized.includes(
-            "esci dalla mappa"
-        )
+    ||  
 
-        ||
+    normalized.includes(  
+        "chiudi mappa"  
+    )  
 
-        normalized.includes(
-            "torna alla modalità normale"
-        )
+    ||  
 
-        ||
+    normalized.includes(  
+        "esci dalla mappa"  
+    )  
 
-        normalized.includes(
-            "torna alla modalita normale"
-        )
+    ||  
 
-    ){
+    normalized.includes(  
+        "torna alla modalità normale"  
+    )  
 
-        closeTacticalMap();
+    ||  
 
-        addMsg(
-            "Modalità tattica disattivata."
-        );
+    normalized.includes(  
+        "torna alla modalita normale"  
+    )  
 
-        return true;
-    }
+){  
 
-    const patterns = [
-        "mostrami ",
-        "mostra ",
-        "vai a ",
-        "portami a ",
-        "localizza ",
-        "cerca ",
-        "visualizza "
-    ];
+    closeTacticalMap();  
 
-    for(
-        const pattern of patterns
-    ){
+    addMsg(  
+        "Modalità tattica disattivata."  
+    );  
 
-        if(
-            normalized.startsWith(
-                pattern
-            )
-        ){
+    return true;  
 
-            const place =
-                text
-                    .trim()
-                    .substring(
-                        pattern.length
-                    )
-                    .trim();
+}  
 
-            if(
-                place.length > 1
-            ){
 
-                searchLocation(
-                    place
-                );
+const patterns = [  
 
-                return true;
+    "mostrami ",  
+    "mostra ",  
+    "vai a ",  
+    "portami a ",  
+    "localizza ",  
+    "cerca ",  
+    "visualizza "  
 
-            }
+];  
 
-        }
 
-    }
+for(  
+    const pattern of patterns  
+){  
 
-    return false;
+    if(  
+        normalized.startsWith(  
+            pattern  
+        )  
+    ){  
+
+        const place =  
+            text  
+                .trim()  
+                .substring(  
+                    pattern.length  
+                )  
+                .trim();  
+
+
+        if(  
+            place.length > 1  
+        ){  
+
+            searchLocation(  
+                place  
+            );  
+
+            return true;  
+
+        }  
+
+    }  
+
+}  
+
+
+return false;
 
 }
 
 /* =====================================================
-   WEB SEARCH
+RICERCA WEB
 ===================================================== */
 
 const webSearchPanel =
-    document.getElementById(
-        "webSearchPanel"
-    );
+document.getElementById(
+"webSearchPanel"
+);
 
 const webSearchFrame =
-    document.getElementById(
-        "webSearchFrame"
-    );
+document.getElementById(
+"webSearchFrame"
+);
 
 const closeWebSearch =
-    document.getElementById(
-        "closeWebSearch"
-    );
+document.getElementById(
+"closeWebSearch"
+);
 
 function openWebSearch(query){
 
-    if(!query){
-        return;
-    }
+if(!query){  
+    return;  
+}  
 
-    const url =
-        "https://www.google.com/search?igu=1&q=" +
-        encodeURIComponent(query);
+const url =  
+    "https://www.google.com/search?igu=1&q=" +  
+    encodeURIComponent(query);  
 
-    webSearchFrame.src =
-        url;
+webSearchFrame.src =  
+    url;  
 
-    webSearchPanel.classList.add(
-        "active"
-    );
+webSearchPanel.classList.add(  
+    "active"  
+);
 
 }
 
 function closeWebSearchPanel(){
 
-    webSearchPanel.classList.remove(
-        "active"
-    );
+webSearchPanel.classList.remove(  
+    "active"  
+);  
 
-    setTimeout(
-        ()=>{
-            webSearchFrame.src =
-                "about:blank";
-        },
-        250
-    );
+
+setTimeout(  
+    () => {  
+
+        webSearchFrame.src =  
+            "about:blank";  
+
+    },  
+    250  
+);
 
 }
 
 closeWebSearch.addEventListener(
-    "click",
-    closeWebSearchPanel
+"click",
+closeWebSearchPanel
 );
 
 /* =====================================================
-   WEB COMMAND
+COMANDI RICERCA WEB
 ===================================================== */
 
 function handleWebCommand(text){
 
-    const normalized =
-        text.toLowerCase().trim();
+const normalized =  
+    text  
+        .toLowerCase()  
+        .trim();  
 
-    const patterns = [
 
-        "cerca sul web ",
-        "cerca nel web ",
-        "ricerca sul web ",
-        "ricerca web ",
-        "cerca online ",
-        "cerca su internet ",
-        "cerca in internet ",
-        "fammi una ricerca su ",
-        "fai una ricerca su "
+const patterns = [  
 
-    ];
+    "cerca sul web ",  
+    "cerca nel web ",  
+    "ricerca sul web ",  
+    "ricerca web ",  
+    "cerca online ",  
+    "cerca su internet ",  
+    "cerca in internet ",  
+    "fammi una ricerca su ",  
+    "fai una ricerca su "  
 
-    for(
-        const pattern of patterns
-    ){
+];  
 
-        if(
-            normalized.startsWith(
-                pattern
-            )
-        ){
 
-            const query =
-                text
-                    .trim()
-                    .substring(
-                        pattern.length
-                    )
-                    .trim();
+for(  
+    const pattern of patterns  
+){  
 
-            if(
-                query.length > 1
-            ){
+    if(  
+        normalized.startsWith(  
+            pattern  
+        )  
+    ){  
 
-                openWebSearch(
-                    query
-                );
+        const query =  
+            text  
+                .trim()  
+                .substring(  
+                    pattern.length  
+                )  
+                .trim();  
 
-                addMsg(
-                    "Ricerca web: " +
-                    query
-                );
 
-                return true;
+        if(  
+            query.length > 1  
+        ){  
 
-            }
+            openWebSearch(  
+                query  
+            );  
 
-        }
+            addMsg(  
+                "Ricerca web: " +  
+                query  
+            );  
 
-    }
+            return true;  
 
-    return false;
+        }  
+
+    }  
+
+}  
+
+
+return false;
 
 }
 
 /* =====================================================
-   MESSAGGIO
+MESSAGGIO
 ===================================================== */
 
-function addMsg(text){
+function addMsg(
+text
+){
 
-    chat.innerHTML = "";
+chat.innerHTML =  
+    "";  
 
-    const element =
-        document.createElement(
-            "div"
-        );
 
-    element.className =
-        "msg";
+const element =  
+    document.createElement(  
+        "div"  
+    );  
 
-    element.textContent =
-        text;
 
-    chat.appendChild(
-        element
-    );
+element.className =  
+    "msg";  
+
+
+element.textContent =  
+    text;  
+
+
+chat.appendChild(  
+    element  
+);
 
 }
 
 /* =====================================================
-   DATI TEMPORALI
+DATI TEMPORALI
 ===================================================== */
 
 function getTimeData(){
 
-    const now =
-        new Date();
+const now =  
+    new Date();  
 
-    return {
 
-        currentTime:
-            now.toLocaleTimeString(
-                "it-IT",
-                {
-                    hour:"2-digit",
-                    minute:"2-digit",
-                    second:"2-digit"
-                }
-            ),
+return {  
 
-        currentDate:
-            now.toLocaleDateString(
-                "it-IT",
-                {
-                    day:"2-digit",
-                    month:"2-digit",
-                    year:"numeric"
-                }
-            ),
+    currentTime:  
+        now.toLocaleTimeString(  
+            "it-IT",  
+            {  
+                hour:"2-digit",  
+                minute:"2-digit",  
+                second:"2-digit"  
+            }  
+        ),  
 
-        dayOfWeek:
-            now.toLocaleDateString(
-                "it-IT",
-                {
-                    weekday:"long"
-                }
-            ),
+    currentDate:  
+        now.toLocaleDateString(  
+            "it-IT",  
+            {  
+                day:"2-digit",  
+                month:"2-digit",  
+                year:"numeric"  
+            }  
+        ),  
 
-        timezone:
-            Intl.DateTimeFormat()
-                .resolvedOptions()
-                .timeZone
+    dayOfWeek:  
+        now.toLocaleDateString(  
+            "it-IT",  
+            {  
+                weekday:"long"  
+            }  
+        ),  
 
-    };
+    timezone:  
+        Intl.DateTimeFormat()  
+            .resolvedOptions()  
+            .timeZone  
+
+};
 
 }
 
 /* =====================================================
-   VOCI
+VOCE DISPOSITIVO
 ===================================================== */
 
 function loadDeviceVoices(){
 
-    if(
-        !("speechSynthesis" in window)
-    ){
-        return;
-    }
+if(  
+    !("speechSynthesis" in window)  
+){  
 
-    deviceVoices =
-        window.speechSynthesis
-            .getVoices();
+    return;  
 
-    voiceSelector.innerHTML = "";
+}  
 
-    const automatic =
-        document.createElement(
-            "option"
-        );
 
-    automatic.value = "";
+deviceVoices =  
+    window.speechSynthesis  
+        .getVoices();  
 
-    automatic.textContent =
-        "Voce dispositivo automatica";
 
-    voiceSelector.appendChild(
-        automatic
-    );
+voiceSelector.innerHTML =  
+    "";  
 
-    deviceVoices.forEach(
-        (voice,index)=>{
 
-            const option =
-                document.createElement(
-                    "option"
-                );
+const automatic =  
+    document.createElement(  
+        "option"  
+    );  
 
-            option.value =
-                String(index);
 
-            option.textContent =
-                `${voice.name} — ${voice.lang}`;
+automatic.value =  
+    "";  
 
-            voiceSelector.appendChild(
-                option
-            );
 
-        }
-    );
+automatic.textContent =  
+    "Voce dispositivo automatica";  
 
-    const savedVoice =
-        localStorage.getItem(
-            "jarvis_device_voice"
-        );
 
-    if(
-        savedVoice !== null &&
-        Number(savedVoice) <
-            deviceVoices.length
-    ){
+voiceSelector.appendChild(  
+    automatic  
+);  
 
-        voiceSelector.value =
-            savedVoice;
 
-        selectedDeviceVoice =
-            deviceVoices[
-                Number(savedVoice)
-            ];
+deviceVoices.forEach(  
+    (voice,index) => {  
 
-    }
+        const option =  
+            document.createElement(  
+                "option"  
+            );  
+
+
+        option.value =  
+            String(index);  
+
+
+        option.textContent =  
+            `${voice.name} — ${voice.lang}`;  
+
+
+        voiceSelector.appendChild(  
+            option  
+        );  
+
+    }  
+);  
+
+
+const savedVoice =  
+    localStorage.getItem(  
+        "jarvis_device_voice"  
+    );  
+
+
+if(  
+    savedVoice !== null &&  
+    Number(savedVoice) <  
+        deviceVoices.length  
+){  
+
+    voiceSelector.value =  
+        savedVoice;  
+
+    selectedDeviceVoice =  
+        deviceVoices[  
+            Number(savedVoice)  
+        ];  
+
+}
 
 }
 
 if(
-    "speechSynthesis" in window
+"speechSynthesis" in window
 ){
 
-    loadDeviceVoices();
+loadDeviceVoices();  
 
-    window.speechSynthesis
-        .addEventListener(
-            "voiceschanged",
-            loadDeviceVoices
-        );
 
-}
-
-/* =====================================================
-   DEVICE SPEECH
-===================================================== */
-
-function speakDevice(text){
-
-    return new Promise(
-        resolve=>{
-
-            if(
-                !("speechSynthesis" in window)
-            ){
-
-                resolve(false);
-
-                return;
-
-            }
-
-            try{
-
-                window.speechSynthesis.cancel();
-
-                const utterance =
-                    new SpeechSynthesisUtterance(
-                        text
-                    );
-
-                utterance.lang =
-                    "it-IT";
-
-                utterance.rate =
-                    .95;
-
-                utterance.pitch =
-                    .9;
-
-                utterance.volume =
-                    1;
-
-                if(
-                    selectedDeviceVoice
-                ){
-
-                    utterance.voice =
-                        selectedDeviceVoice;
-
-                }
-
-                else{
-
-                    const italianVoice =
-                        deviceVoices.find(
-                            voice =>
-                                voice.lang
-                                    .toLowerCase()
-                                    .startsWith("it")
-                        );
-
-                    if(
-                        italianVoice
-                    ){
-                        utterance.voice =
-                            italianVoice;
-                    }
-
-                }
-
-                utterance.onstart =
-                    ()=>{
-                        audioPlaying = true;
-                        setState("speaking");
-                    };
-
-                utterance.onend =
-                    ()=>{
-                        audioPlaying = false;
-                        setState("idle");
-                        resolve(true);
-                    };
-
-                utterance.onerror =
-                    ()=>{
-                        audioPlaying = false;
-                        setState("idle");
-                        resolve(false);
-                    };
-
-                window.speechSynthesis
-                    .speak(
-                        utterance
-                    );
-
-            }catch(error){
-
-                console.error(
-                    "DEVICE TTS:",
-                    error
-                );
-
-                resolve(false);
-
-            }
-
-        }
+window.speechSynthesis  
+    .addEventListener(  
+        "voiceschanged",  
+        loadDeviceVoices  
     );
 
 }
 
 /* =====================================================
-   ELEVENLABS
+SPEECH SYNTHESIS
 ===================================================== */
 
-async function speakElevenLabs(text){
+function speakDevice(
+text
+){
 
-    if(!text){
-        return false;
-    }
+return new Promise(  
+    resolve => {  
 
-    if(currentAudio){
+        if(  
+            !("speechSynthesis" in window)  
+        ){  
 
-        try{
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-        }catch(error){}
+            console.warn(  
+                "SpeechSynthesis non disponibile."  
+            );  
 
-        currentAudio = null;
-    }
+            resolve(false);  
 
-    const controller =
-        new AbortController();
+            return;  
 
-    const timeout =
-        setTimeout(
-            ()=>{
-                controller.abort();
-            },
-            30000
-        );
+        }  
 
-    try{
 
-        const response =
-            await fetch(
-                API,
-                {
+        try{  
 
-                    method:"POST",
+            window.speechSynthesis.cancel();  
 
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
 
-                    body:
-                        JSON.stringify({
+            const utterance =  
+                new SpeechSynthesisUtterance(  
+                    text  
+                );  
 
-                            action:"tts",
 
-                            text:text,
+            utterance.lang =  
+                "it-IT";  
 
-                            voiceId:
-                                ELEVEN_VOICE_ID
 
-                        }),
+            utterance.rate =  
+                0.95;  
 
-                    signal:
-                        controller.signal
 
-                }
-            );
+            utterance.pitch =  
+                0.9;  
 
-        if(!response.ok){
-            return false;
-        }
 
-        const contentType =
-            response.headers.get(
-                "content-type"
-            ) || "";
+            utterance.volume =  
+                1;  
 
-        if(
-            !contentType.includes("audio")
-        ){
-            return false;
-        }
 
-        const audioBlob =
-            await response.blob();
+            if(  
+                selectedDeviceVoice  
+            ){  
 
-        if(
-            !audioBlob ||
-            audioBlob.size === 0
-        ){
-            return false;
-        }
+                utterance.voice =  
+                    selectedDeviceVoice;  
 
-        const audioUrl =
-            URL.createObjectURL(
-                audioBlob
-            );
+            }  
 
-        const audio =
-            new Audio(audioUrl);
+            else{  
 
-        currentAudio =
-            audio;
+                const italianVoice =  
+                    deviceVoices.find(  
+                        voice =>  
+                            voice.lang  
+                                .toLowerCase()  
+                                .startsWith(  
+                                    "it"  
+                                )  
+                    );  
 
-        audio.volume = 1;
 
-        audio.onplay =
-            ()=>{
-                audioPlaying = true;
-                setState("speaking");
-            };
+                if(  
+                    italianVoice  
+                ){  
 
-        audio.onended =
-            ()=>{
-                audioPlaying = false;
-                setState("idle");
+                    utterance.voice =  
+                        italianVoice;  
 
-                URL.revokeObjectURL(
-                    audioUrl
-                );
+                }  
 
-                if(
-                    currentAudio === audio
-                ){
-                    currentAudio = null;
-                }
-            };
+            }  
 
-        audio.onerror =
-            ()=>{
-                audioPlaying = false;
-                setState("idle");
 
-                URL.revokeObjectURL(
-                    audioUrl
-                );
-            };
+            utterance.onstart =  
+                () => {  
 
-        await audio.play();
+                    audioPlaying =  
+                        true;  
 
-        return true;
+                    setState(  
+                        "speaking"  
+                    );  
 
-    }catch(error){
+                };  
 
-        console.warn(
-            "ElevenLabs TTS:",
-            error
-        );
 
-        return false;
+            utterance.onend =  
+                () => {  
 
-    }finally{
+                    audioPlaying =  
+                        false;  
 
-        clearTimeout(timeout);
+                    setState(  
+                        "idle"  
+                    );  
 
-    }
+                    resolve(true);  
+
+                };  
+
+
+            utterance.onerror =  
+                error => {  
+
+                    console.error(  
+                        "DEVICE TTS ERROR:",  
+                        error  
+                    );  
+
+
+                    audioPlaying =  
+                        false;  
+
+                    setState(  
+                        "idle"  
+                    );  
+
+                    resolve(false);  
+
+                };  
+
+
+            window.speechSynthesis  
+                .speak(  
+                    utterance  
+                );  
+
+
+            setTimeout(  
+                () => {  
+
+                    try{  
+
+                        window.speechSynthesis.resume();  
+
+                    }catch(error){  
+
+                        console.warn(  
+                            error  
+                        );  
+
+                    }  
+
+                },  
+                100  
+            );  
+
+        }catch(error){  
+
+            console.error(  
+                "DEVICE TTS:",  
+                error  
+            );  
+
+            resolve(false);  
+
+        }  
+
+    }  
+);
 
 }
 
 /* =====================================================
-   SPEAK
+ELEVENLABS
 ===================================================== */
 
-async function speak(text){
+async function speakElevenLabs(
+text
+){
 
-    if(!text){
-        return;
-    }
+if(!text){  
+    return false;  
+}  
 
-    const elevenSuccess =
-        await speakElevenLabs(
-            text
-        );
 
-    if(elevenSuccess){
-        return;
-    }
+if(currentAudio){  
 
-    await speakDevice(
-        text
-    );
+    try{  
+
+        currentAudio.pause();  
+
+        currentAudio.currentTime =  
+            0;  
+
+    }catch(error){  
+
+        console.warn(  
+            error  
+        );  
+
+    }  
+
+
+    currentAudio =  
+        null;  
+
+}  
+
+
+audioPlaying =  
+    false;  
+
+
+const controller =  
+    new AbortController();  
+
+
+const timeout =  
+    setTimeout(  
+        () => {  
+            controller.abort();  
+        },  
+        30000  
+    );  
+
+
+try{  
+
+    const response =  
+        await fetch(  
+            API,  
+            {  
+
+                method:"POST",  
+
+                headers:{  
+                    "Content-Type":  
+                        "application/json"  
+                },  
+
+                body:  
+                    JSON.stringify({  
+
+                        action:  
+                            "tts",  
+
+                        text:  
+                            text,  
+
+                        voiceId:  
+                            ELEVEN_VOICE_ID  
+
+                    }),  
+
+                signal:  
+                    controller.signal  
+
+            }  
+        );  
+
+
+    if(!response.ok){  
+
+        console.warn(  
+            "ElevenLabs HTTP:",  
+            response.status  
+        );  
+
+        return false;  
+
+    }  
+
+
+    const contentType =  
+        response.headers.get(  
+            "content-type"  
+        ) || "";  
+
+
+    if(  
+        !contentType.includes(  
+            "audio"  
+        )  
+    ){  
+
+        return false;  
+
+    }  
+
+
+    const audioBlob =  
+        await response.blob();  
+
+
+    if(  
+        !audioBlob ||  
+        audioBlob.size === 0  
+    ){  
+
+        return false;  
+
+    }  
+
+
+    const audioUrl =  
+        URL.createObjectURL(  
+            audioBlob  
+        );  
+
+
+    const audio =  
+        new Audio(  
+            audioUrl  
+        );  
+
+
+    currentAudio =  
+        audio;  
+
+
+    audio.volume =  
+        1;  
+
+
+    audio.onplay =  
+        () => {  
+
+            audioPlaying =  
+                true;  
+
+            setState(  
+                "speaking"  
+            );  
+
+        };  
+
+
+    audio.onended =  
+        () => {  
+
+            audioPlaying =  
+                false;  
+
+            setState(  
+                "idle"  
+            );  
+
+
+            URL.revokeObjectURL(  
+                audioUrl  
+            );  
+
+
+            if(  
+                currentAudio ===  
+                audio  
+            ){  
+
+                currentAudio =  
+                    null;  
+
+            }  
+
+        };  
+
+
+    audio.onerror =  
+        error => {  
+
+            console.warn(  
+                "ElevenLabs audio:",  
+                error  
+            );  
+
+            audioPlaying =  
+                false;  
+
+            setState(  
+                "idle"  
+            );  
+
+
+            URL.revokeObjectURL(  
+                audioUrl  
+            );  
+
+        };  
+
+
+    await audio.play();  
+
+
+    return true;  
+
+
+}catch(error){  
+
+    console.warn(  
+        "ElevenLabs TTS:",  
+        error  
+    );  
+
+    return false;  
+
+
+}finally{  
+
+    clearTimeout(  
+        timeout  
+    );  
+
+}
 
 }
 
 /* =====================================================
-   VOICE TEST
+SPEAK
+===================================================== */
+
+async function speak(
+text
+){
+
+if(!text){  
+    return;  
+}  
+
+
+const elevenSuccess =  
+    await speakElevenLabs(  
+        text  
+    );  
+
+
+if(  
+    elevenSuccess  
+){  
+
+    return;  
+
+}  
+
+
+console.log(  
+    "ElevenLabs non disponibile. Uso voce dispositivo."  
+);  
+
+
+await speakDevice(  
+    text  
+);
+
+}
+
+/* =====================================================
+TEST VOCE
 ===================================================== */
 
 voiceTest.addEventListener(
-    "click",
-    async ()=>{
+"click",
+async () => {
 
-        await speakDevice(
-            "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
-        );
+const testText =  
+        "J.A.R.V.I.S. operativo. Sistema vocale funzionante.";  
 
-    }
+
+    await speakDevice(  
+        testText  
+    );  
+
+}
+
 );
 
 /* =====================================================
-   VOICE SELECT
+SELEZIONE VOCE
 ===================================================== */
 
 voiceSelector.addEventListener(
-    "change",
-    ()=>{
+"change",
+() => {
 
-        const value =
-            voiceSelector.value;
+const value =  
+        voiceSelector.value;  
 
-        if(value === ""){
 
-            selectedDeviceVoice =
-                null;
+    if(  
+        value === ""  
+    ){  
 
-            localStorage.removeItem(
-                "jarvis_device_voice"
-            );
+        selectedDeviceVoice =  
+            null;  
 
-            return;
 
-        }
+        localStorage.removeItem(  
+            "jarvis_device_voice"  
+        );  
 
-        const index =
-            Number(value);
 
-        if(
-            Number.isInteger(index) &&
-            deviceVoices[index]
-        ){
+        return;  
 
-            selectedDeviceVoice =
-                deviceVoices[index];
+    }  
 
-            localStorage.setItem(
-                "jarvis_device_voice",
-                String(index)
-            );
 
-        }
+    const index =  
+        Number(value);  
 
-    }
+
+    if(  
+        Number.isInteger(index) &&  
+        deviceVoices[index]  
+    ){  
+
+        selectedDeviceVoice =  
+            deviceVoices[index];  
+
+
+        localStorage.setItem(  
+            "jarvis_device_voice",  
+            String(index)  
+        );  
+
+    }  
+
+}
+
 );
 
 /* =====================================================
-   VOICE PANEL
+PANNELLO VOCE
 ===================================================== */
 
 voiceBtn.addEventListener(
-    "click",
-    ()=>{
+"click",
+() => {
 
-        voicePanel.classList.toggle(
-            "active"
-        );
+voicePanel.classList.toggle(  
+        "active"  
+    );  
 
-        loadDeviceVoices();
+    loadDeviceVoices();  
 
-    }
+}
+
 );
 
 /* =====================================================
-   FULLSCREEN
+PROCESS AI
 ===================================================== */
 
-async function enterFullscreen(){
+async function processAi(
+text
+){
 
-    try{
+if(  
+    handleWebCommand(  
+        text  
+    )  
+){  
 
-        if(
-            !document.fullscreenElement
-        ){
+    return;  
 
-            await document.documentElement
-                .requestFullscreen();
+}  
 
-        }
 
-    }catch(error){
+if(  
+    handleMapCommand(  
+        text  
+    )  
+){  
 
-        console.warn(
-            "Fullscreen:",
-            error
-        );
+    return;  
 
-    }
+}  
+
+
+setState(  
+    "thinking"  
+);  
+
+
+try{  
+
+    const temporal =  
+        getTimeData();  
+
+
+    addMemory(  
+        "user",  
+        text  
+    );  
+
+
+    const controller =  
+        new AbortController();  
+
+
+    const timeout =  
+        setTimeout(  
+            () => {  
+                controller.abort();  
+            },  
+            30000  
+        );  
+
+
+    let response;  
+
+
+    try{  
+
+        response =  
+            await fetch(  
+                API,  
+                {  
+
+                    method:"POST",  
+
+                    headers:{  
+                        "Content-Type":  
+                            "application/json"  
+                    },  
+
+                    body:  
+                        JSON.stringify({  
+
+                            message:  
+                                text,  
+
+                            memory:  
+                                memory.slice(-4),  
+
+                            currentTime:  
+                                temporal.currentTime,  
+
+                            currentDate:  
+                                temporal.currentDate,  
+
+                            dayOfWeek:  
+                                temporal.dayOfWeek,  
+
+                            timezone:  
+                                temporal.timezone  
+
+                        }),  
+
+                    signal:  
+                        controller.signal  
+
+                }  
+            );  
+
+    }finally{  
+
+        clearTimeout(  
+            timeout  
+        );  
+
+    }  
+
+
+    if(!response.ok){  
+
+        const errorText =  
+            await response.text();  
+
+
+        let errorMessage =  
+            "HTTP " +  
+            response.status;  
+
+
+        try{  
+
+            const errorData =  
+                JSON.parse(  
+                    errorText  
+                );  
+
+
+            if(  
+                errorData &&  
+                errorData.error  
+            ){  
+
+                errorMessage =  
+                    errorData.error;  
+
+            }  
+
+        }catch(parseError){  
+
+            if(errorText){  
+
+                errorMessage =  
+                    errorText.substring(  
+                        0,  
+                        200  
+                    );  
+
+            }  
+
+        }  
+
+
+        throw new Error(  
+            errorMessage  
+        );  
+
+    }  
+
+
+    const data =  
+        await response.json();  
+
+
+    console.log(  
+        "JARVIS RESPONSE:",  
+        data  
+    );  
+
+
+    const reply =  
+        typeof data.response ===  
+            "string"  
+            ? data.response.trim()  
+            : "";  
+
+
+    if(!reply){  
+
+        throw new Error(  
+            "Risposta AI vuota"  
+        );  
+
+    }  
+
+
+    addMsg(  
+        reply  
+    );  
+
+
+    addMemory(  
+        "assistant",  
+        reply  
+    );  
+
+
+    speak(  
+        reply  
+    ).catch(  
+        error => {  
+
+            console.error(  
+                "TTS:",  
+                error  
+            );  
+
+        }  
+    );  
+
+
+    setState(  
+        "idle"  
+    );  
+
+
+}catch(error){  
+
+    console.error(  
+        "JARVIS ERROR:",  
+        error  
+    );  
+
+
+    let message =  
+        error.message ||  
+        "Errore sconosciuto";  
+
+
+    if(  
+        error.name ===  
+        "AbortError"  
+    ){  
+
+        message =  
+            "Il server ha impiegato troppo tempo a rispondere.";  
+
+    }  
+
+    else if(  
+        message ===  
+        "Failed to fetch"  
+    ){  
+
+        message =  
+            "Errore di connessione al server JARVIS.";  
+
+    }  
+
+
+    addMsg(  
+        "ERRORE: " +  
+        message  
+    );  
+
+
+    setState(  
+        "idle"  
+    );  
 
 }
-
-async function exitFullscreen(){
-
-    try{
-
-        if(
-            document.fullscreenElement
-        ){
-
-            await document.exitFullscreen();
-
-        }
-
-    }catch(error){
-
-        console.warn(
-            "Fullscreen:",
-            error
-        );
-
-    }
-
-}
-
-function handleFullscreenCommand(text){
-
-    const normalized =
-        text
-            .toLowerCase()
-            .trim();
-
-    if(
-
-        normalized.includes(
-            "modalità fullscreen"
-        )
-
-        ||
-
-        normalized.includes(
-            "modalita fullscreen"
-        )
-
-        ||
-
-        normalized.includes(
-            "modalità schermo intero"
-        )
-
-        ||
-
-        normalized.includes(
-            "modalita schermo intero"
-        )
-
-        ||
-
-        normalized.includes(
-            "entra in fullscreen"
-        )
-
-        ||
-
-        normalized.includes(
-            "schermo intero"
-        )
-
-    ){
-
-        enterFullscreen();
-
-        addMsg(
-            "Modalità fullscreen attivata."
-        );
-
-        return true;
-
-    }
-
-    if(
-
-        normalized.includes(
-            "esci dal fullscreen"
-        )
-
-        ||
-
-        normalized.includes(
-            "esci da fullscreen"
-        )
-
-        ||
-
-        normalized.includes(
-            "esci dallo schermo intero"
-        )
-
-    ){
-
-        exitFullscreen();
-
-        addMsg(
-            "Modalità fullscreen disattivata."
-        );
-
-        return true;
-
-    }
-
-    return false;
 
 }
 
 /* =====================================================
-   PROCESS AI
-===================================================== */
-
-async function processAi(text){
-
-    if(
-        handleFullscreenCommand(text)
-    ){
-        return;
-    }
-
-    if(
-        handleWebCommand(text)
-    ){
-        return;
-    }
-
-    if(
-        handleMapCommand(text)
-    ){
-        return;
-    }
-
-    setState("thinking");
-
-    try{
-
-        const temporal =
-            getTimeData();
-
-        addMemory(
-            "user",
-            text
-        );
-
-        const controller =
-            new AbortController();
-
-        const timeout =
-            setTimeout(
-                ()=>{
-                    controller.abort();
-                },
-                30000
-            );
-
-        let response;
-
-        try{
-
-            response =
-                await fetch(
-                    API,
-                    {
-
-                        method:"POST",
-
-                        headers:{
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                message:text,
-
-                                memory:
-                                    memory.slice(-4),
-
-                                currentTime:
-                                    temporal.currentTime,
-
-                                currentDate:
-                                    temporal.currentDate,
-
-                                dayOfWeek:
-                                    temporal.dayOfWeek,
-
-                                timezone:
-                                    temporal.timezone
-
-                            }),
-
-                        signal:
-                            controller.signal
-
-                    }
-                );
-
-        }finally{
-
-            clearTimeout(
-                timeout
-            );
-
-        }
-
-        if(!response.ok){
-
-            const errorText =
-                await response.text();
-
-            let errorMessage =
-                "HTTP " +
-                response.status;
-
-            try{
-
-                const errorData =
-                    JSON.parse(
-                        errorText
-                    );
-
-                if(
-                    errorData &&
-                    errorData.error
-                ){
-
-                    errorMessage =
-                        errorData.error;
-
-                }
-
-            }catch(parseError){
-
-                if(errorText){
-
-                    errorMessage =
-                        errorText.substring(
-                            0,
-                            200
-                        );
-
-                }
-
-            }
-
-            throw new Error(
-                errorMessage
-            );
-
-        }
-
-        const data =
-            await response.json();
-
-        const reply =
-            typeof data.response ===
-                "string"
-                ? data.response.trim()
-                : "";
-
-        if(!reply){
-
-            throw new Error(
-                "Risposta AI vuota"
-            );
-
-        }
-
-        addMsg(
-            reply
-        );
-
-        addMemory(
-            "assistant",
-            reply
-        );
-
-        speak(
-            reply
-        ).catch(
-            error=>{
-                console.error(
-                    "TTS:",
-                    error
-                );
-            }
-        );
-
-        setState("idle");
-
-    }catch(error){
-
-        console.error(
-            "JARVIS ERROR:",
-            error
-        );
-
-        let message =
-            error.message ||
-            "Errore sconosciuto";
-
-        if(
-            error.name ===
-            "AbortError"
-        ){
-
-            message =
-                "Il server ha impiegato troppo tempo a rispondere.";
-
-        }
-
-        else if(
-            message ===
-            "Failed to fetch"
-        ){
-
-            message =
-                "Errore di connessione al server JARVIS.";
-
-        }
-
-        addMsg(
-            "ERRORE: " +
-            message
-        );
-
-        setState("idle");
-
-    }
-
-}
-
-/* =====================================================
-   INVIO
+INVIO
 ===================================================== */
 
 function sendMessage(){
 
-    const text =
-        textInput.value.trim();
+const text =  
+    textInput.value.trim();  
 
-    if(!text){
-        return;
-    }
 
-    textInput.value = "";
+if(!text){  
+    return;  
+}  
 
-    addMsg(text);
 
-    processAi(text);
+textInput.value =  
+    "";  
+
+
+addMsg(  
+    text  
+);  
+
+
+processAi(  
+    text  
+);
 
 }
 
 sendBtn.addEventListener(
-    "click",
-    sendMessage
+"click",
+sendMessage
 );
 
 textInput.addEventListener(
-    "keydown",
-    event=>{
+"keydown",
+event => {
 
-        if(
-            event.key ===
-            "Enter"
-        ){
+if(  
+        event.key ===  
+        "Enter"  
+    ){  
 
-            event.preventDefault();
+        event.preventDefault();  
 
-            sendMessage();
+        sendMessage();  
 
-        }
+    }  
 
-    }
+}
+
 );
 
 /* =====================================================
-   MICROFONO
+MICROFONO
 ===================================================== */
 
 const Recognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
 
-let recognition = null;
-let listening = false;
+let recognition =
+null;
+
+let listening =
+false;
 
 if(Recognition){
 
-    recognition =
-        new Recognition();
+recognition =  
+    new Recognition();  
 
-    recognition.lang =
-        "it-IT";
 
-    recognition.continuous =
-        false;
+recognition.lang =  
+    "it-IT";  
 
-    recognition.interimResults =
-        false;
 
-    recognition.onstart =
-        ()=>{
+recognition.continuous =  
+    false;  
 
-            listening = true;
 
-            micBtn.classList.add(
-                "active"
-            );
+recognition.interimResults =  
+    false;  
 
-            setState(
-                "listening"
-            );
 
-        };
+recognition.onstart =  
+    () => {  
 
-    recognition.onresult =
-        event=>{
+        listening =  
+            true;  
 
-            const text =
-                event
-                    .results[0][0]
-                    .transcript
-                    .trim();
 
-            if(text){
+        micBtn.classList.add(  
+            "active"  
+        );  
 
-                textInput.value =
-                    text;
 
-                sendMessage();
+        setState(  
+            "listening"  
+        );  
 
-            }
+    };  
 
-        };
 
-    recognition.onerror =
-        error=>{
+recognition.onresult =  
+    event => {  
 
-            console.error(
-                "Microfono:",
-                error
-            );
+        const text =  
+            event  
+                .results[0][0]  
+                .transcript  
+                .trim();  
 
-            listening = false;
 
-            micBtn.classList.remove(
-                "active"
-            );
+        if(text){  
 
-            setState(
-                "idle"
-            );
+            textInput.value =  
+                text;  
 
-        };
 
-    recognition.onend =
-        ()=>{
+            sendMessage();  
 
-            listening = false;
+        }  
 
-            micBtn.classList.remove(
-                "active"
-            );
+    };  
 
-        };
 
-    micBtn.addEventListener(
-        "click",
-        ()=>{
+recognition.onerror =  
+    error => {  
 
-            if(listening){
+        console.error(  
+            "Microfono:",  
+            error  
+        );  
 
-                recognition.stop();
 
-            }else{
+        listening =  
+            false;  
 
-                try{
 
-                    recognition.start();
+        micBtn.classList.remove(  
+            "active"  
+        );  
 
-                }catch(error){
 
-                    console.warn(
-                        error
-                    );
+        setState(  
+            "idle"  
+        );  
 
-                }
+    };  
 
-            }
 
-        }
-    );
+recognition.onend =  
+    () => {  
+
+        listening =  
+            false;  
+
+
+        micBtn.classList.remove(  
+            "active"  
+        );  
+
+    };  
+
+
+micBtn.addEventListener(  
+    "click",  
+    () => {  
+
+        if(listening){  
+
+            recognition.stop();  
+
+        }else{  
+
+            try{  
+
+                recognition.start();  
+
+            }catch(error){  
+
+                console.warn(  
+                    error  
+                );  
+
+            }  
+
+        }  
+
+    }  
+);
 
 }else{
 
-    micBtn.style.opacity =
-        ".3";
+micBtn.style.opacity =  
+    ".3";
 
 }
 
 /* =====================================================
-   RESIZE
+RESIZE
 ===================================================== */
 
 window.addEventListener(
-    "resize",
-    ()=>{
+"resize",
+() => {
 
-        camera.aspect =
-            window.innerWidth /
-            window.innerHeight;
+camera.aspect =  
+        window.innerWidth /  
+        window.innerHeight;  
 
-        camera.updateProjectionMatrix();
 
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
+    camera.updateProjectionMatrix();  
 
-        if(map){
-            map.resize();
-        }
 
-    }
+    renderer.setSize(  
+        window.innerWidth,  
+        window.innerHeight  
+    );  
+
+
+    if(map){  
+
+        map.resize();  
+
+    }  
+
+}
+
 );
 
 /* =====================================================
-   CANCELLA MEMORIA
+CANCELLA MEMORIA
 ===================================================== */
 
 window.clearJarvisMemory =
-    function(){
+function(){
 
-        memory = [];
+memory =  
+        [];  
 
-        localStorage.removeItem(
-            MEMORY_KEY
-        );
 
-        console.log(
-            "Memoria JARVIS cancellata."
-        );
+    localStorage.removeItem(  
+        MEMORY_KEY  
+    );  
 
-    };
+
+    console.log(  
+        "Memoria JARVIS cancellata."  
+    );  
+
+};
 
 /* =====================================================
-   AVVIO
+AVVIO
 ===================================================== */
 
-setState("idle");
+setState(
+"idle"
+);
 
-</script>
+</script></body>
 
-</body>
 </html>

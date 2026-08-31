@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>J.A.R.V.I.S.</title>
-
-<link rel="stylesheet"
-href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
-
-<style>
+<title>J.A.R.V.I.S.</title><link rel="stylesheet"
+href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
 *{box-sizing:border-box;margin:0;padding:0}
 
 html,body{
@@ -77,6 +72,44 @@ body{
  letter-spacing:1px;
 }
 
+
+/* ================= FULL SCREEN ================= */
+
+#fullscreenBtn{
+ position:fixed;
+ top:18px;
+ left:22px;
+ z-index:1000;
+ width:40px;
+ height:40px;
+ border:1px solid rgba(0,255,255,.28);
+ border-radius:11px;
+ background:rgba(2,15,18,.72);
+ color:rgba(210,255,255,.75);
+ cursor:pointer;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:17px;
+ backdrop-filter:blur(14px);
+ box-shadow:0 0 20px rgba(0,255,255,.04);
+ transition:.2s ease;
+}
+
+#fullscreenBtn:hover{
+ color:white;
+ border-color:#00ffff;
+ background:rgba(0,255,255,.08);
+ box-shadow:0 0 20px rgba(0,255,255,.12);
+}
+
+#fullscreenBtn:active{
+ transform:scale(.94);
+}
+
+
+/* ================= CHAT ================= */
+
 #chat{
  position:fixed;
  left:50%;
@@ -101,6 +134,9 @@ body{
  line-height:1.45;
  white-space:pre-wrap;
 }
+
+
+/* ================= COMMAND ================= */
 
 .command-wrapper{
  position:fixed;
@@ -195,6 +231,9 @@ body{
  border-color:#00ffff;
  background:rgba(0,255,255,.1);
 }
+
+
+/* ================= VOCE ================= */
 
 #voiceBtn{
  position:fixed;
@@ -395,9 +434,12 @@ body{
  padding:0 8px 0 13px;
  background:rgba(0,25,29,.92);
  border-bottom:1px solid rgba(0,255,255,.15);
+
+ /* IMPORTANTE PER TOUCH */
  cursor:grab;
  user-select:none;
  -webkit-user-select:none;
+ -webkit-touch-callout:none;
  touch-action:none;
 }
 
@@ -414,6 +456,7 @@ body{
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
+ pointer-events:none;
 }
 
 .web-window-number{
@@ -439,6 +482,7 @@ body{
  align-items:center;
  justify-content:center;
  font-size:12px;
+ touch-action:manipulation;
 }
 
 .web-window-btn:hover{
@@ -452,6 +496,7 @@ body{
  height:calc(100% - 39px);
  border:none;
  background:white;
+ pointer-events:auto;
 }
 
 .web-window.minimized{
@@ -498,6 +543,14 @@ body{
  .datetime{
   top:12px;
   right:13px;
+ }
+
+ #fullscreenBtn{
+  top:11px;
+  left:12px;
+  width:36px;
+  height:36px;
+  font-size:15px;
  }
 
  .command-wrapper{
@@ -562,61 +615,47 @@ body{
   left:2.2cm;
  }
 }
-</style>
-</head>
-
-<body>
-
-<div id="webgl-container"></div>
-<div class="vignette"></div>
-
-<div class="jarvis-title" id="jarvisTitle">J.A.R.V.I.S</div>
-
-<div class="datetime">
+</style></head><body><div id="webgl-container"></div>
+<div class="vignette"></div><div class="jarvis-title" id="jarvisTitle">J.A.R.V.I.S</div><div class="datetime">
  <div id="clock" class="time">00:00:00</div>
  <div id="date" class="date">00 AGO 2026</div>
-</div>
+</div><!-- ================= FULL SCREEN ================= --><button id="fullscreenBtn" title="Schermo intero">⛶</button>
 
-<div id="tacticalMap">
- <div id="map"></div>
- <div class="map-overlay"></div>
- <div class="map-header">TACTICAL MAP</div>
- <button id="closeMap">×</button>
-</div>
+<!-- ================= MAPPA ================= --><div id="tacticalMap"> <div id="map"></div> <div class="map-overlay"></div> <div class="map-header">
+  TACTICAL MAP
+ </div> <button id="closeMap">
+  ×
+ </button></div><!-- ================= WEB WINDOWS ================= --><div id="webSearchWindows"></div><div id="webSearchIndicator">
+ WEB WINDOWS: 0
+</div><!-- ================= CHAT ================= --><div id="chat"></div><!-- ================= COMMAND ================= --><div class="command-wrapper"><input
+id="textInput"
+type="text"
+autocomplete="off"
+placeholder="Chiedi qualcosa a JARVIS..."
 
-<div id="webSearchWindows"></div>
-<div id="webSearchIndicator">WEB WINDOWS: 0</div>
+«»
 
-<div id="chat"></div>
-
-<div class="command-wrapper">
- <input id="textInput" type="text" autocomplete="off"
- placeholder="Chiedi qualcosa a JARVIS...">
- <button id="micBtn"><span class="mic-icon"></span></button>
- <button id="sendBtn">INVIA</button>
-</div>
-
-<button id="voiceBtn">⚙ VOCE</button>
-
-<div id="voicePanel">
- <div class="voice-title">VOCE J.A.R.V.I.S.</div>
- <select id="voiceSelector">
-  <option value="">Voce dispositivo automatica</option>
- </select>
- <button id="voiceTest">TESTA VOCE</button>
-</div>
-
-<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
-
-<script type="importmap">
+ <button id="micBtn">
+  <span class="mic-icon"></span>
+ </button> <button id="sendBtn">
+  INVIA
+ </button></div><!-- ================= VOICE ================= --><button id="voiceBtn">
+ ⚙ VOCE
+</button><div id="voicePanel"> <div class="voice-title">
+  VOCE J.A.R.V.I.S.
+ </div> <select id="voiceSelector">
+  <option value="">
+   Voce dispositivo automatica
+  </option>
+ </select> <button id="voiceTest">
+  TESTA VOCE
+ </button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
 {
  "imports":{
   "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
  }
 }
-</script>
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -655,6 +694,66 @@ const voiceSelector=document.getElementById("voiceSelector");
 const voiceTest=document.getElementById("voiceTest");
 const webSearchWindows=document.getElementById("webSearchWindows");
 const webSearchIndicator=document.getElementById("webSearchIndicator");
+const fullscreenBtn=document.getElementById("fullscreenBtn");
+
+
+/* =====================================================
+   FULL SCREEN
+===================================================== */
+
+async function toggleFullscreen(){
+
+ try{
+
+  if(!document.fullscreenElement){
+
+   await document.documentElement.requestFullscreen();
+
+  }else{
+
+   await document.exitFullscreen();
+
+  }
+
+ }catch(error){
+
+  console.warn(
+   "Fullscreen non disponibile:",
+   error
+  );
+
+ }
+
+}
+
+
+/* ================= AGGIORNA ICONA FULL SCREEN ================= */
+
+function updateFullscreenButton(){
+
+ if(document.fullscreenElement){
+
+  fullscreenBtn.textContent="✕";
+  fullscreenBtn.title="Esci da schermo intero";
+
+ }else{
+
+  fullscreenBtn.textContent="⛶";
+  fullscreenBtn.title="Schermo intero";
+
+ }
+
+}
+
+fullscreenBtn.addEventListener(
+ "click",
+ toggleFullscreen
+);
+
+document.addEventListener(
+ "fullscreenchange",
+ updateFullscreenButton
+);
 
 
 /* ================= MEMORIA ================= */
@@ -662,25 +761,59 @@ const webSearchIndicator=document.getElementById("webSearchIndicator");
 let memory=[];
 
 try{
- const saved=localStorage.getItem(MEMORY_KEY);
+
+ const saved=
+  localStorage.getItem(MEMORY_KEY);
+
  if(saved){
+
   const parsed=JSON.parse(saved);
-  if(Array.isArray(parsed)) memory=parsed.slice(-MAX_MEMORY);
+
+  if(Array.isArray(parsed))
+   memory=parsed.slice(-MAX_MEMORY);
  }
-}catch(e){console.warn("Memoria:",e)}
+
+}catch(e){
+
+ console.warn(
+  "Memoria:",
+  e
+ );
+
+}
 
 function saveMemory(){
+
  try{
+
   localStorage.setItem(
    MEMORY_KEY,
-   JSON.stringify(memory.slice(-MAX_MEMORY))
+   JSON.stringify(
+    memory.slice(-MAX_MEMORY)
+   )
   );
- }catch(e){console.warn("Salvataggio memoria:",e)}
+
+ }catch(e){
+
+  console.warn(
+   "Salvataggio memoria:",
+   e
+  );
+
+ }
+
 }
 
 function addMemory(role,content){
- memory.push({role,content});
- memory=memory.slice(-MAX_MEMORY);
+
+ memory.push({
+  role,
+  content
+ });
+
+ memory=
+  memory.slice(-MAX_MEMORY);
+
  saveMemory();
 }
 
@@ -708,7 +841,11 @@ function updateClock(){
 }
 
 updateClock();
-setInterval(updateClock,1000);
+
+setInterval(
+ updateClock,
+ 1000
+);
 
 
 /* ================= THREE ================= */
@@ -735,10 +872,15 @@ renderer.setSize(
 );
 
 renderer.setPixelRatio(
- Math.min(window.devicePixelRatio,2)
+ Math.min(
+  window.devicePixelRatio,
+  2
+ )
 );
 
-container.appendChild(renderer.domElement);
+container.appendChild(
+ renderer.domElement
+);
 
 
 /* ================= GLOW ================= */
@@ -746,26 +888,55 @@ container.appendChild(renderer.domElement);
 function createGlow(){
 
  const canvas=document.createElement("canvas");
+
  canvas.width=64;
  canvas.height=64;
 
  const ctx=canvas.getContext("2d");
 
- const gradient=ctx.createRadialGradient(
-  32,32,0,
-  32,32,32
+ const gradient=
+  ctx.createRadialGradient(
+   32,32,0,
+   32,32,32
+  );
+
+ gradient.addColorStop(
+  0,
+  "rgba(255,255,255,1)"
  );
 
- gradient.addColorStop(0,"rgba(255,255,255,1)");
- gradient.addColorStop(.2,"rgba(220,255,255,1)");
- gradient.addColorStop(.4,"rgba(0,255,255,.9)");
- gradient.addColorStop(.7,"rgba(0,150,190,.25)");
- gradient.addColorStop(1,"rgba(0,0,0,0)");
+ gradient.addColorStop(
+  .2,
+  "rgba(220,255,255,1)"
+ );
+
+ gradient.addColorStop(
+  .4,
+  "rgba(0,255,255,.9)"
+ );
+
+ gradient.addColorStop(
+  .7,
+  "rgba(0,150,190,.25)"
+ );
+
+ gradient.addColorStop(
+  1,
+  "rgba(0,0,0,0)"
+ );
 
  ctx.fillStyle=gradient;
- ctx.fillRect(0,0,64,64);
 
- return new THREE.CanvasTexture(canvas);
+ ctx.fillRect(
+  0,
+  0,
+  64,
+  64
+ );
+
+ return new THREE.CanvasTexture(
+  canvas
+ );
 }
 
 
@@ -773,66 +944,133 @@ function createGlow(){
 
 const COUNT=3000;
 
-const geometry=new THREE.BufferGeometry();
-const positions=new Float32Array(COUNT*3);
-const radii=new Float32Array(COUNT);
-const angles=new Float32Array(COUNT*2);
-const seeds=new Float32Array(COUNT);
+const geometry=
+ new THREE.BufferGeometry();
+
+const positions=
+ new Float32Array(
+  COUNT*3
+ );
+
+const radii=
+ new Float32Array(
+  COUNT
+ );
+
+const angles=
+ new Float32Array(
+  COUNT*2
+ );
+
+const seeds=
+ new Float32Array(
+  COUNT
+ );
 
 for(let i=0;i<COUNT;i++){
 
- const r=1.10+Math.random()*.70;
- const theta=Math.random()*Math.PI*2;
- const phi=Math.acos(2*Math.random()-1);
+ const r=
+  1.10+
+  Math.random()*.70;
+
+ const theta=
+  Math.random()*Math.PI*2;
+
+ const phi=
+  Math.acos(
+   2*Math.random()-1
+  );
 
  radii[i]=r;
- angles[i*2]=theta;
- angles[i*2+1]=phi;
- seeds[i]=Math.random()*100;
 
- positions[i*3]=r*Math.sin(phi)*Math.cos(theta);
- positions[i*3+1]=r*Math.sin(phi)*Math.sin(theta);
- positions[i*3+2]=r*Math.cos(phi);
+ angles[i*2]=theta;
+
+ angles[i*2+1]=phi;
+
+ seeds[i]=
+  Math.random()*100;
+
+ positions[i*3]=
+  r*Math.sin(phi)*Math.cos(theta);
+
+ positions[i*3+1]=
+  r*Math.sin(phi)*Math.sin(theta);
+
+ positions[i*3+2]=
+  r*Math.cos(phi);
 }
 
 geometry.setAttribute(
  "position",
- new THREE.BufferAttribute(positions,3)
+ new THREE.BufferAttribute(
+  positions,
+  3
+ )
 );
 
-const material=new THREE.PointsMaterial({
- color:new THREE.Color(0x00cfe8),
- size:.042,
- map:createGlow(),
- transparent:true,
- opacity:1,
- depthWrite:false,
- blending:THREE.AdditiveBlending
-});
+const material=
+ new THREE.PointsMaterial({
 
-const particles=new THREE.Points(
- geometry,
- material
+  color:new THREE.Color(
+   0x00cfe8
+  ),
+
+  size:.042,
+
+  map:createGlow(),
+
+  transparent:true,
+
+  opacity:1,
+
+  depthWrite:false,
+
+  blending:THREE.AdditiveBlending
+ });
+
+const particles=
+ new THREE.Points(
+  geometry,
+  material
+ );
+
+scene.add(
+ particles
 );
-
-scene.add(particles);
 
 
 /* ================= STATO ================= */
 
 let targetEnergy=.15;
+
 let energy=.15;
 
-const normalColor=new THREE.Color(0x00cfe8);
-const activeColor=new THREE.Color(0x8fffff);
-const currentColor=normalColor.clone();
+const normalColor=
+ new THREE.Color(
+  0x00cfe8
+ );
+
+const activeColor=
+ new THREE.Color(
+  0x8fffff
+ );
+
+const currentColor=
+ normalColor.clone();
 
 function setState(state){
 
- if(state==="thinking") targetEnergy=2;
- else if(state==="speaking") targetEnergy=.8;
- else if(state==="listening") targetEnergy=.55;
- else targetEnergy=.15;
+ if(state==="thinking")
+  targetEnergy=2;
+
+ else if(state==="speaking")
+  targetEnergy=.8;
+
+ else if(state==="listening")
+  targetEnergy=.55;
+
+ else
+  targetEnergy=.15;
 }
 
 
@@ -840,60 +1078,134 @@ function setState(state){
 
 function animate(){
 
- requestAnimationFrame(animate);
+ requestAnimationFrame(
+  animate
+ );
 
- const time=performance.now()*.001;
+ const time=
+  performance.now()*.001;
 
- energy+=(targetEnergy-energy)*.045;
+ energy+=
+  (targetEnergy-energy)*.045;
 
- currentColor.lerp(activeColor,energy*.04);
+ currentColor.lerp(
+  activeColor,
+  energy*.04
+ );
 
  if(energy<.3)
-  currentColor.lerp(normalColor,.03);
+  currentColor.lerp(
+   normalColor,
+   .03
+  );
 
- material.color=currentColor;
- material.size=.032+energy*.008;
+ material.color=
+  currentColor;
 
- const pos=geometry.attributes.position.array;
+ material.size=
+  .032+
+  energy*.008;
+
+ const pos=
+  geometry.attributes
+  .position.array;
 
  for(let i=0;i<COUNT;i++){
 
   const index=i*3;
-  const r=radii[i];
-  const theta=angles[i*2];
-  const phi=angles[i*2+1];
-  const seed=seeds[i];
 
-  const pulse=Math.sin(time*2+seed)*.035;
+  const r=radii[i];
+
+  const theta=
+   angles[i*2];
+
+  const phi=
+   angles[i*2+1];
+
+  const seed=
+   seeds[i];
+
+  const pulse=
+   Math.sin(
+    time*2+seed
+   )*.035;
 
   const strangeShape=
-   Math.sin(theta*6+time*2+seed)*.18*energy;
+   Math.sin(
+    theta*6+
+    time*2+
+    seed
+   )*.18*energy;
 
   const wave=
-   Math.cos(phi*7-time*1.8+seed)*.12*energy;
+   Math.cos(
+    phi*7-
+    time*1.8+
+    seed
+   )*.12*energy;
 
-  const rr=r+pulse+strangeShape+wave;
+  const rr=
+   r+
+   pulse+
+   strangeShape+
+   wave;
 
-  let x=rr*Math.sin(phi)*Math.cos(theta);
-  let y=rr*Math.sin(phi)*Math.sin(theta);
-  let z=rr*Math.cos(phi);
+  let x=
+   rr*
+   Math.sin(phi)*
+   Math.cos(theta);
 
-  x+=Math.sin(time*2.4+phi*8+seed)*.08*energy;
-  y+=Math.cos(time*2.1+theta*9+seed)*.08*energy;
-  z+=Math.sin(time*2.7+(theta+phi)*7)*.10*energy;
+  let y=
+   rr*
+   Math.sin(phi)*
+   Math.sin(theta);
+
+  let z=
+   rr*
+   Math.cos(phi);
+
+  x+=
+   Math.sin(
+    time*2.4+
+    phi*8+
+    seed
+   )*.08*energy;
+
+  y+=
+   Math.cos(
+    time*2.1+
+    theta*9+
+    seed
+   )*.08*energy;
+
+  z+=
+   Math.sin(
+    time*2.7+
+    (theta+phi)*7
+   )*.10*energy;
 
   pos[index]=x;
   pos[index+1]=y;
   pos[index+2]=z;
  }
 
- geometry.attributes.position.needsUpdate=true;
+ geometry.attributes
+  .position.needsUpdate=true;
 
- particles.rotation.y+=.0005+energy*.0008;
- particles.rotation.x=Math.sin(time*.25)*.04;
- particles.rotation.z=Math.cos(time*.18)*.025;
+ particles.rotation.y+=
+  .0005+
+  energy*.0008;
 
- renderer.render(scene,camera);
+ particles.rotation.x=
+  Math.sin(time*.25)*.04;
+
+ particles.rotation.z=
+  Math.cos(time*.18)*.025;
+
+ renderer.render(
+  scene,
+  camera
+ );
 }
 
 animate();
@@ -901,13 +1213,15 @@ animate();
 
 /* ================= MAPLIBRE ================= */
 
-const MAPTILER_KEY="NmSlgtsAdQyEWy7t0OJf";
+const MAPTILER_KEY=
+ "NmSlgtsAdQyEWy7t0OJf";
 
 const MAPTILER_STYLE=
  "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
  +MAPTILER_KEY;
 
 let map=null;
+
 let currentMarker=null;
 
 function initializeMap(){
@@ -915,50 +1229,90 @@ function initializeMap(){
  if(map)return;
 
  if(typeof maplibregl==="undefined"){
-  addMsg("Errore: MapTiler non disponibile.");
+
+  addMsg(
+   "Errore: MapTiler non disponibile."
+  );
+
   return;
  }
 
  map=new maplibregl.Map({
+
   container:"map",
+
   style:MAPTILER_STYLE,
-  center:[10.2118,45.5416],
+
+  center:[
+   10.2118,
+   45.5416
+  ],
+
   zoom:10,
+
   attributionControl:true,
+
   antialias:true
  });
 
  map.addControl(
+
   new maplibregl.NavigationControl({
+
    showCompass:true,
+
    showZoom:true
+
   }),
+
   "bottom-right"
  );
 
- map.on("load",()=>map.resize());
+ map.on(
+  "load",
+  ()=>{
+   map.resize();
+  }
+ );
 }
 
 function openTacticalMap(){
 
- tacticalMap.classList.add("active");
- jarvisTitle.style.display="none";
- mapHeader.style.display="block";
+ tacticalMap.classList.add(
+  "active"
+ );
+
+ jarvisTitle.style.display=
+  "none";
+
+ mapHeader.style.display=
+  "block";
 
  initializeMap();
 
- setTimeout(()=>{
-  if(map)map.resize();
- },400);
+ setTimeout(
+  ()=>{
+   if(map)
+    map.resize();
+  },
+  400
+ );
 }
 
 function closeTacticalMap(){
 
- tacticalMap.classList.remove("active");
- jarvisTitle.style.display="block";
+ tacticalMap.classList.remove(
+  "active"
+ );
+
+ jarvisTitle.style.display=
+  "block";
 }
 
-closeMap.addEventListener("click",closeTacticalMap);
+closeMap.addEventListener(
+ "click",
+ closeTacticalMap
+);
 
 
 /* ================= UTILITY ================= */
@@ -966,52 +1320,105 @@ closeMap.addEventListener("click",closeTacticalMap);
 function escapeHtml(text){
 
  return String(text)
- .replace(/&/g,"&amp;")
- .replace(/</g,"&lt;")
- .replace(/>/g,"&gt;")
- .replace(/"/g,"&quot;")
- .replace(/'/g,"&#039;");
+
+  .replace(
+   /&/g,
+   "&amp;"
+  )
+
+  .replace(
+   /</g,
+   "&lt;"
+  )
+
+  .replace(
+   />/g,
+   "&gt;"
+  )
+
+  .replace(
+   /"/g,
+   "&quot;"
+  )
+
+  .replace(
+   /'/g,
+   "&#039;"
+  );
 }
 
 function addMsg(text){
 
  chat.innerHTML="";
 
- const element=document.createElement("div");
+ const element=
+  document.createElement(
+   "div"
+  );
 
  element.className="msg";
+
  element.textContent=text;
 
- chat.appendChild(element);
+ chat.appendChild(
+  element
+ );
 }
 
 
 /* ================= MARKER ================= */
 
-function createJarvisMarker(lat,lon,name){
+function createJarvisMarker(
+ lat,
+ lon,
+ name
+){
 
  if(!map)return;
 
  if(currentMarker){
+
   currentMarker.remove();
+
   currentMarker=null;
  }
 
- const markerElement=document.createElement("div");
- markerElement.className="jarvis-map-marker";
+ const markerElement=
+  document.createElement(
+   "div"
+  );
 
- currentMarker=new maplibregl.Marker({
-  element:markerElement,
-  anchor:"center"
- })
- .setLngLat([lon,lat])
- .setPopup(
-  new maplibregl.Popup({offset:15})
-  .setHTML(
-   `<b style="color:#00ffff">${escapeHtml(name)}</b>`
+ markerElement.className=
+  "jarvis-map-marker";
+
+ currentMarker=
+  new maplibregl.Marker({
+
+   element:markerElement,
+
+   anchor:"center"
+
+  })
+
+  .setLngLat([
+   lon,
+   lat
+  ])
+
+  .setPopup(
+
+   new maplibregl.Popup({
+    offset:15
+   })
+
+   .setHTML(
+
+    `<b style="color:#00ffff">${escapeHtml(name)}</b>`
+
+   )
   )
- )
- .addTo(map);
+
+  .addTo(map);
 
  currentMarker.togglePopup();
 }
@@ -1025,53 +1432,102 @@ async function searchLocation(place){
 
   openTacticalMap();
 
-  addMsg("Ricerca posizione: "+place);
+  addMsg(
+   "Ricerca posizione: "+
+   place
+  );
 
   const url=
    "https://nominatim.openstreetmap.org/search"+
    "?format=json&limit=1&q="+
    encodeURIComponent(place);
 
-  const response=await fetch(url,{
-   headers:{
-    "Accept":"application/json"
-   }
-  });
+  const response=
+   await fetch(
+    url,
+    {
+     headers:{
+      "Accept":
+       "application/json"
+     }
+    }
+   );
 
   if(!response.ok)
-   throw new Error("Ricerca posizione fallita");
+   throw new Error(
+    "Ricerca posizione fallita"
+   );
 
-  const results=await response.json();
+  const results=
+   await response.json();
 
   if(!results.length){
-   addMsg("Non riesco a trovare "+place+".");
+
+   addMsg(
+    "Non riesco a trovare "+
+    place+"."
+   );
+
    return;
   }
 
-  const result=results[0];
+  const result=
+   results[0];
 
-  const lat=parseFloat(result.lat);
-  const lon=parseFloat(result.lon);
+  const lat=
+   parseFloat(
+    result.lat
+   );
+
+  const lon=
+   parseFloat(
+    result.lon
+   );
 
   if(!map)
-   throw new Error("Mappa non inizializzata");
+   throw new Error(
+    "Mappa non inizializzata"
+   );
 
   map.flyTo({
-   center:[lon,lat],
+
+   center:[
+    lon,
+    lat
+   ],
+
    zoom:12,
+
    speed:.8,
+
    curve:1.5,
+
    essential:true
+
   });
 
-  createJarvisMarker(lat,lon,place);
+  createJarvisMarker(
+   lat,
+   lon,
+   place
+  );
 
-  addMsg("Posizione acquisita: "+place);
+  addMsg(
+   "Posizione acquisita: "+
+   place
+  );
 
  }catch(error){
 
-  console.error("MAP ERROR:",error);
-  addMsg("Impossibile localizzare "+place+".");
+  console.error(
+   "MAP ERROR:",
+   error
+  );
+
+  addMsg(
+   "Impossibile localizzare "+
+   place+"."
+  );
  }
 }
 
@@ -1080,32 +1536,63 @@ async function searchLocation(place){
 
 function handleMapCommand(text){
 
- const normalized=text.toLowerCase().trim();
+ const normalized=
+  text.toLowerCase().trim();
 
  if(
-  normalized.includes("apri la mappa")||
-  normalized.includes("apri mappa")||
-  normalized.includes("mappa tattica")||
-  normalized.includes("modalità tattica")||
-  normalized.includes("modalita tattica")||
-  normalized.includes("attiva la mappa")
+  normalized.includes(
+   "apri la mappa"
+  )||
+  normalized.includes(
+   "apri mappa"
+  )||
+  normalized.includes(
+   "mappa tattica"
+  )||
+  normalized.includes(
+   "modalità tattica"
+  )||
+  normalized.includes(
+   "modalita tattica"
+  )||
+  normalized.includes(
+   "attiva la mappa"
+  )
  ){
 
   openTacticalMap();
-  addMsg("Mappa tattica attivata.");
+
+  addMsg(
+   "Mappa tattica attivata."
+  );
+
   return true;
  }
 
  if(
-  normalized.includes("chiudi la mappa")||
-  normalized.includes("chiudi mappa")||
-  normalized.includes("esci dalla mappa")||
-  normalized.includes("torna alla modalità normale")||
-  normalized.includes("torna alla modalita normale")
+  normalized.includes(
+   "chiudi la mappa"
+  )||
+  normalized.includes(
+   "chiudi mappa"
+  )||
+  normalized.includes(
+   "esci dalla mappa"
+  )||
+  normalized.includes(
+   "torna alla modalità normale"
+  )||
+  normalized.includes(
+   "torna alla modalita normale"
+  )
  ){
 
   closeTacticalMap();
-  addMsg("Modalità tattica disattivata.");
+
+  addMsg(
+   "Modalità tattica disattivata."
+  );
+
   return true;
  }
 
@@ -1119,14 +1606,29 @@ function handleMapCommand(text){
   "visualizza "
  ];
 
- for(const pattern of patterns){
+ for(
+  const pattern of patterns
+ ){
 
-  if(normalized.startsWith(pattern)){
+  if(
+   normalized.startsWith(
+    pattern
+   )
+  ){
 
-   const place=text.trim().substring(pattern.length).trim();
+   const place=
+    text.trim()
+    .substring(
+     pattern.length
+    )
+    .trim();
 
    if(place.length>1){
-    searchLocation(place);
+
+    searchLocation(
+     place
+    );
+
     return true;
    }
   }
@@ -1141,29 +1643,47 @@ function handleMapCommand(text){
 ===================================================== */
 
 let webWindowCounter=0;
+
 let highestWebZ=220;
 
 function updateWebIndicator(){
 
  const count=
-  webSearchWindows.querySelectorAll(".web-window").length;
+  webSearchWindows
+   .querySelectorAll(
+    ".web-window"
+   ).length;
 
  if(count>0){
 
-  webSearchIndicator.classList.add("active");
-  webSearchIndicator.textContent="WEB WINDOWS: "+count;
+  webSearchIndicator
+   .classList.add(
+    "active"
+   );
+
+  webSearchIndicator.textContent=
+   "WEB WINDOWS: "+
+   count;
 
  }else{
 
-  webSearchIndicator.classList.remove("active");
+  webSearchIndicator
+   .classList.remove(
+    "active"
+   );
  }
 }
 
-function bringWebWindowToFront(windowElement){
+function bringWebWindowToFront(
+ windowElement
+){
 
  highestWebZ++;
 
- windowElement.style.zIndex=String(highestWebZ);
+ windowElement.style.zIndex=
+  String(
+   highestWebZ
+  );
 }
 
 
@@ -1177,17 +1697,30 @@ function openWebSearch(query){
 
  webWindowCounter++;
 
- const windowElement=document.createElement("div");
+ const windowElement=
+  document.createElement(
+   "div"
+  );
 
- windowElement.className="web-window";
+ windowElement.className=
+  "web-window";
 
- const offset=(webWindowCounter-1)%6;
+ const offset=
+  (webWindowCounter-1)%6;
 
- windowElement.style.left=(20+offset*45)+"px";
- windowElement.style.top=(90+offset*35)+"px";
- windowElement.style.zIndex=String(++highestWebZ);
+ windowElement.style.left=
+  (20+offset*45)+"px";
 
- const safeTitle=escapeHtml(query);
+ windowElement.style.top=
+  (90+offset*35)+"px";
+
+ windowElement.style.zIndex=
+  String(
+   ++highestWebZ
+  );
+
+ const safeTitle=
+  escapeHtml(query);
 
  windowElement.innerHTML=`
 
@@ -1228,133 +1761,416 @@ function openWebSearch(query){
 
  `;
 
- webSearchWindows.appendChild(windowElement);
+ webSearchWindows.appendChild(
+  windowElement
+ );
 
- const iframe=windowElement.querySelector("iframe");
+ const iframe=
+  windowElement.querySelector(
+   "iframe"
+  );
 
  iframe.src=
   "https://www.google.com/search?igu=1&q="+
   encodeURIComponent(query);
 
 
- /* ================= PORTA DAVANTI ================= */
+ /* =====================================================
+    PORTA DAVANTI
+ ===================================================== */
 
  windowElement.addEventListener(
   "pointerdown",
   ()=>{
-   bringWebWindowToFront(windowElement);
-  }
- );
-
-
- /* ================= MINIMIZZA ================= */
-
- const minimizeButton=
-  windowElement.querySelector(".minimize-web");
-
- minimizeButton.addEventListener(
-  "click",
-  event=>{
-   event.stopPropagation();
-   windowElement.classList.toggle("minimized");
-  }
- );
-
-
- /* ================= CHIUDI ================= */
-
- const closeButton=
-  windowElement.querySelector(".close-web");
-
- closeButton.addEventListener(
-  "click",
-  event=>{
-   event.stopPropagation();
-   windowElement.remove();
-   updateWebIndicator();
+   bringWebWindowToFront(
+    windowElement
+   );
   }
  );
 
 
  /* =====================================================
-    DRAG CORRETTO
+    MINIMIZZA
+ ===================================================== */
+
+ const minimizeButton=
+  windowElement.querySelector(
+   ".minimize-web"
+  );
+
+ minimizeButton.addEventListener(
+  "click",
+  event=>{
+
+   event.stopPropagation();
+
+   windowElement.classList.toggle(
+    "minimized"
+   );
+
+  }
+ );
+
+
+ /* =====================================================
+    CHIUDI
+ ===================================================== */
+
+ const closeButton=
+  windowElement.querySelector(
+   ".close-web"
+  );
+
+ closeButton.addEventListener(
+  "click",
+  event=>{
+
+   event.stopPropagation();
+
+   windowElement.remove();
+
+   updateWebIndicator();
+
+  }
+ );
+
+
+ /* =====================================================
+    DRAG AVANZATO
     MOUSE + TOUCH + TABLET
  ===================================================== */
 
  const header=
-  windowElement.querySelector(".web-window-header");
+  windowElement.querySelector(
+   ".web-window-header"
+  );
 
  let dragging=false;
+
  let dragOffsetX=0;
+
  let dragOffsetY=0;
 
+ let activePointerId=null;
+
+
+ function startDrag(event){
+
+  if(
+   event.target.closest(
+    ".web-window-btn"
+   )
+  ){
+   return;
+  }
+
+  dragging=true;
+
+  activePointerId=
+   event.pointerId;
+
+  bringWebWindowToFront(
+   windowElement
+  );
+
+  const rect=
+   windowElement.getBoundingClientRect();
+
+  dragOffsetX=
+   event.clientX-
+   rect.left;
+
+  dragOffsetY=
+   event.clientY-
+   rect.top;
+
+  header.classList.add(
+   "dragging"
+  );
+
+  try{
+
+   header.setPointerCapture(
+    event.pointerId
+   );
+
+  }catch(e){}
+
+  event.preventDefault();
+ }
+
+
+ function moveDrag(event){
+
+  if(!dragging)
+   return;
+
+  if(
+   activePointerId!==null &&
+   event.pointerId!==activePointerId
+  ){
+   return;
+  }
+
+  event.preventDefault();
+
+  const rect=
+   windowElement.getBoundingClientRect();
+
+  let newLeft=
+   event.clientX-
+   dragOffsetX;
+
+  let newTop=
+   event.clientY-
+   dragOffsetY;
+
+
+  /* ================= LIMITI ================= */
+
+  const minLeft=
+   -rect.width+80;
+
+  const maxLeft=
+   window.innerWidth-80;
+
+  const minTop=0;
+
+  const maxTop=
+   window.innerHeight-55;
+
+
+  newLeft=
+   Math.max(
+    minLeft,
+    Math.min(
+     newLeft,
+     maxLeft
+    )
+   );
+
+  newTop=
+   Math.max(
+    minTop,
+    Math.min(
+     newTop,
+     maxTop
+    )
+   );
+
+
+  windowElement.style.left=
+   newLeft+"px";
+
+  windowElement.style.top=
+   newTop+"px";
+ }
+
+
+ function stopDrag(event){
+
+  if(!dragging)
+   return;
+
+  if(
+   activePointerId!==null &&
+   event.pointerId!==activePointerId
+  ){
+   return;
+  }
+
+  dragging=false;
+
+  activePointerId=null;
+
+  header.classList.remove(
+   "dragging"
+  );
+
+  try{
+
+   header.releasePointerCapture(
+    event.pointerId
+   );
+
+  }catch(e){}
+
+  event.preventDefault();
+ }
+
+
+ /* =====================================================
+    POINTER DOWN
+ ===================================================== */
 
  header.addEventListener(
   "pointerdown",
+  startDrag,
+  {
+   passive:false
+  }
+ );
+
+
+ /* =====================================================
+    POINTER MOVE
+ ===================================================== */
+
+ header.addEventListener(
+  "pointermove",
+  moveDrag,
+  {
+   passive:false
+  }
+ );
+
+
+ /* =====================================================
+    POINTER UP
+ ===================================================== */
+
+ header.addEventListener(
+  "pointerup",
+  stopDrag,
+  {
+   passive:false
+  }
+ );
+
+
+ /* =====================================================
+    POINTER CANCEL
+ ===================================================== */
+
+ header.addEventListener(
+  "pointercancel",
+  stopDrag,
+  {
+   passive:false
+  }
+ );
+
+
+ /* =====================================================
+    LOST POINTER
+ ===================================================== */
+
+ header.addEventListener(
+  "lostpointercapture",
+  ()=>{
+   dragging=false;
+   activePointerId=null;
+   header.classList.remove(
+    "dragging"
+   );
+  }
+ );
+
+
+ /* =====================================================
+    SUPPORTO EXTRA TOUCH
+    Per alcuni browser/tablet
+ ===================================================== */
+
+ let touchDragging=false;
+
+ let touchStartX=0;
+
+ let touchStartY=0;
+
+ let originalLeft=0;
+
+ let originalTop=0;
+
+
+ header.addEventListener(
+  "touchstart",
   event=>{
 
    if(
-    event.target.closest(".web-window-btn")
+    event.target.closest(
+     ".web-window-btn"
+    )
    ){
     return;
    }
 
-   dragging=true;
-
-   bringWebWindowToFront(windowElement);
+   const touch=
+    event.touches[0];
 
    const rect=
     windowElement.getBoundingClientRect();
 
-   dragOffsetX=
-    event.clientX-rect.left;
+   touchDragging=true;
 
-   dragOffsetY=
-    event.clientY-rect.top;
+   touchStartX=
+    touch.clientX;
 
-   try{
-    header.setPointerCapture(event.pointerId);
-   }catch(e){}
+   touchStartY=
+    touch.clientY;
+
+   originalLeft=
+    rect.left;
+
+   originalTop=
+    rect.top;
+
+   bringWebWindowToFront(
+    windowElement
+   );
 
    event.preventDefault();
+
   },
-  {passive:false}
+  {
+   passive:false
+  }
  );
 
 
  header.addEventListener(
-  "pointermove",
+  "touchmove",
   event=>{
 
-   if(!dragging)return;
+   if(!touchDragging)
+    return;
 
-   event.preventDefault();
+   const touch=
+    event.touches[0];
 
    let newLeft=
-    event.clientX-dragOffsetX;
+    originalLeft+
+    (
+     touch.clientX-
+     touchStartX
+    );
 
    let newTop=
-    event.clientY-dragOffsetY;
+    originalTop+
+    (
+     touch.clientY-
+     touchStartY
+    );
 
    const rect=
     windowElement.getBoundingClientRect();
 
-   const minLeft=-rect.width+100;
-   const maxLeft=window.innerWidth-80;
-
-   const minTop=0;
-   const maxTop=window.innerHeight-60;
-
    newLeft=
     Math.max(
-     minLeft,
-     Math.min(newLeft,maxLeft)
+     -rect.width+80,
+     Math.min(
+      newLeft,
+      window.innerWidth-80
+     )
     );
 
    newTop=
     Math.max(
-     minTop,
-     Math.min(newTop,maxTop)
+     0,
+     Math.min(
+      newTop,
+      window.innerHeight-55
+     )
     );
 
    windowElement.style.left=
@@ -1362,44 +2178,33 @@ function openWebSearch(query){
 
    windowElement.style.top=
     newTop+"px";
+
+   event.preventDefault();
+
   },
-  {passive:false}
+  {
+   passive:false
+  }
  );
 
 
- function stopDragging(event){
-
-  if(!dragging)return;
-
-  dragging=false;
-
-  try{
-   header.releasePointerCapture(event.pointerId);
-  }catch(e){}
- }
-
-
  header.addEventListener(
-  "pointerup",
-  stopDragging
- );
-
- header.addEventListener(
-  "pointercancel",
-  stopDragging
- );
-
- header.addEventListener(
-  "lostpointercapture",
+  "touchend",
   ()=>{
-   dragging=false;
+   touchDragging=false;
+  },
+  {
+   passive:true
   }
  );
 
 
  updateWebIndicator();
 
- addMsg("Ricerca web: "+query);
+ addMsg(
+  "Ricerca web: "+
+  query
+ );
 }
 
 
@@ -1407,7 +2212,8 @@ function openWebSearch(query){
 
 function handleWebCommand(text){
 
- const normalized=text.toLowerCase().trim();
+ const normalized=
+  text.toLowerCase().trim();
 
  const patterns=[
   "cerca sul web ",
@@ -1421,15 +2227,29 @@ function handleWebCommand(text){
   "fai una ricerca su "
  ];
 
- for(const pattern of patterns){
+ for(
+  const pattern of patterns
+ ){
 
-  if(normalized.startsWith(pattern)){
+  if(
+   normalized.startsWith(
+    pattern
+   )
+  ){
 
    const query=
-    text.trim().substring(pattern.length).trim();
+    text.trim()
+    .substring(
+     pattern.length
+    )
+    .trim();
 
    if(query.length>1){
-    openWebSearch(query);
+
+    openWebSearch(
+     query
+    );
+
     return true;
    }
   }
@@ -1443,32 +2263,52 @@ function handleWebCommand(text){
 
 function handleWebWindowCommand(text){
 
- const normalized=text.toLowerCase().trim();
+ const normalized=
+  text.toLowerCase().trim();
 
  if(
-  normalized==="chiudi le ricerche web"||
-  normalized==="chiudi ricerca web"||
-  normalized==="chiudi tutte le ricerche"||
-  normalized==="chiudi tutte le finestre web"
+  normalized===
+   "chiudi le ricerche web"||
+  normalized===
+   "chiudi ricerca web"||
+  normalized===
+   "chiudi tutte le ricerche"||
+  normalized===
+   "chiudi tutte le finestre web"
  ){
 
   webSearchWindows.innerHTML="";
+
   updateWebIndicator();
-  addMsg("Finestre web chiuse.");
+
+  addMsg(
+   "Finestre web chiuse."
+  );
 
   return true;
  }
 
  if(
-  normalized==="minimizza le ricerche web"||
-  normalized==="minimizza tutte le ricerche"
+  normalized===
+   "minimizza le ricerche web"||
+  normalized===
+   "minimizza tutte le ricerche"
  ){
 
   webSearchWindows
-   .querySelectorAll(".web-window")
-   .forEach(w=>w.classList.add("minimized"));
+   .querySelectorAll(
+    ".web-window"
+   )
+   .forEach(
+    w=>
+     w.classList.add(
+      "minimized"
+     )
+   );
 
-  addMsg("Ricerche web minimizzate.");
+  addMsg(
+   "Ricerche web minimizzate."
+  );
 
   return true;
  }
@@ -1484,25 +2324,40 @@ function getTimeData(){
  const now=new Date();
 
  return{
-  currentTime:now.toLocaleTimeString("it-IT",{
-   hour:"2-digit",
-   minute:"2-digit",
-   second:"2-digit"
-  }),
 
-  currentDate:now.toLocaleDateString("it-IT",{
-   day:"2-digit",
-   month:"2-digit",
-   year:"numeric"
-  }),
+  currentTime:
+   now.toLocaleTimeString(
+    "it-IT",
+    {
+     hour:"2-digit",
+     minute:"2-digit",
+     second:"2-digit"
+    }
+   ),
 
-  dayOfWeek:now.toLocaleDateString("it-IT",{
-   weekday:"long"
-  }),
+  currentDate:
+   now.toLocaleDateString(
+    "it-IT",
+    {
+     day:"2-digit",
+     month:"2-digit",
+     year:"numeric"
+    }
+   ),
 
-  timezone:Intl.DateTimeFormat()
+  dayOfWeek:
+   now.toLocaleDateString(
+    "it-IT",
+    {
+     weekday:"long"
+    }
+   ),
+
+  timezone:
+   Intl.DateTimeFormat()
    .resolvedOptions()
    .timeZone
+
  };
 }
 
@@ -1511,56 +2366,84 @@ function getTimeData(){
 
 function loadDeviceVoices(){
 
- if(!("speechSynthesis" in window))return;
+ if(
+  !("speechSynthesis" in window)
+ )
+  return;
 
  deviceVoices=
-  window.speechSynthesis.getVoices();
+  window.speechSynthesis
+  .getVoices();
 
  voiceSelector.innerHTML="";
 
- const automatic=document.createElement("option");
+ const automatic=
+  document.createElement(
+   "option"
+  );
 
  automatic.value="";
+
  automatic.textContent=
   "Voce dispositivo automatica";
 
- voiceSelector.appendChild(automatic);
+ voiceSelector.appendChild(
+  automatic
+ );
 
- deviceVoices.forEach((voice,index)=>{
+ deviceVoices.forEach(
+  (voice,index)=>{
 
-  const option=document.createElement("option");
+   const option=
+    document.createElement(
+     "option"
+    );
 
-  option.value=String(index);
+   option.value=
+    String(index);
 
-  option.textContent=
-   `${voice.name} — ${voice.lang}`;
+   option.textContent=
+    `${voice.name} — ${voice.lang}`;
 
-  voiceSelector.appendChild(option);
- });
+   voiceSelector.appendChild(
+    option
+   );
+
+  }
+ );
 
  const savedVoice=
-  localStorage.getItem("jarvis_device_voice");
+  localStorage.getItem(
+   "jarvis_device_voice"
+  );
 
  if(
   savedVoice!==null&&
-  Number(savedVoice)<deviceVoices.length
+  Number(savedVoice)<
+   deviceVoices.length
  ){
 
-  voiceSelector.value=savedVoice;
+  voiceSelector.value=
+   savedVoice;
 
   selectedDeviceVoice=
-   deviceVoices[Number(savedVoice)];
+   deviceVoices[
+    Number(savedVoice)
+   ];
  }
 }
 
-if("speechSynthesis" in window){
+if(
+ "speechSynthesis" in window
+){
 
  loadDeviceVoices();
 
- window.speechSynthesis.addEventListener(
-  "voiceschanged",
-  loadDeviceVoices
- );
+ window.speechSynthesis
+  .addEventListener(
+   "voiceschanged",
+   loadDeviceVoices
+  );
 }
 
 
@@ -1568,74 +2451,110 @@ if("speechSynthesis" in window){
 
 function speakDevice(text){
 
- return new Promise(resolve=>{
+ return new Promise(
+  resolve=>{
 
-  if(!("speechSynthesis" in window)){
-   resolve(false);
-   return;
-  }
+   if(
+    !("speechSynthesis" in window)
+   ){
 
-  try{
+    resolve(false);
 
-   window.speechSynthesis.cancel();
-
-   const utterance=
-    new SpeechSynthesisUtterance(text);
-
-   utterance.lang="it-IT";
-   utterance.rate=.95;
-   utterance.pitch=.9;
-   utterance.volume=1;
-
-   if(selectedDeviceVoice){
-
-    utterance.voice=
-     selectedDeviceVoice;
-
-   }else{
-
-    const italianVoice=
-     deviceVoices.find(
-      voice=>
-       voice.lang.toLowerCase()
-       .startsWith("it")
-     );
-
-    if(italianVoice)
-     utterance.voice=italianVoice;
+    return;
    }
 
-   utterance.onstart=()=>{
-    audioPlaying=true;
-    setState("speaking");
-   };
+   try{
 
-   utterance.onend=()=>{
-    audioPlaying=false;
-    setState("idle");
-    resolve(true);
-   };
+    window.speechSynthesis.cancel();
 
-   utterance.onerror=()=>{
-    audioPlaying=false;
-    setState("idle");
+    const utterance=
+     new SpeechSynthesisUtterance(
+      text
+     );
+
+    utterance.lang="it-IT";
+
+    utterance.rate=.95;
+
+    utterance.pitch=.9;
+
+    utterance.volume=1;
+
+    if(selectedDeviceVoice){
+
+     utterance.voice=
+      selectedDeviceVoice;
+
+    }else{
+
+     const italianVoice=
+      deviceVoices.find(
+       voice=>
+        voice.lang
+        .toLowerCase()
+        .startsWith("it")
+      );
+
+     if(italianVoice)
+      utterance.voice=
+       italianVoice;
+    }
+
+    utterance.onstart=()=>{
+
+     audioPlaying=true;
+
+     setState(
+      "speaking"
+     );
+    };
+
+    utterance.onend=()=>{
+
+     audioPlaying=false;
+
+     setState(
+      "idle"
+     );
+
+     resolve(true);
+    };
+
+    utterance.onerror=()=>{
+
+     audioPlaying=false;
+
+     setState(
+      "idle"
+     );
+
+     resolve(false);
+    };
+
+    window.speechSynthesis
+     .speak(
+      utterance
+     );
+
+    setTimeout(
+     ()=>{
+      try{
+       window.speechSynthesis
+        .resume();
+      }catch(e){}
+     },
+     100
+    );
+
+   }catch(error){
+
+    console.error(error);
+
     resolve(false);
-   };
+   }
 
-   window.speechSynthesis.speak(utterance);
-
-   setTimeout(()=>{
-    try{
-     window.speechSynthesis.resume();
-    }catch(e){}
-   },100);
-
-  }catch(error){
-
-   console.error(error);
-   resolve(false);
   }
- });
+ );
 }
 
 
@@ -1648,81 +2567,133 @@ async function speakElevenLabs(text){
  if(currentAudio){
 
   try{
+
    currentAudio.pause();
+
    currentAudio.currentTime=0;
+
   }catch(e){}
 
   currentAudio=null;
  }
 
- const controller=new AbortController();
+ const controller=
+  new AbortController();
 
- const timeout=setTimeout(
-  ()=>controller.abort(),
-  30000
- );
+ const timeout=
+  setTimeout(
+   ()=>controller.abort(),
+   30000
+  );
 
  try{
 
-  const response=await fetch(
-   API,
-   {
-    method:"POST",
+  const response=
+   await fetch(
+    API,
+    {
 
-    headers:{
-     "Content-Type":"application/json"
-    },
+     method:"POST",
 
-    body:JSON.stringify({
-     action:"tts",
-     text:text,
-     voiceId:ELEVEN_VOICE_ID
-    }),
+     headers:{
+      "Content-Type":
+       "application/json"
+     },
 
-    signal:controller.signal
-   }
-  );
+     body:JSON.stringify({
 
-  if(!response.ok)return false;
+      action:"tts",
 
-  const contentType=
-   response.headers.get("content-type")||"";
+      text:text,
 
-  if(!contentType.includes("audio"))
+      voiceId:
+       ELEVEN_VOICE_ID
+
+     }),
+
+     signal:
+      controller.signal
+
+    }
+   );
+
+  if(!response.ok)
    return false;
 
-  const audioBlob=await response.blob();
+  const contentType=
+   response.headers
+   .get("content-type")||
+   "";
 
-  if(!audioBlob||audioBlob.size===0)
+  if(
+   !contentType.includes(
+    "audio"
+   )
+  )
+   return false;
+
+  const audioBlob=
+   await response.blob();
+
+  if(
+   !audioBlob||
+   audioBlob.size===0
+  )
    return false;
 
   const audioUrl=
-   URL.createObjectURL(audioBlob);
+   URL.createObjectURL(
+    audioBlob
+   );
 
-  const audio=new Audio(audioUrl);
+  const audio=
+   new Audio(
+    audioUrl
+   );
 
-  currentAudio=audio;
+  currentAudio=
+   audio;
 
   audio.volume=1;
 
   audio.onplay=()=>{
+
    audioPlaying=true;
-   setState("speaking");
+
+   setState(
+    "speaking"
+   );
   };
 
   audio.onended=()=>{
-   audioPlaying=false;
-   setState("idle");
-   URL.revokeObjectURL(audioUrl);
 
-   if(currentAudio===audio)
+   audioPlaying=false;
+
+   setState(
+    "idle"
+   );
+
+   URL.revokeObjectURL(
+    audioUrl
+   );
+
+   if(
+    currentAudio===audio
+   )
     currentAudio=null;
   };
 
   audio.onerror=()=>{
+
    audioPlaying=false;
-   setState("idle");
-   URL.revokeObjectURL(audioUrl);
+
+   setState(
+    "idle"
+   );
+
+   URL.revokeObjectURL(
+    audioUrl
+   );
   };
 
   await audio.play();
@@ -1731,12 +2702,18 @@ async function speakElevenLabs(text){
 
  }catch(error){
 
-  console.warn("ElevenLabs:",error);
+  console.warn(
+   "ElevenLabs:",
+   error
+  );
+
   return false;
 
  }finally{
 
-  clearTimeout(timeout);
+  clearTimeout(
+   timeout
+  );
  }
 }
 
@@ -1748,11 +2725,16 @@ async function speak(text){
  if(!text)return;
 
  const elevenSuccess=
-  await speakElevenLabs(text);
+  await speakElevenLabs(
+   text
+  );
 
- if(elevenSuccess)return;
+ if(elevenSuccess)
+  return;
 
- await speakDevice(text);
+ await speakDevice(
+  text
+ );
 }
 
 
@@ -1771,7 +2753,8 @@ voiceSelector.addEventListener(
  "change",
  ()=>{
 
-  const value=voiceSelector.value;
+  const value=
+   voiceSelector.value;
 
   if(value===""){
 
@@ -1784,7 +2767,8 @@ voiceSelector.addEventListener(
    return;
   }
 
-  const index=Number(value);
+  const index=
+   Number(value);
 
   if(
    Number.isInteger(index)&&
@@ -1805,7 +2789,10 @@ voiceSelector.addEventListener(
 voiceBtn.addEventListener(
  "click",
  ()=>{
-  voicePanel.classList.toggle("active");
+  voicePanel.classList.toggle(
+   "active"
+  );
+
   loadDeviceVoices();
  }
 );
@@ -1815,66 +2802,92 @@ voiceBtn.addEventListener(
 
 async function processAi(text){
 
- if(handleWebWindowCommand(text))
+ if(
+  handleWebWindowCommand(text)
+ )
   return;
 
- if(handleWebCommand(text))
+ if(
+  handleWebCommand(text)
+ )
   return;
 
- if(handleMapCommand(text))
+ if(
+  handleMapCommand(text)
+ )
   return;
 
- setState("thinking");
+ setState(
+  "thinking"
+ );
 
  try{
 
-  const temporal=getTimeData();
+  const temporal=
+   getTimeData();
 
-  addMemory("user",text);
+  addMemory(
+   "user",
+   text
+  );
 
   const controller=
    new AbortController();
 
-  const timeout=setTimeout(
-   ()=>controller.abort(),
-   30000
-  );
+  const timeout=
+   setTimeout(
+    ()=>controller.abort(),
+    30000
+   );
 
   let response;
 
   try{
 
-   response=await fetch(
-    API,
-    {
-     method:"POST",
+   response=
+    await fetch(
+     API,
+     {
 
-     headers:{
-      "Content-Type":"application/json"
-     },
+      method:"POST",
 
-     body:JSON.stringify({
+      headers:{
+       "Content-Type":
+        "application/json"
+      },
 
-      message:text,
+      body:JSON.stringify({
 
-      memory:memory.slice(-4),
+       message:text,
 
-      currentTime:temporal.currentTime,
+       memory:
+        memory.slice(-4),
 
-      currentDate:temporal.currentDate,
+       currentTime:
+        temporal.currentTime,
 
-      dayOfWeek:temporal.dayOfWeek,
+       currentDate:
+        temporal.currentDate,
 
-      timezone:temporal.timezone
-     }),
+       dayOfWeek:
+        temporal.dayOfWeek,
 
-     signal:controller.signal
-    }
-   );
+       timezone:
+        temporal.timezone
+
+      }),
+
+      signal:
+       controller.signal
+
+     }
+    );
 
   }finally{
 
-   clearTimeout(timeout);
+   clearTimeout(
+    timeout
+   );
   }
 
   if(!response.ok){
@@ -1883,27 +2896,40 @@ async function processAi(text){
     await response.text();
 
    let errorMessage=
-    "HTTP "+response.status;
+    "HTTP "+
+    response.status;
 
    try{
 
     const errorData=
-     JSON.parse(errorText);
+     JSON.parse(
+      errorText
+     );
 
-    if(errorData&&errorData.error)
-     errorMessage=errorData.error;
+    if(
+     errorData&&
+     errorData.error
+    )
+     errorMessage=
+      errorData.error;
 
    }catch(e){
 
     if(errorText)
      errorMessage=
-      errorText.substring(0,200);
+      errorText.substring(
+       0,
+       200
+      );
    }
 
-   throw new Error(errorMessage);
+   throw new Error(
+    errorMessage
+   );
   }
 
-  const data=await response.json();
+  const data=
+   await response.json();
 
   const reply=
    typeof data.response==="string"
@@ -1911,35 +2937,60 @@ async function processAi(text){
     :"";
 
   if(!reply)
-   throw new Error("Risposta AI vuota");
+   throw new Error(
+    "Risposta AI vuota"
+   );
 
-  addMsg(reply);
+  addMsg(
+   reply
+  );
 
-  addMemory("assistant",reply);
+  addMemory(
+   "assistant",
+   reply
+  );
 
-  speak(reply).catch(console.error);
+  speak(
+   reply
+  ).catch(
+   console.error
+  );
 
-  setState("idle");
+  setState(
+   "idle"
+  );
 
  }catch(error){
 
-  console.error("JARVIS ERROR:",error);
+  console.error(
+   "JARVIS ERROR:",
+   error
+  );
 
   let message=
    error.message||
    "Errore sconosciuto";
 
-  if(error.name==="AbortError")
+  if(
+   error.name==="AbortError"
+  )
    message=
     "Il server ha impiegato troppo tempo a rispondere.";
 
-  else if(message==="Failed to fetch")
+  else if(
+   message==="Failed to fetch"
+  )
    message=
     "Errore di connessione al server JARVIS.";
 
-  addMsg("ERRORE: "+message);
+  addMsg(
+   "ERRORE: "+
+   message
+  );
 
-  setState("idle");
+  setState(
+   "idle"
+  );
  }
 }
 
@@ -1948,15 +2999,20 @@ async function processAi(text){
 
 function sendMessage(){
 
- const text=textInput.value.trim();
+ const text=
+  textInput.value.trim();
 
  if(!text)return;
 
  textInput.value="";
 
- addMsg(text);
+ addMsg(
+  text
+ );
 
- processAi(text);
+ processAi(
+  text
+ );
 }
 
 sendBtn.addEventListener(
@@ -1985,56 +3041,79 @@ const Recognition=
  window.webkitSpeechRecognition;
 
 let recognition=null;
+
 let listening=false;
 
 if(Recognition){
 
- recognition=new Recognition();
+ recognition=
+  new Recognition();
 
- recognition.lang="it-IT";
- recognition.continuous=false;
- recognition.interimResults=false;
+ recognition.lang=
+  "it-IT";
+
+ recognition.continuous=
+  false;
+
+ recognition.interimResults=
+  false;
 
  recognition.onstart=()=>{
 
   listening=true;
 
-  micBtn.classList.add("active");
+  micBtn.classList.add(
+   "active"
+  );
 
-  setState("listening");
+  setState(
+   "listening"
+  );
  };
 
- recognition.onresult=event=>{
+ recognition.onresult=
+  event=>{
 
-  const text=
-   event.results[0][0]
-   .transcript
-   .trim();
+   const text=
+    event.results[0][0]
+    .transcript
+    .trim();
 
-  if(text){
+   if(text){
 
-   textInput.value=text;
+    textInput.value=
+     text;
 
-   sendMessage();
-  }
- };
+    sendMessage();
+   }
+  };
 
- recognition.onerror=error=>{
+ recognition.onerror=
+  error=>{
 
-  console.error("Microfono:",error);
+   console.error(
+    "Microfono:",
+    error
+   );
 
-  listening=false;
+   listening=false;
 
-  micBtn.classList.remove("active");
+   micBtn.classList.remove(
+    "active"
+   );
 
-  setState("idle");
- };
+   setState(
+    "idle"
+   );
+  };
 
  recognition.onend=()=>{
 
   listening=false;
 
-  micBtn.classList.remove("active");
+  micBtn.classList.remove(
+   "active"
+  );
  };
 
  micBtn.addEventListener(
@@ -2048,9 +3127,15 @@ if(Recognition){
    }else{
 
     try{
+
      recognition.start();
+
     }catch(error){
-     console.warn(error);
+
+     console.warn(
+      error
+     );
+
     }
    }
   }
@@ -2079,32 +3164,36 @@ window.addEventListener(
    window.innerHeight
   );
 
-  if(map)map.resize();
+  if(map)
+   map.resize();
  }
 );
 
 
 /* ================= CANCELLA MEMORIA ================= */
 
-window.clearJarvisMemory=function(){
+window.clearJarvisMemory=
+ function(){
 
- memory=[];
+  memory=[];
 
- localStorage.removeItem(
-  MEMORY_KEY
- );
+  localStorage.removeItem(
+   MEMORY_KEY
+  );
 
- console.log(
-  "Memoria JARVIS cancellata."
- );
+  console.log(
+   "Memoria JARVIS cancellata."
+  );
 };
 
 
 /* ================= AVVIO ================= */
 
-setState("idle");
+setState(
+ "idle"
+);
 
-</script>
+updateFullscreenButton();
 
-</body>
+</script></body>
 </html>

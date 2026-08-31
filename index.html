@@ -464,11 +464,6 @@ body{
     color:white;
 }
 
-#voiceTest:disabled{
-    opacity:.5;
-    cursor:wait;
-}
-
 #tacticalMap{
     position:fixed;
     inset:0;
@@ -950,9 +945,11 @@ body{
 
 </div>
 
+
 <script
     src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
 </script>
+
 
 <script type="importmap">
 
@@ -964,6 +961,7 @@ body{
 }
 
 </script>
+
 
 <script type="module">
 
@@ -991,25 +989,11 @@ const MAX_MEMORY =
 const ELEVEN_VOICE_ID =
     "vkBFlAtUdZqNR4MqxSVr";
 
-
-/* =====================================================
-   AUDIO ENGINE
-===================================================== */
-
 let currentAudio =
     null;
 
 let audioPlaying =
     false;
-
-let audioContext =
-    null;
-
-let audioSource =
-    null;
-
-let audioGain =
-    null;
 
 
 /* =====================================================
@@ -2373,136 +2357,14 @@ function getTimeData(){
 
 
 /* =====================================================
-   AUDIO CONTEXT
+   ELEVENLABS SPEAK
 ===================================================== */
 
-function initAudio(){
+async function speak(text){
 
-    try{
-
-        if(!audioContext){
-
-            const AudioContextClass =
-                window.AudioContext ||
-                window.webkitAudioContext;
-
-            if(!AudioContextClass){
-
-                console.error(
-                    "AudioContext non supportato."
-                );
-
-                return false;
-
-            }
-
-            audioContext =
-                new AudioContextClass();
-
-            audioGain =
-                audioContext.createGain();
-
-            audioGain.gain.value =
-                1;
-
-            audioGain.connect(
-                audioContext.destination
-            );
-
-        }
-
-
-        if(
-            audioContext.state ===
-            "suspended"
-        ){
-
-            audioContext.resume()
-                .catch(error => {
-
-                    console.warn(
-                        "AudioContext resume:",
-                        error
-                    );
-
-                });
-
-        }
-
-        return true;
-
-    }catch(error){
-
-        console.error(
-            "Audio init error:",
-            error
-        );
-
-        return false;
-
+    if(!text){
+        return;
     }
-
-}
-
-
-/* =====================================================
-   SBLOCCO AUDIO
-===================================================== */
-
-function unlockAudio(){
-
-    try{
-
-        if(!initAudio()){
-            return;
-        }
-
-        if(
-            audioContext.state ===
-            "suspended"
-        ){
-
-            audioContext.resume();
-
-        }
-
-    }catch(error){
-
-        console.warn(
-            "Audio unlock:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   STOP AUDIO
-===================================================== */
-
-function stopAudio(){
-
-    try{
-
-        if(audioSource){
-
-            audioSource.stop();
-
-        }
-
-    }catch(error){
-
-        // Audio già terminato.
-
-    }
-
-    audioSource =
-        null;
-
-    audioPlaying =
-        false;
 
 
     if(currentAudio){
@@ -2516,7 +2378,7 @@ function stopAudio(){
 
         }catch(error){
 
-            // Ignora.
+            console.warn(error);
 
         }
 
@@ -2525,23 +2387,9 @@ function stopAudio(){
 
     }
 
-}
 
-
-/* =====================================================
-   ELEVENLABS SPEAK
-===================================================== */
-
-async function speak(
-    text
-){
-
-    if(!text){
-        return;
-    }
-
-
-    stopAudio();
+    audioPlaying =
+        false;
 
 
     setState(
@@ -2549,55 +2397,14 @@ async function speak(
     );
 
 
-    if(!initAudio()){
-
-        setState(
-            "idle"
-        );
-
-        return;
-
-    }
-
-
-    const controller =
-        new AbortController();
-
-
-    const timeout =
-        setTimeout(
-            () => {
-
-                controller.abort();
-
-            },
-            30000
-        );
-
-
     try{
-
-        if(
-            audioContext.state ===
-            "suspended"
-        ){
-
-            await audioContext.resume();
-
-        }
-
-
-        /* ---------------------------------------------
-           RICHIESTA ELEVENLABS
-        --------------------------------------------- */
 
         const response =
             await fetch(
                 API,
                 {
 
-                    method:
-                        "POST",
+                    method:"POST",
 
                     headers:{
                         "Content-Type":
@@ -2616,10 +2423,7 @@ async function speak(
                             voiceId:
                                 ELEVEN_VOICE_ID
 
-                        }),
-
-                    signal:
-                        controller.signal
+                        })
 
                 }
             );
@@ -2643,10 +2447,6 @@ async function speak(
         }
 
 
-        /* ---------------------------------------------
-           CONTROLLO AUDIO
-        --------------------------------------------- */
-
         const contentType =
             response.headers.get(
                 "content-type"
@@ -2654,16 +2454,16 @@ async function speak(
 
 
         if(
-            !contentType
-                .toLowerCase()
-                .includes("audio")
+            !contentType.includes(
+                "audio"
+            )
         ){
 
             const errorText =
                 await response.text();
 
             console.error(
-                "Risposta TTS non audio:",
+                "Risposta TTS:",
                 errorText
             );
 
@@ -2674,101 +2474,93 @@ async function speak(
         }
 
 
-        /* ---------------------------------------------
-           PRELEVA AUDIO
-        --------------------------------------------- */
-
-        const arrayBuffer =
-            await response.arrayBuffer();
+        const audioBlob =
+            await response.blob();
 
 
-        if(
-            !arrayBuffer ||
-            arrayBuffer.byteLength === 0
-        ){
-
-            throw new Error(
-                "ElevenLabs ha restituito audio vuoto."
-            );
-
-        }
-
-
-        /* ---------------------------------------------
-           DECODIFICA
-        --------------------------------------------- */
-
-        const audioBuffer =
-            await audioContext.decodeAudioData(
-                arrayBuffer.slice(0)
+        const audioUrl =
+            URL.createObjectURL(
+                audioBlob
             );
 
 
-        if(!audioBuffer){
-
-            throw new Error(
-                "Impossibile decodificare l'audio."
+        const audio =
+            new Audio(
+                audioUrl
             );
 
-        }
+
+        currentAudio =
+            audio;
 
 
-        /* ---------------------------------------------
-           CREA SORGENTE AUDIO
-        --------------------------------------------- */
-
-        const source =
-            audioContext.createBufferSource();
-
-        source.buffer =
-            audioBuffer;
-
-        source.connect(
-            audioGain
-        );
+        audio.volume =
+            1;
 
 
-        audioSource =
-            source;
-
-
-        audioPlaying =
-            true;
-
-
-        setState(
-            "speaking"
-        );
-
-
-        source.onended =
+        audio.onplay =
             () => {
 
                 audioPlaying =
-                    false;
-
-                if(
-                    audioSource ===
-                    source
-                ){
-
-                    audioSource =
-                        null;
-
-                }
+                    true;
 
                 setState(
-                    "idle"
+                    "speaking"
                 );
 
             };
 
 
-        /* ---------------------------------------------
-           PLAY
-        --------------------------------------------- */
+        audio.onended =
+            () => {
 
-        source.start(0);
+                audioPlaying =
+                    false;
+
+                setState(
+                    "idle"
+                );
+
+                URL.revokeObjectURL(
+                    audioUrl
+                );
+
+                if(
+                    currentAudio ===
+                    audio
+                ){
+
+                    currentAudio =
+                        null;
+
+                }
+
+            };
+
+
+        audio.onerror =
+            error => {
+
+                console.error(
+                    "Audio ElevenLabs:",
+                    error
+                );
+
+                audioPlaying =
+                    false;
+
+                setState(
+                    "idle"
+                );
+
+                URL.revokeObjectURL(
+                    audioUrl
+                );
+
+            };
+
+
+        await audio.play();
 
 
     }catch(error){
@@ -2781,17 +2573,8 @@ async function speak(
         audioPlaying =
             false;
 
-        audioSource =
-            null;
-
         setState(
             "idle"
-        );
-
-    }finally{
-
-        clearTimeout(
-            timeout
         );
 
     }
@@ -2803,9 +2586,7 @@ async function speak(
    PROCESS AI
 ===================================================== */
 
-async function processAi(
-    text
-){
+async function processAi(text){
 
     if(
         handleMapCommand(text)
@@ -2835,7 +2616,6 @@ async function processAi(
 
         const controller =
             new AbortController();
-
 
         const timeout =
             setTimeout(
@@ -2910,7 +2690,6 @@ async function processAi(
                 "HTTP " +
                 response.status;
 
-
             try{
 
                 const errorData =
@@ -2967,11 +2746,6 @@ async function processAi(
 
         if(!reply){
 
-            console.error(
-                "Risposta Worker senza response:",
-                data
-            );
-
             throw new Error(
                 "Risposta AI vuota"
             );
@@ -2989,11 +2763,6 @@ async function processAi(
             reply
         );
 
-
-        /*
-           La voce parte senza
-           bloccare la risposta.
-        */
 
         speak(
             reply
@@ -3123,8 +2892,6 @@ voiceBtn.addEventListener(
     "click",
     () => {
 
-        unlockAudio();
-
         voicePanel.classList.toggle(
             "active"
         );
@@ -3158,53 +2925,224 @@ voiceSelector.addEventListener(
 
 
 /* =====================================================
-   TEST VOCE
+   TEST VOCE — DIAGNOSTICA
 ===================================================== */
 
 voiceTest.addEventListener(
     "click",
     async () => {
 
-        /*
-           Il click dell'utente
-           sblocca immediatamente
-           il sistema audio.
-        */
+        try {
 
-        unlockAudio();
-
-
-        const oldText =
-            voiceTest.textContent;
-
-
-        voiceTest.disabled =
-            true;
-
-        voiceTest.textContent =
-            "CARICAMENTO VOCE...";
-
-
-        try{
-
-            await speak(
-                "Voce J.A.R.V.I.S. configurata correttamente. Sistema ElevenLabs operativo."
+            console.log(
+                "TEST VOCE AVVIATO"
             );
 
-        }catch(error){
+
+            voiceTest.disabled =
+                true;
+
+            voiceTest.textContent =
+                "TEST IN CORSO...";
+
+
+            const response =
+                await fetch(
+                    API,
+                    {
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                action:
+                                    "tts",
+
+                                text:
+                                    "Test audio JARVIS.",
+
+                                voiceId:
+                                    voiceSelector.value ||
+                                    ELEVEN_VOICE_ID
+
+                            })
+
+                    }
+                );
+
+
+            console.log(
+                "STATUS:",
+                response.status
+            );
+
+
+            console.log(
+                "CONTENT-TYPE:",
+                response.headers.get(
+                    "content-type"
+                )
+            );
+
+
+            if(!response.ok){
+
+                const error =
+                    await response.text();
+
+
+                console.error(
+                    "ERRORE:",
+                    error
+                );
+
+
+                alert(
+                    "Errore TTS:\n\n" +
+                    error
+                );
+
+
+                return;
+
+            }
+
+
+            const blob =
+                await response.blob();
+
+
+            console.log(
+                "AUDIO:",
+                blob.size,
+                "bytes"
+            );
+
+
+            if(blob.size === 0){
+
+                alert(
+                    "ElevenLabs ha restituito un audio vuoto."
+                );
+
+                return;
+
+            }
+
+
+            const url =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            const audio =
+                new Audio(
+                    url
+                );
+
+
+            audio.volume =
+                1;
+
+
+            audio.onplay =
+                () => {
+
+                    console.log(
+                        "AUDIO RIPRODOTTO"
+                    );
+
+                    voiceTest.textContent =
+                        "VOCE FUNZIONANTE";
+
+                };
+
+
+            audio.onended =
+                () => {
+
+                    URL.revokeObjectURL(
+                        url
+                    );
+
+                    voiceTest.disabled =
+                        false;
+
+                    voiceTest.textContent =
+                        "TESTA VOCE";
+
+                };
+
+
+            audio.onerror =
+                error => {
+
+                    console.error(
+                        "ERRORE RIPRODUZIONE:",
+                        error
+                    );
+
+
+                    alert(
+                        "L'audio è arrivato dal Worker, ma il dispositivo/browser non riesce a riprodurlo."
+                    );
+
+
+                    URL.revokeObjectURL(
+                        url
+                    );
+
+
+                    voiceTest.disabled =
+                        false;
+
+                    voiceTest.textContent =
+                        "TESTA VOCE";
+
+                };
+
+
+            await audio.play();
+
+
+        } catch(error) {
 
             console.error(
-                "TEST VOCE:",
+                "TEST VOCE ERROR:",
                 error
             );
 
-        }finally{
+
+            alert(
+                "Errore voce:\n\n" +
+                (
+                    error?.message ||
+                    String(error)
+                )
+            );
+
+
+        } finally {
 
             voiceTest.disabled =
                 false;
 
-            voiceTest.textContent =
-                oldText;
+            if(
+                voiceTest.textContent !==
+                "VOCE FUNZIONANTE"
+            ){
+
+                voiceTest.textContent =
+                    "TESTA VOCE";
+
+            }
 
         }
 
@@ -3319,8 +3257,6 @@ if(Recognition){
     micBtn.addEventListener(
         "click",
         () => {
-
-            unlockAudio();
 
             if(listening){
 

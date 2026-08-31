@@ -1,8 +1,19 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
 
-<title>J.A.R.V.I.S.</title><link rel="stylesheet"
-      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
+
+<style>
 
 *{
  box-sizing:border-box;
@@ -181,8 +192,7 @@ body{
  display:flex;
  align-items:center;
  justify-content:center;
- transition:
-  .2s ease;
+ transition:.2s ease;
 }
 
 .mic-icon{
@@ -234,13 +244,11 @@ body{
 @keyframes micPulse{
 
  0%,100%{
-  box-shadow:
-   0 0 0 rgba(0,255,255,0);
+  box-shadow:0 0 0 rgba(0,255,255,0);
  }
 
  50%{
-  box-shadow:
-   0 0 18px rgba(0,255,255,.28);
+  box-shadow:0 0 18px rgba(0,255,255,.28);
  }
 }
 
@@ -271,7 +279,6 @@ body{
 #micStatus.active{
  display:block;
 }
-
 
 #sendBtn{
  height:39px;
@@ -441,7 +448,6 @@ body{
   opacity:1;
   transform:scale(1);
  }
-
 }
 
 .map-header{
@@ -538,7 +544,6 @@ body{
  50%{
   transform:scale(1.18);
  }
-
 }
 
 
@@ -783,69 +788,159 @@ body{
 
 #textInput.listening{
  color:#8fffff;
- text-shadow:
-  0 0 8px rgba(0,255,255,.3);
+ text-shadow:0 0 8px rgba(0,255,255,.3);
 }
 
-</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div class="jarvis-title"
-     id="jarvisTitle">J.A.R.V.I.S
+</style>
 
-</div><div class="datetime"> <div id="clock"
-      class="time">
+</head>
+
+<body>
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+<div class="jarvis-title"
+     id="jarvisTitle">
+ J.A.R.V.I.S.
+</div>
+
+<div class="datetime">
+
+ <div id="clock" class="time">
   00:00:00
- </div> <div id="date"
-      class="date">
+ </div>
+
+ <div id="date" class="date">
   00 AGO 2026
- </div></div><!-- =====================================================
+ </div>
+
+</div>
+
+
+<!-- =====================================================
      MAPPA
-===================================================== --><div id="tacticalMap"> <div id="map"></div> <div class="map-overlay"></div> <div class="map-header">
+===================================================== -->
+
+<div id="tacticalMap">
+
+ <div id="map"></div>
+
+ <div class="map-overlay"></div>
+
+ <div class="map-header">
   TACTICAL MAP
- </div> <button id="closeMap">
+ </div>
+
+ <button id="closeMap">
   ×
- </button></div><!-- =====================================================
+ </button>
+
+</div>
+
+
+<!-- =====================================================
      WEB WINDOWS
-===================================================== --><div id="webSearchWindows"></div><div id="webSearchIndicator">
+===================================================== -->
+
+<div id="webSearchWindows"></div>
+
+<div id="webSearchIndicator">
  WEB WINDOWS: 0
-</div><!-- =====================================================
+</div>
+
+
+<!-- =====================================================
      CHAT
-===================================================== --><div id="chat"></div><!-- =====================================================
+===================================================== -->
+
+<div id="chat"></div>
+
+
+<!-- =====================================================
      STATO MICROFONO
-===================================================== --><div id="micStatus">
+===================================================== -->
+
+<div id="micStatus">
  MICROFONO: PRONTO
-</div><!-- =====================================================
+</div>
+
+
+<!-- =====================================================
      COMMAND BAR
-===================================================== --><div class="command-wrapper"><input
-id="textInput"
-type="text"
-autocomplete="off"
-placeholder="Chiedi qualcosa a JARVIS..."
+===================================================== -->
 
-«»
+<div class="command-wrapper">
 
-<button id="micBtn"
-title="Parla con JARVIS">
+ <input
+  id="textInput"
+  type="text"
+  autocomplete="off"
+  placeholder="Chiedi qualcosa a JARVIS..."
+ >
 
-<span class="mic-icon"></span>
+ <button
+  id="micBtn"
+  title="Parla con JARVIS">
 
- </button> <button id="sendBtn">
+  <span class="mic-icon"></span>
+
+ </button>
+
+ <button id="sendBtn">
   INVIA
- </button></div><!-- =====================================================
+ </button>
+
+</div>
+
+
+<!-- =====================================================
      CONVERSAZIONE CONTINUA
-===================================================== --><button id="conversationBtn">
+===================================================== -->
+
+<button id="conversationBtn">
  🎙 CONVERSAZIONE
-</button><div id="conversationStatus">
+</button>
+
+<div id="conversationStatus">
  CONVERSAZIONE CONTINUA: OFF
-</div><!-- =====================================================
+</div>
+
+
+<!-- =====================================================
      VOCE
-===================================================== --><button id="voiceBtn">
+===================================================== -->
+
+<button id="voiceBtn">
  ⚙ VOCE
-</button><div id="voicePanel"> <div class="voice-title">
+</button>
+
+<div id="voicePanel">
+
+ <div class="voice-title">
   VOCE J.A.R.V.I.S.
- </div> <select id="voiceSelector">  <option value="">
+ </div>
+
+ <select id="voiceSelector">
+
+  <option value="">
    Voce dispositivo automatica
-  </option> </select> <button id="voiceTest">
+  </option>
+
+ </select>
+
+ <button id="voiceTest">
   TESTA VOCE
- </button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
+ </button>
+
+</div>
+
+
+<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
+
+
+<script type="importmap">
 
 {
  "imports":{
@@ -853,7 +948,10 @@ title="Parla con JARVIS">
  }
 }
 
-</script><script type="module">
+</script>
+
+
+<script type="module">
 
 import * as THREE from "three";
 
@@ -904,12 +1002,6 @@ let recognitionShouldRun=false;
 let recognitionStarting=false;
 
 let speechGeneration=0;
-
-
-/*
-   Indica se il riconoscimento corrente
-   è stato avviato dal pulsante normale.
-*/
 
 let manualRecognition=false;
 
@@ -1042,6 +1134,7 @@ try{
     parsed.slice(
      -MAX_MEMORY
     );
+
  }
 
 }catch(error){
@@ -1115,24 +1208,13 @@ function updateClock(){
   new Date();
 
  clock.textContent=
-  `${String(
-    now.getHours()
-   ).padStart(2,"0")}:`+
-  `${String(
-    now.getMinutes()
-   ).padStart(2,"0")}:`+
-  `${String(
-    now.getSeconds()
-   ).padStart(2,"0")}`;
-
+  `${String(now.getHours()).padStart(2,"0")}:`+
+  `${String(now.getMinutes()).padStart(2,"0")}:`+
+  `${String(now.getSeconds()).padStart(2,"0")}`;
 
  date.textContent=
-  `${String(
-    now.getDate()
-   ).padStart(2,"0")} `+
-  `${months[
-    now.getMonth()
-   ]} `+
+  `${String(now.getDate()).padStart(2,"0")} `+
+  `${months[now.getMonth()]} `+
   `${now.getFullYear()}`;
 
 }
@@ -1445,7 +1527,7 @@ function setState(state){
 
 
 /* =====================================================
-   ANIMAZIONE
+   ANIMAZIONE NEURONI
 ===================================================== */
 
 function animate(){
@@ -1466,7 +1548,10 @@ function animate(){
 
  currentColor.lerp(
   activeColor,
-  energy*.04
+  Math.min(
+   energy*.04,
+   1
+  )
  );
 
 
@@ -1562,9 +1647,14 @@ function animate(){
    Math.sin(theta);
 
 
+  /*
+     CORRETTO:
+     mancava la parentesi ")" nel codice originale.
+  */
+
   let z=
    rr*
-   Math.cos(phi;
+   Math.cos(phi);
 
 
   x+=
@@ -1641,8 +1731,7 @@ const MAPTILER_KEY=
 
 
 const MAPTILER_STYLE=
- "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
- +
+ "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="+
  MAPTILER_KEY;
 
 
@@ -1768,30 +1857,15 @@ function escapeHtml(text){
 
  return String(text)
 
-  .replace(
-   /&/g,
-   "&amp;"
-  )
+  .replace(/&/g,"&amp;")
 
-  .replace(
-   /</g,
-   "&lt;"
-  )
+  .replace(/</g,"&lt;")
 
-  .replace(
-   />/g,
-   "&gt;"
-  )
+  .replace(/>/g,"&gt;")
 
-  .replace(
-   /"/g,
-   "&quot;"
-  )
+  .replace(/"/g,"&quot;")
 
-  .replace(
-   /'/g,
-   "&#039;"
-  );
+  .replace(/'/g,"&#039;");
 
 }
 
@@ -1823,7 +1897,7 @@ function addMsg(text){
 
 
 /* =====================================================
-   NORMALIZZAZIONE COMANDI
+   NORMALIZZAZIONE
 ===================================================== */
 
 function normalizeText(text){
@@ -1854,25 +1928,6 @@ function normalizeText(text){
 }
 
 
-function containsAny(
- text,
- words
-){
-
- const normalized=
-  normalizeText(text);
-
-
- return words.some(
-  word=>
-   normalized.includes(
-    normalizeText(word)
-   )
- );
-
-}
-
-
 function similarity(a,b){
 
  a=normalizeText(a);
@@ -1899,9 +1954,6 @@ function similarity(a,b){
  if(longer.includes(shorter))
   return shorter.length/
    longer.length;
-
-
- let distance=0;
 
 
  const matrix=[];
@@ -1963,7 +2015,7 @@ function similarity(a,b){
  }
 
 
- distance=
+ const distance=
   matrix[
    shorter.length
   ][
@@ -2116,9 +2168,7 @@ async function toggleFullscreen(){
 }
 
 
-function handleFullscreenCommand(
- text
-){
+function handleFullscreenCommand(text){
 
  const normalized=
   normalizeText(text);
@@ -2257,9 +2307,7 @@ function createJarvisMarker(
    RICERCA POSIZIONE
 ===================================================== */
 
-async function searchLocation(
- place
-){
+async function searchLocation(place){
 
  try{
 
@@ -2387,9 +2435,7 @@ async function searchLocation(
    COMANDI MAPPA
 ===================================================== */
 
-function handleMapCommand(
- text
-){
+function handleMapCommand(text){
 
  const normalized=
   normalizeText(text);
@@ -2550,20 +2596,13 @@ function bringWebWindowToFront(
 
  highestWebZ++;
 
-
  windowElement.style.zIndex=
   String(highestWebZ);
 
 }
 
 
-/* =====================================================
-   CREA FINESTRA WEB
-===================================================== */
-
-function openWebSearch(
- query
-){
+function openWebSearch(query){
 
  if(!query)
   return;
@@ -2661,11 +2700,9 @@ function openWebSearch(
  windowElement.addEventListener(
   "pointerdown",
   ()=>{
-
    bringWebWindowToFront(
     windowElement
    );
-
   }
  );
 
@@ -2681,7 +2718,6 @@ function openWebSearch(
   event=>{
 
    event.stopPropagation();
-
 
    windowElement
     .classList
@@ -2703,9 +2739,7 @@ function openWebSearch(
 
    event.stopPropagation();
 
-
    windowElement.remove();
-
 
    updateWebIndicator();
 
@@ -2854,9 +2888,7 @@ function openWebSearch(
  );
 
 
- function stopDragging(
-  event
- ){
+ function stopDragging(event){
 
   if(!dragging)
    return;
@@ -2911,9 +2943,7 @@ function openWebSearch(
    COMANDI WEB
 ===================================================== */
 
-function handleWebCommand(
- text
-){
+function handleWebCommand(text){
 
  const normalized=
   normalizeText(text);
@@ -2976,9 +3006,7 @@ function handleWebCommand(
    FINESTRE WEB
 ===================================================== */
 
-function handleWebWindowCommand(
- text
-){
+function handleWebWindowCommand(text){
 
  const normalized=
   normalizeText(text);
@@ -2999,14 +3027,11 @@ function handleWebWindowCommand(
 
   webSearchWindows.innerHTML="";
 
-
   updateWebIndicator();
-
 
   addMsg(
    "Finestre web chiuse."
   );
-
 
   return true;
 
@@ -3073,7 +3098,6 @@ function getTimeData(){
     }
    ),
 
-
   currentDate:
    now.toLocaleDateString(
     "it-IT",
@@ -3084,7 +3108,6 @@ function getTimeData(){
     }
    ),
 
-
   dayOfWeek:
    now.toLocaleDateString(
     "it-IT",
@@ -3092,7 +3115,6 @@ function getTimeData(){
      weekday:"long"
     }
    ),
-
 
   timezone:
    Intl.DateTimeFormat()
@@ -3131,7 +3153,6 @@ function loadDeviceVoices(){
 
 
  automatic.value="";
-
 
  automatic.textContent=
   "Voce dispositivo automatica";
@@ -3252,8 +3273,8 @@ function stopSpeaking(){
 
  setState(
   conversationMode
-   ? "listening"
-   : "idle"
+   ?"listening"
+   :"idle"
  );
 
 }
@@ -3263,9 +3284,7 @@ function stopSpeaking(){
    DEVICE TTS
 ===================================================== */
 
-function speakDevice(
- text
-){
+function speakDevice(text){
 
  return new Promise(
   resolve=>{
@@ -3684,9 +3703,7 @@ async function speakElevenLabs(
    SPEAK
 ===================================================== */
 
-async function speak(
- text
-){
+async function speak(text){
 
  if(!text)
   return;
@@ -3843,11 +3860,6 @@ function setMicStatus(
 }
 
 
-/*
-   Funzione centrale per creare
-   il riconoscimento vocale.
-*/
-
 function setupRecognition(){
 
  if(!Recognition)
@@ -3862,21 +3874,9 @@ function setupRecognition(){
   "it-IT";
 
 
- /*
-    false rende il comportamento
-    più stabile sui telefoni.
-    La modalità continua viene
-    gestita riavviando automaticamente
-    il riconoscimento.
- */
-
  recognition.continuous=
   false;
 
-
- /*
-    Mostriamo anche il testo provvisorio.
- */
 
  recognition.interimResults=
   true;
@@ -3961,12 +3961,6 @@ function setupRecognition(){
     interimText.trim();
 
 
-   /*
-      Durante il parlato mostra
-      immediatamente ciò che il
-      browser sta riconoscendo.
-   */
-
    if(interimText){
 
     textInput.value=
@@ -3974,11 +3968,6 @@ function setupRecognition(){
 
    }
 
-
-   /*
-      Quando la frase è definitiva,
-      la inseriamo e la inviamo.
-   */
 
    if(finalText){
 
@@ -3989,12 +3978,6 @@ function setupRecognition(){
     if(audioPlaying)
      stopSpeaking();
 
-
-    /*
-       Evita di perdere la frase
-       quando il riconoscimento
-       chiude la sessione.
-    */
 
     setMicStatus(
      "MICROFONO: FRASE ACQUISITA",
@@ -4103,10 +4086,12 @@ function setupRecognition(){
 
     setTimeout(
      ()=>{
+
       setMicStatus(
        "MICROFONO: PRONTO",
        false
       );
+
      },
      1200
     );
@@ -4138,11 +4123,6 @@ function setupRecognition(){
     "listening"
    );
 
-
-   /*
-      Se la conversazione continua
-      è attiva, riavviamo il microfono.
-   */
 
    if(
     conversationMode&&
@@ -4177,9 +4157,7 @@ function setupRecognition(){
 }
 
 
-if(
- Recognition
-){
+if(Recognition){
 
  setupRecognition();
 
@@ -4250,7 +4228,7 @@ function stopRecognitionOnly(){
 
 
 /* =====================================================
-   AVVIA RICONOSCIMENTO NORMALE
+   RICONOSCIMENTO MANUALE
 ===================================================== */
 
 function startManualRecognition(){
@@ -4266,18 +4244,9 @@ function startManualRecognition(){
  }
 
 
- /*
-    Se JARVIS sta parlando,
-    interrompiamo la voce.
- */
-
  if(audioPlaying)
   stopSpeaking();
 
-
- /*
-    Evita doppi start.
- */
 
  if(
   listening||
@@ -4317,12 +4286,6 @@ function startManualRecognition(){
   );
 
 
-  /*
-     Alcuni browser restituiscono
-     InvalidStateError se una sessione
-     è ancora in chiusura.
-  */
-
   setTimeout(
    ()=>{
 
@@ -4333,6 +4296,7 @@ function startManualRecognition(){
     ){
 
      recognitionStarting=true;
+
 
      try{
 
@@ -4345,6 +4309,7 @@ function startManualRecognition(){
       console.warn(
        error2
       );
+
 
       setMicStatus(
        "MICROFONO: ERRORE",
@@ -4365,7 +4330,7 @@ function startManualRecognition(){
 
 
 /* =====================================================
-   AVVIA RICONOSCIMENTO CONTINUO
+   CONVERSAZIONE CONTINUA
 ===================================================== */
 
 function startContinuousRecognition(){
@@ -4485,12 +4450,6 @@ micBtn.addEventListener(
   }
 
 
-  /*
-     In conversazione continua
-     il pulsante serve per fermare
-     o riattivare la conversazione.
-  */
-
   if(conversationMode){
 
    if(
@@ -4511,12 +4470,6 @@ micBtn.addEventListener(
 
   }
 
-
-  /*
-     Modalità normale:
-     un click = ascolta.
-     Un secondo click = ferma.
-  */
 
   if(
    listening||
@@ -4539,7 +4492,7 @@ micBtn.addEventListener(
 
 
 /* =====================================================
-   MODALITÀ CONVERSAZIONE CONTINUA
+   MODALITÀ CONVERSAZIONE
 ===================================================== */
 
 function updateConversationUI(){
@@ -4666,16 +4619,14 @@ function toggleConversationMode(){
 conversationBtn.addEventListener(
  "click",
  toggleConversationMode
-);
+ );
 
 
 /* =====================================================
    COMANDI CONVERSAZIONE
 ===================================================== */
 
-function handleConversationCommand(
- text
-){
+function handleConversationCommand(text){
 
  const normalized=
   normalizeText(text);
@@ -4744,14 +4695,7 @@ function handleConversationCommand(
    PROCESS AI
 ===================================================== */
 
-async function processAi(
- text
-){
-
- /*
-    I comandi locali vengono controllati
-    prima dell'AI.
- */
+async function processAi(text){
 
  if(
   handleConversationCommand(
@@ -5042,12 +4986,6 @@ function sendMessage(){
  textInput.value="";
 
 
- /*
-    Se JARVIS sta parlando,
-    una nuova domanda interrompe
-    immediatamente la voce.
- */
-
  if(audioPlaying)
   stopSpeaking();
 
@@ -5172,16 +5110,16 @@ setState(
  "idle"
 );
 
-
 setMicStatus(
  "MICROFONO: PRONTO",
  false
 );
 
-
 console.log(
  "J.A.R.V.I.S. ONLINE"
 );
 
-</script></body>
+</script>
+
+</body>
 </html>

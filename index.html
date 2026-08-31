@@ -72,44 +72,6 @@ body{
  letter-spacing:1px;
 }
 
-
-/* ================= FULL SCREEN ================= */
-
-#fullscreenBtn{
- position:fixed;
- top:18px;
- left:22px;
- z-index:1000;
- width:40px;
- height:40px;
- border:1px solid rgba(0,255,255,.28);
- border-radius:11px;
- background:rgba(2,15,18,.72);
- color:rgba(210,255,255,.75);
- cursor:pointer;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:17px;
- backdrop-filter:blur(14px);
- box-shadow:0 0 20px rgba(0,255,255,.04);
- transition:.2s ease;
-}
-
-#fullscreenBtn:hover{
- color:white;
- border-color:#00ffff;
- background:rgba(0,255,255,.08);
- box-shadow:0 0 20px rgba(0,255,255,.12);
-}
-
-#fullscreenBtn:active{
- transform:scale(.94);
-}
-
-
-/* ================= CHAT ================= */
-
 #chat{
  position:fixed;
  left:50%;
@@ -134,9 +96,6 @@ body{
  line-height:1.45;
  white-space:pre-wrap;
 }
-
-
-/* ================= COMMAND ================= */
 
 .command-wrapper{
  position:fixed;
@@ -231,9 +190,6 @@ body{
  border-color:#00ffff;
  background:rgba(0,255,255,.1);
 }
-
-
-/* ================= VOCE ================= */
 
 #voiceBtn{
  position:fixed;
@@ -434,12 +390,9 @@ body{
  padding:0 8px 0 13px;
  background:rgba(0,25,29,.92);
  border-bottom:1px solid rgba(0,255,255,.15);
-
- /* IMPORTANTE PER TOUCH */
  cursor:grab;
  user-select:none;
  -webkit-user-select:none;
- -webkit-touch-callout:none;
  touch-action:none;
 }
 
@@ -456,7 +409,6 @@ body{
  white-space:nowrap;
  overflow:hidden;
  text-overflow:ellipsis;
- pointer-events:none;
 }
 
 .web-window-number{
@@ -482,7 +434,6 @@ body{
  align-items:center;
  justify-content:center;
  font-size:12px;
- touch-action:manipulation;
 }
 
 .web-window-btn:hover{
@@ -496,7 +447,6 @@ body{
  height:calc(100% - 39px);
  border:none;
  background:white;
- pointer-events:auto;
 }
 
 .web-window.minimized{
@@ -543,14 +493,6 @@ body{
  .datetime{
   top:12px;
   right:13px;
- }
-
- #fullscreenBtn{
-  top:11px;
-  left:12px;
-  width:36px;
-  height:36px;
-  font-size:15px;
  }
 
  .command-wrapper{
@@ -619,37 +561,26 @@ body{
 <div class="vignette"></div><div class="jarvis-title" id="jarvisTitle">J.A.R.V.I.S</div><div class="datetime">
  <div id="clock" class="time">00:00:00</div>
  <div id="date" class="date">00 AGO 2026</div>
-</div><!-- ================= FULL SCREEN ================= --><button id="fullscreenBtn" title="Schermo intero">⛶</button>
+</div><div id="tacticalMap">
+ <div id="map"></div>
+ <div class="map-overlay"></div>
+ <div class="map-header">TACTICAL MAP</div>
+ <button id="closeMap">×</button>
+</div><div id="webSearchWindows"></div>
+<div id="webSearchIndicator">WEB WINDOWS: 0</div><div id="chat"></div><div class="command-wrapper">
+ <input id="textInput" type="text" autocomplete="off"
+ placeholder="Chiedi qualcosa a JARVIS...">
+ <button id="micBtn"><span class="mic-icon"></span></button>
+ <button id="sendBtn">INVIA</button>
+</div><button id="voiceBtn">⚙ VOCE</button>
 
-<!-- ================= MAPPA ================= --><div id="tacticalMap"> <div id="map"></div> <div class="map-overlay"></div> <div class="map-header">
-  TACTICAL MAP
- </div> <button id="closeMap">
-  ×
- </button></div><!-- ================= WEB WINDOWS ================= --><div id="webSearchWindows"></div><div id="webSearchIndicator">
- WEB WINDOWS: 0
-</div><!-- ================= CHAT ================= --><div id="chat"></div><!-- ================= COMMAND ================= --><div class="command-wrapper"><input
-id="textInput"
-type="text"
-autocomplete="off"
-placeholder="Chiedi qualcosa a JARVIS..."
-
-«»
-
- <button id="micBtn">
-  <span class="mic-icon"></span>
- </button> <button id="sendBtn">
-  INVIA
- </button></div><!-- ================= VOICE ================= --><button id="voiceBtn">
- ⚙ VOCE
-</button><div id="voicePanel"> <div class="voice-title">
-  VOCE J.A.R.V.I.S.
- </div> <select id="voiceSelector">
-  <option value="">
-   Voce dispositivo automatica
-  </option>
- </select> <button id="voiceTest">
-  TESTA VOCE
- </button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
+<div id="voicePanel">
+ <div class="voice-title">VOCE J.A.R.V.I.S.</div>
+ <select id="voiceSelector">
+  <option value="">Voce dispositivo automatica</option>
+ </select>
+ <button id="voiceTest">TESTA VOCE</button>
+</div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
 {
  "imports":{
   "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
@@ -694,66 +625,6 @@ const voiceSelector=document.getElementById("voiceSelector");
 const voiceTest=document.getElementById("voiceTest");
 const webSearchWindows=document.getElementById("webSearchWindows");
 const webSearchIndicator=document.getElementById("webSearchIndicator");
-const fullscreenBtn=document.getElementById("fullscreenBtn");
-
-
-/* =====================================================
-   FULL SCREEN
-===================================================== */
-
-async function toggleFullscreen(){
-
- try{
-
-  if(!document.fullscreenElement){
-
-   await document.documentElement.requestFullscreen();
-
-  }else{
-
-   await document.exitFullscreen();
-
-  }
-
- }catch(error){
-
-  console.warn(
-   "Fullscreen non disponibile:",
-   error
-  );
-
- }
-
-}
-
-
-/* ================= AGGIORNA ICONA FULL SCREEN ================= */
-
-function updateFullscreenButton(){
-
- if(document.fullscreenElement){
-
-  fullscreenBtn.textContent="✕";
-  fullscreenBtn.title="Esci da schermo intero";
-
- }else{
-
-  fullscreenBtn.textContent="⛶";
-  fullscreenBtn.title="Schermo intero";
-
- }
-
-}
-
-fullscreenBtn.addEventListener(
- "click",
- toggleFullscreen
-);
-
-document.addEventListener(
- "fullscreenchange",
- updateFullscreenButton
-);
 
 
 /* ================= MEMORIA ================= */
@@ -761,12 +632,9 @@ document.addEventListener(
 let memory=[];
 
 try{
-
- const saved=
-  localStorage.getItem(MEMORY_KEY);
+ const saved=localStorage.getItem(MEMORY_KEY);
 
  if(saved){
-
   const parsed=JSON.parse(saved);
 
   if(Array.isArray(parsed))
@@ -774,12 +642,7 @@ try{
  }
 
 }catch(e){
-
- console.warn(
-  "Memoria:",
-  e
- );
-
+ console.warn("Memoria:",e);
 }
 
 function saveMemory(){
@@ -788,20 +651,12 @@ function saveMemory(){
 
   localStorage.setItem(
    MEMORY_KEY,
-   JSON.stringify(
-    memory.slice(-MAX_MEMORY)
-   )
+   JSON.stringify(memory.slice(-MAX_MEMORY))
   );
 
  }catch(e){
-
-  console.warn(
-   "Salvataggio memoria:",
-   e
-  );
-
+  console.warn("Salvataggio memoria:",e);
  }
-
 }
 
 function addMemory(role,content){
@@ -811,8 +666,7 @@ function addMemory(role,content){
   content
  });
 
- memory=
-  memory.slice(-MAX_MEMORY);
+ memory=memory.slice(-MAX_MEMORY);
 
  saveMemory();
 }
@@ -841,11 +695,7 @@ function updateClock(){
 }
 
 updateClock();
-
-setInterval(
- updateClock,
- 1000
-);
+setInterval(updateClock,1000);
 
 
 /* ================= THREE ================= */
@@ -872,15 +722,10 @@ renderer.setSize(
 );
 
 renderer.setPixelRatio(
- Math.min(
-  window.devicePixelRatio,
-  2
- )
+ Math.min(window.devicePixelRatio,2)
 );
 
-container.appendChild(
- renderer.domElement
-);
+container.appendChild(renderer.domElement);
 
 
 /* ================= GLOW ================= */
@@ -894,11 +739,10 @@ function createGlow(){
 
  const ctx=canvas.getContext("2d");
 
- const gradient=
-  ctx.createRadialGradient(
-   32,32,0,
-   32,32,32
-  );
+ const gradient=ctx.createRadialGradient(
+  32,32,0,
+  32,32,32
+ );
 
  gradient.addColorStop(
   0,
@@ -928,15 +772,10 @@ function createGlow(){
  ctx.fillStyle=gradient;
 
  ctx.fillRect(
-  0,
-  0,
-  64,
-  64
+  0,0,64,64
  );
 
- return new THREE.CanvasTexture(
-  canvas
- );
+ return new THREE.CanvasTexture(canvas);
 }
 
 
@@ -944,51 +783,36 @@ function createGlow(){
 
 const COUNT=3000;
 
-const geometry=
- new THREE.BufferGeometry();
+const geometry=new THREE.BufferGeometry();
 
 const positions=
- new Float32Array(
-  COUNT*3
- );
+ new Float32Array(COUNT*3);
 
 const radii=
- new Float32Array(
-  COUNT
- );
+ new Float32Array(COUNT);
 
 const angles=
- new Float32Array(
-  COUNT*2
- );
+ new Float32Array(COUNT*2);
 
 const seeds=
- new Float32Array(
-  COUNT
- );
+ new Float32Array(COUNT);
 
 for(let i=0;i<COUNT;i++){
 
- const r=
-  1.10+
-  Math.random()*.70;
+ const r=1.10+Math.random()*.70;
 
  const theta=
   Math.random()*Math.PI*2;
 
  const phi=
-  Math.acos(
-   2*Math.random()-1
-  );
+  Math.acos(2*Math.random()-1);
 
  radii[i]=r;
 
  angles[i*2]=theta;
-
  angles[i*2+1]=phi;
 
- seeds[i]=
-  Math.random()*100;
+ seeds[i]=Math.random()*100;
 
  positions[i*3]=
   r*Math.sin(phi)*Math.cos(theta);
@@ -1008,25 +832,23 @@ geometry.setAttribute(
  )
 );
 
-const material=
- new THREE.PointsMaterial({
+const material=new THREE.PointsMaterial({
 
-  color:new THREE.Color(
-   0x00cfe8
-  ),
+ color:new THREE.Color(0x00cfe8),
 
-  size:.042,
+ size:.042,
 
-  map:createGlow(),
+ map:createGlow(),
 
-  transparent:true,
+ transparent:true,
 
-  opacity:1,
+ opacity:1,
 
-  depthWrite:false,
+ depthWrite:false,
 
-  blending:THREE.AdditiveBlending
- });
+ blending:THREE.AdditiveBlending
+
+});
 
 const particles=
  new THREE.Points(
@@ -1034,26 +856,19 @@ const particles=
   material
  );
 
-scene.add(
- particles
-);
+scene.add(particles);
 
 
 /* ================= STATO ================= */
 
 let targetEnergy=.15;
-
 let energy=.15;
 
 const normalColor=
- new THREE.Color(
-  0x00cfe8
- );
+ new THREE.Color(0x00cfe8);
 
 const activeColor=
- new THREE.Color(
-  0x8fffff
- );
+ new THREE.Color(0x8fffff);
 
 const currentColor=
  normalColor.clone();
@@ -1078,9 +893,7 @@ function setState(state){
 
 function animate(){
 
- requestAnimationFrame(
-  animate
- );
+ requestAnimationFrame(animate);
 
  const time=
   performance.now()*.001;
@@ -1099,16 +912,13 @@ function animate(){
    .03
   );
 
- material.color=
-  currentColor;
+ material.color=currentColor;
 
  material.size=
-  .032+
-  energy*.008;
+  .032+energy*.008;
 
  const pos=
-  geometry.attributes
-  .position.array;
+  geometry.attributes.position.array;
 
  for(let i=0;i<COUNT;i++){
 
@@ -1122,8 +932,7 @@ function animate(){
   const phi=
    angles[i*2+1];
 
-  const seed=
-   seeds[i];
+  const seed=seeds[i];
 
   const pulse=
    Math.sin(
@@ -1189,8 +998,7 @@ function animate(){
   pos[index+2]=z;
  }
 
- geometry.attributes
-  .position.needsUpdate=true;
+ geometry.attributes.position.needsUpdate=true;
 
  particles.rotation.y+=
   .0005+
@@ -1221,7 +1029,6 @@ const MAPTILER_STYLE=
  +MAPTILER_KEY;
 
 let map=null;
-
 let currentMarker=null;
 
 function initializeMap(){
@@ -1256,15 +1063,10 @@ function initializeMap(){
  });
 
  map.addControl(
-
   new maplibregl.NavigationControl({
-
    showCompass:true,
-
    showZoom:true
-
   }),
-
   "bottom-right"
  );
 
@@ -1278,15 +1080,11 @@ function initializeMap(){
 
 function openTacticalMap(){
 
- tacticalMap.classList.add(
-  "active"
- );
+ tacticalMap.classList.add("active");
 
- jarvisTitle.style.display=
-  "none";
+ jarvisTitle.style.display="none";
 
- mapHeader.style.display=
-  "block";
+ mapHeader.style.display="block";
 
  initializeMap();
 
@@ -1301,12 +1099,9 @@ function openTacticalMap(){
 
 function closeTacticalMap(){
 
- tacticalMap.classList.remove(
-  "active"
- );
+ tacticalMap.classList.remove("active");
 
- jarvisTitle.style.display=
-  "block";
+ jarvisTitle.style.display="block";
 }
 
 closeMap.addEventListener(
@@ -1320,31 +1115,11 @@ closeMap.addEventListener(
 function escapeHtml(text){
 
  return String(text)
-
-  .replace(
-   /&/g,
-   "&amp;"
-  )
-
-  .replace(
-   /</g,
-   "&lt;"
-  )
-
-  .replace(
-   />/g,
-   "&gt;"
-  )
-
-  .replace(
-   /"/g,
-   "&quot;"
-  )
-
-  .replace(
-   /'/g,
-   "&#039;"
-  );
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
 }
 
 function addMsg(text){
@@ -1352,18 +1127,214 @@ function addMsg(text){
  chat.innerHTML="";
 
  const element=
-  document.createElement(
-   "div"
-  );
+  document.createElement("div");
 
  element.className="msg";
 
  element.textContent=text;
 
- chat.appendChild(
-  element
+ chat.appendChild(element);
+}
+
+
+/* =====================================================
+   FULL SCREEN
+===================================================== */
+
+function isFullscreen(){
+
+ return !!(
+  document.fullscreenElement ||
+  document.webkitFullscreenElement
  );
 }
+
+async function enterFullscreen(){
+
+ try{
+
+  if(isFullscreen()){
+   return true;
+  }
+
+  const element=document.documentElement;
+
+  if(element.requestFullscreen){
+
+   await element.requestFullscreen();
+
+  }else if(element.webkitRequestFullscreen){
+
+   element.webkitRequestFullscreen();
+
+  }else{
+
+   addMsg(
+    "Il dispositivo non supporta la modalità full screen."
+   );
+
+   return false;
+  }
+
+  return true;
+
+ }catch(error){
+
+  console.warn(
+   "Fullscreen non autorizzato:",
+   error
+  );
+
+  addMsg(
+   "Il browser ha bloccato la modalità full screen."
+  );
+
+  return false;
+ }
+}
+
+async function exitFullscreen(){
+
+ try{
+
+  if(!isFullscreen())
+   return true;
+
+  if(document.exitFullscreen){
+
+   await document.exitFullscreen();
+
+  }else if(document.webkitExitFullscreen){
+
+   document.webkitExitFullscreen();
+
+  }
+
+  return true;
+
+ }catch(error){
+
+  console.warn(
+   "Uscita fullscreen:",
+   error
+  );
+
+  return false;
+ }
+}
+
+
+/* ================= COMANDI FULL SCREEN ================= */
+
+function handleFullscreenCommand(text){
+
+ const normalized=
+  text
+   .toLowerCase()
+   .trim()
+   .replace(/[.!?]+$/g,"");
+
+ const enterCommands=[
+
+  "modalità full screen",
+  "modalita full screen",
+
+  "attiva full screen",
+  "attiva il full screen",
+
+  "attiva modalità full screen",
+  "attiva modalita full screen",
+
+  "schermo intero",
+  "attiva schermo intero",
+
+  "modalità schermo intero",
+  "modalita schermo intero",
+
+  "vai in full screen",
+  "vai in modalità full screen",
+  "vai in modalita full screen"
+
+ ];
+
+ const exitCommands=[
+
+  "disattiva full screen",
+  "disattiva il full screen",
+
+  "esci dal full screen",
+  "esci da full screen",
+
+  "esci dallo schermo intero",
+
+  "disattiva schermo intero",
+
+  "disattiva modalità full screen",
+  "disattiva modalita full screen",
+
+  "torna alla modalità normale",
+  "torna alla modalita normale"
+
+ ];
+
+ if(enterCommands.includes(normalized)){
+
+  enterFullscreen().then(success=>{
+
+   if(success){
+
+    addMsg(
+     "Modalità full screen attivata."
+    );
+
+   }
+
+  });
+
+  return true;
+ }
+
+ if(exitCommands.includes(normalized)){
+
+  exitFullscreen().then(success=>{
+
+   if(success){
+
+    addMsg(
+     "Modalità full screen disattivata."
+    );
+
+   }
+
+  });
+
+  return true;
+ }
+
+ return false;
+}
+
+
+/* ================= FULL SCREEN EVENTS ================= */
+
+document.addEventListener(
+ "fullscreenchange",
+ ()=>{
+
+  if(isFullscreen()){
+
+   console.log(
+    "JARVIS: FULL SCREEN ON"
+   );
+
+  }else{
+
+   console.log(
+    "JARVIS: FULL SCREEN OFF"
+   );
+  }
+ }
+);
 
 
 /* ================= MARKER ================= */
@@ -1384,9 +1355,7 @@ function createJarvisMarker(
  }
 
  const markerElement=
-  document.createElement(
-   "div"
-  );
+  document.createElement("div");
 
  markerElement.className=
   "jarvis-map-marker";
@@ -1412,9 +1381,9 @@ function createJarvisMarker(
    })
 
    .setHTML(
-
-    `<b style="color:#00ffff">${escapeHtml(name)}</b>`
-
+    `<b style="color:#00ffff">${
+     escapeHtml(name)
+    }</b>`
    )
   )
 
@@ -1471,18 +1440,13 @@ async function searchLocation(place){
    return;
   }
 
-  const result=
-   results[0];
+  const result=results[0];
 
   const lat=
-   parseFloat(
-    result.lat
-   );
+   parseFloat(result.lat);
 
   const lon=
-   parseFloat(
-    result.lon
-   );
+   parseFloat(result.lon);
 
   if(!map)
    throw new Error(
@@ -1503,7 +1467,6 @@ async function searchLocation(place){
    curve:1.5,
 
    essential:true
-
   });
 
   createJarvisMarker(
@@ -1540,24 +1503,31 @@ function handleMapCommand(text){
   text.toLowerCase().trim();
 
  if(
+
   normalized.includes(
    "apri la mappa"
   )||
+
   normalized.includes(
    "apri mappa"
   )||
+
   normalized.includes(
    "mappa tattica"
   )||
+
   normalized.includes(
    "modalità tattica"
   )||
+
   normalized.includes(
    "modalita tattica"
   )||
+
   normalized.includes(
    "attiva la mappa"
   )
+
  ){
 
   openTacticalMap();
@@ -1570,21 +1540,27 @@ function handleMapCommand(text){
  }
 
  if(
+
   normalized.includes(
    "chiudi la mappa"
   )||
+
   normalized.includes(
    "chiudi mappa"
   )||
+
   normalized.includes(
    "esci dalla mappa"
   )||
+
   normalized.includes(
    "torna alla modalità normale"
   )||
+
   normalized.includes(
    "torna alla modalita normale"
   )
+
  ){
 
   closeTacticalMap();
@@ -1597,6 +1573,7 @@ function handleMapCommand(text){
  }
 
  const patterns=[
+
   "mostrami ",
   "mostra ",
   "vai a ",
@@ -1604,30 +1581,24 @@ function handleMapCommand(text){
   "localizza ",
   "cerca ",
   "visualizza "
+
  ];
 
- for(
-  const pattern of patterns
- ){
+ for(const pattern of patterns){
 
-  if(
-   normalized.startsWith(
-    pattern
-   )
-  ){
+  if(normalized.startsWith(pattern)){
 
    const place=
-    text.trim()
-    .substring(
-     pattern.length
-    )
-    .trim();
+    text
+     .trim()
+     .substring(
+      pattern.length
+     )
+     .trim();
 
    if(place.length>1){
 
-    searchLocation(
-     place
-    );
+    searchLocation(place);
 
     return true;
    }
@@ -1643,7 +1614,6 @@ function handleMapCommand(text){
 ===================================================== */
 
 let webWindowCounter=0;
-
 let highestWebZ=220;
 
 function updateWebIndicator(){
@@ -1657,9 +1627,8 @@ function updateWebIndicator(){
  if(count>0){
 
   webSearchIndicator
-   .classList.add(
-    "active"
-   );
+   .classList
+   .add("active");
 
   webSearchIndicator.textContent=
    "WEB WINDOWS: "+
@@ -1668,9 +1637,8 @@ function updateWebIndicator(){
  }else{
 
   webSearchIndicator
-   .classList.remove(
-    "active"
-   );
+   .classList
+   .remove("active");
  }
 }
 
@@ -1681,9 +1649,7 @@ function bringWebWindowToFront(
  highestWebZ++;
 
  windowElement.style.zIndex=
-  String(
-   highestWebZ
-  );
+  String(highestWebZ);
 }
 
 
@@ -1698,9 +1664,7 @@ function openWebSearch(query){
  webWindowCounter++;
 
  const windowElement=
-  document.createElement(
-   "div"
-  );
+  document.createElement("div");
 
  windowElement.className=
   "web-window";
@@ -1715,9 +1679,7 @@ function openWebSearch(query){
   (90+offset*35)+"px";
 
  windowElement.style.zIndex=
-  String(
-   ++highestWebZ
-  );
+  String(++highestWebZ);
 
  const safeTitle=
   escapeHtml(query);
@@ -1761,23 +1723,19 @@ function openWebSearch(query){
 
  `;
 
- webSearchWindows.appendChild(
-  windowElement
- );
+ webSearchWindows
+  .appendChild(windowElement);
 
  const iframe=
-  windowElement.querySelector(
-   "iframe"
-  );
+  windowElement
+   .querySelector("iframe");
 
  iframe.src=
   "https://www.google.com/search?igu=1&q="+
   encodeURIComponent(query);
 
 
- /* =====================================================
-    PORTA DAVANTI
- ===================================================== */
+ /* ================= PORTA DAVANTI ================= */
 
  windowElement.addEventListener(
   "pointerdown",
@@ -1789,14 +1747,13 @@ function openWebSearch(query){
  );
 
 
- /* =====================================================
-    MINIMIZZA
- ===================================================== */
+ /* ================= MINIMIZZA ================= */
 
  const minimizeButton=
-  windowElement.querySelector(
-   ".minimize-web"
-  );
+  windowElement
+   .querySelector(
+    ".minimize-web"
+   );
 
  minimizeButton.addEventListener(
   "click",
@@ -1804,22 +1761,20 @@ function openWebSearch(query){
 
    event.stopPropagation();
 
-   windowElement.classList.toggle(
-    "minimized"
-   );
-
+   windowElement
+    .classList
+    .toggle("minimized");
   }
  );
 
 
- /* =====================================================
-    CHIUDI
- ===================================================== */
+ /* ================= CHIUDI ================= */
 
  const closeButton=
-  windowElement.querySelector(
-   ".close-web"
-  );
+  windowElement
+   .querySelector(
+    ".close-web"
+   );
 
  closeButton.addEventListener(
   "click",
@@ -1830,261 +1785,29 @@ function openWebSearch(query){
    windowElement.remove();
 
    updateWebIndicator();
-
   }
  );
 
 
  /* =====================================================
-    DRAG AVANZATO
+    DRAG CORRETTO
     MOUSE + TOUCH + TABLET
  ===================================================== */
 
  const header=
-  windowElement.querySelector(
-   ".web-window-header"
-  );
+  windowElement
+   .querySelector(
+    ".web-window-header"
+   );
 
  let dragging=false;
 
  let dragOffsetX=0;
-
  let dragOffsetY=0;
 
- let activePointerId=null;
-
-
- function startDrag(event){
-
-  if(
-   event.target.closest(
-    ".web-window-btn"
-   )
-  ){
-   return;
-  }
-
-  dragging=true;
-
-  activePointerId=
-   event.pointerId;
-
-  bringWebWindowToFront(
-   windowElement
-  );
-
-  const rect=
-   windowElement.getBoundingClientRect();
-
-  dragOffsetX=
-   event.clientX-
-   rect.left;
-
-  dragOffsetY=
-   event.clientY-
-   rect.top;
-
-  header.classList.add(
-   "dragging"
-  );
-
-  try{
-
-   header.setPointerCapture(
-    event.pointerId
-   );
-
-  }catch(e){}
-
-  event.preventDefault();
- }
-
-
- function moveDrag(event){
-
-  if(!dragging)
-   return;
-
-  if(
-   activePointerId!==null &&
-   event.pointerId!==activePointerId
-  ){
-   return;
-  }
-
-  event.preventDefault();
-
-  const rect=
-   windowElement.getBoundingClientRect();
-
-  let newLeft=
-   event.clientX-
-   dragOffsetX;
-
-  let newTop=
-   event.clientY-
-   dragOffsetY;
-
-
-  /* ================= LIMITI ================= */
-
-  const minLeft=
-   -rect.width+80;
-
-  const maxLeft=
-   window.innerWidth-80;
-
-  const minTop=0;
-
-  const maxTop=
-   window.innerHeight-55;
-
-
-  newLeft=
-   Math.max(
-    minLeft,
-    Math.min(
-     newLeft,
-     maxLeft
-    )
-   );
-
-  newTop=
-   Math.max(
-    minTop,
-    Math.min(
-     newTop,
-     maxTop
-    )
-   );
-
-
-  windowElement.style.left=
-   newLeft+"px";
-
-  windowElement.style.top=
-   newTop+"px";
- }
-
-
- function stopDrag(event){
-
-  if(!dragging)
-   return;
-
-  if(
-   activePointerId!==null &&
-   event.pointerId!==activePointerId
-  ){
-   return;
-  }
-
-  dragging=false;
-
-  activePointerId=null;
-
-  header.classList.remove(
-   "dragging"
-  );
-
-  try{
-
-   header.releasePointerCapture(
-    event.pointerId
-   );
-
-  }catch(e){}
-
-  event.preventDefault();
- }
-
-
- /* =====================================================
-    POINTER DOWN
- ===================================================== */
 
  header.addEventListener(
   "pointerdown",
-  startDrag,
-  {
-   passive:false
-  }
- );
-
-
- /* =====================================================
-    POINTER MOVE
- ===================================================== */
-
- header.addEventListener(
-  "pointermove",
-  moveDrag,
-  {
-   passive:false
-  }
- );
-
-
- /* =====================================================
-    POINTER UP
- ===================================================== */
-
- header.addEventListener(
-  "pointerup",
-  stopDrag,
-  {
-   passive:false
-  }
- );
-
-
- /* =====================================================
-    POINTER CANCEL
- ===================================================== */
-
- header.addEventListener(
-  "pointercancel",
-  stopDrag,
-  {
-   passive:false
-  }
- );
-
-
- /* =====================================================
-    LOST POINTER
- ===================================================== */
-
- header.addEventListener(
-  "lostpointercapture",
-  ()=>{
-   dragging=false;
-   activePointerId=null;
-   header.classList.remove(
-    "dragging"
-   );
-  }
- );
-
-
- /* =====================================================
-    SUPPORTO EXTRA TOUCH
-    Per alcuni browser/tablet
- ===================================================== */
-
- let touchDragging=false;
-
- let touchStartX=0;
-
- let touchStartY=0;
-
- let originalLeft=0;
-
- let originalTop=0;
-
-
- header.addEventListener(
-  "touchstart",
   event=>{
 
    if(
@@ -2092,84 +1815,88 @@ function openWebSearch(query){
      ".web-window-btn"
     )
    ){
+
     return;
    }
 
-   const touch=
-    event.touches[0];
-
-   const rect=
-    windowElement.getBoundingClientRect();
-
-   touchDragging=true;
-
-   touchStartX=
-    touch.clientX;
-
-   touchStartY=
-    touch.clientY;
-
-   originalLeft=
-    rect.left;
-
-   originalTop=
-    rect.top;
+   dragging=true;
 
    bringWebWindowToFront(
     windowElement
    );
 
-   event.preventDefault();
+   const rect=
+    windowElement
+     .getBoundingClientRect();
 
+   dragOffsetX=
+    event.clientX-
+    rect.left;
+
+   dragOffsetY=
+    event.clientY-
+    rect.top;
+
+   try{
+
+    header.setPointerCapture(
+     event.pointerId
+    );
+
+   }catch(e){}
+
+   event.preventDefault();
   },
-  {
-   passive:false
-  }
+  {passive:false}
  );
 
 
  header.addEventListener(
-  "touchmove",
+  "pointermove",
   event=>{
 
-   if(!touchDragging)
-    return;
+   if(!dragging)return;
 
-   const touch=
-    event.touches[0];
+   event.preventDefault();
 
    let newLeft=
-    originalLeft+
-    (
-     touch.clientX-
-     touchStartX
-    );
+    event.clientX-
+    dragOffsetX;
 
    let newTop=
-    originalTop+
-    (
-     touch.clientY-
-     touchStartY
-    );
+    event.clientY-
+    dragOffsetY;
 
    const rect=
-    windowElement.getBoundingClientRect();
+    windowElement
+     .getBoundingClientRect();
+
+   const minLeft=
+    -rect.width+100;
+
+   const maxLeft=
+    window.innerWidth-80;
+
+   const minTop=0;
+
+   const maxTop=
+    window.innerHeight-60;
 
    newLeft=
     Math.max(
-     -rect.width+80,
+     minLeft,
      Math.min(
       newLeft,
-      window.innerWidth-80
+      maxLeft
      )
     );
 
    newTop=
     Math.max(
-     0,
+     minTop,
      Math.min(
       newTop,
-      window.innerHeight-55
+      maxTop
      )
     );
 
@@ -2178,23 +1905,41 @@ function openWebSearch(query){
 
    windowElement.style.top=
     newTop+"px";
-
-   event.preventDefault();
-
   },
-  {
-   passive:false
-  }
+  {passive:false}
  );
 
 
+ function stopDragging(event){
+
+  if(!dragging)return;
+
+  dragging=false;
+
+  try{
+
+   header.releasePointerCapture(
+    event.pointerId
+   );
+
+  }catch(e){}
+ }
+
+
  header.addEventListener(
-  "touchend",
+  "pointerup",
+  stopDragging
+ );
+
+ header.addEventListener(
+  "pointercancel",
+  stopDragging
+ );
+
+ header.addEventListener(
+  "lostpointercapture",
   ()=>{
-   touchDragging=false;
-  },
-  {
-   passive:true
+   dragging=false;
   }
  );
 
@@ -2216,6 +1961,7 @@ function handleWebCommand(text){
   text.toLowerCase().trim();
 
  const patterns=[
+
   "cerca sul web ",
   "cerca nel web ",
   "ricerca sul web ",
@@ -2225,30 +1971,24 @@ function handleWebCommand(text){
   "cerca in internet ",
   "fammi una ricerca su ",
   "fai una ricerca su "
+
  ];
 
- for(
-  const pattern of patterns
- ){
+ for(const pattern of patterns){
 
-  if(
-   normalized.startsWith(
-    pattern
-   )
-  ){
+  if(normalized.startsWith(pattern)){
 
    const query=
-    text.trim()
-    .substring(
-     pattern.length
-    )
-    .trim();
+    text
+     .trim()
+     .substring(
+      pattern.length
+     )
+     .trim();
 
    if(query.length>1){
 
-    openWebSearch(
-     query
-    );
+    openWebSearch(query);
 
     return true;
    }
@@ -2267,14 +2007,19 @@ function handleWebWindowCommand(text){
   text.toLowerCase().trim();
 
  if(
+
   normalized===
    "chiudi le ricerche web"||
+
   normalized===
    "chiudi ricerca web"||
+
   normalized===
    "chiudi tutte le ricerche"||
+
   normalized===
    "chiudi tutte le finestre web"
+
  ){
 
   webSearchWindows.innerHTML="";
@@ -2289,10 +2034,13 @@ function handleWebWindowCommand(text){
  }
 
  if(
+
   normalized===
    "minimizza le ricerche web"||
+
   normalized===
    "minimizza tutte le ricerche"
+
  ){
 
   webSearchWindows
@@ -2355,9 +2103,8 @@ function getTimeData(){
 
   timezone:
    Intl.DateTimeFormat()
-   .resolvedOptions()
-   .timeZone
-
+    .resolvedOptions()
+    .timeZone
  };
 }
 
@@ -2366,14 +2113,12 @@ function getTimeData(){
 
 function loadDeviceVoices(){
 
- if(
-  !("speechSynthesis" in window)
- )
+ if(!("speechSynthesis" in window))
   return;
 
  deviceVoices=
   window.speechSynthesis
-  .getVoices();
+   .getVoices();
 
  voiceSelector.innerHTML="";
 
@@ -2408,7 +2153,6 @@ function loadDeviceVoices(){
    voiceSelector.appendChild(
     option
    );
-
   }
  );
 
@@ -2418,9 +2162,12 @@ function loadDeviceVoices(){
   );
 
  if(
+
   savedVoice!==null&&
+
   Number(savedVoice)<
    deviceVoices.length
+
  ){
 
   voiceSelector.value=
@@ -2433,9 +2180,7 @@ function loadDeviceVoices(){
  }
 }
 
-if(
- "speechSynthesis" in window
-){
+if("speechSynthesis" in window){
 
  loadDeviceVoices();
 
@@ -2454,9 +2199,7 @@ function speakDevice(text){
  return new Promise(
   resolve=>{
 
-   if(
-    !("speechSynthesis" in window)
-   ){
+   if(!("speechSynthesis" in window)){
 
     resolve(false);
 
@@ -2491,8 +2234,8 @@ function speakDevice(text){
       deviceVoices.find(
        voice=>
         voice.lang
-        .toLowerCase()
-        .startsWith("it")
+         .toLowerCase()
+         .startsWith("it")
       );
 
      if(italianVoice)
@@ -2504,18 +2247,14 @@ function speakDevice(text){
 
      audioPlaying=true;
 
-     setState(
-      "speaking"
-     );
+     setState("speaking");
     };
 
     utterance.onend=()=>{
 
      audioPlaying=false;
 
-     setState(
-      "idle"
-     );
+     setState("idle");
 
      resolve(true);
     };
@@ -2524,23 +2263,19 @@ function speakDevice(text){
 
      audioPlaying=false;
 
-     setState(
-      "idle"
-     );
+     setState("idle");
 
      resolve(false);
     };
 
-    window.speechSynthesis
-     .speak(
-      utterance
-     );
+    window.speechSynthesis.speak(
+     utterance
+    );
 
     setTimeout(
      ()=>{
       try{
-       window.speechSynthesis
-        .resume();
+       window.speechSynthesis.resume();
       }catch(e){}
      },
      100
@@ -2552,7 +2287,6 @@ function speakDevice(text){
 
     resolve(false);
    }
-
   }
  );
 }
@@ -2613,7 +2347,6 @@ async function speakElevenLabs(text){
 
      signal:
       controller.signal
-
     }
    );
 
@@ -2622,13 +2355,10 @@ async function speakElevenLabs(text){
 
   const contentType=
    response.headers
-   .get("content-type")||
-   "";
+    .get("content-type")||"";
 
   if(
-   !contentType.includes(
-    "audio"
-   )
+   !contentType.includes("audio")
   )
    return false;
 
@@ -2647,12 +2377,9 @@ async function speakElevenLabs(text){
    );
 
   const audio=
-   new Audio(
-    audioUrl
-   );
+   new Audio(audioUrl);
 
-  currentAudio=
-   audio;
+  currentAudio=audio;
 
   audio.volume=1;
 
@@ -2660,26 +2387,20 @@ async function speakElevenLabs(text){
 
    audioPlaying=true;
 
-   setState(
-    "speaking"
-   );
+   setState("speaking");
   };
 
   audio.onended=()=>{
 
    audioPlaying=false;
 
-   setState(
-    "idle"
-   );
+   setState("idle");
 
    URL.revokeObjectURL(
     audioUrl
    );
 
-   if(
-    currentAudio===audio
-   )
+   if(currentAudio===audio)
     currentAudio=null;
   };
 
@@ -2687,9 +2408,7 @@ async function speakElevenLabs(text){
 
    audioPlaying=false;
 
-   setState(
-    "idle"
-   );
+   setState("idle");
 
    URL.revokeObjectURL(
     audioUrl
@@ -2711,9 +2430,7 @@ async function speakElevenLabs(text){
 
  }finally{
 
-  clearTimeout(
-   timeout
-  );
+  clearTimeout(timeout);
  }
 }
 
@@ -2725,16 +2442,11 @@ async function speak(text){
  if(!text)return;
 
  const elevenSuccess=
-  await speakElevenLabs(
-   text
-  );
+  await speakElevenLabs(text);
 
- if(elevenSuccess)
-  return;
+ if(elevenSuccess)return;
 
- await speakDevice(
-  text
- );
+ await speakDevice(text);
 }
 
 
@@ -2743,6 +2455,7 @@ async function speak(text){
 voiceTest.addEventListener(
  "click",
  async()=>{
+
   await speakDevice(
    "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
   );
@@ -2771,8 +2484,10 @@ voiceSelector.addEventListener(
    Number(value);
 
   if(
+
    Number.isInteger(index)&&
    deviceVoices[index]
+
   ){
 
    selectedDeviceVoice=
@@ -2789,9 +2504,10 @@ voiceSelector.addEventListener(
 voiceBtn.addEventListener(
  "click",
  ()=>{
-  voicePanel.classList.toggle(
-   "active"
-  );
+
+  voicePanel
+   .classList
+   .toggle("active");
 
   loadDeviceVoices();
  }
@@ -2802,24 +2518,25 @@ voiceBtn.addEventListener(
 
 async function processAi(text){
 
- if(
-  handleWebWindowCommand(text)
- )
+ /*
+  IMPORTANTE:
+  I comandi locali vengono eseguiti
+  prima di inviare il testo al server.
+ */
+
+ if(handleFullscreenCommand(text))
   return;
 
- if(
-  handleWebCommand(text)
- )
+ if(handleWebWindowCommand(text))
   return;
 
- if(
-  handleMapCommand(text)
- )
+ if(handleWebCommand(text))
   return;
 
- setState(
-  "thinking"
- );
+ if(handleMapCommand(text))
+  return;
+
+ setState("thinking");
 
  try{
 
@@ -2879,15 +2596,12 @@ async function processAi(text){
 
       signal:
        controller.signal
-
      }
     );
 
   }finally{
 
-   clearTimeout(
-    timeout
-   );
+   clearTimeout(timeout);
   }
 
   if(!response.ok){
@@ -2902,25 +2616,27 @@ async function processAi(text){
    try{
 
     const errorData=
-     JSON.parse(
-      errorText
-     );
+     JSON.parse(errorText);
 
     if(
      errorData&&
      errorData.error
-    )
+    ){
+
      errorMessage=
       errorData.error;
+    }
 
    }catch(e){
 
-    if(errorText)
+    if(errorText){
+
      errorMessage=
       errorText.substring(
        0,
        200
       );
+    }
    }
 
    throw new Error(
@@ -2932,7 +2648,8 @@ async function processAi(text){
    await response.json();
 
   const reply=
-   typeof data.response==="string"
+   typeof data.response===
+   "string"
     ?data.response.trim()
     :"";
 
@@ -2941,24 +2658,17 @@ async function processAi(text){
     "Risposta AI vuota"
    );
 
-  addMsg(
-   reply
-  );
+  addMsg(reply);
 
   addMemory(
    "assistant",
    reply
   );
 
-  speak(
-   reply
-  ).catch(
-   console.error
-  );
+  speak(reply)
+   .catch(console.error);
 
-  setState(
-   "idle"
-  );
+  setState("idle");
 
  }catch(error){
 
@@ -2972,25 +2682,28 @@ async function processAi(text){
    "Errore sconosciuto";
 
   if(
-   error.name==="AbortError"
-  )
+   error.name===
+   "AbortError"
+  ){
+
    message=
     "Il server ha impiegato troppo tempo a rispondere.";
 
-  else if(
-   message==="Failed to fetch"
-  )
+  }else if(
+   message===
+   "Failed to fetch"
+  ){
+
    message=
     "Errore di connessione al server JARVIS.";
+  }
 
   addMsg(
    "ERRORE: "+
    message
   );
 
-  setState(
-   "idle"
-  );
+  setState("idle");
  }
 }
 
@@ -3006,13 +2719,9 @@ function sendMessage(){
 
  textInput.value="";
 
- addMsg(
-  text
- );
+ addMsg(text);
 
- processAi(
-  text
- );
+ processAi(text);
 }
 
 sendBtn.addEventListener(
@@ -3041,7 +2750,6 @@ const Recognition=
  window.webkitSpeechRecognition;
 
 let recognition=null;
-
 let listening=false;
 
 if(Recognition){
@@ -3049,26 +2757,21 @@ if(Recognition){
  recognition=
   new Recognition();
 
- recognition.lang=
-  "it-IT";
+ recognition.lang="it-IT";
 
- recognition.continuous=
-  false;
+ recognition.continuous=false;
 
- recognition.interimResults=
-  false;
+ recognition.interimResults=false;
 
  recognition.onstart=()=>{
 
   listening=true;
 
-  micBtn.classList.add(
-   "active"
-  );
+  micBtn
+   .classList
+   .add("active");
 
-  setState(
-   "listening"
-  );
+  setState("listening");
  };
 
  recognition.onresult=
@@ -3076,13 +2779,12 @@ if(Recognition){
 
    const text=
     event.results[0][0]
-    .transcript
-    .trim();
+     .transcript
+     .trim();
 
    if(text){
 
-    textInput.value=
-     text;
+    textInput.value=text;
 
     sendMessage();
    }
@@ -3098,22 +2800,20 @@ if(Recognition){
 
    listening=false;
 
-   micBtn.classList.remove(
-    "active"
-   );
+   micBtn
+    .classList
+    .remove("active");
 
-   setState(
-    "idle"
-   );
+   setState("idle");
   };
 
  recognition.onend=()=>{
 
   listening=false;
 
-  micBtn.classList.remove(
-   "active"
-  );
+  micBtn
+   .classList
+   .remove("active");
  };
 
  micBtn.addEventListener(
@@ -3132,10 +2832,7 @@ if(Recognition){
 
     }catch(error){
 
-     console.warn(
-      error
-     );
-
+     console.warn(error);
     }
    }
   }
@@ -3189,11 +2886,7 @@ window.clearJarvisMemory=
 
 /* ================= AVVIO ================= */
 
-setState(
- "idle"
-);
-
-updateFullscreenButton();
+setState("idle");
 
 </script></body>
 </html>

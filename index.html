@@ -1636,6 +1636,40 @@ function setState(
 
 function animate(){
 
+      const synapsePos =
+    synapseGeometry.attributes.position.array;
+
+for(let i = 0; i < 60; i++){
+
+    const a = Math.floor(
+        Math.random() * COUNT
+    );
+
+    const b = Math.floor(
+        Math.random() * COUNT
+    );
+
+    synapsePos[i*3] =
+        positions[a*3];
+
+    synapsePos[i*3+1] =
+        positions[a*3+1];
+
+    synapsePos[i*3+2] =
+        positions[a*3+2];
+
+    synapsePos[i*3+3] =
+        positions[b*3];
+
+    synapsePos[i*3+4] =
+        positions[b*3+1];
+
+    synapsePos[i*3+5] =
+        positions[b*3+2];
+}
+
+synapseGeometry.attributes.position.needsUpdate = true;
+
     requestAnimationFrame(
         animate
     );

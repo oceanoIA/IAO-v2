@@ -1499,7 +1499,7 @@ const material =
                 0x00cfe8
             ),
 
-        size:.42,
+        size:.042,
 
         map:createGlow(),
 
@@ -1525,40 +1525,6 @@ const particles =
 scene.add(
     particles
 );
-
-      /* =====================================================
-   PICCOLE SINAPSI NEURALI
-===================================================== */
-
-const synapseMaterial =
-    new THREE.LineBasicMaterial({
-        color: 0x35ffff,
-        transparent: true,
-        opacity: 0.16,
-        blending: THREE.AdditiveBlending
-    });
-
-const synapseGeometry =
-    new THREE.BufferGeometry();
-
-const synapsePositions =
-    new Float32Array(60 * 3);
-
-synapseGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        synapsePositions,
-        3
-    )
-);
-
-const synapses =
-    new THREE.LineSegments(
-        synapseGeometry,
-        synapseMaterial
-    );
-
-scene.add(synapses);
 
 
 /* =====================================================
@@ -1635,40 +1601,6 @@ function setState(
 ===================================================== */
 
 function animate(){
-
-      const synapsePos =
-    synapseGeometry.attributes.position.array;
-
-for(let i = 0; i < 60; i++){
-
-    const a = Math.floor(
-        Math.random() * COUNT
-    );
-
-    const b = Math.floor(
-        Math.random() * COUNT
-    );
-
-    synapsePos[i*3] =
-        positions[a*3];
-
-    synapsePos[i*3+1] =
-        positions[a*3+1];
-
-    synapsePos[i*3+2] =
-        positions[a*3+2];
-
-    synapsePos[i*3+3] =
-        positions[b*3];
-
-    synapsePos[i*3+4] =
-        positions[b*3+1];
-
-    synapsePos[i*3+5] =
-        positions[b*3+2];
-}
-
-synapseGeometry.attributes.position.needsUpdate = true;
 
     requestAnimationFrame(
         animate

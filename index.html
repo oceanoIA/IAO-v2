@@ -3404,15 +3404,11 @@ async function processAi(
     text
 ){
 
-    if(
-        handleMapCommand(
-            text
-        )
-    ){
+    /* =================================================
+       PRIMA: RICERCA WEB
+       La ricerca web ha priorità sulla mappa
+    ================================================= */
 
-        return;
-
-    }
     if(
         handleWebCommand(
             text
@@ -3422,6 +3418,22 @@ async function processAi(
         return;
 
     }
+
+
+    /* =================================================
+       POI: COMANDI MAPPA
+    ================================================= */
+
+    if(
+        handleMapCommand(
+            text
+        )
+    ){
+
+        return;
+
+    }
+
 
     setState(
         "thinking"

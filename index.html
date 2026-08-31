@@ -2,7 +2,7 @@
 content="width=device-width,initial-scale=1.0">
 
 <title>J.A.R.V.I.S.</title><link rel="stylesheet"
-href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
+      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
 
 *{
  box-sizing:border-box;
@@ -164,44 +164,114 @@ body{
  color:rgba(255,255,255,.3);
 }
 
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
 #micBtn{
- width:34px;
- height:34px;
- margin-right:7px;
- border:none;
+ width:42px;
+ height:39px;
+ margin-right:5px;
+ border:1px solid transparent;
+ border-radius:50%;
  background:transparent;
  color:rgba(210,255,255,.65);
  cursor:pointer;
  display:flex;
  align-items:center;
  justify-content:center;
+ transition:
+  .2s ease;
 }
 
 .mic-icon{
- width:8px;
- height:14px;
- border:1.3px solid currentColor;
+ width:10px;
+ height:17px;
+ border:1.5px solid currentColor;
  border-radius:60px;
  position:relative;
+}
+
+.mic-icon:before{
+ content:"";
+ position:absolute;
+ left:50%;
+ bottom:-8px;
+ width:15px;
+ height:9px;
+ transform:translateX(-50%);
+ border:1.5px solid currentColor;
+ border-top:none;
+ border-radius:0 0 10px 10px;
 }
 
 .mic-icon:after{
  content:"";
  position:absolute;
  left:50%;
- bottom:-6px;
- width:12px;
- height:7px;
+ bottom:-11px;
+ width:1.5px;
+ height:4px;
  transform:translateX(-50%);
- border:1.3px solid currentColor;
- border-top:none;
- border-radius:0 0 8px 8px;
+ background:currentColor;
+}
+
+#micBtn:hover{
+ color:#8fffff;
+ border-color:rgba(0,255,255,.25);
+ background:rgba(0,255,255,.05);
 }
 
 #micBtn.active{
  color:#8fffff;
+ border-color:rgba(0,255,255,.45);
+ background:rgba(0,255,255,.08);
  filter:drop-shadow(0 0 8px rgba(0,255,255,.7));
+ animation:micPulse 1.2s infinite;
 }
+
+@keyframes micPulse{
+
+ 0%,100%{
+  box-shadow:
+   0 0 0 rgba(0,255,255,0);
+ }
+
+ 50%{
+  box-shadow:
+   0 0 18px rgba(0,255,255,.28);
+ }
+}
+
+#micBtn.unsupported{
+ opacity:.3;
+ cursor:not-allowed;
+}
+
+#micStatus{
+ position:fixed;
+ left:50%;
+ bottom:74px;
+ transform:translateX(-50%);
+ z-index:55;
+ display:none;
+ padding:6px 12px;
+ border:1px solid rgba(0,255,255,.2);
+ border-radius:15px;
+ background:rgba(2,15,18,.85);
+ color:rgba(150,255,255,.75);
+ font-family:monospace;
+ font-size:8px;
+ letter-spacing:1.3px;
+ pointer-events:none;
+ white-space:nowrap;
+}
+
+#micStatus.active{
+ display:block;
+}
+
 
 #sendBtn{
  height:39px;
@@ -361,14 +431,17 @@ body{
 }
 
 @keyframes mapIn{
+
  from{
   opacity:0;
   transform:scale(1.015);
  }
+
  to{
   opacity:1;
   transform:scale(1);
  }
+
 }
 
 .map-header{
@@ -457,12 +530,15 @@ body{
 }
 
 @keyframes markerPulse{
+
  0%,100%{
   transform:scale(1);
  }
+
  50%{
   transform:scale(1.18);
  }
+
 }
 
 
@@ -624,6 +700,10 @@ body{
   bottom:80px;
  }
 
+ #micStatus{
+  bottom:66px;
+ }
+
  #map{
   top:3cm;
   right:3cm;
@@ -682,6 +762,7 @@ body{
   min-width:230px;
   min-height:180px;
  }
+
 }
 
 @media(max-width:430px){
@@ -692,26 +773,46 @@ body{
   bottom:2.2cm;
   left:2.2cm;
  }
+
 }
 
-</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div class="jarvis-title" id="jarvisTitle">
- J.A.R.V.I.S
-</div><div class="datetime">
- <div id="clock" class="time">00:00:00</div>
- <div id="date" class="date">00 AGO 2026</div>
-</div><!-- =====================================================
+
+/* =====================================================
+   TRASCRIZIONE
+===================================================== */
+
+#textInput.listening{
+ color:#8fffff;
+ text-shadow:
+  0 0 8px rgba(0,255,255,.3);
+}
+
+</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div class="jarvis-title"
+     id="jarvisTitle">J.A.R.V.I.S
+
+</div><div class="datetime"> <div id="clock"
+      class="time">
+  00:00:00
+ </div> <div id="date"
+      class="date">
+  00 AGO 2026
+ </div></div><!-- =====================================================
      MAPPA
 ===================================================== --><div id="tacticalMap"> <div id="map"></div> <div class="map-overlay"></div> <div class="map-header">
   TACTICAL MAP
- </div><button id="closeMap">×</button>
-
-</div><!-- =====================================================
+ </div> <button id="closeMap">
+  ×
+ </button></div><!-- =====================================================
      WEB WINDOWS
 ===================================================== --><div id="webSearchWindows"></div><div id="webSearchIndicator">
  WEB WINDOWS: 0
 </div><!-- =====================================================
      CHAT
 ===================================================== --><div id="chat"></div><!-- =====================================================
+     STATO MICROFONO
+===================================================== --><div id="micStatus">
+ MICROFONO: PRONTO
+</div><!-- =====================================================
      COMMAND BAR
 ===================================================== --><div class="command-wrapper"><input
 id="textInput"
@@ -721,8 +822,11 @@ placeholder="Chiedi qualcosa a JARVIS..."
 
 «»
 
- <button id="micBtn">
-  <span class="mic-icon"></span>
+<button id="micBtn"
+title="Parla con JARVIS">
+
+<span class="mic-icon"></span>
+
  </button> <button id="sendBtn">
   INVIA
  </button></div><!-- =====================================================
@@ -742,11 +846,13 @@ placeholder="Chiedi qualcosa a JARVIS..."
   </option> </select> <button id="voiceTest">
   TESTA VOCE
  </button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
+
 {
  "imports":{
   "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
  }
 }
+
 </script><script type="module">
 
 import * as THREE from "three";
@@ -769,7 +875,7 @@ const ELEVEN_VOICE_ID=
 
 
 /* =====================================================
-   AUDIO
+   VARIABILI AUDIO
 ===================================================== */
 
 let currentAudio=null;
@@ -782,7 +888,7 @@ let selectedDeviceVoice=null;
 
 
 /* =====================================================
-   CONVERSAZIONE
+   VARIABILI CONVERSAZIONE
 ===================================================== */
 
 let conversationMode=false;
@@ -797,9 +903,15 @@ let recognitionShouldRun=false;
 
 let recognitionStarting=false;
 
-let recognitionSessionId=0;
-
 let speechGeneration=0;
+
+
+/*
+   Indica se il riconoscimento corrente
+   è stato avviato dal pulsante normale.
+*/
+
+let manualRecognition=false;
 
 
 /* =====================================================
@@ -807,61 +919,104 @@ let speechGeneration=0;
 ===================================================== */
 
 const container=
- document.getElementById("webgl-container");
+ document.getElementById(
+  "webgl-container"
+ );
 
 const chat=
- document.getElementById("chat");
+ document.getElementById(
+  "chat"
+ );
 
 const textInput=
- document.getElementById("textInput");
+ document.getElementById(
+  "textInput"
+ );
 
 const sendBtn=
- document.getElementById("sendBtn");
+ document.getElementById(
+  "sendBtn"
+ );
 
 const micBtn=
- document.getElementById("micBtn");
+ document.getElementById(
+  "micBtn"
+ );
+
+const micStatus=
+ document.getElementById(
+  "micStatus"
+ );
 
 const clock=
- document.getElementById("clock");
+ document.getElementById(
+  "clock"
+ );
 
 const date=
- document.getElementById("date");
+ document.getElementById(
+  "date"
+ );
 
 const tacticalMap=
- document.getElementById("tacticalMap");
+ document.getElementById(
+  "tacticalMap"
+ );
 
 const closeMap=
- document.getElementById("closeMap");
+ document.getElementById(
+  "closeMap"
+ );
 
 const jarvisTitle=
- document.getElementById("jarvisTitle");
+ document.getElementById(
+  "jarvisTitle"
+ );
 
 const mapHeader=
- document.querySelector(".map-header");
+ document.querySelector(
+  ".map-header"
+ );
 
 const voiceBtn=
- document.getElementById("voiceBtn");
+ document.getElementById(
+  "voiceBtn"
+ );
 
 const voicePanel=
- document.getElementById("voicePanel");
+ document.getElementById(
+  "voicePanel"
+ );
 
 const voiceSelector=
- document.getElementById("voiceSelector");
+ document.getElementById(
+  "voiceSelector"
+ );
 
 const voiceTest=
- document.getElementById("voiceTest");
+ document.getElementById(
+  "voiceTest"
+ );
 
 const conversationBtn=
- document.getElementById("conversationBtn");
+ document.getElementById(
+  "conversationBtn"
+ );
 
 const conversationStatus=
- document.getElementById("conversationStatus");
+ document.getElementById(
+  "conversationStatus"
+ );
 
 const webSearchWindows=
- document.getElementById("webSearchWindows");
+ document.getElementById(
+  "webSearchWindows"
+ );
 
 const webSearchIndicator=
- document.getElementById("webSearchIndicator");
+ document.getElementById(
+  "webSearchIndicator"
+ );
 
 
 /* =====================================================
@@ -884,12 +1039,17 @@ try{
 
   if(Array.isArray(parsed))
    memory=
-    parsed.slice(-MAX_MEMORY);
+    parsed.slice(
+     -MAX_MEMORY
+    );
  }
 
 }catch(error){
 
- console.warn("Memoria:",error);
+ console.warn(
+  "Memoria:",
+  error
+ );
 
 }
 
@@ -901,7 +1061,9 @@ function saveMemory(){
   localStorage.setItem(
    MEMORY_KEY,
    JSON.stringify(
-    memory.slice(-MAX_MEMORY)
+    memory.slice(
+     -MAX_MEMORY
+    )
    )
   );
 
@@ -928,7 +1090,9 @@ function addMemory(
  });
 
  memory=
-  memory.slice(-MAX_MEMORY);
+  memory.slice(
+   -MAX_MEMORY
+  );
 
  saveMemory();
 
@@ -947,16 +1111,28 @@ const months=[
 
 function updateClock(){
 
- const now=new Date();
+ const now=
+  new Date();
 
  clock.textContent=
-  `${String(now.getHours()).padStart(2,"0")}:`+
-  `${String(now.getMinutes()).padStart(2,"0")}:`+
-  `${String(now.getSeconds()).padStart(2,"0")}`;
+  `${String(
+    now.getHours()
+   ).padStart(2,"0")}:`+
+  `${String(
+    now.getMinutes()
+   ).padStart(2,"0")}:`+
+  `${String(
+    now.getSeconds()
+   ).padStart(2,"0")}`;
+
 
  date.textContent=
-  `${String(now.getDate()).padStart(2,"0")} `+
-  `${months[now.getMonth()]} `+
+  `${String(
+    now.getDate()
+   ).padStart(2,"0")} `+
+  `${months[
+    now.getMonth()
+   ]} `+
   `${now.getFullYear()}`;
 
 }
@@ -977,6 +1153,7 @@ setInterval(
 const scene=
  new THREE.Scene();
 
+
 const camera=
  new THREE.PerspectiveCamera(
   55,
@@ -986,7 +1163,9 @@ const camera=
   1000
  );
 
-camera.position.z=5.2;
+
+camera.position.z=
+ 5.2;
 
 
 const renderer=
@@ -1005,7 +1184,7 @@ const renderer=
 renderer.setSize(
  window.innerWidth,
  window.innerHeight
-);
+ );
 
 
 renderer.setPixelRatio(
@@ -1013,12 +1192,12 @@ renderer.setPixelRatio(
   window.devicePixelRatio||1,
   2
  )
-);
+ );
 
 
 container.appendChild(
  renderer.domElement
-);
+ );
 
 
 /* =====================================================
@@ -1028,20 +1207,27 @@ container.appendChild(
 function createGlow(){
 
  const canvas=
-  document.createElement("canvas");
+  document.createElement(
+   "canvas"
+  );
 
  canvas.width=64;
 
  canvas.height=64;
 
+
  const ctx=
-  canvas.getContext("2d");
+  canvas.getContext(
+   "2d"
+  );
+
 
  const gradient=
   ctx.createRadialGradient(
    32,32,0,
    32,32,32
   );
+
 
  gradient.addColorStop(
   0,
@@ -1068,11 +1254,15 @@ function createGlow(){
   "rgba(0,0,0,0)"
  );
 
- ctx.fillStyle=gradient;
+
+ ctx.fillStyle=
+  gradient;
+
 
  ctx.fillRect(
   0,0,64,64
  );
+
 
  return new THREE.CanvasTexture(
   canvas
@@ -1082,29 +1272,38 @@ function createGlow(){
 
 
 /* =====================================================
-   PARTICELLE
+   PARTICELLE / NEURONI
 ===================================================== */
 
 const COUNT=3000;
 
+
 const geometry=
  new THREE.BufferGeometry();
+
 
 const positions=
  new Float32Array(
   COUNT*3
  );
 
+
 const radii=
- new Float32Array(COUNT);
+ new Float32Array(
+  COUNT
+ );
+
 
 const angles=
  new Float32Array(
   COUNT*2
  );
 
+
 const seeds=
- new Float32Array(COUNT);
+ new Float32Array(
+  COUNT
+ );
 
 
 for(
@@ -1117,14 +1316,17 @@ for(
   1.10+
   Math.random()*.70;
 
+
  const theta=
   Math.random()*
   Math.PI*2;
+
 
  const phi=
   Math.acos(
    2*Math.random()-1
   );
+
 
  radii[i]=r;
 
@@ -1135,15 +1337,18 @@ for(
  seeds[i]=
   Math.random()*100;
 
+
  positions[i*3]=
   r*
   Math.sin(phi)*
   Math.cos(theta);
 
+
  positions[i*3+1]=
   r*
   Math.sin(phi)*
   Math.sin(theta);
+
 
  positions[i*3+2]=
   r*
@@ -1191,26 +1396,32 @@ const particles=
   material
  );
 
-scene.add(particles);
+
+scene.add(
+ particles
+ );
 
 
 /* =====================================================
-   STATO
+   STATO NEURONI
 ===================================================== */
 
 let targetEnergy=.15;
 
 let energy=.15;
 
+
 const normalColor=
  new THREE.Color(
   0x00cfe8
  );
 
+
 const activeColor=
  new THREE.Color(
   0x8fffff
  );
+
 
 const currentColor=
  normalColor.clone();
@@ -1243,17 +1454,21 @@ function animate(){
   animate
  );
 
+
  const time=
   performance.now()*.001;
+
 
  energy+=
   (targetEnergy-energy)*
   .045;
 
+
  currentColor.lerp(
   activeColor,
   energy*.04
  );
+
 
  if(energy<.3){
 
@@ -1264,12 +1479,15 @@ function animate(){
 
  }
 
+
  material.color=
   currentColor;
+
 
  material.size=
   .032+
   energy*.008;
+
 
  const pos=
   geometry.attributes
@@ -1282,25 +1500,32 @@ function animate(){
   i++
  ){
 
-  const index=i*3;
+  const index=
+   i*3;
+
 
   const r=
    radii[i];
 
+
   const theta=
    angles[i*2];
+
 
   const phi=
    angles[i*2+1];
 
+
   const seed=
    seeds[i];
+
 
   const pulse=
    Math.sin(
     time*2+
     seed
    )*.035;
+
 
   const strangeShape=
    Math.sin(
@@ -1309,6 +1534,7 @@ function animate(){
     seed
    )*.18*energy;
 
+
   const wave=
    Math.cos(
     phi*7-
@@ -1316,25 +1542,30 @@ function animate(){
     seed
    )*.12*energy;
 
+
   const rr=
    r+
    pulse+
    strangeShape+
    wave;
 
+
   let x=
    rr*
    Math.sin(phi)*
    Math.cos(theta);
+
 
   let y=
    rr*
    Math.sin(phi)*
    Math.sin(theta);
 
+
   let z=
    rr*
-   Math.cos(phi);
+   Math.cos(phi;
+
 
   x+=
    Math.sin(
@@ -1343,6 +1574,7 @@ function animate(){
     seed
    )*.08*energy;
 
+
   y+=
    Math.cos(
     time*2.1+
@@ -1350,11 +1582,13 @@ function animate(){
     seed
    )*.08*energy;
 
+
   z+=
    Math.sin(
     time*2.7+
     (theta+phi)*7
    )*.10*energy;
+
 
   pos[index]=x;
 
@@ -1374,10 +1608,12 @@ function animate(){
   .0005+
   energy*.0008;
 
+
  particles.rotation.x=
   Math.sin(
    time*.25
   )*.04;
+
 
  particles.rotation.z=
   Math.cos(
@@ -1403,10 +1639,12 @@ animate();
 const MAPTILER_KEY=
  "NmSlgtsAdQyEWy7t0OJf";
 
+
 const MAPTILER_STYLE=
  "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
  +
  MAPTILER_KEY;
+
 
 let map=null;
 
@@ -1418,16 +1656,15 @@ function initializeMap(){
  if(map)
   return;
 
- if(
-  typeof maplibregl===
-  "undefined"
- ){
+
+ if(typeof maplibregl==="undefined"){
 
   addMsg(
    "Errore: MapTiler non disponibile."
   );
 
   return;
+
  }
 
 
@@ -1454,8 +1691,11 @@ function initializeMap(){
 
  map.addControl(
   new maplibregl.NavigationControl({
+
    showCompass:true,
+
    showZoom:true
+
   }),
   "bottom-right"
  );
@@ -1464,7 +1704,9 @@ function initializeMap(){
  map.on(
   "load",
   ()=>{
+
    map.resize();
+
   }
  );
 
@@ -1483,12 +1725,16 @@ function openTacticalMap(){
  mapHeader.style.display=
   "block";
 
+
  initializeMap();
+
 
  setTimeout(
   ()=>{
+
    if(map)
     map.resize();
+
   },
   400
  );
@@ -1511,7 +1757,7 @@ function closeTacticalMap(){
 closeMap.addEventListener(
  "click",
  closeTacticalMap
-);
+ );
 
 
 /* =====================================================
@@ -1554,15 +1800,20 @@ function addMsg(text){
 
  chat.innerHTML="";
 
+
  const element=
   document.createElement(
    "div"
   );
 
- element.className="msg";
+
+ element.className=
+  "msg";
+
 
  element.textContent=
   text;
+
 
  chat.appendChild(
   element
@@ -1572,7 +1823,7 @@ function addMsg(text){
 
 
 /* =====================================================
-   NORMALIZZAZIONE
+   NORMALIZZAZIONE COMANDI
 ===================================================== */
 
 function normalizeText(text){
@@ -1611,6 +1862,7 @@ function containsAny(
  const normalized=
   normalizeText(text);
 
+
  return words.some(
   word=>
    normalized.includes(
@@ -1627,23 +1879,30 @@ function similarity(a,b){
 
  b=normalizeText(b);
 
+
  if(a===b)
   return 1;
+
 
  if(!a||!b)
   return 0;
 
+
  const longer=
   a.length>b.length?a:b;
 
+
  const shorter=
   a.length>b.length?b:a;
+
 
  if(longer.includes(shorter))
   return shorter.length/
    longer.length;
 
+
  let distance=0;
+
 
  const matrix=[];
 
@@ -1711,6 +1970,7 @@ function similarity(a,b){
    longer.length
   ];
 
+
  return 1-
   distance/
   longer.length;
@@ -1726,6 +1986,7 @@ function commandLooksLike(
  const normalized=
   normalizeText(text);
 
+
  for(
   const variant of variants
  ){
@@ -1733,14 +1994,17 @@ function commandLooksLike(
   const v=
    normalizeText(variant);
 
+
   if(normalized===v)
    return true;
+
 
   if(
    normalized.includes(v)||
    v.includes(normalized)
   )
    return true;
+
 
   if(
    similarity(
@@ -1751,6 +2015,7 @@ function commandLooksLike(
    return true;
 
  }
+
 
  return false;
 
@@ -1768,6 +2033,7 @@ async function enterFullscreen(){
   if(document.fullscreenElement)
    return true;
 
+
   if(
    document.documentElement
     .requestFullscreen
@@ -1776,9 +2042,11 @@ async function enterFullscreen(){
    await document.documentElement
     .requestFullscreen();
 
+
    addMsg(
     "Modalità fullscreen attivata."
    );
+
 
    return true;
 
@@ -1793,9 +2061,11 @@ async function enterFullscreen(){
 
  }
 
+
  addMsg(
   "Il dispositivo non permette di attivare il fullscreen."
  );
+
 
  return false;
 
@@ -1810,9 +2080,11 @@ async function exitFullscreen(){
 
    await document.exitFullscreen();
 
+
    addMsg(
     "Modalità fullscreen disattivata."
    );
+
 
    return true;
 
@@ -1827,6 +2099,7 @@ async function exitFullscreen(){
 
  }
 
+
  return false;
 
 }
@@ -1836,6 +2109,7 @@ async function toggleFullscreen(){
 
  if(document.fullscreenElement)
   return exitFullscreen();
+
 
  return enterFullscreen();
 
@@ -1848,6 +2122,7 @@ function handleFullscreenCommand(
 
  const normalized=
   normalizeText(text);
+
 
  const activateWords=[
   "modalita fullscreen",
@@ -1862,6 +2137,7 @@ function handleFullscreenCommand(
   "fullscreen attivo"
  ];
 
+
  const deactivateWords=[
   "disattiva fullscreen",
   "disattiva full screen",
@@ -1872,6 +2148,7 @@ function handleFullscreenCommand(
   "schermo normale",
   "esci da schermo intero"
  ];
+
 
  if(
   commandLooksLike(
@@ -1919,6 +2196,7 @@ function createJarvisMarker(
  if(!map)
   return;
 
+
  if(currentMarker){
 
   currentMarker.remove();
@@ -1932,6 +2210,7 @@ function createJarvisMarker(
   document.createElement(
    "div"
   );
+
 
  markerElement.className=
   "jarvis-map-marker";
@@ -1978,21 +2257,26 @@ function createJarvisMarker(
    RICERCA POSIZIONE
 ===================================================== */
 
-async function searchLocation(place){
+async function searchLocation(
+ place
+){
 
  try{
 
   openTacticalMap();
+
 
   addMsg(
    "Ricerca posizione: "+
    place
   );
 
+
   const url=
    "https://nominatim.openstreetmap.org/search"+
    "?format=json&limit=1&q="+
    encodeURIComponent(place);
+
 
   const response=
    await fetch(
@@ -2005,13 +2289,16 @@ async function searchLocation(place){
     }
    );
 
+
   if(!response.ok)
    throw new Error(
     "Ricerca posizione fallita"
    );
 
+
   const results=
    await response.json();
+
 
   if(!results.length){
 
@@ -2028,11 +2315,17 @@ async function searchLocation(place){
   const result=
    results[0];
 
+
   const lat=
-   parseFloat(result.lat);
+   parseFloat(
+    result.lat
+   );
+
 
   const lon=
-   parseFloat(result.lon);
+   parseFloat(
+    result.lon
+   );
 
 
   if(!map)
@@ -2079,6 +2372,7 @@ async function searchLocation(place){
    error
   );
 
+
   addMsg(
    "Impossibile localizzare "+
    place+"."
@@ -2119,9 +2413,11 @@ function handleMapCommand(
 
   openTacticalMap();
 
+
   addMsg(
    "Mappa tattica attivata."
   );
+
 
   return true;
 
@@ -2144,9 +2440,11 @@ function handleMapCommand(
 
   closeTacticalMap();
 
+
   addMsg(
    "Modalità tattica disattivata."
   );
+
 
   return true;
 
@@ -2183,9 +2481,13 @@ function handleMapCommand(
      )
      .trim();
 
+
    if(place.length>1){
 
-    searchLocation(place);
+    searchLocation(
+     place
+    );
+
 
     return true;
 
@@ -2218,11 +2520,13 @@ function updateWebIndicator(){
     ".web-window"
    ).length;
 
+
  if(count>0){
 
   webSearchIndicator
    .classList
    .add("active");
+
 
   webSearchIndicator
    .textContent=
@@ -2246,6 +2550,7 @@ function bringWebWindowToFront(
 
  highestWebZ++;
 
+
  windowElement.style.zIndex=
   String(highestWebZ);
 
@@ -2256,10 +2561,13 @@ function bringWebWindowToFront(
    CREA FINESTRA WEB
 ===================================================== */
 
-function openWebSearch(query){
+function openWebSearch(
+ query
+){
 
  if(!query)
   return;
+
 
  webWindowCounter++;
 
@@ -2268,6 +2576,7 @@ function openWebSearch(query){
   document.createElement(
    "div"
   );
+
 
  windowElement.className=
   "web-window";
@@ -2280,8 +2589,10 @@ function openWebSearch(query){
  windowElement.style.left=
   (20+offset*45)+"px";
 
+
  windowElement.style.top=
   (90+offset*35)+"px";
+
 
  windowElement.style.zIndex=
   String(++highestWebZ);
@@ -2350,9 +2661,11 @@ function openWebSearch(query){
  windowElement.addEventListener(
   "pointerdown",
   ()=>{
+
    bringWebWindowToFront(
     windowElement
    );
+
   }
  );
 
@@ -2368,6 +2681,7 @@ function openWebSearch(query){
   event=>{
 
    event.stopPropagation();
+
 
    windowElement
     .classList
@@ -2389,7 +2703,9 @@ function openWebSearch(query){
 
    event.stopPropagation();
 
+
    windowElement.remove();
+
 
    updateWebIndicator();
 
@@ -2421,23 +2737,29 @@ function openWebSearch(query){
    )
     return;
 
+
    dragging=true;
+
 
    bringWebWindowToFront(
     windowElement
    );
 
+
    const rect=
     windowElement
      .getBoundingClientRect();
+
 
    dragOffsetX=
     event.clientX-
     rect.left;
 
+
    dragOffsetY=
     event.clientY-
     rect.top;
+
 
    try{
 
@@ -2446,6 +2768,7 @@ function openWebSearch(query){
     );
 
    }catch(error){}
+
 
    event.preventDefault();
 
@@ -2463,11 +2786,14 @@ function openWebSearch(query){
    if(!dragging)
     return;
 
+
    event.preventDefault();
+
 
    let newLeft=
     event.clientX-
     dragOffsetX;
+
 
    let newTop=
     event.clientY-
@@ -2482,10 +2808,13 @@ function openWebSearch(query){
    const minLeft=
     -rect.width+100;
 
+
    const maxLeft=
     window.innerWidth-80;
 
+
    const minTop=0;
+
 
    const maxTop=
     window.innerHeight-60;
@@ -2514,6 +2843,7 @@ function openWebSearch(query){
    windowElement.style.left=
     newLeft+"px";
 
+
    windowElement.style.top=
     newTop+"px";
 
@@ -2524,12 +2854,16 @@ function openWebSearch(query){
  );
 
 
- function stopDragging(event){
+ function stopDragging(
+  event
+ ){
 
   if(!dragging)
    return;
 
+
   dragging=false;
+
 
   try{
 
@@ -2547,10 +2881,12 @@ function openWebSearch(query){
   stopDragging
  );
 
+
  header.addEventListener(
   "pointercancel",
   stopDragging
  );
+
 
  header.addEventListener(
   "lostpointercapture",
@@ -2561,6 +2897,7 @@ function openWebSearch(query){
 
 
  updateWebIndicator();
+
 
  addMsg(
   "Ricerca web: "+
@@ -2580,6 +2917,7 @@ function handleWebCommand(
 
  const normalized=
   normalizeText(text);
+
 
  const patterns=[
   "cerca sul web ",
@@ -2612,9 +2950,13 @@ function handleWebCommand(
      )
      .trim();
 
+
    if(query.length>1){
 
-    openWebSearch(query);
+    openWebSearch(
+     query
+    );
+
 
     return true;
 
@@ -2657,11 +2999,14 @@ function handleWebWindowCommand(
 
   webSearchWindows.innerHTML="";
 
+
   updateWebIndicator();
+
 
   addMsg(
    "Finestre web chiuse."
   );
+
 
   return true;
 
@@ -2690,13 +3035,16 @@ function handleWebWindowCommand(
      )
    );
 
+
   addMsg(
    "Ricerche web minimizzate."
   );
 
+
   return true;
 
  }
+
 
  return false;
 
@@ -2712,6 +3060,7 @@ function getTimeData(){
  const now=
   new Date();
 
+
  return{
 
   currentTime:
@@ -2724,6 +3073,7 @@ function getTimeData(){
     }
    ),
 
+
   currentDate:
    now.toLocaleDateString(
     "it-IT",
@@ -2734,6 +3084,7 @@ function getTimeData(){
     }
    ),
 
+
   dayOfWeek:
    now.toLocaleDateString(
     "it-IT",
@@ -2741,6 +3092,7 @@ function getTimeData(){
      weekday:"long"
     }
    ),
+
 
   timezone:
    Intl.DateTimeFormat()
@@ -2777,10 +3129,13 @@ function loadDeviceVoices(){
    "option"
   );
 
+
  automatic.value="";
+
 
  automatic.textContent=
   "Voce dispositivo automatica";
+
 
  voiceSelector.appendChild(
   automatic
@@ -2795,11 +3150,14 @@ function loadDeviceVoices(){
      "option"
     );
 
+
    option.value=
     String(index);
 
+
    option.textContent=
     `${voice.name} — ${voice.lang}`;
+
 
    voiceSelector.appendChild(
     option
@@ -2824,6 +3182,7 @@ function loadDeviceVoices(){
   voiceSelector.value=
    savedVoice;
 
+
   selectedDeviceVoice=
    deviceVoices[
     Number(savedVoice)
@@ -2840,6 +3199,7 @@ if(
 
  loadDeviceVoices();
 
+
  window.speechSynthesis
   .addEventListener(
    "voiceschanged",
@@ -2850,7 +3210,7 @@ if(
 
 
 /* =====================================================
-   STOP AUDIO
+   FERMA AUDIO
 ===================================================== */
 
 function stopSpeaking(){
@@ -2867,6 +3227,7 @@ function stopSpeaking(){
    currentAudio.currentTime=0;
 
   }catch(error){}
+
 
   currentAudio=null;
 
@@ -2889,15 +3250,11 @@ function stopSpeaking(){
  audioPlaying=false;
 
 
- if(conversationMode){
-
-  setState("listening");
-
- }else{
-
-  setState("idle");
-
- }
+ setState(
+  conversationMode
+   ? "listening"
+   : "idle"
+ );
 
 }
 
@@ -2906,7 +3263,9 @@ function stopSpeaking(){
    DEVICE TTS
 ===================================================== */
 
-function speakDevice(text){
+function speakDevice(
+ text
+){
 
  return new Promise(
   resolve=>{
@@ -2933,13 +3292,20 @@ function speakDevice(text){
      );
 
 
-    utterance.lang="it-IT";
+    utterance.lang=
+     "it-IT";
 
-    utterance.rate=.95;
 
-    utterance.pitch=.9;
+    utterance.rate=
+     .95;
 
-    utterance.volume=1;
+
+    utterance.pitch=
+     .9;
+
+
+    utterance.volume=
+     1;
 
 
     if(selectedDeviceVoice){
@@ -2956,6 +3322,7 @@ function speakDevice(text){
          .toLowerCase()
          .startsWith("it")
       );
+
 
      if(italianVoice)
       utterance.voice=
@@ -2979,19 +3346,24 @@ function speakDevice(text){
 
      audioPlaying=false;
 
+
      if(conversationMode){
 
       setState(
        "listening"
       );
 
+
       startContinuousRecognition();
 
      }else{
 
-      setState("idle");
+      setState(
+       "idle"
+      );
 
      }
+
 
      resolve(true);
 
@@ -3002,19 +3374,24 @@ function speakDevice(text){
 
      audioPlaying=false;
 
+
      if(conversationMode){
 
       setState(
        "listening"
       );
 
+
       startContinuousRecognition();
 
      }else{
 
-      setState("idle");
+      setState(
+       "idle"
+      );
 
      }
+
 
      resolve(false);
 
@@ -3022,7 +3399,9 @@ function speakDevice(text){
 
 
     window.speechSynthesis
-     .speak(utterance);
+     .speak(
+      utterance
+     );
 
 
     setTimeout(
@@ -3041,7 +3420,10 @@ function speakDevice(text){
 
    }catch(error){
 
-    console.error(error);
+    console.error(
+     error
+    );
+
 
     resolve(false);
 
@@ -3075,6 +3457,7 @@ async function speakElevenLabs(
    currentAudio.currentTime=0;
 
   }catch(error){}
+
 
   currentAudio=null;
 
@@ -3182,6 +3565,7 @@ async function speakElevenLabs(
   currentAudio=
    audio;
 
+
   audio.volume=1;
 
 
@@ -3200,6 +3584,7 @@ async function speakElevenLabs(
 
    audioPlaying=false;
 
+
    URL.revokeObjectURL(
     audioUrl
    );
@@ -3217,11 +3602,14 @@ async function speakElevenLabs(
      "listening"
     );
 
+
     startContinuousRecognition();
 
    }else{
 
-    setState("idle");
+    setState(
+     "idle"
+    );
 
    }
 
@@ -3232,6 +3620,7 @@ async function speakElevenLabs(
 
    audioPlaying=false;
 
+
    URL.revokeObjectURL(
     audioUrl
    );
@@ -3249,11 +3638,14 @@ async function speakElevenLabs(
      "listening"
     );
 
+
     startContinuousRecognition();
 
    }else{
 
-    setState("idle");
+    setState(
+     "idle"
+    );
 
    }
 
@@ -3261,6 +3653,7 @@ async function speakElevenLabs(
 
 
   await audio.play();
+
 
   return true;
 
@@ -3272,12 +3665,15 @@ async function speakElevenLabs(
    error
   );
 
+
   return false;
 
 
  }finally{
 
-  clearTimeout(timeout);
+  clearTimeout(
+   timeout
+  );
 
  }
 
@@ -3288,7 +3684,9 @@ async function speakElevenLabs(
    SPEAK
 ===================================================== */
 
-async function speak(text){
+async function speak(
+ text
+){
 
  if(!text)
   return;
@@ -3296,15 +3694,13 @@ async function speak(text){
 
  speechGeneration++;
 
+
  const generation=
   speechGeneration;
 
 
- if(conversationMode){
-
+ if(conversationMode)
   stopRecognitionOnly();
-
- }
 
 
  const elevenSuccess=
@@ -3341,6 +3737,7 @@ voiceTest.addEventListener(
 
   stopSpeaking();
 
+
   await speakDevice(
    "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
   );
@@ -3361,9 +3758,11 @@ voiceSelector.addEventListener(
 
    selectedDeviceVoice=null;
 
+
    localStorage.removeItem(
     "jarvis_device_voice"
    );
+
 
    return;
 
@@ -3381,6 +3780,7 @@ voiceSelector.addEventListener(
 
    selectedDeviceVoice=
     deviceVoices[index];
+
 
    localStorage.setItem(
     "jarvis_device_voice",
@@ -3401,6 +3801,7 @@ voiceBtn.addEventListener(
    .classList
    .toggle("active");
 
+
   loadDeviceVoices();
 
  }
@@ -3416,7 +3817,42 @@ const Recognition=
  window.webkitSpeechRecognition;
 
 
-if(Recognition){
+function setMicStatus(
+ text,
+ active
+){
+
+ micStatus.textContent=
+  text;
+
+
+ if(active){
+
+  micStatus.classList.add(
+   "active"
+  );
+
+ }else{
+
+  micStatus.classList.remove(
+   "active"
+  );
+
+ }
+
+}
+
+
+/*
+   Funzione centrale per creare
+   il riconoscimento vocale.
+*/
+
+function setupRecognition(){
+
+ if(!Recognition)
+  return false;
+
 
  recognition=
   new Recognition();
@@ -3427,16 +3863,23 @@ if(Recognition){
 
 
  /*
-  IMPORTANTE:
-  false permette di fare il ciclo:
-  ascolta -> risultato -> AI -> voce -> ascolta.
+    false rende il comportamento
+    più stabile sui telefoni.
+    La modalità continua viene
+    gestita riavviando automaticamente
+    il riconoscimento.
  */
+
  recognition.continuous=
   false;
 
 
+ /*
+    Mostriamo anche il testo provvisorio.
+ */
+
  recognition.interimResults=
-  false;
+  true;
 
 
  recognition.maxAlternatives=
@@ -3449,9 +3892,22 @@ if(Recognition){
 
   listening=true;
 
+
   micBtn.classList.add(
    "active"
   );
+
+
+  textInput.classList.add(
+   "listening"
+  );
+
+
+  setMicStatus(
+   "MICROFONO: ASCOLTO...",
+   true
+  );
+
 
   setState(
    "listening"
@@ -3463,49 +3919,92 @@ if(Recognition){
  recognition.onresult=
   event=>{
 
-   const session=
-    recognitionSessionId;
+   let finalText="";
+
+   let interimText="";
 
 
-   const result=
-    event.results[
-     event.resultIndex
-    ];
+   for(
+    let i=event.resultIndex;
+    i<event.results.length;
+    i++
+   ){
+
+    const transcript=
+     event.results[i][0]
+      .transcript
+      .trim();
 
 
-   if(!result)
-    return;
+    if(
+     event.results[i].isFinal
+    ){
+
+     finalText+=
+      transcript+" ";
+
+    }else{
+
+     interimText+=
+      transcript+" ";
+
+    }
+
+   }
 
 
-   const text=
-    result[0]
-     .transcript
-     .trim();
+   finalText=
+    finalText.trim();
 
 
-   if(!text)
-    return;
-
-
-   textInput.value=
-    text;
-
-
-   if(audioPlaying)
-    stopSpeaking();
+   interimText=
+    interimText.trim();
 
 
    /*
-    Evita che un vecchio evento
-    riavvii il microfono mentre
-    JARVIS sta elaborando.
+      Durante il parlato mostra
+      immediatamente ciò che il
+      browser sta riconoscendo.
    */
 
-   recognitionShouldRun=
-    conversationMode;
+   if(interimText){
+
+    textInput.value=
+     interimText;
+
+   }
 
 
-   sendMessage();
+   /*
+      Quando la frase è definitiva,
+      la inseriamo e la inviamo.
+   */
+
+   if(finalText){
+
+    textInput.value=
+     finalText;
+
+
+    if(audioPlaying)
+     stopSpeaking();
+
+
+    /*
+       Evita di perdere la frase
+       quando il riconoscimento
+       chiude la sessione.
+    */
+
+    setMicStatus(
+     "MICROFONO: FRASE ACQUISITA",
+     true
+    );
+
+
+    sendMessage();
+
+   }
 
  };
 
@@ -3513,58 +4012,109 @@ if(Recognition){
  recognition.onerror=
   error=>{
 
-   console.warn(
-    "Microfono:",
-    error.error||
-    error
-   );
-
-
    recognitionStarting=false;
 
    listening=false;
+
 
    micBtn.classList.remove(
     "active"
    );
 
 
-   /*
-    Questi errori possono essere
-    temporanei su Chrome/Android.
-   */
+   textInput.classList.remove(
+    "listening"
+   );
+
+
+   console.warn(
+    "Microfono:",
+    error
+   );
+
 
    if(
-    conversationMode&&
-    recognitionShouldRun
+    error.error==="not-allowed"||
+    error.error==="service-not-allowed"
    ){
 
-    if(
-     error.error===
-     "not-allowed"||
-     error.error===
-     "service-not-allowed"
-    ){
+    setMicStatus(
+     "MICROFONO: PERMESSO NEGATO",
+     true
+    );
+
+
+    addMsg(
+     "Permesso microfono negato. Consenti l'accesso al microfono nel browser."
+    );
+
+
+    if(conversationMode){
+
+     conversationMode=false;
 
      recognitionShouldRun=false;
 
-     conversationStatus.textContent=
-      "MICROFONO BLOCCATO";
-
-     addMsg(
-      "Permesso microfono negato. Controlla i permessi del browser."
-     );
-
-     return;
+     updateConversationUI();
 
     }
 
+
+    setState("idle");
+
+    return;
+
+   }
+
+
+   if(
+    error.error==="no-speech"
+   ){
+
+    setMicStatus(
+     "MICROFONO: NESSUNA VOCE",
+     true
+    );
+
+   }else if(
+    error.error==="audio-capture"
+   ){
+
+    setMicStatus(
+     "MICROFONO: MICROFONO NON DISPONIBILE",
+     true
+    );
+
+   }else{
+
+    setMicStatus(
+     "MICROFONO: RIAVVIO...",
+     true
+    );
+
+   }
+
+
+   if(conversationMode){
 
     scheduleContinuousRecognition();
 
    }else{
 
-    setState("idle");
+    setTimeout(
+     ()=>{
+      setMicStatus(
+       "MICROFONO: PRONTO",
+       false
+      );
+     },
+     1200
+    );
+
+
+    setState(
+     "idle"
+    );
 
    }
 
@@ -3578,26 +4128,42 @@ if(Recognition){
 
    listening=false;
 
+
    micBtn.classList.remove(
     "active"
    );
 
 
+   textInput.classList.remove(
+    "listening"
+   );
+
+
    /*
-    Se la conversazione è attiva
-    il microfono viene riaperto
-    solo quando realmente serve.
+      Se la conversazione continua
+      è attiva, riavviamo il microfono.
    */
 
    if(
     conversationMode&&
-    recognitionShouldRun&&
-    !audioPlaying
+    recognitionShouldRun
    ){
+
+    setMicStatus(
+     "MICROFONO: RIAVVIO...",
+     true
+    );
+
 
     scheduleContinuousRecognition();
 
    }else{
+
+    setMicStatus(
+     "MICROFONO: PRONTO",
+     false
+    );
+
 
     if(!audioPlaying)
      setState("idle");
@@ -3606,152 +4172,31 @@ if(Recognition){
 
  };
 
-
- /* ===================================================
-    MICROFONO NORMALE
- =================================================== */
-
- micBtn.addEventListener(
-  "click",
-  ()=>{
-
-   if(conversationMode){
-
-    if(audioPlaying){
-
-     stopSpeaking();
-
-     return;
-
-    }
-
-
-    if(listening){
-
-     stopRecognitionOnly();
-
-     return;
-
-    }
-
-
-    recognitionShouldRun=true;
-
-    startRecognition();
-
-    return;
-
-   }
-
-
-   if(listening){
-
-    stopRecognitionOnly();
-
-   }else{
-
-    recognitionShouldRun=false;
-
-    startRecognition();
-
-   }
-
-  }
- );
-
-
-}else{
-
- micBtn.style.opacity=".3";
-
- addMsg(
-  "Il browser non supporta il riconoscimento vocale."
- );
+ return true;
 
 }
 
 
-/* =====================================================
-   AVVIO SICURO RICONOSCIMENTO
-===================================================== */
+if(
+ Recognition
+){
 
-function startRecognition(){
+ setupRecognition();
 
- if(!recognition)
-  return;
+}else{
 
-
- if(listening||
-    recognitionStarting)
-  return;
+ micBtn.classList.add(
+  "unsupported"
+ );
 
 
- if(audioPlaying)
-  return;
+ micBtn.title=
+  "Riconoscimento vocale non supportato";
 
 
- recognitionStarting=true;
-
- recognitionSessionId++;
-
-
- try{
-
-  recognition.start();
-
- }catch(error){
-
-  recognitionStarting=false;
-
-  /*
-   InvalidStateError significa
-   che Chrome considera ancora
-   il riconoscimento attivo.
-  */
-
-  if(
-   error.name===
-   "InvalidStateError"
-  ){
-
-   setTimeout(
-    ()=>{
-     if(
-      conversationMode&&
-      recognitionShouldRun&&
-      !listening&&
-      !audioPlaying
-     ){
-
-      try{
-
-       recognition.start();
-
-      }catch(error2){
-
-       console.warn(
-        "Recognition retry:",
-        error2
-       );
-
-      }
-
-     }
-
-    },
-    500
-   );
-
-  }else{
-
-   console.warn(
-    "Recognition start:",
-    error
-   );
-
-  }
-
- }
+ addMsg(
+  "Il browser non supporta il riconoscimento vocale."
+ );
 
 }
 
@@ -3764,11 +4209,11 @@ function stopRecognitionOnly(){
 
  recognitionShouldRun=false;
 
+
  clearTimeout(
   recognitionRestartTimer
  );
 
- recognitionStarting=false;
 
  if(recognition){
 
@@ -3780,17 +4225,147 @@ function stopRecognitionOnly(){
 
  }
 
+
  listening=false;
+
+ recognitionStarting=false;
+
 
  micBtn.classList.remove(
   "active"
+ );
+
+
+ textInput.classList.remove(
+  "listening"
+ );
+
+
+ setMicStatus(
+  "MICROFONO: PRONTO",
+  false
  );
 
 }
 
 
 /* =====================================================
-   AVVIO CONVERSAZIONE CONTINUA
+   AVVIA RICONOSCIMENTO NORMALE
+===================================================== */
+
+function startManualRecognition(){
+
+ if(!recognition){
+
+  addMsg(
+   "Il browser non supporta il riconoscimento vocale."
+  );
+
+  return;
+
+ }
+
+
+ /*
+    Se JARVIS sta parlando,
+    interrompiamo la voce.
+ */
+
+ if(audioPlaying)
+  stopSpeaking();
+
+
+ /*
+    Evita doppi start.
+ */
+
+ if(
+  listening||
+  recognitionStarting
+ )
+  return;
+
+
+ manualRecognition=true;
+
+ recognitionShouldRun=false;
+
+ recognitionStarting=true;
+
+
+ textInput.value="";
+
+
+ setMicStatus(
+  "MICROFONO: AVVIO...",
+  true
+ );
+
+
+ try{
+
+  recognition.start();
+
+ }catch(error){
+
+  recognitionStarting=false;
+
+
+  console.warn(
+   "Avvio microfono:",
+   error
+  );
+
+
+  /*
+     Alcuni browser restituiscono
+     InvalidStateError se una sessione
+     è ancora in chiusura.
+  */
+
+  setTimeout(
+   ()=>{
+
+    if(
+     !listening&&
+     !recognitionStarting&&
+     !conversationMode
+    ){
+
+     recognitionStarting=true;
+
+     try{
+
+      recognition.start();
+
+     }catch(error2){
+
+      recognitionStarting=false;
+
+      console.warn(
+       error2
+      );
+
+      setMicStatus(
+       "MICROFONO: ERRORE",
+       true
+      );
+
+     }
+
+    }
+
+   },
+   350
+  );
+
+ }
+
+}
+
+
+/* =====================================================
+   AVVIA RICONOSCIMENTO CONTINUO
 ===================================================== */
 
 function startContinuousRecognition(){
@@ -3805,17 +4380,16 @@ function startContinuousRecognition(){
  recognitionShouldRun=true;
 
 
- if(
-  listening||
-  recognitionStarting||
-  audioPlaying
- )
-  return;
-
-
  clearTimeout(
   recognitionRestartTimer
  );
+
+
+ if(
+  listening||
+  recognitionStarting
+ )
+  return;
 
 
  recognitionRestartTimer=
@@ -3826,13 +4400,41 @@ function startContinuousRecognition(){
      !conversationMode||
      !recognitionShouldRun||
      listening||
-     recognitionStarting||
-     audioPlaying
+     recognitionStarting
     )
      return;
 
 
-    startRecognition();
+    recognitionStarting=true;
+
+
+    textInput.value="";
+
+
+    setMicStatus(
+     "MICROFONO: ASCOLTO...",
+     true
+    );
+
+
+    try{
+
+     recognition.start();
+
+    }catch(error){
+
+     recognitionStarting=false;
+
+
+     console.warn(
+      "Avvio conversazione:",
+      error
+     );
+
+
+     scheduleContinuousRecognition();
+
+    }
 
    },
    300
@@ -3840,10 +4442,6 @@ function startContinuousRecognition(){
 
 }
 
-
-/* =====================================================
-   RIAVVIO CONVERSAZIONE
-===================================================== */
 
 function scheduleContinuousRecognition(){
 
@@ -3861,9 +4459,7 @@ function scheduleContinuousRecognition(){
 
  recognitionRestartTimer=
   setTimeout(
-   ()=>{
-    startContinuousRecognition();
-   },
+   startContinuousRecognition,
    500
   );
 
@@ -3871,7 +4467,79 @@ function scheduleContinuousRecognition(){
 
 
 /* =====================================================
-   MODALITÀ CONVERSAZIONE
+   PULSANTE MICROFONO
+===================================================== */
+
+micBtn.addEventListener(
+ "click",
+ ()=>{
+
+  if(!recognition){
+
+   addMsg(
+    "Il browser non supporta il riconoscimento vocale."
+   );
+
+   return;
+
+  }
+
+
+  /*
+     In conversazione continua
+     il pulsante serve per fermare
+     o riattivare la conversazione.
+  */
+
+  if(conversationMode){
+
+   if(
+    listening||
+    recognitionStarting
+   ){
+
+    disableConversationMode();
+
+   }else{
+
+    enableConversationMode();
+
+   }
+
+
+   return;
+
+  }
+
+
+  /*
+     Modalità normale:
+     un click = ascolta.
+     Un secondo click = ferma.
+  */
+
+  if(
+   listening||
+   recognitionStarting
+  ){
+
+   stopRecognitionOnly();
+
+   setState("idle");
+
+   return;
+
+  }
+
+
+  startManualRecognition();
+
+ }
+);
+
+
+/* =====================================================
+   MODALITÀ CONVERSAZIONE CONTINUA
 ===================================================== */
 
 function updateConversationUI(){
@@ -3882,12 +4550,15 @@ function updateConversationUI(){
    "active"
   );
 
+
   conversationBtn.textContent=
    "● CONVERSAZIONE ON";
+
 
   conversationStatus.classList.add(
    "active"
   );
+
 
   conversationStatus.textContent=
    "CONVERSAZIONE CONTINUA: ON";
@@ -3898,12 +4569,15 @@ function updateConversationUI(){
    "active"
   );
 
+
   conversationBtn.textContent=
    "🎙 CONVERSAZIONE";
+
 
   conversationStatus.classList.remove(
    "active"
   );
+
 
   conversationStatus.textContent=
    "CONVERSAZIONE CONTINUA: OFF";
@@ -3930,25 +4604,16 @@ function enableConversationMode(){
 
  recognitionShouldRun=true;
 
+
  updateConversationUI();
 
+
  addMsg(
-  "Modalità conversazione continua attivata. Ti ascolto."
+  "Modalità conversazione continua attivata."
  );
 
 
- /*
-  Piccolo ritardo per permettere
-  al browser di registrare il click
-  prima di aprire il microfono.
- */
-
- setTimeout(
-  ()=>{
-   startContinuousRecognition();
-  },
-  150
- );
+ startContinuousRecognition();
 
 }
 
@@ -3959,15 +4624,22 @@ function disableConversationMode(){
 
  recognitionShouldRun=false;
 
+
  clearTimeout(
   recognitionRestartTimer
  );
 
+
  stopRecognitionOnly();
+
 
  updateConversationUI();
 
- setState("idle");
+
+ setState(
+  "idle"
+ );
+
 
  addMsg(
   "Modalità conversazione continua disattivata."
@@ -4072,11 +4744,13 @@ function handleConversationCommand(
    PROCESS AI
 ===================================================== */
 
-async function processAi(text){
+async function processAi(
+ text
+){
 
  /*
-  I comandi locali vengono controllati
-  prima dell'AI.
+    I comandi locali vengono controllati
+    prima dell'AI.
  */
 
  if(
@@ -4192,6 +4866,7 @@ async function processAi(text){
 
      }
     );
+
 
   }finally{
 
@@ -4334,7 +5009,6 @@ async function processAi(text){
     "listening"
    );
 
-   recognitionShouldRun=true;
 
    startContinuousRecognition();
 
@@ -4369,19 +5043,23 @@ function sendMessage(){
 
 
  /*
-  Se JARVIS sta parlando,
-  una nuova domanda interrompe
-  immediatamente la voce.
+    Se JARVIS sta parlando,
+    una nuova domanda interrompe
+    immediatamente la voce.
  */
 
  if(audioPlaying)
   stopSpeaking();
 
 
- addMsg(text);
+ addMsg(
+  text
+ );
 
 
- processAi(text);
+ processAi(
+  text
+ );
 
 }
 
@@ -4389,7 +5067,7 @@ function sendMessage(){
 sendBtn.addEventListener(
  "click",
  sendMessage
-);
+ );
 
 
 textInput.addEventListener(
@@ -4422,6 +5100,7 @@ window.addEventListener(
   camera.aspect=
    window.innerWidth/
    window.innerHeight;
+
 
   camera.updateProjectionMatrix();
 
@@ -4470,9 +5149,11 @@ window.clearJarvisMemory=
 
   memory=[];
 
+
   localStorage.removeItem(
    MEMORY_KEY
   );
+
 
   console.log(
    "Memoria JARVIS cancellata."
@@ -4487,10 +5168,20 @@ window.clearJarvisMemory=
 
 updateConversationUI();
 
-setState("idle");
+setState(
+ "idle"
+);
+
+
+setMicStatus(
+ "MICROFONO: PRONTO",
+ false
+);
+
 
 console.log(
  "J.A.R.V.I.S. ONLINE"
 );
 
-</script></body></html>
+</script></body>
+</html>

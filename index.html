@@ -72,9 +72,13 @@ body{
 
     color:rgba(255,255,255,.86);
 
-    font-size:clamp(20px,2.8vw,31px);
+    font-size:
+        clamp(20px,2.8vw,31px);
+
     font-weight:300;
-    letter-spacing:clamp(5px,1vw,8px);
+
+    letter-spacing:
+        clamp(5px,1vw,8px);
 
     white-space:nowrap;
 
@@ -97,6 +101,7 @@ body{
     gap:3px;
 
     font-family:monospace;
+
     pointer-events:none;
 }
 
@@ -124,6 +129,7 @@ body{
     z-index:40;
 
     width:min(620px,88%);
+
     text-align:center;
 
     pointer-events:none;
@@ -147,7 +153,8 @@ body{
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
 
-    color:rgba(235,255,255,.9);
+    color:
+        rgba(235,255,255,.9);
 
     font-size:12px;
     line-height:1.45;
@@ -187,7 +194,8 @@ body{
 }
 
 .command-wrapper:focus-within{
-    border-color:rgba(0,255,255,.6);
+    border-color:
+        rgba(0,255,255,.6);
 
     box-shadow:
         0 0 25px
@@ -200,6 +208,7 @@ body{
 
     border:none;
     outline:none;
+
     background:transparent;
 
     color:white;
@@ -221,6 +230,7 @@ body{
     margin-right:7px;
 
     border:none;
+
     background:transparent;
 
     color:rgba(210,255,255,.65);
@@ -307,6 +317,7 @@ body{
 
 #sendBtn:hover{
     color:white;
+
     border-color:#00ffff;
 
     background:
@@ -343,11 +354,13 @@ body{
     cursor:pointer;
 
     backdrop-filter:blur(12px);
+
     transition:.2s;
 }
 
 #voiceBtn:hover{
     color:white;
+
     border-color:#00ffff;
 
     box-shadow:
@@ -425,6 +438,7 @@ body{
     width:100%;
 
     margin-top:10px;
+
     padding:9px;
 
     border:
@@ -449,11 +463,6 @@ body{
     border-color:#00ffff;
     color:white;
 }
-
-
-/* =====================================================
-   MAPPA TATTICA
-===================================================== */
 
 #tacticalMap{
     position:fixed;
@@ -480,7 +489,6 @@ body{
 }
 
 @keyframes mapIn{
-
     from{
         opacity:0;
         transform:scale(1.015);
@@ -490,7 +498,6 @@ body{
         opacity:1;
         transform:scale(1);
     }
-
 }
 
 .map-header{
@@ -499,12 +506,15 @@ body{
     top:2.4%;
     left:50%;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
     z-index:600;
 
     color:
         rgba(220,255,255,.9);
+
+    font-family:Arial,sans-serif;
 
     font-size:
         clamp(24px,4vw,42px);
@@ -548,6 +558,7 @@ body{
 
 .map-overlay{
     position:absolute;
+
     inset:0;
 
     z-index:400;
@@ -589,14 +600,18 @@ body{
     font-size:19px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
     backdrop-filter:blur(10px);
+
+    transition:.2s;
 }
 
 #closeMap:hover{
     color:white;
+
     border-color:#00ffff;
 
     box-shadow:
@@ -663,6 +678,8 @@ body{
         0 0 35px
         rgba(0,255,255,.4);
 
+    position:relative;
+
     animation:
         markerPulse 1.5s infinite;
 }
@@ -690,15 +707,25 @@ body{
 }
 
 @keyframes markerPulse{
-
     0%,100%{
         transform:scale(1);
+
+        box-shadow:
+            0 0 15px
+            rgba(0,255,255,.9),
+            0 0 35px
+            rgba(0,255,255,.4);
     }
 
     50%{
         transform:scale(1.18);
-    }
 
+        box-shadow:
+            0 0 22px
+            rgba(0,255,255,1),
+            0 0 50px
+            rgba(0,255,255,.55);
+    }
 }
 
 .maplibregl-popup-content{
@@ -728,273 +755,133 @@ body{
 
 
 /* =====================================================
-   WEB SEARCH — FINESTRE MULTIPLE
+   WEB SEARCH
 ===================================================== */
 
-#webSearchWorkspace{
+#webSearchPanel{
     position:fixed;
     inset:0;
-
     z-index:500;
 
     display:none;
 
-    pointer-events:none;
-
-    overflow:hidden;
-}
-
-#webSearchWorkspace.active{
-    display:block;
-}
-
-.web-window{
-
-    position:absolute;
-
-    left:50px;
-    top:80px;
-
-    width:520px;
-    height:360px;
-
-    min-width:280px;
-    min-height:200px;
-
     background:
-        rgba(2,10,12,.96);
-
-    border:
-        1px solid
-        rgba(0,255,255,.28);
-
-    border-radius:18px;
-
-    box-shadow:
-        0 0 35px
-        rgba(0,255,255,.10),
-        0 12px 50px
-        rgba(0,0,0,.55);
-
-    overflow:hidden;
-
-    resize:both;
-
-    pointer-events:auto;
+        rgba(0,5,7,.96);
 
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
-
-    animation:
-        webWindowIn .3s ease;
 }
 
-@keyframes webWindowIn{
+#webSearchPanel.active{
+    display:block;
 
+    animation:
+        webPanelIn .3s ease;
+}
+
+@keyframes webPanelIn{
     from{
         opacity:0;
-        transform:scale(.94);
+        transform:scale(.985);
     }
 
     to{
         opacity:1;
         transform:scale(1);
     }
-
 }
 
-.web-window.active-window{
+.web-search-header{
+    position:absolute;
 
-    border-color:
-        rgba(0,255,255,.55);
+    top:18px;
+    left:50%;
 
-    box-shadow:
-        0 0 45px
-        rgba(0,255,255,.16),
-        0 15px 60px
-        rgba(0,0,0,.65);
-}
+    transform:
+        translateX(-50%);
 
-.web-window-header{
-
-    height:42px;
-
-    display:flex;
-    align-items:center;
-
-    padding:0 10px 0 15px;
-
-    background:
-        rgba(0,20,23,.92);
-
-    border-bottom:
-        1px solid
-        rgba(0,255,255,.15);
-
-    cursor:move;
-
-    user-select:none;
-    touch-action:none;
-}
-
-.web-window-title{
-
-    flex:1;
-
-    min-width:0;
+    z-index:520;
 
     color:
-        rgba(210,255,255,.82);
+        rgba(220,255,255,.9);
 
-    font-size:10px;
+    font-size:13px;
 
-    letter-spacing:2px;
+    letter-spacing:4px;
 
     white-space:nowrap;
 
-    overflow:hidden;
-
-    text-overflow:ellipsis;
+    text-shadow:
+        0 0 12px
+        rgba(0,255,255,.3);
 }
 
-.web-window-number{
+#webSearchFrame{
+    position:absolute;
 
-    color:
-        rgba(0,255,255,.5);
+    top:58px;
+    left:3%;
+    right:3%;
+    bottom:3%;
 
-    font-size:8px;
-
-    margin-right:8px;
-}
-
-.web-window-close{
-
-    width:28px;
-    height:28px;
+    width:94%;
+    height:calc(97% - 58px);
 
     border:
         1px solid
-        rgba(0,255,255,.2);
+        rgba(0,255,255,.18);
+
+    border-radius:20px;
+
+    background:#fff;
+
+    box-shadow:
+        0 0 40px
+        rgba(0,255,255,.08);
+}
+
+#closeWebSearch{
+    position:absolute;
+
+    top:14px;
+    right:20px;
+
+    z-index:530;
+
+    width:36px;
+    height:36px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.3);
 
     border-radius:50%;
 
     background:
-        rgba(0,10,12,.7);
+        rgba(0,15,18,.9);
 
     color:
-        rgba(210,255,255,.7);
+        rgba(210,255,255,.8);
 
     cursor:pointer;
+
+    font-size:20px;
 
     display:flex;
     align-items:center;
     justify-content:center;
-
-    font-size:17px;
 }
 
-.web-window-close:hover{
-
+#closeWebSearch:hover{
     color:white;
 
     border-color:#00ffff;
 
-    background:
-        rgba(0,255,255,.08);
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.3);
 }
 
-.web-window iframe{
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    top:42px;
-
-    width:100%;
-    height:calc(100% - 42px);
-
-    border:none;
-
-    background:white;
-}
-
-.web-window::after{
-
-    content:"";
-
-    position:absolute;
-
-    right:3px;
-    bottom:3px;
-
-    width:15px;
-    height:15px;
-
-    pointer-events:none;
-
-    border-right:
-        2px solid
-        rgba(0,255,255,.5);
-
-    border-bottom:
-        2px solid
-        rgba(0,255,255,.5);
-
-    border-radius:0 0 4px 0;
-}
-
-
-/* =====================================================
-   INDICATORE RICERCHE
-===================================================== */
-
-#webSearchStatus{
-
-    position:fixed;
-
-    top:18px;
-    left:22px;
-
-    z-index:800;
-
-    display:none;
-
-    padding:7px 12px;
-
-    border:
-        1px solid
-        rgba(0,255,255,.2);
-
-    border-radius:14px;
-
-    background:
-        rgba(2,15,18,.75);
-
-    color:
-        rgba(180,255,255,.55);
-
-    font-family:monospace;
-
-    font-size:8px;
-
-    letter-spacing:1px;
-
-    pointer-events:none;
-
-    backdrop-filter:blur(10px);
-}
-
-#webSearchStatus.active{
-    display:block;
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
 
 @media(max-width:600px){
 
@@ -1018,7 +905,9 @@ body{
     }
 
     .command-wrapper{
-        width:calc(100% - 24px);
+        width:
+            calc(100% - 24px);
+
         bottom:17px;
     }
 
@@ -1072,21 +961,8 @@ body{
         right:12px;
         bottom:112px;
 
-        width:calc(100% - 24px);
-    }
-
-    .web-window{
-
         width:
-            calc(100% - 30px);
-
-        height:
-            55vh;
-
-        left:15px!important;
-        top:80px;
-
-        min-width:250px;
+            calc(100% - 24px);
     }
 
 }
@@ -1102,52 +978,15 @@ body{
 
 }
 
-
-/* =====================================================
-   WEB SEARCH MOBILE: finestre sovrapposte
-===================================================== */
-
-@media(max-width:600px){
-
-    .web-window:nth-child(n+2){
-        transform:scale(.94);
-    }
-
-}
-
-
-/* =====================================================
-   SCROLLBAR
-===================================================== */
-
-::-webkit-scrollbar{
-    width:5px;
-    height:5px;
-}
-
-::-webkit-scrollbar-track{
-    background:#020708;
-}
-
-::-webkit-scrollbar-thumb{
-    background:
-        rgba(0,255,255,.18);
-
-    border-radius:10px;
-}
-
 </style>
 
 </head>
 
-
 <body>
-
 
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
-
 
 <div
     class="jarvis-title"
@@ -1155,7 +994,6 @@ body{
 >
     J.A.R.V.I.S
 </div>
-
 
 <div class="datetime">
 
@@ -1196,26 +1034,34 @@ body{
 
 
 <!-- =====================================================
-     SPAZIO RICERCHE WEB
+     WEB SEARCH
 ===================================================== -->
 
-<div id="webSearchWorkspace"></div>
+<div id="webSearchPanel">
 
-<div id="webSearchStatus">
-    WEB WINDOWS: 0
+    <div class="web-search-header">
+        J.A.R.V.I.S. // WEB SEARCH
+    </div>
+
+    <button
+        id="closeWebSearch"
+        title="Torna a JARVIS"
+        aria-label="Chiudi ricerca web"
+    >
+        ×
+    </button>
+
+    <iframe
+        id="webSearchFrame"
+        title="Ricerca web JARVIS"
+        loading="lazy"
+    ></iframe>
+
 </div>
 
 
-<!-- =====================================================
-     CHAT
-===================================================== -->
-
 <div id="chat"></div>
 
-
-<!-- =====================================================
-     COMANDI
-===================================================== -->
 
 <div class="command-wrapper">
 
@@ -1252,9 +1098,11 @@ body{
     </div>
 
     <select id="voiceSelector">
+
         <option value="">
             Voce dispositivo automatica
         </option>
+
     </select>
 
     <button id="voiceTest">
@@ -1307,11 +1155,21 @@ const MAX_MEMORY =
 const ELEVEN_VOICE_ID =
     "vkBFlAtUdZqNR4MqxSVr";
 
+
 let currentAudio =
     null;
 
 let audioPlaying =
     false;
+
+
+/* =====================================================
+   VOCE DISPOSITIVO
+===================================================== */
+
+let deviceVoices = [];
+
+let selectedDeviceVoice = null;
 
 
 /* =====================================================
@@ -1391,16 +1249,6 @@ const voiceSelector =
 const voiceTest =
     document.getElementById(
         "voiceTest"
-    );
-
-const webSearchWorkspace =
-    document.getElementById(
-        "webSearchWorkspace"
-    );
-
-const webSearchStatus =
-    document.getElementById(
-        "webSearchStatus"
     );
 
 
@@ -1518,25 +1366,38 @@ function updateClock(){
     const h =
         String(
             now.getHours()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     const m =
         String(
             now.getMinutes()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     const s =
         String(
             now.getSeconds()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     clock.textContent =
         `${h}:${m}:${s}`;
 
+
     const d =
         String(
             now.getDate()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     const month =
         months[
@@ -1567,6 +1428,7 @@ setInterval(
 const scene =
     new THREE.Scene();
 
+
 const camera =
     new THREE.PerspectiveCamera(
         55,
@@ -1576,8 +1438,10 @@ const camera =
         1000
     );
 
+
 camera.position.z =
     5.2;
+
 
 const renderer =
     new THREE.WebGLRenderer({
@@ -1587,10 +1451,12 @@ const renderer =
 
     });
 
+
 renderer.setSize(
     window.innerWidth,
     window.innerHeight
 );
+
 
 renderer.setPixelRatio(
     Math.min(
@@ -1598,6 +1464,7 @@ renderer.setPixelRatio(
         2
     )
 );
+
 
 container.appendChild(
     renderer.domElement
@@ -1621,16 +1488,23 @@ function createGlow(){
     canvas.height =
         64;
 
+
     const ctx =
         canvas.getContext(
             "2d"
         );
 
+
     const gradient =
         ctx.createRadialGradient(
-            32,32,0,
-            32,32,32
+            32,
+            32,
+            0,
+            32,
+            32,
+            32
         );
+
 
     gradient.addColorStop(
         0,
@@ -1657,12 +1531,18 @@ function createGlow(){
         "rgba(0,0,0,0)"
     );
 
+
     ctx.fillStyle =
         gradient;
 
+
     ctx.fillRect(
-        0,0,64,64
+        0,
+        0,
+        64,
+        64
     );
+
 
     return new THREE.CanvasTexture(
         canvas
@@ -1678,23 +1558,28 @@ function createGlow(){
 const COUNT =
     3000;
 
+
 const geometry =
     new THREE.BufferGeometry();
+
 
 const positions =
     new Float32Array(
         COUNT * 3
     );
 
+
 const radii =
     new Float32Array(
         COUNT
     );
 
+
 const angles =
     new Float32Array(
         COUNT * 2
     );
+
 
 const seeds =
     new Float32Array(
@@ -1712,36 +1597,46 @@ for(
         1.10 +
         Math.random()*.70;
 
+
     const theta =
         Math.random() *
-        Math.PI * 2;
+        Math.PI *
+        2;
+
 
     const phi =
         Math.acos(
             2*Math.random()-1
         );
 
+
     radii[i] =
         r;
+
 
     angles[i*2] =
         theta;
 
+
     angles[i*2+1] =
         phi;
 
+
     seeds[i] =
         Math.random()*100;
+
 
     positions[i*3] =
         r *
         Math.sin(phi) *
         Math.cos(theta);
 
+
     positions[i*3+1] =
         r *
         Math.sin(phi) *
         Math.sin(theta);
+
 
     positions[i*3+2] =
         r *
@@ -1789,6 +1684,7 @@ const particles =
         material
     );
 
+
 scene.add(
     particles
 );
@@ -1801,24 +1697,30 @@ scene.add(
 let targetEnergy =
     .15;
 
+
 let energy =
     .15;
+
 
 const normalColor =
     new THREE.Color(
         0x00cfe8
     );
 
+
 const activeColor =
     new THREE.Color(
         0x8fffff
     );
 
+
 const currentColor =
     normalColor.clone();
 
 
-function setState(state){
+function setState(
+    state
+){
 
     if(
         state === "thinking"
@@ -1867,8 +1769,10 @@ function animate(){
         animate
     );
 
+
     const time =
         performance.now()*.001;
+
 
     energy +=
         (
@@ -1876,10 +1780,12 @@ function animate(){
             energy
         )*.045;
 
+
     currentColor.lerp(
         activeColor,
         energy*.04
     );
+
 
     if(
         energy < .3
@@ -1892,18 +1798,22 @@ function animate(){
 
     }
 
+
     material.color =
         currentColor;
+
 
     material.size =
         .032 +
         energy*.008;
+
 
     const pos =
         geometry
             .attributes
             .position
             .array;
+
 
     for(
         let i=0;
@@ -1914,23 +1824,29 @@ function animate(){
         const index =
             i*3;
 
+
         const r =
             radii[i];
+
 
         const theta =
             angles[i*2];
 
+
         const phi =
             angles[i*2+1];
 
+
         const seed =
             seeds[i];
+
 
         const pulse =
             Math.sin(
                 time*2 +
                 seed
             )*.035;
+
 
         const strangeShape =
             Math.sin(
@@ -1939,6 +1855,7 @@ function animate(){
                 seed
             )*.18*energy;
 
+
         const wave =
             Math.cos(
                 phi*7 -
@@ -1946,25 +1863,30 @@ function animate(){
                 seed
             )*.12*energy;
 
+
         const rr =
             r +
             pulse +
             strangeShape +
             wave;
 
+
         let x =
             rr *
             Math.sin(phi) *
             Math.cos(theta);
+
 
         let y =
             rr *
             Math.sin(phi) *
             Math.sin(theta);
 
+
         let z =
             rr *
             Math.cos(phi);
+
 
         x +=
             Math.sin(
@@ -1973,6 +1895,7 @@ function animate(){
                 seed
             )*.08*energy;
 
+
         y +=
             Math.cos(
                 time*2.1 +
@@ -1980,11 +1903,13 @@ function animate(){
                 seed
             )*.08*energy;
 
+
         z +=
             Math.sin(
                 time*2.7 +
                 (theta+phi)*7
             )*.10*energy;
+
 
         pos[index] =
             x;
@@ -1997,25 +1922,30 @@ function animate(){
 
     }
 
+
     geometry
         .attributes
         .position
         .needsUpdate =
             true;
 
+
     particles.rotation.y +=
         .0005 +
         energy*.0008;
+
 
     particles.rotation.x =
         Math.sin(
             time*.25
         )*.04;
 
+
     particles.rotation.z =
         Math.cos(
             time*.18
         )*.025;
+
 
     renderer.render(
         scene,
@@ -2035,13 +1965,16 @@ animate();
 const MAPTILER_KEY =
     "NmSlgtsAdQyEWy7t0OJf";
 
+
 const MAPTILER_STYLE =
     "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
     +
     MAPTILER_KEY;
 
+
 let map =
     null;
+
 
 let currentMarker =
     null;
@@ -2052,6 +1985,7 @@ function initializeMap(){
     if(map){
         return;
     }
+
 
     if(
         typeof maplibregl ===
@@ -2066,10 +2000,12 @@ function initializeMap(){
 
     }
 
+
     map =
         new maplibregl.Map({
 
-            container:"map",
+            container:
+                "map",
 
             style:
                 MAPTILER_STYLE,
@@ -2077,13 +2013,17 @@ function initializeMap(){
             center:
                 [10.2118,45.5416],
 
-            zoom:10,
+            zoom:
+                10,
 
-            attributionControl:true,
+            attributionControl:
+                true,
 
-            antialias:true
+            antialias:
+                true
 
         });
+
 
     map.addControl(
         new maplibregl.NavigationControl({
@@ -2092,6 +2032,7 @@ function initializeMap(){
         }),
         "bottom-right"
     );
+
 
     map.on(
         "load",
@@ -2111,13 +2052,17 @@ function openTacticalMap(){
         "active"
     );
 
+
     jarvisTitle.style.display =
         "none";
+
 
     mapHeader.style.display =
         "block";
 
+
     initializeMap();
+
 
     setTimeout(
         () => {
@@ -2139,6 +2084,7 @@ function closeTacticalMap(){
         "active"
     );
 
+
     jarvisTitle.style.display =
         "block";
 
@@ -2155,7 +2101,9 @@ closeMap.addEventListener(
    MARKER
 ===================================================== */
 
-function escapeHtml(text){
+function escapeHtml(
+    text
+){
 
     return String(text)
 
@@ -2197,6 +2145,7 @@ function createJarvisMarker(
         return;
     }
 
+
     if(currentMarker){
 
         currentMarker.remove();
@@ -2206,13 +2155,16 @@ function createJarvisMarker(
 
     }
 
+
     const markerElement =
         document.createElement(
             "div"
         );
 
+
     markerElement.className =
         "jarvis-map-marker";
+
 
     currentMarker =
         new maplibregl.Marker({
@@ -2245,6 +2197,7 @@ function createJarvisMarker(
             map
         );
 
+
     currentMarker.togglePopup();
 
 }
@@ -2254,23 +2207,30 @@ function createJarvisMarker(
    RICERCA POSIZIONE
 ===================================================== */
 
-async function searchLocation(place){
+async function searchLocation(
+    place
+){
 
     try{
 
         openTacticalMap();
+
 
         addMsg(
             "Ricerca posizione: " +
             place
         );
 
+
         const url =
             "https://nominatim.openstreetmap.org/search" +
             "?format=json" +
             "&limit=1" +
             "&q=" +
-            encodeURIComponent(place);
+            encodeURIComponent(
+                place
+            );
+
 
         const response =
             await fetch(
@@ -2283,6 +2243,7 @@ async function searchLocation(place){
                 }
             );
 
+
         if(!response.ok){
 
             throw new Error(
@@ -2291,8 +2252,10 @@ async function searchLocation(place){
 
         }
 
+
         const results =
             await response.json();
+
 
         if(!results.length){
 
@@ -2306,18 +2269,22 @@ async function searchLocation(place){
 
         }
 
+
         const result =
             results[0];
+
 
         const lat =
             parseFloat(
                 result.lat
             );
 
+
         const lon =
             parseFloat(
                 result.lon
             );
+
 
         if(!map){
 
@@ -2327,20 +2294,26 @@ async function searchLocation(place){
 
         }
 
+
         map.flyTo({
 
             center:
                 [lon,lat],
 
-            zoom:12,
+            zoom:
+                12,
 
-            speed:.8,
+            speed:
+                .8,
 
-            curve:1.5,
+            curve:
+                1.5,
 
-            essential:true
+            essential:
+                true
 
         });
+
 
         createJarvisMarker(
             lat,
@@ -2348,10 +2321,12 @@ async function searchLocation(place){
             place
         );
 
+
         addMsg(
             "Posizione acquisita: " +
             place
         );
+
 
     }catch(error){
 
@@ -2359,6 +2334,7 @@ async function searchLocation(place){
             "MAP ERROR:",
             error
         );
+
 
         addMsg(
             "Impossibile localizzare " +
@@ -2375,12 +2351,15 @@ async function searchLocation(place){
    COMANDI MAPPA
 ===================================================== */
 
-function handleMapCommand(text){
+function handleMapCommand(
+    text
+){
 
     const normalized =
         text
             .toLowerCase()
             .trim();
+
 
     if(
 
@@ -2505,6 +2484,7 @@ function handleMapCommand(text){
                     )
                     .trim();
 
+
             if(
                 place.length > 1
             ){
@@ -2521,535 +2501,39 @@ function handleMapCommand(text){
 
     }
 
+
     return false;
 
 }
 
 
 /* =====================================================
-   RICERCHE WEB MULTIPLE
+   RICERCA WEB
 ===================================================== */
 
-let webWindowCount =
-    0;
+const webSearchPanel =
+    document.getElementById(
+        "webSearchPanel"
+    );
 
-let highestWebZ =
-    600;
+const webSearchFrame =
+    document.getElementById(
+        "webSearchFrame"
+    );
 
-
-function updateWebStatus(){
-
-    const count =
-        webSearchWorkspace
-            .querySelectorAll(
-                ".web-window"
-            )
-            .length;
-
-    if(count > 0){
-
-        webSearchStatus.classList.add(
-            "active"
-        );
-
-        webSearchStatus.textContent =
-            `WEB WINDOWS: ${count}`;
-
-    }else{
-
-        webSearchStatus.classList.remove(
-            "active"
-        );
-
-    }
-
-}
+const closeWebSearch =
+    document.getElementById(
+        "closeWebSearch"
+    );
 
 
-function findFreePosition(
-    width,
-    height
+function openWebSearch(
+    query
 ){
-
-    const padding =
-        20;
-
-    const headerSpace =
-        65;
-
-    const maxX =
-        Math.max(
-            padding,
-            window.innerWidth -
-            width -
-            padding
-        );
-
-    const maxY =
-        Math.max(
-            headerSpace,
-            window.innerHeight -
-            height -
-            padding
-        );
-
-
-    const positions = [
-
-        [25,75],
-
-        [window.innerWidth-width-25,75],
-
-        [25,window.innerHeight-height-25],
-
-        [
-            window.innerWidth-width-25,
-            window.innerHeight-height-25
-        ],
-
-        [
-            (window.innerWidth-width)/2,
-            75
-        ],
-
-        [
-            35,
-            110
-        ],
-
-        [
-            70,
-            145
-        ]
-
-    ];
-
-
-    for(
-        const position of positions
-    ){
-
-        const x =
-            Math.max(
-                padding,
-                Math.min(
-                    maxX,
-                    position[0]
-                )
-            );
-
-        const y =
-            Math.max(
-                headerSpace,
-                Math.min(
-                    maxY,
-                    position[1]
-                )
-            );
-
-
-        let collision =
-            false;
-
-
-        const windows =
-            webSearchWorkspace
-                .querySelectorAll(
-                    ".web-window"
-                );
-
-
-        for(
-            const other of windows
-        ){
-
-            const ox =
-                parseFloat(
-                    other.style.left
-                ) || 0;
-
-            const oy =
-                parseFloat(
-                    other.style.top
-                ) || 0;
-
-            const ow =
-                other.offsetWidth;
-
-            const oh =
-                other.offsetHeight;
-
-
-            const gap =
-                12;
-
-
-            if(
-
-                x < ox + ow + gap
-
-                &&
-
-                x + width > ox - gap
-
-                &&
-
-                y < oy + oh + gap
-
-                &&
-
-                y + height > oy - gap
-
-            ){
-
-                collision =
-                    true;
-
-                break;
-
-            }
-
-        }
-
-
-        if(!collision){
-
-            return {
-                x,
-                y
-            };
-
-        }
-
-    }
-
-
-    const count =
-        webSearchWorkspace
-            .querySelectorAll(
-                ".web-window"
-            )
-            .length;
-
-
-    return {
-
-        x:
-            Math.min(
-                maxX,
-                25 + (count * 35)
-            ),
-
-        y:
-            Math.min(
-                maxY,
-                75 + (count * 35)
-            )
-
-    };
-
-}
-
-
-/* =====================================================
-   DRAG DELLE FINESTRE
-===================================================== */
-
-function makeWindowDraggable(
-    windowElement,
-    header
-){
-
-    let dragging =
-        false;
-
-    let startX =
-        0;
-
-    let startY =
-        0;
-
-    let startLeft =
-        0;
-
-    let startTop =
-        0;
-
-
-    function startDrag(event){
-
-        if(
-            event.target.closest(
-                ".web-window-close"
-            )
-        ){
-
-            return;
-
-        }
-
-
-        dragging =
-            true;
-
-
-        highestWebZ++;
-
-        windowElement.style.zIndex =
-            highestWebZ;
-
-        windowElement.classList.add(
-            "active-window"
-        );
-
-
-        const point =
-            event.touches
-            ? event.touches[0]
-            : event;
-
-
-        startX =
-            point.clientX;
-
-        startY =
-            point.clientY;
-
-
-        startLeft =
-            parseFloat(
-                windowElement.style.left
-            ) || 0;
-
-        startTop =
-            parseFloat(
-                windowElement.style.top
-            ) || 0;
-
-
-        header.setPointerCapture?.(
-            event.pointerId
-        );
-
-
-        event.preventDefault();
-
-    }
-
-
-    function moveDrag(event){
-
-        if(!dragging){
-            return;
-        }
-
-
-        const point =
-            event.touches
-            ? event.touches[0]
-            : event;
-
-
-        let newLeft =
-            startLeft +
-            point.clientX -
-            startX;
-
-        let newTop =
-            startTop +
-            point.clientY -
-            startY;
-
-
-        const maxLeft =
-            Math.max(
-                0,
-                window.innerWidth -
-                windowElement.offsetWidth
-            );
-
-
-        const maxTop =
-            Math.max(
-                42,
-                window.innerHeight -
-                windowElement.offsetHeight
-            );
-
-
-        newLeft =
-            Math.max(
-                0,
-                Math.min(
-                    maxLeft,
-                    newLeft
-                )
-            );
-
-
-        newTop =
-            Math.max(
-                42,
-                Math.min(
-                    maxTop,
-                    newTop
-                )
-            );
-
-
-        windowElement.style.left =
-            newLeft + "px";
-
-        windowElement.style.top =
-            newTop + "px";
-
-    }
-
-
-    function stopDrag(){
-
-        if(!dragging){
-            return;
-        }
-
-        dragging =
-            false;
-
-        windowElement.classList.remove(
-            "active-window"
-        );
-
-    }
-
-
-    header.addEventListener(
-        "pointerdown",
-        startDrag
-    );
-
-    header.addEventListener(
-        "pointermove",
-        moveDrag
-    );
-
-    header.addEventListener(
-        "pointerup",
-        stopDrag
-    );
-
-    header.addEventListener(
-        "pointercancel",
-        stopDrag
-    );
-
-
-    windowElement.addEventListener(
-        "pointerdown",
-        () => {
-
-            highestWebZ++;
-
-            windowElement.style.zIndex =
-                highestWebZ;
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   CREA FINESTRA WEB
-===================================================== */
-
-function openWebSearch(query){
 
     if(!query){
         return;
     }
-
-
-    webWindowCount++;
-
-
-    const windowElement =
-        document.createElement(
-            "div"
-        );
-
-    windowElement.className =
-        "web-window";
-
-
-    const header =
-        document.createElement(
-            "div"
-        );
-
-    header.className =
-        "web-window-header";
-
-
-    const title =
-        document.createElement(
-            "div"
-        );
-
-    title.className =
-        "web-window-title";
-
-    title.textContent =
-        query;
-
-
-    const number =
-        document.createElement(
-            "div"
-        );
-
-    number.className =
-        "web-window-number";
-
-    number.textContent =
-        "#" +
-        webWindowCount;
-
-
-    const close =
-        document.createElement(
-            "button"
-        );
-
-    close.className =
-        "web-window-close";
-
-    close.textContent =
-        "×";
-
-    close.title =
-        "Chiudi ricerca";
-
-
-    header.appendChild(
-        title
-    );
-
-    header.appendChild(
-        number
-    );
-
-    header.appendChild(
-        close
-    );
-
-
-    const frame =
-        document.createElement(
-            "iframe"
-        );
-
-    frame.title =
-        "Ricerca web JARVIS";
 
 
     const url =
@@ -3058,108 +2542,51 @@ function openWebSearch(query){
             query
         );
 
-    frame.src =
+
+    webSearchFrame.src =
         url;
 
-    frame.loading =
-        "lazy";
 
-
-    windowElement.appendChild(
-        header
+    webSearchPanel.classList.add(
+        "active"
     );
 
-    windowElement.appendChild(
-        frame
-    );
+}
 
 
-    webSearchWorkspace.appendChild(
-        windowElement
-    );
+function closeWebSearchPanel(){
 
-
-    /*
-       Dimensione iniziale.
-       Puoi modificarla trascinando
-       l'angolo della finestra.
-    */
-
-    const initialWidth =
-        Math.min(
-            520,
-            window.innerWidth - 30
-        );
-
-    const initialHeight =
-        Math.min(
-            360,
-            window.innerHeight - 100
-        );
-
-
-    windowElement.style.width =
-        initialWidth + "px";
-
-    windowElement.style.height =
-        initialHeight + "px";
-
-
-    const position =
-        findFreePosition(
-            initialWidth,
-            initialHeight
-        );
-
-
-    windowElement.style.left =
-        position.x + "px";
-
-    windowElement.style.top =
-        position.y + "px";
-
-
-    highestWebZ++;
-
-    windowElement.style.zIndex =
-        highestWebZ;
-
-
-    makeWindowDraggable(
-        windowElement,
-        header
-    );
-
-
-    close.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-            windowElement.remove();
-
-            updateWebStatus();
-
-        }
-    );
-
-
-    webSearchWorkspace.classList.add(
+    webSearchPanel.classList.remove(
         "active"
     );
 
 
-    updateWebStatus();
+    setTimeout(
+        () => {
+
+            webSearchFrame.src =
+                "about:blank";
+
+        },
+        250
+    );
 
 }
+
+
+closeWebSearch.addEventListener(
+    "click",
+    closeWebSearchPanel
+);
 
 
 /* =====================================================
    COMANDI RICERCA WEB
 ===================================================== */
 
-function handleWebCommand(text){
+function handleWebCommand(
+    text
+){
 
     const normalized =
         text
@@ -3209,10 +2636,12 @@ function handleWebCommand(text){
                     query
                 );
 
+
                 addMsg(
                     "Ricerca web: " +
                     query
                 );
+
 
                 return true;
 
@@ -3229,66 +2658,181 @@ function handleWebCommand(text){
 
 
 /* =====================================================
-   CHIUSURA RICERCHE WEB
+   FULLSCREEN J.A.R.V.I.S.
 ===================================================== */
 
-document.addEventListener(
-    "keydown",
-    event => {
+async function enterJarvisFullscreen(){
 
-        /*
-           ESC chiude tutte le finestre web.
-        */
+    try{
 
         if(
-            event.key ===
-            "Escape"
+            !document.fullscreenElement
         ){
 
-            const windows =
-                webSearchWorkspace
-                    .querySelectorAll(
-                        ".web-window"
-                    );
+            await document
+                .documentElement
+                .requestFullscreen();
 
-            if(
-                windows.length
-            ){
-
-                windows.forEach(
-                    element =>
-                        element.remove()
-                );
-
-                updateWebStatus();
-
-            }
+            addMsg(
+                "Modalità fullscreen attivata."
+            );
 
         }
 
+    }catch(error){
+
+        console.error(
+            "FULLSCREEN ERROR:",
+            error
+        );
+
+        addMsg(
+            "Impossibile attivare la modalità fullscreen."
+        );
+
     }
-);
+
+}
+
+
+async function exitJarvisFullscreen(){
+
+    try{
+
+        if(
+            document.fullscreenElement
+        ){
+
+            await document.exitFullscreen();
+
+            addMsg(
+                "Modalità fullscreen disattivata."
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "EXIT FULLSCREEN ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+function handleFullscreenCommand(
+    text
+){
+
+    const normalized =
+        text
+            .toLowerCase()
+            .trim()
+            .replace(
+                /[.,!?]/g,
+                ""
+            );
+
+
+    const enterCommands = [
+
+        "jarvis modalità fullscreen",
+        "jarvis modalita fullscreen",
+
+        "modalità fullscreen",
+        "modalita fullscreen",
+
+        "attiva fullscreen",
+
+        "attiva modalità fullscreen",
+        "attiva modalita fullscreen",
+
+        "schermo intero",
+
+        "attiva schermo intero",
+
+        "fullscreen"
+
+    ];
+
+
+    const exitCommands = [
+
+        "esci dal fullscreen",
+
+        "esci da fullscreen",
+
+        "disattiva fullscreen",
+
+        "disattiva modalità fullscreen",
+        "disattiva modalita fullscreen",
+
+        "esci da schermo intero",
+
+        "esci dallo schermo intero"
+
+    ];
+
+
+    if(
+        enterCommands.includes(
+            normalized
+        )
+    ){
+
+        enterJarvisFullscreen();
+
+        return true;
+
+    }
+
+
+    if(
+        exitCommands.includes(
+            normalized
+        )
+    ){
+
+        exitJarvisFullscreen();
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
 
 
 /* =====================================================
    MESSAGGIO
 ===================================================== */
 
-function addMsg(text){
+function addMsg(
+    text
+){
 
     chat.innerHTML =
         "";
+
 
     const element =
         document.createElement(
             "div"
         );
 
+
     element.className =
         "msg";
 
+
     element.textContent =
         text;
+
 
     chat.appendChild(
         element
@@ -3305,6 +2849,7 @@ function getTimeData(){
 
     const now =
         new Date();
+
 
     return {
 
@@ -3350,12 +2895,6 @@ function getTimeData(){
    VOCE DISPOSITIVO
 ===================================================== */
 
-let deviceVoices = [];
-
-let selectedDeviceVoice =
-    null;
-
-
 function loadDeviceVoices(){
 
     if(
@@ -3366,27 +2905,34 @@ function loadDeviceVoices(){
 
     }
 
+
     deviceVoices =
         window.speechSynthesis
             .getVoices();
 
+
     voiceSelector.innerHTML =
         "";
+
 
     const automatic =
         document.createElement(
             "option"
         );
 
+
     automatic.value =
         "";
+
 
     automatic.textContent =
         "Voce dispositivo automatica";
 
+
     voiceSelector.appendChild(
         automatic
     );
+
 
     deviceVoices.forEach(
         (voice,index) => {
@@ -3396,11 +2942,14 @@ function loadDeviceVoices(){
                     "option"
                 );
 
+
             option.value =
                 String(index);
 
+
             option.textContent =
                 `${voice.name} — ${voice.lang}`;
+
 
             voiceSelector.appendChild(
                 option
@@ -3425,6 +2974,7 @@ function loadDeviceVoices(){
         voiceSelector.value =
             savedVoice;
 
+
         selectedDeviceVoice =
             deviceVoices[
                 Number(savedVoice)
@@ -3441,6 +2991,7 @@ if(
 
     loadDeviceVoices();
 
+
     window.speechSynthesis
         .addEventListener(
             "voiceschanged",
@@ -3454,7 +3005,9 @@ if(
    SPEECH SYNTHESIS
 ===================================================== */
 
-function speakDevice(text){
+function speakDevice(
+    text
+){
 
     return new Promise(
         resolve => {
@@ -3463,29 +3016,39 @@ function speakDevice(text){
                 !("speechSynthesis" in window)
             ){
 
+                console.warn(
+                    "SpeechSynthesis non disponibile."
+                );
+
                 resolve(false);
 
                 return;
 
             }
 
+
             try{
 
                 window.speechSynthesis.cancel();
+
 
                 const utterance =
                     new SpeechSynthesisUtterance(
                         text
                     );
 
+
                 utterance.lang =
                     "it-IT";
 
+
                 utterance.rate =
-                    .95;
+                    0.95;
+
 
                 utterance.pitch =
-                    .9;
+                    0.9;
+
 
                 utterance.volume =
                     1;
@@ -3498,7 +3061,9 @@ function speakDevice(text){
                     utterance.voice =
                         selectedDeviceVoice;
 
-                }else{
+                }
+
+                else{
 
                     const italianVoice =
                         deviceVoices.find(
@@ -3509,6 +3074,7 @@ function speakDevice(text){
                                         "it"
                                     )
                         );
+
 
                     if(
                         italianVoice
@@ -3558,6 +3124,7 @@ function speakDevice(text){
                             error
                         );
 
+
                         audioPlaying =
                             false;
 
@@ -3581,14 +3148,20 @@ function speakDevice(text){
 
                         try{
 
-                            window.speechSynthesis.resume();
+                            window.speechSynthesis
+                                .resume();
 
-                        }catch(error){}
+                        }catch(error){
+
+                            console.warn(
+                                error
+                            );
+
+                        }
 
                     },
                     100
                 );
-
 
             }catch(error){
 
@@ -3611,11 +3184,14 @@ function speakDevice(text){
    ELEVENLABS
 ===================================================== */
 
-async function speakElevenLabs(text){
+async function speakElevenLabs(
+    text
+){
 
     if(!text){
         return false;
     }
+
 
     if(currentAudio){
 
@@ -3626,12 +3202,20 @@ async function speakElevenLabs(text){
             currentAudio.currentTime =
                 0;
 
-        }catch(error){}
+        }catch(error){
+
+            console.warn(
+                error
+            );
+
+        }
+
 
         currentAudio =
             null;
 
     }
+
 
     audioPlaying =
         false;
@@ -3639,6 +3223,7 @@ async function speakElevenLabs(text){
 
     const controller =
         new AbortController();
+
 
     const timeout =
         setTimeout(
@@ -3666,9 +3251,11 @@ async function speakElevenLabs(text){
                     body:
                         JSON.stringify({
 
-                            action:"tts",
+                            action:
+                                "tts",
 
-                            text:text,
+                            text:
+                                text,
 
                             voiceId:
                                 ELEVEN_VOICE_ID
@@ -3683,6 +3270,11 @@ async function speakElevenLabs(text){
 
 
         if(!response.ok){
+
+            console.warn(
+                "ElevenLabs HTTP:",
+                response.status
+            );
 
             return false;
 
@@ -3735,6 +3327,7 @@ async function speakElevenLabs(text){
         currentAudio =
             audio;
 
+
         audio.volume =
             1;
 
@@ -3762,9 +3355,11 @@ async function speakElevenLabs(text){
                     "idle"
                 );
 
+
                 URL.revokeObjectURL(
                     audioUrl
                 );
+
 
                 if(
                     currentAudio ===
@@ -3780,7 +3375,12 @@ async function speakElevenLabs(text){
 
 
         audio.onerror =
-            () => {
+            error => {
+
+                console.warn(
+                    "ElevenLabs audio:",
+                    error
+                );
 
                 audioPlaying =
                     false;
@@ -3788,6 +3388,7 @@ async function speakElevenLabs(text){
                 setState(
                     "idle"
                 );
+
 
                 URL.revokeObjectURL(
                     audioUrl
@@ -3797,6 +3398,7 @@ async function speakElevenLabs(text){
 
 
         await audio.play();
+
 
         return true;
 
@@ -3823,23 +3425,37 @@ async function speakElevenLabs(text){
 
 
 /* =====================================================
-   SPEAK
+   SPEAK PRINCIPALE
 ===================================================== */
 
-async function speak(text){
+async function speak(
+    text
+){
 
     if(!text){
         return;
     }
+
 
     const elevenSuccess =
         await speakElevenLabs(
             text
         );
 
-    if(elevenSuccess){
+
+    if(
+        elevenSuccess
+    ){
+
         return;
+
     }
+
+
+    console.log(
+        "ElevenLabs non disponibile. Uso voce dispositivo."
+    );
+
 
     await speakDevice(
         text
@@ -3856,8 +3472,12 @@ voiceTest.addEventListener(
     "click",
     async () => {
 
+        const testText =
+            "J.A.R.V.I.S. operativo. Sistema vocale funzionante.";
+
+
         await speakDevice(
-            "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
+            testText
         );
 
     }
@@ -3883,9 +3503,11 @@ voiceSelector.addEventListener(
             selectedDeviceVoice =
                 null;
 
+
             localStorage.removeItem(
                 "jarvis_device_voice"
             );
+
 
             return;
 
@@ -3903,6 +3525,7 @@ voiceSelector.addEventListener(
 
             selectedDeviceVoice =
                 deviceVoices[index];
+
 
             localStorage.setItem(
                 "jarvis_device_voice",
@@ -3937,12 +3560,28 @@ voiceBtn.addEventListener(
    PROCESS AI
 ===================================================== */
 
-async function processAi(text){
+async function processAi(
+    text
+){
 
-    /*
-       La ricerca web viene controllata
-       prima della mappa.
-    */
+    /* =================================================
+       1. FULLSCREEN
+    ================================================= */
+
+    if(
+        handleFullscreenCommand(
+            text
+        )
+    ){
+
+        return;
+
+    }
+
+
+    /* =================================================
+       2. RICERCA WEB
+    ================================================= */
 
     if(
         handleWebCommand(
@@ -3955,6 +3594,10 @@ async function processAi(text){
     }
 
 
+    /* =================================================
+       3. MAPPA
+    ================================================= */
+
     if(
         handleMapCommand(
             text
@@ -3965,6 +3608,10 @@ async function processAi(text){
 
     }
 
+
+    /* =================================================
+       4. AI
+    ================================================= */
 
     setState(
         "thinking"
@@ -4016,7 +3663,8 @@ async function processAi(text){
                         body:
                             JSON.stringify({
 
-                                message:text,
+                                message:
+                                    text,
 
                                 memory:
                                     memory.slice(-4),
@@ -4055,6 +3703,7 @@ async function processAi(text){
             const errorText =
                 await response.text();
 
+
             let errorMessage =
                 "HTTP " +
                 response.status;
@@ -4067,6 +3716,7 @@ async function processAi(text){
                         errorText
                     );
 
+
                 if(
                     errorData &&
                     errorData.error
@@ -4077,7 +3727,20 @@ async function processAi(text){
 
                 }
 
-            }catch(error){}
+            }catch(parseError){
+
+                if(errorText){
+
+                    errorMessage =
+                        errorText.substring(
+                            0,
+                            200
+                        );
+
+                }
+
+            }
+
 
             throw new Error(
                 errorMessage
@@ -4088,6 +3751,12 @@ async function processAi(text){
 
         const data =
             await response.json();
+
+
+        console.log(
+            "JARVIS RESPONSE:",
+            data
+        );
 
 
         const reply =
@@ -4120,11 +3789,14 @@ async function processAi(text){
         speak(
             reply
         ).catch(
-            error =>
+            error => {
+
                 console.error(
                     "TTS:",
                     error
-                )
+                );
+
+            }
         );
 
 
@@ -4250,6 +3922,7 @@ const Recognition =
 let recognition =
     null;
 
+
 let listening =
     false;
 
@@ -4259,11 +3932,14 @@ if(Recognition){
     recognition =
         new Recognition();
 
+
     recognition.lang =
         "it-IT";
 
+
     recognition.continuous =
         false;
+
 
     recognition.interimResults =
         false;
@@ -4275,9 +3951,11 @@ if(Recognition){
             listening =
                 true;
 
+
             micBtn.classList.add(
                 "active"
             );
+
 
             setState(
                 "listening"
@@ -4301,6 +3979,7 @@ if(Recognition){
                 textInput.value =
                     text;
 
+
                 sendMessage();
 
             }
@@ -4316,12 +3995,15 @@ if(Recognition){
                 error
             );
 
+
             listening =
                 false;
+
 
             micBtn.classList.remove(
                 "active"
             );
+
 
             setState(
                 "idle"
@@ -4335,6 +4017,7 @@ if(Recognition){
 
             listening =
                 false;
+
 
             micBtn.classList.remove(
                 "active"
@@ -4391,83 +4074,21 @@ window.addEventListener(
             window.innerWidth /
             window.innerHeight;
 
+
         camera.updateProjectionMatrix();
+
 
         renderer.setSize(
             window.innerWidth,
             window.innerHeight
         );
 
+
         if(map){
 
             map.resize();
 
         }
-
-        /*
-           Mantiene le finestre web
-           dentro lo schermo dopo
-           un cambio di dimensione.
-        */
-
-        const windows =
-            webSearchWorkspace
-                .querySelectorAll(
-                    ".web-window"
-                );
-
-
-        windows.forEach(
-            element => {
-
-                const width =
-                    element.offsetWidth;
-
-                const height =
-                    element.offsetHeight;
-
-
-                let left =
-                    parseFloat(
-                        element.style.left
-                    ) || 0;
-
-                let top =
-                    parseFloat(
-                        element.style.top
-                    ) || 0;
-
-
-                left =
-                    Math.max(
-                        0,
-                        Math.min(
-                            left,
-                            window.innerWidth -
-                            width
-                        )
-                    );
-
-
-                top =
-                    Math.max(
-                        42,
-                        Math.min(
-                            top,
-                            window.innerHeight -
-                            height
-                        )
-                    );
-
-
-                element.style.left =
-                    left + "px";
-
-                element.style.top =
-                    top + "px";
-
-            }
-        );
 
     }
 );
@@ -4483,9 +4104,11 @@ window.clearJarvisMemory =
         memory =
             [];
 
+
         localStorage.removeItem(
             MEMORY_KEY
         );
+
 
         console.log(
             "Memoria JARVIS cancellata."
@@ -4501,8 +4124,6 @@ window.clearJarvisMemory =
 setState(
     "idle"
 );
-
-updateWebStatus();
 
 </script>
 

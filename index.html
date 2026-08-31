@@ -72,9 +72,13 @@ body{
 
     color:rgba(255,255,255,.86);
 
-    font-size:clamp(20px,2.8vw,31px);
+    font-size:
+        clamp(20px,2.8vw,31px);
+
     font-weight:300;
-    letter-spacing:clamp(5px,1vw,8px);
+
+    letter-spacing:
+        clamp(5px,1vw,8px);
 
     white-space:nowrap;
 
@@ -97,6 +101,7 @@ body{
     gap:3px;
 
     font-family:monospace;
+
     pointer-events:none;
 }
 
@@ -104,10 +109,6 @@ body{
     color:rgba(150,255,255,.6);
     font-size:11px;
     letter-spacing:2px;
-
-    text-shadow:
-        0 0 8px
-        rgba(0,255,255,.2);
 }
 
 .date{
@@ -124,6 +125,7 @@ body{
     z-index:40;
 
     width:min(620px,88%);
+
     text-align:center;
 
     pointer-events:none;
@@ -145,9 +147,9 @@ body{
         rgba(4,20,23,.4);
 
     backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
 
-    color:rgba(235,255,255,.9);
+    color:
+        rgba(235,255,255,.9);
 
     font-size:12px;
     line-height:1.45;
@@ -179,7 +181,6 @@ body{
         rgba(5,20,23,.38);
 
     backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
 
     box-shadow:
         0 0 30px
@@ -187,7 +188,8 @@ body{
 }
 
 .command-wrapper:focus-within{
-    border-color:rgba(0,255,255,.6);
+    border-color:
+        rgba(0,255,255,.6);
 
     box-shadow:
         0 0 25px
@@ -200,6 +202,7 @@ body{
 
     border:none;
     outline:none;
+
     background:transparent;
 
     color:white;
@@ -221,6 +224,7 @@ body{
     margin-right:7px;
 
     border:none;
+
     background:transparent;
 
     color:rgba(210,255,255,.65);
@@ -308,9 +312,7 @@ body{
 #sendBtn:hover{
     color:white;
     border-color:#00ffff;
-
-    background:
-        rgba(0,255,255,.1);
+    background:rgba(0,255,255,.1);
 }
 
 #voiceBtn{
@@ -343,6 +345,7 @@ body{
     cursor:pointer;
 
     backdrop-filter:blur(12px);
+
     transition:.2s;
 }
 
@@ -425,6 +428,7 @@ body{
     width:100%;
 
     margin-top:10px;
+
     padding:9px;
 
     border:
@@ -499,7 +503,8 @@ body{
     top:2.4%;
     left:50%;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
     z-index:600;
 
@@ -548,6 +553,7 @@ body{
 
 .map-overlay{
     position:absolute;
+
     inset:0;
 
     z-index:400;
@@ -589,10 +595,13 @@ body{
     font-size:19px;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
     backdrop-filter:blur(10px);
+
+    transition:.2s;
 }
 
 #closeMap:hover{
@@ -663,6 +672,8 @@ body{
         0 0 35px
         rgba(0,255,255,.4);
 
+    position:relative;
+
     animation:
         markerPulse 1.5s infinite;
 }
@@ -728,53 +739,42 @@ body{
 
 
 /* =====================================================
-   WEB SEARCH — FINESTRE MULTIPLE
+   WEB SEARCH DESKTOP
 ===================================================== */
 
-#webSearchWorkspace{
+#webSearchWindows{
     position:fixed;
     inset:0;
 
-    z-index:500;
-
-    display:none;
+    z-index:200;
 
     pointer-events:none;
-
-    overflow:hidden;
-}
-
-#webSearchWorkspace.active{
-    display:block;
 }
 
 .web-window{
 
     position:absolute;
 
-    left:50px;
-    top:80px;
+    width:430px;
+    height:330px;
 
-    width:520px;
-    height:360px;
-
-    min-width:280px;
-    min-height:200px;
+    min-width:250px;
+    min-height:190px;
 
     background:
-        rgba(2,10,12,.96);
+        rgba(2,12,15,.96);
 
     border:
         1px solid
         rgba(0,255,255,.28);
 
-    border-radius:18px;
+    border-radius:16px;
 
     box-shadow:
-        0 0 35px
+        0 0 25px
         rgba(0,255,255,.10),
-        0 12px 50px
-        rgba(0,0,0,.55);
+        0 15px 50px
+        rgba(0,0,0,.5);
 
     overflow:hidden;
 
@@ -782,11 +782,11 @@ body{
 
     pointer-events:auto;
 
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    backdrop-filter:blur(15px);
 
     animation:
-        webWindowIn .3s ease;
+        webWindowIn .25s ease;
+
 }
 
 @keyframes webWindowIn{
@@ -803,29 +803,20 @@ body{
 
 }
 
-.web-window.active-window{
-
-    border-color:
-        rgba(0,255,255,.55);
-
-    box-shadow:
-        0 0 45px
-        rgba(0,255,255,.16),
-        0 15px 60px
-        rgba(0,0,0,.65);
-}
-
 .web-window-header{
 
-    height:42px;
+    position:relative;
+
+    height:39px;
 
     display:flex;
+
     align-items:center;
 
-    padding:0 10px 0 15px;
+    padding:0 8px 0 13px;
 
     background:
-        rgba(0,20,23,.92);
+        rgba(0,25,29,.92);
 
     border-bottom:
         1px solid
@@ -834,7 +825,7 @@ body{
     cursor:move;
 
     user-select:none;
-    touch-action:none;
+
 }
 
 .web-window-title{
@@ -844,17 +835,18 @@ body{
     min-width:0;
 
     color:
-        rgba(210,255,255,.82);
+        rgba(210,255,255,.85);
 
-    font-size:10px;
+    font-size:9px;
 
-    letter-spacing:2px;
+    letter-spacing:1.5px;
 
     white-space:nowrap;
 
     overflow:hidden;
 
     text-overflow:ellipsis;
+
 }
 
 .web-window-number{
@@ -862,38 +854,49 @@ body{
     color:
         rgba(0,255,255,.5);
 
+    margin-right:8px;
+
     font-size:8px;
 
-    margin-right:8px;
 }
 
-.web-window-close{
+.web-window-controls{
 
-    width:28px;
-    height:28px;
+    display:flex;
+
+    gap:5px;
+
+}
+
+.web-window-btn{
+
+    width:24px;
+    height:24px;
 
     border:
         1px solid
-        rgba(0,255,255,.2);
+        rgba(0,255,255,.16);
 
-    border-radius:50%;
+    border-radius:7px;
 
     background:
-        rgba(0,10,12,.7);
+        rgba(0,255,255,.025);
 
     color:
-        rgba(210,255,255,.7);
+        rgba(190,255,255,.7);
 
     cursor:pointer;
 
     display:flex;
+
     align-items:center;
     justify-content:center;
 
-    font-size:17px;
+    font-size:12px;
+
 }
 
-.web-window-close:hover{
+.web-window-btn:hover{
 
     color:white;
 
@@ -901,99 +904,88 @@ body{
 
     background:
         rgba(0,255,255,.08);
+
 }
 
 .web-window iframe{
 
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    top:42px;
+    display:block;
 
     width:100%;
-    height:calc(100% - 42px);
+
+    height:calc(100% - 39px);
 
     border:none;
 
     background:white;
+
 }
 
-.web-window::after{
+.web-window.minimized{
 
-    content:"";
+    height:39px!important;
 
-    position:absolute;
+    min-height:39px!important;
 
-    right:3px;
-    bottom:3px;
+    resize:none;
 
-    width:15px;
-    height:15px;
+}
 
-    pointer-events:none;
+.web-window.minimized iframe{
 
-    border-right:
-        2px solid
-        rgba(0,255,255,.5);
+    display:none;
 
-    border-bottom:
-        2px solid
-        rgba(0,255,255,.5);
-
-    border-radius:0 0 4px 0;
 }
 
 
 /* =====================================================
-   INDICATORE RICERCHE
+   WEB SEARCH INDICATORE
 ===================================================== */
 
-#webSearchStatus{
+#webSearchIndicator{
 
     position:fixed;
 
-    top:18px;
-    left:22px;
+    left:20px;
+    bottom:20px;
 
-    z-index:800;
+    z-index:210;
 
     display:none;
 
-    padding:7px 12px;
+    padding:8px 12px;
 
     border:
         1px solid
         rgba(0,255,255,.2);
 
-    border-radius:14px;
+    border-radius:15px;
 
     background:
         rgba(2,15,18,.75);
 
     color:
-        rgba(180,255,255,.55);
-
-    font-family:monospace;
+        rgba(180,255,255,.6);
 
     font-size:8px;
 
-    letter-spacing:1px;
+    letter-spacing:1.5px;
+
+    backdrop-filter:blur(10px);
 
     pointer-events:none;
 
-    backdrop-filter:blur(10px);
 }
 
-#webSearchStatus.active{
+#webSearchIndicator.active{
+
     display:block;
+
 }
 
 
 /* =====================================================
-   RESPONSIVE
+   MOBILE
 ===================================================== */
 
 @media(max-width:600px){
@@ -1018,7 +1010,9 @@ body{
     }
 
     .command-wrapper{
-        width:calc(100% - 24px);
+        width:
+            calc(100% - 24px);
+
         bottom:17px;
     }
 
@@ -1031,12 +1025,14 @@ body{
     }
 
     #map{
+
         top:3cm;
         right:3cm;
         bottom:3cm;
         left:3cm;
 
         border-radius:22px;
+
     }
 
     .map-overlay{
@@ -1072,21 +1068,27 @@ body{
         right:12px;
         bottom:112px;
 
-        width:calc(100% - 24px);
+        width:
+            calc(100% - 24px);
     }
+
+
+    /* finestre web su telefono */
 
     .web-window{
 
         width:
-            calc(100% - 30px);
+            calc(100vw - 40px);
 
         height:
-            55vh;
+            300px;
 
-        left:15px!important;
-        top:80px;
+        min-width:
+            230px;
 
-        min-width:250px;
+        min-height:
+            180px;
+
     }
 
 }
@@ -1094,52 +1096,19 @@ body{
 @media(max-width:430px){
 
     #map{
+
         top:2.2cm;
         right:2.2cm;
         bottom:2.2cm;
         left:2.2cm;
+
     }
 
-}
-
-
-/* =====================================================
-   WEB SEARCH MOBILE: finestre sovrapposte
-===================================================== */
-
-@media(max-width:600px){
-
-    .web-window:nth-child(n+2){
-        transform:scale(.94);
-    }
-
-}
-
-
-/* =====================================================
-   SCROLLBAR
-===================================================== */
-
-::-webkit-scrollbar{
-    width:5px;
-    height:5px;
-}
-
-::-webkit-scrollbar-track{
-    background:#020708;
-}
-
-::-webkit-scrollbar-thumb{
-    background:
-        rgba(0,255,255,.18);
-
-    border-radius:10px;
 }
 
 </style>
 
 </head>
-
 
 <body>
 
@@ -1196,25 +1165,21 @@ body{
 
 
 <!-- =====================================================
-     SPAZIO RICERCHE WEB
+     FINESTRE RICERCA WEB
 ===================================================== -->
 
-<div id="webSearchWorkspace"></div>
+<div id="webSearchWindows"></div>
 
-<div id="webSearchStatus">
+<div id="webSearchIndicator">
     WEB WINDOWS: 0
 </div>
 
-
-<!-- =====================================================
-     CHAT
-===================================================== -->
 
 <div id="chat"></div>
 
 
 <!-- =====================================================
-     COMANDI
+     INPUT
 ===================================================== -->
 
 <div class="command-wrapper">
@@ -1230,7 +1195,9 @@ body{
         id="micBtn"
         aria-label="Microfono"
     >
+
         <span class="mic-icon"></span>
+
     </button>
 
     <button id="sendBtn">
@@ -1239,6 +1206,10 @@ body{
 
 </div>
 
+
+<!-- =====================================================
+     VOCE
+===================================================== -->
 
 <button id="voiceBtn">
     ⚙ VOCE
@@ -1252,9 +1223,11 @@ body{
     </div>
 
     <select id="voiceSelector">
+
         <option value="">
             Voce dispositivo automatica
         </option>
+
     </select>
 
     <button id="voiceTest">
@@ -1307,11 +1280,21 @@ const MAX_MEMORY =
 const ELEVEN_VOICE_ID =
     "vkBFlAtUdZqNR4MqxSVr";
 
+
 let currentAudio =
     null;
 
 let audioPlaying =
     false;
+
+
+/* =====================================================
+   VOCE DISPOSITIVO
+===================================================== */
+
+let deviceVoices = [];
+
+let selectedDeviceVoice = null;
 
 
 /* =====================================================
@@ -1393,14 +1376,14 @@ const voiceTest =
         "voiceTest"
     );
 
-const webSearchWorkspace =
+const webSearchWindows =
     document.getElementById(
-        "webSearchWorkspace"
+        "webSearchWindows"
     );
 
-const webSearchStatus =
+const webSearchIndicator =
     document.getElementById(
-        "webSearchStatus"
+        "webSearchIndicator"
     );
 
 
@@ -1518,25 +1501,38 @@ function updateClock(){
     const h =
         String(
             now.getHours()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     const m =
         String(
             now.getMinutes()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     const s =
         String(
             now.getSeconds()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     clock.textContent =
         `${h}:${m}:${s}`;
 
+
     const d =
         String(
             now.getDate()
-        ).padStart(2,"0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     const month =
         months[
@@ -1567,6 +1563,7 @@ setInterval(
 const scene =
     new THREE.Scene();
 
+
 const camera =
     new THREE.PerspectiveCamera(
         55,
@@ -1576,8 +1573,10 @@ const camera =
         1000
     );
 
+
 camera.position.z =
     5.2;
+
 
 const renderer =
     new THREE.WebGLRenderer({
@@ -1587,10 +1586,12 @@ const renderer =
 
     });
 
+
 renderer.setSize(
     window.innerWidth,
     window.innerHeight
 );
+
 
 renderer.setPixelRatio(
     Math.min(
@@ -1598,6 +1599,7 @@ renderer.setPixelRatio(
         2
     )
 );
+
 
 container.appendChild(
     renderer.domElement
@@ -1621,16 +1623,23 @@ function createGlow(){
     canvas.height =
         64;
 
+
     const ctx =
         canvas.getContext(
             "2d"
         );
 
+
     const gradient =
         ctx.createRadialGradient(
-            32,32,0,
-            32,32,32
+            32,
+            32,
+            0,
+            32,
+            32,
+            32
         );
+
 
     gradient.addColorStop(
         0,
@@ -1657,12 +1666,18 @@ function createGlow(){
         "rgba(0,0,0,0)"
     );
 
+
     ctx.fillStyle =
         gradient;
 
+
     ctx.fillRect(
-        0,0,64,64
+        0,
+        0,
+        64,
+        64
     );
+
 
     return new THREE.CanvasTexture(
         canvas
@@ -1678,23 +1693,28 @@ function createGlow(){
 const COUNT =
     3000;
 
+
 const geometry =
     new THREE.BufferGeometry();
+
 
 const positions =
     new Float32Array(
         COUNT * 3
     );
 
+
 const radii =
     new Float32Array(
         COUNT
     );
 
+
 const angles =
     new Float32Array(
         COUNT * 2
     );
+
 
 const seeds =
     new Float32Array(
@@ -1712,36 +1732,46 @@ for(
         1.10 +
         Math.random()*.70;
 
+
     const theta =
         Math.random() *
-        Math.PI * 2;
+        Math.PI *
+        2;
+
 
     const phi =
         Math.acos(
             2*Math.random()-1
         );
 
+
     radii[i] =
         r;
+
 
     angles[i*2] =
         theta;
 
+
     angles[i*2+1] =
         phi;
 
+
     seeds[i] =
         Math.random()*100;
+
 
     positions[i*3] =
         r *
         Math.sin(phi) *
         Math.cos(theta);
 
+
     positions[i*3+1] =
         r *
         Math.sin(phi) *
         Math.sin(theta);
+
 
     positions[i*3+2] =
         r *
@@ -1789,6 +1819,7 @@ const particles =
         material
     );
 
+
 scene.add(
     particles
 );
@@ -1804,21 +1835,26 @@ let targetEnergy =
 let energy =
     .15;
 
+
 const normalColor =
     new THREE.Color(
         0x00cfe8
     );
+
 
 const activeColor =
     new THREE.Color(
         0x8fffff
     );
 
+
 const currentColor =
     normalColor.clone();
 
 
-function setState(state){
+function setState(
+    state
+){
 
     if(
         state === "thinking"
@@ -1867,8 +1903,10 @@ function animate(){
         animate
     );
 
+
     const time =
         performance.now()*.001;
+
 
     energy +=
         (
@@ -1876,10 +1914,12 @@ function animate(){
             energy
         )*.045;
 
+
     currentColor.lerp(
         activeColor,
         energy*.04
     );
+
 
     if(
         energy < .3
@@ -1892,18 +1932,22 @@ function animate(){
 
     }
 
+
     material.color =
         currentColor;
+
 
     material.size =
         .032 +
         energy*.008;
+
 
     const pos =
         geometry
             .attributes
             .position
             .array;
+
 
     for(
         let i=0;
@@ -1914,23 +1958,29 @@ function animate(){
         const index =
             i*3;
 
+
         const r =
             radii[i];
+
 
         const theta =
             angles[i*2];
 
+
         const phi =
             angles[i*2+1];
 
+
         const seed =
             seeds[i];
+
 
         const pulse =
             Math.sin(
                 time*2 +
                 seed
             )*.035;
+
 
         const strangeShape =
             Math.sin(
@@ -1939,6 +1989,7 @@ function animate(){
                 seed
             )*.18*energy;
 
+
         const wave =
             Math.cos(
                 phi*7 -
@@ -1946,25 +1997,30 @@ function animate(){
                 seed
             )*.12*energy;
 
+
         const rr =
             r +
             pulse +
             strangeShape +
             wave;
 
+
         let x =
             rr *
             Math.sin(phi) *
             Math.cos(theta);
+
 
         let y =
             rr *
             Math.sin(phi) *
             Math.sin(theta);
 
+
         let z =
             rr *
             Math.cos(phi);
+
 
         x +=
             Math.sin(
@@ -1973,6 +2029,7 @@ function animate(){
                 seed
             )*.08*energy;
 
+
         y +=
             Math.cos(
                 time*2.1 +
@@ -1980,11 +2037,13 @@ function animate(){
                 seed
             )*.08*energy;
 
+
         z +=
             Math.sin(
                 time*2.7 +
                 (theta+phi)*7
             )*.10*energy;
+
 
         pos[index] =
             x;
@@ -1997,25 +2056,30 @@ function animate(){
 
     }
 
+
     geometry
         .attributes
         .position
         .needsUpdate =
             true;
 
+
     particles.rotation.y +=
         .0005 +
         energy*.0008;
+
 
     particles.rotation.x =
         Math.sin(
             time*.25
         )*.04;
 
+
     particles.rotation.z =
         Math.cos(
             time*.18
         )*.025;
+
 
     renderer.render(
         scene,
@@ -2035,13 +2099,16 @@ animate();
 const MAPTILER_KEY =
     "NmSlgtsAdQyEWy7t0OJf";
 
+
 const MAPTILER_STYLE =
     "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
     +
     MAPTILER_KEY;
 
+
 let map =
     null;
+
 
 let currentMarker =
     null;
@@ -2052,6 +2119,7 @@ function initializeMap(){
     if(map){
         return;
     }
+
 
     if(
         typeof maplibregl ===
@@ -2066,10 +2134,12 @@ function initializeMap(){
 
     }
 
+
     map =
         new maplibregl.Map({
 
-            container:"map",
+            container:
+                "map",
 
             style:
                 MAPTILER_STYLE,
@@ -2077,13 +2147,17 @@ function initializeMap(){
             center:
                 [10.2118,45.5416],
 
-            zoom:10,
+            zoom:
+                10,
 
-            attributionControl:true,
+            attributionControl:
+                true,
 
-            antialias:true
+            antialias:
+                true
 
         });
+
 
     map.addControl(
         new maplibregl.NavigationControl({
@@ -2092,6 +2166,7 @@ function initializeMap(){
         }),
         "bottom-right"
     );
+
 
     map.on(
         "load",
@@ -2111,13 +2186,17 @@ function openTacticalMap(){
         "active"
     );
 
+
     jarvisTitle.style.display =
         "none";
+
 
     mapHeader.style.display =
         "block";
 
+
     initializeMap();
+
 
     setTimeout(
         () => {
@@ -2139,6 +2218,7 @@ function closeTacticalMap(){
         "active"
     );
 
+
     jarvisTitle.style.display =
         "block";
 
@@ -2155,7 +2235,9 @@ closeMap.addEventListener(
    MARKER
 ===================================================== */
 
-function escapeHtml(text){
+function escapeHtml(
+    text
+){
 
     return String(text)
 
@@ -2197,6 +2279,7 @@ function createJarvisMarker(
         return;
     }
 
+
     if(currentMarker){
 
         currentMarker.remove();
@@ -2206,13 +2289,16 @@ function createJarvisMarker(
 
     }
 
+
     const markerElement =
         document.createElement(
             "div"
         );
 
+
     markerElement.className =
         "jarvis-map-marker";
+
 
     currentMarker =
         new maplibregl.Marker({
@@ -2245,6 +2331,7 @@ function createJarvisMarker(
             map
         );
 
+
     currentMarker.togglePopup();
 
 }
@@ -2254,23 +2341,30 @@ function createJarvisMarker(
    RICERCA POSIZIONE
 ===================================================== */
 
-async function searchLocation(place){
+async function searchLocation(
+    place
+){
 
     try{
 
         openTacticalMap();
+
 
         addMsg(
             "Ricerca posizione: " +
             place
         );
 
+
         const url =
             "https://nominatim.openstreetmap.org/search" +
             "?format=json" +
             "&limit=1" +
             "&q=" +
-            encodeURIComponent(place);
+            encodeURIComponent(
+                place
+            );
+
 
         const response =
             await fetch(
@@ -2283,6 +2377,7 @@ async function searchLocation(place){
                 }
             );
 
+
         if(!response.ok){
 
             throw new Error(
@@ -2291,8 +2386,10 @@ async function searchLocation(place){
 
         }
 
+
         const results =
             await response.json();
+
 
         if(!results.length){
 
@@ -2306,18 +2403,22 @@ async function searchLocation(place){
 
         }
 
+
         const result =
             results[0];
+
 
         const lat =
             parseFloat(
                 result.lat
             );
 
+
         const lon =
             parseFloat(
                 result.lon
             );
+
 
         if(!map){
 
@@ -2327,20 +2428,26 @@ async function searchLocation(place){
 
         }
 
+
         map.flyTo({
 
             center:
                 [lon,lat],
 
-            zoom:12,
+            zoom:
+                12,
 
-            speed:.8,
+            speed:
+                .8,
 
-            curve:1.5,
+            curve:
+                1.5,
 
-            essential:true
+            essential:
+                true
 
         });
+
 
         createJarvisMarker(
             lat,
@@ -2348,10 +2455,12 @@ async function searchLocation(place){
             place
         );
 
+
         addMsg(
             "Posizione acquisita: " +
             place
         );
+
 
     }catch(error){
 
@@ -2359,6 +2468,7 @@ async function searchLocation(place){
             "MAP ERROR:",
             error
         );
+
 
         addMsg(
             "Impossibile localizzare " +
@@ -2375,12 +2485,15 @@ async function searchLocation(place){
    COMANDI MAPPA
 ===================================================== */
 
-function handleMapCommand(text){
+function handleMapCommand(
+    text
+){
 
     const normalized =
         text
             .toLowerCase()
             .trim();
+
 
     if(
 
@@ -2505,6 +2618,7 @@ function handleMapCommand(text){
                     )
                     .trim();
 
+
             if(
                 place.length > 1
             ){
@@ -2521,43 +2635,51 @@ function handleMapCommand(text){
 
     }
 
+
     return false;
 
 }
 
 
 /* =====================================================
-   RICERCHE WEB MULTIPLE
+   WEB SEARCH MULTI-FINESTRA
 ===================================================== */
 
-let webWindowCount =
+let webWindowCounter =
     0;
 
 let highestWebZ =
-    600;
+    220;
 
 
-function updateWebStatus(){
+/*
+   Questa funzione aggiorna il contatore
+   delle finestre presenti.
+*/
+
+function updateWebIndicator(){
 
     const count =
-        webSearchWorkspace
+        webSearchWindows
             .querySelectorAll(
                 ".web-window"
             )
             .length;
+
 
     if(count > 0){
 
-        webSearchStatus.classList.add(
+        webSearchIndicator.classList.add(
             "active"
         );
 
-        webSearchStatus.textContent =
-            `WEB WINDOWS: ${count}`;
+        webSearchIndicator.textContent =
+            "WEB WINDOWS: " +
+            count;
 
     }else{
 
-        webSearchStatus.classList.remove(
+        webSearchIndicator.classList.remove(
             "active"
         );
 
@@ -2566,410 +2688,36 @@ function updateWebStatus(){
 }
 
 
-function findFreePosition(
-    width,
-    height
+/*
+   Porta una finestra davanti alle altre.
+*/
+
+function bringWebWindowToFront(
+    windowElement
 ){
 
-    const padding =
-        20;
+    highestWebZ++;
 
-    const headerSpace =
-        65;
-
-    const maxX =
-        Math.max(
-            padding,
-            window.innerWidth -
-            width -
-            padding
-        );
-
-    const maxY =
-        Math.max(
-            headerSpace,
-            window.innerHeight -
-            height -
-            padding
-        );
-
-
-    const positions = [
-
-        [25,75],
-
-        [window.innerWidth-width-25,75],
-
-        [25,window.innerHeight-height-25],
-
-        [
-            window.innerWidth-width-25,
-            window.innerHeight-height-25
-        ],
-
-        [
-            (window.innerWidth-width)/2,
-            75
-        ],
-
-        [
-            35,
-            110
-        ],
-
-        [
-            70,
-            145
-        ]
-
-    ];
-
-
-    for(
-        const position of positions
-    ){
-
-        const x =
-            Math.max(
-                padding,
-                Math.min(
-                    maxX,
-                    position[0]
-                )
-            );
-
-        const y =
-            Math.max(
-                headerSpace,
-                Math.min(
-                    maxY,
-                    position[1]
-                )
-            );
-
-
-        let collision =
-            false;
-
-
-        const windows =
-            webSearchWorkspace
-                .querySelectorAll(
-                    ".web-window"
-                );
-
-
-        for(
-            const other of windows
-        ){
-
-            const ox =
-                parseFloat(
-                    other.style.left
-                ) || 0;
-
-            const oy =
-                parseFloat(
-                    other.style.top
-                ) || 0;
-
-            const ow =
-                other.offsetWidth;
-
-            const oh =
-                other.offsetHeight;
-
-
-            const gap =
-                12;
-
-
-            if(
-
-                x < ox + ow + gap
-
-                &&
-
-                x + width > ox - gap
-
-                &&
-
-                y < oy + oh + gap
-
-                &&
-
-                y + height > oy - gap
-
-            ){
-
-                collision =
-                    true;
-
-                break;
-
-            }
-
-        }
-
-
-        if(!collision){
-
-            return {
-                x,
-                y
-            };
-
-        }
-
-    }
-
-
-    const count =
-        webSearchWorkspace
-            .querySelectorAll(
-                ".web-window"
-            )
-            .length;
-
-
-    return {
-
-        x:
-            Math.min(
-                maxX,
-                25 + (count * 35)
-            ),
-
-        y:
-            Math.min(
-                maxY,
-                75 + (count * 35)
-            )
-
-    };
+    windowElement.style.zIndex =
+        String(highestWebZ);
 
 }
 
 
-/* =====================================================
-   DRAG DELLE FINESTRE
-===================================================== */
+/*
+   Crea una nuova finestra di ricerca.
+*/
 
-function makeWindowDraggable(
-    windowElement,
-    header
+function openWebSearch(
+    query
 ){
-
-    let dragging =
-        false;
-
-    let startX =
-        0;
-
-    let startY =
-        0;
-
-    let startLeft =
-        0;
-
-    let startTop =
-        0;
-
-
-    function startDrag(event){
-
-        if(
-            event.target.closest(
-                ".web-window-close"
-            )
-        ){
-
-            return;
-
-        }
-
-
-        dragging =
-            true;
-
-
-        highestWebZ++;
-
-        windowElement.style.zIndex =
-            highestWebZ;
-
-        windowElement.classList.add(
-            "active-window"
-        );
-
-
-        const point =
-            event.touches
-            ? event.touches[0]
-            : event;
-
-
-        startX =
-            point.clientX;
-
-        startY =
-            point.clientY;
-
-
-        startLeft =
-            parseFloat(
-                windowElement.style.left
-            ) || 0;
-
-        startTop =
-            parseFloat(
-                windowElement.style.top
-            ) || 0;
-
-
-        header.setPointerCapture?.(
-            event.pointerId
-        );
-
-
-        event.preventDefault();
-
-    }
-
-
-    function moveDrag(event){
-
-        if(!dragging){
-            return;
-        }
-
-
-        const point =
-            event.touches
-            ? event.touches[0]
-            : event;
-
-
-        let newLeft =
-            startLeft +
-            point.clientX -
-            startX;
-
-        let newTop =
-            startTop +
-            point.clientY -
-            startY;
-
-
-        const maxLeft =
-            Math.max(
-                0,
-                window.innerWidth -
-                windowElement.offsetWidth
-            );
-
-
-        const maxTop =
-            Math.max(
-                42,
-                window.innerHeight -
-                windowElement.offsetHeight
-            );
-
-
-        newLeft =
-            Math.max(
-                0,
-                Math.min(
-                    maxLeft,
-                    newLeft
-                )
-            );
-
-
-        newTop =
-            Math.max(
-                42,
-                Math.min(
-                    maxTop,
-                    newTop
-                )
-            );
-
-
-        windowElement.style.left =
-            newLeft + "px";
-
-        windowElement.style.top =
-            newTop + "px";
-
-    }
-
-
-    function stopDrag(){
-
-        if(!dragging){
-            return;
-        }
-
-        dragging =
-            false;
-
-        windowElement.classList.remove(
-            "active-window"
-        );
-
-    }
-
-
-    header.addEventListener(
-        "pointerdown",
-        startDrag
-    );
-
-    header.addEventListener(
-        "pointermove",
-        moveDrag
-    );
-
-    header.addEventListener(
-        "pointerup",
-        stopDrag
-    );
-
-    header.addEventListener(
-        "pointercancel",
-        stopDrag
-    );
-
-
-    windowElement.addEventListener(
-        "pointerdown",
-        () => {
-
-            highestWebZ++;
-
-            windowElement.style.zIndex =
-                highestWebZ;
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   CREA FINESTRA WEB
-===================================================== */
-
-function openWebSearch(query){
 
     if(!query){
         return;
     }
 
 
-    webWindowCount++;
+    webWindowCounter++;
 
 
     const windowElement =
@@ -2977,79 +2725,108 @@ function openWebSearch(query){
             "div"
         );
 
+
     windowElement.className =
         "web-window";
 
 
-    const header =
-        document.createElement(
-            "div"
+    /*
+       Posizione iniziale automatica.
+
+       Ogni nuova finestra viene spostata
+       leggermente rispetto alla precedente.
+    */
+
+    const offset =
+        (
+            webWindowCounter - 1
+        ) % 6;
+
+
+    const startLeft =
+        20 +
+        offset * 45;
+
+
+    const startTop =
+        90 +
+        offset * 35;
+
+
+    windowElement.style.left =
+        startLeft + "px";
+
+
+    windowElement.style.top =
+        startTop + "px";
+
+
+    windowElement.style.zIndex =
+        String(
+            ++highestWebZ
         );
 
-    header.className =
-        "web-window-header";
 
-
-    const title =
-        document.createElement(
-            "div"
+    const safeTitle =
+        escapeHtml(
+            query
         );
 
-    title.className =
-        "web-window-title";
 
-    title.textContent =
-        query;
+    windowElement.innerHTML = `
 
+        <div class="web-window-header">
 
-    const number =
-        document.createElement(
-            "div"
-        );
+            <div class="web-window-title">
 
-    number.className =
-        "web-window-number";
+                <span class="web-window-number">
+                    WEB ${webWindowCounter}
+                </span>
 
-    number.textContent =
-        "#" +
-        webWindowCount;
+                ${safeTitle}
+
+            </div>
 
 
-    const close =
-        document.createElement(
-            "button"
-        );
+            <div class="web-window-controls">
 
-    close.className =
-        "web-window-close";
-
-    close.textContent =
-        "×";
-
-    close.title =
-        "Chiudi ricerca";
+                <button
+                    class="web-window-btn minimize-web"
+                    title="Minimizza"
+                >
+                    −
+                </button>
 
 
-    header.appendChild(
-        title
+                <button
+                    class="web-window-btn close-web"
+                    title="Chiudi"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <iframe
+            title="Ricerca web ${safeTitle}"
+            loading="eager"
+        ></iframe>
+
+    `;
+
+
+    webSearchWindows.appendChild(
+        windowElement
     );
 
-    header.appendChild(
-        number
-    );
 
-    header.appendChild(
-        close
-    );
-
-
-    const frame =
-        document.createElement(
+    const iframe =
+        windowElement.querySelector(
             "iframe"
         );
-
-    frame.title =
-        "Ricerca web JARVIS";
 
 
     const url =
@@ -3058,80 +2835,63 @@ function openWebSearch(query){
             query
         );
 
-    frame.src =
+
+    iframe.src =
         url;
 
-    frame.loading =
-        "lazy";
 
+    /*
+       CLICK SULLA FINESTRA
+       -> la porta davanti.
+    */
 
-    windowElement.appendChild(
-        header
-    );
+    windowElement.addEventListener(
+        "pointerdown",
+        () => {
 
-    windowElement.appendChild(
-        frame
-    );
+            bringWebWindowToFront(
+                windowElement
+            );
 
-
-    webSearchWorkspace.appendChild(
-        windowElement
+        }
     );
 
 
     /*
-       Dimensione iniziale.
-       Puoi modificarla trascinando
-       l'angolo della finestra.
+       MINIMIZZA
     */
 
-    const initialWidth =
-        Math.min(
-            520,
-            window.innerWidth - 30
-        );
-
-    const initialHeight =
-        Math.min(
-            360,
-            window.innerHeight - 100
+    const minimizeButton =
+        windowElement.querySelector(
+            ".minimize-web"
         );
 
 
-    windowElement.style.width =
-        initialWidth + "px";
+    minimizeButton.addEventListener(
+        "click",
+        event => {
 
-    windowElement.style.height =
-        initialHeight + "px";
+            event.stopPropagation();
 
+            windowElement.classList.toggle(
+                "minimized"
+            );
 
-    const position =
-        findFreePosition(
-            initialWidth,
-            initialHeight
-        );
-
-
-    windowElement.style.left =
-        position.x + "px";
-
-    windowElement.style.top =
-        position.y + "px";
-
-
-    highestWebZ++;
-
-    windowElement.style.zIndex =
-        highestWebZ;
-
-
-    makeWindowDraggable(
-        windowElement,
-        header
+        }
     );
 
 
-    close.addEventListener(
+    /*
+       CHIUDI
+    */
+
+    const closeButton =
+        windowElement.querySelector(
+            ".close-web"
+        );
+
+
+    closeButton.addEventListener(
         "click",
         event => {
 
@@ -3139,18 +2899,192 @@ function openWebSearch(query){
 
             windowElement.remove();
 
-            updateWebStatus();
+            updateWebIndicator();
 
         }
     );
 
 
-    webSearchWorkspace.classList.add(
-        "active"
+    /*
+       DRAG DELLA FINESTRA
+    */
+
+    const header =
+        windowElement.querySelector(
+            ".web-window-header"
+        );
+
+
+    let dragging =
+        false;
+
+    let dragOffsetX =
+        0;
+
+    let dragOffsetY =
+        0;
+
+
+    header.addEventListener(
+        "pointerdown",
+        event => {
+
+            /*
+               Non iniziare il drag se
+               l'utente ha cliccato sui pulsanti.
+            */
+
+            if(
+                event.target.closest(
+                    ".web-window-btn"
+                )
+            ){
+
+                return;
+
+            }
+
+
+            dragging =
+                true;
+
+
+            bringWebWindowToFront(
+                windowElement
+            );
+
+
+            const rect =
+                windowElement.getBoundingClientRect();
+
+
+            dragOffsetX =
+                event.clientX -
+                rect.left;
+
+
+            dragOffsetY =
+                event.clientY -
+                rect.top;
+
+
+            header.setPointerCapture(
+                event.pointerId
+            );
+
+
+            event.preventDefault();
+
+        }
     );
 
 
-    updateWebStatus();
+    header.addEventListener(
+        "pointermove",
+        event => {
+
+            if(!dragging){
+                return;
+            }
+
+
+            let newLeft =
+                event.clientX -
+                dragOffsetX;
+
+
+            let newTop =
+                event.clientY -
+                dragOffsetY;
+
+
+            /*
+               Mantiene almeno una parte
+               della finestra dentro lo schermo.
+            */
+
+            const rect =
+                windowElement.getBoundingClientRect();
+
+
+            const maxLeft =
+                window.innerWidth -
+                80;
+
+
+            const maxTop =
+                window.innerHeight -
+                60;
+
+
+            newLeft =
+                Math.max(
+                    -rect.width + 100,
+                    Math.min(
+                        newLeft,
+                        maxLeft
+                    )
+                );
+
+
+            newTop =
+                Math.max(
+                    0,
+                    Math.min(
+                        newTop,
+                        maxTop
+                    )
+                );
+
+
+            windowElement.style.left =
+                newLeft + "px";
+
+
+            windowElement.style.top =
+                newTop + "px";
+
+        }
+    );
+
+
+    header.addEventListener(
+        "pointerup",
+        event => {
+
+            dragging =
+                false;
+
+            try{
+
+                header.releasePointerCapture(
+                    event.pointerId
+                );
+
+            }catch(error){}
+
+        }
+    );
+
+
+    header.addEventListener(
+        "pointercancel",
+        () => {
+
+            dragging =
+                false;
+
+        }
+    );
+
+
+    updateWebIndicator();
+
+
+    addMsg(
+        "Ricerca web: " +
+        query
+    );
 
 }
 
@@ -3159,7 +3093,9 @@ function openWebSearch(query){
    COMANDI RICERCA WEB
 ===================================================== */
 
-function handleWebCommand(text){
+function handleWebCommand(
+    text
+){
 
     const normalized =
         text
@@ -3209,11 +3145,6 @@ function handleWebCommand(text){
                     query
                 );
 
-                addMsg(
-                    "Ricerca web: " +
-                    query
-                );
-
                 return true;
 
             }
@@ -3229,66 +3160,131 @@ function handleWebCommand(text){
 
 
 /* =====================================================
-   CHIUSURA RICERCHE WEB
+   COMANDI WEB AGGIUNTIVI
 ===================================================== */
 
-document.addEventListener(
-    "keydown",
-    event => {
+/*
+   Permette anche di chiudere tutte
+   le finestre dicendo:
 
-        /*
-           ESC chiude tutte le finestre web.
-        */
+   "chiudi le ricerche web"
+*/
 
-        if(
-            event.key ===
-            "Escape"
-        ){
+function handleWebWindowCommand(
+    text
+){
 
-            const windows =
-                webSearchWorkspace
-                    .querySelectorAll(
-                        ".web-window"
-                    );
+    const normalized =
+        text
+            .toLowerCase()
+            .trim();
 
-            if(
-                windows.length
-            ){
 
-                windows.forEach(
-                    element =>
-                        element.remove()
-                );
+    if(
 
-                updateWebStatus();
+        normalized ===
+        "chiudi le ricerche web"
 
-            }
+        ||
 
-        }
+        normalized ===
+        "chiudi ricerca web"
+
+        ||
+
+        normalized ===
+        "chiudi tutte le ricerche"
+
+        ||
+
+        normalized ===
+        "chiudi tutte le finestre web"
+
+    ){
+
+        webSearchWindows.innerHTML =
+            "";
+
+        updateWebIndicator();
+
+        addMsg(
+            "Finestre web chiuse."
+        );
+
+        return true;
 
     }
-);
+
+
+    if(
+
+        normalized ===
+        "minimizza le ricerche web"
+
+        ||
+
+        normalized ===
+        "minimizza tutte le ricerche"
+
+    ){
+
+        const windows =
+            webSearchWindows
+                .querySelectorAll(
+                    ".web-window"
+                );
+
+
+        windows.forEach(
+            windowElement => {
+
+                windowElement.classList.add(
+                    "minimized"
+                );
+
+            }
+        );
+
+
+        addMsg(
+            "Ricerche web minimizzate."
+        );
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
 
 
 /* =====================================================
    MESSAGGIO
 ===================================================== */
 
-function addMsg(text){
+function addMsg(
+    text
+){
 
     chat.innerHTML =
         "";
+
 
     const element =
         document.createElement(
             "div"
         );
 
+
     element.className =
         "msg";
 
+
     element.textContent =
         text;
+
 
     chat.appendChild(
         element
@@ -3305,6 +3301,7 @@ function getTimeData(){
 
     const now =
         new Date();
+
 
     return {
 
@@ -3350,12 +3347,6 @@ function getTimeData(){
    VOCE DISPOSITIVO
 ===================================================== */
 
-let deviceVoices = [];
-
-let selectedDeviceVoice =
-    null;
-
-
 function loadDeviceVoices(){
 
     if(
@@ -3366,27 +3357,34 @@ function loadDeviceVoices(){
 
     }
 
+
     deviceVoices =
         window.speechSynthesis
             .getVoices();
 
+
     voiceSelector.innerHTML =
         "";
+
 
     const automatic =
         document.createElement(
             "option"
         );
 
+
     automatic.value =
         "";
+
 
     automatic.textContent =
         "Voce dispositivo automatica";
 
+
     voiceSelector.appendChild(
         automatic
     );
+
 
     deviceVoices.forEach(
         (voice,index) => {
@@ -3396,11 +3394,14 @@ function loadDeviceVoices(){
                     "option"
                 );
 
+
             option.value =
                 String(index);
 
+
             option.textContent =
                 `${voice.name} — ${voice.lang}`;
+
 
             voiceSelector.appendChild(
                 option
@@ -3441,6 +3442,7 @@ if(
 
     loadDeviceVoices();
 
+
     window.speechSynthesis
         .addEventListener(
             "voiceschanged",
@@ -3454,7 +3456,9 @@ if(
    SPEECH SYNTHESIS
 ===================================================== */
 
-function speakDevice(text){
+function speakDevice(
+    text
+){
 
     return new Promise(
         resolve => {
@@ -3469,23 +3473,29 @@ function speakDevice(text){
 
             }
 
+
             try{
 
                 window.speechSynthesis.cancel();
+
 
                 const utterance =
                     new SpeechSynthesisUtterance(
                         text
                     );
 
+
                 utterance.lang =
                     "it-IT";
 
+
                 utterance.rate =
-                    .95;
+                    0.95;
+
 
                 utterance.pitch =
-                    .9;
+                    0.9;
+
 
                 utterance.volume =
                     1;
@@ -3498,7 +3508,9 @@ function speakDevice(text){
                     utterance.voice =
                         selectedDeviceVoice;
 
-                }else{
+                }
+
+                else{
 
                     const italianVoice =
                         deviceVoices.find(
@@ -3509,6 +3521,7 @@ function speakDevice(text){
                                         "it"
                                     )
                         );
+
 
                     if(
                         italianVoice
@@ -3558,6 +3571,7 @@ function speakDevice(text){
                             error
                         );
 
+
                         audioPlaying =
                             false;
 
@@ -3589,7 +3603,6 @@ function speakDevice(text){
                     100
                 );
 
-
             }catch(error){
 
                 console.error(
@@ -3611,11 +3624,14 @@ function speakDevice(text){
    ELEVENLABS
 ===================================================== */
 
-async function speakElevenLabs(text){
+async function speakElevenLabs(
+    text
+){
 
     if(!text){
         return false;
     }
+
 
     if(currentAudio){
 
@@ -3628,10 +3644,12 @@ async function speakElevenLabs(text){
 
         }catch(error){}
 
+
         currentAudio =
             null;
 
     }
+
 
     audioPlaying =
         false;
@@ -3639,6 +3657,7 @@ async function speakElevenLabs(text){
 
     const controller =
         new AbortController();
+
 
     const timeout =
         setTimeout(
@@ -3666,9 +3685,11 @@ async function speakElevenLabs(text){
                     body:
                         JSON.stringify({
 
-                            action:"tts",
+                            action:
+                                "tts",
 
-                            text:text,
+                            text:
+                                text,
 
                             voiceId:
                                 ELEVEN_VOICE_ID
@@ -3735,6 +3756,7 @@ async function speakElevenLabs(text){
         currentAudio =
             audio;
 
+
         audio.volume =
             1;
 
@@ -3762,9 +3784,11 @@ async function speakElevenLabs(text){
                     "idle"
                 );
 
+
                 URL.revokeObjectURL(
                     audioUrl
                 );
+
 
                 if(
                     currentAudio ===
@@ -3789,6 +3813,7 @@ async function speakElevenLabs(text){
                     "idle"
                 );
 
+
                 URL.revokeObjectURL(
                     audioUrl
                 );
@@ -3797,6 +3822,7 @@ async function speakElevenLabs(text){
 
 
         await audio.play();
+
 
         return true;
 
@@ -3823,23 +3849,32 @@ async function speakElevenLabs(text){
 
 
 /* =====================================================
-   SPEAK
+   SPEAK PRINCIPALE
 ===================================================== */
 
-async function speak(text){
+async function speak(
+    text
+){
 
     if(!text){
         return;
     }
+
 
     const elevenSuccess =
         await speakElevenLabs(
             text
         );
 
-    if(elevenSuccess){
+
+    if(
+        elevenSuccess
+    ){
+
         return;
+
     }
+
 
     await speakDevice(
         text
@@ -3856,8 +3891,12 @@ voiceTest.addEventListener(
     "click",
     async () => {
 
+        const testText =
+            "J.A.R.V.I.S. operativo. Sistema vocale funzionante.";
+
+
         await speakDevice(
-            "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
+            testText
         );
 
     }
@@ -3883,9 +3922,11 @@ voiceSelector.addEventListener(
             selectedDeviceVoice =
                 null;
 
+
             localStorage.removeItem(
                 "jarvis_device_voice"
             );
+
 
             return;
 
@@ -3903,6 +3944,7 @@ voiceSelector.addEventListener(
 
             selectedDeviceVoice =
                 deviceVoices[index];
+
 
             localStorage.setItem(
                 "jarvis_device_voice",
@@ -3937,12 +3979,24 @@ voiceBtn.addEventListener(
    PROCESS AI
 ===================================================== */
 
-async function processAi(text){
+async function processAi(
+    text
+){
 
     /*
-       La ricerca web viene controllata
-       prima della mappa.
+       1. COMANDI WEB
     */
+
+    if(
+        handleWebWindowCommand(
+            text
+        )
+    ){
+
+        return;
+
+    }
+
 
     if(
         handleWebCommand(
@@ -3955,6 +4009,10 @@ async function processAi(text){
     }
 
 
+    /*
+       2. COMANDI MAPPA
+    */
+
     if(
         handleMapCommand(
             text
@@ -3965,6 +4023,10 @@ async function processAi(text){
 
     }
 
+
+    /*
+       3. AI
+    */
 
     setState(
         "thinking"
@@ -4016,7 +4078,8 @@ async function processAi(text){
                         body:
                             JSON.stringify({
 
-                                message:text,
+                                message:
+                                    text,
 
                                 memory:
                                     memory.slice(-4),
@@ -4055,6 +4118,7 @@ async function processAi(text){
             const errorText =
                 await response.text();
 
+
             let errorMessage =
                 "HTTP " +
                 response.status;
@@ -4067,6 +4131,7 @@ async function processAi(text){
                         errorText
                     );
 
+
                 if(
                     errorData &&
                     errorData.error
@@ -4077,7 +4142,20 @@ async function processAi(text){
 
                 }
 
-            }catch(error){}
+            }catch(parseError){
+
+                if(errorText){
+
+                    errorMessage =
+                        errorText.substring(
+                            0,
+                            200
+                        );
+
+                }
+
+            }
+
 
             throw new Error(
                 errorMessage
@@ -4120,11 +4198,14 @@ async function processAi(text){
         speak(
             reply
         ).catch(
-            error =>
+            error => {
+
                 console.error(
                     "TTS:",
                     error
-                )
+                );
+
+            }
         );
 
 
@@ -4250,6 +4331,7 @@ const Recognition =
 let recognition =
     null;
 
+
 let listening =
     false;
 
@@ -4259,11 +4341,14 @@ if(Recognition){
     recognition =
         new Recognition();
 
+
     recognition.lang =
         "it-IT";
 
+
     recognition.continuous =
         false;
+
 
     recognition.interimResults =
         false;
@@ -4275,9 +4360,11 @@ if(Recognition){
             listening =
                 true;
 
+
             micBtn.classList.add(
                 "active"
             );
+
 
             setState(
                 "listening"
@@ -4301,6 +4388,7 @@ if(Recognition){
                 textInput.value =
                     text;
 
+
                 sendMessage();
 
             }
@@ -4316,12 +4404,15 @@ if(Recognition){
                 error
             );
 
+
             listening =
                 false;
+
 
             micBtn.classList.remove(
                 "active"
             );
+
 
             setState(
                 "idle"
@@ -4335,6 +4426,7 @@ if(Recognition){
 
             listening =
                 false;
+
 
             micBtn.classList.remove(
                 "active"
@@ -4391,83 +4483,21 @@ window.addEventListener(
             window.innerWidth /
             window.innerHeight;
 
+
         camera.updateProjectionMatrix();
+
 
         renderer.setSize(
             window.innerWidth,
             window.innerHeight
         );
 
+
         if(map){
 
             map.resize();
 
         }
-
-        /*
-           Mantiene le finestre web
-           dentro lo schermo dopo
-           un cambio di dimensione.
-        */
-
-        const windows =
-            webSearchWorkspace
-                .querySelectorAll(
-                    ".web-window"
-                );
-
-
-        windows.forEach(
-            element => {
-
-                const width =
-                    element.offsetWidth;
-
-                const height =
-                    element.offsetHeight;
-
-
-                let left =
-                    parseFloat(
-                        element.style.left
-                    ) || 0;
-
-                let top =
-                    parseFloat(
-                        element.style.top
-                    ) || 0;
-
-
-                left =
-                    Math.max(
-                        0,
-                        Math.min(
-                            left,
-                            window.innerWidth -
-                            width
-                        )
-                    );
-
-
-                top =
-                    Math.max(
-                        42,
-                        Math.min(
-                            top,
-                            window.innerHeight -
-                            height
-                        )
-                    );
-
-
-                element.style.left =
-                    left + "px";
-
-                element.style.top =
-                    top + "px";
-
-            }
-        );
 
     }
 );
@@ -4483,9 +4513,11 @@ window.clearJarvisMemory =
         memory =
             [];
 
+
         localStorage.removeItem(
             MEMORY_KEY
         );
+
 
         console.log(
             "Memoria JARVIS cancellata."
@@ -4501,8 +4533,6 @@ window.clearJarvisMemory =
 setState(
     "idle"
 );
-
-updateWebStatus();
 
 </script>
 

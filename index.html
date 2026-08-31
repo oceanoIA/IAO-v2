@@ -28,7 +28,7 @@ body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#010405;
+    background:#050401;
     font-family:Arial,sans-serif;
 }
 
@@ -36,8 +36,8 @@ body{
     background:
         radial-gradient(
             circle at center,
-            #071719 0%,
-            #020708 48%,
+            #171305 0%,
+            #080702 48%,
             #000000 100%
         );
 }
@@ -70,7 +70,7 @@ body{
     transform:translateX(-50%);
     z-index:30;
 
-    color:rgba(255,255,255,.86);
+    color:rgba(255,239,180,.9);
 
     font-size:
         clamp(20px,2.8vw,31px);
@@ -84,7 +84,7 @@ body{
 
     text-shadow:
         0 0 10px
-        rgba(255,255,255,.12);
+        rgba(255,195,45,.22);
 
     pointer-events:none;
 }
@@ -106,13 +106,17 @@ body{
 }
 
 .time{
-    color:rgba(150,255,255,.6);
+    color:rgba(255,220,110,.7);
     font-size:11px;
     letter-spacing:2px;
+
+    text-shadow:
+        0 0 8px
+        rgba(255,190,30,.25);
 }
 
 .date{
-    color:rgba(150,255,255,.38);
+    color:rgba(255,215,100,.42);
     font-size:8px;
     letter-spacing:1px;
 }
@@ -139,22 +143,27 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.22);
+        rgba(255,200,55,.28);
 
     border-radius:24px;
 
     background:
-        rgba(4,20,23,.4);
+        rgba(25,19,4,.48);
 
     backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
 
     color:
-        rgba(235,255,255,.9);
+        rgba(255,242,205,.94);
 
     font-size:12px;
     line-height:1.45;
 
     white-space:pre-wrap;
+
+    box-shadow:
+        0 0 18px
+        rgba(255,190,35,.035);
 }
 
 .command-wrapper{
@@ -173,27 +182,28 @@ body{
 
     border:
         1px solid
-        rgba(100,255,255,.28);
+        rgba(255,200,55,.34);
 
     border-radius:40px;
 
     background:
-        rgba(5,20,23,.38);
+        rgba(24,18,4,.48);
 
     backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
 
     box-shadow:
         0 0 30px
-        rgba(0,255,255,.05);
+        rgba(255,190,35,.06);
 }
 
 .command-wrapper:focus-within{
     border-color:
-        rgba(0,255,255,.6);
+        rgba(255,205,65,.75);
 
     box-shadow:
         0 0 25px
-        rgba(0,255,255,.12);
+        rgba(255,190,30,.16);
 }
 
 #textInput{
@@ -205,7 +215,7 @@ body{
 
     background:transparent;
 
-    color:white;
+    color:#fff8dc;
 
     font-family:Arial,sans-serif;
     font-size:14px;
@@ -214,7 +224,7 @@ body{
 }
 
 #textInput::placeholder{
-    color:rgba(255,255,255,.3);
+    color:rgba(255,225,140,.35);
 }
 
 #micBtn{
@@ -227,7 +237,7 @@ body{
 
     background:transparent;
 
-    color:rgba(210,255,255,.65);
+    color:rgba(255,224,140,.72);
 
     cursor:pointer;
 
@@ -273,16 +283,16 @@ body{
 }
 
 #micBtn:hover{
-    color:#00ffff;
+    color:#ffd34d;
 }
 
 #micBtn.active{
-    color:#8fffff;
+    color:#fff0a3;
 
     filter:
         drop-shadow(
             0 0 8px
-            rgba(0,255,255,.7)
+            rgba(255,200,45,.8)
         );
 }
 
@@ -293,15 +303,15 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.28);
+        rgba(255,200,55,.34);
 
     border-radius:22px;
 
     background:
-        rgba(0,255,255,.05);
+        rgba(255,195,35,.055);
 
     color:
-        rgba(220,255,255,.78);
+        rgba(255,235,170,.82);
 
     font-size:10px;
     letter-spacing:2px;
@@ -311,8 +321,15 @@ body{
 
 #sendBtn:hover{
     color:white;
-    border-color:#00ffff;
-    background:rgba(0,255,255,.1);
+
+    border-color:#ffd34d;
+
+    background:
+        rgba(255,195,35,.12);
+
+    box-shadow:
+        0 0 15px
+        rgba(255,195,35,.12);
 }
 
 #voiceBtn{
@@ -329,15 +346,15 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.25);
+        rgba(255,200,55,.3);
 
     border-radius:22px;
 
     background:
-        rgba(3,15,18,.72);
+        rgba(22,16,3,.76);
 
     color:
-        rgba(210,255,255,.7);
+        rgba(255,225,145,.76);
 
     font-size:10px;
     letter-spacing:1.5px;
@@ -351,11 +368,12 @@ body{
 
 #voiceBtn:hover{
     color:white;
-    border-color:#00ffff;
+
+    border-color:#ffd34d;
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.2);
+        rgba(255,195,35,.25);
 }
 
 #voicePanel{
@@ -374,18 +392,18 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.25);
+        rgba(255,200,55,.3);
 
     border-radius:18px;
 
     background:
-        rgba(2,13,16,.94);
+        rgba(18,13,3,.95);
 
     backdrop-filter:blur(20px);
 
     box-shadow:
         0 0 35px
-        rgba(0,255,255,.12);
+        rgba(255,190,35,.14);
 }
 
 #voicePanel.active{
@@ -394,7 +412,7 @@ body{
 
 .voice-title{
     color:
-        rgba(220,255,255,.9);
+        rgba(255,235,175,.92);
 
     font-size:11px;
     letter-spacing:2px;
@@ -409,17 +427,17 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.2);
+        rgba(255,200,55,.25);
 
     border-radius:10px;
 
     outline:none;
 
     background:
-        rgba(0,20,23,.9);
+        rgba(25,18,3,.95);
 
     color:
-        rgba(220,255,255,.85);
+        rgba(255,235,175,.88);
 
     font-size:11px;
 }
@@ -433,15 +451,15 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.2);
+        rgba(255,200,55,.25);
 
     border-radius:10px;
 
     background:
-        rgba(0,255,255,.04);
+        rgba(255,195,35,.045);
 
     color:
-        rgba(210,255,255,.7);
+        rgba(255,225,150,.76);
 
     cursor:pointer;
 
@@ -450,8 +468,12 @@ body{
 }
 
 #voiceTest:hover{
-    border-color:#00ffff;
+    border-color:#ffd34d;
     color:white;
+
+    box-shadow:
+        0 0 12px
+        rgba(255,195,35,.1);
 }
 
 
@@ -470,8 +492,8 @@ body{
     background:
         radial-gradient(
             circle at center,
-            #081719 0%,
-            #020708 65%,
+            #171305 0%,
+            #080702 65%,
             #000000 100%
         );
 }
@@ -484,7 +506,6 @@ body{
 }
 
 @keyframes mapIn{
-
     from{
         opacity:0;
         transform:scale(1.015);
@@ -494,7 +515,6 @@ body{
         opacity:1;
         transform:scale(1);
     }
-
 }
 
 .map-header{
@@ -509,7 +529,9 @@ body{
     z-index:600;
 
     color:
-        rgba(220,255,255,.9);
+        rgba(255,235,175,.92);
+
+    font-family:Arial,sans-serif;
 
     font-size:
         clamp(24px,4vw,42px);
@@ -523,7 +545,7 @@ body{
 
     text-shadow:
         0 0 12px
-        rgba(0,255,255,.25);
+        rgba(255,195,35,.3);
 
     pointer-events:none;
 }
@@ -540,15 +562,15 @@ body{
 
     border-radius:28px;
 
-    background:#071012;
+    background:#120f05;
 
     box-shadow:
         0 0 35px rgba(0,0,0,.65),
-        0 0 70px rgba(0,255,255,.035);
+        0 0 70px rgba(255,195,35,.045);
 
     border:
         1px solid
-        rgba(0,255,255,.10);
+        rgba(255,200,55,.14);
 }
 
 .map-overlay{
@@ -580,15 +602,15 @@ body{
 
     border:
         1px solid
-        rgba(0,255,255,.35);
+        rgba(255,200,55,.38);
 
     border-radius:50%;
 
     background:
-        rgba(0,15,18,.85);
+        rgba(20,15,3,.88);
 
     color:
-        rgba(200,255,255,.85);
+        rgba(255,230,160,.88);
 
     cursor:pointer;
 
@@ -606,20 +628,26 @@ body{
 
 #closeMap:hover{
     color:white;
-    border-color:#00ffff;
+
+    border-color:#ffd34d;
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.3);
+        rgba(255,195,35,.32);
 }
+
+
+/* =====================================================
+   CONTROLLI MAPLIBRE
+===================================================== */
 
 .maplibregl-ctrl-group{
     background:
-        rgba(0,15,18,.85)!important;
+        rgba(20,15,3,.9)!important;
 
     border:
         1px solid
-        rgba(0,255,255,.18)!important;
+        rgba(255,200,55,.22)!important;
 
     border-radius:12px!important;
 
@@ -630,28 +658,33 @@ body{
     background:
         transparent!important;
 
-    color:#bfffff!important;
+    color:#ffe59a!important;
 }
 
 .maplibregl-ctrl-group button:hover{
     background:
-        rgba(0,255,255,.08)!important;
+        rgba(255,195,35,.09)!important;
 }
 
 .maplibregl-ctrl-attrib{
     background:
-        rgba(0,8,10,.65)!important;
+        rgba(8,6,1,.72)!important;
 
     color:
-        rgba(180,255,255,.35)!important;
+        rgba(255,220,140,.4)!important;
 
     font-size:8px!important;
 }
 
 .maplibregl-ctrl-attrib a{
     color:
-        rgba(150,240,255,.45)!important;
+        rgba(255,210,110,.52)!important;
 }
+
+
+/* =====================================================
+   MARKER JARVIS
+===================================================== */
 
 .jarvis-map-marker{
     width:20px;
@@ -661,16 +694,16 @@ body{
 
     border:
         2px solid
-        #00ffff;
+        #ffd34d;
 
     background:
-        rgba(0,255,255,.16);
+        rgba(255,195,35,.16);
 
     box-shadow:
         0 0 15px
-        rgba(0,255,255,.9),
+        rgba(255,205,60,.95),
         0 0 35px
-        rgba(0,255,255,.4);
+        rgba(255,185,25,.42);
 
     position:relative;
 
@@ -694,34 +727,44 @@ body{
 
     border-radius:50%;
 
-    background:#dfffff;
+    background:#fff4c4;
 
     box-shadow:
-        0 0 8px #00ffff;
+        0 0 8px #ffd34d;
 }
 
 @keyframes markerPulse{
-
     0%,100%{
         transform:scale(1);
+
+        box-shadow:
+            0 0 15px
+            rgba(255,205,60,.95),
+            0 0 35px
+            rgba(255,185,25,.42);
     }
 
     50%{
         transform:scale(1.18);
-    }
 
+        box-shadow:
+            0 0 22px
+            rgba(255,220,90,1),
+            0 0 50px
+            rgba(255,190,25,.58);
+    }
 }
 
 .maplibregl-popup-content{
     background:
-        rgba(3,15,18,.96)!important;
+        rgba(20,15,3,.97)!important;
 
     color:
-        rgba(220,255,255,.9)!important;
+        rgba(255,235,175,.92)!important;
 
     border:
         1px solid
-        rgba(0,255,255,.25);
+        rgba(255,200,55,.28);
 
     border-radius:10px;
 
@@ -729,258 +772,133 @@ body{
 
     box-shadow:
         0 0 20px
-        rgba(0,255,255,.12);
+        rgba(255,195,35,.14);
 }
 
 .maplibregl-popup-close-button{
-    color:#00ffff!important;
+    color:#ffd34d!important;
     font-size:18px;
 }
 
 
 /* =====================================================
-   WEB SEARCH DESKTOP
+   WEB SEARCH PANEL
 ===================================================== */
 
-#webSearchWindows{
+#webSearchPanel{
     position:fixed;
     inset:0;
+    z-index:500;
 
-    z-index:200;
-
-    pointer-events:none;
-}
-
-.web-window{
-
-    position:absolute;
-
-    width:430px;
-    height:330px;
-
-    min-width:250px;
-    min-height:190px;
+    display:none;
 
     background:
-        rgba(2,12,15,.96);
+        rgba(8,6,1,.96);
 
-    border:
-        1px solid
-        rgba(0,255,255,.28);
-
-    border-radius:16px;
-
-    box-shadow:
-        0 0 25px
-        rgba(0,255,255,.10),
-        0 15px 50px
-        rgba(0,0,0,.5);
-
-    overflow:hidden;
-
-    resize:both;
-
-    pointer-events:auto;
-
-    backdrop-filter:blur(15px);
-
-    animation:
-        webWindowIn .25s ease;
-
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
 }
 
-@keyframes webWindowIn{
+#webSearchPanel.active{
+    display:block;
+    animation:webPanelIn .3s ease;
+}
 
+@keyframes webPanelIn{
     from{
         opacity:0;
-        transform:scale(.94);
+        transform:scale(.985);
     }
 
     to{
         opacity:1;
         transform:scale(1);
     }
-
 }
 
-.web-window-header{
+.web-search-header{
+    position:absolute;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
 
-    position:relative;
+    z-index:520;
 
-    height:39px;
+    color:rgba(255,235,175,.92);
 
-    display:flex;
-
-    align-items:center;
-
-    padding:0 8px 0 13px;
-
-    background:
-        rgba(0,25,29,.92);
-
-    border-bottom:
-        1px solid
-        rgba(0,255,255,.15);
-
-    cursor:move;
-
-    user-select:none;
-
-}
-
-.web-window-title{
-
-    flex:1;
-
-    min-width:0;
-
-    color:
-        rgba(210,255,255,.85);
-
-    font-size:9px;
-
-    letter-spacing:1.5px;
+    font-size:13px;
+    letter-spacing:4px;
 
     white-space:nowrap;
 
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
+    text-shadow:
+        0 0 12px
+        rgba(255,195,35,.32);
 }
 
-.web-window-number{
+#webSearchFrame{
+    position:absolute;
 
-    color:
-        rgba(0,255,255,.5);
+    top:58px;
+    left:3%;
+    right:3%;
+    bottom:3%;
 
-    margin-right:8px;
-
-    font-size:8px;
-
-}
-
-.web-window-controls{
-
-    display:flex;
-
-    gap:5px;
-
-}
-
-.web-window-btn{
-
-    width:24px;
-    height:24px;
+    width:94%;
+    height:calc(97% - 58px);
 
     border:
         1px solid
-        rgba(0,255,255,.16);
+        rgba(255,200,55,.2);
 
-    border-radius:7px;
+    border-radius:20px;
+
+    background:#fff;
+
+    box-shadow:
+        0 0 40px
+        rgba(255,195,35,.09);
+}
+
+#closeWebSearch{
+    position:absolute;
+
+    top:14px;
+    right:20px;
+
+    z-index:530;
+
+    width:36px;
+    height:36px;
+
+    border:
+        1px solid
+        rgba(255,200,55,.34);
+
+    border-radius:50%;
 
     background:
-        rgba(0,255,255,.025);
+        rgba(20,15,3,.92);
 
     color:
-        rgba(190,255,255,.7);
+        rgba(255,230,160,.84);
 
     cursor:pointer;
 
-    display:flex;
+    font-size:20px;
 
+    display:flex;
     align-items:center;
     justify-content:center;
-
-    font-size:12px;
-
 }
 
-.web-window-btn:hover{
-
+#closeWebSearch:hover{
     color:white;
+    border-color:#ffd34d;
 
-    border-color:#00ffff;
-
-    background:
-        rgba(0,255,255,.08);
-
-}
-
-.web-window iframe{
-
-    display:block;
-
-    width:100%;
-
-    height:calc(100% - 39px);
-
-    border:none;
-
-    background:white;
-
-}
-
-.web-window.minimized{
-
-    height:39px!important;
-
-    min-height:39px!important;
-
-    resize:none;
-
-}
-
-.web-window.minimized iframe{
-
-    display:none;
-
-}
-
-
-/* =====================================================
-   WEB SEARCH INDICATORE
-===================================================== */
-
-#webSearchIndicator{
-
-    position:fixed;
-
-    left:20px;
-    bottom:20px;
-
-    z-index:210;
-
-    display:none;
-
-    padding:8px 12px;
-
-    border:
-        1px solid
-        rgba(0,255,255,.2);
-
-    border-radius:15px;
-
-    background:
-        rgba(2,15,18,.75);
-
-    color:
-        rgba(180,255,255,.6);
-
-    font-size:8px;
-
-    letter-spacing:1.5px;
-
-    backdrop-filter:blur(10px);
-
-    pointer-events:none;
-
-}
-
-#webSearchIndicator.active{
-
-    display:block;
-
+    box-shadow:
+        0 0 15px
+        rgba(255,195,35,.32);
 }
 
 
@@ -1025,14 +943,12 @@ body{
     }
 
     #map{
-
         top:3cm;
         right:3cm;
         bottom:3cm;
         left:3cm;
 
         border-radius:22px;
-
     }
 
     .map-overlay{
@@ -1072,36 +988,15 @@ body{
             calc(100% - 24px);
     }
 
-
-    /* finestre web su telefono */
-
-    .web-window{
-
-        width:
-            calc(100vw - 40px);
-
-        height:
-            300px;
-
-        min-width:
-            230px;
-
-        min-height:
-            180px;
-
-    }
-
 }
 
 @media(max-width:430px){
 
     #map{
-
         top:2.2cm;
         right:2.2cm;
         bottom:2.2cm;
         left:2.2cm;
-
     }
 
 }
@@ -1112,11 +1007,9 @@ body{
 
 <body>
 
-
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
-
 
 <div
     class="jarvis-title"
@@ -1124,7 +1017,6 @@ body{
 >
     J.A.R.V.I.S
 </div>
-
 
 <div class="datetime">
 
@@ -1165,22 +1057,34 @@ body{
 
 
 <!-- =====================================================
-     FINESTRE RICERCA WEB
+     WEB SEARCH
 ===================================================== -->
 
-<div id="webSearchWindows"></div>
+<div id="webSearchPanel">
 
-<div id="webSearchIndicator">
-    WEB WINDOWS: 0
+    <div class="web-search-header">
+        J.A.R.V.I.S. // WEB SEARCH
+    </div>
+
+    <button
+        id="closeWebSearch"
+        title="Torna a JARVIS"
+        aria-label="Chiudi ricerca web"
+    >
+        ×
+    </button>
+
+    <iframe
+        id="webSearchFrame"
+        title="Ricerca web JARVIS"
+        loading="lazy"
+    ></iframe>
+
 </div>
 
 
 <div id="chat"></div>
 
-
-<!-- =====================================================
-     INPUT
-===================================================== -->
 
 <div class="command-wrapper">
 
@@ -1195,9 +1099,7 @@ body{
         id="micBtn"
         aria-label="Microfono"
     >
-
         <span class="mic-icon"></span>
-
     </button>
 
     <button id="sendBtn">
@@ -1206,10 +1108,6 @@ body{
 
 </div>
 
-
-<!-- =====================================================
-     VOCE
-===================================================== -->
 
 <button id="voiceBtn">
     ⚙ VOCE
@@ -1223,11 +1121,9 @@ body{
     </div>
 
     <select id="voiceSelector">
-
         <option value="">
             Voce dispositivo automatica
         </option>
-
     </select>
 
     <button id="voiceTest">
@@ -1374,16 +1270,6 @@ const voiceSelector =
 const voiceTest =
     document.getElementById(
         "voiceTest"
-    );
-
-const webSearchWindows =
-    document.getElementById(
-        "webSearchWindows"
-    );
-
-const webSearchIndicator =
-    document.getElementById(
-        "webSearchIndicator"
     );
 
 
@@ -1607,7 +1493,7 @@ container.appendChild(
 
 
 /* =====================================================
-   GLOW
+   GLOW ORO
 ===================================================== */
 
 function createGlow(){
@@ -1648,17 +1534,17 @@ function createGlow(){
 
     gradient.addColorStop(
         .2,
-        "rgba(220,255,255,1)"
+        "rgba(255,244,185,1)"
     );
 
     gradient.addColorStop(
         .4,
-        "rgba(0,255,255,.9)"
+        "rgba(255,210,55,.95)"
     );
 
     gradient.addColorStop(
         .7,
-        "rgba(0,150,190,.25)"
+        "rgba(210,145,10,.28)"
     );
 
     gradient.addColorStop(
@@ -1794,7 +1680,7 @@ const material =
 
         color:
             new THREE.Color(
-                0x00cfe8
+                0xffc928
             ),
 
         size:.042,
@@ -1832,19 +1718,20 @@ scene.add(
 let targetEnergy =
     .15;
 
+
 let energy =
     .15;
 
 
 const normalColor =
     new THREE.Color(
-        0x00cfe8
+        0xffb900
     );
 
 
 const activeColor =
     new THREE.Color(
-        0x8fffff
+        0xfff0a0
     );
 
 
@@ -2322,7 +2209,7 @@ function createJarvisMarker(
             })
 
             .setHTML(
-                `<b style="color:#00ffff">${escapeHtml(name)}</b>`
+                `<b style="color:#ffd34d">${escapeHtml(name)}</b>`
             )
 
         )
@@ -2642,460 +2529,76 @@ function handleMapCommand(
 
 
 /* =====================================================
-   WEB SEARCH MULTI-FINESTRA
+   RICERCA WEB
 ===================================================== */
 
-let webWindowCounter =
-    0;
+const webSearchPanel =
+    document.getElementById(
+        "webSearchPanel"
+    );
 
-let highestWebZ =
-    220;
+const webSearchFrame =
+    document.getElementById(
+        "webSearchFrame"
+    );
 
-
-/*
-   Questa funzione aggiorna il contatore
-   delle finestre presenti.
-*/
-
-function updateWebIndicator(){
-
-    const count =
-        webSearchWindows
-            .querySelectorAll(
-                ".web-window"
-            )
-            .length;
+const closeWebSearch =
+    document.getElementById(
+        "closeWebSearch"
+    );
 
 
-    if(count > 0){
-
-        webSearchIndicator.classList.add(
-            "active"
-        );
-
-        webSearchIndicator.textContent =
-            "WEB WINDOWS: " +
-            count;
-
-    }else{
-
-        webSearchIndicator.classList.remove(
-            "active"
-        );
-
-    }
-
-}
-
-
-/*
-   Porta una finestra davanti alle altre.
-*/
-
-function bringWebWindowToFront(
-    windowElement
-){
-
-    highestWebZ++;
-
-    windowElement.style.zIndex =
-        String(highestWebZ);
-
-}
-
-
-/*
-   Crea una nuova finestra di ricerca.
-*/
-
-function openWebSearch(
-    query
-){
+function openWebSearch(query){
 
     if(!query){
         return;
     }
 
-
-    webWindowCounter++;
-
-
-    const windowElement =
-        document.createElement(
-            "div"
-        );
-
-
-    windowElement.className =
-        "web-window";
-
-
-    /*
-       Posizione iniziale automatica.
-
-       Ogni nuova finestra viene spostata
-       leggermente rispetto alla precedente.
-    */
-
-    const offset =
-        (
-            webWindowCounter - 1
-        ) % 6;
-
-
-    const startLeft =
-        20 +
-        offset * 45;
-
-
-    const startTop =
-        90 +
-        offset * 35;
-
-
-    windowElement.style.left =
-        startLeft + "px";
-
-
-    windowElement.style.top =
-        startTop + "px";
-
-
-    windowElement.style.zIndex =
-        String(
-            ++highestWebZ
-        );
-
-
-    const safeTitle =
-        escapeHtml(
-            query
-        );
-
-
-    windowElement.innerHTML = `
-
-        <div class="web-window-header">
-
-            <div class="web-window-title">
-
-                <span class="web-window-number">
-                    WEB ${webWindowCounter}
-                </span>
-
-                ${safeTitle}
-
-            </div>
-
-
-            <div class="web-window-controls">
-
-                <button
-                    class="web-window-btn minimize-web"
-                    title="Minimizza"
-                >
-                    −
-                </button>
-
-
-                <button
-                    class="web-window-btn close-web"
-                    title="Chiudi"
-                >
-                    ×
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <iframe
-            title="Ricerca web ${safeTitle}"
-            loading="eager"
-        ></iframe>
-
-    `;
-
-
-    webSearchWindows.appendChild(
-        windowElement
-    );
-
-
-    const iframe =
-        windowElement.querySelector(
-            "iframe"
-        );
-
-
     const url =
         "https://www.google.com/search?igu=1&q=" +
-        encodeURIComponent(
-            query
-        );
+        encodeURIComponent(query);
 
-
-    iframe.src =
+    webSearchFrame.src =
         url;
 
-
-    /*
-       CLICK SULLA FINESTRA
-       -> la porta davanti.
-    */
-
-    windowElement.addEventListener(
-        "pointerdown",
-        () => {
-
-            bringWebWindowToFront(
-                windowElement
-            );
-
-        }
-    );
-
-
-    /*
-       MINIMIZZA
-    */
-
-    const minimizeButton =
-        windowElement.querySelector(
-            ".minimize-web"
-        );
-
-
-    minimizeButton.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-            windowElement.classList.toggle(
-                "minimized"
-            );
-
-        }
-    );
-
-
-    /*
-       CHIUDI
-    */
-
-    const closeButton =
-        windowElement.querySelector(
-            ".close-web"
-        );
-
-
-    closeButton.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-            windowElement.remove();
-
-            updateWebIndicator();
-
-        }
-    );
-
-
-    /*
-       DRAG DELLA FINESTRA
-    */
-
-    const header =
-        windowElement.querySelector(
-            ".web-window-header"
-        );
-
-
-    let dragging =
-        false;
-
-    let dragOffsetX =
-        0;
-
-    let dragOffsetY =
-        0;
-
-
-    header.addEventListener(
-        "pointerdown",
-        event => {
-
-            /*
-               Non iniziare il drag se
-               l'utente ha cliccato sui pulsanti.
-            */
-
-            if(
-                event.target.closest(
-                    ".web-window-btn"
-                )
-            ){
-
-                return;
-
-            }
-
-
-            dragging =
-                true;
-
-
-            bringWebWindowToFront(
-                windowElement
-            );
-
-
-            const rect =
-                windowElement.getBoundingClientRect();
-
-
-            dragOffsetX =
-                event.clientX -
-                rect.left;
-
-
-            dragOffsetY =
-                event.clientY -
-                rect.top;
-
-
-            header.setPointerCapture(
-                event.pointerId
-            );
-
-
-            event.preventDefault();
-
-        }
-    );
-
-
-    header.addEventListener(
-        "pointermove",
-        event => {
-
-            if(!dragging){
-                return;
-            }
-
-
-            let newLeft =
-                event.clientX -
-                dragOffsetX;
-
-
-            let newTop =
-                event.clientY -
-                dragOffsetY;
-
-
-            /*
-               Mantiene almeno una parte
-               della finestra dentro lo schermo.
-            */
-
-            const rect =
-                windowElement.getBoundingClientRect();
-
-
-            const maxLeft =
-                window.innerWidth -
-                80;
-
-
-            const maxTop =
-                window.innerHeight -
-                60;
-
-
-            newLeft =
-                Math.max(
-                    -rect.width + 100,
-                    Math.min(
-                        newLeft,
-                        maxLeft
-                    )
-                );
-
-
-            newTop =
-                Math.max(
-                    0,
-                    Math.min(
-                        newTop,
-                        maxTop
-                    )
-                );
-
-
-            windowElement.style.left =
-                newLeft + "px";
-
-
-            windowElement.style.top =
-                newTop + "px";
-
-        }
-    );
-
-
-    header.addEventListener(
-        "pointerup",
-        event => {
-
-            dragging =
-                false;
-
-            try{
-
-                header.releasePointerCapture(
-                    event.pointerId
-                );
-
-            }catch(error){}
-
-        }
-    );
-
-
-    header.addEventListener(
-        "pointercancel",
-        () => {
-
-            dragging =
-                false;
-
-        }
-    );
-
-
-    updateWebIndicator();
-
-
-    addMsg(
-        "Ricerca web: " +
-        query
+    webSearchPanel.classList.add(
+        "active"
     );
 
 }
+
+
+function closeWebSearchPanel(){
+
+    webSearchPanel.classList.remove(
+        "active"
+    );
+
+
+    setTimeout(
+        () => {
+
+            webSearchFrame.src =
+                "about:blank";
+
+        },
+        250
+    );
+
+}
+
+
+closeWebSearch.addEventListener(
+    "click",
+    closeWebSearchPanel
+);
 
 
 /* =====================================================
    COMANDI RICERCA WEB
 ===================================================== */
 
-function handleWebCommand(
-    text
-){
+function handleWebCommand(text){
 
     const normalized =
         text
@@ -3145,112 +2648,16 @@ function handleWebCommand(
                     query
                 );
 
+                addMsg(
+                    "Ricerca web: " +
+                    query
+                );
+
                 return true;
 
             }
 
         }
-
-    }
-
-
-    return false;
-
-}
-
-
-/* =====================================================
-   COMANDI WEB AGGIUNTIVI
-===================================================== */
-
-/*
-   Permette anche di chiudere tutte
-   le finestre dicendo:
-
-   "chiudi le ricerche web"
-*/
-
-function handleWebWindowCommand(
-    text
-){
-
-    const normalized =
-        text
-            .toLowerCase()
-            .trim();
-
-
-    if(
-
-        normalized ===
-        "chiudi le ricerche web"
-
-        ||
-
-        normalized ===
-        "chiudi ricerca web"
-
-        ||
-
-        normalized ===
-        "chiudi tutte le ricerche"
-
-        ||
-
-        normalized ===
-        "chiudi tutte le finestre web"
-
-    ){
-
-        webSearchWindows.innerHTML =
-            "";
-
-        updateWebIndicator();
-
-        addMsg(
-            "Finestre web chiuse."
-        );
-
-        return true;
-
-    }
-
-
-    if(
-
-        normalized ===
-        "minimizza le ricerche web"
-
-        ||
-
-        normalized ===
-        "minimizza tutte le ricerche"
-
-    ){
-
-        const windows =
-            webSearchWindows
-                .querySelectorAll(
-                    ".web-window"
-                );
-
-
-        windows.forEach(
-            windowElement => {
-
-                windowElement.classList.add(
-                    "minimized"
-                );
-
-            }
-        );
-
-
-        addMsg(
-            "Ricerche web minimizzate."
-        );
-
-        return true;
 
     }
 
@@ -3467,6 +2874,10 @@ function speakDevice(
                 !("speechSynthesis" in window)
             ){
 
+                console.warn(
+                    "SpeechSynthesis non disponibile."
+                );
+
                 resolve(false);
 
                 return;
@@ -3597,7 +3008,13 @@ function speakDevice(
 
                             window.speechSynthesis.resume();
 
-                        }catch(error){}
+                        }catch(error){
+
+                            console.warn(
+                                error
+                            );
+
+                        }
 
                     },
                     100
@@ -3642,7 +3059,13 @@ async function speakElevenLabs(
             currentAudio.currentTime =
                 0;
 
-        }catch(error){}
+        }catch(error){
+
+            console.warn(
+                error
+            );
+
+        }
 
 
         currentAudio =
@@ -3704,6 +3127,11 @@ async function speakElevenLabs(
 
 
         if(!response.ok){
+
+            console.warn(
+                "ElevenLabs HTTP:",
+                response.status
+            );
 
             return false;
 
@@ -3804,7 +3232,12 @@ async function speakElevenLabs(
 
 
         audio.onerror =
-            () => {
+            error => {
+
+                console.warn(
+                    "ElevenLabs audio:",
+                    error
+                );
 
                 audioPlaying =
                     false;
@@ -3874,6 +3307,11 @@ async function speak(
         return;
 
     }
+
+
+    console.log(
+        "ElevenLabs non disponibile. Uso voce dispositivo."
+    );
 
 
     await speakDevice(
@@ -3984,19 +3422,8 @@ async function processAi(
 ){
 
     /*
-       1. COMANDI WEB
+       PRIMA: RICERCA WEB
     */
-
-    if(
-        handleWebWindowCommand(
-            text
-        )
-    ){
-
-        return;
-
-    }
-
 
     if(
         handleWebCommand(
@@ -4010,7 +3437,7 @@ async function processAi(
 
 
     /*
-       2. COMANDI MAPPA
+       POI: COMANDI MAPPA
     */
 
     if(
@@ -4023,10 +3450,6 @@ async function processAi(
 
     }
 
-
-    /*
-       3. AI
-    */
 
     setState(
         "thinking"
@@ -4166,6 +3589,12 @@ async function processAi(
 
         const data =
             await response.json();
+
+
+        console.log(
+            "JARVIS RESPONSE:",
+            data
+        );
 
 
         const reply =

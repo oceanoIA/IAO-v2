@@ -2491,7 +2491,147 @@ function handleMapCommand(
 
 }
 
+/* =====================================================
+   RICERCA WEB DENTRO JARVIS
+===================================================== */
 
+const webSearchPanel =
+    document.getElementById(
+        "webSearchPanel"
+    );
+
+const webSearchFrame =
+    document.getElementById(
+        "webSearchFrame"
+    );
+
+const closeWebSearch =
+    document.getElementById(
+        "closeWebSearch"
+    );
+
+
+function openWebSearch(query){
+
+    if(!query){
+        return;
+    }
+
+    const url =
+        "https://www.google.com/search?igu=1&q=" +
+        encodeURIComponent(query);
+
+    webSearchFrame.src =
+        url;
+
+    webSearchPanel.classList.add(
+        "active"
+    );
+
+}
+
+
+function closeWebSearchPanel(){
+
+    webSearchPanel.classList.remove(
+        "active"
+    );
+
+    /*
+       Svuota l'iframe quando si torna
+       alla schermata principale.
+    */
+
+    setTimeout(
+        () => {
+
+            webSearchFrame.src =
+                "about:blank";
+
+        },
+        250
+    );
+
+}
+
+
+closeWebSearch.addEventListener(
+    "click",
+    closeWebSearchPanel
+);
+
+
+/* =====================================================
+   COMANDI RICERCA WEB
+===================================================== */
+
+function handleWebCommand(text){
+
+    const normalized =
+        text
+            .toLowerCase()
+            .trim();
+
+
+    const patterns = [
+
+        "cerca sul web ",
+        "cerca nel web ",
+        "ricerca sul web ",
+        "ricerca web ",
+        "cerca online ",
+        "cerca su internet ",
+        "cerca in internet ",
+        "fammi una ricerca su ",
+        "fai una ricerca su "
+
+    ];
+
+
+    for(
+        const pattern of patterns
+    ){
+
+        if(
+            normalized.startsWith(
+                pattern
+            )
+        ){
+
+            const query =
+                text
+                    .trim()
+                    .substring(
+                        pattern.length
+                    )
+                    .trim();
+
+
+            if(
+                query.length > 1
+            ){
+
+                openWebSearch(
+                    query
+                );
+
+                addMsg(
+                    "Ricerca web: " +
+                    query
+                );
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+
+    return false;
+
+}
 /* =====================================================
    MESSAGGIO
 ===================================================== */

@@ -1526,6 +1526,40 @@ scene.add(
     particles
 );
 
+      /* =====================================================
+   PICCOLE SINAPSI NEURALI
+===================================================== */
+
+const synapseMaterial =
+    new THREE.LineBasicMaterial({
+        color: 0x35ffff,
+        transparent: true,
+        opacity: 0.16,
+        blending: THREE.AdditiveBlending
+    });
+
+const synapseGeometry =
+    new THREE.BufferGeometry();
+
+const synapsePositions =
+    new Float32Array(60 * 3);
+
+synapseGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        synapsePositions,
+        3
+    )
+);
+
+const synapses =
+    new THREE.LineSegments(
+        synapseGeometry,
+        synapseMaterial
+    );
+
+scene.add(synapses);
+
 
 /* =====================================================
    ENERGIA

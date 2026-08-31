@@ -1,10 +1,21 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
 
-<title>J.A.R.V.I.S.</title><link
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link
     rel="stylesheet"
     href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-/><style>
+/>
+
+<style>
 
 *{
     box-sizing:border-box;
@@ -453,6 +464,11 @@ body{
     color:white;
 }
 
+#voiceTest:disabled{
+    opacity:.5;
+    cursor:wait;
+}
+
 #tacticalMap{
     position:fixed;
     inset:0;
@@ -837,74 +853,108 @@ body{
 
 }
 
-</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
+</style>
+
+</head>
+
+<body>
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+<div
     class="jarvis-title"
     id="jarvisTitle"
 >
     J.A.R.V.I.S
-</div><div class="datetime"><div id="clock" class="time">
-    00:00:00
 </div>
 
-<div id="date" class="date">
-    00 AGO 2026
+<div class="datetime">
+
+    <div id="clock" class="time">
+        00:00:00
+    </div>
+
+    <div id="date" class="date">
+        00 AGO 2026
+    </div>
+
 </div>
 
-</div><div id="tacticalMap"><div id="map"></div>
+<div id="tacticalMap">
 
-<div class="map-overlay"></div>
+    <div id="map"></div>
 
-<div class="map-header">
-    TACTICAL MAP
+    <div class="map-overlay"></div>
+
+    <div class="map-header">
+        TACTICAL MAP
+    </div>
+
+    <button
+        id="closeMap"
+        title="Chiudi mappa"
+        aria-label="Chiudi mappa"
+    >
+        ×
+    </button>
+
 </div>
 
-<button
-    id="closeMap"
-    title="Chiudi mappa"
-    aria-label="Chiudi mappa"
->
-    ×
-</button>
+<div id="chat"></div>
 
-</div><div id="chat"></div><div class="command-wrapper"><input
-    id="textInput"
-    type="text"
-    autocomplete="off"
-    placeholder="Chiedi qualcosa a JARVIS..."
->
+<div class="command-wrapper">
 
-<button
-    id="micBtn"
-    aria-label="Microfono"
->
-    <span class="mic-icon"></span>
-</button>
+    <input
+        id="textInput"
+        type="text"
+        autocomplete="off"
+        placeholder="Chiedi qualcosa a JARVIS..."
+    >
 
-<button id="sendBtn">
-    INVIA
-</button>
+    <button
+        id="micBtn"
+        aria-label="Microfono"
+    >
+        <span class="mic-icon"></span>
+    </button>
 
-</div><button id="voiceBtn">
+    <button id="sendBtn">
+        INVIA
+    </button>
+
+</div>
+
+<button id="voiceBtn">
     ⚙ VOCE
-</button><div id="voicePanel"><div class="voice-title">
-    VOCE J.A.R.V.I.S.
-</div>
-
-<select id="voiceSelector">
-
-    <option value="vkBFlAtUdZqNR4MqxSVr">
-        ElevenLabs — J.A.R.V.I.S.
-    </option>
-
-</select>
-
-<button id="voiceTest">
-    TESTA VOCE
 </button>
 
-</div><script
+<div id="voicePanel">
+
+    <div class="voice-title">
+        VOCE J.A.R.V.I.S.
+    </div>
+
+    <select id="voiceSelector">
+
+        <option value="vkBFlAtUdZqNR4MqxSVr">
+            ElevenLabs — J.A.R.V.I.S.
+        </option>
+
+    </select>
+
+    <button id="voiceTest">
+        TESTA VOCE
+    </button>
+
+</div>
+
+<script
     src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script><script type="importmap">
+</script>
+
+<script type="importmap">
 
 {
     "imports":{
@@ -913,7 +963,9 @@ body{
     }
 }
 
-</script><script type="module">
+</script>
+
+<script type="module">
 
 import * as THREE from "three";
 
@@ -939,11 +991,25 @@ const MAX_MEMORY =
 const ELEVEN_VOICE_ID =
     "vkBFlAtUdZqNR4MqxSVr";
 
+
+/* =====================================================
+   AUDIO ENGINE
+===================================================== */
+
 let currentAudio =
     null;
 
 let audioPlaying =
     false;
+
+let audioContext =
+    null;
+
+let audioSource =
+    null;
+
+let audioGain =
+    null;
 
 
 /* =====================================================
@@ -2307,14 +2373,136 @@ function getTimeData(){
 
 
 /* =====================================================
-   ELEVENLABS SPEAK
+   AUDIO CONTEXT
 ===================================================== */
 
-async function speak(text){
+function initAudio(){
 
-    if(!text){
-        return;
+    try{
+
+        if(!audioContext){
+
+            const AudioContextClass =
+                window.AudioContext ||
+                window.webkitAudioContext;
+
+            if(!AudioContextClass){
+
+                console.error(
+                    "AudioContext non supportato."
+                );
+
+                return false;
+
+            }
+
+            audioContext =
+                new AudioContextClass();
+
+            audioGain =
+                audioContext.createGain();
+
+            audioGain.gain.value =
+                1;
+
+            audioGain.connect(
+                audioContext.destination
+            );
+
+        }
+
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            audioContext.resume()
+                .catch(error => {
+
+                    console.warn(
+                        "AudioContext resume:",
+                        error
+                    );
+
+                });
+
+        }
+
+        return true;
+
+    }catch(error){
+
+        console.error(
+            "Audio init error:",
+            error
+        );
+
+        return false;
+
     }
+
+}
+
+
+/* =====================================================
+   SBLOCCO AUDIO
+===================================================== */
+
+function unlockAudio(){
+
+    try{
+
+        if(!initAudio()){
+            return;
+        }
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            audioContext.resume();
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Audio unlock:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   STOP AUDIO
+===================================================== */
+
+function stopAudio(){
+
+    try{
+
+        if(audioSource){
+
+            audioSource.stop();
+
+        }
+
+    }catch(error){
+
+        // Audio già terminato.
+
+    }
+
+    audioSource =
+        null;
+
+    audioPlaying =
+        false;
 
 
     if(currentAudio){
@@ -2328,7 +2516,7 @@ async function speak(text){
 
         }catch(error){
 
-            console.warn(error);
+            // Ignora.
 
         }
 
@@ -2337,8 +2525,23 @@ async function speak(text){
 
     }
 
-    audioPlaying =
-        false;
+}
+
+
+/* =====================================================
+   ELEVENLABS SPEAK
+===================================================== */
+
+async function speak(
+    text
+){
+
+    if(!text){
+        return;
+    }
+
+
+    stopAudio();
 
 
     setState(
@@ -2346,13 +2549,27 @@ async function speak(text){
     );
 
 
+    if(!initAudio()){
+
+        setState(
+            "idle"
+        );
+
+        return;
+
+    }
+
+
     const controller =
         new AbortController();
+
 
     const timeout =
         setTimeout(
             () => {
+
                 controller.abort();
+
             },
             30000
         );
@@ -2360,12 +2577,27 @@ async function speak(text){
 
     try{
 
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            await audioContext.resume();
+
+        }
+
+
+        /* ---------------------------------------------
+           RICHIESTA ELEVENLABS
+        --------------------------------------------- */
+
         const response =
             await fetch(
                 API,
                 {
 
-                    method:"POST",
+                    method:
+                        "POST",
 
                     headers:{
                         "Content-Type":
@@ -2411,6 +2643,10 @@ async function speak(text){
         }
 
 
+        /* ---------------------------------------------
+           CONTROLLO AUDIO
+        --------------------------------------------- */
+
         const contentType =
             response.headers.get(
                 "content-type"
@@ -2418,16 +2654,16 @@ async function speak(text){
 
 
         if(
-            !contentType.includes(
-                "audio"
-            )
+            !contentType
+                .toLowerCase()
+                .includes("audio")
         ){
 
             const errorText =
                 await response.text();
 
             console.error(
-                "Risposta TTS:",
+                "Risposta TTS non audio:",
                 errorText
             );
 
@@ -2438,103 +2674,101 @@ async function speak(text){
         }
 
 
-        const audioBlob =
-            await response.blob();
+        /* ---------------------------------------------
+           PRELEVA AUDIO
+        --------------------------------------------- */
+
+        const arrayBuffer =
+            await response.arrayBuffer();
 
 
-        const audioUrl =
-            URL.createObjectURL(
-                audioBlob
+        if(
+            !arrayBuffer ||
+            arrayBuffer.byteLength === 0
+        ){
+
+            throw new Error(
+                "ElevenLabs ha restituito audio vuoto."
+            );
+
+        }
+
+
+        /* ---------------------------------------------
+           DECODIFICA
+        --------------------------------------------- */
+
+        const audioBuffer =
+            await audioContext.decodeAudioData(
+                arrayBuffer.slice(0)
             );
 
 
-        const audio =
-            new Audio(
-                audioUrl
+        if(!audioBuffer){
+
+            throw new Error(
+                "Impossibile decodificare l'audio."
             );
 
-
-        currentAudio =
-            audio;
+        }
 
 
-        audio.volume =
-            1;
+        /* ---------------------------------------------
+           CREA SORGENTE AUDIO
+        --------------------------------------------- */
+
+        const source =
+            audioContext.createBufferSource();
+
+        source.buffer =
+            audioBuffer;
+
+        source.connect(
+            audioGain
+        );
 
 
-        audio.onplay =
-            () => {
-
-                audioPlaying =
-                    true;
-
-                setState(
-                    "speaking"
-                );
-
-            };
+        audioSource =
+            source;
 
 
-        audio.onended =
+        audioPlaying =
+            true;
+
+
+        setState(
+            "speaking"
+        );
+
+
+        source.onended =
             () => {
 
                 audioPlaying =
                     false;
 
-                setState(
-                    "idle"
-                );
-
-                URL.revokeObjectURL(
-                    audioUrl
-                );
-
                 if(
-                    currentAudio ===
-                    audio
+                    audioSource ===
+                    source
                 ){
 
-                    currentAudio =
+                    audioSource =
                         null;
 
                 }
-
-            };
-
-
-        audio.onerror =
-            error => {
-
-                console.error(
-                    "Audio ElevenLabs:",
-                    error
-                );
-
-                audioPlaying =
-                    false;
 
                 setState(
                     "idle"
                 );
 
-                URL.revokeObjectURL(
-                    audioUrl
-                );
-
-                if(
-                    currentAudio ===
-                    audio
-                ){
-
-                    currentAudio =
-                        null;
-
-                }
-
             };
 
 
-        await audio.play();
+        /* ---------------------------------------------
+           PLAY
+        --------------------------------------------- */
+
+        source.start(0);
 
 
     }catch(error){
@@ -2547,14 +2781,12 @@ async function speak(text){
         audioPlaying =
             false;
 
+        audioSource =
+            null;
+
         setState(
             "idle"
         );
-
-        /*
-           Un errore TTS non deve
-           cancellare la risposta AI.
-        */
 
     }finally{
 
@@ -2571,7 +2803,9 @@ async function speak(text){
    PROCESS AI
 ===================================================== */
 
-async function processAi(text){
+async function processAi(
+    text
+){
 
     if(
         handleMapCommand(text)
@@ -2599,15 +2833,9 @@ async function processAi(text){
         );
 
 
-        /*
-           Timeout della richiesta AI.
-           Se il Worker non risponde entro
-           30 secondi, la richiesta viene
-           interrotta invece di rimanere bloccata.
-        */
-
         const controller =
             new AbortController();
+
 
         const timeout =
             setTimeout(
@@ -2673,11 +2901,6 @@ async function processAi(text){
         }
 
 
-        /*
-           Controllo HTTP prima
-           di leggere la risposta.
-        */
-
         if(!response.ok){
 
             const errorText =
@@ -2686,6 +2909,7 @@ async function processAi(text){
             let errorMessage =
                 "HTTP " +
                 response.status;
+
 
             try{
 
@@ -2725,10 +2949,6 @@ async function processAi(text){
         }
 
 
-        /*
-           Il Worker restituisce JSON.
-        */
-
         const data =
             await response.json();
 
@@ -2759,19 +2979,10 @@ async function processAi(text){
         }
 
 
-        /*
-           Mostra immediatamente
-           la risposta all'utente.
-        */
-
         addMsg(
             reply
         );
 
-
-        /*
-           Salva la risposta nella memoria.
-        */
 
         addMemory(
             "assistant",
@@ -2780,8 +2991,8 @@ async function processAi(text){
 
 
         /*
-           ElevenLabs parte senza
-           bloccare processAi().
+           La voce parte senza
+           bloccare la risposta.
         */
 
         speak(
@@ -2797,12 +3008,6 @@ async function processAi(text){
             }
         );
 
-
-        /*
-           La risposta AI è già stata
-           completata: non aspettiamo
-           la fine dell'audio.
-        */
 
         setState(
             "idle"
@@ -2911,12 +3116,14 @@ textInput.addEventListener(
 
 
 /* =====================================================
-   PANNELLO VOCE ELEVENLABS
+   PANNELLO VOCE
 ===================================================== */
 
 voiceBtn.addEventListener(
     "click",
     () => {
+
+        unlockAudio();
 
         voicePanel.classList.toggle(
             "active"
@@ -2956,11 +3163,50 @@ voiceSelector.addEventListener(
 
 voiceTest.addEventListener(
     "click",
-    () => {
+    async () => {
 
-        speak(
-            "Voce J.A.R.V.I.S. configurata correttamente. Sistema ElevenLabs operativo."
-        );
+        /*
+           Il click dell'utente
+           sblocca immediatamente
+           il sistema audio.
+        */
+
+        unlockAudio();
+
+
+        const oldText =
+            voiceTest.textContent;
+
+
+        voiceTest.disabled =
+            true;
+
+        voiceTest.textContent =
+            "CARICAMENTO VOCE...";
+
+
+        try{
+
+            await speak(
+                "Voce J.A.R.V.I.S. configurata correttamente. Sistema ElevenLabs operativo."
+            );
+
+        }catch(error){
+
+            console.error(
+                "TEST VOCE:",
+                error
+            );
+
+        }finally{
+
+            voiceTest.disabled =
+                false;
+
+            voiceTest.textContent =
+                oldText;
+
+        }
 
     }
 );
@@ -3074,6 +3320,8 @@ if(Recognition){
         "click",
         () => {
 
+            unlockAudio();
+
             if(listening){
 
                 recognition.stop();
@@ -3163,5 +3411,7 @@ setState(
     "idle"
 );
 
-</script></body>
+</script>
+
+</body>
 </html>

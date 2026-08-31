@@ -28,7 +28,7 @@ body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#050401;
+    background:#010405;
     font-family:Arial,sans-serif;
 }
 
@@ -36,8 +36,8 @@ body{
     background:
         radial-gradient(
             circle at center,
-            #171305 0%,
-            #080702 48%,
+            #071719 0%,
+            #020708 48%,
             #000000 100%
         );
 }
@@ -70,7 +70,7 @@ body{
     transform:translateX(-50%);
     z-index:30;
 
-    color:rgba(255,239,180,.9);
+    color:rgba(255,255,255,.86);
 
     font-size:
         clamp(20px,2.8vw,31px);
@@ -84,7 +84,7 @@ body{
 
     text-shadow:
         0 0 10px
-        rgba(255,195,45,.22);
+        rgba(255,255,255,.12);
 
     pointer-events:none;
 }
@@ -106,17 +106,17 @@ body{
 }
 
 .time{
-    color:rgba(255,220,110,.7);
+    color:rgba(150,255,255,.6);
     font-size:11px;
     letter-spacing:2px;
 
     text-shadow:
         0 0 8px
-        rgba(255,190,30,.25);
+        rgba(0,255,255,.2);
 }
 
 .date{
-    color:rgba(255,215,100,.42);
+    color:rgba(150,255,255,.38);
     font-size:8px;
     letter-spacing:1px;
 }
@@ -143,27 +143,23 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.28);
+        rgba(0,255,255,.22);
 
     border-radius:24px;
 
     background:
-        rgba(25,19,4,.48);
+        rgba(4,20,23,.4);
 
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
 
     color:
-        rgba(255,242,205,.94);
+        rgba(235,255,255,.9);
 
     font-size:12px;
     line-height:1.45;
 
     white-space:pre-wrap;
-
-    box-shadow:
-        0 0 18px
-        rgba(255,190,35,.035);
 }
 
 .command-wrapper{
@@ -182,28 +178,28 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.34);
+        rgba(100,255,255,.28);
 
     border-radius:40px;
 
     background:
-        rgba(24,18,4,.48);
+        rgba(5,20,23,.38);
 
     backdrop-filter:blur(20px);
     -webkit-backdrop-filter:blur(20px);
 
     box-shadow:
         0 0 30px
-        rgba(255,190,35,.06);
+        rgba(0,255,255,.05);
 }
 
 .command-wrapper:focus-within{
     border-color:
-        rgba(255,205,65,.75);
+        rgba(0,255,255,.6);
 
     box-shadow:
         0 0 25px
-        rgba(255,190,30,.16);
+        rgba(0,255,255,.12);
 }
 
 #textInput{
@@ -215,7 +211,7 @@ body{
 
     background:transparent;
 
-    color:#fff8dc;
+    color:white;
 
     font-family:Arial,sans-serif;
     font-size:14px;
@@ -224,7 +220,7 @@ body{
 }
 
 #textInput::placeholder{
-    color:rgba(255,225,140,.35);
+    color:rgba(255,255,255,.3);
 }
 
 #micBtn{
@@ -237,7 +233,7 @@ body{
 
     background:transparent;
 
-    color:rgba(255,224,140,.72);
+    color:rgba(210,255,255,.65);
 
     cursor:pointer;
 
@@ -283,16 +279,16 @@ body{
 }
 
 #micBtn:hover{
-    color:#ffd34d;
+    color:#00ffff;
 }
 
 #micBtn.active{
-    color:#fff0a3;
+    color:#8fffff;
 
     filter:
         drop-shadow(
             0 0 8px
-            rgba(255,200,45,.8)
+            rgba(0,255,255,.7)
         );
 }
 
@@ -303,15 +299,15 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.34);
+        rgba(0,255,255,.28);
 
     border-radius:22px;
 
     background:
-        rgba(255,195,35,.055);
+        rgba(0,255,255,.05);
 
     color:
-        rgba(255,235,170,.82);
+        rgba(220,255,255,.78);
 
     font-size:10px;
     letter-spacing:2px;
@@ -322,14 +318,10 @@ body{
 #sendBtn:hover{
     color:white;
 
-    border-color:#ffd34d;
+    border-color:#00ffff;
 
     background:
-        rgba(255,195,35,.12);
-
-    box-shadow:
-        0 0 15px
-        rgba(255,195,35,.12);
+        rgba(0,255,255,.1);
 }
 
 #voiceBtn{
@@ -346,15 +338,15 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.3);
+        rgba(0,255,255,.25);
 
     border-radius:22px;
 
     background:
-        rgba(22,16,3,.76);
+        rgba(3,15,18,.72);
 
     color:
-        rgba(255,225,145,.76);
+        rgba(210,255,255,.7);
 
     font-size:10px;
     letter-spacing:1.5px;
@@ -369,11 +361,11 @@ body{
 #voiceBtn:hover{
     color:white;
 
-    border-color:#ffd34d;
+    border-color:#00ffff;
 
     box-shadow:
         0 0 15px
-        rgba(255,195,35,.25);
+        rgba(0,255,255,.2);
 }
 
 #voicePanel{
@@ -392,18 +384,18 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.3);
+        rgba(0,255,255,.25);
 
     border-radius:18px;
 
     background:
-        rgba(18,13,3,.95);
+        rgba(2,13,16,.94);
 
     backdrop-filter:blur(20px);
 
     box-shadow:
         0 0 35px
-        rgba(255,190,35,.14);
+        rgba(0,255,255,.12);
 }
 
 #voicePanel.active{
@@ -412,7 +404,7 @@ body{
 
 .voice-title{
     color:
-        rgba(255,235,175,.92);
+        rgba(220,255,255,.9);
 
     font-size:11px;
     letter-spacing:2px;
@@ -427,17 +419,17 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.25);
+        rgba(0,255,255,.2);
 
     border-radius:10px;
 
     outline:none;
 
     background:
-        rgba(25,18,3,.95);
+        rgba(0,20,23,.9);
 
     color:
-        rgba(255,235,175,.88);
+        rgba(220,255,255,.85);
 
     font-size:11px;
 }
@@ -451,15 +443,15 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.25);
+        rgba(0,255,255,.2);
 
     border-radius:10px;
 
     background:
-        rgba(255,195,35,.045);
+        rgba(0,255,255,.04);
 
     color:
-        rgba(255,225,150,.76);
+        rgba(210,255,255,.7);
 
     cursor:pointer;
 
@@ -468,18 +460,9 @@ body{
 }
 
 #voiceTest:hover{
-    border-color:#ffd34d;
+    border-color:#00ffff;
     color:white;
-
-    box-shadow:
-        0 0 12px
-        rgba(255,195,35,.1);
 }
-
-
-/* =====================================================
-   MAPPA TATTICA
-===================================================== */
 
 #tacticalMap{
     position:fixed;
@@ -492,8 +475,8 @@ body{
     background:
         radial-gradient(
             circle at center,
-            #171305 0%,
-            #080702 65%,
+            #081719 0%,
+            #020708 65%,
             #000000 100%
         );
 }
@@ -529,7 +512,7 @@ body{
     z-index:600;
 
     color:
-        rgba(255,235,175,.92);
+        rgba(220,255,255,.9);
 
     font-family:Arial,sans-serif;
 
@@ -545,7 +528,7 @@ body{
 
     text-shadow:
         0 0 12px
-        rgba(255,195,35,.3);
+        rgba(0,255,255,.25);
 
     pointer-events:none;
 }
@@ -562,15 +545,15 @@ body{
 
     border-radius:28px;
 
-    background:#120f05;
+    background:#071012;
 
     box-shadow:
         0 0 35px rgba(0,0,0,.65),
-        0 0 70px rgba(255,195,35,.045);
+        0 0 70px rgba(0,255,255,.035);
 
     border:
         1px solid
-        rgba(255,200,55,.14);
+        rgba(0,255,255,.10);
 }
 
 .map-overlay{
@@ -602,15 +585,15 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.38);
+        rgba(0,255,255,.35);
 
     border-radius:50%;
 
     background:
-        rgba(20,15,3,.88);
+        rgba(0,15,18,.85);
 
     color:
-        rgba(255,230,160,.88);
+        rgba(200,255,255,.85);
 
     cursor:pointer;
 
@@ -629,25 +612,20 @@ body{
 #closeMap:hover{
     color:white;
 
-    border-color:#ffd34d;
+    border-color:#00ffff;
 
     box-shadow:
         0 0 15px
-        rgba(255,195,35,.32);
+        rgba(0,255,255,.3);
 }
-
-
-/* =====================================================
-   CONTROLLI MAPLIBRE
-===================================================== */
 
 .maplibregl-ctrl-group{
     background:
-        rgba(20,15,3,.9)!important;
+        rgba(0,15,18,.85)!important;
 
     border:
         1px solid
-        rgba(255,200,55,.22)!important;
+        rgba(0,255,255,.18)!important;
 
     border-radius:12px!important;
 
@@ -658,33 +636,28 @@ body{
     background:
         transparent!important;
 
-    color:#ffe59a!important;
+    color:#bfffff!important;
 }
 
 .maplibregl-ctrl-group button:hover{
     background:
-        rgba(255,195,35,.09)!important;
+        rgba(0,255,255,.08)!important;
 }
 
 .maplibregl-ctrl-attrib{
     background:
-        rgba(8,6,1,.72)!important;
+        rgba(0,8,10,.65)!important;
 
     color:
-        rgba(255,220,140,.4)!important;
+        rgba(180,255,255,.35)!important;
 
     font-size:8px!important;
 }
 
 .maplibregl-ctrl-attrib a{
     color:
-        rgba(255,210,110,.52)!important;
+        rgba(150,240,255,.45)!important;
 }
-
-
-/* =====================================================
-   MARKER JARVIS
-===================================================== */
 
 .jarvis-map-marker{
     width:20px;
@@ -694,16 +667,16 @@ body{
 
     border:
         2px solid
-        #ffd34d;
+        #00ffff;
 
     background:
-        rgba(255,195,35,.16);
+        rgba(0,255,255,.16);
 
     box-shadow:
         0 0 15px
-        rgba(255,205,60,.95),
+        rgba(0,255,255,.9),
         0 0 35px
-        rgba(255,185,25,.42);
+        rgba(0,255,255,.4);
 
     position:relative;
 
@@ -727,10 +700,10 @@ body{
 
     border-radius:50%;
 
-    background:#fff4c4;
+    background:#dfffff;
 
     box-shadow:
-        0 0 8px #ffd34d;
+        0 0 8px #00ffff;
 }
 
 @keyframes markerPulse{
@@ -739,9 +712,9 @@ body{
 
         box-shadow:
             0 0 15px
-            rgba(255,205,60,.95),
+            rgba(0,255,255,.9),
             0 0 35px
-            rgba(255,185,25,.42);
+            rgba(0,255,255,.4);
     }
 
     50%{
@@ -749,22 +722,22 @@ body{
 
         box-shadow:
             0 0 22px
-            rgba(255,220,90,1),
+            rgba(0,255,255,1),
             0 0 50px
-            rgba(255,190,25,.58);
+            rgba(0,255,255,.55);
     }
 }
 
 .maplibregl-popup-content{
     background:
-        rgba(20,15,3,.97)!important;
+        rgba(3,15,18,.96)!important;
 
     color:
-        rgba(255,235,175,.92)!important;
+        rgba(220,255,255,.9)!important;
 
     border:
         1px solid
-        rgba(255,200,55,.28);
+        rgba(0,255,255,.25);
 
     border-radius:10px;
 
@@ -772,17 +745,17 @@ body{
 
     box-shadow:
         0 0 20px
-        rgba(255,195,35,.14);
+        rgba(0,255,255,.12);
 }
 
 .maplibregl-popup-close-button{
-    color:#ffd34d!important;
+    color:#00ffff!important;
     font-size:18px;
 }
 
 
 /* =====================================================
-   WEB SEARCH PANEL
+   WEB SEARCH
 ===================================================== */
 
 #webSearchPanel{
@@ -793,7 +766,7 @@ body{
     display:none;
 
     background:
-        rgba(8,6,1,.96);
+        rgba(0,5,7,.96);
 
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
@@ -801,7 +774,9 @@ body{
 
 #webSearchPanel.active{
     display:block;
-    animation:webPanelIn .3s ease;
+
+    animation:
+        webPanelIn .3s ease;
 }
 
 @keyframes webPanelIn{
@@ -818,22 +793,27 @@ body{
 
 .web-search-header{
     position:absolute;
+
     top:18px;
     left:50%;
-    transform:translateX(-50%);
+
+    transform:
+        translateX(-50%);
 
     z-index:520;
 
-    color:rgba(255,235,175,.92);
+    color:
+        rgba(220,255,255,.9);
 
     font-size:13px;
+
     letter-spacing:4px;
 
     white-space:nowrap;
 
     text-shadow:
         0 0 12px
-        rgba(255,195,35,.32);
+        rgba(0,255,255,.3);
 }
 
 #webSearchFrame{
@@ -849,7 +829,7 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.2);
+        rgba(0,255,255,.18);
 
     border-radius:20px;
 
@@ -857,7 +837,7 @@ body{
 
     box-shadow:
         0 0 40px
-        rgba(255,195,35,.09);
+        rgba(0,255,255,.08);
 }
 
 #closeWebSearch{
@@ -873,15 +853,15 @@ body{
 
     border:
         1px solid
-        rgba(255,200,55,.34);
+        rgba(0,255,255,.3);
 
     border-radius:50%;
 
     background:
-        rgba(20,15,3,.92);
+        rgba(0,15,18,.9);
 
     color:
-        rgba(255,230,160,.84);
+        rgba(210,255,255,.8);
 
     cursor:pointer;
 
@@ -894,17 +874,14 @@ body{
 
 #closeWebSearch:hover{
     color:white;
-    border-color:#ffd34d;
+
+    border-color:#00ffff;
 
     box-shadow:
         0 0 15px
-        rgba(255,195,35,.32);
+        rgba(0,255,255,.3);
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
 
 @media(max-width:600px){
 
@@ -1121,9 +1098,11 @@ body{
     </div>
 
     <select id="voiceSelector">
+
         <option value="">
             Voce dispositivo automatica
         </option>
+
     </select>
 
     <button id="voiceTest">
@@ -1493,7 +1472,7 @@ container.appendChild(
 
 
 /* =====================================================
-   GLOW ORO
+   GLOW
 ===================================================== */
 
 function createGlow(){
@@ -1534,17 +1513,17 @@ function createGlow(){
 
     gradient.addColorStop(
         .2,
-        "rgba(255,244,185,1)"
+        "rgba(220,255,255,1)"
     );
 
     gradient.addColorStop(
         .4,
-        "rgba(255,210,55,.95)"
+        "rgba(0,255,255,.9)"
     );
 
     gradient.addColorStop(
         .7,
-        "rgba(210,145,10,.28)"
+        "rgba(0,150,190,.25)"
     );
 
     gradient.addColorStop(
@@ -1680,7 +1659,7 @@ const material =
 
         color:
             new THREE.Color(
-                0xffc928
+                0x00cfe8
             ),
 
         size:.042,
@@ -1725,13 +1704,13 @@ let energy =
 
 const normalColor =
     new THREE.Color(
-        0xffb900
+        0x00cfe8
     );
 
 
 const activeColor =
     new THREE.Color(
-        0xfff0a0
+        0x8fffff
     );
 
 
@@ -2209,7 +2188,7 @@ function createJarvisMarker(
             })
 
             .setHTML(
-                `<b style="color:#ffd34d">${escapeHtml(name)}</b>`
+                `<b style="color:#00ffff">${escapeHtml(name)}</b>`
             )
 
         )
@@ -2548,18 +2527,25 @@ const closeWebSearch =
     );
 
 
-function openWebSearch(query){
+function openWebSearch(
+    query
+){
 
     if(!query){
         return;
     }
 
+
     const url =
         "https://www.google.com/search?igu=1&q=" +
-        encodeURIComponent(query);
+        encodeURIComponent(
+            query
+        );
+
 
     webSearchFrame.src =
         url;
+
 
     webSearchPanel.classList.add(
         "active"
@@ -2598,7 +2584,9 @@ closeWebSearch.addEventListener(
    COMANDI RICERCA WEB
 ===================================================== */
 
-function handleWebCommand(text){
+function handleWebCommand(
+    text
+){
 
     const normalized =
         text
@@ -2648,16 +2636,169 @@ function handleWebCommand(text){
                     query
                 );
 
+
                 addMsg(
                     "Ricerca web: " +
                     query
                 );
+
 
                 return true;
 
             }
 
         }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =====================================================
+   FULLSCREEN J.A.R.V.I.S.
+===================================================== */
+
+async function enterJarvisFullscreen(){
+
+    try{
+
+        if(
+            !document.fullscreenElement
+        ){
+
+            await document
+                .documentElement
+                .requestFullscreen();
+
+            addMsg(
+                "Modalità fullscreen attivata."
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "FULLSCREEN ERROR:",
+            error
+        );
+
+        addMsg(
+            "Impossibile attivare la modalità fullscreen."
+        );
+
+    }
+
+}
+
+
+async function exitJarvisFullscreen(){
+
+    try{
+
+        if(
+            document.fullscreenElement
+        ){
+
+            await document.exitFullscreen();
+
+            addMsg(
+                "Modalità fullscreen disattivata."
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "EXIT FULLSCREEN ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+function handleFullscreenCommand(
+    text
+){
+
+    const normalized =
+        text
+            .toLowerCase()
+            .trim()
+            .replace(
+                /[.,!?]/g,
+                ""
+            );
+
+
+    const enterCommands = [
+
+        "jarvis modalità fullscreen",
+        "jarvis modalita fullscreen",
+
+        "modalità fullscreen",
+        "modalita fullscreen",
+
+        "attiva fullscreen",
+
+        "attiva modalità fullscreen",
+        "attiva modalita fullscreen",
+
+        "schermo intero",
+
+        "attiva schermo intero",
+
+        "fullscreen"
+
+    ];
+
+
+    const exitCommands = [
+
+        "esci dal fullscreen",
+
+        "esci da fullscreen",
+
+        "disattiva fullscreen",
+
+        "disattiva modalità fullscreen",
+        "disattiva modalita fullscreen",
+
+        "esci da schermo intero",
+
+        "esci dallo schermo intero"
+
+    ];
+
+
+    if(
+        enterCommands.includes(
+            normalized
+        )
+    ){
+
+        enterJarvisFullscreen();
+
+        return true;
+
+    }
+
+
+    if(
+        exitCommands.includes(
+            normalized
+        )
+    ){
+
+        exitJarvisFullscreen();
+
+        return true;
 
     }
 
@@ -2833,6 +2974,7 @@ function loadDeviceVoices(){
         voiceSelector.value =
             savedVoice;
 
+
         selectedDeviceVoice =
             deviceVoices[
                 Number(savedVoice)
@@ -3006,7 +3148,8 @@ function speakDevice(
 
                         try{
 
-                            window.speechSynthesis.resume();
+                            window.speechSynthesis
+                                .resume();
 
                         }catch(error){
 
@@ -3421,9 +3564,24 @@ async function processAi(
     text
 ){
 
-    /*
-       PRIMA: RICERCA WEB
-    */
+    /* =================================================
+       1. FULLSCREEN
+    ================================================= */
+
+    if(
+        handleFullscreenCommand(
+            text
+        )
+    ){
+
+        return;
+
+    }
+
+
+    /* =================================================
+       2. RICERCA WEB
+    ================================================= */
 
     if(
         handleWebCommand(
@@ -3436,9 +3594,9 @@ async function processAi(
     }
 
 
-    /*
-       POI: COMANDI MAPPA
-    */
+    /* =================================================
+       3. MAPPA
+    ================================================= */
 
     if(
         handleMapCommand(
@@ -3450,6 +3608,10 @@ async function processAi(
 
     }
 
+
+    /* =================================================
+       4. AI
+    ================================================= */
 
     setState(
         "thinking"

@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link
+<title>J.A.R.V.I.S.</title><link
     rel="stylesheet"
     href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-/>
-
-<style>
+/><style>
 
 *{
     box-sizing:border-box;
@@ -121,6 +110,11 @@ body{
     letter-spacing:1px;
 }
 
+
+/* =====================================================
+   CHAT
+===================================================== */
+
 #chat{
     position:fixed;
     left:50%;
@@ -161,6 +155,11 @@ body{
 
     white-space:pre-wrap;
 }
+
+
+/* =====================================================
+   INPUT
+===================================================== */
 
 .command-wrapper{
     position:fixed;
@@ -324,6 +323,11 @@ body{
         rgba(0,255,255,.1);
 }
 
+
+/* =====================================================
+   VOCE
+===================================================== */
+
 #voiceBtn{
     position:fixed;
 
@@ -463,6 +467,11 @@ body{
     border-color:#00ffff;
     color:white;
 }
+
+
+/* =====================================================
+   MAPPA TATTICA
+===================================================== */
 
 #tacticalMap{
     position:fixed;
@@ -752,189 +761,364 @@ body{
     color:#00ffff!important;
     font-size:18px;
 }
+
+
 /* =====================================================
-   WEB SEARCH PANEL
+   WEB SEARCH DOCK
 ===================================================== */
 
 #webSearchPanel{
     position:fixed;
-    inset:0;
-    z-index:500;
+
+    top:11%;
+    left:2%;
+
+    width:42vw;
+    max-width:680px;
+    min-width:300px;
+
+    max-height:67vh;
+
+    z-index:25;
 
     display:none;
 
-    background:
-        rgba(0,5,7,.96);
+    padding:8px;
 
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    overflow:hidden;
+
+    pointer-events:none;
 }
 
 #webSearchPanel.active{
-    display:block;
-    animation:webPanelIn .3s ease;
+    display:flex;
+
+    flex-wrap:wrap;
+    align-content:flex-start;
+    gap:8px;
+
+    animation:webDockIn .3s ease;
 }
 
-@keyframes webPanelIn{
+@keyframes webDockIn{
+
     from{
         opacity:0;
-        transform:scale(.985);
+        transform:translateX(-15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}
+
+
+/* =====================================================
+   SINGOLO RISULTATO WEB
+===================================================== */
+
+.web-search-card{
+
+    position:relative;
+
+    flex:1 1 calc(50% - 8px);
+
+    min-width:220px;
+
+    height:270px;
+
+    overflow:hidden;
+
+    border:
+        1px solid
+        rgba(0,255,255,.22);
+
+    border-radius:18px;
+
+    background:
+        rgba(2,13,16,.94);
+
+    box-shadow:
+        0 0 25px
+        rgba(0,255,255,.08);
+
+    backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
+
+    pointer-events:auto;
+
+    animation:
+        webCardIn .35s ease;
+}
+
+@keyframes webCardIn{
+
+    from{
+        opacity:0;
+        transform:scale(.92);
     }
 
     to{
         opacity:1;
         transform:scale(1);
     }
+
 }
 
-.web-search-header{
+.web-card-header{
+
     position:absolute;
-    top:18px;
-    left:50%;
-    transform:translateX(-50%);
 
-    z-index:520;
+    top:0;
+    left:0;
+    right:0;
 
-    color:rgba(220,255,255,.9);
+    height:38px;
 
-    font-size:13px;
-    letter-spacing:4px;
+    z-index:10;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 8px 0 13px;
+
+    background:
+        rgba(2,15,18,.96);
+
+    border-bottom:
+        1px solid
+        rgba(0,255,255,.15);
+
+    color:
+        rgba(190,255,255,.75);
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+.web-card-title{
+
+    overflow:hidden;
 
     white-space:nowrap;
 
-    text-shadow:
-        0 0 12px
-        rgba(0,255,255,.3);
+    text-overflow:ellipsis;
+
+    max-width:calc(100% - 38px);
 }
 
-#webSearchFrame{
-    position:absolute;
+.web-card-close{
 
-    top:58px;
-    left:3%;
-    right:3%;
-    bottom:3%;
+    width:25px;
+    height:25px;
 
-    width:94%;
-    height:calc(97% - 58px);
+    flex-shrink:0;
 
     border:
         1px solid
-        rgba(0,255,255,.18);
-
-    border-radius:20px;
-
-    background:#fff;
-
-    box-shadow:
-        0 0 40px
-        rgba(0,255,255,.08);
-}
-
-#closeWebSearch{
-    position:absolute;
-
-    top:14px;
-    right:20px;
-
-    z-index:530;
-
-    width:36px;
-    height:36px;
-
-    border:
-        1px solid
-        rgba(0,255,255,.3);
+        rgba(0,255,255,.2);
 
     border-radius:50%;
 
     background:
-        rgba(0,15,18,.9);
+        rgba(0,20,23,.8);
 
     color:
-        rgba(210,255,255,.8);
+        rgba(190,255,255,.7);
 
     cursor:pointer;
 
-    font-size:20px;
-
     display:flex;
+
     align-items:center;
     justify-content:center;
+
+    font-size:15px;
+
+    transition:.2s;
 }
 
-#closeWebSearch:hover{
+.web-card-close:hover{
+
     color:white;
+
     border-color:#00ffff;
 
-    box-shadow:
-        0 0 15px
-        rgba(0,255,255,.3);
+    background:
+        rgba(0,255,255,.08);
+
 }
+
+.web-card-frame{
+
+    position:absolute;
+
+    top:38px;
+    left:0;
+
+    width:100%;
+
+    height:calc(100% - 38px);
+
+    border:none;
+
+    background:#fff;
+}
+
+
+/* =====================================================
+   MEDIA
+===================================================== */
+
+@media(max-width:1100px){
+
+    #webSearchPanel{
+
+        width:48vw;
+
+    }
+
+    .web-search-card{
+
+        min-width:200px;
+
+        height:250px;
+
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    #webSearchPanel{
+
+        top:8%;
+
+        left:3%;
+
+        width:94%;
+
+        max-width:none;
+
+        max-height:58vh;
+
+        padding:5px;
+
+    }
+
+    #webSearchPanel.active{
+
+        gap:6px;
+
+    }
+
+    .web-search-card{
+
+        flex:1 1 100%;
+
+        min-width:0;
+
+        height:220px;
+
+    }
+
+}
+
+
 @media(max-width:600px){
 
     .jarvis-title{
+
         top:2.2%;
         font-size:23px;
         letter-spacing:5px;
+
     }
 
     .datetime{
+
         top:12px;
         right:13px;
+
     }
 
     .time{
+
         font-size:10px;
+
     }
 
     .date{
+
         font-size:7px;
+
     }
 
     .command-wrapper{
+
         width:
             calc(100% - 24px);
 
         bottom:17px;
+
     }
 
     #textInput{
+
         font-size:13px;
+
     }
 
     #chat{
+
         bottom:80px;
+
     }
 
     #map{
+
         top:3cm;
         right:3cm;
         bottom:3cm;
         left:3cm;
 
         border-radius:22px;
+
     }
 
     .map-overlay{
+
         border-radius:22px;
+
     }
 
     .map-header{
+
         top:2.5%;
         font-size:23px;
         letter-spacing:5px;
+
     }
 
     #closeMap{
+
         top:24px;
         left:25px;
 
         width:34px;
         height:34px;
+
     }
 
     #voiceBtn{
+
         right:12px;
         bottom:70px;
 
@@ -943,166 +1127,111 @@ body{
         font-size:9px;
 
         padding:0 11px;
+
     }
 
     #voicePanel{
+
         right:12px;
         bottom:112px;
 
         width:
             calc(100% - 24px);
+
     }
 
 }
+
 
 @media(max-width:430px){
 
     #map{
+
         top:2.2cm;
         right:2.2cm;
         bottom:2.2cm;
         left:2.2cm;
+
     }
 
 }
 
-</style>
-
-</head>
-
-<body>
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-<div
+</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
     class="jarvis-title"
     id="jarvisTitle"
 >
     J.A.R.V.I.S
+</div><div class="datetime"><div id="clock" class="time">
+    00:00:00
 </div>
 
-<div class="datetime">
-
-    <div id="clock" class="time">
-        00:00:00
-    </div>
-
-    <div id="date" class="date">
-        00 AGO 2026
-    </div>
-
+<div id="date" class="date">
+    00 AGO 2026
 </div>
 
+</div><!-- =====================================================
+     MAPPA TATTICA
+===================================================== --><div id="tacticalMap"><div id="map"></div>
 
-<div id="tacticalMap">
+<div class="map-overlay"></div>
 
-    <div id="map"></div>
-
-    <div class="map-overlay"></div>
-
-    <div class="map-header">
-        TACTICAL MAP
-    </div>
-
-    <button
-        id="closeMap"
-        title="Chiudi mappa"
-        aria-label="Chiudi mappa"
-    >
-        ×
-    </button>
-
+<div class="map-header">
+    TACTICAL MAP
 </div>
 
-
-</div>
-
-
-<!-- =====================================================
-     WEB SEARCH
-===================================================== -->
-
-<div id="webSearchPanel">
-
-    <div class="web-search-header">
-        J.A.R.V.I.S. // WEB SEARCH
-    </div>
-
-    <button
-        id="closeWebSearch"
-        title="Torna a JARVIS"
-        aria-label="Chiudi ricerca web"
-    >
-        ×
-    </button>
-
-    <iframe
-        id="webSearchFrame"
-        title="Ricerca web JARVIS"
-        loading="lazy"
-    ></iframe>
-
-</div>
-
-
-<div id="chat"></div>
-
-
-<div class="command-wrapper">
-
-    <input
-        id="textInput"
-        type="text"
-        autocomplete="off"
-        placeholder="Chiedi qualcosa a JARVIS..."
-    >
-
-    <button
-        id="micBtn"
-        aria-label="Microfono"
-    >
-        <span class="mic-icon"></span>
-    </button>
-
-    <button id="sendBtn">
-        INVIA
-    </button>
-
-</div>
-
-
-<button id="voiceBtn">
-    ⚙ VOCE
+<button
+    id="closeMap"
+    title="Chiudi mappa"
+    aria-label="Chiudi mappa"
+>
+    ×
 </button>
 
+</div><!-- =====================================================
+     WEB SEARCH
+===================================================== --><div id="webSearchPanel"></div><div id="chat"></div><!-- =====================================================
+     INPUT
+===================================================== --><div class="command-wrapper"><input
+    id="textInput"
+    type="text"
+    autocomplete="off"
+    placeholder="Chiedi qualcosa a JARVIS..."
+>
 
-<div id="voicePanel">
+<button
+    id="micBtn"
+    aria-label="Microfono"
+>
+    <span class="mic-icon"></span>
+</button>
 
-    <div class="voice-title">
-        VOCE J.A.R.V.I.S.
-    </div>
+<button id="sendBtn">
+    INVIA
+</button>
 
-    <select id="voiceSelector">
-        <option value="">
-            Voce dispositivo automatica
-        </option>
-    </select>
-
-    <button id="voiceTest">
-        TESTA VOCE
-    </button>
-
+</div><!-- =====================================================
+     VOCE
+===================================================== --><button id="voiceBtn">
+    ⚙ VOCE
+</button><div id="voicePanel"><div class="voice-title">
+    VOCE J.A.R.V.I.S.
 </div>
 
+<select id="voiceSelector">
 
-<script
+    <option value="">
+        Voce dispositivo automatica
+    </option>
+
+</select>
+
+<button id="voiceTest">
+    TESTA VOCE
+</button>
+
+</div><script
     src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script>
-
-
-<script type="importmap">
+</script><script type="importmap">
 
 {
     "imports":{
@@ -1111,10 +1240,7 @@ body{
     }
 }
 
-</script>
-
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -2491,8 +2617,9 @@ function handleMapCommand(
 
 }
 
+
 /* =====================================================
-   RICERCA WEB DENTRO JARVIS
+   RICERCA WEB
 ===================================================== */
 
 const webSearchPanel =
@@ -2500,72 +2627,207 @@ const webSearchPanel =
         "webSearchPanel"
     );
 
-const webSearchFrame =
-    document.getElementById(
-        "webSearchFrame"
-    );
 
-const closeWebSearch =
-    document.getElementById(
-        "closeWebSearch"
-    );
+let webSearchCounter =
+    0;
 
 
-function openWebSearch(query){
+/*
+   Crea un nuovo pannello web.
+
+   Ogni ricerca rimane aperta.
+   Le ricerche successive vengono
+   aggiunte accanto alle precedenti.
+*/
+
+function openWebSearch(
+    query
+){
 
     if(!query){
         return;
     }
 
+
+    webSearchCounter++;
+
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+
+    card.className =
+        "web-search-card";
+
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+
+    header.className =
+        "web-card-header";
+
+
+    const title =
+        document.createElement(
+            "div"
+        );
+
+
+    title.className =
+        "web-card-title";
+
+
+    title.textContent =
+        "WEB // " + query;
+
+
+    const close =
+        document.createElement(
+            "button"
+        );
+
+
+    close.className =
+        "web-card-close";
+
+    close.type =
+        "button";
+
+    close.textContent =
+        "×";
+
+    close.title =
+        "Chiudi ricerca";
+
+
+    close.addEventListener(
+        "click",
+        () => {
+
+            card.remove();
+
+
+            if(
+                webSearchPanel.children.length === 0
+            ){
+
+                webSearchPanel.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    header.appendChild(
+        title
+    );
+
+
+    header.appendChild(
+        close
+    );
+
+
+    const frame =
+        document.createElement(
+            "iframe"
+        );
+
+
+    frame.className =
+        "web-card-frame";
+
+
+    frame.title =
+        "Ricerca web JARVIS";
+
+
+    frame.loading =
+        "lazy";
+
+
+    frame.referrerPolicy =
+        "no-referrer-when-downgrade";
+
+
     const url =
         "https://www.google.com/search?igu=1&q=" +
-        encodeURIComponent(query);
+        encodeURIComponent(
+            query
+        );
 
-    webSearchFrame.src =
+
+    frame.src =
         url;
+
+
+    card.appendChild(
+        header
+    );
+
+
+    card.appendChild(
+        frame
+    );
+
+
+    webSearchPanel.appendChild(
+        card
+    );
+
 
     webSearchPanel.classList.add(
         "active"
     );
 
+
+    /*
+       Mantiene visibile il pannello
+       più recente.
+    */
+
+    requestAnimationFrame(
+        () => {
+
+            card.scrollIntoView({
+                behavior:"smooth",
+                block:"nearest",
+                inline:"nearest"
+            });
+
+        }
+    );
+
 }
 
 
+/* =====================================================
+   CHIUSURA GENERALE RICERCHE
+===================================================== */
+
 function closeWebSearchPanel(){
+
+    webSearchPanel.innerHTML =
+        "";
 
     webSearchPanel.classList.remove(
         "active"
     );
 
-    /*
-       Svuota l'iframe quando si torna
-       alla schermata principale.
-    */
-
-    setTimeout(
-        () => {
-
-            webSearchFrame.src =
-                "about:blank";
-
-        },
-        250
-    );
-
 }
 
 
-closeWebSearch.addEventListener(
-    "click",
-    closeWebSearchPanel
-);
-
-
-/* =====================================================
-   COMANDI RICERCA WEB
-===================================================== */
-
-function handleWebCommand(text){
+function handleWebCommand(
+    text
+){
 
     const normalized =
         text
@@ -2615,10 +2877,12 @@ function handleWebCommand(text){
                     query
                 );
 
+
                 addMsg(
                     "Ricerca web: " +
                     query
                 );
+
 
                 return true;
 
@@ -2632,6 +2896,8 @@ function handleWebCommand(text){
     return false;
 
 }
+
+
 /* =====================================================
    MESSAGGIO
 ===================================================== */
@@ -2966,12 +3232,6 @@ function speakDevice(
                     );
 
 
-                /*
-                   Su alcuni browser Android
-                   la sintesi può rimanere sospesa.
-                   Questo piccolo resume la mantiene attiva.
-                */
-
                 setTimeout(
                     () => {
 
@@ -3265,12 +3525,6 @@ async function speak(
     }
 
 
-    /*
-       Prima prova ElevenLabs.
-       Se fallisce, passa automaticamente
-       alla voce del dispositivo.
-    */
-
     const elevenSuccess =
         await speakElevenLabs(
             text
@@ -3305,12 +3559,6 @@ async function speak(
 voiceTest.addEventListener(
     "click",
     async () => {
-
-        /*
-           IMPORTANTE:
-           Il test NON usa ElevenLabs.
-           Non consuma crediti.
-        */
 
         const testText =
             "J.A.R.V.I.S. operativo. Sistema vocale funzionante.";
@@ -3404,10 +3652,11 @@ async function processAi(
     text
 ){
 
-    /* =================================================
-       PRIMA: RICERCA WEB
-       La ricerca web ha priorità sulla mappa
-    ================================================= */
+    /*
+       IMPORTANTE:
+       La ricerca web viene controllata
+       PRIMA della mappa.
+    */
 
     if(
         handleWebCommand(
@@ -3419,10 +3668,6 @@ async function processAi(
 
     }
 
-
-    /* =================================================
-       POI: COMANDI MAPPA
-    ================================================= */
 
     if(
         handleMapCommand(
@@ -3607,11 +3852,6 @@ async function processAi(
             reply
         );
 
-
-        /*
-           La voce non blocca
-           la risposta scritta.
-        */
 
         speak(
             reply
@@ -3952,7 +4192,5 @@ setState(
     "idle"
 );
 
-</script>
-
-</body>
+</script></body>
 </html>

@@ -2745,10 +2745,9 @@ async function processAi(text){
            Parla con ElevenLabs
         */
 
-        await speak(
-            reply
-        );
-
+        speak(reply).catch(error => {
+    console.error("TTS:", error);
+});
 
     }catch(error){
 

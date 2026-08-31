@@ -1,20 +1,34 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"  content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
 
-<title>J.A.R.V.I.S.</title><link  
-    rel="stylesheet"  
-    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"  
-/><style>  :root{
+<head>
 
---jarvis-main:#FFD21A;  
---jarvis-bright:#FFF36A;  
---jarvis-light:#FFF8B0;  
---jarvis-dark:#4D3900;  
+<meta charset="UTF-8">
 
---jarvis-glow:  
-    rgba(0,102,255,.65);  
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
---jarvis-glow-light:  
-    rgba(0,168,255,.35);
+<title>J.A.R.V.I.S.</title>
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
+/>
+
+<style>
+
+:root{
+
+--jarvis-main:#FFD21A;
+--jarvis-bright:#FFF36A;
+--jarvis-light:#FFF8B0;
+--jarvis-dark:#4D3900;
+
+--jarvis-glow:
+    rgba(255,210,26,.65);
+
+--jarvis-glow-light:
+    rgba(255,243,106,.35);
 
 }
 
@@ -34,18 +48,17 @@ width:100%;
 height:100%;
 overflow:hidden;
 
-background:#01030A;  
+background:#01030A;
 
 font-family:Arial,sans-serif;
-
 }
 
 body{
 background:
 radial-gradient(
 circle at center,
-#07152B 0%,
-#020817 48%,
+#171405 0%,
+#090803 48%,
 #000000 100%
 );
 }
@@ -68,18 +81,17 @@ VIGNETTE
 position:fixed;
 inset:0;
 
-z-index:3;  
+z-index:3;
 
-pointer-events:none;  
+pointer-events:none;
 
-background:  
-    radial-gradient(  
-        circle at center,  
-        transparent 30%,  
-        rgba(0,0,0,.2) 65%,  
-        rgba(0,0,0,.8) 100%  
-    );
-
+background:
+radial-gradient(
+    circle at center,
+    transparent 30%,
+    rgba(0,0,0,.2) 65%,
+    rgba(0,0,0,.8) 100%
+);
 }
 
 /* =====================================================
@@ -88,38 +100,40 @@ TITOLO
 
 .jarvis-title{
 
-position:fixed;  
+position:fixed;
 
-top:2.4%;  
-left:50%;  
+top:2.4%;
+left:50%;
 
-transform:  
-    translateX(-50%);  
+transform:
+    translateX(-50%);
 
-z-index:30;  
+z-index:30;
 
-color:  
-    rgba(220,240,255,.9);  
+color:
+    rgba(255,248,190,.95);
 
-font-size:  
-    clamp(20px,2.8vw,31px);  
+font-size:
+    clamp(20px,2.8vw,31px);
 
-font-weight:300;  
+font-weight:300;
 
-letter-spacing:  
-    clamp(5px,1vw,8px);  
+letter-spacing:
+    clamp(5px,1vw,8px);
 
-white-space:nowrap;  
+white-space:nowrap;
 
-text-shadow:  
-    0 0 10px  
-    rgba(0,102,255,.45),  
+text-shadow:
+    0 0 10px
+    rgba(255,210,26,.65),
 
-    0 0 25px  
-    rgba(0,168,255,.2);  
+    0 0 25px
+    rgba(255,243,106,.35),
+
+    0 0 45px
+    rgba(255,190,0,.18);
 
 pointer-events:none;
-
 }
 
 /* =====================================================
@@ -128,51 +142,51 @@ DATA / ORA
 
 .datetime{
 
-position:fixed;  
+position:fixed;
 
-top:18px;  
-right:24px;  
+top:18px;
+right:24px;
 
-z-index:30;  
+z-index:30;
 
-display:flex;  
+display:flex;
 
-flex-direction:column;  
+flex-direction:column;
 
-align-items:flex-end;  
+align-items:flex-end;
 
-gap:3px;  
+gap:3px;
 
-font-family:monospace;  
+font-family:monospace;
 
 pointer-events:none;
-
 }
 
 .time{
 
-color:  
-    rgba(100,180,255,.8);  
+color:
+    rgba(255,225,80,.9);
 
-font-size:11px;  
+font-size:11px;
 
-letter-spacing:2px;  
+letter-spacing:2px;
 
-text-shadow:  
-    0 0 8px  
-    rgba(0,102,255,.55);
+text-shadow:
+    0 0 8px
+    rgba(255,210,26,.7),
 
+    0 0 18px
+    rgba(255,190,0,.25);
 }
 
 .date{
 
-color:  
-    rgba(100,170,255,.5);  
+color:
+    rgba(255,220,90,.55);
 
-font-size:8px;  
+font-size:8px;
 
 letter-spacing:1px;
-
 }
 
 /* =====================================================
@@ -181,61 +195,62 @@ CHAT
 
 #chat{
 
-position:fixed;  
+position:fixed;
 
-left:50%;  
-bottom:92px;  
+left:50%;
+bottom:92px;
 
-transform:  
-    translateX(-50%);  
+transform:
+    translateX(-50%);
 
-z-index:40;  
+z-index:40;
 
-width:  
-    min(620px,88%);  
+width:
+    min(620px,88%);
 
-text-align:center;  
+text-align:center;
 
 pointer-events:none;
-
 }
 
 .msg{
 
-display:inline-block;  
+display:inline-block;
 
-max-width:100%;  
+max-width:100%;
 
-padding:10px 18px;  
+padding:10px 18px;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.4);  
+border:
+    1px solid
+    rgba(255,210,26,.45);
 
-border-radius:24px;  
+border-radius:24px;
 
-background:  
-    rgba(2,12,28,.5);  
+background:
+    rgba(24,18,2,.52);
 
-backdrop-filter:  
-    blur(14px);  
+backdrop-filter:
+    blur(14px);
 
--webkit-backdrop-filter:  
-    blur(14px);  
+-webkit-backdrop-filter:
+    blur(14px);
 
-color:  
-    rgba(235,245,255,.94);  
+color:
+    rgba(255,250,220,.96);
 
-font-size:12px;  
+font-size:12px;
 
-line-height:1.45;  
+line-height:1.45;
 
-white-space:pre-wrap;  
+white-space:pre-wrap;
 
-box-shadow:  
-    0 0 18px  
-    rgba(0,102,255,.08);
+box-shadow:
+    0 0 18px
+    rgba(255,210,26,.1),
 
+    0 0 35px
+    rgba(255,190,0,.04);
 }
 
 /* =====================================================
@@ -244,63 +259,61 @@ COMMAND BAR
 
 .command-wrapper{
 
-position:fixed;  
+position:fixed;
 
-left:50%;  
-bottom:23px;  
+left:50%;
+bottom:23px;
 
-transform:  
-    translateX(-50%);  
+transform:
+    translateX(-50%);
 
-z-index:50;  
+z-index:50;
 
-width:  
-    min(650px,90%);  
+width:
+    min(650px,90%);
 
-display:flex;  
+display:flex;
 
-align-items:center;  
+align-items:center;
 
-padding:  
-    6px 7px 6px 20px;  
+padding:
+    6px 7px 6px 20px;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.5);  
+border:
+    1px solid
+    rgba(255,210,26,.5);
 
-border-radius:40px;  
+border-radius:40px;
 
-background:  
-    rgba(2,10,24,.58);  
+background:
+    rgba(20,15,2,.62);
 
-backdrop-filter:  
-    blur(20px);  
+backdrop-filter:
+    blur(20px);
 
--webkit-backdrop-filter:  
-    blur(20px);  
+-webkit-backdrop-filter:
+    blur(20px);
 
-box-shadow:  
-    0 0 30px  
-    rgba(0,102,255,.12),  
+box-shadow:
+    0 0 30px
+    rgba(255,210,26,.12),
 
-    inset 0 0 20px  
-    rgba(0,102,255,.025);
-
+    inset 0 0 20px
+    rgba(255,210,26,.025);
 }
 
 .command-wrapper:focus-within{
 
-border-color:  
-    var(--jarvis-bright);  
+border-color:
+    var(--jarvis-bright);
 
-box-shadow:  
+box-shadow:
 
-    0 0 25px  
-    rgba(0,102,255,.28),  
+    0 0 25px
+    rgba(255,210,26,.3),
 
-    0 0 55px  
-    rgba(0,168,255,.08);
-
+    0 0 55px
+    rgba(255,243,106,.1);
 }
 
 /* =====================================================
@@ -309,31 +322,29 @@ INPUT
 
 #textInput{
 
-flex:1;  
+flex:1;
 
-min-width:0;  
+min-width:0;
 
-border:none;  
+border:none;
 
-outline:none;  
+outline:none;
 
-background:transparent;  
+background:transparent;
 
-color:white;  
+color:white;
 
-font-family:Arial,sans-serif;  
+font-family:Arial,sans-serif;
 
-font-size:14px;  
+font-size:14px;
 
 padding:12px 5px;
-
 }
 
 #textInput::placeholder{
 
-color:  
-    rgba(150,190,230,.38);
-
+color:
+    rgba(230,210,130,.42);
 }
 
 /* =====================================================
@@ -342,92 +353,87 @@ MICROFONO
 
 #micBtn{
 
-width:34px;  
-height:34px;  
+width:34px;
+height:34px;
 
-margin-right:7px;  
+margin-right:7px;
 
-border:none;  
+border:none;
 
-background:transparent;  
+background:transparent;
 
-color:  
-    rgba(150,210,255,.8);  
+color:
+    rgba(255,235,150,.85);
 
-cursor:pointer;  
+cursor:pointer;
 
-display:flex;  
+display:flex;
 
-align-items:center;  
+align-items:center;
 justify-content:center;
-
 }
 
 .mic-icon{
 
-width:8px;  
-height:14px;  
+width:8px;
+height:14px;
 
-border:  
-    1.3px solid  
-    currentColor;  
+border:
+    1.3px solid
+    currentColor;
 
-border-radius:60px;  
+border-radius:60px;
 
 position:relative;
-
 }
 
 .mic-icon::after{
 
-content:"";  
+content:"";
 
-position:absolute;  
+position:absolute;
 
-left:50%;  
-bottom:-6px;  
+left:50%;
+bottom:-6px;
 
-width:12px;  
-height:7px;  
+width:12px;
+height:7px;
 
-transform:  
-    translateX(-50%);  
+transform:
+    translateX(-50%);
 
-border:  
-    1.3px solid  
-    currentColor;  
+border:
+    1.3px solid
+    currentColor;
 
-border-top:none;  
+border-top:none;
 
-border-radius:  
+border-radius:
     0 0 8px 8px;
-
 }
 
 #micBtn:hover{
 
-color:  
-    var(--jarvis-bright);  
+color:
+    var(--jarvis-bright);
 
-filter:  
-    drop-shadow(  
-        0 0 8px  
-        rgba(0,168,255,.7)  
+filter:
+    drop-shadow(
+        0 0 8px
+        rgba(255,230,70,.8)
     );
-
 }
 
 #micBtn.active{
 
-color:  
-    #8CC8FF;  
+color:
+    #FFF7A0;
 
-filter:  
-    drop-shadow(  
-        0 0 8px  
-        rgba(0,102,255,.9)  
+filter:
+    drop-shadow(
+        0 0 8px
+        rgba(255,210,26,.95)
     );
-
 }
 
 /* =====================================================
@@ -436,46 +442,44 @@ INVIA
 
 #sendBtn{
 
-height:39px;  
+height:39px;
 
-padding:0 17px;  
+padding:0 17px;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.5);  
+border:
+    1px solid
+    rgba(255,210,26,.5);
 
-border-radius:22px;  
+border-radius:22px;
 
-background:  
-    rgba(0,102,255,.08);  
+background:
+    rgba(255,210,26,.08);
 
-color:  
-    rgba(190,225,255,.88);  
+color:
+    rgba(255,240,170,.9);
 
-font-size:10px;  
+font-size:10px;
 
-letter-spacing:2px;  
+letter-spacing:2px;
 
-cursor:pointer;  
+cursor:pointer;
 
 transition:.2s;
-
 }
 
 #sendBtn:hover{
 
-color:white;  
+color:white;
 
-border-color:  
-    var(--jarvis-bright);  
+border-color:
+    var(--jarvis-bright);
 
-background:  
-    rgba(0,102,255,.18);  
+background:
+    rgba(255,210,26,.18);
 
-box-shadow:  
-    0 0 15px  
-    rgba(0,102,255,.25);
-
+box-shadow:
+    0 0 15px
+    rgba(255,210,26,.3);
 }
 
 /* =====================================================
@@ -484,53 +488,51 @@ VOCE
 
 #voiceBtn{
 
-position:fixed;  
+position:fixed;
 
-right:22px;  
-bottom:24px;  
+right:22px;
+bottom:24px;
 
-z-index:60;  
+z-index:60;
 
-height:39px;  
+height:39px;
 
-padding:0 15px;  
+padding:0 15px;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.5);  
+border:
+    1px solid
+    rgba(255,210,26,.5);
 
-border-radius:22px;  
+border-radius:22px;
 
-background:  
-    rgba(2,10,24,.82);  
+background:
+    rgba(15,11,2,.84);
 
-color:  
-    rgba(180,220,255,.82);  
+color:
+    rgba(255,235,160,.86);
 
-font-size:10px;  
+font-size:10px;
 
-letter-spacing:1.5px;  
+letter-spacing:1.5px;
 
-cursor:pointer;  
+cursor:pointer;
 
-backdrop-filter:  
-    blur(12px);  
+backdrop-filter:
+    blur(12px);
 
 transition:.2s;
-
 }
 
 #voiceBtn:hover{
 
-color:white;  
+color:white;
 
-border-color:  
-    var(--jarvis-bright);  
+border-color:
+    var(--jarvis-bright);
 
-box-shadow:  
-    0 0 15px  
-    rgba(0,102,255,.4);
-
+box-shadow:
+    0 0 15px
+    rgba(255,210,26,.45);
 }
 
 /* =====================================================
@@ -539,120 +541,114 @@ VOICE PANEL
 
 #voicePanel{
 
-position:fixed;  
+position:fixed;
 
-right:22px;  
-bottom:72px;  
+right:22px;
+bottom:72px;
 
-z-index:100;  
+z-index:100;
 
-width:  
-    min(330px,calc(100% - 30px));  
+width:
+    min(330px,calc(100% - 30px));
 
-padding:15px;  
+padding:15px;
 
-display:none;  
+display:none;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.45);  
+border:
+    1px solid
+    rgba(255,210,26,.45);
 
-border-radius:18px;  
+border-radius:18px;
 
-background:  
-    rgba(1,8,20,.96);  
+background:
+    rgba(10,8,1,.97);
 
-backdrop-filter:  
-    blur(20px);  
+backdrop-filter:
+    blur(20px);
 
-box-shadow:  
-    0 0 35px  
-    rgba(0,102,255,.25);
-
+box-shadow:
+    0 0 35px
+    rgba(255,210,26,.25);
 }
 
 #voicePanel.active{
 
 display:block;
-
 }
 
 .voice-title{
 
-color:  
-    rgba(210,235,255,.95);  
+color:
+    rgba(255,245,190,.96);
 
-font-size:11px;  
+font-size:11px;
 
-letter-spacing:2px;  
+letter-spacing:2px;
 
 margin-bottom:10px;
-
 }
 
 #voiceSelector{
 
-width:100%;  
+width:100%;
 
-padding:11px;  
+padding:11px;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.35);  
+border:
+    1px solid
+    rgba(255,210,26,.35);
 
-border-radius:10px;  
+border-radius:10px;
 
-outline:none;  
+outline:none;
 
-background:  
-    rgba(0,15,38,.95);  
+background:
+    rgba(25,19,2,.96);
 
-color:  
-    rgba(215,235,255,.9);  
+color:
+    rgba(255,240,170,.92);
 
 font-size:11px;
-
 }
 
 #voiceTest{
 
-width:100%;  
+width:100%;
 
-margin-top:10px;  
+margin-top:10px;
 
-padding:9px;  
+padding:9px;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.35);  
+border:
+    1px solid
+    rgba(255,210,26,.35);
 
-border-radius:10px;  
+border-radius:10px;
 
-background:  
-    rgba(0,102,255,.07);  
+background:
+    rgba(255,210,26,.07);
 
-color:  
-    rgba(190,225,255,.8);  
+color:
+    rgba(255,235,160,.82);
 
-cursor:pointer;  
+cursor:pointer;
 
-font-size:10px;  
+font-size:10px;
 
 letter-spacing:1px;
-
 }
 
 #voiceTest:hover{
 
-border-color:  
-    var(--jarvis-bright);  
+border-color:
+    var(--jarvis-bright);
 
-color:white;  
+color:white;
 
-box-shadow:  
-    0 0 12px  
-    rgba(0,102,255,.2);
-
+box-shadow:
+    0 0 12px
+    rgba(255,210,26,.25);
 }
 
 /* =====================================================
@@ -661,52 +657,49 @@ MAPPA TATTICA
 
 #tacticalMap{
 
-position:fixed;  
+position:fixed;
 
-inset:0;  
+inset:0;
 
-z-index:20;  
+z-index:20;
 
-display:none;  
+display:none;
 
-background:  
+background:
 
-    radial-gradient(  
-        circle at center,  
-        #08162D 0%,  
-        #020817 65%,  
-        #000000 100%  
+    radial-gradient(
+        circle at center,
+        #171505 0%,
+        #080803 65%,
+        #000000 100%
     );
-
 }
 
 #tacticalMap.active{
 
-display:block;  
+display:block;
 
-animation:  
+animation:
     mapIn .45s ease;
-
 }
 
 @keyframes mapIn{
 
-from{  
+from{
 
-    opacity:0;  
+    opacity:0;
 
-    transform:  
-        scale(1.015);  
-}  
-
-to{  
-
-    opacity:1;  
-
-    transform:  
-        scale(1);  
+    transform:
+        scale(1.015);
 }
 
+to{
+
+    opacity:1;
+
+    transform:
+        scale(1);
+}
 }
 
 /* =====================================================
@@ -715,41 +708,43 @@ HEADER MAPPA
 
 .map-header{
 
-position:absolute;  
+position:absolute;
 
-top:2.4%;  
-left:50%;  
+top:2.4%;
+left:50%;
 
-transform:  
-    translateX(-50%);  
+transform:
+    translateX(-50%);
 
-z-index:600;  
+z-index:600;
 
-color:  
-    rgba(210,235,255,.95);  
+color:
+    rgba(255,245,190,.96);
 
-font-family:Arial,sans-serif;  
+font-family:Arial,sans-serif;
 
-font-size:  
-    clamp(24px,4vw,42px);  
+font-size:
+    clamp(24px,4vw,42px);
 
-font-weight:300;  
+font-weight:300;
 
-letter-spacing:  
-    clamp(6px,1.3vw,12px);  
+letter-spacing:
+    clamp(6px,1.3vw,12px);
 
-white-space:nowrap;  
+white-space:nowrap;
 
-text-shadow:  
+text-shadow:
 
-    0 0 12px  
-    rgba(0,102,255,.6),  
+    0 0 12px
+    rgba(255,210,26,.7),
 
-    0 0 30px  
-    rgba(0,168,255,.25);  
+    0 0 30px
+    rgba(255,243,106,.3),
+
+    0 0 50px
+    rgba(255,190,0,.15);
 
 pointer-events:none;
-
 }
 
 /* =====================================================
@@ -758,53 +753,51 @@ MAPPA
 
 #map{
 
-position:absolute;  
+position:absolute;
 
-top:3cm;  
-right:3cm;  
-bottom:3cm;  
-left:3cm;  
+top:3cm;
+right:3cm;
+bottom:3cm;
+left:3cm;
 
-overflow:hidden;  
+overflow:hidden;
 
-border-radius:28px;  
+border-radius:28px;
 
-background:#071012;  
+background:#10100a;
 
-box-shadow:  
+box-shadow:
 
-    0 0 35px  
-    rgba(0,0,0,.65),  
+    0 0 35px
+    rgba(0,0,0,.65),
 
-    0 0 70px  
-    rgba(0,102,255,.12);  
+    0 0 70px
+    rgba(255,210,26,.12);
 
-border:  
-    1px solid  
-    rgba(0,102,255,.3);
-
+border:
+    1px solid
+    rgba(255,210,26,.3);
 }
 
 .map-overlay{
 
-position:absolute;  
+position:absolute;
 
-inset:0;  
+inset:0;
 
-z-index:400;  
+z-index:400;
 
-pointer-events:none;  
+pointer-events:none;
 
-border-radius:28px;  
+border-radius:28px;
 
-box-shadow:  
+box-shadow:
 
-    inset 0 0 80px  
-    rgba(0,0,0,.28),  
+    inset 0 0 80px
+    rgba(0,0,0,.28),
 
-    inset 0 0 25px  
-    rgba(0,102,255,.06);
-
+    inset 0 0 25px
+    rgba(255,210,26,.06);
 }
 
 /* =====================================================
@@ -813,55 +806,53 @@ CHIUSURA MAPPA
 
 #closeMap{
 
-position:absolute;  
+position:absolute;
 
-top:28px;  
-left:34px;  
+top:28px;
+left:34px;
 
-z-index:700;  
+z-index:700;
 
-width:38px;  
-height:38px;  
+width:38px;
+height:38px;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.6);  
+border:
+    1px solid
+    rgba(255,210,26,.6);
 
-border-radius:50%;  
+border-radius:50%;
 
-background:  
-    rgba(0,10,25,.9);  
+background:
+    rgba(15,11,2,.92);
 
-color:  
-    rgba(190,225,255,.9);  
+color:
+    rgba(255,240,170,.92);
 
-cursor:pointer;  
+cursor:pointer;
 
-font-size:19px;  
+font-size:19px;
 
-display:flex;  
+display:flex;
 
-align-items:center;  
-justify-content:center;  
+align-items:center;
+justify-content:center;
 
-backdrop-filter:  
-    blur(10px);  
+backdrop-filter:
+    blur(10px);
 
 transition:.2s;
-
 }
 
 #closeMap:hover{
 
-color:white;  
+color:white;
 
-border-color:  
-    var(--jarvis-bright);  
+border-color:
+    var(--jarvis-bright);
 
-box-shadow:  
-    0 0 15px  
-    rgba(0,102,255,.5);
-
+box-shadow:
+    0 0 15px
+    rgba(255,210,26,.5);
 }
 
 /* =====================================================
@@ -870,57 +861,52 @@ CONTROLLI MAPLIBRE
 
 .maplibregl-ctrl-group{
 
-background:  
-    rgba(0,10,25,.9)!important;  
+background:
+    rgba(15,11,2,.92)!important;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.4)!important;  
+border:
+    1px solid
+    rgba(255,210,26,.4)!important;
 
-border-radius:12px!important;  
+border-radius:12px!important;
 
-overflow:hidden;  
+overflow:hidden;
 
-box-shadow:  
-    0 0 15px  
-    rgba(0,102,255,.15);
-
+box-shadow:
+    0 0 15px
+    rgba(255,210,26,.15);
 }
 
 .maplibregl-ctrl-group button{
 
-background:  
-    transparent!important;  
+background:
+    transparent!important;
 
-color:  
-    #9FD8FF!important;
-
+color:
+    #FFF8B0!important;
 }
 
 .maplibregl-ctrl-group button:hover{
 
-background:  
-    rgba(0,102,255,.15)!important;
-
+background:
+    rgba(255,210,26,.15)!important;
 }
 
 .maplibregl-ctrl-attrib{
 
-background:  
-    rgba(0,5,15,.75)!important;  
+background:
+    rgba(5,4,0,.78)!important;
 
-color:  
-    rgba(150,200,255,.4)!important;  
+color:
+    rgba(255,220,120,.45)!important;
 
 font-size:8px!important;
-
 }
 
 .maplibregl-ctrl-attrib a{
 
-color:  
-    rgba(100,180,255,.55)!important;
-
+color:
+    rgba(255,210,70,.6)!important;
 }
 
 /* =====================================================
@@ -929,86 +915,83 @@ MARKER JARVIS
 
 .jarvis-map-marker{
 
-width:20px;  
-height:20px;  
+width:20px;
+height:20px;
 
-border-radius:50%;  
+border-radius:50%;
 
-border:  
-    2px solid  
-    #008CFF;  
+border:
+    2px solid
+    #FFD21A;
 
-background:  
-    rgba(0,102,255,.2);  
+background:
+    rgba(255,210,26,.2);
 
-box-shadow:  
+box-shadow:
 
-    0 0 15px  
-    rgba(0,102,255,1),  
+    0 0 15px
+    rgba(255,210,26,1),
 
-    0 0 35px  
-    rgba(0,168,255,.5);  
+    0 0 35px
+    rgba(255,243,106,.5);
 
-position:relative;  
+position:relative;
 
-animation:  
+animation:
     markerPulse 1.5s infinite;
-
 }
 
 .jarvis-map-marker::after{
 
-content:"";  
+content:"";
 
-position:absolute;  
+position:absolute;
 
-left:50%;  
-top:50%;  
+left:50%;
+top:50%;
 
-width:5px;  
-height:5px;  
+width:5px;
+height:5px;
 
-transform:  
-    translate(-50%,-50%);  
+transform:
+    translate(-50%,-50%);
 
-border-radius:50%;  
+border-radius:50%;
 
-background:#E8F5FF;  
+background:#FFFBE0;
 
-box-shadow:  
-    0 0 8px  
-    #00A8FF;
-
+box-shadow:
+    0 0 8px
+    #FFF36A;
 }
 
 @keyframes markerPulse{
 
-0%,100%{  
+0%,100%{
 
-    transform:scale(1);  
+    transform:scale(1);
 
-    box-shadow:  
+    box-shadow:
 
-        0 0 15px  
-        rgba(0,102,255,.9),  
+        0 0 15px
+        rgba(255,210,26,.9),
 
-        0 0 35px  
-        rgba(0,168,255,.4);  
-}  
-
-50%{  
-
-    transform:scale(1.18);  
-
-    box-shadow:  
-
-        0 0 22px  
-        rgba(0,140,255,1),  
-
-        0 0 50px  
-        rgba(0,168,255,.6);  
+        0 0 35px
+        rgba(255,243,106,.4);
 }
 
+50%{
+
+    transform:scale(1.18);
+
+    box-shadow:
+
+        0 0 22px
+        rgba(255,220,40,1),
+
+        0 0 50px
+        rgba(255,243,106,.6);
+}
 }
 
 /* =====================================================
@@ -1017,33 +1000,31 @@ POPUP
 
 .maplibregl-popup-content{
 
-background:  
-    rgba(2,10,25,.97)!important;  
+background:
+    rgba(15,11,2,.97)!important;
 
-color:  
-    rgba(220,240,255,.95)!important;  
+color:
+    rgba(255,245,200,.96)!important;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.45);  
+border:
+    1px solid
+    rgba(255,210,26,.45);
 
-border-radius:10px;  
+border-radius:10px;
 
-padding:10px 14px;  
+padding:10px 14px;
 
-box-shadow:  
-    0 0 20px  
-    rgba(0,102,255,.25);
-
+box-shadow:
+    0 0 20px
+    rgba(255,210,26,.25);
 }
 
 .maplibregl-popup-close-button{
 
-color:  
-    #00A8FF!important;  
+color:
+    #FFF36A!important;
 
 font-size:18px;
-
 }
 
 /* =====================================================
@@ -1052,163 +1033,156 @@ WEB SEARCH
 
 #webSearchPanel{
 
-position:fixed;  
+position:fixed;
 
-inset:0;  
+inset:0;
 
-z-index:500;  
+z-index:500;
 
-display:none;  
+display:none;
 
-background:  
-    rgba(0,5,15,.96);  
+background:
+    rgba(5,4,0,.96);
 
-backdrop-filter:  
-    blur(18px);  
-
--webkit-backdrop-filter:  
+backdrop-filter:
     blur(18px);
 
+-webkit-backdrop-filter:
+    blur(18px);
 }
 
 #webSearchPanel.active{
 
-display:block;  
+display:block;
 
-animation:  
+animation:
     webPanelIn .3s ease;
-
 }
 
 @keyframes webPanelIn{
 
-from{  
+from{
 
-    opacity:0;  
+    opacity:0;
 
-    transform:  
-        scale(.985);  
-}  
-
-to{  
-
-    opacity:1;  
-
-    transform:  
-        scale(1);  
+    transform:
+        scale(.985);
 }
 
+to{
+
+    opacity:1;
+
+    transform:
+        scale(1);
+}
 }
 
 .web-search-header{
 
-position:absolute;  
+position:absolute;
 
-top:18px;  
-left:50%;  
+top:18px;
+left:50%;
 
-transform:  
-    translateX(-50%);  
+transform:
+    translateX(-50%);
 
-z-index:520;  
+z-index:520;
 
-color:  
-    rgba(210,235,255,.95);  
+color:
+    rgba(255,245,190,.96);
 
-font-size:13px;  
+font-size:13px;
 
-letter-spacing:4px;  
+letter-spacing:4px;
 
-white-space:nowrap;  
+white-space:nowrap;
 
-text-shadow:  
+text-shadow:
 
-    0 0 12px  
-    rgba(0,102,255,.6),  
+    0 0 12px
+    rgba(255,210,26,.7),
 
-    0 0 25px  
-    rgba(0,168,255,.2);
-
+    0 0 25px
+    rgba(255,243,106,.25);
 }
 
 #webSearchFrame{
 
-position:absolute;  
+position:absolute;
 
-top:58px;  
+top:58px;
 
-left:3%;  
-right:3%;  
+left:3%;
+right:3%;
 
-bottom:3%;  
+bottom:3%;
 
-width:94%;  
+width:94%;
 
-height:  
-    calc(97% - 58px);  
+height:
+    calc(97% - 58px);
 
-border:  
-    1px solid  
-    rgba(0,102,255,.35);  
+border:
+    1px solid
+    rgba(255,210,26,.35);
 
-border-radius:20px;  
+border-radius:20px;
 
-background:#fff;  
+background:#fff;
 
-box-shadow:  
-    0 0 40px  
-    rgba(0,102,255,.15);
-
+box-shadow:
+    0 0 40px
+    rgba(255,210,26,.15);
 }
 
 #closeWebSearch{
 
-position:absolute;  
+position:absolute;
 
-top:14px;  
-right:20px;  
+top:14px;
+right:20px;
 
-z-index:530;  
+z-index:530;
 
-width:36px;  
-height:36px;  
+width:36px;
+height:36px;
 
-border:  
-    1px solid  
-    rgba(0,102,255,.5);  
+border:
+    1px solid
+    rgba(255,210,26,.5);
 
-border-radius:50%;  
+border-radius:50%;
 
-background:  
-    rgba(0,10,25,.92);  
+background:
+    rgba(15,11,2,.94);
 
-color:  
-    rgba(190,225,255,.9);  
+color:
+    rgba(255,240,180,.92);
 
-cursor:pointer;  
+cursor:pointer;
 
-font-size:20px;  
+font-size:20px;
 
-display:flex;  
+display:flex;
 
-align-items:center;  
-justify-content:center;  
+align-items:center;
+justify-content:center;
 
 transition:.2s;
-
 }
 
 #closeWebSearch:hover{
 
-color:white;  
+color:white;
 
-border-color:  
-    #00A8FF;  
+border-color:
+    #FFF36A;
 
-box-shadow:  
-    0 0 15px  
-    rgba(0,102,255,.5);
-
+box-shadow:
+    0 0 15px
+    rgba(255,210,26,.5);
 }
 
 /* =====================================================
@@ -1217,196 +1191,265 @@ MOBILE
 
 @media(max-width:600px){
 
-.jarvis-title{  
+.jarvis-title{
 
-    top:2.2%;  
+    top:2.2%;
 
-    font-size:23px;  
+    font-size:23px;
 
-    letter-spacing:5px;  
-}  
-
-.datetime{  
-
-    top:12px;  
-    right:13px;  
-}  
-
-.time{  
-
-    font-size:10px;  
-}  
-
-.date{  
-
-    font-size:7px;  
-}  
-
-.command-wrapper{  
-
-    width:  
-        calc(100% - 24px);  
-
-    bottom:17px;  
-}  
-
-#textInput{  
-
-    font-size:13px;  
-}  
-
-#chat{  
-
-    bottom:80px;  
-}  
-
-#map{  
-
-    top:3cm;  
-    right:3cm;  
-    bottom:3cm;  
-    left:3cm;  
-
-    border-radius:22px;  
-}  
-
-.map-overlay{  
-
-    border-radius:22px;  
-}  
-
-.map-header{  
-
-    top:2.5%;  
-
-    font-size:23px;  
-
-    letter-spacing:5px;  
-}  
-
-#closeMap{  
-
-    top:24px;  
-    left:25px;  
-
-    width:34px;  
-    height:34px;  
-}  
-
-#voiceBtn{  
-
-    right:12px;  
-    bottom:70px;  
-
-    height:34px;  
-
-    font-size:9px;  
-
-    padding:0 11px;  
-}  
-
-#voicePanel{  
-
-    right:12px;  
-    bottom:112px;  
-
-    width:  
-        calc(100% - 24px);  
+    letter-spacing:5px;
 }
 
+.datetime{
+
+    top:12px;
+    right:13px;
+}
+
+.time{
+
+    font-size:10px;
+}
+
+.date{
+
+    font-size:7px;
+}
+
+.command-wrapper{
+
+    width:
+        calc(100% - 24px);
+
+    bottom:17px;
+}
+
+#textInput{
+
+    font-size:13px;
+}
+
+#chat{
+
+    bottom:80px;
+}
+
+#map{
+
+    top:3cm;
+    right:3cm;
+    bottom:3cm;
+    left:3cm;
+
+    border-radius:22px;
+}
+
+.map-overlay{
+
+    border-radius:22px;
+}
+
+.map-header{
+
+    top:2.5%;
+
+    font-size:23px;
+
+    letter-spacing:5px;
+}
+
+#closeMap{
+
+    top:24px;
+    left:25px;
+
+    width:34px;
+    height:34px;
+}
+
+#voiceBtn{
+
+    right:12px;
+    bottom:70px;
+
+    height:34px;
+
+    font-size:9px;
+
+    padding:0 11px;
+}
+
+#voicePanel{
+
+    right:12px;
+    bottom:112px;
+
+    width:
+        calc(100% - 24px);
+}
 }
 
 @media(max-width:430px){
 
-#map{  
+#map{
 
-    top:2.2cm;  
-    right:2.2cm;  
-    bottom:2.2cm;  
-    left:2.2cm;  
+    top:2.2cm;
+    right:2.2cm;
+    bottom:2.2cm;
+    left:2.2cm;
+}
 }
 
-}
+</style>
 
-</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
+</head>
+
+<body>
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+<div
 class="jarvis-title"
-id="jarvisTitle"
-
-> 
+id="jarvisTitle">
 
 J.A.R.V.I.S
 
-</div><div class="datetime"><div id="clock" class="time">  
-    00:00:00  
-</div>  <div id="date" class="date">  
-    00 AGO 2026  
-</div>  </div><!-- =====================================================  
-     MAPPA TATTICA  
-===================================================== --><div id="tacticalMap"><div id="map"></div>  <div class="map-overlay"></div>  <div class="map-header">  
-    TACTICAL MAP  
-</div>  <button
+</div>
+
+<div class="datetime">
+
+<div id="clock" class="time">
+00:00:00
+</div>
+
+<div id="date" class="date">
+00 AGO 2026
+</div>
+
+</div>
+
+<!-- =====================================================
+MAPPA TATTICA
+===================================================== -->
+
+<div id="tacticalMap">
+
+<div id="map"></div>
+
+<div class="map-overlay"></div>
+
+<div class="map-header">
+TACTICAL MAP
+</div>
+
+<button
 id="closeMap"
 title="Chiudi mappa"
-aria-label="Chiudi mappa"
-
-> 
+aria-label="Chiudi mappa">
 
 ×
 
-</button>  </div><!-- =====================================================  
-     WEB SEARCH  
-===================================================== --><div id="webSearchPanel"><div class="web-search-header">  
-    J.A.R.V.I.S. // WEB SEARCH  
-</div>  <button
+</button>
+
+</div>
+
+<!-- =====================================================
+WEB SEARCH
+===================================================== -->
+
+<div id="webSearchPanel">
+
+<div class="web-search-header">
+J.A.R.V.I.S. // WEB SEARCH
+</div>
+
+<button
 id="closeWebSearch"
 title="Torna a JARVIS"
-aria-label="Chiudi ricerca web"
-
-> 
+aria-label="Chiudi ricerca web">
 
 ×
 
-</button>  <iframe  
-    id="webSearchFrame"  
-    title="Ricerca web JARVIS"  
-    loading="lazy"  
-></iframe>  </div><div id="chat"></div><!-- =====================================================  
-     COMANDO  
-===================================================== --><div class="command-wrapper"><input  
-    id="textInput"  
-    type="text"  
-    autocomplete="off"  
-    placeholder="Chiedi qualcosa a JARVIS..."  
->  <button
-id="micBtn"
-aria-label="Microfono"
+</button>
 
-> 
+<iframe
+id="webSearchFrame"
+title="Ricerca web JARVIS"
+loading="lazy">
+</iframe>
+
+</div>
+
+<div id="chat"></div>
+
+<!-- =====================================================
+COMANDO
+===================================================== -->
+
+<div class="command-wrapper">
+
+<input
+id="textInput"
+type="text"
+autocomplete="off"
+placeholder="Chiedi qualcosa a JARVIS...">
+
+<button
+id="micBtn"
+aria-label="Microfono">
 
 <span class="mic-icon"></span>
 
-</button>  <button id="sendBtn">  
-    INVIA  
-</button>  </div><button id="voiceBtn">  
-    ⚙ VOCE  
-</button><div id="voicePanel"><div class="voice-title">  
-    VOCE J.A.R.V.I.S.  
-</div>  <select id="voiceSelector">  <option value="">  
-    Voce dispositivo automatica  
+</button>
+
+<button id="sendBtn">
+INVIA
+</button>
+
+</div>
+
+<button id="voiceBtn">
+⚙ VOCE
+</button>
+
+<div id="voicePanel">
+
+<div class="voice-title">
+VOCE J.A.R.V.I.S.
+</div>
+
+<select id="voiceSelector">
+
+<option value="">
+Voce dispositivo automatica
 </option>
 
-</select>  <button id="voiceTest">  
-    TESTA VOCE  
-</button>  </div><script  
-    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">  
-</script><script type="importmap">  {
+</select>
+
+<button id="voiceTest">
+TESTA VOCE
+</button>
+
+</div>
+
+<script
+src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
+</script>
+
+<script type="importmap">
+
+{
 "imports":{
 "three":
 "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
 }
 }
 
-</script><script type="module">
+</script>
+
+<script type="module">
 
 import * as THREE from "three";
 
@@ -1531,55 +1574,57 @@ let memory = [];
 
 try{
 
-const saved =  
-    localStorage.getItem(  
-        MEMORY_KEY  
-    );  
+const saved =
+    localStorage.getItem(
+        MEMORY_KEY
+    );
 
-if(saved){  
+if(saved){
 
-    const parsed =  
-        JSON.parse(saved);  
+    const parsed =
+        JSON.parse(
+            saved
+        );
 
-    if(Array.isArray(parsed)){  
+    if(Array.isArray(parsed)){
 
-        memory =  
-            parsed.slice(  
-                -MAX_MEMORY  
-            );  
+        memory =
+            parsed.slice(
+                -MAX_MEMORY
+            );
 
-    }  
+    }
 
 }
 
 }catch(error){
 
-console.warn(  
-    "Memoria:",  
-    error  
+console.warn(
+    "Memoria:",
+    error
 );
 
 }
 
 function saveMemory(){
 
-try{  
+try{
 
-    localStorage.setItem(  
-        MEMORY_KEY,  
-        JSON.stringify(  
-            memory.slice(  
-                -MAX_MEMORY  
-            )  
-        )  
-    );  
+    localStorage.setItem(
+        MEMORY_KEY,
+        JSON.stringify(
+            memory.slice(
+                -MAX_MEMORY
+            )
+        )
+    );
 
-}catch(error){  
+}catch(error){
 
-    console.warn(  
-        "Salvataggio memoria:",  
-        error  
-    );  
+    console.warn(
+        "Salvataggio memoria:",
+        error
+    );
 
 }
 
@@ -1590,15 +1635,15 @@ role,
 content
 ){
 
-memory.push({  
-    role,  
-    content  
-});  
+memory.push({
+    role,
+    content
+});
 
-memory =  
-    memory.slice(  
-        -MAX_MEMORY  
-    );  
+memory =
+    memory.slice(
+        -MAX_MEMORY
+    );
 
 saveMemory();
 
@@ -1610,71 +1655,70 @@ ORA
 
 const months = [
 
-"GEN",  
-"FEB",  
-"MAR",  
-"APR",  
-"MAG",  
-"GIU",  
-"LUG",  
-"AGO",  
-"SET",  
-"OTT",  
-"NOV",  
+"GEN",
+"FEB",
+"MAR",
+"APR",
+"MAG",
+"GIU",
+"LUG",
+"AGO",
+"SET",
+"OTT",
+"NOV",
 "DIC"
 
 ];
 
 function updateClock(){
 
-const now =  
-    new Date();  
+const now =
+    new Date();
 
-const h =  
-    String(  
-        now.getHours()  
-    ).padStart(  
-        2,  
-        "0"  
-    );  
+const h =
+    String(
+        now.getHours()
+    ).padStart(
+        2,
+        "0"
+    );
 
-const m =  
-    String(  
-        now.getMinutes()  
-    ).padStart(  
-        2,  
-        "0"  
-    );  
+const m =
+    String(
+        now.getMinutes()
+    ).padStart(
+        2,
+        "0"
+    );
 
-const s =  
-    String(  
-        now.getSeconds()  
-    ).padStart(  
-        2,  
-        "0"  
-    );  
+const s =
+    String(
+        now.getSeconds()
+    ).padStart(
+        2,
+        "0"
+    );
 
-clock.textContent =  
-    `${h}:${m}:${s}`;  
+clock.textContent =
+    `${h}:${m}:${s}`;
 
+const d =
+    String(
+        now.getDate()
+    ).padStart(
+        2,
+        "0"
+    );
 
-const d =  
-    String(  
-        now.getDate()  
-    ).padStart(  
-        2,  
-        "0"  
-    );  
+const month =
+    months[
+        now.getMonth()
+    ];
 
-const month =  
-    months[  
-        now.getMonth()  
-    ];  
+const year =
+    now.getFullYear();
 
-const year =  
-    now.getFullYear();  
-
-date.textContent =  
+date.textContent =
     `${d} ${month} ${year}`;
 
 }
@@ -1708,8 +1752,8 @@ camera.position.z =
 const renderer =
 new THREE.WebGLRenderer({
 
-antialias:true,  
-    alpha:true  
+antialias:true,
+alpha:true
 
 });
 
@@ -1730,80 +1774,74 @@ renderer.domElement
 );
 
 /* =====================================================
-GLOW BLU ELETTRICO
+GLOW GIALLO OLOGRAFICO
 ===================================================== */
 
 function createGlow(){
 
-const canvas =  
-    document.createElement(  
-        "canvas"  
-    );  
+const canvas =
+    document.createElement(
+        "canvas"
+    );
 
-canvas.width =  
-    64;  
+canvas.width =
+    64;
 
-canvas.height =  
-    64;  
+canvas.height =
+    64;
 
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
 
-const ctx =  
-    canvas.getContext(  
-        "2d"  
-    );  
+const gradient =
+    ctx.createRadialGradient(
+        32,
+        32,
+        0,
+        32,
+        32,
+        32
+    );
 
+gradient.addColorStop(
+    0,
+    "rgba(255,255,255,1)"
+);
 
-const gradient =  
-    ctx.createRadialGradient(  
-        32,  
-        32,  
-        0,  
-        32,  
-        32,  
-        32  
-    );  
+gradient.addColorStop(
+    .2,
+    "rgba(255,250,190,1)"
+);
 
+gradient.addColorStop(
+    .4,
+    "rgba(255,243,106,.95)"
+);
 
-gradient.addColorStop(  
-    0,  
-    "rgba(255,255,255,1)"  
-);  
+gradient.addColorStop(
+    .7,
+    "rgba(255,210,26,.3)"
+);
 
-gradient.addColorStop(  
-    .2,  
-    "rgba(210,235,255,1)"  
-);  
+gradient.addColorStop(
+    1,
+    "rgba(0,0,0,0)"
+);
 
-gradient.addColorStop(  
-    .4,  
-    "rgba(0,168,255,.95)"  
-);  
+ctx.fillStyle =
+    gradient;
 
-gradient.addColorStop(  
-    .7,  
-    "rgba(0,102,255,.3)"  
-);  
+ctx.fillRect(
+    0,
+    0,
+    64,
+    64
+);
 
-gradient.addColorStop(  
-    1,  
-    "rgba(0,0,0,0)"  
-);  
-
-
-ctx.fillStyle =  
-    gradient;  
-
-
-ctx.fillRect(  
-    0,  
-    0,  
-    64,  
-    64  
-);  
-
-
-return new THREE.CanvasTexture(  
-    canvas  
+return new THREE.CanvasTexture(
+    canvas
 );
 
 }
@@ -1844,53 +1882,44 @@ i<COUNT;
 i++
 ){
 
-const r =  
-    1.10 +  
-    Math.random()*.70;  
+const r =
+    1.10 +
+    Math.random()*.70;
 
+const theta =
+    Math.random() *
+    Math.PI *
+    2;
 
-const theta =  
-    Math.random() *  
-    Math.PI *  
-    2;  
+const phi =
+    Math.acos(
+        2*Math.random()-1
+    );
 
+radii[i] =
+    r;
 
-const phi =  
-    Math.acos(  
-        2*Math.random()-1  
-    );  
+angles[i*2] =
+    theta;
 
+angles[i*2+1] =
+    phi;
 
-radii[i] =  
-    r;  
+seeds[i] =
+    Math.random()*100;
 
+positions[i*3] =
+    r *
+    Math.sin(phi) *
+    Math.cos(theta);
 
-angles[i*2] =  
-    theta;  
+positions[i*3+1] =
+    r *
+    Math.sin(phi) *
+    Math.sin(theta);
 
-
-angles[i*2+1] =  
-    phi;  
-
-
-seeds[i] =  
-    Math.random()*100;  
-
-
-positions[i*3] =  
-    r *  
-    Math.sin(phi) *  
-    Math.cos(theta);  
-
-
-positions[i*3+1] =  
-    r *  
-    Math.sin(phi) *  
-    Math.sin(theta);  
-
-
-positions[i*3+2] =  
-    r *  
+positions[i*3+2] =
+    r *
     Math.cos(phi);
 
 }
@@ -1906,23 +1935,23 @@ positions,
 const material =
 new THREE.PointsMaterial({
 
-color:  
-        new THREE.Color(  
-            0x0066FF  
-        ),  
+color:
+        new THREE.Color(
+            0xFFD21A
+        ),
 
-    size:.042,  
+size:.042,
 
-    map:createGlow(),  
+map:createGlow(),
 
-    transparent:true,  
+transparent:true,
 
-    opacity:1,  
+opacity:1,
 
-    depthWrite:false,  
+depthWrite:false,
 
-    blending:  
-        THREE.AdditiveBlending  
+blending:
+    THREE.AdditiveBlending
 
 });
 
@@ -1948,12 +1977,12 @@ let energy =
 
 const normalColor =
 new THREE.Color(
-0x0066FF
+0xFFD21A
 );
 
 const activeColor =
 new THREE.Color(
-0x00A8FF
+0xFFF36A
 );
 
 const currentColor =
@@ -1963,37 +1992,37 @@ function setState(
 state
 ){
 
-if(  
-    state === "thinking"  
-){  
+if(
+    state === "thinking"
+){
 
-    targetEnergy =  
-        2;  
+    targetEnergy =
+        2;
 
-}  
+}
 
-else if(  
-    state === "speaking"  
-){  
+else if(
+    state === "speaking"
+){
 
-    targetEnergy =  
-        .8;  
+    targetEnergy =
+        .8;
 
-}  
+}
 
-else if(  
-    state === "listening"  
-){  
+else if(
+    state === "listening"
+){
 
-    targetEnergy =  
-        .55;  
+    targetEnergy =
+        .55;
 
-}  
+}
 
-else{  
+else{
 
-    targetEnergy =  
-        .15;  
+    targetEnergy =
+        .15;
 
 }
 
@@ -2005,191 +2034,163 @@ ANIMAZIONE
 
 function animate(){
 
-requestAnimationFrame(  
-    animate  
-);  
+requestAnimationFrame(
+    animate
+);
 
+const time =
+    performance.now()*.001;
 
-const time =  
-    performance.now()*.001;  
+energy +=
+    (
+        targetEnergy -
+        energy
+    )*.045;
 
+currentColor.lerp(
+    activeColor,
+    energy*.04
+);
 
-energy +=  
-    (  
-        targetEnergy -  
-        energy  
-    )*.045;  
+if(
+    energy < .3
+){
 
+    currentColor.lerp(
+        normalColor,
+        .03
+    );
 
-currentColor.lerp(  
-    activeColor,  
-    energy*.04  
-);  
+}
 
+material.color =
+    currentColor;
 
-if(  
-    energy < .3  
-){  
+material.size =
+    .032 +
+    energy*.008;
 
-    currentColor.lerp(  
-        normalColor,  
-        .03  
-    );  
+const pos =
+    geometry
+        .attributes
+        .position
+        .array;
 
-}  
+for(
+    let i=0;
+    i<COUNT;
+    i++
+){
 
+    const index =
+        i*3;
 
-material.color =  
-    currentColor;  
+    const r =
+        radii[i];
 
+    const theta =
+        angles[i*2];
 
-material.size =  
-    .032 +  
-    energy*.008;  
+    const phi =
+        angles[i*2+1];
 
+    const seed =
+        seeds[i];
 
-const pos =  
-    geometry  
-        .attributes  
-        .position  
-        .array;  
+    const pulse =
+        Math.sin(
+            time*2 +
+            seed
+        )*.035;
 
+    const strangeShape =
+        Math.sin(
+            theta*6 +
+            time*2 +
+            seed
+        )*.18*energy;
 
-for(  
-    let i=0;  
-    i<COUNT;  
-    i++  
-){  
+    const wave =
+        Math.cos(
+            phi*7 -
+            time*1.8 +
+            seed
+        )*.12*energy;
 
-    const index =  
-        i*3;  
+    const rr =
+        r +
+        pulse +
+        strangeShape +
+        wave;
 
+    let x =
+        rr *
+        Math.sin(phi) *
+        Math.cos(theta);
 
-    const r =  
-        radii[i];  
+    let y =
+        rr *
+        Math.sin(phi) *
+        Math.sin(theta);
 
+    let z =
+        rr *
+        Math.cos(phi);
 
-    const theta =  
-        angles[i*2];  
+    x +=
+        Math.sin(
+            time*2.4 +
+            phi*8 +
+            seed
+        )*.08*energy;
 
+    y +=
+        Math.cos(
+            time*2.1 +
+            theta*9 +
+            seed
+        )*.08*energy;
 
-    const phi =  
-        angles[i*2+1];  
+    z +=
+        Math.sin(
+            time*2.7 +
+            (theta+phi)*7
+        )*.10*energy;
 
+    pos[index] =
+        x;
 
-    const seed =  
-        seeds[i];  
+    pos[index+1] =
+        y;
 
+    pos[index+2] =
+        z;
 
-    const pulse =  
-        Math.sin(  
-            time*2 +  
-            seed  
-        )*.035;  
+}
 
+geometry
+    .attributes
+    .position
+    .needsUpdate =
+        true;
 
-    const strangeShape =  
-        Math.sin(  
-            theta*6 +  
-            time*2 +  
-            seed  
-        )*.18*energy;  
+particles.rotation.y +=
+    .0005 +
+    energy*.0008;
 
+particles.rotation.x =
+    Math.sin(
+        time*.25
+    )*.04;
 
-    const wave =  
-        Math.cos(  
-            phi*7 -  
-            time*1.8 +  
-            seed  
-        )*.12*energy;  
+particles.rotation.z =
+    Math.cos(
+        time*.18
+    )*.025;
 
-
-    const rr =  
-        r +  
-        pulse +  
-        strangeShape +  
-        wave;  
-
-
-    let x =  
-        rr *  
-        Math.sin(phi) *  
-        Math.cos(theta);  
-
-
-    let y =  
-        rr *  
-        Math.sin(phi) *  
-        Math.sin(theta);  
-
-
-    let z =  
-        rr *  
-        Math.cos(phi);  
-
-
-    x +=  
-        Math.sin(  
-            time*2.4 +  
-            phi*8 +  
-            seed  
-        )*.08*energy;  
-
-
-    y +=  
-        Math.cos(  
-            time*2.1 +  
-            theta*9 +  
-            seed  
-        )*.08*energy;  
-
-
-    z +=  
-        Math.sin(  
-            time*2.7 +  
-            (theta+phi)*7  
-        )*.10*energy;  
-
-
-    pos[index] =  
-        x;  
-
-    pos[index+1] =  
-        y;  
-
-    pos[index+2] =  
-        z;  
-
-}  
-
-
-geometry  
-    .attributes  
-    .position  
-    .needsUpdate =  
-        true;  
-
-
-particles.rotation.y +=  
-    .0005 +  
-    energy*.0008;  
-
-
-particles.rotation.x =  
-    Math.sin(  
-        time*.25  
-    )*.04;  
-
-
-particles.rotation.z =  
-    Math.cos(  
-        time*.18  
-    )*.025;  
-
-
-renderer.render(  
-    scene,  
-    camera  
+renderer.render(
+    scene,
+    camera
 );
 
 }
@@ -2216,108 +2217,99 @@ null;
 
 function initializeMap(){
 
-if(map){  
-    return;  
-}  
+if(map){
+    return;
+}
 
+if(
+    typeof maplibregl ===
+    "undefined"
+){
 
-if(  
-    typeof maplibregl ===  
-    "undefined"  
-){  
+    addMsg(
+        "Errore: MapTiler non disponibile."
+    );
 
-    addMsg(  
-        "Errore: MapTiler non disponibile."  
-    );  
+    return;
 
-    return;  
+}
 
-}  
+map =
+    new maplibregl.Map({
 
+        container:
+            "map",
 
-map =  
-    new maplibregl.Map({  
+        style:
+            MAPTILER_STYLE,
 
-        container:  
-            "map",  
+        center:
+            [10.2118,45.5416],
 
-        style:  
-            MAPTILER_STYLE,  
+        zoom:
+            10,
 
-        center:  
-            [10.2118,45.5416],  
+        attributionControl:
+            true,
 
-        zoom:  
-            10,  
+        antialias:
+            true
 
-        attributionControl:  
-            true,  
+    });
 
-        antialias:  
-            true  
+map.addControl(
+    new maplibregl.NavigationControl({
+        showCompass:true,
+        showZoom:true
+    }),
+    "bottom-right"
+);
 
-    });  
+map.on(
+    "load",
+    () => {
 
+        map.resize();
 
-map.addControl(  
-    new maplibregl.NavigationControl({  
-        showCompass:true,  
-        showZoom:true  
-    }),  
-    "bottom-right"  
-);  
-
-
-map.on(  
-    "load",  
-    () => {  
-
-        map.resize();  
-
-    }  
+    }
 );
 
 }
 
 function openTacticalMap(){
 
-tacticalMap.classList.add(  
-    "active"  
-);  
+tacticalMap.classList.add(
+    "active"
+);
 
+jarvisTitle.style.display =
+    "none";
 
-jarvisTitle.style.display =  
-    "none";  
+mapHeader.style.display =
+    "block";
 
+initializeMap();
 
-mapHeader.style.display =  
-    "block";  
+setTimeout(
+    () => {
 
+        if(map){
+            map.resize();
+        }
 
-initializeMap();  
-
-
-setTimeout(  
-    () => {  
-
-        if(map){  
-            map.resize();  
-        }  
-
-    },  
-    400  
+    },
+    400
 );
 
 }
 
 function closeTacticalMap(){
 
-tacticalMap.classList.remove(  
-    "active"  
-);  
+tacticalMap.classList.remove(
+    "active"
+);
 
-
-jarvisTitle.style.display =  
+jarvisTitle.style.display =
     "block";
 
 }
@@ -2335,31 +2327,31 @@ function escapeHtml(
 text
 ){
 
-return String(text)  
+return String(text)
 
-    .replace(  
-        /&/g,  
-        "&amp;"  
-    )  
+    .replace(
+        /&/g,
+        "&amp;"
+    )
 
-    .replace(  
-        /</g,  
-        "&lt;"  
-    )  
+    .replace(
+        /</g,
+        "&lt;"
+    )
 
-    .replace(  
-        />/g,  
-        "&gt;"  
-    )  
+    .replace(
+        />/g,
+        "&gt;"
+    )
 
-    .replace(  
-        /"/g,  
-        "&quot;"  
-    )  
+    .replace(
+        /"/g,
+        "&quot;"
+    )
 
-    .replace(  
-        /'/g,  
-        "&#039;"  
+    .replace(
+        /'/g,
+        "&#039;"
     );
 
 }
@@ -2370,62 +2362,57 @@ lon,
 name
 ){
 
-if(!map){  
-    return;  
-}  
+if(!map){
+    return;
+}
 
+if(currentMarker){
 
-if(currentMarker){  
+    currentMarker.remove();
 
-    currentMarker.remove();  
+    currentMarker =
+        null;
 
-    currentMarker =  
-        null;  
+}
 
-}  
+const markerElement =
+    document.createElement(
+        "div"
+    );
 
+markerElement.className =
+    "jarvis-map-marker";
 
-const markerElement =  
-    document.createElement(  
-        "div"  
-    );  
+currentMarker =
+    new maplibregl.Marker({
 
+        element:
+            markerElement,
 
-markerElement.className =  
-    "jarvis-map-marker";  
+        anchor:
+            "center"
 
+    })
 
-currentMarker =  
-    new maplibregl.Marker({  
+    .setLngLat(
+        [lon,lat]
+    )
 
-        element:  
-            markerElement,  
+    .setPopup(
 
-        anchor:  
-            "center"  
+        new maplibregl.Popup({
+            offset:15
+        })
 
-    })  
+        .setHTML(
+            `<b style="color:#FFF36A">${escapeHtml(name)}</b>`
+        )
 
-    .setLngLat(  
-        [lon,lat]  
-    )  
+    )
 
-    .setPopup(  
-
-        new maplibregl.Popup({  
-            offset:15  
-        })  
-
-        .setHTML(  
-            `<b style="color:#00A8FF">${escapeHtml(name)}</b>`  
-        )  
-
-    )  
-
-    .addTo(  
-        map  
-    );  
-
+    .addTo(
+        map
+    );
 
 currentMarker.togglePopup();
 
@@ -2439,136 +2426,121 @@ async function searchLocation(
 place
 ){
 
-try{  
+try{
 
-    openTacticalMap();  
+    openTacticalMap();
 
+    addMsg(
+        "Ricerca posizione: " +
+        place
+    );
 
-    addMsg(  
-        "Ricerca posizione: " +  
-        place  
-    );  
+    const url =
+        "https://nominatim.openstreetmap.org/search" +
+        "?format=json" +
+        "&limit=1" +
+        "&q=" +
+        encodeURIComponent(
+            place
+        );
 
+    const response =
+        await fetch(
+            url,
+            {
+                headers:{
+                    "Accept":
+                        "application/json"
+                }
+            }
+        );
 
-    const url =  
-        "https://nominatim.openstreetmap.org/search" +  
-        "?format=json" +  
-        "&limit=1" +  
-        "&q=" +  
-        encodeURIComponent(  
-            place  
-        );  
+    if(!response.ok){
 
+        throw new Error(
+            "Ricerca posizione fallita"
+        );
 
-    const response =  
-        await fetch(  
-            url,  
-            {  
-                headers:{  
-                    "Accept":  
-                        "application/json"  
-                }  
-            }  
-        );  
+    }
 
+    const results =
+        await response.json();
 
-    if(!response.ok){  
+    if(!results.length){
 
-        throw new Error(  
-            "Ricerca posizione fallita"  
-        );  
+        addMsg(
+            "Non riesco a trovare " +
+            place +
+            "."
+        );
 
-    }  
+        return;
 
+    }
 
-    const results =  
-        await response.json();  
+    const result =
+        results[0];
 
+    const lat =
+        parseFloat(
+            result.lat
+        );
 
-    if(!results.length){  
+    const lon =
+        parseFloat(
+            result.lon
+        );
 
-        addMsg(  
-            "Non riesco a trovare " +  
-            place +  
-            "."  
-        );  
+    if(!map){
 
-        return;  
+        throw new Error(
+            "Mappa non inizializzata"
+        );
 
-    }  
+    }
 
+    map.flyTo({
 
-    const result =  
-        results[0];  
+        center:
+            [lon,lat],
 
+        zoom:
+            12,
 
-    const lat =  
-        parseFloat(  
-            result.lat  
-        );  
+        speed:
+            .8,
 
+        curve:
+            1.5,
 
-    const lon =  
-        parseFloat(  
-            result.lon  
-        );  
+        essential:
+            true
 
+    });
 
-    if(!map){  
+    createJarvisMarker(
+        lat,
+        lon,
+        place
+    );
 
-        throw new Error(  
-            "Mappa non inizializzata"  
-        );  
+    addMsg(
+        "Posizione acquisita: " +
+        place
+    );
 
-    }  
+}catch(error){
 
+    console.error(
+        "MAP ERROR:",
+        error
+    );
 
-    map.flyTo({  
-
-        center:  
-            [lon,lat],  
-
-        zoom:  
-            12,  
-
-        speed:  
-            .8,  
-
-        curve:  
-            1.5,  
-
-        essential:  
-            true  
-
-    });  
-
-
-    createJarvisMarker(  
-        lat,  
-        lon,  
-        place  
-    );  
-
-
-    addMsg(  
-        "Posizione acquisita: " +  
-        place  
-    );  
-
-
-}catch(error){  
-
-    console.error(  
-        "MAP ERROR:",  
-        error  
-    );  
-
-
-    addMsg(  
-        "Impossibile localizzare " +  
-        place +  
-        "."  
-    );  
+    addMsg(
+        "Impossibile localizzare " +
+        place +
+        "."
+    );
 
 }
 
@@ -2582,152 +2554,146 @@ function handleMapCommand(
 text
 ){
 
-const normalized =  
-    text  
-        .toLowerCase()  
-        .trim();  
+const normalized =
+    text
+        .toLowerCase()
+        .trim();
 
+if(
 
-if(  
+    normalized.includes(
+        "apri la mappa"
+    )
 
-    normalized.includes(  
-        "apri la mappa"  
-    )  
+    ||
 
-    ||  
+    normalized.includes(
+        "apri mappa"
+    )
 
-    normalized.includes(  
-        "apri mappa"  
-    )  
+    ||
 
-    ||  
+    normalized.includes(
+        "mappa tattica"
+    )
 
-    normalized.includes(  
-        "mappa tattica"  
-    )  
+    ||
 
-    ||  
+    normalized.includes(
+        "modalità tattica"
+    )
 
-    normalized.includes(  
-        "modalità tattica"  
-    )  
+    ||
 
-    ||  
+    normalized.includes(
+        "modalita tattica"
+    )
 
-    normalized.includes(  
-        "modalita tattica"  
-    )  
+    ||
 
-    ||  
+    normalized.includes(
+        "attiva la mappa"
+    )
 
-    normalized.includes(  
-        "attiva la mappa"  
-    )  
+){
 
-){  
+    openTacticalMap();
 
-    openTacticalMap();  
+    addMsg(
+        "Mappa tattica attivata."
+    );
 
-    addMsg(  
-        "Mappa tattica attivata."  
-    );  
+    return true;
 
-    return true;  
+}
 
-}  
+if(
 
+    normalized.includes(
+        "chiudi la mappa"
+    )
 
-if(  
+    ||
 
-    normalized.includes(  
-        "chiudi la mappa"  
-    )  
+    normalized.includes(
+        "chiudi mappa"
+    )
 
-    ||  
+    ||
 
-    normalized.includes(  
-        "chiudi mappa"  
-    )  
+    normalized.includes(
+        "esci dalla mappa"
+    )
 
-    ||  
+    ||
 
-    normalized.includes(  
-        "esci dalla mappa"  
-    )  
+    normalized.includes(
+        "torna alla modalità normale"
+    )
 
-    ||  
+    ||
 
-    normalized.includes(  
-        "torna alla modalità normale"  
-    )  
+    normalized.includes(
+        "torna alla modalita normale"
+    )
 
-    ||  
+){
 
-    normalized.includes(  
-        "torna alla modalita normale"  
-    )  
+    closeTacticalMap();
 
-){  
+    addMsg(
+        "Modalità tattica disattivata."
+    );
 
-    closeTacticalMap();  
+    return true;
 
-    addMsg(  
-        "Modalità tattica disattivata."  
-    );  
+}
 
-    return true;  
+const patterns = [
 
-}  
+    "mostrami ",
+    "mostra ",
+    "vai a ",
+    "portami a ",
+    "localizza ",
+    "cerca ",
+    "visualizza "
 
+];
 
-const patterns = [  
+for(
+    const pattern of patterns
+){
 
-    "mostrami ",  
-    "mostra ",  
-    "vai a ",  
-    "portami a ",  
-    "localizza ",  
-    "cerca ",  
-    "visualizza "  
+    if(
+        normalized.startsWith(
+            pattern
+        )
+    ){
 
-];  
+        const place =
+            text
+                .trim()
+                .substring(
+                    pattern.length
+                )
+                .trim();
 
+        if(
+            place.length > 1
+        ){
 
-for(  
-    const pattern of patterns  
-){  
+            searchLocation(
+                place
+            );
 
-    if(  
-        normalized.startsWith(  
-            pattern  
-        )  
-    ){  
+            return true;
 
-        const place =  
-            text  
-                .trim()  
-                .substring(  
-                    pattern.length  
-                )  
-                .trim();  
+        }
 
+    }
 
-        if(  
-            place.length > 1  
-        ){  
-
-            searchLocation(  
-                place  
-            );  
-
-            return true;  
-
-        }  
-
-    }  
-
-}  
-
+}
 
 return false;
 
@@ -2754,38 +2720,37 @@ document.getElementById(
 
 function openWebSearch(query){
 
-if(!query){  
-    return;  
-}  
+if(!query){
+    return;
+}
 
-const url =  
-    "https://www.google.com/search?igu=1&q=" +  
-    encodeURIComponent(query);  
+const url =
+    "https://www.google.com/search?igu=1&q=" +
+    encodeURIComponent(query);
 
-webSearchFrame.src =  
-    url;  
+webSearchFrame.src =
+    url;
 
-webSearchPanel.classList.add(  
-    "active"  
+webSearchPanel.classList.add(
+    "active"
 );
 
 }
 
 function closeWebSearchPanel(){
 
-webSearchPanel.classList.remove(  
-    "active"  
-);  
+webSearchPanel.classList.remove(
+    "active"
+);
 
+setTimeout(
+    () => {
 
-setTimeout(  
-    () => {  
+        webSearchFrame.src =
+            "about:blank";
 
-        webSearchFrame.src =  
-            "about:blank";  
-
-    },  
-    250  
+    },
+    250
 );
 
 }
@@ -2801,67 +2766,63 @@ COMANDI RICERCA WEB
 
 function handleWebCommand(text){
 
-const normalized =  
-    text  
-        .toLowerCase()  
-        .trim();  
+const normalized =
+    text
+        .toLowerCase()
+        .trim();
 
+const patterns = [
 
-const patterns = [  
+    "cerca sul web ",
+    "cerca nel web ",
+    "ricerca sul web ",
+    "ricerca web ",
+    "cerca online ",
+    "cerca su internet ",
+    "cerca in internet ",
+    "fammi una ricerca su ",
+    "fai una ricerca su "
 
-    "cerca sul web ",  
-    "cerca nel web ",  
-    "ricerca sul web ",  
-    "ricerca web ",  
-    "cerca online ",  
-    "cerca su internet ",  
-    "cerca in internet ",  
-    "fammi una ricerca su ",  
-    "fai una ricerca su "  
+];
 
-];  
+for(
+    const pattern of patterns
+){
 
+    if(
+        normalized.startsWith(
+            pattern
+        )
+    ){
 
-for(  
-    const pattern of patterns  
-){  
+        const query =
+            text
+                .trim()
+                .substring(
+                    pattern.length
+                )
+                .trim();
 
-    if(  
-        normalized.startsWith(  
-            pattern  
-        )  
-    ){  
+        if(
+            query.length > 1
+        ){
 
-        const query =  
-            text  
-                .trim()  
-                .substring(  
-                    pattern.length  
-                )  
-                .trim();  
+            openWebSearch(
+                query
+            );
 
+            addMsg(
+                "Ricerca web: " +
+                query
+            );
 
-        if(  
-            query.length > 1  
-        ){  
+            return true;
 
-            openWebSearch(  
-                query  
-            );  
+        }
 
-            addMsg(  
-                "Ricerca web: " +  
-                query  
-            );  
+    }
 
-            return true;  
-
-        }  
-
-    }  
-
-}  
-
+}
 
 return false;
 
@@ -2875,29 +2836,23 @@ function addMsg(
 text
 ){
 
-chat.innerHTML =  
-    "";  
+chat.innerHTML =
+    "";
 
+const element =
+    document.createElement(
+        "div"
+    );
 
-const element =  
-    document.createElement(  
-        "div"  
-    );  
+element.className =
+    "msg";
 
+element.textContent =
+    text;
 
-element.className =  
-    "msg";  
-
-
-element.textContent =  
-    text;  
-
-
-chat.appendChild(  
-    element  
+chat.appendChild(
+    element
 );
-
-}
 
 /* =====================================================
 DATI TEMPORALI
@@ -2905,44 +2860,43 @@ DATI TEMPORALI
 
 function getTimeData(){
 
-const now =  
-    new Date();  
+const now =
+    new Date();
 
+return {
 
-return {  
+    currentTime:
+        now.toLocaleTimeString(
+            "it-IT",
+            {
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit"
+            }
+        ),
 
-    currentTime:  
-        now.toLocaleTimeString(  
-            "it-IT",  
-            {  
-                hour:"2-digit",  
-                minute:"2-digit",  
-                second:"2-digit"  
-            }  
-        ),  
+    currentDate:
+        now.toLocaleDateString(
+            "it-IT",
+            {
+                day:"2-digit",
+                month:"2-digit",
+                year:"numeric"
+            }
+        ),
 
-    currentDate:  
-        now.toLocaleDateString(  
-            "it-IT",  
-            {  
-                day:"2-digit",  
-                month:"2-digit",  
-                year:"numeric"  
-            }  
-        ),  
+    dayOfWeek:
+        now.toLocaleDateString(
+            "it-IT",
+            {
+                weekday:"long"
+            }
+        ),
 
-    dayOfWeek:  
-        now.toLocaleDateString(  
-            "it-IT",  
-            {  
-                weekday:"long"  
-            }  
-        ),  
-
-    timezone:  
-        Intl.DateTimeFormat()  
-            .resolvedOptions()  
-            .timeZone  
+    timezone:
+        Intl.DateTimeFormat()
+            .resolvedOptions()
+            .timeZone
 
 };
 
@@ -2954,87 +2908,75 @@ VOCE DISPOSITIVO
 
 function loadDeviceVoices(){
 
-if(  
-    !("speechSynthesis" in window)  
-){  
+if(
+    !("speechSynthesis" in window)
+){
 
-    return;  
+    return;
 
-}  
+}
 
+deviceVoices =
+    window.speechSynthesis
+        .getVoices();
 
-deviceVoices =  
-    window.speechSynthesis  
-        .getVoices();  
+voiceSelector.innerHTML =
+    "";
 
+const automatic =
+    document.createElement(
+        "option"
+    );
 
-voiceSelector.innerHTML =  
-    "";  
+automatic.value =
+    "";
 
+automatic.textContent =
+    "Voce dispositivo automatica";
 
-const automatic =  
-    document.createElement(  
-        "option"  
-    );  
+voiceSelector.appendChild(
+    automatic
+);
 
+deviceVoices.forEach(
+    (voice,index) => {
 
-automatic.value =  
-    "";  
+        const option =
+            document.createElement(
+                "option"
+            );
 
+        option.value =
+            String(index);
 
-automatic.textContent =  
-    "Voce dispositivo automatica";  
+        option.textContent =
+            `${voice.name} — ${voice.lang}`;
 
+        voiceSelector.appendChild(
+            option
+        );
 
-voiceSelector.appendChild(  
-    automatic  
-);  
+    }
+);
 
+const savedVoice =
+    localStorage.getItem(
+        "jarvis_device_voice"
+    );
 
-deviceVoices.forEach(  
-    (voice,index) => {  
+if(
+    savedVoice !== null &&
+    Number(savedVoice) <
+        deviceVoices.length
+){
 
-        const option =  
-            document.createElement(  
-                "option"  
-            );  
+    voiceSelector.value =
+        savedVoice;
 
-
-        option.value =  
-            String(index);  
-
-
-        option.textContent =  
-            `${voice.name} — ${voice.lang}`;  
-
-
-        voiceSelector.appendChild(  
-            option  
-        );  
-
-    }  
-);  
-
-
-const savedVoice =  
-    localStorage.getItem(  
-        "jarvis_device_voice"  
-    );  
-
-
-if(  
-    savedVoice !== null &&  
-    Number(savedVoice) <  
-        deviceVoices.length  
-){  
-
-    voiceSelector.value =  
-        savedVoice;  
-
-    selectedDeviceVoice =  
-        deviceVoices[  
-            Number(savedVoice)  
-        ];  
+    selectedDeviceVoice =
+        deviceVoices[
+            Number(savedVoice)
+        ];
 
 }
 
@@ -3044,13 +2986,12 @@ if(
 "speechSynthesis" in window
 ){
 
-loadDeviceVoices();  
+loadDeviceVoices();
 
-
-window.speechSynthesis  
-    .addEventListener(  
-        "voiceschanged",  
-        loadDeviceVoices  
+window.speechSynthesis
+    .addEventListener(
+        "voiceschanged",
+        loadDeviceVoices
     );
 
 }
@@ -3063,171 +3004,158 @@ function speakDevice(
 text
 ){
 
-return new Promise(  
-    resolve => {  
+return new Promise(
+resolve => {
 
-        if(  
-            !("speechSynthesis" in window)  
-        ){  
+    if(
+        !("speechSynthesis" in window)
+    ){
 
-            console.warn(  
-                "SpeechSynthesis non disponibile."  
-            );  
+        console.warn(
+            "SpeechSynthesis non disponibile."
+        );
 
-            resolve(false);  
+        resolve(false);
 
-            return;  
+        return;
 
-        }  
+    }
 
+    try{
 
-        try{  
+        window.speechSynthesis.cancel();
 
-            window.speechSynthesis.cancel();  
+        const utterance =
+            new SpeechSynthesisUtterance(
+                text
+            );
 
+        utterance.lang =
+            "it-IT";
 
-            const utterance =  
-                new SpeechSynthesisUtterance(  
-                    text  
-                );  
+        utterance.rate =
+            0.95;
 
+        utterance.pitch =
+            0.9;
 
-            utterance.lang =  
-                "it-IT";  
+        utterance.volume =
+            1;
 
+        if(
+            selectedDeviceVoice
+        ){
 
-            utterance.rate =  
-                0.95;  
+            utterance.voice =
+                selectedDeviceVoice;
 
+        }
 
-            utterance.pitch =  
-                0.9;  
+        else{
 
+            const italianVoice =
+                deviceVoices.find(
+                    voice =>
+                        voice.lang
+                            .toLowerCase()
+                            .startsWith(
+                                "it"
+                            )
+                );
 
-            utterance.volume =  
-                1;  
+            if(
+                italianVoice
+            ){
 
+                utterance.voice =
+                    italianVoice;
 
-            if(  
-                selectedDeviceVoice  
-            ){  
+            }
 
-                utterance.voice =  
-                    selectedDeviceVoice;  
+        }
 
-            }  
+        utterance.onstart =
+            () => {
 
-            else{  
+                audioPlaying =
+                    true;
 
-                const italianVoice =  
-                    deviceVoices.find(  
-                        voice =>  
-                            voice.lang  
-                                .toLowerCase()  
-                                .startsWith(  
-                                    "it"  
-                                )  
-                    );  
+                setState(
+                    "speaking"
+                );
 
+            };
 
-                if(  
-                    italianVoice  
-                ){  
+        utterance.onend =
+            () => {
 
-                    utterance.voice =  
-                        italianVoice;  
+                audioPlaying =
+                    false;
 
-                }  
+                setState(
+                    "idle"
+                );
 
-            }  
+                resolve(true);
 
+            };
 
-            utterance.onstart =  
-                () => {  
+        utterance.onerror =
+            error => {
 
-                    audioPlaying =  
-                        true;  
+                console.error(
+                    "DEVICE TTS ERROR:",
+                    error
+                );
 
-                    setState(  
-                        "speaking"  
-                    );  
+                audioPlaying =
+                    false;
 
-                };  
+                setState(
+                    "idle"
+                );
 
+                resolve(false);
 
-            utterance.onend =  
-                () => {  
+            };
 
-                    audioPlaying =  
-                        false;  
+        window.speechSynthesis
+            .speak(
+                utterance
+            );
 
-                    setState(  
-                        "idle"  
-                    );  
+        setTimeout(
+            () => {
 
-                    resolve(true);  
+                try{
 
-                };  
+                    window.speechSynthesis.resume();
 
+                }catch(error){
 
-            utterance.onerror =  
-                error => {  
+                    console.warn(
+                        error
+                    );
 
-                    console.error(  
-                        "DEVICE TTS ERROR:",  
-                        error  
-                    );  
+                }
 
+            },
+            100
+        );
 
-                    audioPlaying =  
-                        false;  
+    }catch(error){
 
-                    setState(  
-                        "idle"  
-                    );  
+        console.error(
+            "DEVICE TTS:",
+            error
+        );
 
-                    resolve(false);  
+        resolve(false);
 
-                };  
+    }
 
+}
 
-            window.speechSynthesis  
-                .speak(  
-                    utterance  
-                );  
-
-
-            setTimeout(  
-                () => {  
-
-                    try{  
-
-                        window.speechSynthesis.resume();  
-
-                    }catch(error){  
-
-                        console.warn(  
-                            error  
-                        );  
-
-                    }  
-
-                },  
-                100  
-            );  
-
-        }catch(error){  
-
-            console.error(  
-                "DEVICE TTS:",  
-                error  
-            );  
-
-            resolve(false);  
-
-        }  
-
-    }  
 );
 
 }
@@ -3240,236 +3168,211 @@ async function speakElevenLabs(
 text
 ){
 
-if(!text){  
-    return false;  
-}  
+if(!text){
+    return false;
+}
 
+if(currentAudio){
 
-if(currentAudio){  
+    try{
 
-    try{  
+        currentAudio.pause();
 
-        currentAudio.pause();  
+        currentAudio.currentTime =
+            0;
 
-        currentAudio.currentTime =  
-            0;  
+    }catch(error){
 
-    }catch(error){  
+        console.warn(
+            error
+        );
 
-        console.warn(  
-            error  
-        );  
+    }
 
-    }  
+    currentAudio =
+        null;
 
+}
 
-    currentAudio =  
-        null;  
+audioPlaying =
+    false;
 
-}  
+const controller =
+    new AbortController();
 
+const timeout =
+    setTimeout(
+        () => {
+            controller.abort();
+        },
+        30000
+    );
 
-audioPlaying =  
-    false;  
+try{
 
+    const response =
+        await fetch(
+            API,
+            {
 
-const controller =  
-    new AbortController();  
+                method:"POST",
 
+                headers:{
+                    "Content-Type":
+                        "application/json"
+                },
 
-const timeout =  
-    setTimeout(  
-        () => {  
-            controller.abort();  
-        },  
-        30000  
-    );  
+                body:
+                    JSON.stringify({
 
+                        action:
+                            "tts",
 
-try{  
+                        text:
+                            text,
 
-    const response =  
-        await fetch(  
-            API,  
-            {  
+                        voiceId:
+                            ELEVEN_VOICE_ID
 
-                method:"POST",  
+                    }),
 
-                headers:{  
-                    "Content-Type":  
-                        "application/json"  
-                },  
+                signal:
+                    controller.signal
 
-                body:  
-                    JSON.stringify({  
+            }
+        );
 
-                        action:  
-                            "tts",  
+    if(!response.ok){
 
-                        text:  
-                            text,  
+        console.warn(
+            "ElevenLabs HTTP:",
+            response.status
+        );
 
-                        voiceId:  
-                            ELEVEN_VOICE_ID  
+        return false;
 
-                    }),  
+    }
 
-                signal:  
-                    controller.signal  
+    const contentType =
+        response.headers.get(
+            "content-type"
+        ) || "";
 
-            }  
-        );  
+    if(
+        !contentType.includes(
+            "audio"
+        )
+    ){
 
+        return false;
 
-    if(!response.ok){  
+    }
 
-        console.warn(  
-            "ElevenLabs HTTP:",  
-            response.status  
-        );  
+    const audioBlob =
+        await response.blob();
 
-        return false;  
+    if(
+        !audioBlob ||
+        audioBlob.size === 0
+    ){
 
-    }  
+        return false;
 
+    }
 
-    const contentType =  
-        response.headers.get(  
-            "content-type"  
-        ) || "";  
+    const audioUrl =
+        URL.createObjectURL(
+            audioBlob
+        );
 
+    const audio =
+        new Audio(
+            audioUrl
+        );
 
-    if(  
-        !contentType.includes(  
-            "audio"  
-        )  
-    ){  
+    currentAudio =
+        audio;
 
-        return false;  
+    audio.volume =
+        1;
 
-    }  
+    audio.onplay =
+        () => {
 
+            audioPlaying =
+                true;
 
-    const audioBlob =  
-        await response.blob();  
+            setState(
+                "speaking"
+            );
 
+        };
 
-    if(  
-        !audioBlob ||  
-        audioBlob.size === 0  
-    ){  
+    audio.onended =
+        () => {
 
-        return false;  
+            audioPlaying =
+                false;
 
-    }  
+            setState(
+                "idle"
+            );
 
+            URL.revokeObjectURL(
+                audioUrl
+            );
 
-    const audioUrl =  
-        URL.createObjectURL(  
-            audioBlob  
-        );  
+            if(
+                currentAudio ===
+                audio
+            ){
 
+                currentAudio =
+                    null;
 
-    const audio =  
-        new Audio(  
-            audioUrl  
-        );  
+            }
 
+        };
 
-    currentAudio =  
-        audio;  
+    audio.onerror =
+        error => {
 
+            console.warn(
+                "ElevenLabs audio:",
+                error
+            );
 
-    audio.volume =  
-        1;  
+            audioPlaying =
+                false;
 
+            setState(
+                "idle"
+            );
 
-    audio.onplay =  
-        () => {  
+            URL.revokeObjectURL(
+                audioUrl
+            );
 
-            audioPlaying =  
-                true;  
+        };
 
-            setState(  
-                "speaking"  
-            );  
+    await audio.play();
 
-        };  
+    return true;
 
+}catch(error){
 
-    audio.onended =  
-        () => {  
+    console.warn(
+        "ElevenLabs TTS:",
+        error
+    );
 
-            audioPlaying =  
-                false;  
+    return false;
 
-            setState(  
-                "idle"  
-            );  
+}finally{
 
-
-            URL.revokeObjectURL(  
-                audioUrl  
-            );  
-
-
-            if(  
-                currentAudio ===  
-                audio  
-            ){  
-
-                currentAudio =  
-                    null;  
-
-            }  
-
-        };  
-
-
-    audio.onerror =  
-        error => {  
-
-            console.warn(  
-                "ElevenLabs audio:",  
-                error  
-            );  
-
-            audioPlaying =  
-                false;  
-
-            setState(  
-                "idle"  
-            );  
-
-
-            URL.revokeObjectURL(  
-                audioUrl  
-            );  
-
-        };  
-
-
-    await audio.play();  
-
-
-    return true;  
-
-
-}catch(error){  
-
-    console.warn(  
-        "ElevenLabs TTS:",  
-        error  
-    );  
-
-    return false;  
-
-
-}finally{  
-
-    clearTimeout(  
-        timeout  
-    );  
+    clearTimeout(
+        timeout
+    );
 
 }
 
@@ -3483,33 +3386,29 @@ async function speak(
 text
 ){
 
-if(!text){  
-    return;  
-}  
+if(!text){
+    return;
+}
 
+const elevenSuccess =
+    await speakElevenLabs(
+        text
+    );
 
-const elevenSuccess =  
-    await speakElevenLabs(  
-        text  
-    );  
+if(
+    elevenSuccess
+){
 
+    return;
 
-if(  
-    elevenSuccess  
-){  
+}
 
-    return;  
+console.log(
+    "ElevenLabs non disponibile. Uso voce dispositivo."
+);
 
-}  
-
-
-console.log(  
-    "ElevenLabs non disponibile. Uso voce dispositivo."  
-);  
-
-
-await speakDevice(  
-    text  
+await speakDevice(
+    text
 );
 
 }
@@ -3522,16 +3421,14 @@ voiceTest.addEventListener(
 "click",
 async () => {
 
-const testText =  
-        "J.A.R.V.I.S. operativo. Sistema vocale funzionante.";  
+const testText =
+        "J.A.R.V.I.S. operativo. Sistema vocale funzionante.";
 
-
-    await speakDevice(  
-        testText  
-    );  
+    await speakDevice(
+        testText
+    );
 
 }
-
 );
 
 /* =====================================================
@@ -3542,50 +3439,43 @@ voiceSelector.addEventListener(
 "change",
 () => {
 
-const value =  
-        voiceSelector.value;  
+const value =
+        voiceSelector.value;
 
+    if(
+        value === ""
+    ){
 
-    if(  
-        value === ""  
-    ){  
+        selectedDeviceVoice =
+            null;
 
-        selectedDeviceVoice =  
-            null;  
+        localStorage.removeItem(
+            "jarvis_device_voice"
+        );
 
+        return;
 
-        localStorage.removeItem(  
-            "jarvis_device_voice"  
-        );  
+    }
 
+    const index =
+        Number(value);
 
-        return;  
+    if(
+        Number.isInteger(index) &&
+        deviceVoices[index]
+    ){
 
-    }  
+        selectedDeviceVoice =
+            deviceVoices[index];
 
+        localStorage.setItem(
+            "jarvis_device_voice",
+            String(index)
+        );
 
-    const index =  
-        Number(value);  
-
-
-    if(  
-        Number.isInteger(index) &&  
-        deviceVoices[index]  
-    ){  
-
-        selectedDeviceVoice =  
-            deviceVoices[index];  
-
-
-        localStorage.setItem(  
-            "jarvis_device_voice",  
-            String(index)  
-        );  
-
-    }  
+    }
 
 }
-
 );
 
 /* =====================================================
@@ -3596,14 +3486,13 @@ voiceBtn.addEventListener(
 "click",
 () => {
 
-voicePanel.classList.toggle(  
-        "active"  
-    );  
+voicePanel.classList.toggle(
+        "active"
+    );
 
-    loadDeviceVoices();  
+    loadDeviceVoices();
 
 }
-
 );
 
 /* =====================================================
@@ -3614,263 +3503,237 @@ async function processAi(
 text
 ){
 
-if(  
-    handleWebCommand(  
-        text  
-    )  
-){  
+if(
+    handleWebCommand(
+        text
+    )
+){
 
-    return;  
+    return;
 
-}  
+}
 
+if(
+    handleMapCommand(
+        text
+    )
+){
 
-if(  
-    handleMapCommand(  
-        text  
-    )  
-){  
+    return;
 
-    return;  
+}
 
-}  
+setState(
+    "thinking"
+);
 
+try{
 
-setState(  
-    "thinking"  
-);  
+    const temporal =
+        getTimeData();
 
+    addMemory(
+        "user",
+        text
+    );
 
-try{  
+    const controller =
+        new AbortController();
 
-    const temporal =  
-        getTimeData();  
+    const timeout =
+        setTimeout(
+            () => {
+                controller.abort();
+            },
+            30000
+        );
 
+    let response;
 
-    addMemory(  
-        "user",  
-        text  
-    );  
+    try{
 
+        response =
+            await fetch(
+                API,
+                {
 
-    const controller =  
-        new AbortController();  
+                    method:"POST",
 
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-    const timeout =  
-        setTimeout(  
-            () => {  
-                controller.abort();  
-            },  
-            30000  
-        );  
+                    body:
+                        JSON.stringify({
 
+                            message:
+                                text,
 
-    let response;  
+                            memory:
+                                memory.slice(-4),
 
+                            currentTime:
+                                temporal.currentTime,
 
-    try{  
+                            currentDate:
+                                temporal.currentDate,
 
-        response =  
-            await fetch(  
-                API,  
-                {  
+                            dayOfWeek:
+                                temporal.dayOfWeek,
 
-                    method:"POST",  
+                            timezone:
+                                temporal.timezone
 
-                    headers:{  
-                        "Content-Type":  
-                            "application/json"  
-                    },  
+                        }),
 
-                    body:  
-                        JSON.stringify({  
+                    signal:
+                        controller.signal
 
-                            message:  
-                                text,  
+                }
+            );
 
-                            memory:  
-                                memory.slice(-4),  
+    }finally{
 
-                            currentTime:  
-                                temporal.currentTime,  
+        clearTimeout(
+            timeout
+        );
 
-                            currentDate:  
-                                temporal.currentDate,  
+    }
 
-                            dayOfWeek:  
-                                temporal.dayOfWeek,  
+    if(!response.ok){
 
-                            timezone:  
-                                temporal.timezone  
+        const errorText =
+            await response.text();
 
-                        }),  
+        let errorMessage =
+            "HTTP " +
+            response.status;
 
-                    signal:  
-                        controller.signal  
+        try{
 
-                }  
-            );  
+            const errorData =
+                JSON.parse(
+                    errorText
+                );
 
-    }finally{  
+            if(
+                errorData &&
+                errorData.error
+            ){
 
-        clearTimeout(  
-            timeout  
-        );  
+                errorMessage =
+                    errorData.error;
 
-    }  
+            }
 
+        }catch(parseError){
 
-    if(!response.ok){  
+            if(errorText){
 
-        const errorText =  
-            await response.text();  
+                errorMessage =
+                    errorText.substring(
+                        0,
+                        200
+                    );
 
+            }
 
-        let errorMessage =  
-            "HTTP " +  
-            response.status;  
+        }
 
+        throw new Error(
+            errorMessage
+        );
 
-        try{  
+    }
 
-            const errorData =  
-                JSON.parse(  
-                    errorText  
-                );  
+    const data =
+        await response.json();
 
+    console.log(
+        "JARVIS RESPONSE:",
+        data
+    );
 
-            if(  
-                errorData &&  
-                errorData.error  
-            ){  
+    const reply =
+        typeof data.response ===
+            "string"
+            ? data.response.trim()
+            : "";
 
-                errorMessage =  
-                    errorData.error;  
+    if(!reply){
 
-            }  
+        throw new Error(
+            "Risposta AI vuota"
+        );
 
-        }catch(parseError){  
+    }
 
-            if(errorText){  
+    addMsg(
+        reply
+    );
 
-                errorMessage =  
-                    errorText.substring(  
-                        0,  
-                        200  
-                    );  
+    addMemory(
+        "assistant",
+        reply
+    );
 
-            }  
+    speak(
+        reply
+    ).catch(
+        error => {
 
-        }  
+            console.error(
+                "TTS:",
+                error
+            );
 
+        }
+    );
 
-        throw new Error(  
-            errorMessage  
-        );  
+    setState(
+        "idle"
+    );
 
-    }  
+}catch(error){
 
+    console.error(
+        "JARVIS ERROR:",
+        error
+    );
 
-    const data =  
-        await response.json();  
+    let message =
+        error.message ||
+        "Errore sconosciuto";
 
+    if(
+        error.name ===
+        "AbortError"
+    ){
 
-    console.log(  
-        "JARVIS RESPONSE:",  
-        data  
-    );  
+        message =
+            "Il server ha impiegato troppo tempo a rispondere.";
 
+    }
 
-    const reply =  
-        typeof data.response ===  
-            "string"  
-            ? data.response.trim()  
-            : "";  
+    else if(
+        message ===
+        "Failed to fetch"
+    ){
 
+        message =
+            "Errore di connessione al server JARVIS.";
 
-    if(!reply){  
+    }
 
-        throw new Error(  
-            "Risposta AI vuota"  
-        );  
+    addMsg(
+        "ERRORE: " +
+        message
+    );
 
-    }  
-
-
-    addMsg(  
-        reply  
-    );  
-
-
-    addMemory(  
-        "assistant",  
-        reply  
-    );  
-
-
-    speak(  
-        reply  
-    ).catch(  
-        error => {  
-
-            console.error(  
-                "TTS:",  
-                error  
-            );  
-
-        }  
-    );  
-
-
-    setState(  
-        "idle"  
-    );  
-
-
-}catch(error){  
-
-    console.error(  
-        "JARVIS ERROR:",  
-        error  
-    );  
-
-
-    let message =  
-        error.message ||  
-        "Errore sconosciuto";  
-
-
-    if(  
-        error.name ===  
-        "AbortError"  
-    ){  
-
-        message =  
-            "Il server ha impiegato troppo tempo a rispondere.";  
-
-    }  
-
-    else if(  
-        message ===  
-        "Failed to fetch"  
-    ){  
-
-        message =  
-            "Errore di connessione al server JARVIS.";  
-
-    }  
-
-
-    addMsg(  
-        "ERRORE: " +  
-        message  
-    );  
-
-
-    setState(  
-        "idle"  
-    );  
+    setState(
+        "idle"
+    );
 
 }
 
@@ -3882,26 +3745,22 @@ INVIO
 
 function sendMessage(){
 
-const text =  
-    textInput.value.trim();  
+const text =
+    textInput.value.trim();
 
+if(!text){
+    return;
+}
 
-if(!text){  
-    return;  
-}  
+textInput.value =
+    "";
 
+addMsg(
+    text
+);
 
-textInput.value =  
-    "";  
-
-
-addMsg(  
-    text  
-);  
-
-
-processAi(  
-    text  
+processAi(
+    text
 );
 
 }
@@ -3915,19 +3774,18 @@ textInput.addEventListener(
 "keydown",
 event => {
 
-if(  
-        event.key ===  
-        "Enter"  
-    ){  
+if(
+        event.key ===
+        "Enter"
+    ){
 
-        event.preventDefault();  
+        event.preventDefault();
 
-        sendMessage();  
+        sendMessage();
 
-    }  
+    }
 
 }
-
 );
 
 /* =====================================================
@@ -3946,133 +3804,117 @@ false;
 
 if(Recognition){
 
-recognition =  
-    new Recognition();  
+recognition =
+    new Recognition();
 
+recognition.lang =
+    "it-IT";
 
-recognition.lang =  
-    "it-IT";  
+recognition.continuous =
+    false;
 
+recognition.interimResults =
+    false;
 
-recognition.continuous =  
-    false;  
+recognition.onstart =
+    () => {
 
+        listening =
+            true;
 
-recognition.interimResults =  
-    false;  
+        micBtn.classList.add(
+            "active"
+        );
 
+        setState(
+            "listening"
+        );
 
-recognition.onstart =  
-    () => {  
+    };
 
-        listening =  
-            true;  
+recognition.onresult =
+    event => {
 
+        const text =
+            event
+                .results[0][0]
+                .transcript
+                .trim();
 
-        micBtn.classList.add(  
-            "active"  
-        );  
+        if(text){
 
+            textInput.value =
+                text;
 
-        setState(  
-            "listening"  
-        );  
+            sendMessage();
 
-    };  
+        }
 
+    };
 
-recognition.onresult =  
-    event => {  
+recognition.onerror =
+    error => {
 
-        const text =  
-            event  
-                .results[0][0]  
-                .transcript  
-                .trim();  
+        console.error(
+            "Microfono:",
+            error
+        );
 
+        listening =
+            false;
 
-        if(text){  
+        micBtn.classList.remove(
+            "active"
+        );
 
-            textInput.value =  
-                text;  
+        setState(
+            "idle"
+        );
 
+    };
 
-            sendMessage();  
+recognition.onend =
+    () => {
 
-        }  
+        listening =
+            false;
 
-    };  
+        micBtn.classList.remove(
+            "active"
+        );
 
+    };
 
-recognition.onerror =  
-    error => {  
+micBtn.addEventListener(
+    "click",
+    () => {
 
-        console.error(  
-            "Microfono:",  
-            error  
-        );  
+        if(listening){
 
+            recognition.stop();
 
-        listening =  
-            false;  
+        }else{
 
+            try{
 
-        micBtn.classList.remove(  
-            "active"  
-        );  
+                recognition.start();
 
+            }catch(error){
 
-        setState(  
-            "idle"  
-        );  
+                console.warn(
+                    error
+                );
 
-    };  
+            }
 
+        }
 
-recognition.onend =  
-    () => {  
-
-        listening =  
-            false;  
-
-
-        micBtn.classList.remove(  
-            "active"  
-        );  
-
-    };  
-
-
-micBtn.addEventListener(  
-    "click",  
-    () => {  
-
-        if(listening){  
-
-            recognition.stop();  
-
-        }else{  
-
-            try{  
-
-                recognition.start();  
-
-            }catch(error){  
-
-                console.warn(  
-                    error  
-                );  
-
-            }  
-
-        }  
-
-    }  
+    }
 );
 
 }else{
 
-micBtn.style.opacity =  
+micBtn.style.opacity =
     ".3";
 
 }
@@ -4085,28 +3927,24 @@ window.addEventListener(
 "resize",
 () => {
 
-camera.aspect =  
-        window.innerWidth /  
-        window.innerHeight;  
+camera.aspect =
+        window.innerWidth /
+        window.innerHeight;
 
+    camera.updateProjectionMatrix();
 
-    camera.updateProjectionMatrix();  
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
 
+    if(map){
 
-    renderer.setSize(  
-        window.innerWidth,  
-        window.innerHeight  
-    );  
+        map.resize();
 
-
-    if(map){  
-
-        map.resize();  
-
-    }  
+    }
 
 }
-
 );
 
 /* =====================================================
@@ -4116,18 +3954,16 @@ CANCELLA MEMORIA
 window.clearJarvisMemory =
 function(){
 
-memory =  
-        [];  
+memory =
+        [];
 
+    localStorage.removeItem(
+        MEMORY_KEY
+    );
 
-    localStorage.removeItem(  
-        MEMORY_KEY  
-    );  
-
-
-    console.log(  
-        "Memoria JARVIS cancellata."  
-    );  
+    console.log(
+        "Memoria JARVIS cancellata."
+    );
 
 };
 
@@ -4139,6 +3975,7 @@ setState(
 "idle"
 );
 
-</script></body>
+</script>
 
+</body>
 </html>

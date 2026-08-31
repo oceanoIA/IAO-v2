@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-<html lang="it">
-
+<!DOCTYPE html><html lang="it">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link rel="stylesheet"
-      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
-
-<style>
-
-*{
- box-sizing:border-box;
- margin:0;
- padding:0;
-}
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>J.A.R.V.I.S.</title><link rel="stylesheet"
+href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
+*{box-sizing:border-box;margin:0;padding:0}
 
 html,body{
  width:100%;
@@ -30,12 +15,7 @@ html,body{
 }
 
 body{
- background:radial-gradient(
-  circle at center,
-  #071719 0%,
-  #020708 48%,
-  #000 100%
- );
+ background:radial-gradient(circle at center,#071719 0%,#020708 48%,#000 100%);
 }
 
 #webgl-container{
@@ -44,23 +24,12 @@ body{
  z-index:1;
 }
 
-#webgl-container canvas{
- display:block;
- width:100%;
- height:100%;
-}
-
 .vignette{
  position:fixed;
  inset:0;
  z-index:3;
  pointer-events:none;
- background:radial-gradient(
-  circle at center,
-  transparent 30%,
-  rgba(0,0,0,.2) 65%,
-  rgba(0,0,0,.8) 100%
- );
+ background:radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.2) 65%,rgba(0,0,0,.8) 100%);
 }
 
 .jarvis-title{
@@ -103,11 +72,6 @@ body{
  letter-spacing:1px;
 }
 
-
-/* =====================================================
-   CHAT
-===================================================== */
-
 #chat{
  position:fixed;
  left:50%;
@@ -132,11 +96,6 @@ body{
  line-height:1.45;
  white-space:pre-wrap;
 }
-
-
-/* =====================================================
-   COMMAND BAR
-===================================================== */
 
 .command-wrapper{
  position:fixed;
@@ -175,109 +134,43 @@ body{
  color:rgba(255,255,255,.3);
 }
 
-
-/* =====================================================
-   MICROFONO
-===================================================== */
-
 #micBtn{
- width:42px;
- height:39px;
- margin-right:5px;
- border:1px solid transparent;
- border-radius:50%;
+ width:34px;
+ height:34px;
+ margin-right:7px;
+ border:none;
  background:transparent;
  color:rgba(210,255,255,.65);
  cursor:pointer;
  display:flex;
  align-items:center;
  justify-content:center;
- transition:.2s ease;
 }
 
 .mic-icon{
- width:10px;
- height:17px;
- border:1.5px solid currentColor;
+ width:8px;
+ height:14px;
+ border:1.3px solid currentColor;
  border-radius:60px;
  position:relative;
-}
-
-.mic-icon:before{
- content:"";
- position:absolute;
- left:50%;
- bottom:-8px;
- width:15px;
- height:9px;
- transform:translateX(-50%);
- border:1.5px solid currentColor;
- border-top:none;
- border-radius:0 0 10px 10px;
 }
 
 .mic-icon:after{
  content:"";
  position:absolute;
  left:50%;
- bottom:-11px;
- width:1.5px;
- height:4px;
+ bottom:-6px;
+ width:12px;
+ height:7px;
  transform:translateX(-50%);
- background:currentColor;
-}
-
-#micBtn:hover{
- color:#8fffff;
- border-color:rgba(0,255,255,.25);
- background:rgba(0,255,255,.05);
+ border:1.3px solid currentColor;
+ border-top:none;
+ border-radius:0 0 8px 8px;
 }
 
 #micBtn.active{
  color:#8fffff;
- border-color:rgba(0,255,255,.45);
- background:rgba(0,255,255,.08);
  filter:drop-shadow(0 0 8px rgba(0,255,255,.7));
- animation:micPulse 1.2s infinite;
-}
-
-@keyframes micPulse{
-
- 0%,100%{
-  box-shadow:0 0 0 rgba(0,255,255,0);
- }
-
- 50%{
-  box-shadow:0 0 18px rgba(0,255,255,.28);
- }
-}
-
-#micBtn.unsupported{
- opacity:.3;
- cursor:not-allowed;
-}
-
-#micStatus{
- position:fixed;
- left:50%;
- bottom:74px;
- transform:translateX(-50%);
- z-index:55;
- display:none;
- padding:6px 12px;
- border:1px solid rgba(0,255,255,.2);
- border-radius:15px;
- background:rgba(2,15,18,.85);
- color:rgba(150,255,255,.75);
- font-family:monospace;
- font-size:8px;
- letter-spacing:1.3px;
- pointer-events:none;
- white-space:nowrap;
-}
-
-#micStatus.active{
- display:block;
 }
 
 #sendBtn{
@@ -299,9 +192,7 @@ body{
 }
 
 
-/* =====================================================
-   CONVERSAZIONE CONTINUA
-===================================================== */
+/* ================= CONVERSAZIONE ================= */
 
 #conversationBtn{
  position:fixed;
@@ -322,37 +213,13 @@ body{
 
 #conversationBtn.active{
  color:#8fffff;
- border-color:rgba(0,255,255,.75);
- background:rgba(0,255,255,.09);
- box-shadow:
-  0 0 15px rgba(0,255,255,.15),
-  inset 0 0 15px rgba(0,255,255,.04);
-}
-
-#conversationStatus{
- position:fixed;
- left:22px;
- bottom:70px;
- z-index:60;
- display:none;
- padding:7px 12px;
- border:1px solid rgba(0,255,255,.2);
- border-radius:15px;
- background:rgba(2,15,18,.8);
- color:rgba(150,255,255,.7);
- font-family:monospace;
- font-size:8px;
- letter-spacing:1.2px;
-}
-
-#conversationStatus.active{
- display:block;
+ border-color:rgba(0,255,255,.7);
+ background:rgba(0,255,255,.08);
+ box-shadow:0 0 18px rgba(0,255,255,.12);
 }
 
 
-/* =====================================================
-   VOCE
-===================================================== */
+/* ================= VOCE ================= */
 
 #voiceBtn{
  position:fixed;
@@ -385,9 +252,7 @@ body{
  backdrop-filter:blur(20px);
 }
 
-#voicePanel.active{
- display:block;
-}
+#voicePanel.active{display:block}
 
 .voice-title{
  color:rgba(220,255,255,.9);
@@ -396,8 +261,7 @@ body{
  margin-bottom:10px;
 }
 
-#voiceSelector,
-#voiceTest{
+#voiceSelector,#voiceTest{
  width:100%;
  padding:10px;
  border:1px solid rgba(0,255,255,.2);
@@ -415,21 +279,14 @@ body{
 }
 
 
-/* =====================================================
-   MAPPA
-===================================================== */
+/* ================= MAPPA ================= */
 
 #tacticalMap{
  position:fixed;
  inset:0;
  z-index:20;
  display:none;
- background:radial-gradient(
-  circle at center,
-  #081719 0%,
-  #020708 65%,
-  #000 100%
- );
+ background:radial-gradient(circle at center,#081719 0%,#020708 65%,#000 100%);
 }
 
 #tacticalMap.active{
@@ -438,16 +295,8 @@ body{
 }
 
 @keyframes mapIn{
-
- from{
-  opacity:0;
-  transform:scale(1.015);
- }
-
- to{
-  opacity:1;
-  transform:scale(1);
- }
+ from{opacity:0;transform:scale(1.015)}
+ to{opacity:1;transform:scale(1)}
 }
 
 .map-header{
@@ -474,9 +323,7 @@ body{
  overflow:hidden;
  border-radius:28px;
  background:#071012;
- box-shadow:
-  0 0 35px rgba(0,0,0,.65),
-  0 0 70px rgba(0,255,255,.035);
+ box-shadow:0 0 35px rgba(0,0,0,.65),0 0 70px rgba(0,255,255,.035);
  border:1px solid rgba(0,255,255,.10);
 }
 
@@ -529,27 +376,17 @@ body{
  border-radius:50%;
  border:2px solid #00ffff;
  background:rgba(0,255,255,.16);
- box-shadow:
-  0 0 15px rgba(0,255,255,.9),
-  0 0 35px rgba(0,255,255,.4);
+ box-shadow:0 0 15px rgba(0,255,255,.9),0 0 35px rgba(0,255,255,.4);
  animation:markerPulse 1.5s infinite;
 }
 
 @keyframes markerPulse{
-
- 0%,100%{
-  transform:scale(1);
- }
-
- 50%{
-  transform:scale(1.18);
- }
+ 0%,100%{transform:scale(1)}
+ 50%{transform:scale(1.18)}
 }
 
 
-/* =====================================================
-   WEB WINDOWS
-===================================================== */
+/* ================= WEB WINDOWS ================= */
 
 #webSearchWindows{
  position:fixed;
@@ -567,9 +404,7 @@ body{
  background:rgba(2,12,15,.96);
  border:1px solid rgba(0,255,255,.28);
  border-radius:16px;
- box-shadow:
-  0 0 25px rgba(0,255,255,.10),
-  0 15px 50px rgba(0,0,0,.5);
+ box-shadow:0 0 25px rgba(0,255,255,.10),0 15px 50px rgba(0,0,0,.5);
  overflow:hidden;
  resize:both;
  pointer-events:auto;
@@ -675,9 +510,7 @@ body{
 }
 
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* ================= MOBILE ================= */
 
 @media(max-width:600px){
 
@@ -697,17 +530,9 @@ body{
   bottom:17px;
  }
 
- #textInput{
-  font-size:13px;
- }
+ #textInput{font-size:13px}
 
- #chat{
-  bottom:80px;
- }
-
- #micStatus{
-  bottom:66px;
- }
+ #chat{bottom:80px}
 
  #map{
   top:3cm;
@@ -717,9 +542,7 @@ body{
   border-radius:22px;
  }
 
- .map-overlay{
-  border-radius:22px;
- }
+ .map-overlay{border-radius:22px}
 
  .map-header{
   top:2.5%;
@@ -750,11 +573,6 @@ body{
   padding:0 11px;
  }
 
- #conversationStatus{
-  left:12px;
-  bottom:112px;
- }
-
  #voicePanel{
   right:12px;
   bottom:112px;
@@ -767,445 +585,127 @@ body{
   min-width:230px;
   min-height:180px;
  }
-
 }
 
 @media(max-width:430px){
-
  #map{
   top:2.2cm;
   right:2.2cm;
   bottom:2.2cm;
   left:2.2cm;
  }
-
 }
-
-
-/* =====================================================
-   TRASCRIZIONE
-===================================================== */
-
-#textInput.listening{
- color:#8fffff;
- text-shadow:0 0 8px rgba(0,255,255,.3);
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-<div class="jarvis-title"
-     id="jarvisTitle">
- J.A.R.V.I.S.
-</div>
-
-<div class="datetime">
-
- <div id="clock" class="time">
-  00:00:00
- </div>
-
- <div id="date" class="date">
-  00 AGO 2026
- </div>
-
-</div>
-
-
-<!-- =====================================================
-     MAPPA
-===================================================== -->
-
-<div id="tacticalMap">
-
+</style></head><body><div id="webgl-container"></div>
+<div class="vignette"></div><div class="jarvis-title" id="jarvisTitle">J.A.R.V.I.S</div><div class="datetime">
+ <div id="clock" class="time">00:00:00</div>
+ <div id="date" class="date">00 AGO 2026</div>
+</div><div id="tacticalMap">
  <div id="map"></div>
-
  <div class="map-overlay"></div>
+ <div class="map-header">TACTICAL MAP</div>
+ <button id="closeMap">×</button>
+</div><div id="webSearchWindows"></div>
+<div id="webSearchIndicator">WEB WINDOWS: 0</div><div id="chat"></div><div class="command-wrapper">
+ <input id="textInput" type="text" autocomplete="off"
+ placeholder="Chiedi qualcosa a JARVIS...">
+ <button id="micBtn"><span class="mic-icon"></span></button>
+ <button id="sendBtn">INVIA</button>
+</div><button id="conversationBtn">◉ CONVERSAZIONE</button>
 
- <div class="map-header">
-  TACTICAL MAP
- </div>
-
- <button id="closeMap">
-  ×
- </button>
-
-</div>
-
-
-<!-- =====================================================
-     WEB WINDOWS
-===================================================== -->
-
-<div id="webSearchWindows"></div>
-
-<div id="webSearchIndicator">
- WEB WINDOWS: 0
-</div>
-
-
-<!-- =====================================================
-     CHAT
-===================================================== -->
-
-<div id="chat"></div>
-
-
-<!-- =====================================================
-     STATO MICROFONO
-===================================================== -->
-
-<div id="micStatus">
- MICROFONO: PRONTO
-</div>
-
-
-<!-- =====================================================
-     COMMAND BAR
-===================================================== -->
-
-<div class="command-wrapper">
-
- <input
-  id="textInput"
-  type="text"
-  autocomplete="off"
-  placeholder="Chiedi qualcosa a JARVIS..."
- >
-
- <button
-  id="micBtn"
-  title="Parla con JARVIS">
-
-  <span class="mic-icon"></span>
-
- </button>
-
- <button id="sendBtn">
-  INVIA
- </button>
-
-</div>
-
-
-<!-- =====================================================
-     CONVERSAZIONE CONTINUA
-===================================================== -->
-
-<button id="conversationBtn">
- 🎙 CONVERSAZIONE
-</button>
-
-<div id="conversationStatus">
- CONVERSAZIONE CONTINUA: OFF
-</div>
-
-
-<!-- =====================================================
-     VOCE
-===================================================== -->
-
-<button id="voiceBtn">
- ⚙ VOCE
-</button>
+<button id="voiceBtn">⚙ VOCE</button>
 
 <div id="voicePanel">
-
- <div class="voice-title">
-  VOCE J.A.R.V.I.S.
- </div>
-
+ <div class="voice-title">VOCE J.A.R.V.I.S.</div>
  <select id="voiceSelector">
-
-  <option value="">
-   Voce dispositivo automatica
-  </option>
-
+  <option value="">Voce dispositivo automatica</option>
  </select>
-
- <button id="voiceTest">
-  TESTA VOCE
- </button>
-
-</div>
-
-
-<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
-
-
-<script type="importmap">
-
+ <button id="voiceTest">TESTA VOCE</button>
+</div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
 {
  "imports":{
   "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
  }
 }
-
-</script>
-
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
 
-/* =====================================================
-   CONFIG
-===================================================== */
+/* ================= CONFIG ================= */
 
-const API=
- "https://iao-ai-v3.oceano-masoud.workers.dev/";
-
-const MEMORY_KEY=
- "jarvis_memory_v1";
-
+const API="https://iao-ai-v3.oceano-masoud.workers.dev/";
+const MEMORY_KEY="jarvis_memory_v1";
 const MAX_MEMORY=30;
 
-const ELEVEN_VOICE_ID=
- "vkBFlAtUdZqNR4MqxSVr";
-
-
-/* =====================================================
-   VARIABILI AUDIO
-===================================================== */
+const ELEVEN_VOICE_ID="vkBFlAtUdZqNR4MqxSVr";
 
 let currentAudio=null;
-
 let audioPlaying=false;
 
 let deviceVoices=[];
-
 let selectedDeviceVoice=null;
 
 
-/* =====================================================
-   VARIABILI CONVERSAZIONE
-===================================================== */
+/* ================= ELEMENTI ================= */
 
-let conversationMode=false;
-
-let recognition=null;
-
-let listening=false;
-
-let recognitionRestartTimer=null;
-
-let recognitionShouldRun=false;
-
-let recognitionStarting=false;
-
-let speechGeneration=0;
-
-let manualRecognition=false;
-
-
-/* =====================================================
-   ELEMENTI
-===================================================== */
-
-const container=
- document.getElementById(
-  "webgl-container"
- );
-
-const chat=
- document.getElementById(
-  "chat"
- );
-
-const textInput=
- document.getElementById(
-  "textInput"
- );
-
-const sendBtn=
- document.getElementById(
-  "sendBtn"
- );
-
-const micBtn=
- document.getElementById(
-  "micBtn"
- );
-
-const micStatus=
- document.getElementById(
-  "micStatus"
- );
-
-const clock=
- document.getElementById(
-  "clock"
- );
-
-const date=
- document.getElementById(
-  "date"
- );
-
-const tacticalMap=
- document.getElementById(
-  "tacticalMap"
- );
-
-const closeMap=
- document.getElementById(
-  "closeMap"
- );
-
-const jarvisTitle=
- document.getElementById(
-  "jarvisTitle"
- );
-
-const mapHeader=
- document.querySelector(
-  ".map-header"
- );
-
-const voiceBtn=
- document.getElementById(
-  "voiceBtn"
- );
-
-const voicePanel=
- document.getElementById(
-  "voicePanel"
- );
-
-const voiceSelector=
- document.getElementById(
-  "voiceSelector"
- );
-
-const voiceTest=
- document.getElementById(
-  "voiceTest"
- );
-
-const conversationBtn=
- document.getElementById(
-  "conversationBtn"
- );
-
-const conversationStatus=
- document.getElementById(
-  "conversationStatus"
- );
-
-const webSearchWindows=
- document.getElementById(
-  "webSearchWindows"
- );
-
-const webSearchIndicator=
- document.getElementById(
-  "webSearchIndicator"
- );
+const container=document.getElementById("webgl-container");
+const chat=document.getElementById("chat");
+const textInput=document.getElementById("textInput");
+const sendBtn=document.getElementById("sendBtn");
+const micBtn=document.getElementById("micBtn");
+const clock=document.getElementById("clock");
+const date=document.getElementById("date");
+const tacticalMap=document.getElementById("tacticalMap");
+const closeMap=document.getElementById("closeMap");
+const jarvisTitle=document.getElementById("jarvisTitle");
+const mapHeader=document.querySelector(".map-header");
+const voiceBtn=document.getElementById("voiceBtn");
+const voicePanel=document.getElementById("voicePanel");
+const voiceSelector=document.getElementById("voiceSelector");
+const voiceTest=document.getElementById("voiceTest");
+const webSearchWindows=document.getElementById("webSearchWindows");
+const webSearchIndicator=document.getElementById("webSearchIndicator");
+const conversationBtn=document.getElementById("conversationBtn");
 
 
-/* =====================================================
-   MEMORIA
-===================================================== */
+/* ================= MEMORIA ================= */
 
 let memory=[];
 
 try{
-
- const saved=
-  localStorage.getItem(
-   MEMORY_KEY
-  );
-
+ const saved=localStorage.getItem(MEMORY_KEY);
  if(saved){
-
-  const parsed=
-   JSON.parse(saved);
-
-  if(Array.isArray(parsed))
-   memory=
-    parsed.slice(
-     -MAX_MEMORY
-    );
-
+  const parsed=JSON.parse(saved);
+  if(Array.isArray(parsed)) memory=parsed.slice(-MAX_MEMORY);
  }
-
-}catch(error){
-
- console.warn(
-  "Memoria:",
-  error
- );
-
-}
-
+}catch(e){console.warn("Memoria:",e)}
 
 function saveMemory(){
-
  try{
-
   localStorage.setItem(
    MEMORY_KEY,
-   JSON.stringify(
-    memory.slice(
-     -MAX_MEMORY
-    )
-   )
+   JSON.stringify(memory.slice(-MAX_MEMORY))
   );
-
- }catch(error){
-
-  console.warn(
-   "Salvataggio memoria:",
-   error
-  );
-
- }
-
+ }catch(e){console.warn("Salvataggio memoria:",e)}
 }
 
-
-function addMemory(
- role,
- content
-){
-
- memory.push({
-  role,
-  content
- });
-
- memory=
-  memory.slice(
-   -MAX_MEMORY
-  );
-
+function addMemory(role,content){
+ memory.push({role,content});
+ memory=memory.slice(-MAX_MEMORY);
  saveMemory();
-
 }
 
 
-/* =====================================================
-   OROLOGIO
-===================================================== */
+/* ================= OROLOGIO ================= */
 
 const months=[
  "GEN","FEB","MAR","APR","MAG","GIU",
  "LUG","AGO","SET","OTT","NOV","DIC"
 ];
 
-
 function updateClock(){
 
- const now=
-  new Date();
+ const now=new Date();
 
  clock.textContent=
   `${String(now.getHours()).padStart(2,"0")}:`+
@@ -1216,1096 +716,319 @@ function updateClock(){
   `${String(now.getDate()).padStart(2,"0")} `+
   `${months[now.getMonth()]} `+
   `${now.getFullYear()}`;
-
 }
 
-
 updateClock();
+setInterval(updateClock,1000);
 
-setInterval(
- updateClock,
+
+/* ================= THREE ================= */
+
+const scene=new THREE.Scene();
+
+const camera=new THREE.PerspectiveCamera(
+ 55,
+ window.innerWidth/window.innerHeight,
+ .1,
  1000
 );
 
+camera.position.z=5.2;
 
-/* =====================================================
-   THREE.JS
-===================================================== */
-
-const scene=
- new THREE.Scene();
-
-
-const camera=
- new THREE.PerspectiveCamera(
-  55,
-  window.innerWidth/
-  window.innerHeight,
-  .1,
-  1000
- );
-
-
-camera.position.z=
- 5.2;
-
-
-const renderer=
- new THREE.WebGLRenderer({
-
-  antialias:true,
-
-  alpha:true,
-
-  powerPreference:
-   "high-performance"
-
- });
-
+const renderer=new THREE.WebGLRenderer({
+ antialias:true,
+ alpha:true
+});
 
 renderer.setSize(
  window.innerWidth,
  window.innerHeight
- );
-
+);
 
 renderer.setPixelRatio(
- Math.min(
-  window.devicePixelRatio||1,
-  2
- )
- );
+ Math.min(window.devicePixelRatio,2)
+);
+
+container.appendChild(renderer.domElement);
 
 
-container.appendChild(
- renderer.domElement
- );
-
-
-/* =====================================================
-   GLOW
-===================================================== */
+/* ================= GLOW ================= */
 
 function createGlow(){
 
- const canvas=
-  document.createElement(
-   "canvas"
-  );
-
+ const canvas=document.createElement("canvas");
  canvas.width=64;
-
  canvas.height=64;
 
+ const ctx=canvas.getContext("2d");
 
- const ctx=
-  canvas.getContext(
-   "2d"
-  );
-
-
- const gradient=
-  ctx.createRadialGradient(
-   32,32,0,
-   32,32,32
-  );
-
-
- gradient.addColorStop(
-  0,
-  "rgba(255,255,255,1)"
+ const gradient=ctx.createRadialGradient(
+  32,32,0,
+  32,32,32
  );
 
- gradient.addColorStop(
-  .2,
-  "rgba(220,255,255,1)"
- );
+ gradient.addColorStop(0,"rgba(255,255,255,1)");
+ gradient.addColorStop(.2,"rgba(220,255,255,1)");
+ gradient.addColorStop(.4,"rgba(0,255,255,.9)");
+ gradient.addColorStop(.7,"rgba(0,150,190,.25)");
+ gradient.addColorStop(1,"rgba(0,0,0,0)");
 
- gradient.addColorStop(
-  .4,
-  "rgba(0,255,255,.9)"
- );
+ ctx.fillStyle=gradient;
+ ctx.fillRect(0,0,64,64);
 
- gradient.addColorStop(
-  .7,
-  "rgba(0,150,190,.25)"
- );
-
- gradient.addColorStop(
-  1,
-  "rgba(0,0,0,0)"
- );
-
-
- ctx.fillStyle=
-  gradient;
-
-
- ctx.fillRect(
-  0,0,64,64
- );
-
-
- return new THREE.CanvasTexture(
-  canvas
- );
-
+ return new THREE.CanvasTexture(canvas);
 }
 
 
-/* =====================================================
-   PARTICELLE / NEURONI
-===================================================== */
+/* ================= PARTICELLE ================= */
 
 const COUNT=3000;
 
+const geometry=new THREE.BufferGeometry();
+const positions=new Float32Array(COUNT*3);
+const radii=new Float32Array(COUNT);
+const angles=new Float32Array(COUNT*2);
+const seeds=new Float32Array(COUNT);
 
-const geometry=
- new THREE.BufferGeometry();
+for(let i=0;i<COUNT;i++){
 
-
-const positions=
- new Float32Array(
-  COUNT*3
- );
-
-
-const radii=
- new Float32Array(
-  COUNT
- );
-
-
-const angles=
- new Float32Array(
-  COUNT*2
- );
-
-
-const seeds=
- new Float32Array(
-  COUNT
- );
-
-
-for(
- let i=0;
- i<COUNT;
- i++
-){
-
- const r=
-  1.10+
-  Math.random()*.70;
-
-
- const theta=
-  Math.random()*
-  Math.PI*2;
-
-
- const phi=
-  Math.acos(
-   2*Math.random()-1
-  );
-
+ const r=1.10+Math.random()*.70;
+ const theta=Math.random()*Math.PI*2;
+ const phi=Math.acos(2*Math.random()-1);
 
  radii[i]=r;
-
  angles[i*2]=theta;
-
  angles[i*2+1]=phi;
+ seeds[i]=Math.random()*100;
 
- seeds[i]=
-  Math.random()*100;
-
-
- positions[i*3]=
-  r*
-  Math.sin(phi)*
-  Math.cos(theta);
-
-
- positions[i*3+1]=
-  r*
-  Math.sin(phi)*
-  Math.sin(theta);
-
-
- positions[i*3+2]=
-  r*
-  Math.cos(phi);
-
+ positions[i*3]=r*Math.sin(phi)*Math.cos(theta);
+ positions[i*3+1]=r*Math.sin(phi)*Math.sin(theta);
+ positions[i*3+2]=r*Math.cos(phi);
 }
-
 
 geometry.setAttribute(
  "position",
- new THREE.BufferAttribute(
-  positions,
-  3
- )
+ new THREE.BufferAttribute(positions,3)
 );
 
+const material=new THREE.PointsMaterial({
+ color:new THREE.Color(0x00cfe8),
+ size:.042,
+ map:createGlow(),
+ transparent:true,
+ opacity:1,
+ depthWrite:false,
+ blending:THREE.AdditiveBlending
+});
 
-const material=
- new THREE.PointsMaterial({
+const particles=new THREE.Points(
+ geometry,
+ material
+);
 
-  color:
-   new THREE.Color(
-    0x00cfe8
-   ),
-
-  size:.042,
-
-  map:createGlow(),
-
-  transparent:true,
-
-  opacity:1,
-
-  depthWrite:false,
-
-  blending:
-   THREE.AdditiveBlending
-
- });
+scene.add(particles);
 
 
-const particles=
- new THREE.Points(
-  geometry,
-  material
- );
-
-
-scene.add(
- particles
- );
-
-
-/* =====================================================
-   STATO NEURONI
-===================================================== */
+/* ================= STATO ================= */
 
 let targetEnergy=.15;
-
 let energy=.15;
 
-
-const normalColor=
- new THREE.Color(
-  0x00cfe8
- );
-
-
-const activeColor=
- new THREE.Color(
-  0x8fffff
- );
-
-
-const currentColor=
- normalColor.clone();
-
+const normalColor=new THREE.Color(0x00cfe8);
+const activeColor=new THREE.Color(0x8fffff);
+const currentColor=normalColor.clone();
 
 function setState(state){
 
- if(state==="thinking")
-  targetEnergy=2;
-
- else if(state==="speaking")
-  targetEnergy=.8;
-
- else if(state==="listening")
-  targetEnergy=.55;
-
- else
-  targetEnergy=.15;
-
+ if(state==="thinking") targetEnergy=2;
+ else if(state==="speaking") targetEnergy=.8;
+ else if(state==="listening") targetEnergy=.55;
+ else targetEnergy=.15;
 }
 
 
-/* =====================================================
-   ANIMAZIONE NEURONI
-===================================================== */
+/* ================= ANIMAZIONE ================= */
 
 function animate(){
 
- requestAnimationFrame(
-  animate
- );
+ requestAnimationFrame(animate);
 
+ const time=performance.now()*.001;
 
- const time=
-  performance.now()*.001;
+ energy+=(targetEnergy-energy)*.045;
 
+ currentColor.lerp(activeColor,energy*.04);
 
- energy+=
-  (targetEnergy-energy)*
-  .045;
+ if(energy<.3)
+  currentColor.lerp(normalColor,.03);
 
+ material.color=currentColor;
+ material.size=.032+energy*.008;
 
- currentColor.lerp(
-  activeColor,
-  Math.min(
-   energy*.04,
-   1
-  )
- );
+ const pos=geometry.attributes.position.array;
 
+ for(let i=0;i<COUNT;i++){
 
- if(energy<.3){
+  const index=i*3;
+  const r=radii[i];
+  const theta=angles[i*2];
+  const phi=angles[i*2+1];
+  const seed=seeds[i];
 
-  currentColor.lerp(
-   normalColor,
-   .03
-  );
-
- }
-
-
- material.color=
-  currentColor;
-
-
- material.size=
-  .032+
-  energy*.008;
-
-
- const pos=
-  geometry.attributes
-   .position.array;
-
-
- for(
-  let i=0;
-  i<COUNT;
-  i++
- ){
-
-  const index=
-   i*3;
-
-
-  const r=
-   radii[i];
-
-
-  const theta=
-   angles[i*2];
-
-
-  const phi=
-   angles[i*2+1];
-
-
-  const seed=
-   seeds[i];
-
-
-  const pulse=
-   Math.sin(
-    time*2+
-    seed
-   )*.035;
-
+  const pulse=Math.sin(time*2+seed)*.035;
 
   const strangeShape=
-   Math.sin(
-    theta*6+
-    time*2+
-    seed
-   )*.18*energy;
-
+   Math.sin(theta*6+time*2+seed)*.18*energy;
 
   const wave=
-   Math.cos(
-    phi*7-
-    time*1.8+
-    seed
-   )*.12*energy;
+   Math.cos(phi*7-time*1.8+seed)*.12*energy;
 
+  const rr=r+pulse+strangeShape+wave;
 
-  const rr=
-   r+
-   pulse+
-   strangeShape+
-   wave;
+  let x=rr*Math.sin(phi)*Math.cos(theta);
+  let y=rr*Math.sin(phi)*Math.sin(theta);
+  let z=rr*Math.cos(phi);
 
-
-  let x=
-   rr*
-   Math.sin(phi)*
-   Math.cos(theta);
-
-
-  let y=
-   rr*
-   Math.sin(phi)*
-   Math.sin(theta);
-
-
-  /*
-     CORRETTO:
-     mancava la parentesi ")" nel codice originale.
-  */
-
-  let z=
-   rr*
-   Math.cos(phi);
-
-
-  x+=
-   Math.sin(
-    time*2.4+
-    phi*8+
-    seed
-   )*.08*energy;
-
-
-  y+=
-   Math.cos(
-    time*2.1+
-    theta*9+
-    seed
-   )*.08*energy;
-
-
-  z+=
-   Math.sin(
-    time*2.7+
-    (theta+phi)*7
-   )*.10*energy;
-
+  x+=Math.sin(time*2.4+phi*8+seed)*.08*energy;
+  y+=Math.cos(time*2.1+theta*9+seed)*.08*energy;
+  z+=Math.sin(time*2.7+(theta+phi)*7)*.10*energy;
 
   pos[index]=x;
-
   pos[index+1]=y;
-
   pos[index+2]=z;
-
  }
 
+ geometry.attributes.position.needsUpdate=true;
 
- geometry.attributes
-  .position
-  .needsUpdate=true;
+ particles.rotation.y+=.0005+energy*.0008;
+ particles.rotation.x=Math.sin(time*.25)*.04;
+ particles.rotation.z=Math.cos(time*.18)*.025;
 
-
- particles.rotation.y+=
-  .0005+
-  energy*.0008;
-
-
- particles.rotation.x=
-  Math.sin(
-   time*.25
-  )*.04;
-
-
- particles.rotation.z=
-  Math.cos(
-   time*.18
-  )*.025;
-
-
- renderer.render(
-  scene,
-  camera
- );
-
+ renderer.render(scene,camera);
 }
-
 
 animate();
 
 
-/* =====================================================
-   MAPTILER
-===================================================== */
+/* ================= MAPLIBRE ================= */
 
-const MAPTILER_KEY=
- "NmSlgtsAdQyEWy7t0OJf";
-
+const MAPTILER_KEY="NmSlgtsAdQyEWy7t0OJf";
 
 const MAPTILER_STYLE=
- "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="+
- MAPTILER_KEY;
-
+ "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
+ +MAPTILER_KEY;
 
 let map=null;
-
 let currentMarker=null;
-
 
 function initializeMap(){
 
- if(map)
-  return;
-
+ if(map)return;
 
  if(typeof maplibregl==="undefined"){
-
-  addMsg(
-   "Errore: MapTiler non disponibile."
-  );
-
+  addMsg("Errore: MapTiler non disponibile.");
   return;
-
  }
 
-
- map=
-  new maplibregl.Map({
-
-   container:"map",
-
-   style:MAPTILER_STYLE,
-
-   center:[
-    10.2118,
-    45.5416
-   ],
-
-   zoom:10,
-
-   attributionControl:true,
-
-   antialias:true
-
-  });
-
+ map=new maplibregl.Map({
+  container:"map",
+  style:MAPTILER_STYLE,
+  center:[10.2118,45.5416],
+  zoom:10,
+  attributionControl:true,
+  antialias:true
+ });
 
  map.addControl(
   new maplibregl.NavigationControl({
-
    showCompass:true,
-
    showZoom:true
-
   }),
   "bottom-right"
  );
 
-
- map.on(
-  "load",
-  ()=>{
-
-   map.resize();
-
-  }
- );
-
+ map.on("load",()=>map.resize());
 }
-
 
 function openTacticalMap(){
 
- tacticalMap.classList.add(
-  "active"
- );
-
- jarvisTitle.style.display=
-  "none";
-
- mapHeader.style.display=
-  "block";
-
+ tacticalMap.classList.add("active");
+ jarvisTitle.style.display="none";
+ mapHeader.style.display="block";
 
  initializeMap();
 
-
- setTimeout(
-  ()=>{
-
-   if(map)
-    map.resize();
-
-  },
-  400
- );
-
+ setTimeout(()=>{
+  if(map)map.resize();
+ },400);
 }
-
 
 function closeTacticalMap(){
 
- tacticalMap.classList.remove(
-  "active"
- );
-
- jarvisTitle.style.display=
-  "block";
-
+ tacticalMap.classList.remove("active");
+ jarvisTitle.style.display="block";
 }
 
-
-closeMap.addEventListener(
- "click",
- closeTacticalMap
- );
+closeMap.addEventListener("click",closeTacticalMap);
 
 
-/* =====================================================
-   UTILITY
-===================================================== */
+/* ================= UTILITY ================= */
 
 function escapeHtml(text){
 
  return String(text)
-
-  .replace(/&/g,"&amp;")
-
-  .replace(/</g,"&lt;")
-
-  .replace(/>/g,"&gt;")
-
-  .replace(/"/g,"&quot;")
-
-  .replace(/'/g,"&#039;");
-
+ .replace(/&/g,"&amp;")
+ .replace(/</g,"&lt;")
+ .replace(/>/g,"&gt;")
+ .replace(/"/g,"&quot;")
+ .replace(/'/g,"&#039;");
 }
-
 
 function addMsg(text){
 
  chat.innerHTML="";
 
+ const element=document.createElement("div");
 
- const element=
-  document.createElement(
-   "div"
-  );
+ element.className="msg";
+ element.textContent=text;
 
-
- element.className=
-  "msg";
-
-
- element.textContent=
-  text;
-
-
- chat.appendChild(
-  element
- );
-
+ chat.appendChild(element);
 }
 
 
-/* =====================================================
-   NORMALIZZAZIONE
-===================================================== */
+/* ================= MARKER ================= */
 
-function normalizeText(text){
+function createJarvisMarker(lat,lon,name){
 
- return String(text||"")
-
-  .toLowerCase()
-
-  .normalize("NFD")
-
-  .replace(
-   /[\u0300-\u036f]/g,
-   ""
-  )
-
-  .replace(
-   /[^a-z0-9\s]/g,
-   " "
-  )
-
-  .replace(
-   /\s+/g,
-   " "
-  )
-
-  .trim();
-
-}
-
-
-function similarity(a,b){
-
- a=normalizeText(a);
-
- b=normalizeText(b);
-
-
- if(a===b)
-  return 1;
-
-
- if(!a||!b)
-  return 0;
-
-
- const longer=
-  a.length>b.length?a:b;
-
-
- const shorter=
-  a.length>b.length?b:a;
-
-
- if(longer.includes(shorter))
-  return shorter.length/
-   longer.length;
-
-
- const matrix=[];
-
-
- for(
-  let i=0;
-  i<=shorter.length;
-  i++
- ){
-
-  matrix[i]=[i];
-
- }
-
-
- for(
-  let j=0;
-  j<=longer.length;
-  j++
- ){
-
-  matrix[0][j]=j;
-
- }
-
-
- for(
-  let i=1;
-  i<=shorter.length;
-  i++
- ){
-
-  for(
-   let j=1;
-   j<=longer.length;
-   j++
-  ){
-
-   matrix[i][j]=
-    Math.min(
-
-     matrix[i-1][j]+1,
-
-     matrix[i][j-1]+1,
-
-     matrix[i-1][j-1]+
-      (
-       shorter[i-1]===
-       longer[j-1]
-       ?0
-       :1
-      )
-
-    );
-
-  }
-
- }
-
-
- const distance=
-  matrix[
-   shorter.length
-  ][
-   longer.length
-  ];
-
-
- return 1-
-  distance/
-  longer.length;
-
-}
-
-
-function commandLooksLike(
- text,
- variants
-){
-
- const normalized=
-  normalizeText(text);
-
-
- for(
-  const variant of variants
- ){
-
-  const v=
-   normalizeText(variant);
-
-
-  if(normalized===v)
-   return true;
-
-
-  if(
-   normalized.includes(v)||
-   v.includes(normalized)
-  )
-   return true;
-
-
-  if(
-   similarity(
-    normalized,
-    v
-   )>=.72
-  )
-   return true;
-
- }
-
-
- return false;
-
-}
-
-
-/* =====================================================
-   FULLSCREEN
-===================================================== */
-
-async function enterFullscreen(){
-
- try{
-
-  if(document.fullscreenElement)
-   return true;
-
-
-  if(
-   document.documentElement
-    .requestFullscreen
-  ){
-
-   await document.documentElement
-    .requestFullscreen();
-
-
-   addMsg(
-    "Modalità fullscreen attivata."
-   );
-
-
-   return true;
-
-  }
-
- }catch(error){
-
-  console.warn(
-   "Fullscreen:",
-   error
-  );
-
- }
-
-
- addMsg(
-  "Il dispositivo non permette di attivare il fullscreen."
- );
-
-
- return false;
-
-}
-
-
-async function exitFullscreen(){
-
- try{
-
-  if(document.fullscreenElement){
-
-   await document.exitFullscreen();
-
-
-   addMsg(
-    "Modalità fullscreen disattivata."
-   );
-
-
-   return true;
-
-  }
-
- }catch(error){
-
-  console.warn(
-   "Fullscreen:",
-   error
-  );
-
- }
-
-
- return false;
-
-}
-
-
-async function toggleFullscreen(){
-
- if(document.fullscreenElement)
-  return exitFullscreen();
-
-
- return enterFullscreen();
-
-}
-
-
-function handleFullscreenCommand(text){
-
- const normalized=
-  normalizeText(text);
-
-
- const activateWords=[
-  "modalita fullscreen",
-  "modalita full screen",
-  "attiva fullscreen",
-  "attiva full screen",
-  "apri fullscreen",
-  "apri full screen",
-  "schermo intero",
-  "attiva schermo intero",
-  "full screen attivo",
-  "fullscreen attivo"
- ];
-
-
- const deactivateWords=[
-  "disattiva fullscreen",
-  "disattiva full screen",
-  "esci da fullscreen",
-  "esci dal fullscreen",
-  "esci da full screen",
-  "chiudi fullscreen",
-  "schermo normale",
-  "esci da schermo intero"
- ];
-
-
- if(
-  commandLooksLike(
-   normalized,
-   activateWords
-  )
- ){
-
-  enterFullscreen();
-
-  return true;
-
- }
-
-
- if(
-  commandLooksLike(
-   normalized,
-   deactivateWords
-  )
- ){
-
-  exitFullscreen();
-
-  return true;
-
- }
-
-
- return false;
-
-}
-
-
-/* =====================================================
-   MARKER
-===================================================== */
-
-function createJarvisMarker(
- lat,
- lon,
- name
-){
-
- if(!map)
-  return;
-
+ if(!map)return;
 
  if(currentMarker){
-
   currentMarker.remove();
-
   currentMarker=null;
-
  }
 
+ const markerElement=document.createElement("div");
+ markerElement.className="jarvis-map-marker";
 
- const markerElement=
-  document.createElement(
-   "div"
-  );
-
-
- markerElement.className=
-  "jarvis-map-marker";
-
-
- currentMarker=
-  new maplibregl.Marker({
-
-   element:
-    markerElement,
-
-   anchor:"center"
-
-  })
-
-  .setLngLat([
-   lon,
-   lat
-  ])
-
-  .setPopup(
-
-   new maplibregl.Popup({
-    offset:15
-   })
-
-   .setHTML(
-    `<b style="color:#00ffff">${
-     escapeHtml(name)
-    }</b>`
-   )
-
+ currentMarker=new maplibregl.Marker({
+  element:markerElement,
+  anchor:"center"
+ })
+ .setLngLat([lon,lat])
+ .setPopup(
+  new maplibregl.Popup({offset:15})
+  .setHTML(
+   `<b style="color:#00ffff">${escapeHtml(name)}</b>`
   )
-
-  .addTo(map);
-
+ )
+ .addTo(map);
 
  currentMarker.togglePopup();
-
 }
 
 
-/* =====================================================
-   RICERCA POSIZIONE
-===================================================== */
+/* ================= RICERCA POSIZIONE ================= */
 
 async function searchLocation(place){
 
@@ -2313,189 +1036,89 @@ async function searchLocation(place){
 
   openTacticalMap();
 
-
-  addMsg(
-   "Ricerca posizione: "+
-   place
-  );
-
+  addMsg("Ricerca posizione: "+place);
 
   const url=
    "https://nominatim.openstreetmap.org/search"+
    "?format=json&limit=1&q="+
    encodeURIComponent(place);
 
-
-  const response=
-   await fetch(
-    url,
-    {
-     headers:{
-      "Accept":
-       "application/json"
-     }
-    }
-   );
-
-
-  if(!response.ok)
-   throw new Error(
-    "Ricerca posizione fallita"
-   );
-
-
-  const results=
-   await response.json();
-
-
-  if(!results.length){
-
-   addMsg(
-    "Non riesco a trovare "+
-    place+"."
-   );
-
-   return;
-
-  }
-
-
-  const result=
-   results[0];
-
-
-  const lat=
-   parseFloat(
-    result.lat
-   );
-
-
-  const lon=
-   parseFloat(
-    result.lon
-   );
-
-
-  if(!map)
-   throw new Error(
-    "Mappa non inizializzata"
-   );
-
-
-  map.flyTo({
-
-   center:[
-    lon,
-    lat
-   ],
-
-   zoom:12,
-
-   speed:.8,
-
-   curve:1.5,
-
-   essential:true
-
+  const response=await fetch(url,{
+   headers:{
+    "Accept":"application/json"
+   }
   });
 
+  if(!response.ok)
+   throw new Error("Ricerca posizione fallita");
 
-  createJarvisMarker(
-   lat,
-   lon,
-   place
-  );
+  const results=await response.json();
 
+  if(!results.length){
+   addMsg("Non riesco a trovare "+place+".");
+   return;
+  }
 
-  addMsg(
-   "Posizione acquisita: "+
-   place
-  );
+  const result=results[0];
 
+  const lat=parseFloat(result.lat);
+  const lon=parseFloat(result.lon);
+
+  if(!map)
+   throw new Error("Mappa non inizializzata");
+
+  map.flyTo({
+   center:[lon,lat],
+   zoom:12,
+   speed:.8,
+   curve:1.5,
+   essential:true
+  });
+
+  createJarvisMarker(lat,lon,place);
+
+  addMsg("Posizione acquisita: "+place);
 
  }catch(error){
 
-  console.error(
-   "MAP ERROR:",
-   error
-  );
-
-
-  addMsg(
-   "Impossibile localizzare "+
-   place+"."
-  );
-
+  console.error("MAP ERROR:",error);
+  addMsg("Impossibile localizzare "+place+".");
  }
-
 }
 
 
-/* =====================================================
-   COMANDI MAPPA
-===================================================== */
+/* ================= COMANDI MAPPA ================= */
 
 function handleMapCommand(text){
 
- const normalized=
-  normalizeText(text);
-
+ const normalized=text.toLowerCase().trim();
 
  if(
-  commandLooksLike(
-   normalized,
-   [
-    "apri la mappa",
-    "apri mappa",
-    "mappa tattica",
-    "modalita tattica",
-    "attiva la mappa",
-    "attiva mappa",
-    "mostra la mappa",
-    "mostrami la mappa"
-   ]
-  )
+  normalized.includes("apri la mappa")||
+  normalized.includes("apri mappa")||
+  normalized.includes("mappa tattica")||
+  normalized.includes("modalità tattica")||
+  normalized.includes("modalita tattica")||
+  normalized.includes("attiva la mappa")
  ){
 
   openTacticalMap();
-
-
-  addMsg(
-   "Mappa tattica attivata."
-  );
-
-
+  addMsg("Mappa tattica attivata.");
   return true;
-
  }
 
-
  if(
-  commandLooksLike(
-   normalized,
-   [
-    "chiudi la mappa",
-    "chiudi mappa",
-    "esci dalla mappa",
-    "torna alla modalita normale",
-    "disattiva mappa",
-    "chiudi modalita tattica"
-   ]
-  )
+  normalized.includes("chiudi la mappa")||
+  normalized.includes("chiudi mappa")||
+  normalized.includes("esci dalla mappa")||
+  normalized.includes("torna alla modalità normale")||
+  normalized.includes("torna alla modalita normale")
  ){
 
   closeTacticalMap();
-
-
-  addMsg(
-   "Modalità tattica disattivata."
-  );
-
-
+  addMsg("Modalità tattica disattivata.");
   return true;
-
  }
-
 
  const patterns=[
   "mostrami ",
@@ -2504,48 +1127,23 @@ function handleMapCommand(text){
   "portami a ",
   "localizza ",
   "cerca ",
-  "visualizza ",
-  "fammi vedere "
+  "visualizza "
  ];
 
+ for(const pattern of patterns){
 
- for(
-  const pattern of patterns
- ){
+  if(normalized.startsWith(pattern)){
 
-  if(
-   normalized.startsWith(
-    normalizeText(pattern)
-   )
-  ){
-
-   const place=
-    text
-     .trim()
-     .substring(
-      pattern.length
-     )
-     .trim();
-
+   const place=text.trim().substring(pattern.length).trim();
 
    if(place.length>1){
-
-    searchLocation(
-     place
-    );
-
-
+    searchLocation(place);
     return true;
-
    }
-
   }
-
  }
 
-
  return false;
-
 }
 
 
@@ -2554,92 +1152,53 @@ function handleMapCommand(text){
 ===================================================== */
 
 let webWindowCounter=0;
-
 let highestWebZ=220;
-
 
 function updateWebIndicator(){
 
  const count=
-  webSearchWindows
-   .querySelectorAll(
-    ".web-window"
-   ).length;
-
+  webSearchWindows.querySelectorAll(".web-window").length;
 
  if(count>0){
 
-  webSearchIndicator
-   .classList
-   .add("active");
-
-
-  webSearchIndicator
-   .textContent=
-   "WEB WINDOWS: "+
-   count;
+  webSearchIndicator.classList.add("active");
+  webSearchIndicator.textContent="WEB WINDOWS: "+count;
 
  }else{
 
-  webSearchIndicator
-   .classList
-   .remove("active");
-
+  webSearchIndicator.classList.remove("active");
  }
-
 }
 
-
-function bringWebWindowToFront(
- windowElement
-){
+function bringWebWindowToFront(windowElement){
 
  highestWebZ++;
 
- windowElement.style.zIndex=
-  String(highestWebZ);
-
+ windowElement.style.zIndex=String(highestWebZ);
 }
 
 
+/* =====================================================
+   CREA FINESTRA WEB
+===================================================== */
+
 function openWebSearch(query){
 
- if(!query)
-  return;
-
+ if(!query)return;
 
  webWindowCounter++;
 
+ const windowElement=document.createElement("div");
 
- const windowElement=
-  document.createElement(
-   "div"
-  );
+ windowElement.className="web-window";
 
+ const offset=(webWindowCounter-1)%6;
 
- windowElement.className=
-  "web-window";
+ windowElement.style.left=(20+offset*45)+"px";
+ windowElement.style.top=(90+offset*35)+"px";
+ windowElement.style.zIndex=String(++highestWebZ);
 
-
- const offset=
-  (webWindowCounter-1)%6;
-
-
- windowElement.style.left=
-  (20+offset*45)+"px";
-
-
- windowElement.style.top=
-  (90+offset*35)+"px";
-
-
- windowElement.style.zIndex=
-  String(++highestWebZ);
-
-
- const safeTitle=
-  escapeHtml(query);
-
+ const safeTitle=escapeHtml(query);
 
  windowElement.innerHTML=`
 
@@ -2680,17 +1239,9 @@ function openWebSearch(query){
 
  `;
 
+ webSearchWindows.appendChild(windowElement);
 
- webSearchWindows.appendChild(
-  windowElement
- );
-
-
- const iframe=
-  windowElement.querySelector(
-   "iframe"
-  );
-
+ const iframe=windowElement.querySelector("iframe");
 
  iframe.src=
   "https://www.google.com/search?igu=1&q="+
@@ -2700,63 +1251,41 @@ function openWebSearch(query){
  windowElement.addEventListener(
   "pointerdown",
   ()=>{
-   bringWebWindowToFront(
-    windowElement
-   );
+   bringWebWindowToFront(windowElement);
   }
  );
 
 
  const minimizeButton=
-  windowElement.querySelector(
-   ".minimize-web"
-  );
-
+  windowElement.querySelector(".minimize-web");
 
  minimizeButton.addEventListener(
   "click",
   event=>{
-
    event.stopPropagation();
-
-   windowElement
-    .classList
-    .toggle("minimized");
-
+   windowElement.classList.toggle("minimized");
   }
  );
 
 
  const closeButton=
-  windowElement.querySelector(
-   ".close-web"
-  );
-
+  windowElement.querySelector(".close-web");
 
  closeButton.addEventListener(
   "click",
   event=>{
-
    event.stopPropagation();
-
    windowElement.remove();
-
    updateWebIndicator();
-
   }
  );
 
 
  const header=
-  windowElement.querySelector(
-   ".web-window-header"
-  );
-
+  windowElement.querySelector(".web-window-header");
 
  let dragging=false;
-
  let dragOffsetX=0;
-
  let dragOffsetY=0;
 
 
@@ -2765,51 +1294,31 @@ function openWebSearch(query){
   event=>{
 
    if(
-    event.target.closest(
-     ".web-window-btn"
-    )
-   )
+    event.target.closest(".web-window-btn")
+   ){
     return;
-
+   }
 
    dragging=true;
 
-
-   bringWebWindowToFront(
-    windowElement
-   );
-
+   bringWebWindowToFront(windowElement);
 
    const rect=
-    windowElement
-     .getBoundingClientRect();
-
+    windowElement.getBoundingClientRect();
 
    dragOffsetX=
-    event.clientX-
-    rect.left;
-
+    event.clientX-rect.left;
 
    dragOffsetY=
-    event.clientY-
-    rect.top;
-
+    event.clientY-rect.top;
 
    try{
-
-    header.setPointerCapture(
-     event.pointerId
-    );
-
-   }catch(error){}
-
+    header.setPointerCapture(event.pointerId);
+   }catch(e){}
 
    event.preventDefault();
-
   },
-  {
-   passive:false
-  }
+  {passive:false}
  );
 
 
@@ -2817,94 +1326,56 @@ function openWebSearch(query){
   "pointermove",
   event=>{
 
-   if(!dragging)
-    return;
-
+   if(!dragging)return;
 
    event.preventDefault();
 
-
    let newLeft=
-    event.clientX-
-    dragOffsetX;
-
+    event.clientX-dragOffsetX;
 
    let newTop=
-    event.clientY-
-    dragOffsetY;
-
+    event.clientY-dragOffsetY;
 
    const rect=
-    windowElement
-     .getBoundingClientRect();
+    windowElement.getBoundingClientRect();
 
-
-   const minLeft=
-    -rect.width+100;
-
-
-   const maxLeft=
-    window.innerWidth-80;
-
+   const minLeft=-rect.width+100;
+   const maxLeft=window.innerWidth-80;
 
    const minTop=0;
-
-
-   const maxTop=
-    window.innerHeight-60;
-
+   const maxTop=window.innerHeight-60;
 
    newLeft=
     Math.max(
      minLeft,
-     Math.min(
-      newLeft,
-      maxLeft
-     )
+     Math.min(newLeft,maxLeft)
     );
-
 
    newTop=
     Math.max(
      minTop,
-     Math.min(
-      newTop,
-      maxTop
-     )
+     Math.min(newTop,maxTop)
     );
-
 
    windowElement.style.left=
     newLeft+"px";
 
-
    windowElement.style.top=
     newTop+"px";
-
   },
-  {
-   passive:false
-  }
+  {passive:false}
  );
 
 
  function stopDragging(event){
 
-  if(!dragging)
-   return;
-
+  if(!dragging)return;
 
   dragging=false;
 
-
   try{
-
-   header.releasePointerCapture(
-    event.pointerId
-   );
-
-  }catch(error){}
-
+   header.releasePointerCapture(event.pointerId);
+  }catch(e){}
  }
 
 
@@ -2913,12 +1384,10 @@ function openWebSearch(query){
   stopDragging
  );
 
-
  header.addEventListener(
   "pointercancel",
   stopDragging
  );
-
 
  header.addEventListener(
   "lostpointercapture",
@@ -2930,24 +1399,15 @@ function openWebSearch(query){
 
  updateWebIndicator();
 
-
- addMsg(
-  "Ricerca web: "+
-  query
- );
-
+ addMsg("Ricerca web: "+query);
 }
 
 
-/* =====================================================
-   COMANDI WEB
-===================================================== */
+/* ================= COMANDI WEB ================= */
 
 function handleWebCommand(text){
 
- const normalized=
-  normalizeText(text);
-
+ const normalized=text.toLowerCase().trim();
 
  const patterns=[
   "cerca sul web ",
@@ -2961,834 +1421,416 @@ function handleWebCommand(text){
   "fai una ricerca su "
  ];
 
+ for(const pattern of patterns){
 
- for(
-  const pattern of patterns
- ){
-
-  if(
-   normalized.startsWith(
-    normalizeText(pattern)
-   )
-  ){
+  if(normalized.startsWith(pattern)){
 
    const query=
-    text
-     .trim()
-     .substring(
-      pattern.length
-     )
-     .trim();
-
+    text.trim().substring(pattern.length).trim();
 
    if(query.length>1){
-
-    openWebSearch(
-     query
-    );
-
-
+    openWebSearch(query);
     return true;
-
    }
-
   }
-
  }
 
-
  return false;
-
 }
 
 
-/* =====================================================
-   FINESTRE WEB
-===================================================== */
+/* ================= FINESTRE WEB ================= */
 
 function handleWebWindowCommand(text){
 
- const normalized=
-  normalizeText(text);
-
+ const normalized=text.toLowerCase().trim();
 
  if(
-  commandLooksLike(
-   normalized,
-   [
-    "chiudi le ricerche web",
-    "chiudi ricerca web",
-    "chiudi tutte le ricerche",
-    "chiudi tutte le finestre web",
-    "chiudi finestre web"
-   ]
-  )
+  normalized==="chiudi le ricerche web"||
+  normalized==="chiudi ricerca web"||
+  normalized==="chiudi tutte le ricerche"||
+  normalized==="chiudi tutte le finestre web"
  ){
 
   webSearchWindows.innerHTML="";
-
   updateWebIndicator();
-
-  addMsg(
-   "Finestre web chiuse."
-  );
+  addMsg("Finestre web chiuse.");
 
   return true;
-
  }
 
-
  if(
-  commandLooksLike(
-   normalized,
-   [
-    "minimizza le ricerche web",
-    "minimizza tutte le ricerche",
-    "minimizza finestre web"
-   ]
-  )
+  normalized==="minimizza le ricerche web"||
+  normalized==="minimizza tutte le ricerche"
  ){
 
   webSearchWindows
-   .querySelectorAll(
-    ".web-window"
-   )
-   .forEach(
-    w=>
-     w.classList.add(
-      "minimized"
-     )
-   );
+   .querySelectorAll(".web-window")
+   .forEach(w=>w.classList.add("minimized"));
 
-
-  addMsg(
-   "Ricerche web minimizzate."
-  );
-
+  addMsg("Ricerche web minimizzate.");
 
   return true;
-
  }
 
-
  return false;
-
 }
 
 
-/* =====================================================
-   DATI TEMPORALI
-===================================================== */
+/* ================= DATI TEMPORALI ================= */
 
 function getTimeData(){
 
- const now=
-  new Date();
-
+ const now=new Date();
 
  return{
+  currentTime:now.toLocaleTimeString("it-IT",{
+   hour:"2-digit",
+   minute:"2-digit",
+   second:"2-digit"
+  }),
 
-  currentTime:
-   now.toLocaleTimeString(
-    "it-IT",
-    {
-     hour:"2-digit",
-     minute:"2-digit",
-     second:"2-digit"
-    }
-   ),
+  currentDate:now.toLocaleDateString("it-IT",{
+   day:"2-digit",
+   month:"2-digit",
+   year:"numeric"
+  }),
 
-  currentDate:
-   now.toLocaleDateString(
-    "it-IT",
-    {
-     day:"2-digit",
-     month:"2-digit",
-     year:"numeric"
-    }
-   ),
+  dayOfWeek:now.toLocaleDateString("it-IT",{
+   weekday:"long"
+  }),
 
-  dayOfWeek:
-   now.toLocaleDateString(
-    "it-IT",
-    {
-     weekday:"long"
-    }
-   ),
-
-  timezone:
-   Intl.DateTimeFormat()
-    .resolvedOptions()
-    .timeZone
-
+  timezone:Intl.DateTimeFormat()
+   .resolvedOptions()
+   .timeZone
  };
-
 }
 
 
-/* =====================================================
-   VOCI
-===================================================== */
+/* ================= VOCI ================= */
 
 function loadDeviceVoices(){
 
- if(
-  !("speechSynthesis" in window)
- )
-  return;
-
+ if(!("speechSynthesis" in window))return;
 
  deviceVoices=
-  window.speechSynthesis
-   .getVoices();
-
+  window.speechSynthesis.getVoices();
 
  voiceSelector.innerHTML="";
 
-
- const automatic=
-  document.createElement(
-   "option"
-  );
-
+ const automatic=document.createElement("option");
 
  automatic.value="";
-
  automatic.textContent=
   "Voce dispositivo automatica";
 
+ voiceSelector.appendChild(automatic);
 
- voiceSelector.appendChild(
-  automatic
- );
+ deviceVoices.forEach((voice,index)=>{
 
+  const option=document.createElement("option");
 
- deviceVoices.forEach(
-  (voice,index)=>{
+  option.value=String(index);
 
-   const option=
-    document.createElement(
-     "option"
-    );
+  option.textContent=
+   `${voice.name} — ${voice.lang}`;
 
-
-   option.value=
-    String(index);
-
-
-   option.textContent=
-    `${voice.name} — ${voice.lang}`;
-
-
-   voiceSelector.appendChild(
-    option
-   );
-
-  }
- );
-
+  voiceSelector.appendChild(option);
+ });
 
  const savedVoice=
-  localStorage.getItem(
-   "jarvis_device_voice"
-  );
-
+  localStorage.getItem("jarvis_device_voice");
 
  if(
   savedVoice!==null&&
-  Number(savedVoice)<
-   deviceVoices.length
+  Number(savedVoice)<deviceVoices.length
  ){
 
-  voiceSelector.value=
-   savedVoice;
-
+  voiceSelector.value=savedVoice;
 
   selectedDeviceVoice=
-   deviceVoices[
-    Number(savedVoice)
-   ];
-
+   deviceVoices[Number(savedVoice)];
  }
-
 }
 
-
-if(
- "speechSynthesis" in window
-){
+if("speechSynthesis" in window){
 
  loadDeviceVoices();
 
-
- window.speechSynthesis
-  .addEventListener(
-   "voiceschanged",
-   loadDeviceVoices
-  );
-
+ window.speechSynthesis.addEventListener(
+  "voiceschanged",
+  loadDeviceVoices
+ );
 }
 
 
-/* =====================================================
-   FERMA AUDIO
-===================================================== */
+/* ================= DEVICE TTS ================= */
 
-function stopSpeaking(){
+function speakDevice(text){
 
- speechGeneration++;
+ return new Promise(resolve=>{
 
-
- if(currentAudio){
-
-  try{
-
-   currentAudio.pause();
-
-   currentAudio.currentTime=0;
-
-  }catch(error){}
-
-
-  currentAudio=null;
-
- }
-
-
- if(
-  "speechSynthesis" in window
- ){
+  if(!("speechSynthesis" in window)){
+   resolve(false);
+   return;
+  }
 
   try{
 
    window.speechSynthesis.cancel();
 
-  }catch(error){}
+   const utterance=
+    new SpeechSynthesisUtterance(text);
 
- }
+   utterance.lang="it-IT";
+   utterance.rate=.95;
+   utterance.pitch=.9;
+   utterance.volume=1;
 
+   if(selectedDeviceVoice){
 
- audioPlaying=false;
+    utterance.voice=
+     selectedDeviceVoice;
 
+   }else{
 
- setState(
-  conversationMode
-   ?"listening"
-   :"idle"
- );
+    const italianVoice=
+     deviceVoices.find(
+      voice=>
+       voice.lang.toLowerCase()
+       .startsWith("it")
+     );
 
-}
-
-
-/* =====================================================
-   DEVICE TTS
-===================================================== */
-
-function speakDevice(text){
-
- return new Promise(
-  resolve=>{
-
-   if(
-    !("speechSynthesis" in window)
-   ){
-
-    resolve(false);
-
-    return;
-
+    if(italianVoice)
+     utterance.voice=italianVoice;
    }
 
-
-   try{
-
-    window.speechSynthesis.cancel();
-
-
-    const utterance=
-     new SpeechSynthesisUtterance(
-      text
-     );
-
-
-    utterance.lang=
-     "it-IT";
-
-
-    utterance.rate=
-     .95;
-
-
-    utterance.pitch=
-     .9;
-
-
-    utterance.volume=
-     1;
-
-
-    if(selectedDeviceVoice){
-
-     utterance.voice=
-      selectedDeviceVoice;
-
-    }else{
-
-     const italianVoice=
-      deviceVoices.find(
-       voice=>
-        voice.lang
-         .toLowerCase()
-         .startsWith("it")
-      );
-
-
-     if(italianVoice)
-      utterance.voice=
-       italianVoice;
-
-    }
-
-
-    utterance.onstart=()=>{
-
-     audioPlaying=true;
-
-     setState(
-      "speaking"
-     );
-
-    };
-
-
-    utterance.onend=()=>{
-
-     audioPlaying=false;
-
-
-     if(conversationMode){
-
-      setState(
-       "listening"
-      );
-
-
-      startContinuousRecognition();
-
-     }else{
-
-      setState(
-       "idle"
-      );
-
-     }
-
-
-     resolve(true);
-
-    };
-
-
-    utterance.onerror=()=>{
-
-     audioPlaying=false;
-
-
-     if(conversationMode){
-
-      setState(
-       "listening"
-      );
-
-
-      startContinuousRecognition();
-
-     }else{
-
-      setState(
-       "idle"
-      );
-
-     }
-
-
-     resolve(false);
-
-    };
-
-
-    window.speechSynthesis
-     .speak(
-      utterance
-     );
-
-
-    setTimeout(
-     ()=>{
-
-      try{
-
-       window.speechSynthesis.resume();
-
-      }catch(error){}
-
-     },
-     100
-    );
-
-
-   }catch(error){
-
-    console.error(
-     error
-    );
-
-
+   utterance.onstart=()=>{
+    audioPlaying=true;
+    setState("speaking");
+   };
+
+   utterance.onend=()=>{
+    audioPlaying=false;
+    setState("idle");
+    resolve(true);
+   };
+
+   utterance.onerror=()=>{
+    audioPlaying=false;
+    setState("idle");
     resolve(false);
+   };
 
-   }
+   window.speechSynthesis.speak(utterance);
 
+   setTimeout(()=>{
+    try{
+     window.speechSynthesis.resume();
+    }catch(e){}
+   },100);
+
+  }catch(error){
+
+   console.error(error);
+   resolve(false);
   }
- );
-
+ });
 }
 
 
-/* =====================================================
-   ELEVENLABS
-===================================================== */
+/* ================= ELEVENLABS ================= */
 
-async function speakElevenLabs(
- text,
- generation
-){
+async function speakElevenLabs(text){
 
- if(!text)
-  return false;
-
+ if(!text)return false;
 
  if(currentAudio){
 
   try{
-
    currentAudio.pause();
-
    currentAudio.currentTime=0;
-
-  }catch(error){}
-
+  }catch(e){}
 
   currentAudio=null;
-
  }
 
+ const controller=new AbortController();
 
- const controller=
-  new AbortController();
-
-
- const timeout=
-  setTimeout(
-   ()=>{
-    controller.abort();
-   },
-   30000
-  );
-
+ const timeout=setTimeout(
+  ()=>controller.abort(),
+  30000
+ );
 
  try{
 
-  const response=
-   await fetch(
-    API,
-    {
+  const response=await fetch(
+   API,
+   {
+    method:"POST",
 
-     method:"POST",
+    headers:{
+     "Content-Type":"application/json"
+    },
 
-     headers:{
-      "Content-Type":
-       "application/json"
-     },
+    body:JSON.stringify({
+     action:"tts",
+     text:text,
+     voiceId:ELEVEN_VOICE_ID
+    }),
 
-     body:JSON.stringify({
+    signal:controller.signal
+   }
+  );
 
-      action:"tts",
-
-      text:text,
-
-      voiceId:
-       ELEVEN_VOICE_ID
-
-     }),
-
-     signal:
-      controller.signal
-
-    }
-   );
-
-
-  if(!response.ok)
-   return false;
-
-
-  if(
-   generation!==speechGeneration
-  )
-   return false;
-
+  if(!response.ok)return false;
 
   const contentType=
-   response.headers
-    .get("content-type")||
-   "";
+   response.headers.get("content-type")||"";
 
-
-  if(
-   !contentType.includes(
-    "audio"
-   )
-  )
+  if(!contentType.includes("audio"))
    return false;
 
+  const audioBlob=await response.blob();
 
-  const audioBlob=
-   await response.blob();
-
-
-  if(
-   !audioBlob||
-   audioBlob.size===0
-  )
+  if(!audioBlob||audioBlob.size===0)
    return false;
-
-
-  if(
-   generation!==speechGeneration
-  )
-   return false;
-
 
   const audioUrl=
-   URL.createObjectURL(
-    audioBlob
-   );
+   URL.createObjectURL(audioBlob);
 
+  const audio=new Audio(audioUrl);
 
-  const audio=
-   new Audio(
-    audioUrl
-   );
-
-
-  currentAudio=
-   audio;
-
+  currentAudio=audio;
 
   audio.volume=1;
 
-
   audio.onplay=()=>{
-
    audioPlaying=true;
-
-   setState(
-    "speaking"
-   );
-
+   setState("speaking");
   };
-
 
   audio.onended=()=>{
-
    audioPlaying=false;
+   setState("idle");
+   URL.revokeObjectURL(audioUrl);
 
-
-   URL.revokeObjectURL(
-    audioUrl
-   );
-
-
-   if(
-    currentAudio===audio
-   )
+   if(currentAudio===audio)
     currentAudio=null;
 
-
+   /* Se la conversazione continua, torna ad ascoltare */
    if(conversationMode){
-
-    setState(
-     "listening"
-    );
-
-
-    startContinuousRecognition();
-
-   }else{
-
-    setState(
-     "idle"
-    );
-
+    setTimeout(()=>{
+     startContinuousRecognition();
+    },150);
    }
-
   };
-
 
   audio.onerror=()=>{
-
    audioPlaying=false;
-
-
-   URL.revokeObjectURL(
-    audioUrl
-   );
-
-
-   if(
-    currentAudio===audio
-   )
-    currentAudio=null;
-
+   setState("idle");
+   URL.revokeObjectURL(audioUrl);
 
    if(conversationMode){
-
-    setState(
-     "listening"
-    );
-
-
-    startContinuousRecognition();
-
-   }else{
-
-    setState(
-     "idle"
-    );
-
+    setTimeout(()=>{
+     startContinuousRecognition();
+    },150);
    }
-
   };
-
 
   await audio.play();
 
-
   return true;
-
 
  }catch(error){
 
-  console.warn(
-   "ElevenLabs:",
-   error
-  );
-
-
+  console.warn("ElevenLabs:",error);
   return false;
-
 
  }finally{
 
-  clearTimeout(
-   timeout
-  );
-
+  clearTimeout(timeout);
  }
-
 }
 
 
-/* =====================================================
-   SPEAK
-===================================================== */
+/* ================= INTERRUZIONE VOCE ================= */
+
+function stopJarvisSpeaking(){
+
+ if(currentAudio){
+
+  try{
+   currentAudio.pause();
+   currentAudio.currentTime=0;
+  }catch(e){}
+
+  currentAudio=null;
+ }
+
+ if("speechSynthesis" in window){
+
+  try{
+   window.speechSynthesis.cancel();
+  }catch(e){}
+ }
+
+ audioPlaying=false;
+ setState("listening");
+}
+
+
+/* ================= SPEAK ================= */
 
 async function speak(text){
 
- if(!text)
-  return;
-
-
- speechGeneration++;
-
-
- const generation=
-  speechGeneration;
-
-
- if(conversationMode)
-  stopRecognitionOnly();
-
+ if(!text)return;
 
  const elevenSuccess=
-  await speakElevenLabs(
-   text,
-   generation
-  );
+  await speakElevenLabs(text);
 
+ if(elevenSuccess)return;
 
- if(elevenSuccess)
-  return;
+ await speakDevice(text);
 
+ if(conversationMode){
 
- if(
-  generation!==speechGeneration
- )
-  return;
-
-
- await speakDevice(
-  text
- );
-
+  setTimeout(()=>{
+   startContinuousRecognition();
+  },150);
+ }
 }
 
 
-/* =====================================================
-   VOICE UI
-===================================================== */
+/* ================= VOICE UI ================= */
 
 voiceTest.addEventListener(
  "click",
  async()=>{
-
-  stopSpeaking();
-
-
   await speakDevice(
    "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
   );
-
  }
 );
-
 
 voiceSelector.addEventListener(
  "change",
  ()=>{
 
-  const value=
-   voiceSelector.value;
-
+  const value=voiceSelector.value;
 
   if(value===""){
 
    selectedDeviceVoice=null;
 
-
    localStorage.removeItem(
     "jarvis_device_voice"
    );
 
-
    return;
-
   }
 
-
-  const index=
-   Number(value);
-
+  const index=Number(value);
 
   if(
    Number.isInteger(index)&&
@@ -3798,1238 +1840,543 @@ voiceSelector.addEventListener(
    selectedDeviceVoice=
     deviceVoices[index];
 
-
    localStorage.setItem(
     "jarvis_device_voice",
     String(index)
    );
-
   }
-
  }
 );
-
 
 voiceBtn.addEventListener(
  "click",
  ()=>{
-
-  voicePanel
-   .classList
-   .toggle("active");
-
-
+  voicePanel.classList.toggle("active");
   loadDeviceVoices();
-
  }
 );
 
 
 /* =====================================================
-   RICONOSCIMENTO VOCALE
+   MODALITÀ CONVERSAZIONE CONTINUA
 ===================================================== */
+
+let conversationMode=false;
+let conversationStarting=false;
+
+
+/* ================= RICONOSCIMENTO ================= */
 
 const Recognition=
  window.SpeechRecognition||
  window.webkitSpeechRecognition;
 
-
-function setMicStatus(
- text,
- active
-){
-
- micStatus.textContent=
-  text;
-
-
- if(active){
-
-  micStatus.classList.add(
-   "active"
-  );
-
- }else{
-
-  micStatus.classList.remove(
-   "active"
-  );
-
- }
-
-}
-
-
-function setupRecognition(){
-
- if(!Recognition)
-  return false;
-
-
- recognition=
-  new Recognition();
-
-
- recognition.lang=
-  "it-IT";
-
-
- recognition.continuous=
-  false;
-
-
- recognition.interimResults=
-  true;
-
-
- recognition.maxAlternatives=
-  1;
-
-
- recognition.onstart=()=>{
-
-  recognitionStarting=false;
-
-  listening=true;
-
-
-  micBtn.classList.add(
-   "active"
-  );
-
-
-  textInput.classList.add(
-   "listening"
-  );
-
-
-  setMicStatus(
-   "MICROFONO: ASCOLTO...",
-   true
-  );
-
-
-  setState(
-   "listening"
-  );
-
- };
-
-
- recognition.onresult=
-  event=>{
-
-   let finalText="";
-
-   let interimText="";
-
-
-   for(
-    let i=event.resultIndex;
-    i<event.results.length;
-    i++
-   ){
-
-    const transcript=
-     event.results[i][0]
-      .transcript
-      .trim();
-
-
-    if(
-     event.results[i].isFinal
-    ){
-
-     finalText+=
-      transcript+" ";
-
-    }else{
-
-     interimText+=
-      transcript+" ";
-
-    }
-
-   }
-
-
-   finalText=
-    finalText.trim();
-
-
-   interimText=
-    interimText.trim();
-
-
-   if(interimText){
-
-    textInput.value=
-     interimText;
-
-   }
-
-
-   if(finalText){
-
-    textInput.value=
-     finalText;
-
-
-    if(audioPlaying)
-     stopSpeaking();
-
-
-    setMicStatus(
-     "MICROFONO: FRASE ACQUISITA",
-     true
-    );
-
-
-    sendMessage();
-
-   }
-
- };
-
-
- recognition.onerror=
-  error=>{
-
-   recognitionStarting=false;
-
-   listening=false;
-
-
-   micBtn.classList.remove(
-    "active"
-   );
-
-
-   textInput.classList.remove(
-    "listening"
-   );
-
-
-   console.warn(
-    "Microfono:",
-    error
-   );
-
-
-   if(
-    error.error==="not-allowed"||
-    error.error==="service-not-allowed"
-   ){
-
-    setMicStatus(
-     "MICROFONO: PERMESSO NEGATO",
-     true
-    );
-
-
-    addMsg(
-     "Permesso microfono negato. Consenti l'accesso al microfono nel browser."
-    );
-
-
-    if(conversationMode){
-
-     conversationMode=false;
-
-     recognitionShouldRun=false;
-
-     updateConversationUI();
-
-    }
-
-
-    setState("idle");
-
-    return;
-
-   }
-
-
-   if(
-    error.error==="no-speech"
-   ){
-
-    setMicStatus(
-     "MICROFONO: NESSUNA VOCE",
-     true
-    );
-
-   }else if(
-    error.error==="audio-capture"
-   ){
-
-    setMicStatus(
-     "MICROFONO: MICROFONO NON DISPONIBILE",
-     true
-    );
-
-   }else{
-
-    setMicStatus(
-     "MICROFONO: RIAVVIO...",
-     true
-    );
-
-   }
-
-
-   if(conversationMode){
-
-    scheduleContinuousRecognition();
-
-   }else{
-
-    setTimeout(
-     ()=>{
-
-      setMicStatus(
-       "MICROFONO: PRONTO",
-       false
-      );
-
-     },
-     1200
-    );
-
-
-    setState(
-     "idle"
-    );
-
-   }
-
- };
-
-
- recognition.onend=
-  ()=>{
-
-   recognitionStarting=false;
-
-   listening=false;
-
-
-   micBtn.classList.remove(
-    "active"
-   );
-
-
-   textInput.classList.remove(
-    "listening"
-   );
-
-
-   if(
-    conversationMode&&
-    recognitionShouldRun
-   ){
-
-    setMicStatus(
-     "MICROFONO: RIAVVIO...",
-     true
-    );
-
-
-    scheduleContinuousRecognition();
-
-   }else{
-
-    setMicStatus(
-     "MICROFONO: PRONTO",
-     false
-    );
-
-
-    if(!audioPlaying)
-     setState("idle");
-
-   }
-
- };
-
- return true;
-
-}
-
+let recognition=null;
+let listening=false;
+let recognitionStopping=false;
 
 if(Recognition){
 
- setupRecognition();
+ recognition=new Recognition();
 
-}else{
+ recognition.lang="it-IT";
+ recognition.continuous=false;
+ recognition.interimResults=false;
 
- micBtn.classList.add(
-  "unsupported"
- );
+ recognition.onstart=()=>{
 
+  listening=true;
+  conversationStarting=false;
 
- micBtn.title=
-  "Riconoscimento vocale non supportato";
+  micBtn.classList.add("active");
 
-
- addMsg(
-  "Il browser non supporta il riconoscimento vocale."
- );
-
-}
+  setState("listening");
+ };
 
 
-/* =====================================================
-   STOP RICONOSCIMENTO
-===================================================== */
+ recognition.onresult=event=>{
 
-function stopRecognitionOnly(){
+  const result=
+   event.results[event.results.length-1];
 
- recognitionShouldRun=false;
+  if(!result)return;
+
+  const text=
+   result[0]
+   .transcript
+   .trim();
+
+  if(!text)return;
+
+  console.log("JARVIS VOICE:",text);
+
+  textInput.value=text;
+
+  /*
+   * Se JARVIS sta parlando e l'utente
+   * ricomincia a parlare, la risposta viene
+   * interrotta immediatamente.
+   */
+  if(conversationMode && audioPlaying){
+   stopJarvisSpeaking();
+  }
+
+  sendMessage();
+ };
 
 
- clearTimeout(
-  recognitionRestartTimer
- );
+ recognition.onerror=error=>{
+
+  console.error("Microfono:",error);
+
+  listening=false;
+
+  micBtn.classList.remove("active");
+
+  if(
+   conversationMode &&
+   error.error!=="not-allowed" &&
+   error.error!=="service-not-allowed"
+  ){
+
+   setTimeout(()=>{
+    startContinuousRecognition();
+   },500);
+
+  }else{
+
+   setState("idle");
+  }
+ };
 
 
- if(recognition){
+ recognition.onend=()=>{
+
+  listening=false;
+
+  micBtn.classList.remove("active");
+
+  /*
+   * In modalità conversazione il riconoscimento
+   * viene riavviato automaticamente.
+   */
+  if(
+   conversationMode &&
+   !recognitionStopping
+  ){
+
+   setTimeout(()=>{
+    startContinuousRecognition();
+   },250);
+
+  }else{
+
+   recognitionStopping=false;
+
+   if(!conversationMode)
+    setState("idle");
+  }
+ };
+
+
+ function startRecognition(){
+
+  if(!recognition)return;
+
+  if(listening)return;
+
+  recognitionStopping=false;
 
   try{
 
+   recognition.start();
+
+  }catch(error){
+
+   console.warn("Avvio microfono:",error);
+
+   setTimeout(()=>{
+    if(!listening)
+     startRecognition();
+   },500);
+  }
+ }
+
+
+ function stopRecognition(){
+
+  if(!recognition)return;
+
+  recognitionStopping=true;
+
+  try{
    recognition.stop();
+  }catch(e){}
 
-  }catch(error){}
+  listening=false;
 
+  micBtn.classList.remove("active");
  }
 
 
- listening=false;
+ function startContinuousRecognition(){
 
- recognitionStarting=false;
+  if(!conversationMode)return;
 
+  if(listening)return;
 
- micBtn.classList.remove(
-  "active"
- );
-
-
- textInput.classList.remove(
-  "listening"
- );
-
-
- setMicStatus(
-  "MICROFONO: PRONTO",
-  false
- );
-
-}
-
-
-/* =====================================================
-   RICONOSCIMENTO MANUALE
-===================================================== */
-
-function startManualRecognition(){
-
- if(!recognition){
-
-  addMsg(
-   "Il browser non supporta il riconoscimento vocale."
-  );
-
-  return;
-
+  startRecognition();
  }
 
 
- if(audioPlaying)
-  stopSpeaking();
+ function stopContinuousRecognition(){
 
+  conversationMode=false;
 
- if(
-  listening||
-  recognitionStarting
- )
-  return;
+  recognitionStopping=true;
 
+  try{
+   recognition.stop();
+  }catch(e){}
 
- manualRecognition=true;
+  listening=false;
 
- recognitionShouldRun=false;
+  micBtn.classList.remove("active");
 
- recognitionStarting=true;
+  conversationBtn.classList.remove("active");
 
+  conversationBtn.textContent="◉ CONVERSAZIONE";
 
- textInput.value="";
-
-
- setMicStatus(
-  "MICROFONO: AVVIO...",
-  true
- );
-
-
- try{
-
-  recognition.start();
-
- }catch(error){
-
-  recognitionStarting=false;
-
-
-  console.warn(
-   "Avvio microfono:",
-   error
-  );
-
-
-  setTimeout(
-   ()=>{
-
-    if(
-     !listening&&
-     !recognitionStarting&&
-     !conversationMode
-    ){
-
-     recognitionStarting=true;
-
-
-     try{
-
-      recognition.start();
-
-     }catch(error2){
-
-      recognitionStarting=false;
-
-      console.warn(
-       error2
-      );
-
-
-      setMicStatus(
-       "MICROFONO: ERRORE",
-       true
-      );
-
-     }
-
-    }
-
-   },
-   350
-  );
-
+  setState("idle");
  }
 
-}
 
+ function activateConversationMode(){
 
-/* =====================================================
-   CONVERSAZIONE CONTINUA
-===================================================== */
+  if(conversationMode)return;
 
-function startContinuousRecognition(){
+  conversationMode=true;
 
- if(
-  !conversationMode||
-  !recognition
- )
-  return;
+  conversationBtn.classList.add("active");
+  conversationBtn.textContent="● CONVERSAZIONE ATTIVA";
 
+  addMsg("Modalità conversazione continua attivata.");
 
- recognitionShouldRun=true;
-
-
- clearTimeout(
-  recognitionRestartTimer
- );
-
-
- if(
-  listening||
-  recognitionStarting
- )
-  return;
-
-
- recognitionRestartTimer=
-  setTimeout(
-   ()=>{
-
-    if(
-     !conversationMode||
-     !recognitionShouldRun||
-     listening||
-     recognitionStarting
-    )
-     return;
-
-
-    recognitionStarting=true;
-
-
-    textInput.value="";
-
-
-    setMicStatus(
-     "MICROFONO: ASCOLTO...",
-     true
-    );
-
-
-    try{
-
-     recognition.start();
-
-    }catch(error){
-
-     recognitionStarting=false;
-
-
-     console.warn(
-      "Avvio conversazione:",
-      error
-     );
-
-
-     scheduleContinuousRecognition();
-
-    }
-
-   },
-   300
-  );
-
-}
-
-
-function scheduleContinuousRecognition(){
-
- if(
-  !conversationMode||
-  !recognitionShouldRun
- )
-  return;
-
-
- clearTimeout(
-  recognitionRestartTimer
- );
-
-
- recognitionRestartTimer=
-  setTimeout(
-   startContinuousRecognition,
-   500
-  );
-
-}
-
-
-/* =====================================================
-   PULSANTE MICROFONO
-===================================================== */
-
-micBtn.addEventListener(
- "click",
- ()=>{
-
-  if(!recognition){
-
-   addMsg(
-    "Il browser non supporta il riconoscimento vocale."
-   );
-
-   return;
-
+  /*
+   * Se JARVIS sta parlando, viene interrotto
+   * e il microfono parte immediatamente.
+   */
+  if(audioPlaying){
+   stopJarvisSpeaking();
   }
 
+  startContinuousRecognition();
+ }
 
-  if(conversationMode){
 
-   if(
-    listening||
-    recognitionStarting
-   ){
+ function deactivateConversationMode(){
 
-    disableConversationMode();
+  if(!conversationMode)return;
+
+  stopContinuousRecognition();
+
+  addMsg("Modalità conversazione continua disattivata.");
+ }
+
+
+ conversationBtn.addEventListener(
+  "click",
+  ()=>{
+
+   if(conversationMode){
+    deactivateConversationMode();
+   }else{
+    activateConversationMode();
+   }
+
+  }
+ );
+
+
+ /*
+  * Pulsante microfono normale.
+  * Se la modalità conversazione è attiva,
+  * il pulsante permette di disattivarla.
+  */
+ micBtn.addEventListener(
+  "click",
+  ()=>{
+
+   if(conversationMode){
+
+    deactivateConversationMode();
+    return;
+   }
+
+   if(listening){
+
+    stopRecognition();
 
    }else{
 
-    enableConversationMode();
-
+    startRecognition();
    }
-
-
-   return;
-
   }
+ );
 
 
-  if(
-   listening||
-   recognitionStarting
-  ){
+}else{
 
-   stopRecognitionOnly();
-
-   setState("idle");
-
-   return;
-
-  }
-
-
-  startManualRecognition();
-
- }
-);
+ micBtn.style.opacity=".3";
+ conversationBtn.style.opacity=".35";
+}
 
 
 /* =====================================================
-   MODALITÀ CONVERSAZIONE
-===================================================== */
-
-function updateConversationUI(){
-
- if(conversationMode){
-
-  conversationBtn.classList.add(
-   "active"
-  );
-
-
-  conversationBtn.textContent=
-   "● CONVERSAZIONE ON";
-
-
-  conversationStatus.classList.add(
-   "active"
-  );
-
-
-  conversationStatus.textContent=
-   "CONVERSAZIONE CONTINUA: ON";
-
- }else{
-
-  conversationBtn.classList.remove(
-   "active"
-  );
-
-
-  conversationBtn.textContent=
-   "🎙 CONVERSAZIONE";
-
-
-  conversationStatus.classList.remove(
-   "active"
-  );
-
-
-  conversationStatus.textContent=
-   "CONVERSAZIONE CONTINUA: OFF";
-
- }
-
-}
-
-
-function enableConversationMode(){
-
- if(!recognition){
-
-  addMsg(
-   "Il browser non supporta la conversazione vocale continua."
-  );
-
-  return;
-
- }
-
-
- conversationMode=true;
-
- recognitionShouldRun=true;
-
-
- updateConversationUI();
-
-
- addMsg(
-  "Modalità conversazione continua attivata."
- );
-
-
- startContinuousRecognition();
-
-}
-
-
-function disableConversationMode(){
-
- conversationMode=false;
-
- recognitionShouldRun=false;
-
-
- clearTimeout(
-  recognitionRestartTimer
- );
-
-
- stopRecognitionOnly();
-
-
- updateConversationUI();
-
-
- setState(
-  "idle"
- );
-
-
- addMsg(
-  "Modalità conversazione continua disattivata."
- );
-
-}
-
-
-function toggleConversationMode(){
-
- if(conversationMode){
-
-  disableConversationMode();
-
- }else{
-
-  enableConversationMode();
-
- }
-
-}
-
-
-conversationBtn.addEventListener(
- "click",
- toggleConversationMode
- );
-
-
-/* =====================================================
-   COMANDI CONVERSAZIONE
+   COMANDI MODALITÀ CONVERSAZIONE
 ===================================================== */
 
 function handleConversationCommand(text){
 
  const normalized=
-  normalizeText(text);
+  text
+   .toLowerCase()
+   .trim()
+   .replace(/[.,!?;:]/g,"");
 
-
- const activate=[
-  "modalita conversazione",
-  "modalita conversazione continua",
-  "conversazione continua",
-  "attiva conversazione",
+ const activateCommands=[
+  "attiva modalità conversazione",
   "attiva modalita conversazione",
-  "attiva conversazione continua",
-  "microfono sempre acceso",
-  "tieni il microfono acceso",
-  "ascolto continuo",
-  "attiva ascolto continuo"
+  "attiva la modalità conversazione",
+  "attiva la modalita conversazione",
+  "modalità conversazione",
+  "modalita conversazione",
+  "avvia modalità conversazione",
+  "avvia modalita conversazione",
+  "inizia modalità conversazione",
+  "inizia modalita conversazione",
+  "conversazione continua",
+  "attiva conversazione continua"
  ];
 
-
- const deactivate=[
-  "disattiva conversazione",
+ const deactivateCommands=[
+  "disattiva modalità conversazione",
   "disattiva modalita conversazione",
-  "disattiva conversazione continua",
-  "chiudi conversazione continua",
-  "spegni conversazione",
-  "spegni ascolto continuo",
-  "disattiva ascolto continuo",
-  "spegni microfono continuo"
+  "disattiva la modalità conversazione",
+  "disattiva la modalita conversazione",
+  "chiudi modalità conversazione",
+  "chiudi modalita conversazione",
+  "stop modalità conversazione",
+  "stop modalita conversazione",
+  "disattiva conversazione continua"
  ];
 
-
  if(
-  commandLooksLike(
-   normalized,
-   activate
-  )
+  activateCommands.includes(normalized)
  ){
 
-  enableConversationMode();
-
+  activateConversationMode();
   return true;
-
  }
-
 
  if(
-  commandLooksLike(
-   normalized,
-   deactivate
-  )
+  deactivateCommands.includes(normalized)
  ){
 
-  disableConversationMode();
-
+  deactivateConversationMode();
   return true;
-
  }
-
 
  return false;
-
 }
 
 
-/* =====================================================
-   PROCESS AI
-===================================================== */
+/* ================= PROCESS AI ================= */
 
 async function processAi(text){
 
- if(
-  handleConversationCommand(
-   text
-  )
- )
+ /*
+  * I comandi della modalità conversazione
+  * vengono controllati prima dell'AI.
+  */
+ if(handleConversationCommand(text))
   return;
 
-
- if(
-  handleFullscreenCommand(
-   text
-  )
- )
+ if(handleWebWindowCommand(text))
   return;
 
-
- if(
-  handleWebWindowCommand(
-   text
-  )
- )
+ if(handleWebCommand(text))
   return;
 
-
- if(
-  handleWebCommand(
-   text
-  )
- )
+ if(handleMapCommand(text))
   return;
 
-
- if(
-  handleMapCommand(
-   text
-  )
- )
-  return;
-
-
- setState(
-  "thinking"
- );
-
+ setState("thinking");
 
  try{
 
-  const temporal=
-   getTimeData();
+  const temporal=getTimeData();
 
-
-  addMemory(
-   "user",
-   text
-  );
-
+  addMemory("user",text);
 
   const controller=
    new AbortController();
 
-
-  const timeout=
-   setTimeout(
-    ()=>{
-     controller.abort();
-    },
-    30000
-   );
-
+  const timeout=setTimeout(
+   ()=>controller.abort(),
+   30000
+  );
 
   let response;
 
-
   try{
 
-   response=
-    await fetch(
-     API,
-     {
+   response=await fetch(
+    API,
+    {
+     method:"POST",
 
-      method:"POST",
+     headers:{
+      "Content-Type":"application/json"
+     },
 
-      headers:{
-       "Content-Type":
-        "application/json"
-      },
+     body:JSON.stringify({
 
-      body:JSON.stringify({
+      message:text,
 
-       message:text,
+      memory:memory.slice(-4),
 
-       memory:
-        memory.slice(-4),
+      currentTime:temporal.currentTime,
 
-       currentTime:
-        temporal.currentTime,
+      currentDate:temporal.currentDate,
 
-       currentDate:
-        temporal.currentDate,
+      dayOfWeek:temporal.dayOfWeek,
 
-       dayOfWeek:
-        temporal.dayOfWeek,
+      timezone:temporal.timezone
+     }),
 
-       timezone:
-        temporal.timezone
-
-      }),
-
-      signal:
-       controller.signal
-
-     }
-    );
-
+     signal:controller.signal
+    }
+   );
 
   }finally{
 
-   clearTimeout(
-    timeout
-   );
-
+   clearTimeout(timeout);
   }
-
 
   if(!response.ok){
 
    const errorText=
     await response.text();
 
-
    let errorMessage=
-    "HTTP "+
-    response.status;
-
+    "HTTP "+response.status;
 
    try{
 
     const errorData=
-     JSON.parse(
-      errorText
-     );
+     JSON.parse(errorText);
 
+    if(errorData&&errorData.error)
+     errorMessage=errorData.error;
 
-    if(
-     errorData&&
-     errorData.error
-    ){
+   }catch(e){
 
+    if(errorText)
      errorMessage=
-      errorData.error;
-
-    }
-
-   }catch(error){
-
-    if(errorText){
-
-     errorMessage=
-      errorText.substring(
-       0,
-       200
-      );
-
-    }
-
+      errorText.substring(0,200);
    }
 
-
-   throw new Error(
-    errorMessage
-   );
-
+   throw new Error(errorMessage);
   }
 
-
-  const data=
-   await response.json();
-
+  const data=await response.json();
 
   const reply=
-   typeof data.response===
-    "string"
-     ?data.response.trim()
-     :"";
-
+   typeof data.response==="string"
+    ?data.response.trim()
+    :"";
 
   if(!reply)
-   throw new Error(
-    "Risposta AI vuota"
-   );
+   throw new Error("Risposta AI vuota");
 
+  addMsg(reply);
 
-  addMsg(
-   reply
-  );
+  addMemory("assistant",reply);
 
+  speak(reply).catch(console.error);
 
-  addMemory(
-   "assistant",
-   reply
-  );
-
-
-  speak(
-   reply
-  ).catch(
-   console.error
-  );
-
+  setState("idle");
 
  }catch(error){
 
-  console.error(
-   "JARVIS ERROR:",
-   error
-  );
-
+  console.error("JARVIS ERROR:",error);
 
   let message=
    error.message||
    "Errore sconosciuto";
 
-
-  if(
-   error.name===
-   "AbortError"
-  ){
-
+  if(error.name==="AbortError")
    message=
     "Il server ha impiegato troppo tempo a rispondere.";
 
-  }else if(
-   message===
-   "Failed to fetch"
-  ){
-
+  else if(message==="Failed to fetch")
    message=
     "Errore di connessione al server JARVIS.";
 
+  addMsg("ERRORE: "+message);
+
+  setState("idle");
+
+  /*
+   * Se la modalità conversazione è attiva,
+   * dopo un errore torna comunque ad ascoltare.
+   */
+  if(conversationMode){
+
+   setTimeout(()=>{
+    startContinuousRecognition();
+   },500);
   }
-
-
-  addMsg(
-   "ERRORE: "+
-   message
-  );
-
-
-  if(
-   conversationMode
-  ){
-
-   setState(
-    "listening"
-   );
-
-
-   startContinuousRecognition();
-
-  }else{
-
-   setState(
-    "idle"
-   );
-
-  }
-
  }
-
 }
 
 
-/* =====================================================
-   INVIO
-===================================================== */
+/* ================= INVIO ================= */
 
 function sendMessage(){
 
- const text=
-  textInput.value.trim();
+ const text=textInput.value.trim();
 
-
- if(!text)
-  return;
-
+ if(!text)return;
 
  textInput.value="";
 
+ addMsg(text);
 
- if(audioPlaying)
-  stopSpeaking();
-
-
- addMsg(
-  text
- );
-
-
- processAi(
-  text
- );
-
+ processAi(text);
 }
-
 
 sendBtn.addEventListener(
  "click",
  sendMessage
- );
-
+);
 
 textInput.addEventListener(
  "keydown",
  event=>{
 
-  if(
-   event.key===
-   "Enter"
-  ){
+  if(event.key==="Enter"){
 
    event.preventDefault();
 
    sendMessage();
-
   }
-
  }
 );
 
 
-/* =====================================================
-   RESIZE
-===================================================== */
+/* ================= RESIZE ================= */
 
 window.addEventListener(
  "resize",
@@ -5039,87 +2386,37 @@ window.addEventListener(
    window.innerWidth/
    window.innerHeight;
 
-
   camera.updateProjectionMatrix();
-
 
   renderer.setSize(
    window.innerWidth,
    window.innerHeight
   );
 
-
-  if(map)
-   map.resize();
-
+  if(map)map.resize();
  }
 );
 
 
-/* =====================================================
-   FULLSCREEN CHANGE
-===================================================== */
+/* ================= CANCELLA MEMORIA ================= */
 
-document.addEventListener(
- "fullscreenchange",
- ()=>{
+window.clearJarvisMemory=function(){
 
-  if(
-   !document.fullscreenElement
-  ){
+ memory=[];
 
-   console.log(
-    "Fullscreen disattivato."
-   );
+ localStorage.removeItem(
+  MEMORY_KEY
+ );
 
-  }
-
- }
-);
+ console.log(
+  "Memoria JARVIS cancellata."
+ );
+};
 
 
-/* =====================================================
-   CANCELLA MEMORIA
-===================================================== */
+/* ================= AVVIO ================= */
 
-window.clearJarvisMemory=
- function(){
+setState("idle");
 
-  memory=[];
-
-
-  localStorage.removeItem(
-   MEMORY_KEY
-  );
-
-
-  console.log(
-   "Memoria JARVIS cancellata."
-  );
-
- };
-
-
-/* =====================================================
-   AVVIO
-===================================================== */
-
-updateConversationUI();
-
-setState(
- "idle"
-);
-
-setMicStatus(
- "MICROFONO: PRONTO",
- false
-);
-
-console.log(
- "J.A.R.V.I.S. ONLINE"
-);
-
-</script>
-
-</body>
+</script></body>
 </html>

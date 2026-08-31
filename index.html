@@ -1,9 +1,14 @@
-<!DOCTYPE html><html lang="it">
+<!DOCTYPE html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>J.A.R.V.I.S.</title><link rel="stylesheet"
-href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
+<title>J.A.R.V.I.S.</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
+
+<style>
 *{box-sizing:border-box;margin:0;padding:0}
 
 html,body{
@@ -557,22 +562,41 @@ body{
   left:2.2cm;
  }
 }
-</style></head><body><div id="webgl-container"></div>
-<div class="vignette"></div><div class="jarvis-title" id="jarvisTitle">J.A.R.V.I.S</div><div class="datetime">
+</style>
+</head>
+
+<body>
+
+<div id="webgl-container"></div>
+<div class="vignette"></div>
+
+<div class="jarvis-title" id="jarvisTitle">J.A.R.V.I.S</div>
+
+<div class="datetime">
  <div id="clock" class="time">00:00:00</div>
  <div id="date" class="date">00 AGO 2026</div>
-</div><div id="tacticalMap">
+</div>
+
+<div id="tacticalMap">
  <div id="map"></div>
  <div class="map-overlay"></div>
  <div class="map-header">TACTICAL MAP</div>
  <button id="closeMap">×</button>
-</div><div id="webSearchWindows"></div>
-<div id="webSearchIndicator">WEB WINDOWS: 0</div><div id="chat"></div><div class="command-wrapper">
+</div>
+
+<div id="webSearchWindows"></div>
+<div id="webSearchIndicator">WEB WINDOWS: 0</div>
+
+<div id="chat"></div>
+
+<div class="command-wrapper">
  <input id="textInput" type="text" autocomplete="off"
  placeholder="Chiedi qualcosa a JARVIS...">
  <button id="micBtn"><span class="mic-icon"></span></button>
  <button id="sendBtn">INVIA</button>
-</div><button id="voiceBtn">⚙ VOCE</button>
+</div>
+
+<button id="voiceBtn">⚙ VOCE</button>
 
 <div id="voicePanel">
  <div class="voice-title">VOCE J.A.R.V.I.S.</div>
@@ -580,13 +604,19 @@ body{
   <option value="">Voce dispositivo automatica</option>
  </select>
  <button id="voiceTest">TESTA VOCE</button>
-</div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
+
+<script type="importmap">
 {
  "imports":{
   "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
  }
 }
-</script><script type="module">
+</script>
+
+<script type="module">
 
 import * as THREE from "three";
 
@@ -635,6 +665,7 @@ try{
  const saved=localStorage.getItem(MEMORY_KEY);
 
  if(saved){
+
   const parsed=JSON.parse(saved);
 
   if(Array.isArray(parsed))
@@ -695,6 +726,7 @@ function updateClock(){
 }
 
 updateClock();
+
 setInterval(updateClock,1000);
 
 
@@ -771,9 +803,7 @@ function createGlow(){
 
  ctx.fillStyle=gradient;
 
- ctx.fillRect(
-  0,0,64,64
- );
+ ctx.fillRect(0,0,64,64);
 
  return new THREE.CanvasTexture(canvas);
 }
@@ -810,6 +840,7 @@ for(let i=0;i<COUNT;i++){
  radii[i]=r;
 
  angles[i*2]=theta;
+
  angles[i*2+1]=phi;
 
  seeds[i]=Math.random()*100;
@@ -833,21 +864,13 @@ geometry.setAttribute(
 );
 
 const material=new THREE.PointsMaterial({
-
  color:new THREE.Color(0x00cfe8),
-
  size:.042,
-
  map:createGlow(),
-
  transparent:true,
-
  opacity:1,
-
  depthWrite:false,
-
  blending:THREE.AdditiveBlending
-
 });
 
 const particles=
@@ -912,7 +935,8 @@ function animate(){
    .03
   );
 
- material.color=currentColor;
+ material.color=
+  currentColor;
 
  material.size=
   .032+energy*.008;
@@ -932,12 +956,11 @@ function animate(){
   const phi=
    angles[i*2+1];
 
-  const seed=seeds[i];
+  const seed=
+   seeds[i];
 
   const pulse=
-   Math.sin(
-    time*2+seed
-   )*.035;
+   Math.sin(time*2+seed)*.035;
 
   const strangeShape=
    Math.sin(
@@ -1063,10 +1086,15 @@ function initializeMap(){
  });
 
  map.addControl(
+
   new maplibregl.NavigationControl({
+
    showCompass:true,
+
    showZoom:true
+
   }),
+
   "bottom-right"
  );
 
@@ -1110,16 +1138,240 @@ closeMap.addEventListener(
 );
 
 
+/* =====================================================
+   NORMALIZZAZIONE INTELLIGENTE DEL TESTO
+===================================================== */
+
+function normalizeText(text){
+
+ return String(text||"")
+
+  .toLowerCase()
+
+  .normalize("NFD")
+
+  .replace(
+   /[\u0300-\u036f]/g,
+   ""
+  )
+
+  .replace(
+   /[^a-z0-9\s]/g,
+   " "
+  )
+
+  .replace(
+   /\s+/g,
+   " "
+  )
+
+  .trim();
+}
+
+
+/* =====================================================
+   DISTANZA TRA PAROLE
+===================================================== */
+
+function levenshtein(a,b){
+
+ a=String(a);
+ b=String(b);
+
+ const matrix=[];
+
+ for(let i=0;i<=b.length;i++)
+  matrix[i]=[i];
+
+ for(let j=0;j<=a.length;j++)
+  matrix[0][j]=j;
+
+ for(let i=1;i<=b.length;i++){
+
+  for(let j=1;j<=a.length;j++){
+
+   if(
+    b.charAt(i-1)===
+    a.charAt(j-1)
+   ){
+
+    matrix[i][j]=
+     matrix[i-1][j-1];
+
+   }else{
+
+    matrix[i][j]=Math.min(
+
+     matrix[i-1][j]+1,
+
+     matrix[i][j-1]+1,
+
+     matrix[i-1][j-1]+1
+    );
+   }
+  }
+ }
+
+ return matrix[b.length][a.length];
+}
+
+
+/* =====================================================
+   CONFRONTO TOLLERANTE
+===================================================== */
+
+function wordsSimilar(a,b){
+
+ a=normalizeText(a);
+ b=normalizeText(b);
+
+ if(a===b)
+  return true;
+
+ if(!a||!b)
+  return false;
+
+ const distance=
+  levenshtein(a,b);
+
+ const maxLength=
+  Math.max(a.length,b.length);
+
+ if(maxLength<=4)
+  return distance<=1;
+
+ if(maxLength<=7)
+  return distance<=2;
+
+ return distance<=2;
+}
+
+
+/* =====================================================
+   CERCA SE UNA FRASE CONTIENE PAROLE SIMILI
+===================================================== */
+
+function containsSimilarPhrase(text,phrase){
+
+ const textWords=
+  normalizeText(text)
+  .split(" ")
+  .filter(Boolean);
+
+ const phraseWords=
+  normalizeText(phrase)
+  .split(" ")
+  .filter(Boolean);
+
+ if(!phraseWords.length)
+  return false;
+
+ let matched=0;
+
+ for(const phraseWord of phraseWords){
+
+  const found=
+   textWords.some(
+    textWord=>
+     wordsSimilar(
+      textWord,
+      phraseWord
+     )
+   );
+
+  if(found)
+   matched++;
+ }
+
+ return matched>=
+  Math.max(
+   1,
+   Math.ceil(
+    phraseWords.length*.6
+   )
+  );
+}
+
+
+/* =====================================================
+   ESTRAE TESTO DOPO UNA FRASE
+===================================================== */
+
+function extractAfterSimilarPrefix(text,prefix){
+
+ const originalWords=
+  String(text)
+   .trim()
+   .split(/\s+/);
+
+ const prefixWords=
+  normalizeText(prefix)
+   .split(" ")
+   .filter(Boolean);
+
+ if(!prefixWords.length)
+  return null;
+
+ let index=0;
+
+ for(
+  ;
+  index<originalWords.length &&
+  index<prefixWords.length;
+  index++
+ ){
+
+  if(
+   !wordsSimilar(
+    originalWords[index],
+    prefixWords[index]
+   )
+  ){
+
+   return null;
+  }
+ }
+
+ if(index<prefixWords.length)
+  return null;
+
+ return originalWords
+  .slice(index)
+  .join(" ")
+  .trim();
+}
+
+
 /* ================= UTILITY ================= */
 
 function escapeHtml(text){
 
  return String(text)
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
+
+  .replace(
+   /&/g,
+   "&amp;"
+  )
+
+  .replace(
+   /</g,
+   "&lt;"
+  )
+
+  .replace(
+   />/g,
+   "&gt;"
+  )
+
+  .replace(
+   /"/g,
+   "&quot;"
+  )
+
+  .replace(
+   /'/g,
+   "&#039;"
+  );
 }
 
 function addMsg(text){
@@ -1138,79 +1390,47 @@ function addMsg(text){
 
 
 /* =====================================================
-   FULL SCREEN
+   FULLSCREEN
 ===================================================== */
-
-function isFullscreen(){
-
- return !!(
-  document.fullscreenElement ||
-  document.webkitFullscreenElement
- );
-}
 
 async function enterFullscreen(){
 
  try{
 
-  if(isFullscreen()){
+  if(document.fullscreenElement)
+   return true;
+
+  if(
+   document.documentElement.requestFullscreen
+  ){
+
+   await document.documentElement
+    .requestFullscreen();
+
    return true;
   }
-
-  const element=document.documentElement;
-
-  if(element.requestFullscreen){
-
-   await element.requestFullscreen();
-
-  }else if(element.webkitRequestFullscreen){
-
-   element.webkitRequestFullscreen();
-
-  }else{
-
-   addMsg(
-    "Il dispositivo non supporta la modalità full screen."
-   );
-
-   return false;
-  }
-
-  return true;
 
  }catch(error){
 
   console.warn(
-   "Fullscreen non autorizzato:",
+   "Fullscreen:",
    error
   );
-
-  addMsg(
-   "Il browser ha bloccato la modalità full screen."
-  );
-
-  return false;
  }
+
+ return false;
 }
 
 async function exitFullscreen(){
 
  try{
 
-  if(!isFullscreen())
-   return true;
-
-  if(document.exitFullscreen){
+  if(document.fullscreenElement){
 
    await document.exitFullscreen();
 
-  }else if(document.webkitExitFullscreen){
-
-   document.webkitExitFullscreen();
-
+   return true;
   }
-
-  return true;
 
  }catch(error){
 
@@ -1218,123 +1438,134 @@ async function exitFullscreen(){
    "Uscita fullscreen:",
    error
   );
+ }
 
-  return false;
+ return false;
+}
+
+async function toggleFullscreen(){
+
+ if(document.fullscreenElement){
+
+  await exitFullscreen();
+
+ }else{
+
+  await enterFullscreen();
  }
 }
 
+function isFullscreen(){
 
-/* ================= COMANDI FULL SCREEN ================= */
+ return !!document.fullscreenElement;
+}
 
-function handleFullscreenCommand(text){
+
+/* =====================================================
+   COMANDI FULLSCREEN
+===================================================== */
+
+async function handleFullscreenCommand(text){
 
  const normalized=
-  text
-   .toLowerCase()
-   .trim()
-   .replace(/[.!?]+$/g,"");
+  normalizeText(text);
 
- const enterCommands=[
+ const activateCommands=[
 
-  "modalità full screen",
+  "modalita fullscreen",
+
   "modalita full screen",
 
+  "attiva fullscreen",
+
   "attiva full screen",
-  "attiva il full screen",
 
-  "attiva modalità full screen",
-  "attiva modalita full screen",
-
-  "schermo intero",
   "attiva schermo intero",
 
-  "modalità schermo intero",
-  "modalita schermo intero",
+  "schermo intero",
 
-  "vai in full screen",
-  "vai in modalità full screen",
-  "vai in modalita full screen"
+  "vai fullscreen",
+
+  "vai full screen",
+
+  "entra fullscreen",
+
+  "entra full screen",
+
+  "fullscreen"
 
  ];
 
- const exitCommands=[
+ const deactivateCommands=[
+
+  "disattiva fullscreen",
 
   "disattiva full screen",
-  "disattiva il full screen",
 
-  "esci dal full screen",
+  "esci fullscreen",
+
+  "esci full screen",
+
+  "esci da fullscreen",
+
   "esci da full screen",
 
   "esci dallo schermo intero",
 
   "disattiva schermo intero",
 
-  "disattiva modalità full screen",
-  "disattiva modalita full screen",
+  "torna allo schermo normale",
 
-  "torna alla modalità normale",
-  "torna alla modalita normale"
+  "schermo normale"
 
  ];
 
- if(enterCommands.includes(normalized)){
+ for(const command of activateCommands){
 
-  enterFullscreen().then(success=>{
+  if(
+   containsSimilarPhrase(
+    normalized,
+    command
+   )
+  ){
 
-   if(success){
+   const success=
+    await enterFullscreen();
 
-    addMsg(
-     "Modalità full screen attivata."
-    );
+   addMsg(
+    success
+     ?"Modalità fullscreen attivata."
+     :"Non posso attivare la modalità fullscreen da questo dispositivo/browser."
+   );
 
-   }
-
-  });
-
-  return true;
+   return true;
+  }
  }
 
- if(exitCommands.includes(normalized)){
+ for(const command of deactivateCommands){
 
-  exitFullscreen().then(success=>{
+  if(
+   containsSimilarPhrase(
+    normalized,
+    command
+   )
+  ){
 
-   if(success){
+   const success=
+    await exitFullscreen();
 
-    addMsg(
-     "Modalità full screen disattivata."
-    );
+   addMsg(
+    success
+     ?"Modalità fullscreen disattivata."
+     :"La modalità fullscreen non è attiva."
+   );
 
-   }
-
-  });
-
-  return true;
+   return true;
+  }
  }
 
  return false;
 }
-
-
-/* ================= FULL SCREEN EVENTS ================= */
-
-document.addEventListener(
- "fullscreenchange",
- ()=>{
-
-  if(isFullscreen()){
-
-   console.log(
-    "JARVIS: FULL SCREEN ON"
-   );
-
-  }else{
-
-   console.log(
-    "JARVIS: FULL SCREEN OFF"
-   );
-  }
- }
-);
 
 
 /* ================= MARKER ================= */
@@ -1381,10 +1612,13 @@ function createJarvisMarker(
    })
 
    .setHTML(
+
     `<b style="color:#00ffff">${
      escapeHtml(name)
     }</b>`
+
    )
+
   )
 
   .addTo(map);
@@ -1440,7 +1674,8 @@ async function searchLocation(place){
    return;
   }
 
-  const result=results[0];
+  const result=
+   results[0];
 
   const lat=
    parseFloat(result.lat);
@@ -1491,7 +1726,6 @@ async function searchLocation(place){
    "Impossibile localizzare "+
    place+"."
   );
- }
 }
 
 
@@ -1500,108 +1734,117 @@ async function searchLocation(place){
 function handleMapCommand(text){
 
  const normalized=
-  text.toLowerCase().trim();
+  normalizeText(text);
 
- if(
+ const openCommands=[
 
-  normalized.includes(
-   "apri la mappa"
-  )||
+  "apri la mappa",
 
-  normalized.includes(
-   "apri mappa"
-  )||
+  "apri mappa",
 
-  normalized.includes(
-   "mappa tattica"
-  )||
+  "mappa tattica",
 
-  normalized.includes(
-   "modalità tattica"
-  )||
+  "modalita tattica",
 
-  normalized.includes(
-   "modalita tattica"
-  )||
+  "attiva la mappa",
 
-  normalized.includes(
-   "attiva la mappa"
-  )
+  "attiva mappa",
 
- ){
+  "mostra la mappa",
 
-  openTacticalMap();
-
-  addMsg(
-   "Mappa tattica attivata."
-  );
-
-  return true;
- }
-
- if(
-
-  normalized.includes(
-   "chiudi la mappa"
-  )||
-
-  normalized.includes(
-   "chiudi mappa"
-  )||
-
-  normalized.includes(
-   "esci dalla mappa"
-  )||
-
-  normalized.includes(
-   "torna alla modalità normale"
-  )||
-
-  normalized.includes(
-   "torna alla modalita normale"
-  )
-
- ){
-
-  closeTacticalMap();
-
-  addMsg(
-   "Modalità tattica disattivata."
-  );
-
-  return true;
- }
-
- const patterns=[
-
-  "mostrami ",
-  "mostra ",
-  "vai a ",
-  "portami a ",
-  "localizza ",
-  "cerca ",
-  "visualizza "
-
+  "mostra mappa"
  ];
 
- for(const pattern of patterns){
+ for(const command of openCommands){
 
-  if(normalized.startsWith(pattern)){
+  if(
+   containsSimilarPhrase(
+    normalized,
+    command
+   )
+  ){
 
-   const place=
-    text
-     .trim()
-     .substring(
-      pattern.length
-     )
-     .trim();
+   openTacticalMap();
 
-   if(place.length>1){
+   addMsg(
+    "Mappa tattica attivata."
+   );
 
-    searchLocation(place);
+   return true;
+  }
+ }
 
-    return true;
-   }
+ const closeCommands=[
+
+  "chiudi la mappa",
+
+  "chiudi mappa",
+
+  "esci dalla mappa",
+
+  "torna alla modalita normale",
+
+  "chiudi modalita tattica",
+
+  "disattiva modalita tattica"
+ ];
+
+ for(const command of closeCommands){
+
+  if(
+   containsSimilarPhrase(
+    normalized,
+    command
+   )
+  ){
+
+   closeTacticalMap();
+
+   addMsg(
+    "Modalità tattica disattivata."
+   );
+
+   return true;
+  }
+ }
+
+ const locationPatterns=[
+
+  "mostrami",
+
+  "mostra",
+
+  "vai a",
+
+  "portami a",
+
+  "localizza",
+
+  "cerca",
+
+  "visualizza",
+
+  "fammi vedere",
+
+  "portami"
+ ];
+
+ for(const pattern of locationPatterns){
+
+  const place=
+   extractAfterSimilarPrefix(
+    text,
+    pattern
+   );
+
+  if(
+   place &&
+   place.length>1
+  ){
+
+   searchLocation(place);
+
+   return true;
   }
  }
 
@@ -1630,7 +1873,8 @@ function updateWebIndicator(){
    .classList
    .add("active");
 
-  webSearchIndicator.textContent=
+  webSearchIndicator
+   .textContent=
    "WEB WINDOWS: "+
    count;
 
@@ -1724,11 +1968,15 @@ function openWebSearch(query){
  `;
 
  webSearchWindows
-  .appendChild(windowElement);
+  .appendChild(
+   windowElement
+  );
 
  const iframe=
   windowElement
-   .querySelector("iframe");
+   .querySelector(
+    "iframe"
+   );
 
  iframe.src=
   "https://www.google.com/search?igu=1&q="+
@@ -1791,7 +2039,6 @@ function openWebSearch(query){
 
  /* =====================================================
     DRAG CORRETTO
-    MOUSE + TOUCH + TABLET
  ===================================================== */
 
  const header=
@@ -1815,7 +2062,6 @@ function openWebSearch(query){
      ".web-window-btn"
     )
    ){
-
     return;
    }
 
@@ -1847,7 +2093,9 @@ function openWebSearch(query){
 
    event.preventDefault();
   },
-  {passive:false}
+  {
+   passive:false
+  }
  );
 
 
@@ -1906,7 +2154,9 @@ function openWebSearch(query){
    windowElement.style.top=
     newTop+"px";
   },
-  {passive:false}
+  {
+   passive:false
+  }
  );
 
 
@@ -1957,41 +2207,46 @@ function openWebSearch(query){
 
 function handleWebCommand(text){
 
- const normalized=
-  text.toLowerCase().trim();
-
  const patterns=[
 
-  "cerca sul web ",
-  "cerca nel web ",
-  "ricerca sul web ",
-  "ricerca web ",
-  "cerca online ",
-  "cerca su internet ",
-  "cerca in internet ",
-  "fammi una ricerca su ",
-  "fai una ricerca su "
+  "cerca sul web",
+
+  "cerca nel web",
+
+  "ricerca sul web",
+
+  "ricerca web",
+
+  "cerca online",
+
+  "cerca su internet",
+
+  "cerca in internet",
+
+  "fammi una ricerca su",
+
+  "fai una ricerca su",
+
+  "ricerca su internet"
 
  ];
 
  for(const pattern of patterns){
 
-  if(normalized.startsWith(pattern)){
+  const query=
+   extractAfterSimilarPrefix(
+    text,
+    pattern
+   );
 
-   const query=
-    text
-     .trim()
-     .substring(
-      pattern.length
-     )
-     .trim();
+  if(
+   query &&
+   query.length>1
+  ){
 
-   if(query.length>1){
+   openWebSearch(query);
 
-    openWebSearch(query);
-
-    return true;
-   }
+   return true;
   }
  }
 
@@ -2004,61 +2259,81 @@ function handleWebCommand(text){
 function handleWebWindowCommand(text){
 
  const normalized=
-  text.toLowerCase().trim();
+  normalizeText(text);
 
- if(
+ const closeCommands=[
 
-  normalized===
-   "chiudi le ricerche web"||
+  "chiudi le ricerche web",
 
-  normalized===
-   "chiudi ricerca web"||
+  "chiudi ricerca web",
 
-  normalized===
-   "chiudi tutte le ricerche"||
+  "chiudi tutte le ricerche",
 
-  normalized===
-   "chiudi tutte le finestre web"
+  "chiudi tutte le finestre web",
 
- ){
+  "chiudi le finestre web",
 
-  webSearchWindows.innerHTML="";
+  "chiudi finestre web"
+ ];
 
-  updateWebIndicator();
+ for(const command of closeCommands){
 
-  addMsg(
-   "Finestre web chiuse."
-  );
-
-  return true;
- }
-
- if(
-
-  normalized===
-   "minimizza le ricerche web"||
-
-  normalized===
-   "minimizza tutte le ricerche"
-
- ){
-
-  webSearchWindows
-   .querySelectorAll(
-    ".web-window"
+  if(
+   containsSimilarPhrase(
+    normalized,
+    command
    )
-   .forEach(
-    w=>
-     w.classList.add(
-      "minimized"
-     )
+  ){
+
+   webSearchWindows.innerHTML="";
+
+   updateWebIndicator();
+
+   addMsg(
+    "Finestre web chiuse."
    );
 
-  addMsg(
-   "Ricerche web minimizzate."
-  );
+   return true;
+  }
+ }
 
-  return true;
+ const minimizeCommands=[
+
+  "minimizza le ricerche web",
+
+  "minimizza tutte le ricerche",
+
+  "minimizza tutte le finestre web",
+
+  "minimizza finestre web"
+ ];
+
+ for(const command of minimizeCommands){
+
+  if(
+   containsSimilarPhrase(
+    normalized,
+    command
+   )
+  ){
+
+   webSearchWindows
+    .querySelectorAll(
+     ".web-window"
+    )
+    .forEach(
+     w=>
+      w.classList.add(
+       "minimized"
+      )
+    );
+
+   addMsg(
+    "Ricerche web minimizzate."
+   );
+
+   return true;
+  }
  }
 
  return false;
@@ -2113,7 +2388,9 @@ function getTimeData(){
 
 function loadDeviceVoices(){
 
- if(!("speechSynthesis" in window))
+ if(
+  !("speechSynthesis" in window)
+ )
   return;
 
  deviceVoices=
@@ -2162,12 +2439,9 @@ function loadDeviceVoices(){
   );
 
  if(
-
-  savedVoice!==null&&
-
+  savedVoice!==null &&
   Number(savedVoice)<
    deviceVoices.length
-
  ){
 
   voiceSelector.value=
@@ -2180,7 +2454,9 @@ function loadDeviceVoices(){
  }
 }
 
-if("speechSynthesis" in window){
+if(
+ "speechSynthesis" in window
+){
 
  loadDeviceVoices();
 
@@ -2199,7 +2475,9 @@ function speakDevice(text){
  return new Promise(
   resolve=>{
 
-   if(!("speechSynthesis" in window)){
+   if(
+    !("speechSynthesis" in window)
+   ){
 
     resolve(false);
 
@@ -2247,14 +2525,18 @@ function speakDevice(text){
 
      audioPlaying=true;
 
-     setState("speaking");
+     setState(
+      "speaking"
+     );
     };
 
     utterance.onend=()=>{
 
      audioPlaying=false;
 
-     setState("idle");
+     setState(
+      "idle"
+     );
 
      resolve(true);
     };
@@ -2263,19 +2545,23 @@ function speakDevice(text){
 
      audioPlaying=false;
 
-     setState("idle");
+     setState(
+      "idle"
+     );
 
      resolve(false);
     };
 
-    window.speechSynthesis.speak(
-     utterance
-    );
+    window.speechSynthesis
+     .speak(
+      utterance
+     );
 
     setTimeout(
      ()=>{
       try{
-       window.speechSynthesis.resume();
+       window.speechSynthesis
+        .resume();
       }catch(e){}
      },
      100
@@ -2316,7 +2602,9 @@ async function speakElevenLabs(text){
 
  const timeout=
   setTimeout(
-   ()=>controller.abort(),
+   ()=>{
+    controller.abort();
+   },
    30000
   );
 
@@ -2355,10 +2643,14 @@ async function speakElevenLabs(text){
 
   const contentType=
    response.headers
-    .get("content-type")||"";
+    .get(
+     "content-type"
+    )||"";
 
   if(
-   !contentType.includes("audio")
+   !contentType.includes(
+    "audio"
+   )
   )
    return false;
 
@@ -2377,9 +2669,12 @@ async function speakElevenLabs(text){
    );
 
   const audio=
-   new Audio(audioUrl);
+   new Audio(
+    audioUrl
+   );
 
-  currentAudio=audio;
+  currentAudio=
+   audio;
 
   audio.volume=1;
 
@@ -2387,20 +2682,26 @@ async function speakElevenLabs(text){
 
    audioPlaying=true;
 
-   setState("speaking");
+   setState(
+    "speaking"
+   );
   };
 
   audio.onended=()=>{
 
    audioPlaying=false;
 
-   setState("idle");
+   setState(
+    "idle"
+   );
 
    URL.revokeObjectURL(
     audioUrl
    );
 
-   if(currentAudio===audio)
+   if(
+    currentAudio===audio
+   )
     currentAudio=null;
   };
 
@@ -2408,7 +2709,9 @@ async function speakElevenLabs(text){
 
    audioPlaying=false;
 
-   setState("idle");
+   setState(
+    "idle"
+   );
 
    URL.revokeObjectURL(
     audioUrl
@@ -2430,7 +2733,9 @@ async function speakElevenLabs(text){
 
  }finally{
 
-  clearTimeout(timeout);
+  clearTimeout(
+   timeout
+  );
  }
 }
 
@@ -2442,11 +2747,16 @@ async function speak(text){
  if(!text)return;
 
  const elevenSuccess=
-  await speakElevenLabs(text);
+  await speakElevenLabs(
+   text
+  );
 
- if(elevenSuccess)return;
+ if(elevenSuccess)
+  return;
 
- await speakDevice(text);
+ await speakDevice(
+  text
+ );
 }
 
 
@@ -2484,10 +2794,8 @@ voiceSelector.addEventListener(
    Number(value);
 
   if(
-
    Number.isInteger(index)&&
    deviceVoices[index]
-
   ){
 
    selectedDeviceVoice=
@@ -2514,29 +2822,49 @@ voiceBtn.addEventListener(
 );
 
 
-/* ================= PROCESS AI ================= */
+/* =====================================================
+   PROCESS AI
+===================================================== */
 
 async function processAi(text){
 
  /*
   IMPORTANTE:
-  I comandi locali vengono eseguiti
-  prima di inviare il testo al server.
+  I comandi locali vengono controllati
+  PRIMA di mandare il messaggio all'AI.
  */
 
- if(handleFullscreenCommand(text))
+ if(
+  await handleFullscreenCommand(
+   text
+  )
+ )
   return;
 
- if(handleWebWindowCommand(text))
+ if(
+  handleWebWindowCommand(
+   text
+  )
+ )
   return;
 
- if(handleWebCommand(text))
+ if(
+  handleWebCommand(
+   text
+  )
+ )
   return;
 
- if(handleMapCommand(text))
+ if(
+  handleMapCommand(
+   text
+  )
+ )
   return;
 
- setState("thinking");
+ setState(
+  "thinking"
+ );
 
  try{
 
@@ -2553,7 +2881,9 @@ async function processAi(text){
 
   const timeout=
    setTimeout(
-    ()=>controller.abort(),
+    ()=>{
+     controller.abort();
+    },
     30000
    );
 
@@ -2591,7 +2921,6 @@ async function processAi(text){
 
        timezone:
         temporal.timezone
-
       }),
 
       signal:
@@ -2601,7 +2930,9 @@ async function processAi(text){
 
   }finally{
 
-   clearTimeout(timeout);
+   clearTimeout(
+    timeout
+   );
   }
 
   if(!response.ok){
@@ -2616,27 +2947,25 @@ async function processAi(text){
    try{
 
     const errorData=
-     JSON.parse(errorText);
+     JSON.parse(
+      errorText
+     );
 
     if(
      errorData&&
      errorData.error
-    ){
-
+    )
      errorMessage=
       errorData.error;
-    }
 
    }catch(e){
 
-    if(errorText){
-
+    if(errorText)
      errorMessage=
       errorText.substring(
        0,
        200
       );
-    }
    }
 
    throw new Error(
@@ -2649,26 +2978,33 @@ async function processAi(text){
 
   const reply=
    typeof data.response===
-   "string"
-    ?data.response.trim()
-    :"";
+    "string"
+     ?data.response.trim()
+     :"";
 
   if(!reply)
    throw new Error(
     "Risposta AI vuota"
    );
 
-  addMsg(reply);
+  addMsg(
+   reply
+  );
 
   addMemory(
    "assistant",
    reply
   );
 
-  speak(reply)
-   .catch(console.error);
+  speak(
+   reply
+  ).catch(
+   console.error
+  );
 
-  setState("idle");
+  setState(
+   "idle"
+  );
 
  }catch(error){
 
@@ -2682,16 +3018,14 @@ async function processAi(text){
    "Errore sconosciuto";
 
   if(
-   error.name===
-   "AbortError"
+   error.name==="AbortError"
   ){
 
    message=
     "Il server ha impiegato troppo tempo a rispondere.";
 
   }else if(
-   message===
-   "Failed to fetch"
+   message==="Failed to fetch"
   ){
 
    message=
@@ -2703,7 +3037,9 @@ async function processAi(text){
    message
   );
 
-  setState("idle");
+  setState(
+   "idle"
+  );
  }
 }
 
@@ -2719,9 +3055,13 @@ function sendMessage(){
 
  textInput.value="";
 
- addMsg(text);
+ addMsg(
+  text
+ );
 
- processAi(text);
+ processAi(
+  text
+ );
 }
 
 sendBtn.addEventListener(
@@ -2750,6 +3090,7 @@ const Recognition=
  window.webkitSpeechRecognition;
 
 let recognition=null;
+
 let listening=false;
 
 if(Recognition){
@@ -2757,11 +3098,14 @@ if(Recognition){
  recognition=
   new Recognition();
 
- recognition.lang="it-IT";
+ recognition.lang=
+  "it-IT";
 
- recognition.continuous=false;
+ recognition.continuous=
+  false;
 
- recognition.interimResults=false;
+ recognition.interimResults=
+  false;
 
  recognition.onstart=()=>{
 
@@ -2771,7 +3115,9 @@ if(Recognition){
    .classList
    .add("active");
 
-  setState("listening");
+  setState(
+   "listening"
+  );
  };
 
  recognition.onresult=
@@ -2784,7 +3130,8 @@ if(Recognition){
 
    if(text){
 
-    textInput.value=text;
+    textInput.value=
+     text;
 
     sendMessage();
    }
@@ -2802,9 +3149,13 @@ if(Recognition){
 
    micBtn
     .classList
-    .remove("active");
+    .remove(
+     "active"
+    );
 
-   setState("idle");
+   setState(
+    "idle"
+   );
   };
 
  recognition.onend=()=>{
@@ -2813,7 +3164,9 @@ if(Recognition){
 
   micBtn
    .classList
-   .remove("active");
+   .remove(
+    "active"
+   );
  };
 
  micBtn.addEventListener(
@@ -2832,7 +3185,9 @@ if(Recognition){
 
     }catch(error){
 
-     console.warn(error);
+     console.warn(
+      error
+     );
     }
    }
   }
@@ -2842,6 +3197,30 @@ if(Recognition){
 
  micBtn.style.opacity=".3";
 }
+
+
+/* ================= FULLSCREEN EVENT ================= */
+
+document.addEventListener(
+ "fullscreenchange",
+ ()=>{
+
+  if(
+   document.fullscreenElement
+  ){
+
+   addMsg(
+    "FULLSCREEN: ATTIVO"
+   );
+
+  }else{
+
+   addMsg(
+    "FULLSCREEN: DISATTIVATO"
+   );
+  }
+ }
+);
 
 
 /* ================= RESIZE ================= */
@@ -2886,7 +3265,11 @@ window.clearJarvisMemory=
 
 /* ================= AVVIO ================= */
 
-setState("idle");
+setState(
+ "idle"
+);
 
-</script></body>
+</script>
+
+</body>
 </html>

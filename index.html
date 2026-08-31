@@ -3413,7 +3413,15 @@ async function processAi(
         return;
 
     }
+    if(
+        handleWebCommand(
+            text
+        )
+    ){
 
+        return;
+
+    }
 
     setState(
         "thinking"

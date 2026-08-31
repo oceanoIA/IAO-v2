@@ -1,31 +1,1583 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
+/>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#010405;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:
+        radial-gradient(
+            circle at center,
+            #071719 0%,
+            #020708 48%,
+            #000000 100%
+        );
+}
+
+#webgl-container{
+    position:fixed;
+    inset:0;
+    z-index:1;
+}
+
+.vignette{
+    position:fixed;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            circle at center,
+            transparent 30%,
+            rgba(0,0,0,.2) 65%,
+            rgba(0,0,0,.8) 100%
+        );
+}
+
+.jarvis-title{
+    position:fixed;
+    top:2.4%;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:30;
+
+    color:rgba(255,255,255,.86);
+
+    font-size:clamp(20px,2.8vw,31px);
+    font-weight:300;
+    letter-spacing:clamp(5px,1vw,8px);
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 0 10px
+        rgba(255,255,255,.12);
+
+    pointer-events:none;
+}
+
+.datetime{
+    position:fixed;
+    top:18px;
+    right:24px;
+    z-index:30;
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:3px;
+
+    font-family:monospace;
+    pointer-events:none;
+}
+
+.time{
+    color:rgba(150,255,255,.6);
+    font-size:11px;
+    letter-spacing:2px;
+
+    text-shadow:
+        0 0 8px
+        rgba(0,255,255,.2);
+}
+
+.date{
+    color:rgba(150,255,255,.38);
+    font-size:8px;
+    letter-spacing:1px;
+}
+
+#chat{
+    position:fixed;
+    left:50%;
+    bottom:92px;
+    transform:translateX(-50%);
+    z-index:40;
+
+    width:min(620px,88%);
+    text-align:center;
+
+    pointer-events:none;
+}
+
+.msg{
+    display:inline-block;
+    max-width:100%;
+
+    padding:10px 18px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.22);
+
+    border-radius:24px;
+
+    background:
+        rgba(4,20,23,.4);
+
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+
+    color:rgba(235,255,255,.9);
+
+    font-size:12px;
+    line-height:1.45;
+
+    white-space:pre-wrap;
+}
+
+.command-wrapper{
+    position:fixed;
+    left:50%;
+    bottom:23px;
+    transform:translateX(-50%);
+    z-index:50;
+
+    width:min(650px,90%);
+
+    display:flex;
+    align-items:center;
+
+    padding:6px 7px 6px 20px;
+
+    border:
+        1px solid
+        rgba(100,255,255,.28);
+
+    border-radius:40px;
+
+    background:
+        rgba(5,20,23,.38);
+
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 0 30px
+        rgba(0,255,255,.05);
+}
+
+.command-wrapper:focus-within{
+    border-color:rgba(0,255,255,.6);
+
+    box-shadow:
+        0 0 25px
+        rgba(0,255,255,.12);
+}
+
+#textInput{
+    flex:1;
+    min-width:0;
+
+    border:none;
+    outline:none;
+    background:transparent;
+
+    color:white;
+
+    font-family:Arial,sans-serif;
+    font-size:14px;
+
+    padding:12px 5px;
+}
+
+#textInput::placeholder{
+    color:rgba(255,255,255,.3);
+}
+
+#micBtn{
+    width:34px;
+    height:34px;
+
+    margin-right:7px;
+
+    border:none;
+    background:transparent;
+
+    color:rgba(210,255,255,.65);
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.mic-icon{
+    width:8px;
+    height:14px;
+
+    border:
+        1.3px solid
+        currentColor;
+
+    border-radius:60px;
+
+    position:relative;
+}
+
+.mic-icon::after{
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    bottom:-6px;
+
+    width:12px;
+    height:7px;
+
+    transform:translateX(-50%);
+
+    border:
+        1.3px solid
+        currentColor;
+
+    border-top:none;
+
+    border-radius:
+        0 0 8px 8px;
+}
+
+#micBtn:hover{
+    color:#00ffff;
+}
+
+#micBtn.active{
+    color:#8fffff;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(0,255,255,.7)
+        );
+}
+
+#sendBtn{
+    height:39px;
+
+    padding:0 17px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.28);
+
+    border-radius:22px;
+
+    background:
+        rgba(0,255,255,.05);
+
+    color:
+        rgba(220,255,255,.78);
+
+    font-size:10px;
+    letter-spacing:2px;
+
+    cursor:pointer;
+}
+
+#sendBtn:hover{
+    color:white;
+    border-color:#00ffff;
+
+    background:
+        rgba(0,255,255,.1);
+}
+
+#voiceBtn{
+    position:fixed;
+
+    right:22px;
+    bottom:24px;
+
+    z-index:60;
+
+    height:39px;
+
+    padding:0 15px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.25);
+
+    border-radius:22px;
+
+    background:
+        rgba(3,15,18,.72);
+
+    color:
+        rgba(210,255,255,.7);
+
+    font-size:10px;
+    letter-spacing:1.5px;
+
+    cursor:pointer;
+
+    backdrop-filter:blur(12px);
+    transition:.2s;
+}
+
+#voiceBtn:hover{
+    color:white;
+    border-color:#00ffff;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.2);
+}
+
+#voicePanel{
+    position:fixed;
+
+    right:22px;
+    bottom:72px;
+
+    z-index:100;
+
+    width:min(330px,calc(100% - 30px));
+
+    padding:15px;
+
+    display:none;
+
+    border:
+        1px solid
+        rgba(0,255,255,.25);
+
+    border-radius:18px;
+
+    background:
+        rgba(2,13,16,.94);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 0 35px
+        rgba(0,255,255,.12);
+}
+
+#voicePanel.active{
+    display:block;
+}
+
+.voice-title{
+    color:
+        rgba(220,255,255,.9);
+
+    font-size:11px;
+    letter-spacing:2px;
+
+    margin-bottom:10px;
+}
+
+#voiceSelector{
+    width:100%;
+
+    padding:11px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.2);
+
+    border-radius:10px;
+
+    outline:none;
+
+    background:
+        rgba(0,20,23,.9);
+
+    color:
+        rgba(220,255,255,.85);
+
+    font-size:11px;
+}
+
+#voiceTest{
+    width:100%;
+
+    margin-top:10px;
+    padding:9px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.2);
+
+    border-radius:10px;
+
+    background:
+        rgba(0,255,255,.04);
+
+    color:
+        rgba(210,255,255,.7);
+
+    cursor:pointer;
+
+    font-size:10px;
+    letter-spacing:1px;
+}
+
+#voiceTest:hover{
+    border-color:#00ffff;
+    color:white;
+}
+
+
+/* =====================================================
+   MAPPA TATTICA
+===================================================== */
+
+#tacticalMap{
+    position:fixed;
+    inset:0;
+
+    z-index:20;
+
+    display:none;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #081719 0%,
+            #020708 65%,
+            #000000 100%
+        );
+}
+
+#tacticalMap.active{
+    display:block;
+
+    animation:
+        mapIn .45s ease;
+}
+
+@keyframes mapIn{
+
+    from{
+        opacity:0;
+        transform:scale(1.015);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+.map-header{
+    position:absolute;
+
+    top:2.4%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:600;
+
+    color:
+        rgba(220,255,255,.9);
+
+    font-size:
+        clamp(24px,4vw,42px);
+
+    font-weight:300;
+
+    letter-spacing:
+        clamp(6px,1.3vw,12px);
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 0 12px
+        rgba(0,255,255,.25);
+
+    pointer-events:none;
+}
+
+#map{
+    position:absolute;
+
+    top:3cm;
+    right:3cm;
+    bottom:3cm;
+    left:3cm;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    background:#071012;
+
+    box-shadow:
+        0 0 35px rgba(0,0,0,.65),
+        0 0 70px rgba(0,255,255,.035);
+
+    border:
+        1px solid
+        rgba(0,255,255,.10);
+}
+
+.map-overlay{
+    position:absolute;
+    inset:0;
+
+    z-index:400;
+
+    pointer-events:none;
+
+    border-radius:28px;
+
+    box-shadow:
+        inset 0 0 80px
+        rgba(0,0,0,.28);
+}
+
+#closeMap{
+    position:absolute;
+
+    top:28px;
+    left:34px;
+
+    z-index:700;
+
+    width:38px;
+    height:38px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.35);
+
+    border-radius:50%;
+
+    background:
+        rgba(0,15,18,.85);
+
+    color:
+        rgba(200,255,255,.85);
+
+    cursor:pointer;
+
+    font-size:19px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    backdrop-filter:blur(10px);
+}
+
+#closeMap:hover{
+    color:white;
+    border-color:#00ffff;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.3);
+}
+
+.maplibregl-ctrl-group{
+    background:
+        rgba(0,15,18,.85)!important;
+
+    border:
+        1px solid
+        rgba(0,255,255,.18)!important;
+
+    border-radius:12px!important;
+
+    overflow:hidden;
+}
+
+.maplibregl-ctrl-group button{
+    background:
+        transparent!important;
+
+    color:#bfffff!important;
+}
+
+.maplibregl-ctrl-group button:hover{
+    background:
+        rgba(0,255,255,.08)!important;
+}
+
+.maplibregl-ctrl-attrib{
+    background:
+        rgba(0,8,10,.65)!important;
+
+    color:
+        rgba(180,255,255,.35)!important;
+
+    font-size:8px!important;
+}
+
+.maplibregl-ctrl-attrib a{
+    color:
+        rgba(150,240,255,.45)!important;
+}
+
+.jarvis-map-marker{
+    width:20px;
+    height:20px;
+
+    border-radius:50%;
+
+    border:
+        2px solid
+        #00ffff;
+
+    background:
+        rgba(0,255,255,.16);
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.9),
+        0 0 35px
+        rgba(0,255,255,.4);
+
+    animation:
+        markerPulse 1.5s infinite;
+}
+
+.jarvis-map-marker::after{
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:5px;
+    height:5px;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:#dfffff;
+
+    box-shadow:
+        0 0 8px #00ffff;
+}
+
+@keyframes markerPulse{
+
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.18);
+    }
+
+}
+
+.maplibregl-popup-content{
+    background:
+        rgba(3,15,18,.96)!important;
+
+    color:
+        rgba(220,255,255,.9)!important;
+
+    border:
+        1px solid
+        rgba(0,255,255,.25);
+
+    border-radius:10px;
+
+    padding:10px 14px;
+
+    box-shadow:
+        0 0 20px
+        rgba(0,255,255,.12);
+}
+
+.maplibregl-popup-close-button{
+    color:#00ffff!important;
+    font-size:18px;
+}
+
+
+/* =====================================================
+   WEB SEARCH — FINESTRE MULTIPLE
+===================================================== */
+
+#webSearchWorkspace{
+    position:fixed;
+    inset:0;
+
+    z-index:500;
+
+    display:none;
+
+    pointer-events:none;
+
+    overflow:hidden;
+}
+
+#webSearchWorkspace.active{
+    display:block;
+}
+
+.web-window{
+
+    position:absolute;
+
+    left:50px;
+    top:80px;
+
+    width:520px;
+    height:360px;
+
+    min-width:280px;
+    min-height:200px;
+
+    background:
+        rgba(2,10,12,.96);
+
+    border:
+        1px solid
+        rgba(0,255,255,.28);
+
+    border-radius:18px;
+
+    box-shadow:
+        0 0 35px
+        rgba(0,255,255,.10),
+        0 12px 50px
+        rgba(0,0,0,.55);
+
+    overflow:hidden;
+
+    resize:both;
+
+    pointer-events:auto;
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    animation:
+        webWindowIn .3s ease;
+}
+
+@keyframes webWindowIn{
+
+    from{
+        opacity:0;
+        transform:scale(.94);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+.web-window.active-window{
+
+    border-color:
+        rgba(0,255,255,.55);
+
+    box-shadow:
+        0 0 45px
+        rgba(0,255,255,.16),
+        0 15px 60px
+        rgba(0,0,0,.65);
+}
+
+.web-window-header{
+
+    height:42px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 10px 0 15px;
+
+    background:
+        rgba(0,20,23,.92);
+
+    border-bottom:
+        1px solid
+        rgba(0,255,255,.15);
+
+    cursor:move;
+
+    user-select:none;
+    touch-action:none;
+}
+
+.web-window-title{
+
+    flex:1;
+
+    min-width:0;
+
+    color:
+        rgba(210,255,255,.82);
+
+    font-size:10px;
+
+    letter-spacing:2px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.web-window-number{
+
+    color:
+        rgba(0,255,255,.5);
+
+    font-size:8px;
+
+    margin-right:8px;
+}
+
+.web-window-close{
+
+    width:28px;
+    height:28px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.2);
+
+    border-radius:50%;
+
+    background:
+        rgba(0,10,12,.7);
+
+    color:
+        rgba(210,255,255,.7);
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:17px;
+}
+
+.web-window-close:hover{
+
+    color:white;
+
+    border-color:#00ffff;
+
+    background:
+        rgba(0,255,255,.08);
+}
+
+.web-window iframe{
+
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    top:42px;
+
+    width:100%;
+    height:calc(100% - 42px);
+
+    border:none;
+
+    background:white;
+}
+
+.web-window::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:3px;
+    bottom:3px;
+
+    width:15px;
+    height:15px;
+
+    pointer-events:none;
+
+    border-right:
+        2px solid
+        rgba(0,255,255,.5);
+
+    border-bottom:
+        2px solid
+        rgba(0,255,255,.5);
+
+    border-radius:0 0 4px 0;
+}
+
+
+/* =====================================================
+   INDICATORE RICERCHE
+===================================================== */
+
+#webSearchStatus{
+
+    position:fixed;
+
+    top:18px;
+    left:22px;
+
+    z-index:800;
+
+    display:none;
+
+    padding:7px 12px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.2);
+
+    border-radius:14px;
+
+    background:
+        rgba(2,15,18,.75);
+
+    color:
+        rgba(180,255,255,.55);
+
+    font-family:monospace;
+
+    font-size:8px;
+
+    letter-spacing:1px;
+
+    pointer-events:none;
+
+    backdrop-filter:blur(10px);
+}
+
+#webSearchStatus.active{
+    display:block;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:600px){
+
+    .jarvis-title{
+        top:2.2%;
+        font-size:23px;
+        letter-spacing:5px;
+    }
+
+    .datetime{
+        top:12px;
+        right:13px;
+    }
+
+    .time{
+        font-size:10px;
+    }
+
+    .date{
+        font-size:7px;
+    }
+
+    .command-wrapper{
+        width:calc(100% - 24px);
+        bottom:17px;
+    }
+
+    #textInput{
+        font-size:13px;
+    }
+
+    #chat{
+        bottom:80px;
+    }
+
+    #map{
+        top:3cm;
+        right:3cm;
+        bottom:3cm;
+        left:3cm;
+
+        border-radius:22px;
+    }
+
+    .map-overlay{
+        border-radius:22px;
+    }
+
+    .map-header{
+        top:2.5%;
+        font-size:23px;
+        letter-spacing:5px;
+    }
+
+    #closeMap{
+        top:24px;
+        left:25px;
+
+        width:34px;
+        height:34px;
+    }
+
+    #voiceBtn{
+        right:12px;
+        bottom:70px;
+
+        height:34px;
+
+        font-size:9px;
+
+        padding:0 11px;
+    }
+
+    #voicePanel{
+        right:12px;
+        bottom:112px;
+
+        width:calc(100% - 24px);
+    }
+
+    .web-window{
+
+        width:
+            calc(100% - 30px);
+
+        height:
+            55vh;
+
+        left:15px!important;
+        top:80px;
+
+        min-width:250px;
+    }
+
+}
+
+@media(max-width:430px){
+
+    #map{
+        top:2.2cm;
+        right:2.2cm;
+        bottom:2.2cm;
+        left:2.2cm;
+    }
+
+}
+
+
+/* =====================================================
+   WEB SEARCH MOBILE: finestre sovrapposte
+===================================================== */
+
+@media(max-width:600px){
+
+    .web-window:nth-child(n+2){
+        transform:scale(.94);
+    }
+
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+::-webkit-scrollbar{
+    width:5px;
+    height:5px;
+}
+
+::-webkit-scrollbar-track{
+    background:#020708;
+}
+
+::-webkit-scrollbar-thumb{
+    background:
+        rgba(0,255,255,.18);
+
+    border-radius:10px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+
+<div
+    class="jarvis-title"
+    id="jarvisTitle"
+>
+    J.A.R.V.I.S
+</div>
+
+
+<div class="datetime">
+
+    <div id="clock" class="time">
+        00:00:00
+    </div>
+
+    <div id="date" class="date">
+        00 AGO 2026
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAPPA TATTICA
+===================================================== -->
+
+<div id="tacticalMap">
+
+    <div id="map"></div>
+
+    <div class="map-overlay"></div>
+
+    <div class="map-header">
+        TACTICAL MAP
+    </div>
+
+    <button
+        id="closeMap"
+        title="Chiudi mappa"
+        aria-label="Chiudi mappa"
+    >
+        ×
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     SPAZIO RICERCHE WEB
+===================================================== -->
+
+<div id="webSearchWorkspace"></div>
+
+<div id="webSearchStatus">
+    WEB WINDOWS: 0
+</div>
+
+
+<!-- =====================================================
+     CHAT
+===================================================== -->
+
+<div id="chat"></div>
+
+
+<!-- =====================================================
+     COMANDI
+===================================================== -->
+
+<div class="command-wrapper">
+
+    <input
+        id="textInput"
+        type="text"
+        autocomplete="off"
+        placeholder="Chiedi qualcosa a JARVIS..."
+    >
+
+    <button
+        id="micBtn"
+        aria-label="Microfono"
+    >
+        <span class="mic-icon"></span>
+    </button>
+
+    <button id="sendBtn">
+        INVIA
+    </button>
+
+</div>
+
+
+<button id="voiceBtn">
+    ⚙ VOCE
+</button>
+
+
+<div id="voicePanel">
+
+    <div class="voice-title">
+        VOCE J.A.R.V.I.S.
+    </div>
+
+    <select id="voiceSelector">
+        <option value="">
+            Voce dispositivo automatica
+        </option>
+    </select>
+
+    <button id="voiceTest">
+        TESTA VOCE
+    </button>
+
+</div>
+
+
+<script
+    src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
+</script>
+
+
+<script type="importmap">
+
+{
+    "imports":{
+        "three":
+        "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
+    }
+}
+
+</script>
+
+
 <script type="module">
 
 import * as THREE from "three";
 
 
 /* =====================================================
-   J.A.R.V.I.S. HOLOGRAPHIC HUD
+   CONFIGURAZIONE
+===================================================== */
+
+const API =
+    "https://iao-ai-v3.oceano-masoud.workers.dev/";
+
+const MEMORY_KEY =
+    "jarvis_memory_v1";
+
+const MAX_MEMORY =
+    30;
+
+
+/* =====================================================
+   ELEVENLABS
+===================================================== */
+
+const ELEVEN_VOICE_ID =
+    "vkBFlAtUdZqNR4MqxSVr";
+
+let currentAudio =
+    null;
+
+let audioPlaying =
+    false;
+
+
+/* =====================================================
+   ELEMENTI
+===================================================== */
+
+const container =
+    document.getElementById(
+        "webgl-container"
+    );
+
+const chat =
+    document.getElementById(
+        "chat"
+    );
+
+const textInput =
+    document.getElementById(
+        "textInput"
+    );
+
+const sendBtn =
+    document.getElementById(
+        "sendBtn"
+    );
+
+const micBtn =
+    document.getElementById(
+        "micBtn"
+    );
+
+const clock =
+    document.getElementById(
+        "clock"
+    );
+
+const date =
+    document.getElementById(
+        "date"
+    );
+
+const tacticalMap =
+    document.getElementById(
+        "tacticalMap"
+    );
+
+const closeMap =
+    document.getElementById(
+        "closeMap"
+    );
+
+const jarvisTitle =
+    document.getElementById(
+        "jarvisTitle"
+    );
+
+const mapHeader =
+    document.querySelector(
+        ".map-header"
+    );
+
+const voiceBtn =
+    document.getElementById(
+        "voiceBtn"
+    );
+
+const voicePanel =
+    document.getElementById(
+        "voicePanel"
+    );
+
+const voiceSelector =
+    document.getElementById(
+        "voiceSelector"
+    );
+
+const voiceTest =
+    document.getElementById(
+        "voiceTest"
+    );
+
+const webSearchWorkspace =
+    document.getElementById(
+        "webSearchWorkspace"
+    );
+
+const webSearchStatus =
+    document.getElementById(
+        "webSearchStatus"
+    );
+
+
+/* =====================================================
+   MEMORIA
+===================================================== */
+
+let memory = [];
+
+try{
+
+    const saved =
+        localStorage.getItem(
+            MEMORY_KEY
+        );
+
+    if(saved){
+
+        const parsed =
+            JSON.parse(saved);
+
+        if(Array.isArray(parsed)){
+
+            memory =
+                parsed.slice(
+                    -MAX_MEMORY
+                );
+
+        }
+
+    }
+
+}catch(error){
+
+    console.warn(
+        "Memoria:",
+        error
+    );
+
+}
+
+
+function saveMemory(){
+
+    try{
+
+        localStorage.setItem(
+            MEMORY_KEY,
+            JSON.stringify(
+                memory.slice(
+                    -MAX_MEMORY
+                )
+            )
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Salvataggio memoria:",
+            error
+        );
+
+    }
+
+}
+
+
+function addMemory(
+    role,
+    content
+){
+
+    memory.push({
+        role,
+        content
+    });
+
+    memory =
+        memory.slice(
+            -MAX_MEMORY
+        );
+
+    saveMemory();
+
+}
+
+
+/* =====================================================
+   ORA
+===================================================== */
+
+const months = [
+
+    "GEN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAG",
+    "GIU",
+    "LUG",
+    "AGO",
+    "SET",
+    "OTT",
+    "NOV",
+    "DIC"
+
+];
+
+
+function updateClock(){
+
+    const now =
+        new Date();
+
+    const h =
+        String(
+            now.getHours()
+        ).padStart(2,"0");
+
+    const m =
+        String(
+            now.getMinutes()
+        ).padStart(2,"0");
+
+    const s =
+        String(
+            now.getSeconds()
+        ).padStart(2,"0");
+
+    clock.textContent =
+        `${h}:${m}:${s}`;
+
+    const d =
+        String(
+            now.getDate()
+        ).padStart(2,"0");
+
+    const month =
+        months[
+            now.getMonth()
+        ];
+
+    const year =
+        now.getFullYear();
+
+    date.textContent =
+        `${d} ${month} ${year}`;
+
+}
+
+
+updateClock();
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* =====================================================
+   THREE.JS
 ===================================================== */
 
 const scene =
     new THREE.Scene();
 
-
 const camera =
     new THREE.PerspectiveCamera(
-        45,
+        55,
         window.innerWidth /
         window.innerHeight,
         .1,
         1000
     );
 
-camera.position.z = 5;
-
-
-/* =====================================================
-   RENDERER
-===================================================== */
+camera.position.z =
+    5.2;
 
 const renderer =
     new THREE.WebGLRenderer({
@@ -53,460 +1605,64 @@ container.appendChild(
 
 
 /* =====================================================
-   COLORI JARVIS ORO
+   GLOW
 ===================================================== */
 
-const GOLD =
-    new THREE.Color(
-        0xFFD34E
-    );
-
-const GOLD_BRIGHT =
-    new THREE.Color(
-        0xFFF4B0
-    );
-
-const GOLD_DARK =
-    new THREE.Color(
-        0x9A6A00
-    );
-
-
-/* =====================================================
-   GRUPPO HUD
-===================================================== */
-
-const hud =
-    new THREE.Group();
-
-scene.add(
-    hud
-);
-
-
-/* =====================================================
-   CREA ANELLO
-===================================================== */
-
-function createRing(
-    radius,
-    tube,
-    color,
-    opacity,
-    segments = 160
-){
-
-    const geometry =
-        new THREE.TorusGeometry(
-            radius,
-            tube,
-            8,
-            segments
-        );
-
-    const material =
-        new THREE.MeshBasicMaterial({
-
-            color:color,
-
-            transparent:true,
-
-            opacity:opacity,
-
-            blending:
-                THREE.AdditiveBlending,
-
-            depthWrite:false
-
-        });
-
-    return new THREE.Mesh(
-        geometry,
-        material
-    );
-
-}
-
-
-/* =====================================================
-   ANELLI PRINCIPALI
-===================================================== */
-
-const ringOuter =
-    createRing(
-        1.55,
-        .012,
-        GOLD,
-        .65
-    );
-
-const ringMiddle =
-    createRing(
-        1.25,
-        .018,
-        GOLD_BRIGHT,
-        .8
-    );
-
-const ringInner =
-    createRing(
-        .88,
-        .014,
-        GOLD,
-        .9
-    );
-
-
-hud.add(
-    ringOuter,
-    ringMiddle,
-    ringInner
-);
-
-
-/* =====================================================
-   ANELLI INCLINATI
-===================================================== */
-
-const ringTilt1 =
-    createRing(
-        1.38,
-        .008,
-        GOLD_BRIGHT,
-        .45
-    );
-
-ringTilt1.rotation.x =
-    Math.PI * .32;
-
-ringTilt1.rotation.y =
-    Math.PI * .15;
-
-
-const ringTilt2 =
-    createRing(
-        1.05,
-        .009,
-        GOLD,
-        .5
-    );
-
-ringTilt2.rotation.x =
-    -Math.PI * .42;
-
-ringTilt2.rotation.z =
-    Math.PI * .2;
-
-
-hud.add(
-    ringTilt1,
-    ringTilt2
-);
-
-
-/* =====================================================
-   TACCHETTE HUD
-===================================================== */
-
-const tickGroup =
-    new THREE.Group();
-
-hud.add(
-    tickGroup
-);
-
-
-const tickMaterial =
-    new THREE.LineBasicMaterial({
-
-        color:
-            GOLD_BRIGHT,
-
-        transparent:true,
-
-        opacity:.65,
-
-        blending:
-            THREE.AdditiveBlending
-
-    });
-
-
-for(
-    let i=0;
-    i<72;
-    i++
-){
-
-    const angle =
-        (i / 72) *
-        Math.PI *
-        2;
-
-
-    const radius =
-        i % 6 === 0
-            ? 1.62
-            : 1.55;
-
-
-    const length =
-        i % 6 === 0
-            ? .12
-            : .055;
-
-
-    const x1 =
-        Math.cos(angle) *
-        radius;
-
-
-    const y1 =
-        Math.sin(angle) *
-        radius;
-
-
-    const x2 =
-        Math.cos(angle) *
-        (radius - length);
-
-
-    const y2 =
-        Math.sin(angle) *
-        (radius - length);
-
-
-    const geometry =
-        new THREE.BufferGeometry()
-            .setFromPoints([
-
-                new THREE.Vector3(
-                    x1,
-                    y1,
-                    0
-                ),
-
-                new THREE.Vector3(
-                    x2,
-                    y2,
-                    0
-                )
-
-            ]);
-
-
-    tickGroup.add(
-        new THREE.Line(
-            geometry,
-            tickMaterial
-        )
-    );
-
-}
-
-
-/* =====================================================
-   SEGMENTI RADIALI
-===================================================== */
-
-const segmentGroup =
-    new THREE.Group();
-
-hud.add(
-    segmentGroup
-);
-
-
-for(
-    let i=0;
-    i<12;
-    i++
-){
-
-    const angle =
-        i *
-        Math.PI /
-        6;
-
-
-    const radius =
-        1.72;
-
-
-    const gap =
-        .22;
-
-
-    const x1 =
-        Math.cos(angle) *
-        radius;
-
-
-    const y1 =
-        Math.sin(angle) *
-        radius;
-
-
-    const x2 =
-        Math.cos(angle) *
-        (radius - gap);
-
-
-    const y2 =
-        Math.sin(angle) *
-        (radius - gap);
-
-
-    const geometry =
-        new THREE.BufferGeometry()
-            .setFromPoints([
-
-                new THREE.Vector3(
-                    x1,
-                    y1,
-                    0
-                ),
-
-                new THREE.Vector3(
-                    x2,
-                    y2,
-                    0
-                )
-
-            ]);
-
-
-    const material =
-        new THREE.LineBasicMaterial({
-
-            color:
-                GOLD,
-
-            transparent:true,
-
-            opacity:.5,
-
-            blending:
-                THREE.AdditiveBlending
-
-        });
-
-
-    segmentGroup.add(
-        new THREE.Line(
-            geometry,
-            material
-        )
-    );
-
-}
-
-
-/* =====================================================
-   NUCLEO CENTRALE
-===================================================== */
-
-const coreGeometry =
-    new THREE.CircleGeometry(
-        .28,
-        64
-    );
-
-
-const coreMaterial =
-    new THREE.MeshBasicMaterial({
-
-        color:
-            GOLD_BRIGHT,
-
-        transparent:true,
-
-        opacity:.9,
-
-        blending:
-            THREE.AdditiveBlending,
-
-        depthWrite:false
-
-    });
-
-
-const core =
-    new THREE.Mesh(
-        coreGeometry,
-        coreMaterial
-    );
-
-
-hud.add(
-    core
-);
-
-
-/* =====================================================
-   GLOW CENTRALE
-===================================================== */
-
-function createGlowTexture(){
+function createGlow(){
 
     const canvas =
         document.createElement(
             "canvas"
         );
 
-    canvas.width = 128;
-    canvas.height = 128;
+    canvas.width =
+        64;
 
+    canvas.height =
+        64;
 
     const ctx =
         canvas.getContext(
             "2d"
         );
 
-
     const gradient =
         ctx.createRadialGradient(
-            64,
-            64,
-            0,
-            64,
-            64,
-            64
+            32,32,0,
+            32,32,32
         );
-
 
     gradient.addColorStop(
         0,
-        "rgba(255,255,230,1)"
+        "rgba(255,255,255,1)"
     );
 
     gradient.addColorStop(
-        .15,
-        "rgba(255,225,100,.9)"
+        .2,
+        "rgba(220,255,255,1)"
     );
 
     gradient.addColorStop(
         .4,
-        "rgba(255,190,30,.45)"
+        "rgba(0,255,255,.9)"
+    );
+
+    gradient.addColorStop(
+        .7,
+        "rgba(0,150,190,.25)"
     );
 
     gradient.addColorStop(
         1,
-        "rgba(255,180,0,0)"
+        "rgba(0,0,0,0)"
     );
-
 
     ctx.fillStyle =
         gradient;
 
-
     ctx.fillRect(
-        0,
-        0,
-        128,
-        128
+        0,0,64,64
     );
-
 
     return new THREE.CanvasTexture(
         canvas
@@ -515,55 +1671,111 @@ function createGlowTexture(){
 }
 
 
-const glowMaterial =
-    new THREE.SpriteMaterial({
+/* =====================================================
+   PARTICELLE
+===================================================== */
 
-        map:
-            createGlowTexture(),
+const COUNT =
+    3000;
 
-        transparent:true,
+const geometry =
+    new THREE.BufferGeometry();
 
-        opacity:.75,
+const positions =
+    new Float32Array(
+        COUNT * 3
+    );
 
-        blending:
-            THREE.AdditiveBlending,
+const radii =
+    new Float32Array(
+        COUNT
+    );
 
-        depthWrite:false
+const angles =
+    new Float32Array(
+        COUNT * 2
+    );
 
-    });
-
-
-const glow =
-    new THREE.Sprite(
-        glowMaterial
+const seeds =
+    new Float32Array(
+        COUNT
     );
 
 
-glow.scale.set(
-    1.4,
-    1.4,
-    1
+for(
+    let i=0;
+    i<COUNT;
+    i++
+){
+
+    const r =
+        1.10 +
+        Math.random()*.70;
+
+    const theta =
+        Math.random() *
+        Math.PI * 2;
+
+    const phi =
+        Math.acos(
+            2*Math.random()-1
+        );
+
+    radii[i] =
+        r;
+
+    angles[i*2] =
+        theta;
+
+    angles[i*2+1] =
+        phi;
+
+    seeds[i] =
+        Math.random()*100;
+
+    positions[i*3] =
+        r *
+        Math.sin(phi) *
+        Math.cos(theta);
+
+    positions[i*3+1] =
+        r *
+        Math.sin(phi) *
+        Math.sin(theta);
+
+    positions[i*3+2] =
+        r *
+        Math.cos(phi);
+
+}
+
+
+geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        positions,
+        3
+    )
 );
 
 
-hud.add(
-    glow
-);
-
-
-/* =====================================================
-   LINEE DI SCANSIONE
-===================================================== */
-
-const scanMaterial =
-    new THREE.LineBasicMaterial({
+const material =
+    new THREE.PointsMaterial({
 
         color:
-            GOLD_BRIGHT,
+            new THREE.Color(
+                0x00cfe8
+            ),
+
+        size:.042,
+
+        map:createGlow(),
 
         transparent:true,
 
-        opacity:.22,
+        opacity:1,
+
+        depthWrite:false,
 
         blending:
             THREE.AdditiveBlending
@@ -571,39 +1783,19 @@ const scanMaterial =
     });
 
 
-const scanGeometry =
-    new THREE.BufferGeometry()
-        .setFromPoints([
-
-            new THREE.Vector3(
-                -1.8,
-                0,
-                0
-            ),
-
-            new THREE.Vector3(
-                1.8,
-                0,
-                0
-            )
-
-        ]);
-
-
-const scanLine =
-    new THREE.Line(
-        scanGeometry,
-        scanMaterial
+const particles =
+    new THREE.Points(
+        geometry,
+        material
     );
 
-
-hud.add(
-    scanLine
+scene.add(
+    particles
 );
 
 
 /* =====================================================
-   STATO ENERGIA
+   ENERGIA
 ===================================================== */
 
 let targetEnergy =
@@ -612,17 +1804,28 @@ let targetEnergy =
 let energy =
     .15;
 
+const normalColor =
+    new THREE.Color(
+        0x00cfe8
+    );
 
-function setState(
-    state
-){
+const activeColor =
+    new THREE.Color(
+        0x8fffff
+    );
+
+const currentColor =
+    normalColor.clone();
+
+
+function setState(state){
 
     if(
         state === "thinking"
     ){
 
         targetEnergy =
-            1.5;
+            2;
 
     }
 
@@ -631,7 +1834,7 @@ function setState(
     ){
 
         targetEnergy =
-            .85;
+            .8;
 
     }
 
@@ -640,7 +1843,7 @@ function setState(
     ){
 
         targetEnergy =
-            .65;
+            .55;
 
     }
 
@@ -655,7 +1858,7 @@ function setState(
 
 
 /* =====================================================
-   ANIMAZIONE HUD
+   ANIMAZIONE
 ===================================================== */
 
 function animate(){
@@ -664,113 +1867,155 @@ function animate(){
         animate
     );
 
-
     const time =
-        performance.now() *
-        .001;
-
+        performance.now()*.001;
 
     energy +=
         (
             targetEnergy -
             energy
-        ) *
-        .045;
+        )*.045;
 
-
-    /* ROTAZIONE */
-
-    ringOuter.rotation.z +=
-        .00035 +
-        energy * .0008;
-
-
-    ringMiddle.rotation.z -=
-        .00055 +
-        energy * .001;
-
-
-    ringInner.rotation.z +=
-        .0008 +
-        energy * .0012;
-
-
-    ringTilt1.rotation.z -=
-        .0003;
-
-
-    ringTilt2.rotation.z +=
-        .00045;
-
-
-    tickGroup.rotation.z =
-        Math.sin(
-            time * .12
-        ) * .025;
-
-
-    segmentGroup.rotation.z -=
-        .00025 +
-        energy * .0005;
-
-
-    /* PULSAZIONE */
-
-    const pulse =
-        1 +
-        Math.sin(
-            time * 2.2
-        ) *
-        (.015 + energy * .025);
-
-
-    hud.scale.set(
-        pulse,
-        pulse,
-        pulse
+    currentColor.lerp(
+        activeColor,
+        energy*.04
     );
 
+    if(
+        energy < .3
+    ){
 
-    coreMaterial.opacity =
-        .65 +
-        energy * .25;
+        currentColor.lerp(
+            normalColor,
+            .03
+        );
 
+    }
 
-    glowMaterial.opacity =
-        .35 +
-        energy * .3;
+    material.color =
+        currentColor;
 
+    material.size =
+        .032 +
+        energy*.008;
 
-    /* SCANSIONE */
+    const pos =
+        geometry
+            .attributes
+            .position
+            .array;
 
-    scanLine.position.y =
+    for(
+        let i=0;
+        i<COUNT;
+        i++
+    ){
+
+        const index =
+            i*3;
+
+        const r =
+            radii[i];
+
+        const theta =
+            angles[i*2];
+
+        const phi =
+            angles[i*2+1];
+
+        const seed =
+            seeds[i];
+
+        const pulse =
+            Math.sin(
+                time*2 +
+                seed
+            )*.035;
+
+        const strangeShape =
+            Math.sin(
+                theta*6 +
+                time*2 +
+                seed
+            )*.18*energy;
+
+        const wave =
+            Math.cos(
+                phi*7 -
+                time*1.8 +
+                seed
+            )*.12*energy;
+
+        const rr =
+            r +
+            pulse +
+            strangeShape +
+            wave;
+
+        let x =
+            rr *
+            Math.sin(phi) *
+            Math.cos(theta);
+
+        let y =
+            rr *
+            Math.sin(phi) *
+            Math.sin(theta);
+
+        let z =
+            rr *
+            Math.cos(phi);
+
+        x +=
+            Math.sin(
+                time*2.4 +
+                phi*8 +
+                seed
+            )*.08*energy;
+
+        y +=
+            Math.cos(
+                time*2.1 +
+                theta*9 +
+                seed
+            )*.08*energy;
+
+        z +=
+            Math.sin(
+                time*2.7 +
+                (theta+phi)*7
+            )*.10*energy;
+
+        pos[index] =
+            x;
+
+        pos[index+1] =
+            y;
+
+        pos[index+2] =
+            z;
+
+    }
+
+    geometry
+        .attributes
+        .position
+        .needsUpdate =
+            true;
+
+    particles.rotation.y +=
+        .0005 +
+        energy*.0008;
+
+    particles.rotation.x =
         Math.sin(
-            time * (
-                .7 +
-                energy
-            )
-        ) *
-        1.25;
+            time*.25
+        )*.04;
 
-
-    scanMaterial.opacity =
-        .12 +
-        energy * .16;
-
-
-    /* LEGGERA OSCILLAZIONE */
-
-    hud.rotation.x =
-        Math.sin(
-            time * .18
-        ) * .035;
-
-
-    hud.rotation.y =
+    particles.rotation.z =
         Math.cos(
-            time * .15
-        ) * .035;
-
+            time*.18
+        )*.025;
 
     renderer.render(
         scene,
@@ -781,6 +2026,2357 @@ function animate(){
 
 
 animate();
+
+
+/* =====================================================
+   MAPLIBRE
+===================================================== */
+
+const MAPTILER_KEY =
+    "NmSlgtsAdQyEWy7t0OJf";
+
+const MAPTILER_STYLE =
+    "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
+    +
+    MAPTILER_KEY;
+
+let map =
+    null;
+
+let currentMarker =
+    null;
+
+
+function initializeMap(){
+
+    if(map){
+        return;
+    }
+
+    if(
+        typeof maplibregl ===
+        "undefined"
+    ){
+
+        addMsg(
+            "Errore: MapTiler non disponibile."
+        );
+
+        return;
+
+    }
+
+    map =
+        new maplibregl.Map({
+
+            container:"map",
+
+            style:
+                MAPTILER_STYLE,
+
+            center:
+                [10.2118,45.5416],
+
+            zoom:10,
+
+            attributionControl:true,
+
+            antialias:true
+
+        });
+
+    map.addControl(
+        new maplibregl.NavigationControl({
+            showCompass:true,
+            showZoom:true
+        }),
+        "bottom-right"
+    );
+
+    map.on(
+        "load",
+        () => {
+
+            map.resize();
+
+        }
+    );
+
+}
+
+
+function openTacticalMap(){
+
+    tacticalMap.classList.add(
+        "active"
+    );
+
+    jarvisTitle.style.display =
+        "none";
+
+    mapHeader.style.display =
+        "block";
+
+    initializeMap();
+
+    setTimeout(
+        () => {
+
+            if(map){
+                map.resize();
+            }
+
+        },
+        400
+    );
+
+}
+
+
+function closeTacticalMap(){
+
+    tacticalMap.classList.remove(
+        "active"
+    );
+
+    jarvisTitle.style.display =
+        "block";
+
+}
+
+
+closeMap.addEventListener(
+    "click",
+    closeTacticalMap
+);
+
+
+/* =====================================================
+   MARKER
+===================================================== */
+
+function escapeHtml(text){
+
+    return String(text)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function createJarvisMarker(
+    lat,
+    lon,
+    name
+){
+
+    if(!map){
+        return;
+    }
+
+    if(currentMarker){
+
+        currentMarker.remove();
+
+        currentMarker =
+            null;
+
+    }
+
+    const markerElement =
+        document.createElement(
+            "div"
+        );
+
+    markerElement.className =
+        "jarvis-map-marker";
+
+    currentMarker =
+        new maplibregl.Marker({
+
+            element:
+                markerElement,
+
+            anchor:
+                "center"
+
+        })
+
+        .setLngLat(
+            [lon,lat]
+        )
+
+        .setPopup(
+
+            new maplibregl.Popup({
+                offset:15
+            })
+
+            .setHTML(
+                `<b style="color:#00ffff">${escapeHtml(name)}</b>`
+            )
+
+        )
+
+        .addTo(
+            map
+        );
+
+    currentMarker.togglePopup();
+
+}
+
+
+/* =====================================================
+   RICERCA POSIZIONE
+===================================================== */
+
+async function searchLocation(place){
+
+    try{
+
+        openTacticalMap();
+
+        addMsg(
+            "Ricerca posizione: " +
+            place
+        );
+
+        const url =
+            "https://nominatim.openstreetmap.org/search" +
+            "?format=json" +
+            "&limit=1" +
+            "&q=" +
+            encodeURIComponent(place);
+
+        const response =
+            await fetch(
+                url,
+                {
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+        if(!response.ok){
+
+            throw new Error(
+                "Ricerca posizione fallita"
+            );
+
+        }
+
+        const results =
+            await response.json();
+
+        if(!results.length){
+
+            addMsg(
+                "Non riesco a trovare " +
+                place +
+                "."
+            );
+
+            return;
+
+        }
+
+        const result =
+            results[0];
+
+        const lat =
+            parseFloat(
+                result.lat
+            );
+
+        const lon =
+            parseFloat(
+                result.lon
+            );
+
+        if(!map){
+
+            throw new Error(
+                "Mappa non inizializzata"
+            );
+
+        }
+
+        map.flyTo({
+
+            center:
+                [lon,lat],
+
+            zoom:12,
+
+            speed:.8,
+
+            curve:1.5,
+
+            essential:true
+
+        });
+
+        createJarvisMarker(
+            lat,
+            lon,
+            place
+        );
+
+        addMsg(
+            "Posizione acquisita: " +
+            place
+        );
+
+    }catch(error){
+
+        console.error(
+            "MAP ERROR:",
+            error
+        );
+
+        addMsg(
+            "Impossibile localizzare " +
+            place +
+            "."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   COMANDI MAPPA
+===================================================== */
+
+function handleMapCommand(text){
+
+    const normalized =
+        text
+            .toLowerCase()
+            .trim();
+
+    if(
+
+        normalized.includes(
+            "apri la mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "apri mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "mappa tattica"
+        )
+
+        ||
+
+        normalized.includes(
+            "modalità tattica"
+        )
+
+        ||
+
+        normalized.includes(
+            "modalita tattica"
+        )
+
+        ||
+
+        normalized.includes(
+            "attiva la mappa"
+        )
+
+    ){
+
+        openTacticalMap();
+
+        addMsg(
+            "Mappa tattica attivata."
+        );
+
+        return true;
+
+    }
+
+
+    if(
+
+        normalized.includes(
+            "chiudi la mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "chiudi mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "esci dalla mappa"
+        )
+
+        ||
+
+        normalized.includes(
+            "torna alla modalità normale"
+        )
+
+        ||
+
+        normalized.includes(
+            "torna alla modalita normale"
+        )
+
+    ){
+
+        closeTacticalMap();
+
+        addMsg(
+            "Modalità tattica disattivata."
+        );
+
+        return true;
+
+    }
+
+
+    const patterns = [
+
+        "mostrami ",
+        "mostra ",
+        "vai a ",
+        "portami a ",
+        "localizza ",
+        "cerca ",
+        "visualizza "
+
+    ];
+
+
+    for(
+        const pattern of patterns
+    ){
+
+        if(
+            normalized.startsWith(
+                pattern
+            )
+        ){
+
+            const place =
+                text
+                    .trim()
+                    .substring(
+                        pattern.length
+                    )
+                    .trim();
+
+            if(
+                place.length > 1
+            ){
+
+                searchLocation(
+                    place
+                );
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+    return false;
+
+}
+
+
+/* =====================================================
+   RICERCHE WEB MULTIPLE
+===================================================== */
+
+let webWindowCount =
+    0;
+
+let highestWebZ =
+    600;
+
+
+function updateWebStatus(){
+
+    const count =
+        webSearchWorkspace
+            .querySelectorAll(
+                ".web-window"
+            )
+            .length;
+
+    if(count > 0){
+
+        webSearchStatus.classList.add(
+            "active"
+        );
+
+        webSearchStatus.textContent =
+            `WEB WINDOWS: ${count}`;
+
+    }else{
+
+        webSearchStatus.classList.remove(
+            "active"
+        );
+
+    }
+
+}
+
+
+function findFreePosition(
+    width,
+    height
+){
+
+    const padding =
+        20;
+
+    const headerSpace =
+        65;
+
+    const maxX =
+        Math.max(
+            padding,
+            window.innerWidth -
+            width -
+            padding
+        );
+
+    const maxY =
+        Math.max(
+            headerSpace,
+            window.innerHeight -
+            height -
+            padding
+        );
+
+
+    const positions = [
+
+        [25,75],
+
+        [window.innerWidth-width-25,75],
+
+        [25,window.innerHeight-height-25],
+
+        [
+            window.innerWidth-width-25,
+            window.innerHeight-height-25
+        ],
+
+        [
+            (window.innerWidth-width)/2,
+            75
+        ],
+
+        [
+            35,
+            110
+        ],
+
+        [
+            70,
+            145
+        ]
+
+    ];
+
+
+    for(
+        const position of positions
+    ){
+
+        const x =
+            Math.max(
+                padding,
+                Math.min(
+                    maxX,
+                    position[0]
+                )
+            );
+
+        const y =
+            Math.max(
+                headerSpace,
+                Math.min(
+                    maxY,
+                    position[1]
+                )
+            );
+
+
+        let collision =
+            false;
+
+
+        const windows =
+            webSearchWorkspace
+                .querySelectorAll(
+                    ".web-window"
+                );
+
+
+        for(
+            const other of windows
+        ){
+
+            const ox =
+                parseFloat(
+                    other.style.left
+                ) || 0;
+
+            const oy =
+                parseFloat(
+                    other.style.top
+                ) || 0;
+
+            const ow =
+                other.offsetWidth;
+
+            const oh =
+                other.offsetHeight;
+
+
+            const gap =
+                12;
+
+
+            if(
+
+                x < ox + ow + gap
+
+                &&
+
+                x + width > ox - gap
+
+                &&
+
+                y < oy + oh + gap
+
+                &&
+
+                y + height > oy - gap
+
+            ){
+
+                collision =
+                    true;
+
+                break;
+
+            }
+
+        }
+
+
+        if(!collision){
+
+            return {
+                x,
+                y
+            };
+
+        }
+
+    }
+
+
+    const count =
+        webSearchWorkspace
+            .querySelectorAll(
+                ".web-window"
+            )
+            .length;
+
+
+    return {
+
+        x:
+            Math.min(
+                maxX,
+                25 + (count * 35)
+            ),
+
+        y:
+            Math.min(
+                maxY,
+                75 + (count * 35)
+            )
+
+    };
+
+}
+
+
+/* =====================================================
+   DRAG DELLE FINESTRE
+===================================================== */
+
+function makeWindowDraggable(
+    windowElement,
+    header
+){
+
+    let dragging =
+        false;
+
+    let startX =
+        0;
+
+    let startY =
+        0;
+
+    let startLeft =
+        0;
+
+    let startTop =
+        0;
+
+
+    function startDrag(event){
+
+        if(
+            event.target.closest(
+                ".web-window-close"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        dragging =
+            true;
+
+
+        highestWebZ++;
+
+        windowElement.style.zIndex =
+            highestWebZ;
+
+        windowElement.classList.add(
+            "active-window"
+        );
+
+
+        const point =
+            event.touches
+            ? event.touches[0]
+            : event;
+
+
+        startX =
+            point.clientX;
+
+        startY =
+            point.clientY;
+
+
+        startLeft =
+            parseFloat(
+                windowElement.style.left
+            ) || 0;
+
+        startTop =
+            parseFloat(
+                windowElement.style.top
+            ) || 0;
+
+
+        header.setPointerCapture?.(
+            event.pointerId
+        );
+
+
+        event.preventDefault();
+
+    }
+
+
+    function moveDrag(event){
+
+        if(!dragging){
+            return;
+        }
+
+
+        const point =
+            event.touches
+            ? event.touches[0]
+            : event;
+
+
+        let newLeft =
+            startLeft +
+            point.clientX -
+            startX;
+
+        let newTop =
+            startTop +
+            point.clientY -
+            startY;
+
+
+        const maxLeft =
+            Math.max(
+                0,
+                window.innerWidth -
+                windowElement.offsetWidth
+            );
+
+
+        const maxTop =
+            Math.max(
+                42,
+                window.innerHeight -
+                windowElement.offsetHeight
+            );
+
+
+        newLeft =
+            Math.max(
+                0,
+                Math.min(
+                    maxLeft,
+                    newLeft
+                )
+            );
+
+
+        newTop =
+            Math.max(
+                42,
+                Math.min(
+                    maxTop,
+                    newTop
+                )
+            );
+
+
+        windowElement.style.left =
+            newLeft + "px";
+
+        windowElement.style.top =
+            newTop + "px";
+
+    }
+
+
+    function stopDrag(){
+
+        if(!dragging){
+            return;
+        }
+
+        dragging =
+            false;
+
+        windowElement.classList.remove(
+            "active-window"
+        );
+
+    }
+
+
+    header.addEventListener(
+        "pointerdown",
+        startDrag
+    );
+
+    header.addEventListener(
+        "pointermove",
+        moveDrag
+    );
+
+    header.addEventListener(
+        "pointerup",
+        stopDrag
+    );
+
+    header.addEventListener(
+        "pointercancel",
+        stopDrag
+    );
+
+
+    windowElement.addEventListener(
+        "pointerdown",
+        () => {
+
+            highestWebZ++;
+
+            windowElement.style.zIndex =
+                highestWebZ;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CREA FINESTRA WEB
+===================================================== */
+
+function openWebSearch(query){
+
+    if(!query){
+        return;
+    }
+
+
+    webWindowCount++;
+
+
+    const windowElement =
+        document.createElement(
+            "div"
+        );
+
+    windowElement.className =
+        "web-window";
+
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+    header.className =
+        "web-window-header";
+
+
+    const title =
+        document.createElement(
+            "div"
+        );
+
+    title.className =
+        "web-window-title";
+
+    title.textContent =
+        query;
+
+
+    const number =
+        document.createElement(
+            "div"
+        );
+
+    number.className =
+        "web-window-number";
+
+    number.textContent =
+        "#" +
+        webWindowCount;
+
+
+    const close =
+        document.createElement(
+            "button"
+        );
+
+    close.className =
+        "web-window-close";
+
+    close.textContent =
+        "×";
+
+    close.title =
+        "Chiudi ricerca";
+
+
+    header.appendChild(
+        title
+    );
+
+    header.appendChild(
+        number
+    );
+
+    header.appendChild(
+        close
+    );
+
+
+    const frame =
+        document.createElement(
+            "iframe"
+        );
+
+    frame.title =
+        "Ricerca web JARVIS";
+
+
+    const url =
+        "https://www.google.com/search?igu=1&q=" +
+        encodeURIComponent(
+            query
+        );
+
+    frame.src =
+        url;
+
+    frame.loading =
+        "lazy";
+
+
+    windowElement.appendChild(
+        header
+    );
+
+    windowElement.appendChild(
+        frame
+    );
+
+
+    webSearchWorkspace.appendChild(
+        windowElement
+    );
+
+
+    /*
+       Dimensione iniziale.
+       Puoi modificarla trascinando
+       l'angolo della finestra.
+    */
+
+    const initialWidth =
+        Math.min(
+            520,
+            window.innerWidth - 30
+        );
+
+    const initialHeight =
+        Math.min(
+            360,
+            window.innerHeight - 100
+        );
+
+
+    windowElement.style.width =
+        initialWidth + "px";
+
+    windowElement.style.height =
+        initialHeight + "px";
+
+
+    const position =
+        findFreePosition(
+            initialWidth,
+            initialHeight
+        );
+
+
+    windowElement.style.left =
+        position.x + "px";
+
+    windowElement.style.top =
+        position.y + "px";
+
+
+    highestWebZ++;
+
+    windowElement.style.zIndex =
+        highestWebZ;
+
+
+    makeWindowDraggable(
+        windowElement,
+        header
+    );
+
+
+    close.addEventListener(
+        "click",
+        event => {
+
+            event.stopPropagation();
+
+            windowElement.remove();
+
+            updateWebStatus();
+
+        }
+    );
+
+
+    webSearchWorkspace.classList.add(
+        "active"
+    );
+
+
+    updateWebStatus();
+
+}
+
+
+/* =====================================================
+   COMANDI RICERCA WEB
+===================================================== */
+
+function handleWebCommand(text){
+
+    const normalized =
+        text
+            .toLowerCase()
+            .trim();
+
+
+    const patterns = [
+
+        "cerca sul web ",
+        "cerca nel web ",
+        "ricerca sul web ",
+        "ricerca web ",
+        "cerca online ",
+        "cerca su internet ",
+        "cerca in internet ",
+        "fammi una ricerca su ",
+        "fai una ricerca su "
+
+    ];
+
+
+    for(
+        const pattern of patterns
+    ){
+
+        if(
+            normalized.startsWith(
+                pattern
+            )
+        ){
+
+            const query =
+                text
+                    .trim()
+                    .substring(
+                        pattern.length
+                    )
+                    .trim();
+
+
+            if(
+                query.length > 1
+            ){
+
+                openWebSearch(
+                    query
+                );
+
+                addMsg(
+                    "Ricerca web: " +
+                    query
+                );
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =====================================================
+   CHIUSURA RICERCHE WEB
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        /*
+           ESC chiude tutte le finestre web.
+        */
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            const windows =
+                webSearchWorkspace
+                    .querySelectorAll(
+                        ".web-window"
+                    );
+
+            if(
+                windows.length
+            ){
+
+                windows.forEach(
+                    element =>
+                        element.remove()
+                );
+
+                updateWebStatus();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   MESSAGGIO
+===================================================== */
+
+function addMsg(text){
+
+    chat.innerHTML =
+        "";
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+    element.className =
+        "msg";
+
+    element.textContent =
+        text;
+
+    chat.appendChild(
+        element
+    );
+
+}
+
+
+/* =====================================================
+   DATI TEMPORALI
+===================================================== */
+
+function getTimeData(){
+
+    const now =
+        new Date();
+
+    return {
+
+        currentTime:
+            now.toLocaleTimeString(
+                "it-IT",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit",
+                    second:"2-digit"
+                }
+            ),
+
+        currentDate:
+            now.toLocaleDateString(
+                "it-IT",
+                {
+                    day:"2-digit",
+                    month:"2-digit",
+                    year:"numeric"
+                }
+            ),
+
+        dayOfWeek:
+            now.toLocaleDateString(
+                "it-IT",
+                {
+                    weekday:"long"
+                }
+            ),
+
+        timezone:
+            Intl.DateTimeFormat()
+                .resolvedOptions()
+                .timeZone
+
+    };
+
+}
+
+
+/* =====================================================
+   VOCE DISPOSITIVO
+===================================================== */
+
+let deviceVoices = [];
+
+let selectedDeviceVoice =
+    null;
+
+
+function loadDeviceVoices(){
+
+    if(
+        !("speechSynthesis" in window)
+    ){
+
+        return;
+
+    }
+
+    deviceVoices =
+        window.speechSynthesis
+            .getVoices();
+
+    voiceSelector.innerHTML =
+        "";
+
+    const automatic =
+        document.createElement(
+            "option"
+        );
+
+    automatic.value =
+        "";
+
+    automatic.textContent =
+        "Voce dispositivo automatica";
+
+    voiceSelector.appendChild(
+        automatic
+    );
+
+    deviceVoices.forEach(
+        (voice,index) => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                String(index);
+
+            option.textContent =
+                `${voice.name} — ${voice.lang}`;
+
+            voiceSelector.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    const savedVoice =
+        localStorage.getItem(
+            "jarvis_device_voice"
+        );
+
+
+    if(
+        savedVoice !== null &&
+        Number(savedVoice) <
+            deviceVoices.length
+    ){
+
+        voiceSelector.value =
+            savedVoice;
+
+        selectedDeviceVoice =
+            deviceVoices[
+                Number(savedVoice)
+            ];
+
+    }
+
+}
+
+
+if(
+    "speechSynthesis" in window
+){
+
+    loadDeviceVoices();
+
+    window.speechSynthesis
+        .addEventListener(
+            "voiceschanged",
+            loadDeviceVoices
+        );
+
+}
+
+
+/* =====================================================
+   SPEECH SYNTHESIS
+===================================================== */
+
+function speakDevice(text){
+
+    return new Promise(
+        resolve => {
+
+            if(
+                !("speechSynthesis" in window)
+            ){
+
+                resolve(false);
+
+                return;
+
+            }
+
+            try{
+
+                window.speechSynthesis.cancel();
+
+                const utterance =
+                    new SpeechSynthesisUtterance(
+                        text
+                    );
+
+                utterance.lang =
+                    "it-IT";
+
+                utterance.rate =
+                    .95;
+
+                utterance.pitch =
+                    .9;
+
+                utterance.volume =
+                    1;
+
+
+                if(
+                    selectedDeviceVoice
+                ){
+
+                    utterance.voice =
+                        selectedDeviceVoice;
+
+                }else{
+
+                    const italianVoice =
+                        deviceVoices.find(
+                            voice =>
+                                voice.lang
+                                    .toLowerCase()
+                                    .startsWith(
+                                        "it"
+                                    )
+                        );
+
+                    if(
+                        italianVoice
+                    ){
+
+                        utterance.voice =
+                            italianVoice;
+
+                    }
+
+                }
+
+
+                utterance.onstart =
+                    () => {
+
+                        audioPlaying =
+                            true;
+
+                        setState(
+                            "speaking"
+                        );
+
+                    };
+
+
+                utterance.onend =
+                    () => {
+
+                        audioPlaying =
+                            false;
+
+                        setState(
+                            "idle"
+                        );
+
+                        resolve(true);
+
+                    };
+
+
+                utterance.onerror =
+                    error => {
+
+                        console.error(
+                            "DEVICE TTS ERROR:",
+                            error
+                        );
+
+                        audioPlaying =
+                            false;
+
+                        setState(
+                            "idle"
+                        );
+
+                        resolve(false);
+
+                    };
+
+
+                window.speechSynthesis
+                    .speak(
+                        utterance
+                    );
+
+
+                setTimeout(
+                    () => {
+
+                        try{
+
+                            window.speechSynthesis.resume();
+
+                        }catch(error){}
+
+                    },
+                    100
+                );
+
+
+            }catch(error){
+
+                console.error(
+                    "DEVICE TTS:",
+                    error
+                );
+
+                resolve(false);
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ELEVENLABS
+===================================================== */
+
+async function speakElevenLabs(text){
+
+    if(!text){
+        return false;
+    }
+
+    if(currentAudio){
+
+        try{
+
+            currentAudio.pause();
+
+            currentAudio.currentTime =
+                0;
+
+        }catch(error){}
+
+        currentAudio =
+            null;
+
+    }
+
+    audioPlaying =
+        false;
+
+
+    const controller =
+        new AbortController();
+
+    const timeout =
+        setTimeout(
+            () => {
+                controller.abort();
+            },
+            30000
+        );
+
+
+    try{
+
+        const response =
+            await fetch(
+                API,
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:"tts",
+
+                            text:text,
+
+                            voiceId:
+                                ELEVEN_VOICE_ID
+
+                        }),
+
+                    signal:
+                        controller.signal
+
+                }
+            );
+
+
+        if(!response.ok){
+
+            return false;
+
+        }
+
+
+        const contentType =
+            response.headers.get(
+                "content-type"
+            ) || "";
+
+
+        if(
+            !contentType.includes(
+                "audio"
+            )
+        ){
+
+            return false;
+
+        }
+
+
+        const audioBlob =
+            await response.blob();
+
+
+        if(
+            !audioBlob ||
+            audioBlob.size === 0
+        ){
+
+            return false;
+
+        }
+
+
+        const audioUrl =
+            URL.createObjectURL(
+                audioBlob
+            );
+
+
+        const audio =
+            new Audio(
+                audioUrl
+            );
+
+
+        currentAudio =
+            audio;
+
+        audio.volume =
+            1;
+
+
+        audio.onplay =
+            () => {
+
+                audioPlaying =
+                    true;
+
+                setState(
+                    "speaking"
+                );
+
+            };
+
+
+        audio.onended =
+            () => {
+
+                audioPlaying =
+                    false;
+
+                setState(
+                    "idle"
+                );
+
+                URL.revokeObjectURL(
+                    audioUrl
+                );
+
+                if(
+                    currentAudio ===
+                    audio
+                ){
+
+                    currentAudio =
+                        null;
+
+                }
+
+            };
+
+
+        audio.onerror =
+            () => {
+
+                audioPlaying =
+                    false;
+
+                setState(
+                    "idle"
+                );
+
+                URL.revokeObjectURL(
+                    audioUrl
+                );
+
+            };
+
+
+        await audio.play();
+
+        return true;
+
+
+    }catch(error){
+
+        console.warn(
+            "ElevenLabs TTS:",
+            error
+        );
+
+        return false;
+
+
+    }finally{
+
+        clearTimeout(
+            timeout
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SPEAK
+===================================================== */
+
+async function speak(text){
+
+    if(!text){
+        return;
+    }
+
+    const elevenSuccess =
+        await speakElevenLabs(
+            text
+        );
+
+    if(elevenSuccess){
+        return;
+    }
+
+    await speakDevice(
+        text
+    );
+
+}
+
+
+/* =====================================================
+   TEST VOCE
+===================================================== */
+
+voiceTest.addEventListener(
+    "click",
+    async () => {
+
+        await speakDevice(
+            "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
+        );
+
+    }
+);
+
+
+/* =====================================================
+   SELEZIONE VOCE
+===================================================== */
+
+voiceSelector.addEventListener(
+    "change",
+    () => {
+
+        const value =
+            voiceSelector.value;
+
+
+        if(
+            value === ""
+        ){
+
+            selectedDeviceVoice =
+                null;
+
+            localStorage.removeItem(
+                "jarvis_device_voice"
+            );
+
+            return;
+
+        }
+
+
+        const index =
+            Number(value);
+
+
+        if(
+            Number.isInteger(index) &&
+            deviceVoices[index]
+        ){
+
+            selectedDeviceVoice =
+                deviceVoices[index];
+
+            localStorage.setItem(
+                "jarvis_device_voice",
+                String(index)
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   PANNELLO VOCE
+===================================================== */
+
+voiceBtn.addEventListener(
+    "click",
+    () => {
+
+        voicePanel.classList.toggle(
+            "active"
+        );
+
+        loadDeviceVoices();
+
+    }
+);
+
+
+/* =====================================================
+   PROCESS AI
+===================================================== */
+
+async function processAi(text){
+
+    /*
+       La ricerca web viene controllata
+       prima della mappa.
+    */
+
+    if(
+        handleWebCommand(
+            text
+        )
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        handleMapCommand(
+            text
+        )
+    ){
+
+        return;
+
+    }
+
+
+    setState(
+        "thinking"
+    );
+
+
+    try{
+
+        const temporal =
+            getTimeData();
+
+
+        addMemory(
+            "user",
+            text
+        );
+
+
+        const controller =
+            new AbortController();
+
+
+        const timeout =
+            setTimeout(
+                () => {
+                    controller.abort();
+                },
+                30000
+            );
+
+
+        let response;
+
+
+        try{
+
+            response =
+                await fetch(
+                    API,
+                    {
+
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                message:text,
+
+                                memory:
+                                    memory.slice(-4),
+
+                                currentTime:
+                                    temporal.currentTime,
+
+                                currentDate:
+                                    temporal.currentDate,
+
+                                dayOfWeek:
+                                    temporal.dayOfWeek,
+
+                                timezone:
+                                    temporal.timezone
+
+                            }),
+
+                        signal:
+                            controller.signal
+
+                    }
+                );
+
+        }finally{
+
+            clearTimeout(
+                timeout
+            );
+
+        }
+
+
+        if(!response.ok){
+
+            const errorText =
+                await response.text();
+
+            let errorMessage =
+                "HTTP " +
+                response.status;
+
+
+            try{
+
+                const errorData =
+                    JSON.parse(
+                        errorText
+                    );
+
+                if(
+                    errorData &&
+                    errorData.error
+                ){
+
+                    errorMessage =
+                        errorData.error;
+
+                }
+
+            }catch(error){}
+
+            throw new Error(
+                errorMessage
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const reply =
+            typeof data.response ===
+                "string"
+                ? data.response.trim()
+                : "";
+
+
+        if(!reply){
+
+            throw new Error(
+                "Risposta AI vuota"
+            );
+
+        }
+
+
+        addMsg(
+            reply
+        );
+
+
+        addMemory(
+            "assistant",
+            reply
+        );
+
+
+        speak(
+            reply
+        ).catch(
+            error =>
+                console.error(
+                    "TTS:",
+                    error
+                )
+        );
+
+
+        setState(
+            "idle"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "JARVIS ERROR:",
+            error
+        );
+
+
+        let message =
+            error.message ||
+            "Errore sconosciuto";
+
+
+        if(
+            error.name ===
+            "AbortError"
+        ){
+
+            message =
+                "Il server ha impiegato troppo tempo a rispondere.";
+
+        }
+
+        else if(
+            message ===
+            "Failed to fetch"
+        ){
+
+            message =
+                "Errore di connessione al server JARVIS.";
+
+        }
+
+
+        addMsg(
+            "ERRORE: " +
+            message
+        );
+
+
+        setState(
+            "idle"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   INVIO
+===================================================== */
+
+function sendMessage(){
+
+    const text =
+        textInput.value.trim();
+
+
+    if(!text){
+        return;
+    }
+
+
+    textInput.value =
+        "";
+
+
+    addMsg(
+        text
+    );
+
+
+    processAi(
+        text
+    );
+
+}
+
+
+sendBtn.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+textInput.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key ===
+            "Enter"
+        ){
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
+const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+let recognition =
+    null;
+
+let listening =
+    false;
+
+
+if(Recognition){
+
+    recognition =
+        new Recognition();
+
+    recognition.lang =
+        "it-IT";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.onstart =
+        () => {
+
+            listening =
+                true;
+
+            micBtn.classList.add(
+                "active"
+            );
+
+            setState(
+                "listening"
+            );
+
+        };
+
+
+    recognition.onresult =
+        event => {
+
+            const text =
+                event
+                    .results[0][0]
+                    .transcript
+                    .trim();
+
+
+            if(text){
+
+                textInput.value =
+                    text;
+
+                sendMessage();
+
+            }
+
+        };
+
+
+    recognition.onerror =
+        error => {
+
+            console.error(
+                "Microfono:",
+                error
+            );
+
+            listening =
+                false;
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+            setState(
+                "idle"
+            );
+
+        };
+
+
+    recognition.onend =
+        () => {
+
+            listening =
+                false;
+
+            micBtn.classList.remove(
+                "active"
+            );
+
+        };
+
+
+    micBtn.addEventListener(
+        "click",
+        () => {
+
+            if(listening){
+
+                recognition.stop();
+
+            }else{
+
+                try{
+
+                    recognition.start();
+
+                }catch(error){
+
+                    console.warn(
+                        error
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+
+}else{
+
+    micBtn.style.opacity =
+        ".3";
+
+}
 
 
 /* =====================================================
@@ -795,16 +4391,120 @@ window.addEventListener(
             window.innerWidth /
             window.innerHeight;
 
-
         camera.updateProjectionMatrix();
-
 
         renderer.setSize(
             window.innerWidth,
             window.innerHeight
         );
 
+        if(map){
+
+            map.resize();
+
+        }
+
+        /*
+           Mantiene le finestre web
+           dentro lo schermo dopo
+           un cambio di dimensione.
+        */
+
+        const windows =
+            webSearchWorkspace
+                .querySelectorAll(
+                    ".web-window"
+                );
+
+
+        windows.forEach(
+            element => {
+
+                const width =
+                    element.offsetWidth;
+
+                const height =
+                    element.offsetHeight;
+
+
+                let left =
+                    parseFloat(
+                        element.style.left
+                    ) || 0;
+
+                let top =
+                    parseFloat(
+                        element.style.top
+                    ) || 0;
+
+
+                left =
+                    Math.max(
+                        0,
+                        Math.min(
+                            left,
+                            window.innerWidth -
+                            width
+                        )
+                    );
+
+
+                top =
+                    Math.max(
+                        42,
+                        Math.min(
+                            top,
+                            window.innerHeight -
+                            height
+                        )
+                    );
+
+
+                element.style.left =
+                    left + "px";
+
+                element.style.top =
+                    top + "px";
+
+            }
+        );
+
     }
 );
 
+
+/* =====================================================
+   CANCELLA MEMORIA
+===================================================== */
+
+window.clearJarvisMemory =
+    function(){
+
+        memory =
+            [];
+
+        localStorage.removeItem(
+            MEMORY_KEY
+        );
+
+        console.log(
+            "Memoria JARVIS cancellata."
+        );
+
+    };
+
+
+/* =====================================================
+   AVVIO
+===================================================== */
+
+setState(
+    "idle"
+);
+
+updateWebStatus();
+
 </script>
+
+</body>
+</html>

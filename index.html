@@ -2400,10 +2400,56 @@ async function speak(text){
 
     try{
 
-        const response =
-            await fetch(
-                API,
-                {
+        const controller = new AbortController();
+
+const timeout = setTimeout(() => {
+    controller.abort();
+}, 30000);
+
+let response;
+
+try {
+
+    response = await fetch(
+        API,
+        {
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body: JSON.stringify({
+
+                message: text,
+
+                memory:
+                    memory.slice(-4),
+
+                currentTime:
+                    temporal.currentTime,
+
+                currentDate:
+                    temporal.currentDate,
+
+                dayOfWeek:
+                    temporal.dayOfWeek,
+
+                timezone:
+                    temporal.timezone
+
+            }),
+
+            signal: controller.signal
+        }
+    );
+
+} finally {
+
+    clearTimeout(timeout);
+
+}
 
                     method:"POST",
 

@@ -752,7 +752,125 @@ body{
     color:#00ffff!important;
     font-size:18px;
 }
+/* =====================================================
+   WEB SEARCH PANEL
+===================================================== */
 
+#webSearchPanel{
+    position:fixed;
+    inset:0;
+    z-index:500;
+
+    display:none;
+
+    background:
+        rgba(0,5,7,.96);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+
+#webSearchPanel.active{
+    display:block;
+    animation:webPanelIn .3s ease;
+}
+
+@keyframes webPanelIn{
+    from{
+        opacity:0;
+        transform:scale(.985);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.web-search-header{
+    position:absolute;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+
+    z-index:520;
+
+    color:rgba(220,255,255,.9);
+
+    font-size:13px;
+    letter-spacing:4px;
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 0 12px
+        rgba(0,255,255,.3);
+}
+
+#webSearchFrame{
+    position:absolute;
+
+    top:58px;
+    left:3%;
+    right:3%;
+    bottom:3%;
+
+    width:94%;
+    height:calc(97% - 58px);
+
+    border:
+        1px solid
+        rgba(0,255,255,.18);
+
+    border-radius:20px;
+
+    background:#fff;
+
+    box-shadow:
+        0 0 40px
+        rgba(0,255,255,.08);
+}
+
+#closeWebSearch{
+    position:absolute;
+
+    top:14px;
+    right:20px;
+
+    z-index:530;
+
+    width:36px;
+    height:36px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.3);
+
+    border-radius:50%;
+
+    background:
+        rgba(0,15,18,.9);
+
+    color:
+        rgba(210,255,255,.8);
+
+    cursor:pointer;
+
+    font-size:20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+#closeWebSearch:hover{
+    color:white;
+    border-color:#00ffff;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.3);
+}
 @media(max-width:600px){
 
     .jarvis-title{

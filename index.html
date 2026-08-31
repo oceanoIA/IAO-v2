@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link rel="stylesheet"
-href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
-
-<style>
+<title>J.A.R.V.I.S.</title><link rel="stylesheet"
+href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
 
 *{
  box-sizing:border-box;
@@ -697,123 +686,44 @@ body{
  }
 }
 
-</style>
-
-</head>
-
-<body>
-
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-<div class="jarvis-title"
+</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div class="jarvis-title"
      id="jarvisTitle">
  J.A.R.V.I.S
-</div>
-
-<div class="datetime">
-
- <div id="clock"
+</div><div class="datetime"> <div id="clock"
       class="time">
   00:00:00
- </div>
-
- <div id="date"
+ </div> <div id="date"
       class="date">
   00 AGO 2026
- </div>
-
-</div>
-
-
-<div id="tacticalMap">
-
- <div id="map"></div>
-
- <div class="map-overlay"></div>
-
- <div class="map-header">
+ </div></div><div id="tacticalMap"> <div id="map"></div> <div class="map-overlay"></div> <div class="map-header">
   TACTICAL MAP
- </div>
-
- <button id="closeMap">
+ </div> <button id="closeMap">
   ×
- </button>
-
-</div>
-
-
-<div id="webSearchWindows"></div>
-
-<div id="webSearchIndicator">
+ </button></div><div id="webSearchWindows"></div><div id="webSearchIndicator">
  WEB WINDOWS: 0
-</div>
-
-
-<div id="chat"></div>
-
-
-<div class="command-wrapper">
-
- <input
-  id="textInput"
-  type="text"
-  autocomplete="off"
-  placeholder="Chiedi qualcosa a JARVIS...">
+</div><div id="chat"></div><div class="command-wrapper"><input
+id="textInput"
+type="text"
+autocomplete="off"
+placeholder="Chiedi qualcosa a JARVIS...">
 
  <button id="micBtn">
   <span class="mic-icon"></span>
- </button>
-
- <button id="sendBtn">
+ </button> <button id="sendBtn">
   INVIA
- </button>
-
-</div>
-
-
-<button id="conversationBtn">
+ </button></div><button id="conversationBtn">
  ◉ CONVERSAZIONE
-</button>
-
-
-<button id="fullscreenBtn">
+</button><button id="fullscreenBtn">
  ⛶ FULLSCREEN
-</button>
-
-
-<button id="voiceBtn">
+</button><button id="voiceBtn">
  ⚙ VOCE
-</button>
-
-
-<div id="voicePanel">
-
- <div class="voice-title">
+</button><div id="voicePanel"> <div class="voice-title">
   VOCE J.A.R.V.I.S.
- </div>
-
- <select id="voiceSelector">
-
-  <option value="">
+ </div> <select id="voiceSelector">  <option value="">
    Voce dispositivo automatica
-  </option>
-
- </select>
-
- <button id="voiceTest">
+  </option> </select> <button id="voiceTest">
   TESTA VOCE
- </button>
-
-</div>
-
-
-<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
-
-
-<script type="importmap">
+ </button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
 
 {
  "imports":{
@@ -821,10 +731,7 @@ body{
  }
 }
 
-</script>
-
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -839,8 +746,19 @@ const MEMORY_KEY=
 
 const MAX_MEMORY=30;
 
-const ELEVEN_VOICE_ID=
- "vkBFlAtUdZqNR4MqxSVr";
+
+/*
+ * NON inserire qui la API key TTSFree.
+ *
+ * La chiave rimane nel Secret del Worker.
+ *
+ * Il browser manda solamente:
+ *
+ * action: "tts"
+ * text:   "..."
+ *
+ * Il Worker si occupa di chiamare TTSFree.
+ */
 
 
 let currentAudio=null;
@@ -1773,12 +1691,6 @@ function handleFullscreenCommand(text){
   normalizeCommand(text);
 
 
- /*
-  * Rimuoviamo alcune parole riempitive.
-  * In questo modo JARVIS è più tollerante
-  * con il riconoscimento vocale.
-  */
-
  const simplified=
   normalized
    .replace(
@@ -1819,43 +1731,24 @@ function handleFullscreenCommand(text){
  const activatePatterns=[
 
   "attiva fullscreen",
-
   "attiva il fullscreen",
-
   "attiva la fullscreen",
-
   "attiva modalita fullscreen",
-
   "attiva la modalita fullscreen",
-
   "attiva modalita schermo intero",
-
   "attiva la modalita schermo intero",
-
   "attiva schermo intero",
-
   "metti fullscreen",
-
   "metti in fullscreen",
-
   "metti a fullscreen",
-
   "vai fullscreen",
-
   "vai in fullscreen",
-
   "fullscreen",
-
   "modalita fullscreen",
-
   "modalita schermo intero",
-
   "schermo intero",
-
   "a schermo intero",
-
   "passa a schermo intero",
-
   "passa in fullscreen"
 
  ];
@@ -1864,35 +1757,20 @@ function handleFullscreenCommand(text){
  const deactivatePatterns=[
 
   "disattiva fullscreen",
-
   "disattiva il fullscreen",
-
   "disattiva la fullscreen",
-
   "disattiva modalita fullscreen",
-
   "disattiva la modalita fullscreen",
-
   "disattiva schermo intero",
-
   "disattiva la modalita schermo intero",
-
   "esci dal fullscreen",
-
   "esci da fullscreen",
-
   "esci fullscreen",
-
   "esci da schermo intero",
-
   "esci dallo schermo intero",
-
   "torna normale",
-
   "torna alla modalita normale",
-
   "modalita normale",
-
   "schermo normale"
 
  ];
@@ -1912,12 +1790,6 @@ function handleFullscreenCommand(text){
 
    return true;
   }
-
-
-  /*
-   * Il browser può bloccare questa chiamata
-   * se arriva da SpeechRecognition.
-   */
 
   enterFullscreen();
 
@@ -1945,13 +1817,6 @@ function handleFullscreenCommand(text){
   return true;
  }
 
-
- /*
-  * Riconoscimento più generico.
-  * Se la frase contiene fullscreen o schermo intero
-  * insieme a parole di attivazione, viene comunque
-  * considerata un comando.
-  */
 
  const hasFullscreenWord=
   simplified.includes("fullscreen") ||
@@ -2248,17 +2113,11 @@ function handleMapCommand(text){
  const patterns=[
 
   "mostrami ",
-
   "mostra ",
-
   "vai a ",
-
   "portami a ",
-
   "localizza ",
-
   "cerca ",
-
   "visualizza "
 
  ];
@@ -2698,21 +2557,13 @@ function handleWebCommand(text){
  const patterns=[
 
   "cerca sul web ",
-
   "cerca nel web ",
-
   "ricerca sul web ",
-
   "ricerca web ",
-
   "cerca online ",
-
   "cerca su internet ",
-
   "cerca in internet ",
-
   "fammi una ricerca su ",
-
   "fai una ricerca su "
 
  ];
@@ -2867,7 +2718,7 @@ function getTimeData(){
 }
 
 
-/* ================= VOCI ================= */
+/* ================= VOCI DISPOSITIVO ================= */
 
 function loadDeviceVoices(){
 
@@ -2969,6 +2820,14 @@ if(
 
 
 /* ================= DEVICE TTS ================= */
+
+/*
+ * Questa funzione rimane solamente come
+ * TEST VOCE dispositivo.
+ *
+ * NON viene più usata come fallback
+ * della voce principale di JARVIS.
+ */
 
 function speakDevice(text){
 
@@ -3108,13 +2967,19 @@ function speakDevice(text){
 }
 
 
-/* ================= ELEVENLABS ================= */
+/* =====================================================
+   TTSFREE TRAMITE WORKER
+===================================================== */
 
-async function speakElevenLabs(text){
+async function speakTTSFree(text){
 
  if(!text)
   return false;
 
+
+ /*
+  * Ferma eventuale audio precedente.
+  */
 
  if(currentAudio){
 
@@ -3137,12 +3002,21 @@ async function speakElevenLabs(text){
 
  const timeout=
   setTimeout(
-   ()=>controller.abort(),
+   ()=>{
+    controller.abort();
+   },
    30000
   );
 
 
  try{
+
+  /*
+   * La richiesta arriva al Worker.
+   *
+   * La API key TTSFree NON è presente
+   * nel browser.
+   */
 
   const response=
    await fetch(
@@ -3160,10 +3034,7 @@ async function speakElevenLabs(text){
 
       action:"tts",
 
-      text:text,
-
-      voiceId:
-       ELEVEN_VOICE_ID
+      text:text
 
      }),
 
@@ -3174,8 +3045,19 @@ async function speakElevenLabs(text){
    );
 
 
-  if(!response.ok)
+  if(!response.ok){
+
+   const errorText=
+    await response.text();
+
+   console.error(
+    "TTSFree Worker:",
+    response.status,
+    errorText
+   );
+
    return false;
+  }
 
 
   const contentType=
@@ -3184,12 +3066,27 @@ async function speakElevenLabs(text){
    "";
 
 
+  /*
+   * Il Worker deve restituire direttamente
+   * un file audio.
+   */
+
   if(
    !contentType.includes(
     "audio"
    )
-  )
+  ){
+
+   const errorText=
+    await response.text();
+
+   console.error(
+    "Risposta TTS non audio:",
+    errorText
+   );
+
    return false;
+  }
 
 
   const audioBlob=
@@ -3270,7 +3167,13 @@ async function speakElevenLabs(text){
 
 
   audio.onerror=
-   ()=>{
+   error=>{
+
+    console.error(
+     "Audio TTS:",
+     error
+    );
+
 
     audioPlaying=false;
 
@@ -3282,6 +3185,12 @@ async function speakElevenLabs(text){
     URL.revokeObjectURL(
      audioUrl
     );
+
+
+    if(
+     currentAudio===audio
+    )
+     currentAudio=null;
 
 
     if(conversationMode){
@@ -3306,8 +3215,8 @@ async function speakElevenLabs(text){
 
  }catch(error){
 
-  console.warn(
-   "ElevenLabs:",
+  console.error(
+   "TTSFree:",
    error
   );
 
@@ -3343,6 +3252,11 @@ function stopJarvisSpeaking(){
  }
 
 
+ /*
+  * Interrompi anche eventuale voce
+  * del dispositivo.
+  */
+
  if(
   "speechSynthesis" in window
  ){
@@ -3364,38 +3278,51 @@ function stopJarvisSpeaking(){
 }
 
 
-/* ================= SPEAK ================= */
+/* ================= SPEAK PRINCIPALE ================= */
 
 async function speak(text){
 
- if(!text)return;
+ if(!text)
+  return;
 
 
- const elevenSuccess=
-  await speakElevenLabs(
+ /*
+  * JARVIS usa ESCLUSIVAMENTE TTSFree
+  * tramite il Worker.
+  *
+  * NON viene più usata la voce
+  * automatica del tablet come fallback.
+  */
+
+ const success=
+  await speakTTSFree(
    text
   );
 
 
- if(elevenSuccess)
-  return;
+ if(!success){
 
-
- await speakDevice(
-  text
- );
-
-
- if(conversationMode){
-
-  setTimeout(
-   ()=>{
-    startContinuousRecognition();
-   },
-   150
+  console.warn(
+   "TTSFree non disponibile."
   );
 
+  setState(
+   "idle"
+  );
+
+  if(conversationMode){
+
+   setTimeout(
+    ()=>{
+     startContinuousRecognition();
+    },
+    150
+   );
+
+  }
+
  }
+
 }
 
 
@@ -3405,8 +3332,16 @@ voiceTest.addEventListener(
  "click",
  async()=>{
 
+  /*
+   * Il pulsante TESTA VOCE verifica
+   * la voce del dispositivo.
+   *
+   * La voce principale di JARVIS
+   * continua a essere TTSFree.
+   */
+
   await speakDevice(
-   "J.A.R.V.I.S. operativo. Sistema vocale funzionante."
+   "J.A.R.V.I.S. operativo. Test della voce del dispositivo."
   );
 
  }
@@ -3915,17 +3850,11 @@ function handleConversationCommand(text){
  const activateCommands=[
 
   "attiva modalita conversazione",
-
   "attiva la modalita conversazione",
-
   "modalita conversazione",
-
   "avvia modalita conversazione",
-
   "inizia modalita conversazione",
-
   "conversazione continua",
-
   "attiva conversazione continua"
 
  ];
@@ -3934,13 +3863,9 @@ function handleConversationCommand(text){
  const deactivateCommands=[
 
   "disattiva modalita conversazione",
-
   "disattiva la modalita conversazione",
-
   "chiudi modalita conversazione",
-
   "stop modalita conversazione",
-
   "disattiva conversazione continua"
 
  ];
@@ -3969,11 +3894,6 @@ function handleConversationCommand(text){
   return true;
  }
 
-
- /*
-  * Comando generico:
-  * permette piccole differenze nella frase.
-  */
 
  const hasConversation=
   normalized.includes(
@@ -4034,12 +3954,6 @@ function handleConversationCommand(text){
 /* ================= PROCESS AI ================= */
 
 async function processAi(text){
-
- /*
-  * I comandi locali vengono controllati
-  * prima dell'AI.
-  */
-
 
  if(
   handleFullscreenCommand(text)
@@ -4404,7 +4318,5 @@ setState(
 
 updateFullscreenUI();
 
-</script>
-
-</body>
+</script></body>
 </html>

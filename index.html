@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0">
+
 <title>J.A.R.V.I.S.</title>
 
 <link rel="stylesheet"
@@ -13,7 +18,7 @@ href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
 *{
  box-sizing:border-box;
  margin:0;
- padding:0;
+ padding:0
 }
 
 html,body{
@@ -34,22 +39,10 @@ body{
  );
 }
 
-button,
-input,
-select{
- font-family:inherit;
-}
-
 #webgl-container{
  position:fixed;
  inset:0;
  z-index:1;
-}
-
-#webgl-container canvas{
- display:block;
- width:100%;
- height:100%;
 }
 
 .vignette{
@@ -60,9 +53,9 @@ select{
  background:
  radial-gradient(
   circle at center,
-  transparent 25%,
-  rgba(0,0,0,.18) 65%,
-  rgba(0,0,0,.82) 100%
+  transparent 30%,
+  rgba(0,0,0,.2) 65%,
+  rgba(0,0,0,.8) 100%
  );
 }
 
@@ -225,10 +218,74 @@ select{
  background:rgba(0,255,255,.1);
 }
 
-#voiceBtn{
+
+/* ================= CONVERSAZIONE ================= */
+
+#conversationBtn{
+ position:fixed;
+ left:22px;
+ bottom:24px;
+ z-index:60;
+ height:39px;
+ padding:0 15px;
+ border:1px solid rgba(0,255,255,.25);
+ border-radius:22px;
+ background:rgba(3,15,18,.72);
+ color:rgba(210,255,255,.7);
+ font-size:10px;
+ letter-spacing:1.5px;
+ cursor:pointer;
+ backdrop-filter:blur(12px);
+}
+
+#conversationBtn.active{
+ color:#8fffff;
+ border-color:rgba(0,255,255,.7);
+ background:rgba(0,255,255,.08);
+ box-shadow:0 0 18px rgba(0,255,255,.12);
+}
+
+
+/* ================= FULLSCREEN ================= */
+
+#fullscreenBtn{
  position:fixed;
  right:22px;
  bottom:24px;
+ z-index:60;
+ height:39px;
+ padding:0 15px;
+ border:1px solid rgba(0,255,255,.25);
+ border-radius:22px;
+ background:rgba(3,15,18,.72);
+ color:rgba(210,255,255,.7);
+ font-size:10px;
+ letter-spacing:1.5px;
+ cursor:pointer;
+ backdrop-filter:blur(12px);
+ transition:.2s;
+}
+
+#fullscreenBtn:hover{
+ color:white;
+ border-color:#00ffff;
+ background:rgba(0,255,255,.08);
+}
+
+#fullscreenBtn.active{
+ color:#8fffff;
+ border-color:rgba(0,255,255,.75);
+ background:rgba(0,255,255,.09);
+ box-shadow:0 0 18px rgba(0,255,255,.14);
+}
+
+
+/* ================= VOCE ================= */
+
+#voiceBtn{
+ position:fixed;
+ right:22px;
+ bottom:74px;
  z-index:60;
  height:39px;
  padding:0 15px;
@@ -245,7 +302,7 @@ select{
 #voicePanel{
  position:fixed;
  right:22px;
- bottom:72px;
+ bottom:122px;
  z-index:100;
  width:min(330px,calc(100% - 30px));
  padding:15px;
@@ -257,7 +314,7 @@ select{
 }
 
 #voicePanel.active{
- display:block;
+ display:block
 }
 
 .voice-title{
@@ -286,34 +343,7 @@ select{
 }
 
 
-/* =====================================================
-   FULLSCREEN
-===================================================== */
-
-#fullscreenIndicator{
- position:fixed;
- top:18px;
- left:20px;
- z-index:500;
- display:none;
- padding:8px 12px;
- border:1px solid rgba(0,255,255,.2);
- border-radius:15px;
- background:rgba(2,15,18,.75);
- color:rgba(180,255,255,.65);
- font-size:8px;
- letter-spacing:1.5px;
- pointer-events:none;
-}
-
-#fullscreenIndicator.active{
- display:block;
-}
-
-
-/* =====================================================
-   MAPPA
-===================================================== */
+/* ================= MAPPA ================= */
 
 #tacticalMap{
  position:fixed;
@@ -337,11 +367,11 @@ select{
 @keyframes mapIn{
  from{
   opacity:0;
-  transform:scale(1.015);
+  transform:scale(1.015)
  }
  to{
   opacity:1;
-  transform:scale(1);
+  transform:scale(1)
  }
 }
 
@@ -432,17 +462,15 @@ select{
 
 @keyframes markerPulse{
  0%,100%{
-  transform:scale(1);
+  transform:scale(1)
  }
  50%{
-  transform:scale(1.18);
+  transform:scale(1.18)
  }
 }
 
 
-/* =====================================================
-   WEB WINDOWS
-===================================================== */
+/* ================= WEB WINDOWS ================= */
 
 #webSearchWindows{
  position:fixed;
@@ -564,13 +592,11 @@ select{
 }
 
 #webSearchIndicator.active{
- display:block;
+ display:block
 }
 
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* ================= MOBILE ================= */
 
 @media(max-width:600px){
 
@@ -591,11 +617,11 @@ select{
  }
 
  #textInput{
-  font-size:13px;
+  font-size:13px
  }
 
  #chat{
-  bottom:80px;
+  bottom:80px
  }
 
  #map{
@@ -607,7 +633,7 @@ select{
  }
 
  .map-overlay{
-  border-radius:22px;
+  border-radius:22px
  }
 
  .map-header{
@@ -625,6 +651,22 @@ select{
 
  #voiceBtn{
   right:12px;
+  bottom:112px;
+  height:34px;
+  font-size:9px;
+  padding:0 11px;
+ }
+
+ #fullscreenBtn{
+  right:12px;
+  bottom:70px;
+  height:34px;
+  font-size:9px;
+  padding:0 11px;
+ }
+
+ #conversationBtn{
+  left:12px;
   bottom:70px;
   height:34px;
   font-size:9px;
@@ -633,7 +675,7 @@ select{
 
  #voicePanel{
   right:12px;
-  bottom:112px;
+  bottom:150px;
   width:calc(100% - 24px);
  }
 
@@ -643,7 +685,6 @@ select{
   min-width:230px;
   min-height:180px;
  }
-
 }
 
 @media(max-width:430px){
@@ -654,29 +695,38 @@ select{
   bottom:2.2cm;
   left:2.2cm;
  }
-
 }
+
 </style>
+
 </head>
 
 <body>
+
 
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
 
-<div class="jarvis-title" id="jarvisTitle">
+<div class="jarvis-title"
+     id="jarvisTitle">
  J.A.R.V.I.S
 </div>
 
 <div class="datetime">
- <div id="clock" class="time">00:00:00</div>
- <div id="date" class="date">00 AGO 2026</div>
+
+ <div id="clock"
+      class="time">
+  00:00:00
+ </div>
+
+ <div id="date"
+      class="date">
+  00 AGO 2026
+ </div>
+
 </div>
 
-<div id="fullscreenIndicator">
- FULLSCREEN: ACTIVE
-</div>
 
 <div id="tacticalMap">
 
@@ -688,9 +738,12 @@ select{
   TACTICAL MAP
  </div>
 
- <button id="closeMap">×</button>
+ <button id="closeMap">
+  ×
+ </button>
 
 </div>
+
 
 <div id="webSearchWindows"></div>
 
@@ -698,7 +751,9 @@ select{
  WEB WINDOWS: 0
 </div>
 
+
 <div id="chat"></div>
+
 
 <div class="command-wrapper">
 
@@ -706,8 +761,7 @@ select{
   id="textInput"
   type="text"
   autocomplete="off"
-  placeholder="Chiedi qualcosa a JARVIS..."
- >
+  placeholder="Chiedi qualcosa a JARVIS...">
 
  <button id="micBtn">
   <span class="mic-icon"></span>
@@ -719,9 +773,21 @@ select{
 
 </div>
 
+
+<button id="conversationBtn">
+ ◉ CONVERSAZIONE
+</button>
+
+
+<button id="fullscreenBtn">
+ ⛶ FULLSCREEN
+</button>
+
+
 <button id="voiceBtn">
  ⚙ VOCE
 </button>
+
 
 <div id="voicePanel">
 
@@ -730,9 +796,11 @@ select{
  </div>
 
  <select id="voiceSelector">
+
   <option value="">
    Voce dispositivo automatica
   </option>
+
  </select>
 
  <button id="voiceTest">
@@ -741,24 +809,27 @@ select{
 
 </div>
 
+
 <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
 
+
 <script type="importmap">
+
 {
  "imports":{
   "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
  }
 }
+
 </script>
+
 
 <script type="module">
 
 import * as THREE from "three";
 
 
-/* =====================================================
-   CONFIG
-===================================================== */
+/* ================= CONFIG ================= */
 
 const API=
  "https://iao-ai-v3.oceano-masoud.workers.dev/";
@@ -771,6 +842,7 @@ const MAX_MEMORY=30;
 const ELEVEN_VOICE_ID=
  "vkBFlAtUdZqNR4MqxSVr";
 
+
 let currentAudio=null;
 let audioPlaying=false;
 
@@ -778,9 +850,7 @@ let deviceVoices=[];
 let selectedDeviceVoice=null;
 
 
-/* =====================================================
-   ELEMENTI
-===================================================== */
+/* ================= ELEMENTI ================= */
 
 const container=
  document.getElementById("webgl-container");
@@ -833,13 +903,14 @@ const webSearchWindows=
 const webSearchIndicator=
  document.getElementById("webSearchIndicator");
 
-const fullscreenIndicator=
- document.getElementById("fullscreenIndicator");
+const conversationBtn=
+ document.getElementById("conversationBtn");
+
+const fullscreenBtn=
+ document.getElementById("fullscreenBtn");
 
 
-/* =====================================================
-   MEMORIA
-===================================================== */
+/* ================= MEMORIA ================= */
 
 let memory=[];
 
@@ -857,14 +928,15 @@ try{
    memory=parsed.slice(-MAX_MEMORY);
  }
 
-}catch(error){
+}catch(e){
 
  console.warn(
   "Memoria:",
-  error
+  e
  );
 
 }
+
 
 function saveMemory(){
 
@@ -877,16 +949,17 @@ function saveMemory(){
    )
   );
 
- }catch(error){
+ }catch(e){
 
   console.warn(
    "Salvataggio memoria:",
-   error
+   e
   );
 
  }
 
 }
+
 
 function addMemory(role,content){
 
@@ -902,14 +975,13 @@ function addMemory(role,content){
 }
 
 
-/* =====================================================
-   OROLOGIO
-===================================================== */
+/* ================= OROLOGIO ================= */
 
 const months=[
  "GEN","FEB","MAR","APR","MAG","GIU",
  "LUG","AGO","SET","OTT","NOV","DIC"
 ];
+
 
 function updateClock(){
 
@@ -926,6 +998,7 @@ function updateClock(){
   `${now.getFullYear()}`;
 }
 
+
 updateClock();
 
 setInterval(
@@ -934,20 +1007,20 @@ setInterval(
 );
 
 
-/* =====================================================
-   THREE.JS
-===================================================== */
+/* ================= THREE ================= */
 
 const scene=
  new THREE.Scene();
+
 
 const camera=
  new THREE.PerspectiveCamera(
   55,
   window.innerWidth/window.innerHeight,
-  .1,
+  0.1,
   1000
  );
+
 
 camera.position.z=5.2;
 
@@ -955,51 +1028,46 @@ camera.position.z=5.2;
 const renderer=
  new THREE.WebGLRenderer({
   antialias:true,
-  alpha:true,
-  powerPreference:"high-performance"
+  alpha:true
  });
 
-renderer.setPixelRatio(
- Math.min(
-  window.devicePixelRatio || 1,
-  2
- )
-);
 
 renderer.setSize(
  window.innerWidth,
  window.innerHeight
 );
 
-renderer.setClearColor(
- 0x000000,
- 0
+
+renderer.setPixelRatio(
+ Math.min(
+  window.devicePixelRatio,
+  2
+ )
 );
+
 
 container.appendChild(
  renderer.domElement
 );
 
 
-/* =====================================================
-   GLOW TEXTURE
-===================================================== */
+/* ================= GLOW ================= */
 
 function createGlow(){
 
  const canvas=
   document.createElement("canvas");
 
- canvas.width=128;
- canvas.height=128;
+ canvas.width=64;
+ canvas.height=64;
 
  const ctx=
   canvas.getContext("2d");
 
  const gradient=
   ctx.createRadialGradient(
-   64,64,0,
-   64,64,64
+   32,32,0,
+   32,32,32
   );
 
  gradient.addColorStop(
@@ -1008,18 +1076,18 @@ function createGlow(){
  );
 
  gradient.addColorStop(
-  .15,
-  "rgba(160,255,255,1)"
+  .2,
+  "rgba(220,255,255,1)"
  );
 
  gradient.addColorStop(
-  .35,
-  "rgba(0,255,255,.95)"
+  .4,
+  "rgba(0,255,255,.9)"
  );
 
  gradient.addColorStop(
-  .65,
-  "rgba(0,150,200,.35)"
+  .7,
+  "rgba(0,150,190,.25)"
  );
 
  gradient.addColorStop(
@@ -1032,50 +1100,49 @@ function createGlow(){
  ctx.fillRect(
   0,
   0,
-  128,
-  128
+  64,
+  64
  );
 
- const texture=
-  new THREE.CanvasTexture(
-   canvas
-  );
-
- texture.needsUpdate=true;
-
- return texture;
+ return new THREE.CanvasTexture(
+  canvas
+ );
 }
 
 
-/* =====================================================
-   NEURAL PARTICLES
-===================================================== */
+/* ================= PARTICELLE ================= */
 
-const COUNT=2600;
+const COUNT=3000;
+
+const geometry=
+ new THREE.BufferGeometry();
 
 const positions=
  new Float32Array(
   COUNT*3
  );
 
-const basePositions=
+const radii=
  new Float32Array(
-  COUNT*3
+  COUNT
  );
 
-const randomValues=
+const angles=
  new Float32Array(
-  COUNT*4
+  COUNT*2
+ );
+
+const seeds=
+ new Float32Array(
+  COUNT
  );
 
 
 for(let i=0;i<COUNT;i++){
 
- const i3=i*3;
-
- const radius=
-  1.05+
-  Math.random()*.75;
+ const r=
+  1.10+
+  Math.random()*.70;
 
  const theta=
   Math.random()*
@@ -1086,40 +1153,27 @@ for(let i=0;i<COUNT;i++){
    2*Math.random()-1
   );
 
- const sinPhi=
-  Math.sin(phi);
+ radii[i]=r;
 
- const x=
-  radius*
-  sinPhi*
+ angles[i*2]=theta;
+
+ angles[i*2+1]=phi;
+
+ seeds[i]=
+  Math.random()*100;
+
+ positions[i*3]=
+  r*Math.sin(phi)*
   Math.cos(theta);
 
- const y=
-  radius*
-  sinPhi*
+ positions[i*3+1]=
+  r*Math.sin(phi)*
   Math.sin(theta);
 
- const z=
-  radius*
-  Math.cos(phi);
-
- positions[i3]=x;
- positions[i3+1]=y;
- positions[i3+2]=z;
-
- basePositions[i3]=x;
- basePositions[i3+1]=y;
- basePositions[i3+2]=z;
-
- randomValues[i*4]=Math.random()*100;
- randomValues[i*4+1]=Math.random()*100;
- randomValues[i*4+2]=Math.random()*100;
- randomValues[i*4+3]=Math.random()*100;
+ positions[i*3+2]=
+  r*Math.cos(phi);
 }
 
-
-const geometry=
- new THREE.BufferGeometry();
 
 geometry.setAttribute(
  "position",
@@ -1133,23 +1187,23 @@ geometry.setAttribute(
 const material=
  new THREE.PointsMaterial({
 
-  color:0x00e5ff,
+  color:
+   new THREE.Color(
+    0x00cfe8
+   ),
 
-  size:.055,
+  size:.042,
 
   map:createGlow(),
 
   transparent:true,
 
-  opacity:.95,
+  opacity:1,
 
   depthWrite:false,
 
   blending:
-   THREE.AdditiveBlending,
-
-  sizeAttenuation:true
-
+   THREE.AdditiveBlending
  });
 
 
@@ -1159,16 +1213,18 @@ const particles=
   material
  );
 
-scene.add(particles);
+
+scene.add(
+ particles
+);
 
 
-/* =====================================================
-   STATO
-===================================================== */
+/* ================= STATO ================= */
 
-let targetEnergy=.18;
+let targetEnergy=.15;
 
-let energy=.18;
+let energy=.15;
+
 
 const normalColor=
  new THREE.Color(
@@ -1177,7 +1233,7 @@ const normalColor=
 
 const activeColor=
  new THREE.Color(
-  0x9fffff
+  0x8fffff
  );
 
 const currentColor=
@@ -1187,22 +1243,20 @@ const currentColor=
 function setState(state){
 
  if(state==="thinking")
-  targetEnergy=1.8;
+  targetEnergy=2;
 
  else if(state==="speaking")
-  targetEnergy=.85;
+  targetEnergy=.8;
 
  else if(state==="listening")
-  targetEnergy=.65;
+  targetEnergy=.55;
 
  else
-  targetEnergy=.18;
+  targetEnergy=.15;
 }
 
 
-/* =====================================================
-   ANIMAZIONE NEURONI
-===================================================== */
+/* ================= ANIMAZIONE ================= */
 
 function animate(){
 
@@ -1214,107 +1268,137 @@ function animate(){
   performance.now()*.001;
 
  energy+=
-  (targetEnergy-energy)*.06;
-
-
- const colorTarget=
-  energy>.3
-   ?activeColor
-   :normalColor;
+  (targetEnergy-energy)*
+  .045;
 
  currentColor.lerp(
-  colorTarget,
-  .08
+  activeColor,
+  energy*.04
  );
+
+ if(energy<.3){
+
+  currentColor.lerp(
+   normalColor,
+   .03
+  );
+
+ }
 
  material.color=
   currentColor;
 
  material.size=
-  .042+
-  energy*.018;
+  .032+
+  energy*.008;
 
 
  const pos=
-  geometry.attributes
-  .position
-  .array;
+  geometry.attributes.position.array;
 
 
  for(let i=0;i<COUNT;i++){
 
-  const i3=i*3;
+  const index=i*3;
 
-  const x=
-   basePositions[i3];
+  const r=
+   radii[i];
 
-  const y=
-   basePositions[i3+1];
+  const theta=
+   angles[i*2];
 
-  const z=
-   basePositions[i3+2];
+  const phi=
+   angles[i*2+1];
 
   const seed=
-   randomValues[i*4];
+   seeds[i];
 
-  const seed2=
-   randomValues[i*4+1];
 
-  const seed3=
-   randomValues[i*4+2];
+  const pulse=
+   Math.sin(
+    time*2+seed
+   )*.035;
 
-  const radius=
-   Math.sqrt(
-    x*x+y*y+z*z
-   );
+
+  const strangeShape=
+   Math.sin(
+    theta*6+
+    time*2+
+    seed
+   )*.18*energy;
+
 
   const wave=
-   Math.sin(
-    time*1.7+
-    seed+
-    radius*5
-   )*.025;
-
-  const movement=
-   .025+
-   energy*.075;
-
-  pos[i3]=
-   x+
-   Math.sin(
-    time*.8+
-    seed
-   )*movement+
-   x/radius*wave;
-
-  pos[i3+1]=
-   y+
    Math.cos(
-    time*.7+
-    seed2
-   )*movement+
-   y/radius*wave;
+    phi*7-
+    time*1.8+
+    seed
+   )*.12*energy;
 
-  pos[i3+2]=
-   z+
+
+  const rr=
+   r+
+   pulse+
+   strangeShape+
+   wave;
+
+
+  let x=
+   rr*
+   Math.sin(phi)*
+   Math.cos(theta);
+
+  let y=
+   rr*
+   Math.sin(phi)*
+   Math.sin(theta);
+
+  let z=
+   rr*
+   Math.cos(phi);
+
+
+  x+=
    Math.sin(
-    time*.9+
-    seed3
-   )*movement+
-   z/radius*wave;
+    time*2.4+
+    phi*8+
+    seed
+   )*.08*energy;
+
+
+  y+=
+   Math.cos(
+    time*2.1+
+    theta*9+
+    seed
+   )*.08*energy;
+
+
+  z+=
+   Math.sin(
+    time*2.7+
+    (theta+phi)*7
+   )*.10*energy;
+
+
+  pos[index]=x;
+
+  pos[index+1]=y;
+
+  pos[index+2]=z;
+
  }
 
- geometry.attributes
-  .position
-  .needsUpdate=true;
+
+ geometry.attributes.position.needsUpdate=true;
 
 
  particles.rotation.y+=
-  .00045+
-  energy*.001;
+  .0005+
+  energy*.0008;
 
  particles.rotation.x=
-  Math.sin(time*.22)*.035;
+  Math.sin(time*.25)*.04;
 
  particles.rotation.z=
   Math.cos(time*.18)*.025;
@@ -1326,19 +1410,20 @@ function animate(){
  );
 }
 
+
 animate();
 
 
-/* =====================================================
-   MAPTILER
-===================================================== */
+/* ================= MAPLIBRE ================= */
 
 const MAPTILER_KEY=
  "NmSlgtsAdQyEWy7t0OJf";
 
+
 const MAPTILER_STYLE=
  "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
  +MAPTILER_KEY;
+
 
 let map=null;
 
@@ -1347,13 +1432,9 @@ let currentMarker=null;
 
 function initializeMap(){
 
- if(map)
-  return;
+ if(map)return;
 
- if(
-  typeof maplibregl===
-  "undefined"
- ){
+ if(typeof maplibregl==="undefined"){
 
   addMsg(
    "Errore: MapTiler non disponibile."
@@ -1385,17 +1466,11 @@ function initializeMap(){
 
 
  map.addControl(
-
   new maplibregl.NavigationControl({
-
    showCompass:true,
-
    showZoom:true
-
   }),
-
   "bottom-right"
-
  );
 
 
@@ -1450,38 +1525,16 @@ closeMap.addEventListener(
 );
 
 
-/* =====================================================
-   UTILITY
-===================================================== */
+/* ================= UTILITY ================= */
 
 function escapeHtml(text){
 
  return String(text)
-
-  .replace(
-   /&/g,
-   "&amp;"
-  )
-
-  .replace(
-   /</g,
-   "&lt;"
-  )
-
-  .replace(
-   />/g,
-   "&gt;"
-  )
-
-  .replace(
-   /"/g,
-   "&quot;"
-  )
-
-  .replace(
-   /'/g,
-   "&#039;"
-  );
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
 }
 
 
@@ -1490,9 +1543,7 @@ function addMsg(text){
  chat.innerHTML="";
 
  const element=
-  document.createElement(
-   "div"
-  );
+  document.createElement("div");
 
  element.className="msg";
 
@@ -1508,18 +1559,61 @@ function addMsg(text){
    FULLSCREEN
 ===================================================== */
 
+let fullscreenChanging=false;
+
+
+function isFullscreen(){
+
+ return !!(
+  document.fullscreenElement ||
+  document.webkitFullscreenElement
+ );
+}
+
+
 async function enterFullscreen(){
+
+ if(isFullscreen())
+  return true;
+
+
+ if(fullscreenChanging)
+  return false;
+
+
+ fullscreenChanging=true;
+
 
  try{
 
   if(
-   !document.fullscreenElement
+   document.documentElement.requestFullscreen
   ){
 
-   await document.documentElement
-    .requestFullscreen();
+   await document.documentElement.requestFullscreen();
 
+  }else if(
+   document.documentElement.webkitRequestFullscreen
+  ){
+
+   document.documentElement.webkitRequestFullscreen();
+
+  }else{
+
+   addMsg(
+    "Fullscreen non supportato da questo browser."
+   );
+
+   fullscreenChanging=false;
+
+   return false;
   }
+
+
+  fullscreenChanging=false;
+
+  return true;
+
 
  }catch(error){
 
@@ -1528,10 +1622,13 @@ async function enterFullscreen(){
    error
   );
 
+  fullscreenChanging=false;
+
   addMsg(
-   "Il dispositivo/browser non permette il fullscreen automatico."
+   "Il browser ha bloccato il fullscreen. Premi il pulsante FULLSCREEN."
   );
 
+  return false;
  }
 }
 
@@ -1540,8 +1637,19 @@ async function exitFullscreen(){
 
  try{
 
-  if(document.fullscreenElement)
+  if(document.exitFullscreen){
+
    await document.exitFullscreen();
+
+  }else if(
+   document.webkitExitFullscreen
+  ){
+
+   document.webkitExitFullscreen();
+
+  }
+
+  return true;
 
  }catch(error){
 
@@ -1550,6 +1658,21 @@ async function exitFullscreen(){
    error
   );
 
+  return false;
+ }
+}
+
+
+async function toggleFullscreen(){
+
+ if(isFullscreen()){
+
+  await exitFullscreen();
+
+ }else{
+
+  await enterFullscreen();
+
  }
 }
 
@@ -1557,33 +1680,69 @@ async function exitFullscreen(){
 function updateFullscreenUI(){
 
  const active=
-  !!document.fullscreenElement;
+  isFullscreen();
 
- fullscreenIndicator
-  .classList
-  .toggle(
-   "active",
-   active
-  );
-
- fullscreenIndicator.textContent=
+ fullscreenBtn.classList.toggle(
+  "active",
   active
-   ? "FULLSCREEN: ACTIVE"
-   : "";
+ );
+
+ fullscreenBtn.textContent=
+  active
+   ? "⛶ ESCI FULLSCREEN"
+   : "⛶ FULLSCREEN";
 }
+
+
+fullscreenBtn.addEventListener(
+ "click",
+ async()=>{
+
+  await toggleFullscreen();
+
+  updateFullscreenUI();
+
+ }
+);
 
 
 document.addEventListener(
  "fullscreenchange",
- updateFullscreenUI
+ ()=>{
+  updateFullscreenUI();
+
+  setTimeout(
+   ()=>{
+    if(map)
+     map.resize();
+   },
+   100
+  );
+ }
+);
+
+
+document.addEventListener(
+ "webkitfullscreenchange",
+ ()=>{
+  updateFullscreenUI();
+
+  setTimeout(
+   ()=>{
+    if(map)
+     map.resize();
+   },
+   100
+  );
+ }
 );
 
 
 /* =====================================================
-   NORMALIZZAZIONE TESTO
+   NORMALIZZAZIONE COMANDI
 ===================================================== */
 
-function normalizeText(text){
+function normalizeCommand(text){
 
  return String(text)
   .toLowerCase()
@@ -1593,7 +1752,7 @@ function normalizeText(text){
    ""
   )
   .replace(
-   /[^a-z0-9\s]/g,
+   /[.,!?;:]/g,
    " "
   )
   .replace(
@@ -1605,141 +1764,234 @@ function normalizeText(text){
 
 
 /* =====================================================
-   RICONOSCIMENTO GENERICO
-===================================================== */
-
-function hasAny(text,words){
-
- const normalized=
-  normalizeText(text);
-
- return words.some(
-  word=>
-   normalized.includes(
-    normalizeText(word)
-   )
- );
-}
-
-
-function similarity(a,b){
-
- a=normalizeText(a);
- b=normalizeText(b);
-
- if(!a||!b)
-  return 0;
-
- if(a===b)
-  return 1;
-
- if(
-  a.includes(b)||
-  b.includes(a)
- )
-  return .85;
-
- const aWords=a.split(" ");
- const bWords=b.split(" ");
-
- let matches=0;
-
- for(const wordA of aWords){
-
-  if(wordA.length<2)
-   continue;
-
-  for(const wordB of bWords){
-
-   if(
-    wordA===wordB||
-    wordA.startsWith(wordB)||
-    wordB.startsWith(wordA)
-   ){
-
-    matches++;
-    break;
-   }
-  }
- }
-
- return matches/
-  Math.max(
-   aWords.length,
-   bWords.length
-  );
-}
-
-
-/* =====================================================
-   FULLSCREEN COMMAND
+   COMANDI FULLSCREEN
 ===================================================== */
 
 function handleFullscreenCommand(text){
 
  const normalized=
-  normalizeText(text);
+  normalizeCommand(text);
 
 
- const enterWords=[
-  "fullscreen",
-  "full screen",
-  "schermo intero",
-  "tutto schermo",
-  "modalita schermo intero",
-  "modalita tutto schermo",
-  "a schermo intero",
-  "metti a tutto schermo",
-  "metti fullscreen",
+ /*
+  * Rimuoviamo alcune parole riempitive.
+  * In questo modo JARVIS è più tollerante
+  * con il riconoscimento vocale.
+  */
+
+ const simplified=
+  normalized
+   .replace(
+    /\bper favore\b/g,
+    ""
+   )
+   .replace(
+    /\bjarvis\b/g,
+    ""
+   )
+   .replace(
+    /\bla modalita\b/g,
+    "modalita"
+   )
+   .replace(
+    /\bla modalita di\b/g,
+    "modalita"
+   )
+   .replace(
+    /\bmodalita a\b/g,
+    "modalita"
+   )
+   .replace(
+    /\bmodalita dello\b/g,
+    "modalita"
+   )
+   .replace(
+    /\bmodalita dello schermo\b/g,
+    "modalita schermo"
+   )
+   .replace(
+    /\s+/g,
+    " "
+   )
+   .trim();
+
+
+ const activatePatterns=[
+
   "attiva fullscreen",
-  "attiva full screen",
+
+  "attiva il fullscreen",
+
+  "attiva la fullscreen",
+
+  "attiva modalita fullscreen",
+
+  "attiva la modalita fullscreen",
+
+  "attiva modalita schermo intero",
+
+  "attiva la modalita schermo intero",
+
   "attiva schermo intero",
-  "attiva modalita fullscreen"
+
+  "metti fullscreen",
+
+  "metti in fullscreen",
+
+  "metti a fullscreen",
+
+  "vai fullscreen",
+
+  "vai in fullscreen",
+
+  "fullscreen",
+
+  "modalita fullscreen",
+
+  "modalita schermo intero",
+
+  "schermo intero",
+
+  "a schermo intero",
+
+  "passa a schermo intero",
+
+  "passa in fullscreen"
+
  ];
 
 
- const exitWords=[
-  "esci dal fullscreen",
-  "esci da fullscreen",
-  "esci dal full screen",
-  "esci dallo schermo intero",
-  "chiudi fullscreen",
+ const deactivatePatterns=[
+
   "disattiva fullscreen",
+
+  "disattiva il fullscreen",
+
+  "disattiva la fullscreen",
+
+  "disattiva modalita fullscreen",
+
+  "disattiva la modalita fullscreen",
+
   "disattiva schermo intero",
-  "torna allo schermo normale",
+
+  "disattiva la modalita schermo intero",
+
+  "esci dal fullscreen",
+
+  "esci da fullscreen",
+
+  "esci fullscreen",
+
+  "esci da schermo intero",
+
+  "esci dallo schermo intero",
+
+  "torna normale",
+
+  "torna alla modalita normale",
+
+  "modalita normale",
+
   "schermo normale"
+
  ];
 
 
  if(
-  hasAny(
-   normalized,
-   exitWords
+  activatePatterns.includes(
+   simplified
   )
  ){
 
-  exitFullscreen();
+  if(isFullscreen()){
 
-  addMsg(
-   "Modalità fullscreen disattivata."
-  );
+   addMsg(
+    "Modalità fullscreen già attiva."
+   );
+
+   return true;
+  }
+
+
+  /*
+   * Il browser può bloccare questa chiamata
+   * se arriva da SpeechRecognition.
+   */
+
+  enterFullscreen();
 
   return true;
  }
 
 
  if(
-  hasAny(
-   normalized,
-   enterWords
+  deactivatePatterns.includes(
+   simplified
   )
+ ){
+
+  if(!isFullscreen()){
+
+   addMsg(
+    "Modalità fullscreen non attiva."
+   );
+
+   return true;
+  }
+
+  exitFullscreen();
+
+  return true;
+ }
+
+
+ /*
+  * Riconoscimento più generico.
+  * Se la frase contiene fullscreen o schermo intero
+  * insieme a parole di attivazione, viene comunque
+  * considerata un comando.
+  */
+
+ const hasFullscreenWord=
+  simplified.includes("fullscreen") ||
+  simplified.includes("full screen") ||
+  simplified.includes("schermo intero");
+
+
+ const wantsActivate=
+  simplified.includes("attiva") ||
+  simplified.includes("avvia") ||
+  simplified.includes("inizia") ||
+  simplified.includes("metti") ||
+  simplified.includes("passa") ||
+  simplified.includes("vai");
+
+
+ const wantsDeactivate=
+  simplified.includes("disattiva") ||
+  simplified.includes("chiudi") ||
+  simplified.includes("esci") ||
+  simplified.includes("torna");
+
+
+ if(
+  hasFullscreenWord &&
+  wantsActivate
  ){
 
   enterFullscreen();
 
-  addMsg(
-   "Modalità fullscreen attivata."
-  );
+  return true;
+ }
+
+
+ if(
+  hasFullscreenWord &&
+  wantsDeactivate
+ ){
+
+  exitFullscreen();
 
   return true;
  }
@@ -1749,9 +2001,7 @@ function handleFullscreenCommand(text){
 }
 
 
-/* =====================================================
-   MARKER
-===================================================== */
+/* ================= MARKER ================= */
 
 function createJarvisMarker(
  lat,
@@ -1759,8 +2009,7 @@ function createJarvisMarker(
  name
 ){
 
- if(!map)
-  return;
+ if(!map)return;
 
 
  if(currentMarker){
@@ -1768,14 +2017,11 @@ function createJarvisMarker(
   currentMarker.remove();
 
   currentMarker=null;
-
  }
 
 
  const markerElement=
-  document.createElement(
-   "div"
-  );
+  document.createElement("div");
 
  markerElement.className=
   "jarvis-map-marker";
@@ -1789,24 +2035,18 @@ function createJarvisMarker(
    anchor:"center"
 
   })
-
   .setLngLat([
    lon,
    lat
   ])
-
   .setPopup(
-
    new maplibregl.Popup({
     offset:15
    })
-
    .setHTML(
     `<b style="color:#00ffff">${escapeHtml(name)}</b>`
    )
-
   )
-
   .addTo(map);
 
 
@@ -1814,9 +2054,7 @@ function createJarvisMarker(
 }
 
 
-/* =====================================================
-   RICERCA POSIZIONE
-===================================================== */
+/* ================= RICERCA POSIZIONE ================= */
 
 async function searchLocation(place){
 
@@ -1862,7 +2100,8 @@ async function searchLocation(place){
 
    addMsg(
     "Non riesco a trovare "+
-    place+"."
+    place+
+    "."
    );
 
    return;
@@ -1874,14 +2113,10 @@ async function searchLocation(place){
 
 
   const lat=
-   parseFloat(
-    result.lat
-   );
+   parseFloat(result.lat);
 
   const lon=
-   parseFloat(
-    result.lon
-   );
+   parseFloat(result.lon);
 
 
   if(!map)
@@ -1930,37 +2165,44 @@ async function searchLocation(place){
 
   addMsg(
    "Impossibile localizzare "+
-   place+"."
+   place+
+   "."
   );
 
  }
 }
 
 
-/* =====================================================
-   MAPPA — RICONOSCIMENTO GENERICO
-===================================================== */
+/* ================= COMANDI MAPPA ================= */
 
 function handleMapCommand(text){
 
  const normalized=
-  normalizeText(text);
+  normalizeCommand(text);
 
 
  if(
-  hasAny(
-   normalized,
-   [
-    "apri mappa",
-    "apri la mappa",
-    "mappa tattica",
-    "modalita tattica",
-    "attiva mappa",
-    "mostra mappa",
-    "fammi vedere la mappa",
-    "voglio la mappa"
-   ]
+
+  normalized.includes(
+   "apri la mappa"
+  ) ||
+
+  normalized.includes(
+   "apri mappa"
+  ) ||
+
+  normalized.includes(
+   "mappa tattica"
+  ) ||
+
+  normalized.includes(
+   "modalita tattica"
+  ) ||
+
+  normalized.includes(
+   "attiva la mappa"
   )
+
  ){
 
   openTacticalMap();
@@ -1974,16 +2216,23 @@ function handleMapCommand(text){
 
 
  if(
-  hasAny(
-   normalized,
-   [
-    "chiudi mappa",
-    "chiudi la mappa",
-    "esci dalla mappa",
-    "chiudi modalita tattica",
-    "torna alla modalita normale"
-   ]
+
+  normalized.includes(
+   "chiudi la mappa"
+  ) ||
+
+  normalized.includes(
+   "chiudi mappa"
+  ) ||
+
+  normalized.includes(
+   "esci dalla mappa"
+  ) ||
+
+  normalized.includes(
+   "torna alla modalita normale"
   )
+
  ){
 
   closeTacticalMap();
@@ -1997,15 +2246,21 @@ function handleMapCommand(text){
 
 
  const patterns=[
-  "mostrami",
-  "mostra",
-  "vai a",
-  "portami a",
-  "localizza",
-  "cerca",
-  "visualizza",
-  "fammi vedere",
-  "trova"
+
+  "mostrami ",
+
+  "mostra ",
+
+  "vai a ",
+
+  "portami a ",
+
+  "localizza ",
+
+  "cerca ",
+
+  "visualizza "
+
  ];
 
 
@@ -2013,17 +2268,15 @@ function handleMapCommand(text){
   const pattern of patterns
  ){
 
-  const cleanPattern=
-   normalizeText(pattern);
-
   if(
    normalized.startsWith(
-    cleanPattern+" "
+    pattern
    )
   ){
 
    const place=
-    text.trim()
+    text
+     .trim()
      .substring(
       pattern.length
      )
@@ -2039,7 +2292,6 @@ function handleMapCommand(text){
     return true;
    }
   }
-
  }
 
 
@@ -2068,9 +2320,9 @@ function updateWebIndicator(){
 
  if(count>0){
 
-  webSearchIndicator
-   .classList
-   .add("active");
+  webSearchIndicator.classList.add(
+   "active"
+  );
 
   webSearchIndicator.textContent=
    "WEB WINDOWS: "+
@@ -2078,9 +2330,9 @@ function updateWebIndicator(){
 
  }else{
 
-  webSearchIndicator
-   .classList
-   .remove("active");
+  webSearchIndicator.classList.remove(
+   "active"
+  );
 
  }
 }
@@ -2093,27 +2345,26 @@ function bringWebWindowToFront(
  highestWebZ++;
 
  windowElement.style.zIndex=
-  String(highestWebZ);
+  String(
+   highestWebZ
+  );
 }
 
 
 /* =====================================================
-   CREA WEB WINDOW
+   CREA FINESTRA WEB
 ===================================================== */
 
 function openWebSearch(query){
 
- if(!query)
-  return;
-
+ if(!query)return;
 
  webWindowCounter++;
 
 
  const windowElement=
-  document.createElement(
-   "div"
-  );
+  document.createElement("div");
+
 
  windowElement.className=
   "web-window";
@@ -2132,7 +2383,9 @@ function openWebSearch(query){
 
 
  windowElement.style.zIndex=
-  String(++highestWebZ);
+  String(
+   ++highestWebZ
+  );
 
 
  const safeTitle=
@@ -2158,13 +2411,17 @@ function openWebSearch(query){
     <button
      class="web-window-btn minimize-web"
      title="Minimizza">
+
      −
+
     </button>
 
     <button
      class="web-window-btn close-web"
      title="Chiudi">
+
      ×
+
     </button>
 
    </div>
@@ -2245,10 +2502,6 @@ function openWebSearch(query){
  );
 
 
- /* =================================================
-    DRAG TOUCH + MOUSE
- ================================================= */
-
  const header=
   windowElement.querySelector(
    ".web-window-header"
@@ -2270,8 +2523,10 @@ function openWebSearch(query){
     event.target.closest(
      ".web-window-btn"
     )
-   )
+   ){
+
     return;
+   }
 
 
    dragging=true;
@@ -2283,8 +2538,7 @@ function openWebSearch(query){
 
 
    const rect=
-    windowElement
-     .getBoundingClientRect();
+    windowElement.getBoundingClientRect();
 
 
    dragOffsetX=
@@ -2303,7 +2557,7 @@ function openWebSearch(query){
      event.pointerId
     );
 
-   }catch(error){}
+   }catch(e){}
 
 
    event.preventDefault();
@@ -2319,9 +2573,7 @@ function openWebSearch(query){
   "pointermove",
   event=>{
 
-   if(!dragging)
-    return;
-
+   if(!dragging)return;
 
    event.preventDefault();
 
@@ -2337,12 +2589,12 @@ function openWebSearch(query){
 
 
    const rect=
-    windowElement
-     .getBoundingClientRect();
+    windowElement.getBoundingClientRect();
 
 
    const minLeft=
     -rect.width+100;
+
 
    const maxLeft=
     window.innerWidth-80;
@@ -2390,9 +2642,7 @@ function openWebSearch(query){
 
  function stopDragging(event){
 
-  if(!dragging)
-   return;
-
+  if(!dragging)return;
 
   dragging=false;
 
@@ -2403,7 +2653,7 @@ function openWebSearch(query){
     event.pointerId
    );
 
-  }catch(error){}
+  }catch(e){}
 
  }
 
@@ -2430,7 +2680,6 @@ function openWebSearch(query){
 
  updateWebIndicator();
 
-
  addMsg(
   "Ricerca web: "+
   query
@@ -2438,28 +2687,34 @@ function openWebSearch(query){
 }
 
 
-/* =====================================================
-   WEB COMMAND
-===================================================== */
+/* ================= COMANDI WEB ================= */
 
 function handleWebCommand(text){
 
  const normalized=
-  normalizeText(text);
+  normalizeCommand(text);
 
 
  const patterns=[
-  "cerca sul web",
-  "cerca nel web",
-  "ricerca sul web",
-  "ricerca web",
-  "cerca online",
-  "cerca su internet",
-  "cerca in internet",
-  "fammi una ricerca su",
-  "fai una ricerca su",
-  "cerca per me",
-  "cerca informazioni su"
+
+  "cerca sul web ",
+
+  "cerca nel web ",
+
+  "ricerca sul web ",
+
+  "ricerca web ",
+
+  "cerca online ",
+
+  "cerca su internet ",
+
+  "cerca in internet ",
+
+  "fammi una ricerca su ",
+
+  "fai una ricerca su "
+
  ];
 
 
@@ -2467,18 +2722,15 @@ function handleWebCommand(text){
   const pattern of patterns
  ){
 
-  const p=
-   normalizeText(pattern);
-
-
   if(
    normalized.startsWith(
-    p+" "
+    pattern
    )
   ){
 
    const query=
-    text.trim()
+    text
+     .trim()
      .substring(
       pattern.length
      )
@@ -2501,27 +2753,24 @@ function handleWebCommand(text){
 }
 
 
-/* =====================================================
-   WEB WINDOWS COMMAND
-===================================================== */
+/* ================= FINESTRE WEB ================= */
 
 function handleWebWindowCommand(text){
 
  const normalized=
-  normalizeText(text);
+  normalizeCommand(text);
 
 
  if(
-  hasAny(
-   normalized,
-   [
-    "chiudi le ricerche web",
-    "chiudi ricerca web",
-    "chiudi tutte le ricerche",
-    "chiudi tutte le finestre web",
-    "chiudi finestre web"
-   ]
-  )
+
+  normalized==="chiudi le ricerche web" ||
+
+  normalized==="chiudi ricerca web" ||
+
+  normalized==="chiudi tutte le ricerche" ||
+
+  normalized==="chiudi tutte le finestre web"
+
  ){
 
   webSearchWindows.innerHTML="";
@@ -2537,14 +2786,11 @@ function handleWebWindowCommand(text){
 
 
  if(
-  hasAny(
-   normalized,
-   [
-    "minimizza le ricerche web",
-    "minimizza tutte le ricerche",
-    "minimizza finestre web"
-   ]
-  )
+
+  normalized==="minimizza le ricerche web" ||
+
+  normalized==="minimizza tutte le ricerche"
+
  ){
 
   webSearchWindows
@@ -2552,10 +2798,10 @@ function handleWebWindowCommand(text){
     ".web-window"
    )
    .forEach(
-    windowElement=>
-     windowElement
-      .classList
-      .add("minimized")
+    w=>
+     w.classList.add(
+      "minimized"
+     )
    );
 
 
@@ -2571,13 +2817,12 @@ function handleWebWindowCommand(text){
 }
 
 
-/* =====================================================
-   DATI TEMPORALI
-===================================================== */
+/* ================= DATI TEMPORALI ================= */
 
 function getTimeData(){
 
- const now=new Date();
+ const now=
+  new Date();
 
 
  return{
@@ -2592,6 +2837,7 @@ function getTimeData(){
     }
    ),
 
+
   currentDate:
    now.toLocaleDateString(
     "it-IT",
@@ -2602,6 +2848,7 @@ function getTimeData(){
     }
    ),
 
+
   dayOfWeek:
    now.toLocaleDateString(
     "it-IT",
@@ -2610,19 +2857,17 @@ function getTimeData(){
     }
    ),
 
+
   timezone:
    Intl.DateTimeFormat()
     .resolvedOptions()
     .timeZone
 
  };
-
 }
 
 
-/* =====================================================
-   VOCI
-===================================================== */
+/* ================= VOCI ================= */
 
 function loadDeviceVoices(){
 
@@ -2689,9 +2934,12 @@ function loadDeviceVoices(){
 
 
  if(
+
   savedVoice!==null&&
+
   Number(savedVoice)<
    deviceVoices.length
+
  ){
 
   voiceSelector.value=
@@ -2712,17 +2960,15 @@ if(
 
  loadDeviceVoices();
 
+
  window.speechSynthesis.addEventListener(
   "voiceschanged",
   loadDeviceVoices
  );
-
 }
 
 
-/* =====================================================
-   DEVICE TTS
-===================================================== */
+/* ================= DEVICE TTS ================= */
 
 function speakDevice(text){
 
@@ -2784,29 +3030,47 @@ function speakDevice(text){
      if(italianVoice)
       utterance.voice=
        italianVoice;
+
     }
 
 
     utterance.onstart=
      ()=>{
+
       audioPlaying=true;
-      setState("speaking");
+
+      setState(
+       "speaking"
+      );
+
      };
 
 
     utterance.onend=
      ()=>{
+
       audioPlaying=false;
-      setState("idle");
+
+      setState(
+       "idle"
+      );
+
       resolve(true);
+
      };
 
 
     utterance.onerror=
      ()=>{
+
       audioPlaying=false;
-      setState("idle");
+
+      setState(
+       "idle"
+      );
+
       resolve(false);
+
      };
 
 
@@ -2817,9 +3081,13 @@ function speakDevice(text){
 
     setTimeout(
      ()=>{
+
       try{
+
        window.speechSynthesis.resume();
-      }catch(error){}
+
+      }catch(e){}
+
      },
      100
     );
@@ -2827,7 +3095,9 @@ function speakDevice(text){
 
    }catch(error){
 
-    console.error(error);
+    console.error(
+     error
+    );
 
     resolve(false);
 
@@ -2835,13 +3105,10 @@ function speakDevice(text){
 
   }
  );
-
 }
 
 
-/* =====================================================
-   ELEVENLABS
-===================================================== */
+/* ================= ELEVENLABS ================= */
 
 async function speakElevenLabs(text){
 
@@ -2857,7 +3124,7 @@ async function speakElevenLabs(text){
 
    currentAudio.currentTime=0;
 
-  }catch(error){}
+  }catch(e){}
 
 
   currentAudio=null;
@@ -2870,9 +3137,7 @@ async function speakElevenLabs(text){
 
  const timeout=
   setTimeout(
-   ()=>{
-    controller.abort();
-   },
+   ()=>controller.abort(),
    30000
   );
 
@@ -2915,11 +3180,14 @@ async function speakElevenLabs(text){
 
   const contentType=
    response.headers
-    .get("content-type")||"";
+    .get("content-type")||
+   "";
 
 
   if(
-   !contentType.includes("audio")
+   !contentType.includes(
+    "audio"
+   )
   )
    return false;
 
@@ -2956,35 +3224,77 @@ async function speakElevenLabs(text){
 
   audio.onplay=
    ()=>{
+
     audioPlaying=true;
-    setState("speaking");
+
+    setState(
+     "speaking"
+    );
+
    };
 
 
   audio.onended=
    ()=>{
+
     audioPlaying=false;
-    setState("idle");
+
+    setState(
+     "idle"
+    );
+
 
     URL.revokeObjectURL(
      audioUrl
     );
+
 
     if(
      currentAudio===audio
     )
      currentAudio=null;
+
+
+    if(conversationMode){
+
+     setTimeout(
+      ()=>{
+       startContinuousRecognition();
+      },
+      150
+     );
+
+    }
+
    };
 
 
   audio.onerror=
    ()=>{
+
     audioPlaying=false;
-    setState("idle");
+
+    setState(
+     "idle"
+    );
+
 
     URL.revokeObjectURL(
      audioUrl
     );
+
+
+    if(conversationMode){
+
+     setTimeout(
+      ()=>{
+       startContinuousRecognition();
+      },
+      150
+     );
+
+    }
+
    };
 
 
@@ -3011,18 +3321,54 @@ async function speakElevenLabs(text){
   );
 
  }
-
 }
 
 
-/* =====================================================
-   SPEAK
-===================================================== */
+/* ================= INTERRUZIONE VOCE ================= */
+
+function stopJarvisSpeaking(){
+
+ if(currentAudio){
+
+  try{
+
+   currentAudio.pause();
+
+   currentAudio.currentTime=0;
+
+  }catch(e){}
+
+
+  currentAudio=null;
+ }
+
+
+ if(
+  "speechSynthesis" in window
+ ){
+
+  try{
+
+   window.speechSynthesis.cancel();
+
+  }catch(e){}
+
+ }
+
+
+ audioPlaying=false;
+
+ setState(
+  "listening"
+ );
+}
+
+
+/* ================= SPEAK ================= */
 
 async function speak(text){
 
- if(!text)
-  return;
+ if(!text)return;
 
 
  const elevenSuccess=
@@ -3039,12 +3385,21 @@ async function speak(text){
   text
  );
 
+
+ if(conversationMode){
+
+  setTimeout(
+   ()=>{
+    startContinuousRecognition();
+   },
+   150
+  );
+
+ }
 }
 
 
-/* =====================================================
-   VOICE UI
-===================================================== */
+/* ================= VOICE UI ================= */
 
 voiceTest.addEventListener(
  "click",
@@ -3070,9 +3425,11 @@ voiceSelector.addEventListener(
 
    selectedDeviceVoice=null;
 
+
    localStorage.removeItem(
     "jarvis_device_voice"
    );
+
 
    return;
   }
@@ -3083,8 +3440,11 @@ voiceSelector.addEventListener(
 
 
   if(
+
    Number.isInteger(index)&&
+
    deviceVoices[index]
+
   ){
 
    selectedDeviceVoice=
@@ -3117,19 +3477,578 @@ voiceBtn.addEventListener(
 
 
 /* =====================================================
-   PROCESS AI
+   MODALITÀ CONVERSAZIONE CONTINUA
 ===================================================== */
+
+let conversationMode=false;
+
+let conversationStarting=false;
+
+
+/* ================= RICONOSCIMENTO ================= */
+
+const Recognition=
+ window.SpeechRecognition||
+ window.webkitSpeechRecognition;
+
+
+let recognition=null;
+
+let listening=false;
+
+let recognitionStopping=false;
+
+
+if(Recognition){
+
+ recognition=
+  new Recognition();
+
+
+ recognition.lang=
+  "it-IT";
+
+
+ recognition.continuous=
+  false;
+
+
+ recognition.interimResults=
+  false;
+
+
+ recognition.onstart=
+  ()=>{
+
+   listening=true;
+
+   conversationStarting=
+    false;
+
+   micBtn.classList.add(
+    "active"
+   );
+
+   setState(
+    "listening"
+   );
+
+  };
+
+
+ recognition.onresult=
+  event=>{
+
+   const result=
+    event.results[
+     event.results.length-1
+    ];
+
+
+   if(!result)
+    return;
+
+
+   const text=
+    result[0]
+     .transcript
+     .trim();
+
+
+   if(!text)
+    return;
+
+
+   console.log(
+    "JARVIS VOICE:",
+    text
+   );
+
+
+   textInput.value=
+    text;
+
+
+   if(
+    conversationMode&&
+    audioPlaying
+   ){
+
+    stopJarvisSpeaking();
+
+   }
+
+
+   sendMessage();
+
+  };
+
+
+ recognition.onerror=
+  error=>{
+
+   console.error(
+    "Microfono:",
+    error
+   );
+
+
+   listening=false;
+
+
+   micBtn.classList.remove(
+    "active"
+   );
+
+
+   if(
+
+    conversationMode&&
+
+    error.error!=="not-allowed"&&
+
+    error.error!=="service-not-allowed"
+
+   ){
+
+    setTimeout(
+     ()=>{
+      startContinuousRecognition();
+     },
+     500
+    );
+
+   }else{
+
+    setState(
+     "idle"
+    );
+
+   }
+
+  };
+
+
+ recognition.onend=
+  ()=>{
+
+   listening=false;
+
+
+   micBtn.classList.remove(
+    "active"
+   );
+
+
+   if(
+
+    conversationMode&&
+
+    !recognitionStopping
+
+   ){
+
+    setTimeout(
+     ()=>{
+      startContinuousRecognition();
+     },
+     250
+    );
+
+   }else{
+
+    recognitionStopping=
+     false;
+
+
+    if(!conversationMode)
+     setState(
+      "idle"
+     );
+
+   }
+
+  };
+
+
+ function startRecognition(){
+
+  if(!recognition)
+   return;
+
+
+  if(listening)
+   return;
+
+
+  recognitionStopping=
+   false;
+
+
+  try{
+
+   recognition.start();
+
+  }catch(error){
+
+   console.warn(
+    "Avvio microfono:",
+    error
+   );
+
+
+   setTimeout(
+    ()=>{
+
+     if(!listening)
+      startRecognition();
+
+    },
+    500
+   );
+
+  }
+
+ }
+
+
+ function stopRecognition(){
+
+  if(!recognition)
+   return;
+
+
+  recognitionStopping=
+   true;
+
+
+  try{
+
+   recognition.stop();
+
+  }catch(e){}
+
+
+  listening=false;
+
+
+  micBtn.classList.remove(
+   "active"
+  );
+
+ }
+
+
+ function startContinuousRecognition(){
+
+  if(!conversationMode)
+   return;
+
+
+  if(listening)
+   return;
+
+
+  startRecognition();
+
+ }
+
+
+ function stopContinuousRecognition(){
+
+  conversationMode=
+   false;
+
+
+  recognitionStopping=
+   true;
+
+
+  try{
+
+   recognition.stop();
+
+  }catch(e){}
+
+
+  listening=false;
+
+
+  micBtn.classList.remove(
+   "active"
+  );
+
+
+  conversationBtn.classList.remove(
+   "active"
+  );
+
+
+  conversationBtn.textContent=
+   "◉ CONVERSAZIONE";
+
+
+  setState(
+   "idle"
+  );
+
+ }
+
+
+ function activateConversationMode(){
+
+  if(conversationMode)
+   return;
+
+
+  conversationMode=
+   true;
+
+
+  conversationBtn.classList.add(
+   "active"
+  );
+
+
+  conversationBtn.textContent=
+   "● CONVERSAZIONE ATTIVA";
+
+
+  addMsg(
+   "Modalità conversazione continua attivata."
+  );
+
+
+  if(audioPlaying){
+
+   stopJarvisSpeaking();
+
+  }
+
+
+  startContinuousRecognition();
+
+ }
+
+
+ function deactivateConversationMode(){
+
+  if(!conversationMode)
+   return;
+
+
+  stopContinuousRecognition();
+
+
+  addMsg(
+   "Modalità conversazione continua disattivata."
+  );
+
+ }
+
+
+ conversationBtn.addEventListener(
+  "click",
+  ()=>{
+
+   if(conversationMode){
+
+    deactivateConversationMode();
+
+   }else{
+
+    activateConversationMode();
+
+   }
+
+  }
+ );
+
+
+ micBtn.addEventListener(
+  "click",
+  ()=>{
+
+   if(conversationMode){
+
+    deactivateConversationMode();
+
+    return;
+   }
+
+
+   if(listening){
+
+    stopRecognition();
+
+   }else{
+
+    startRecognition();
+
+   }
+
+  }
+ );
+
+
+}else{
+
+ micBtn.style.opacity=
+  ".3";
+
+ conversationBtn.style.opacity=
+  ".35";
+
+}
+
+
+/* =====================================================
+   COMANDI MODALITÀ CONVERSAZIONE
+===================================================== */
+
+function handleConversationCommand(text){
+
+ const normalized=
+  normalizeCommand(text);
+
+
+ const activateCommands=[
+
+  "attiva modalita conversazione",
+
+  "attiva la modalita conversazione",
+
+  "modalita conversazione",
+
+  "avvia modalita conversazione",
+
+  "inizia modalita conversazione",
+
+  "conversazione continua",
+
+  "attiva conversazione continua"
+
+ ];
+
+
+ const deactivateCommands=[
+
+  "disattiva modalita conversazione",
+
+  "disattiva la modalita conversazione",
+
+  "chiudi modalita conversazione",
+
+  "stop modalita conversazione",
+
+  "disattiva conversazione continua"
+
+ ];
+
+
+ if(
+  activateCommands.includes(
+   normalized
+  )
+ ){
+
+  activateConversationMode();
+
+  return true;
+ }
+
+
+ if(
+  deactivateCommands.includes(
+   normalized
+  )
+ ){
+
+  deactivateConversationMode();
+
+  return true;
+ }
+
+
+ /*
+  * Comando generico:
+  * permette piccole differenze nella frase.
+  */
+
+ const hasConversation=
+  normalized.includes(
+   "conversazione"
+  );
+
+
+ const wantsActivate=
+  normalized.includes(
+   "attiva"
+  ) ||
+  normalized.includes(
+   "avvia"
+  ) ||
+  normalized.includes(
+   "inizia"
+  );
+
+
+ const wantsDeactivate=
+  normalized.includes(
+   "disattiva"
+  ) ||
+  normalized.includes(
+   "chiudi"
+  ) ||
+  normalized.includes(
+   "stop"
+  );
+
+
+ if(
+  hasConversation&&
+  wantsActivate
+ ){
+
+  activateConversationMode();
+
+  return true;
+ }
+
+
+ if(
+  hasConversation&&
+  wantsDeactivate
+ ){
+
+  deactivateConversationMode();
+
+  return true;
+ }
+
+
+ return false;
+}
+
+
+/* ================= PROCESS AI ================= */
 
 async function processAi(text){
 
  /*
-   Prima controlliamo i comandi locali.
-   Questo significa che JARVIS può capire
-   diversi modi di dire la stessa cosa.
- */
+  * I comandi locali vengono controllati
+  * prima dell'AI.
+  */
+
 
  if(
   handleFullscreenCommand(text)
+ )
+  return;
+
+
+ if(
+  handleConversationCommand(text)
  )
   return;
 
@@ -3152,11 +4071,9 @@ async function processAi(text){
   return;
 
 
- /* ================================================
-    AI
- ================================================= */
-
- setState("thinking");
+ setState(
+  "thinking"
+ );
 
 
  try{
@@ -3267,7 +4184,7 @@ async function processAi(text){
 
     }
 
-   }catch(error){
+   }catch(e){
 
     if(errorText){
 
@@ -3285,6 +4202,7 @@ async function processAi(text){
    throw new Error(
     errorMessage
    );
+
   }
 
 
@@ -3293,10 +4211,9 @@ async function processAi(text){
 
 
   const reply=
-   typeof data.response===
-    "string"
-     ?data.response.trim()
-     :"";
+   typeof data.response==="string"
+    ?data.response.trim()
+    :"";
 
 
   if(!reply)
@@ -3342,16 +4259,14 @@ async function processAi(text){
 
 
   if(
-   error.name===
-   "AbortError"
+   error.name==="AbortError"
   ){
 
    message=
     "Il server ha impiegato troppo tempo a rispondere.";
 
   }else if(
-   message===
-   "Failed to fetch"
+   message==="Failed to fetch"
   ){
 
    message=
@@ -3370,14 +4285,23 @@ async function processAi(text){
    "idle"
   );
 
- }
 
+  if(conversationMode){
+
+   setTimeout(
+    ()=>{
+     startContinuousRecognition();
+    },
+    500
+   );
+
+  }
+
+ }
 }
 
 
-/* =====================================================
-   INVIO
-===================================================== */
+/* ================= INVIO ================= */
 
 function sendMessage(){
 
@@ -3400,7 +4324,6 @@ function sendMessage(){
  processAi(
   text
  );
-
 }
 
 
@@ -3414,9 +4337,7 @@ textInput.addEventListener(
  "keydown",
  event=>{
 
-  if(
-   event.key==="Enter"
-  ){
+  if(event.key==="Enter"){
 
    event.preventDefault();
 
@@ -3428,146 +4349,7 @@ textInput.addEventListener(
 );
 
 
-/* =====================================================
-   MICROFONO
-===================================================== */
-
-const Recognition=
- window.SpeechRecognition||
- window.webkitSpeechRecognition;
-
-
-let recognition=null;
-
-let listening=false;
-
-
-if(Recognition){
-
- recognition=
-  new Recognition();
-
-
- recognition.lang=
-  "it-IT";
-
-
- recognition.continuous=
-  false;
-
-
- recognition.interimResults=
-  false;
-
-
- recognition.onstart=
-  ()=>{
-
-   listening=true;
-
-   micBtn.classList.add(
-    "active"
-   );
-
-   setState(
-    "listening"
-   );
-
-  };
-
-
- recognition.onresult=
-  event=>{
-
-   const text=
-    event.results[0][0]
-     .transcript
-     .trim();
-
-
-   if(text){
-
-    textInput.value=
-     text;
-
-    sendMessage();
-
-   }
-
-  };
-
-
- recognition.onerror=
-  error=>{
-
-   console.error(
-    "Microfono:",
-    error
-   );
-
-
-   listening=false;
-
-   micBtn.classList.remove(
-    "active"
-   );
-
-   setState(
-    "idle"
-   );
-
-  };
-
-
- recognition.onend=
-  ()=>{
-
-   listening=false;
-
-   micBtn.classList.remove(
-    "active"
-   );
-
-  };
-
-
- micBtn.addEventListener(
-  "click",
-  ()=>{
-
-   if(listening){
-
-    recognition.stop();
-
-   }else{
-
-    try{
-
-     recognition.start();
-
-    }catch(error){
-
-     console.warn(
-      error
-     );
-
-    }
-
-   }
-
-  }
- );
-
-}else{
-
- micBtn.style.opacity=".3";
-
-}
-
-
-/* =====================================================
-   RESIZE
-===================================================== */
+/* ================= RESIZE ================= */
 
 window.addEventListener(
  "resize",
@@ -3594,18 +4376,18 @@ window.addEventListener(
 );
 
 
-/* =====================================================
-   CANCELLA MEMORIA
-===================================================== */
+/* ================= CANCELLA MEMORIA ================= */
 
 window.clearJarvisMemory=
  function(){
 
   memory=[];
 
+
   localStorage.removeItem(
    MEMORY_KEY
   );
+
 
   console.log(
    "Memoria JARVIS cancellata."
@@ -3614,39 +4396,13 @@ window.clearJarvisMemory=
  };
 
 
-/* =====================================================
-   COMANDI DA CONSOLE
-===================================================== */
-
-window.jarvisFullscreen=
- function(){
-
-  enterFullscreen();
-
- };
-
-
-window.jarvisExitFullscreen=
- function(){
-
-  exitFullscreen();
-
- };
-
-
-/* =====================================================
-   AVVIO
-===================================================== */
+/* ================= AVVIO ================= */
 
 setState(
  "idle"
 );
 
 updateFullscreenUI();
-
-console.log(
- "J.A.R.V.I.S. ONLINE"
-);
 
 </script>
 

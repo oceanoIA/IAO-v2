@@ -52,6 +52,7 @@ circle at center,
 position:fixed;
 inset:0;
 z-index:1;
+overflow:hidden;
 }
 
 #webgl-container canvas{
@@ -69,9 +70,9 @@ pointer-events:none;
 background:
 radial-gradient(
 circle at center,
-transparent 30%,
-rgba(0,0,0,.2) 65%,
-rgba(0,0,0,.8) 100%
+transparent 25%,
+rgba(0,0,0,.18) 58%,
+rgba(0,0,0,.82) 100%
 );
 }
 
@@ -171,7 +172,7 @@ border:
 border-radius:24px;
 
 background:
-rgba(4,20,23,.4);
+rgba(4,20,23,.42);
 
 backdrop-filter:blur(14px);
 
@@ -185,6 +186,9 @@ line-height:1.45;
 white-space:pre-wrap;
 
 word-break:break-word;
+
+box-shadow:
+0 0 25px rgba(0,255,255,.035);
 }
 
 /* =====================================================
@@ -214,7 +218,7 @@ border:
 border-radius:40px;
 
 background:
-rgba(5,20,23,.38);
+rgba(5,20,23,.42);
 
 backdrop-filter:blur(20px);
 
@@ -1208,7 +1212,7 @@ display:none;
 }
 
 /* =====================================================
-   INDICATORE WEB
+   WEB INDICATOR
 ===================================================== */
 
 #webSearchIndicator{
@@ -1385,6 +1389,7 @@ height:34px;
 #voiceBtn{
 
 right:12px;
+
 bottom:112px;
 
 height:34px;
@@ -1397,6 +1402,7 @@ padding:0 11px;
 #fullscreenBtn{
 
 right:12px;
+
 bottom:70px;
 
 height:34px;
@@ -1534,9 +1540,7 @@ border-radius:5px;
 
 </head>
 
-
 <body>
-
 
 <!-- =====================================================
      WEBGL
@@ -1545,7 +1549,6 @@ border-radius:5px;
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
-
 
 <!-- =====================================================
      TITOLO
@@ -1559,31 +1562,21 @@ J.A.R.V.I.S.
 
 </div>
 
-
 <!-- =====================================================
      DATA / ORA
 ===================================================== -->
 
 <div class="datetime">
 
-<div
-id="clock"
-class="time">
-
+<div id="clock" class="time">
 00:00:00
-
 </div>
 
-<div
-id="date"
-class="date">
-
+<div id="date" class="date">
 00 AGO 2026
-
 </div>
 
 </div>
-
 
 <!-- =====================================================
      MAPPA
@@ -1596,9 +1589,7 @@ class="date">
 <div class="map-overlay"></div>
 
 <div class="map-header">
-
 TACTICAL MAP
-
 </div>
 
 <button id="closeMap">
@@ -1606,7 +1597,6 @@ TACTICAL MAP
 </button>
 
 </div>
-
 
 <!-- =====================================================
      WEB
@@ -1618,20 +1608,17 @@ TACTICAL MAP
 WEB WINDOWS: 0
 </div>
 
-
 <!-- =====================================================
      NOTIFICHE
 ===================================================== -->
 
 <div id="hudNotifications"></div>
 
-
 <!-- =====================================================
      CHAT
 ===================================================== -->
 
 <div id="chat"></div>
-
 
 <!-- =====================================================
      INPUT
@@ -1652,42 +1639,30 @@ placeholder="Chiedi qualcosa a JARVIS...">
 </button>
 
 <button id="sendBtn">
-
 INVIA
-
 </button>
 
 </div>
-
 
 <!-- =====================================================
      PULSANTI
 ===================================================== -->
 
 <button id="conversationBtn">
-
 ◉ CONVERSAZIONE
-
 </button>
 
 <button id="controlBtn">
-
 ⚙ CONTROL CENTER
-
 </button>
 
 <button id="fullscreenBtn">
-
 ⛶ FULLSCREEN
-
 </button>
 
 <button id="voiceBtn">
-
 ⚙ VOCE
-
 </button>
-
 
 <!-- =====================================================
      VOCE
@@ -1696,9 +1671,7 @@ INVIA
 <div id="voicePanel">
 
 <div class="voice-title">
-
 VOCE J.A.R.V.I.S.
-
 </div>
 
 <select id="voiceSelector">
@@ -1710,13 +1683,10 @@ Voce dispositivo automatica
 </select>
 
 <button id="voiceTest">
-
 TESTA VOCE
-
 </button>
 
 </div>
-
 
 <!-- =====================================================
      CONTROL CENTER
@@ -1727,25 +1697,18 @@ TESTA VOCE
 <button
 class="control-close"
 id="controlClose">
-
 ×
-
 </button>
 
 <div class="control-title">
-
 J.A.R.V.I.S. CONTROL CENTER
-
 </div>
 
 <div class="control-subtitle">
-
 SYSTEM MANAGEMENT INTERFACE
-
 </div>
 
 <div class="control-grid">
-
 
 <div class="control-card">
 
@@ -1753,11 +1716,10 @@ SYSTEM MANAGEMENT INTERFACE
 
 <p id="systemAI">
 STATUS: ONLINE<br>
-API: CONNECTING...
+API: CHECKING...
 </p>
 
 </div>
-
 
 <div class="control-card">
 
@@ -1769,7 +1731,6 @@ MIC: CHECKING...
 </p>
 
 </div>
-
 
 <div class="control-card">
 
@@ -1785,23 +1746,18 @@ STORAGE: LOCAL
 <button
 class="memory-button"
 id="showMemoryBtn">
-
 VISUALIZZA
-
 </button>
 
 <button
 class="memory-button"
 id="clearMemoryBtn">
-
 CANCELLA
-
 </button>
 
 </div>
 
 </div>
-
 
 <div class="control-card">
 
@@ -1814,7 +1770,6 @@ PROVIDER: MAPTILER
 
 </div>
 
-
 <div class="control-card">
 
 <h3>WEB</h3>
@@ -1825,7 +1780,6 @@ ENGINE: BING
 </p>
 
 </div>
-
 
 <div class="control-card">
 
@@ -1839,11 +1793,9 @@ NETWORK: --
 
 </div>
 
-
 </div>
 
 </div>
-
 
 <!-- =====================================================
      LIBRERIE
@@ -1852,7 +1804,6 @@ NETWORK: --
 <script
 src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
 </script>
-
 
 <script type="importmap">
 
@@ -1865,11 +1816,9 @@ src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
 
 </script>
 
-
 <script type="module">
 
 import * as THREE from "three";
-
 
 /* =====================================================
    CONFIG
@@ -1879,13 +1828,12 @@ const API =
 "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
 const MEMORY_KEY =
-"jarvis_memory_v1";
+"jarvis_memory_v2";
 
-const MAX_MEMORY = 30;
+const MAX_MEMORY = 40;
 
 const ELEVEN_VOICE_ID =
 "vkBFlAtUdZqNR4MqxSVr";
-
 
 /* =====================================================
    VARIABILI
@@ -1901,8 +1849,6 @@ let selectedDeviceVoice = null;
 
 let conversationMode = false;
 
-let conversationStarting = false;
-
 let recognition = null;
 
 let listening = false;
@@ -1911,7 +1857,7 @@ let recognitionStopping = false;
 
 let map = null;
 
-let currentMarker = null;
+let currentMarkers = [];
 
 let webWindowCounter = 0;
 
@@ -1919,13 +1865,16 @@ let highestWebZ = 220;
 
 let fullscreenChanging = false;
 
+let apiOnline = false;
 
 /* =====================================================
    ELEMENTI
 ===================================================== */
 
 const container =
-document.getElementById("webgl-container");
+document.getElementById(
+"webgl-container"
+);
 
 const chat =
 document.getElementById("chat");
@@ -1973,26 +1922,39 @@ const webSearchWindows =
 document.getElementById("webSearchWindows");
 
 const webSearchIndicator =
-document.getElementById("webSearchIndicator");
+document.getElementById(
+"webSearchIndicator"
+);
 
 const conversationBtn =
-document.getElementById("conversationBtn");
+document.getElementById(
+"conversationBtn"
+);
 
 const fullscreenBtn =
-document.getElementById("fullscreenBtn");
+document.getElementById(
+"fullscreenBtn"
+);
 
 const controlBtn =
-document.getElementById("controlBtn");
+document.getElementById(
+"controlBtn"
+);
 
 const controlCenter =
-document.getElementById("controlCenter");
+document.getElementById(
+"controlCenter"
+);
 
 const controlClose =
-document.getElementById("controlClose");
+document.getElementById(
+"controlClose"
+);
 
 const hudNotifications =
-document.getElementById("hudNotifications");
-
+document.getElementById(
+"hudNotifications"
+);
 
 /* =====================================================
    MEMORIA
@@ -2003,7 +1965,9 @@ let memory = [];
 try{
 
 const saved =
-localStorage.getItem(MEMORY_KEY);
+localStorage.getItem(
+MEMORY_KEY
+);
 
 if(saved){
 
@@ -2028,7 +1992,6 @@ error
 
 }
 
-
 function saveMemory(){
 
 try{
@@ -2043,7 +2006,7 @@ memory.slice(-MAX_MEMORY)
 }catch(error){
 
 console.warn(
-"Salvataggio memoria:",
+"Errore salvataggio memoria:",
 error
 );
 
@@ -2051,15 +2014,23 @@ error
 
 }
 
-
 function addMemory(
 role,
 content
 ){
 
+if(!content)
+return;
+
 memory.push({
-role:role,
-content:content
+
+role:String(role),
+
+content:String(content),
+
+timestamp:
+new Date().toISOString()
+
 });
 
 memory =
@@ -2071,6 +2042,170 @@ updateSystemPanel();
 
 }
 
+/* =====================================================
+   MEMORIA INTELLIGENTE LOCALE
+===================================================== */
+
+function handleMemoryCommand(text){
+
+const normalized =
+normalizeCommand(text);
+
+const rememberPatterns = [
+
+"ricorda che ",
+
+"ricordati che ",
+
+"memorizza che ",
+
+"salva che ",
+
+"ricorda "
+
+];
+
+for(
+const pattern of rememberPatterns
+){
+
+if(
+normalized.startsWith(pattern)
+){
+
+const original =
+text.trim();
+
+const content =
+original.substring(
+pattern.length
+).trim();
+
+if(content.length < 2){
+
+addMsg(
+"Dimmi cosa devo ricordare."
+);
+
+return true;
+
+}
+
+addMemory(
+"memory",
+content
+);
+
+notify(
+"INFORMAZIONE MEMORIZZATA"
+);
+
+addMsg(
+"Ricorderò: " +
+content
+);
+
+return true;
+
+}
+
+}
+
+if(
+
+normalized ===
+"cosa ricordi"
+
+||
+
+normalized ===
+"mostra memoria"
+
+||
+
+normalized ===
+"mostrami la memoria"
+
+){
+
+if(!memory.length){
+
+addMsg(
+"La memoria JARVIS è vuota."
+);
+
+return true;
+
+}
+
+const memories =
+memory
+.filter(
+item =>
+item.role === "memory"
+)
+.slice(-10)
+.map(
+(item,index)=>
+(index + 1) +
+". " +
+item.content
+)
+.join("\n");
+
+addMsg(
+memories ||
+"La memoria personale è vuota."
+);
+
+return true;
+
+}
+
+if(
+
+normalized ===
+"cancella memoria"
+
+||
+
+normalized ===
+"cancella tutta la memoria"
+
+||
+
+normalized ===
+"elimina memoria"
+
+){
+
+memory = [];
+
+try{
+
+localStorage.removeItem(
+MEMORY_KEY
+);
+
+}catch(e){}
+
+updateSystemPanel();
+
+notify(
+"MEMORIA CANCELLATA"
+);
+
+addMsg(
+"Memoria JARVIS cancellata."
+);
+
+return true;
+
+}
+
+return false;
+
+}
 
 /* =====================================================
    NOTIFICHE
@@ -2087,12 +2222,17 @@ element.className =
 element.textContent =
 message;
 
-hudNotifications.appendChild(element);
+hudNotifications.appendChild(
+element
+);
 
 setTimeout(
 ()=>{
 
 element.style.opacity = "0";
+
+element.style.transform =
+"translateX(-15px)";
 
 setTimeout(
 ()=>element.remove(),
@@ -2104,7 +2244,6 @@ setTimeout(
 );
 
 }
-
 
 /* =====================================================
    OROLOGIO
@@ -2127,47 +2266,63 @@ const months = [
 
 ];
 
-
 function updateClock(){
 
 const now =
 new Date();
 
 clock.textContent =
+
 String(
 now.getHours()
 ).padStart(2,"0")
+
 +
+
 ":"
+
 +
+
 String(
 now.getMinutes()
 ).padStart(2,"0")
+
 +
+
 ":"
+
 +
+
 String(
 now.getSeconds()
 ).padStart(2,"0");
 
 
 date.textContent =
+
 String(
 now.getDate()
 ).padStart(2,"0")
+
 +
+
 " "
+
 +
+
 months[
 now.getMonth()
 ]
+
 +
+
 " "
+
 +
+
 now.getFullYear();
 
 }
-
 
 updateClock();
 
@@ -2176,9 +2331,8 @@ updateClock,
 1000
 );
 
-
 /* =====================================================
-   THREE.JS — CORE NEURALE
+   THREE.JS — NEURAL CORE
 ===================================================== */
 
 let scene = null;
@@ -2187,30 +2341,56 @@ let camera = null;
 
 let renderer = null;
 
-let particles = null;
+let neuralParticles = null;
 
-let geometry = null;
+let neuralGeometry = null;
 
-let material = null;
+let neuralMaterial = null;
+
+let connectionLines = null;
+
+let connectionGeometry = null;
+
+let connectionMaterial = null;
+
+let coreMesh = null;
+
+let coreMaterial = null;
+
+let rings = [];
 
 let animationStarted = false;
+
+let webglWorking = false;
 
 let targetEnergy = .15;
 
 let energy = .15;
 
+let currentState =
+"idle";
+
+/* =====================================================
+   TEXTURE GLOW
+===================================================== */
 
 function createGlowTexture(){
 
 const canvas =
-document.createElement("canvas");
+document.createElement(
+"canvas"
+);
 
 canvas.width = 64;
-
 canvas.height = 64;
 
 const ctx =
-canvas.getContext("2d");
+canvas.getContext(
+"2d"
+);
+
+if(!ctx)
+return null;
 
 const gradient =
 ctx.createRadialGradient(
@@ -2228,18 +2408,18 @@ gradient.addColorStop(
 );
 
 gradient.addColorStop(
-.2,
-"rgba(220,255,255,1)"
+.18,
+"rgba(220,255,255,.95)"
 );
 
 gradient.addColorStop(
-.4,
-"rgba(0,255,255,.9)"
+.38,
+"rgba(0,255,255,.75)"
 );
 
 gradient.addColorStop(
-.7,
-"rgba(0,150,190,.25)"
+.65,
+"rgba(0,160,200,.25)"
 );
 
 gradient.addColorStop(
@@ -2257,12 +2437,20 @@ ctx.fillRect(
 64
 );
 
-return new THREE.CanvasTexture(
+const texture =
+new THREE.CanvasTexture(
 canvas
 );
 
+texture.needsUpdate = true;
+
+return texture;
+
 }
 
+/* =====================================================
+   INITIALIZE NEURAL CORE
+===================================================== */
 
 function initializeNeuralCore(){
 
@@ -2277,14 +2465,17 @@ new THREE.PerspectiveCamera(
 55,
 window.innerWidth /
 window.innerHeight,
-.1,
-1000
+0.1,
+100
 );
 
-
 camera.position.z =
-5.2;
+5.4;
 
+
+/* =====================================================
+   RENDERER
+===================================================== */
 
 renderer =
 new THREE.WebGLRenderer({
@@ -2293,24 +2484,35 @@ antialias:true,
 
 alpha:true,
 
-powerPreference:"high-performance"
+powerPreference:
+"high-performance",
+
+failIfMajorPerformanceCaveat:false
 
 });
 
+renderer.setPixelRatio(
+Math.min(
+window.devicePixelRatio || 1,
+1.6
+)
+);
 
 renderer.setSize(
 window.innerWidth,
 window.innerHeight
 );
 
-
-renderer.setPixelRatio(
-Math.min(
-window.devicePixelRatio || 1,
-2
-)
+renderer.setClearColor(
+0x000000,
+0
 );
 
+renderer.domElement.style.width =
+"100%";
+
+renderer.domElement.style.height =
+"100%";
 
 container.innerHTML = "";
 
@@ -2318,14 +2520,63 @@ container.appendChild(
 renderer.domElement
 );
 
+webglWorking = true;
+
+
+/* =====================================================
+   CORE GLOW
+===================================================== */
+
+const coreGeometry =
+new THREE.SphereGeometry(
+0.78,
+32,
+32
+);
+
+coreMaterial =
+new THREE.MeshBasicMaterial({
+
+color:0x00cfe8,
+
+transparent:true,
+
+opacity:.075,
+
+blending:
+THREE.AdditiveBlending,
+
+depthWrite:false
+
+});
+
+coreMesh =
+new THREE.Mesh(
+coreGeometry,
+coreMaterial
+);
+
+scene.add(
+coreMesh
+);
+
 
 /* =====================================================
    PARTICELLE
 ===================================================== */
 
-const COUNT = 3000;
+const mobile =
+window.innerWidth < 700 ||
+window.devicePixelRatio > 2;
 
-geometry =
+const COUNT =
+mobile
+?
+1300
+:
+2200;
+
+neuralGeometry =
 new THREE.BufferGeometry();
 
 const positions =
@@ -2333,17 +2584,17 @@ new Float32Array(
 COUNT * 3
 );
 
-const radii =
+const basePositions =
 new Float32Array(
-COUNT
+COUNT * 3
 );
 
-const angles =
+const velocities =
 new Float32Array(
-COUNT * 2
+COUNT * 3
 );
 
-const seeds =
+const phases =
 new Float32Array(
 COUNT
 );
@@ -2356,8 +2607,9 @@ i++
 ){
 
 const radius =
-1.10 +
-Math.random() * .70;
+0.9 +
+Math.random() *
+0.95;
 
 const theta =
 Math.random() *
@@ -2368,41 +2620,61 @@ Math.acos(
 2 * Math.random() - 1
 );
 
-radii[i] =
-radius;
-
-angles[i*2] =
-theta;
-
-angles[i*2+1] =
-phi;
-
-seeds[i] =
-Math.random() * 100;
-
-
 const index =
 i * 3;
 
-
-positions[index] =
+const x =
 radius *
 Math.sin(phi) *
 Math.cos(theta);
 
-positions[index+1] =
+const y =
 radius *
 Math.sin(phi) *
 Math.sin(theta);
 
-positions[index+2] =
+const z =
 radius *
 Math.cos(phi);
 
+positions[index] =
+x;
+
+positions[index+1] =
+y;
+
+positions[index+2] =
+z;
+
+basePositions[index] =
+x;
+
+basePositions[index+1] =
+y;
+
+basePositions[index+2] =
+z;
+
+velocities[index] =
+.15 +
+Math.random() * .35;
+
+velocities[index+1] =
+.15 +
+Math.random() * .35;
+
+velocities[index+2] =
+.15 +
+Math.random() * .35;
+
+phases[i] =
+Math.random() *
+Math.PI *
+2;
+
 }
 
-
-geometry.setAttribute(
+neuralGeometry.setAttribute(
 "position",
 new THREE.BufferAttribute(
 positions,
@@ -2411,39 +2683,268 @@ positions,
 );
 
 
-material =
-new THREE.PointsMaterial({
+/* =====================================================
+   PARTICLE MATERIAL
+===================================================== */
+
+const glowTexture =
+createGlowTexture();
+
+const materialOptions = {
 
 color:
-new THREE.Color(0x00cfe8),
+0x00d9ee,
 
-size:.042,
-
-map:createGlowTexture(),
+size:
+mobile ? .055 : .045,
 
 transparent:true,
 
-opacity:1,
+opacity:.95,
 
 depthWrite:false,
 
 blending:
 THREE.AdditiveBlending
 
+};
+
+if(glowTexture){
+
+materialOptions.map =
+glowTexture;
+
+}
+
+neuralMaterial =
+new THREE.PointsMaterial(
+materialOptions
+);
+
+neuralParticles =
+new THREE.Points(
+neuralGeometry,
+neuralMaterial
+);
+
+scene.add(
+neuralParticles
+);
+
+
+/* =====================================================
+   CONNECTIONS
+===================================================== */
+
+const connectionCount =
+mobile ? 90 : 150;
+
+connectionGeometry =
+new THREE.BufferGeometry();
+
+const connectionPositions =
+new Float32Array(
+connectionCount * 6
+);
+
+for(
+let i=0;
+i<connectionCount;
+i++
+){
+
+const a =
+Math.floor(
+Math.random() * COUNT
+);
+
+const b =
+Math.floor(
+Math.random() * COUNT
+);
+
+const ai =
+a * 3;
+
+const bi =
+b * 3;
+
+const ci =
+i * 6;
+
+connectionPositions[ci] =
+basePositions[ai];
+
+connectionPositions[ci+1] =
+basePositions[ai+1];
+
+connectionPositions[ci+2] =
+basePositions[ai+2];
+
+connectionPositions[ci+3] =
+basePositions[bi];
+
+connectionPositions[ci+4] =
+basePositions[bi+1];
+
+connectionPositions[ci+5] =
+basePositions[bi+2];
+
+}
+
+connectionGeometry.setAttribute(
+"position",
+new THREE.BufferAttribute(
+connectionPositions,
+3
+)
+);
+
+connectionMaterial =
+new THREE.LineBasicMaterial({
+
+color:0x00cfe8,
+
+transparent:true,
+
+opacity:.13,
+
+blending:
+THREE.AdditiveBlending,
+
+depthWrite:false
+
 });
 
+connectionLines =
+new THREE.LineSegments(
+connectionGeometry,
+connectionMaterial
+);
 
-particles =
-new THREE.Points(
+scene.add(
+connectionLines
+);
+
+
+/* =====================================================
+   ORBITAL RINGS
+===================================================== */
+
+const ringConfigs = [
+
+{
+radius:1.25,
+tube:.009,
+rotation:[.8,0.2,.1]
+},
+
+{
+radius:1.48,
+tube:.007,
+rotation:[1.3,.5,.6]
+},
+
+{
+radius:1.72,
+tube:.006,
+rotation:[.3,1.0,.2]
+}
+
+];
+
+ringConfigs.forEach(
+(config,index)=>{
+
+const geometry =
+new THREE.TorusGeometry(
+config.radius,
+config.tube,
+8,
+96
+);
+
+const material =
+new THREE.MeshBasicMaterial({
+
+color:
+index === 1
+?
+0x65faff
+:
+0x00bcd4,
+
+transparent:true,
+
+opacity:
+index === 1 ? .28 : .18,
+
+blending:
+THREE.AdditiveBlending,
+
+depthWrite:false
+
+});
+
+const ring =
+new THREE.Mesh(
 geometry,
 material
 );
 
+ring.rotation.x =
+config.rotation[0];
+
+ring.rotation.y =
+config.rotation[1];
+
+ring.rotation.z =
+config.rotation[2];
 
 scene.add(
-particles
+ring
 );
 
+rings.push(ring);
+
+});
+
+
+/* =====================================================
+   WEBGL ERROR EVENTS
+===================================================== */
+
+renderer.domElement.addEventListener(
+"webglcontextlost",
+event=>{
+
+event.preventDefault();
+
+webglWorking = false;
+
+setState("error");
+
+notify(
+"WEBGL CONTEXT PERSO"
+);
+
+}
+);
+
+renderer.domElement.addEventListener(
+"webglcontextrestored",
+()=>{
+
+webglWorking = true;
+
+setState("idle");
+
+notify(
+"WEBGL RIPRISTINATO"
+);
+
+}
+);
 
 animationStarted = true;
 
@@ -2459,6 +2960,8 @@ console.error(
 "THREE.JS ERROR:",
 error
 );
+
+webglWorking = false;
 
 container.innerHTML = "";
 
@@ -2500,62 +3003,76 @@ errorElement
 
 }
 
-
 /* =====================================================
    STATO SFERA
 ===================================================== */
 
-const normalColor =
+const idleColor =
 new THREE.Color(
 0x00cfe8
 );
 
-const activeColor =
+const blueColor =
+new THREE.Color(
+0x36eaff
+);
+
+const thinkingColor =
 new THREE.Color(
 0x8fffff
 );
 
-const currentColor =
-normalColor.clone();
+const errorColor =
+new THREE.Color(
+0xff5577
+);
 
+const currentColor =
+idleColor.clone();
 
 function setState(state){
 
-if(state === "thinking"){
+currentState =
+state;
 
-targetEnergy = 2;
+switch(state){
 
-}
+case "thinking":
 
-else if(state === "speaking"){
+targetEnergy = 1.9;
 
-targetEnergy = .8;
+break;
 
-}
+case "speaking":
 
-else if(state === "listening"){
+targetEnergy = .9;
 
-targetEnergy = .55;
+break;
 
-}
+case "listening":
 
-else if(state === "error"){
+targetEnergy = .65;
 
-targetEnergy = 1.4;
+break;
 
-}
+case "error":
 
-else{
+targetEnergy = 1.7;
+
+break;
+
+default:
 
 targetEnergy = .15;
 
-}
+break;
 
 }
 
+}
 
 /* =====================================================
-   ANIMAZIONE SFERA
+   ANIMAZIONE NEURALE
 ===================================================== */
 
 function animate(){
@@ -2567,199 +3084,283 @@ requestAnimationFrame(
 animate
 );
 
+if(!renderer ||
+!neuralParticles ||
+!neuralGeometry
+)
+return;
 
 const time =
-performance.now() * .001;
-
+performance.now() *
+0.001;
 
 energy +=
 (
 targetEnergy -
 energy
 ) *
-.045;
+0.045;
 
+
+/* =====================================================
+   COLORE
+===================================================== */
+
+let desiredColor;
+
+if(currentState === "error"){
+
+desiredColor =
+errorColor;
+
+}
+
+else if(
+currentState === "thinking"
+){
+
+desiredColor =
+thinkingColor;
+
+}
+
+else if(
+currentState === "listening" ||
+currentState === "speaking"
+){
+
+desiredColor =
+blueColor;
+
+}
+
+else{
+
+desiredColor =
+idleColor;
+
+}
 
 currentColor.lerp(
-activeColor,
-Math.min(
-energy * .04,
-1
-)
+desiredColor,
+.045
 );
 
+neuralMaterial.color =
+currentColor;
 
-if(energy < .3){
+if(connectionMaterial){
 
-currentColor.lerp(
-normalColor,
-.03
-);
+connectionMaterial.color =
+currentColor;
+
+connectionMaterial.opacity =
+.08 +
+energy * .11;
+
+}
+
+if(coreMaterial){
+
+coreMaterial.color =
+currentColor;
+
+coreMaterial.opacity =
+.045 +
+energy * .045;
 
 }
 
 
-material.color =
-currentColor;
+/* =====================================================
+   PARTICELLE
+===================================================== */
 
-material.size =
-.032 +
-energy * .008;
+const positions =
+neuralGeometry
+.attributes
+.position
+.array;
 
-
-const pos =
-geometry.attributes.position.array;
-
+const base =
+new Float32Array(
+positions.length
+);
 
 for(
 let i=0;
-i<3000;
+i<positions.length;
+i++
+){
+
+base[i] =
+positions[i];
+
+}
+
+for(
+let i=0;
+i<positions.length / 3;
 i++
 ){
 
 const index =
 i * 3;
 
-const r =
-new Number(
-geometry.attributes
-.position
-.array[index] * 0 + 1
-);
+const bx =
+base[index];
 
+const by =
+base[index+1];
 
-/*
-   I valori originali vengono ricostruiti
-   usando coordinate sferiche salvate.
-*/
+const bz =
+base[index+2];
 
-const theta =
-angles[i*2];
+const length =
+Math.sqrt(
+bx*bx +
+by*by +
+bz*bz
+) || 1;
 
-const phi =
-angles[i*2+1];
+const nx =
+bx / length;
 
-const baseRadius =
-radii[i];
+const ny =
+by / length;
 
-const seed =
-seeds[i];
+const nz =
+bz / length;
 
-
-const pulse =
-Math.sin(
-time * 2 +
-seed
-) *
-.035;
-
-
-const strangeShape =
-Math.sin(
-theta * 6 +
-time * 2 +
-seed
-) *
-.18 *
-energy;
-
+const phase =
+i * .37;
 
 const wave =
-Math.cos(
-phi * 7 -
-time * 1.8 +
-seed
-) *
-.12 *
-energy;
-
-
-const rr =
-baseRadius +
-pulse +
-strangeShape +
-wave;
-
-
-let x =
-rr *
-Math.sin(phi) *
-Math.cos(theta);
-
-
-let y =
-rr *
-Math.sin(phi) *
-Math.sin(theta);
-
-
-let z =
-rr *
-Math.cos(phi);
-
-
-x +=
 Math.sin(
-time * 2.4 +
-phi * 8 +
-seed
+time * 1.7 +
+phase
 ) *
-.08 *
-energy;
+.025;
 
-
-y +=
-Math.cos(
-time * 2.1 +
-theta * 9 +
-seed
-) *
-.08 *
-energy;
-
-
-z +=
+const pulse =
+energy *
+(
+0.035 +
+0.025 *
 Math.sin(
-time * 2.7 +
-(theta + phi) * 7
-) *
-.10 *
-energy;
+time * 2 +
+phase
+)
+);
 
+const scale =
+1 +
+wave +
+pulse;
 
-pos[index] =
-x;
+positions[index] =
+bx *
+scale;
 
-pos[index+1] =
-y;
+positions[index+1] =
+by *
+scale;
 
-pos[index+2] =
-z;
+positions[index+2] =
+bz *
+scale;
 
 }
 
 
-geometry.attributes
+/* =====================================================
+   ROTAZIONE
+===================================================== */
+
+neuralParticles.rotation.y +=
+.00035 +
+energy * .0012;
+
+neuralParticles.rotation.x =
+Math.sin(
+time * .18
+) *
+.045;
+
+neuralParticles.rotation.z =
+Math.cos(
+time * .15
+) *
+.035;
+
+
+/* =====================================================
+   CORE PULSE
+===================================================== */
+
+if(coreMesh){
+
+const coreScale =
+1 +
+energy *
+.07 +
+Math.sin(
+time * 3
+) *
+.015;
+
+coreMesh.scale.set(
+coreScale,
+coreScale,
+coreScale
+);
+
+}
+
+
+/* =====================================================
+   RINGS
+===================================================== */
+
+rings.forEach(
+(ring,index)=>{
+
+ring.rotation.y +=
+.00025 +
+energy *
+(.00025 + index * .00005);
+
+ring.rotation.x +=
+Math.sin(
+time * .15 +
+index
+) *
+.00008;
+
+const scale =
+1 +
+energy *
+.025 *
+(index + 1);
+
+ring.scale.set(
+scale,
+scale,
+scale
+);
+
+}
+);
+
+neuralGeometry
+.attributes
 .position
 .needsUpdate = true;
 
 
-particles.rotation.y +=
-.0005 +
-energy * .0008;
-
-particles.rotation.x =
-Math.sin(
-time * .25
-) *
-.04;
-
-particles.rotation.z =
-Math.cos(
-time * .18
-) *
-.025;
-
+/* =====================================================
+   RENDER
+===================================================== */
 
 renderer.render(
 scene,
@@ -2768,9 +3369,7 @@ camera
 
 }
 
-
 initializeNeuralCore();
-
 
 /* =====================================================
    MAPTILER
@@ -2779,29 +3378,36 @@ initializeNeuralCore();
 const MAPTILER_KEY =
 "NmSlgtsAdQyEWy7t0OJf";
 
-
 const MAPTILER_STYLE =
 "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
 +
-MAPTILER_KEY;
-
+encodeURIComponent(
+MAPTILER_KEY
+);
 
 function initializeMap(){
 
 if(map)
 return;
 
-
-if(typeof maplibregl === "undefined"){
+if(
+typeof maplibregl ===
+"undefined"
+){
 
 addMsg(
 "Errore: MapLibre non disponibile."
+);
+
+notify(
+"MAPLIBRE OFFLINE"
 );
 
 return;
 
 }
 
+try{
 
 map =
 new maplibregl.Map({
@@ -2823,7 +3429,6 @@ antialias:true
 
 });
 
-
 map.addControl(
 new maplibregl.NavigationControl({
 showCompass:true,
@@ -2831,7 +3436,6 @@ showZoom:true
 }),
 "bottom-right"
 );
-
 
 map.on(
 "load",
@@ -2843,11 +3447,36 @@ notify(
 "MAP SYSTEM ONLINE"
 );
 
+updateSystemPanel();
+
 }
+);
+
+map.on(
+"error",
+event=>{
+
+console.warn(
+"MAP ERROR:",
+event
+);
+
+});
+
+}catch(error){
+
+console.error(
+"MAP INIT:",
+error
+);
+
+addMsg(
+"Impossibile inizializzare la mappa."
 );
 
 }
 
+}
 
 function openTacticalMap(){
 
@@ -2875,7 +3504,6 @@ map.resize();
 
 }
 
-
 function closeTacticalMap(){
 
 tacticalMap.classList.remove(
@@ -2887,12 +3515,10 @@ jarvisTitle.style.display =
 
 }
 
-
 closeMap.addEventListener(
 "click",
 closeTacticalMap
 );
-
 
 /* =====================================================
    UTILITY
@@ -2902,18 +3528,32 @@ function escapeHtml(text){
 
 return String(text)
 
-.replace(/&/g,"&amp;")
+.replace(
+/&/g,
+"&amp;"
+)
 
-.replace(/</g,"&lt;")
+.replace(
+/</g,
+"&lt;"
+)
 
-.replace(/>/g,"&gt;")
+.replace(
+/>/g,
+"&gt;"
+)
 
-.replace(/"/g,"&quot;")
+.replace(
+/"/g,
+"&quot;"
+)
 
-.replace(/'/g,"&#039;");
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
-
 
 function addMsg(text){
 
@@ -2928,10 +3568,11 @@ element.className =
 element.textContent =
 text;
 
-chat.appendChild(element);
+chat.appendChild(
+element
+);
 
 }
-
 
 /* =====================================================
    FULLSCREEN
@@ -2946,7 +3587,6 @@ document.webkitFullscreenElement
 
 }
 
-
 async function enterFullscreen(){
 
 if(isFullscreen())
@@ -2959,7 +3599,10 @@ fullscreenChanging = true;
 
 try{
 
-if(document.documentElement.requestFullscreen){
+if(
+document.documentElement
+.requestFullscreen
+){
 
 await document.documentElement
 .requestFullscreen();
@@ -2978,21 +3621,21 @@ document.documentElement
 
 else{
 
+fullscreenChanging = false;
+
 addMsg(
 "Fullscreen non supportato."
 );
-
-fullscreenChanging = false;
 
 return false;
 
 }
 
-fullscreenChanging = false;
-
 notify(
 "FULLSCREEN ATTIVO"
 );
+
+fullscreenChanging = false;
 
 return true;
 
@@ -3015,12 +3658,13 @@ return false;
 
 }
 
-
 async function exitFullscreen(){
 
 try{
 
-if(document.exitFullscreen){
+if(
+document.exitFullscreen
+){
 
 await document.exitFullscreen();
 
@@ -3044,23 +3688,19 @@ return false;
 
 }
 
-
 async function toggleFullscreen(){
 
 if(isFullscreen()){
 
 await exitFullscreen();
 
-}
-
-else{
+}else{
 
 await enterFullscreen();
 
 }
 
 }
-
 
 function updateFullscreenUI(){
 
@@ -3081,7 +3721,6 @@ active
 
 }
 
-
 fullscreenBtn.addEventListener(
 "click",
 async()=>{
@@ -3092,7 +3731,6 @@ updateFullscreenUI();
 
 }
 );
-
 
 document.addEventListener(
 "fullscreenchange",
@@ -3112,7 +3750,6 @@ setTimeout(
 }
 );
 
-
 /* =====================================================
    NORMALIZZAZIONE
 ===================================================== */
@@ -3123,7 +3760,9 @@ return String(text)
 
 .toLowerCase()
 
-.normalize("NFD")
+.normalize(
+"NFD"
+)
 
 .replace(
 /[\u0300-\u036f]/g,
@@ -3144,10 +3783,27 @@ return String(text)
 
 }
 
-
 /* =====================================================
    MAP MARKER
 ===================================================== */
+
+function clearMarkers(){
+
+currentMarkers.forEach(
+marker=>{
+
+try{
+
+marker.remove();
+
+}catch(e){}
+
+}
+);
+
+currentMarkers = [];
+
+}
 
 function createJarvisMarker(
 lat,
@@ -3158,27 +3814,17 @@ name
 if(!map)
 return;
 
-
-if(currentMarker){
-
-currentMarker.remove();
-
-currentMarker = null;
-
-}
-
-
 const markerElement =
 document.createElement("div");
 
 markerElement.className =
 "jarvis-map-marker";
 
-
-currentMarker =
+const marker =
 new maplibregl.Marker({
 
-element:markerElement,
+element:
+markerElement,
 
 anchor:"center"
 
@@ -3207,11 +3853,13 @@ ${escapeHtml(name)}
 
 .addTo(map);
 
+currentMarkers.push(
+marker
+);
 
-currentMarker.togglePopup();
+marker.togglePopup();
 
 }
-
 
 /* =====================================================
    RICERCA POSIZIONE
@@ -3228,14 +3876,12 @@ addMsg(
 place
 );
 
-
 const url =
 "https://nominatim.openstreetmap.org/search"
 +
 "?format=json&limit=1&q="
 +
 encodeURIComponent(place);
-
 
 const response =
 await fetch(
@@ -3248,16 +3894,14 @@ headers:{
 }
 );
 
-
 if(!response.ok)
 throw new Error(
-"Ricerca posizione fallita"
+"HTTP " +
+response.status
 );
-
 
 const results =
 await response.json();
-
 
 if(!results.length){
 
@@ -3271,7 +3915,6 @@ return;
 
 }
 
-
 const result =
 results[0];
 
@@ -3281,12 +3924,21 @@ parseFloat(result.lat);
 const lon =
 parseFloat(result.lon);
 
+if(
+!Number.isFinite(lat) ||
+!Number.isFinite(lon)
+){
+
+throw new Error(
+"Coordinate non valide"
+);
+
+}
 
 if(!map)
 throw new Error(
 "Mappa non inizializzata"
 );
-
 
 map.flyTo({
 
@@ -3305,13 +3957,11 @@ essential:true
 
 });
 
-
 createJarvisMarker(
 lat,
 lon,
 place
 );
-
 
 addMsg(
 "Posizione acquisita: " +
@@ -3325,7 +3975,7 @@ notify(
 }catch(error){
 
 console.error(
-"MAP ERROR:",
+"MAP SEARCH:",
 error
 );
 
@@ -3335,10 +3985,13 @@ place +
 "."
 );
 
-}
+notify(
+"RICERCA POSIZIONE FALLITA"
+);
 
 }
 
+}
 
 /* =====================================================
    COMANDI MAPPA
@@ -3349,26 +4002,35 @@ function handleMapCommand(text){
 const normalized =
 normalizeCommand(text);
 
-
 if(
 
-normalized.includes("apri la mappa")
+normalized.includes(
+"apri la mappa"
+)
 
 ||
 
-normalized.includes("apri mappa")
+normalized.includes(
+"apri mappa"
+)
 
 ||
 
-normalized.includes("mappa tattica")
+normalized.includes(
+"mappa tattica"
+)
 
 ||
 
-normalized.includes("modalita tattica")
+normalized.includes(
+"modalita tattica"
+)
 
 ||
 
-normalized.includes("attiva la mappa")
+normalized.includes(
+"attiva la mappa"
+)
 
 ){
 
@@ -3382,22 +4044,29 @@ return true;
 
 }
 
-
 if(
 
-normalized.includes("chiudi la mappa")
+normalized.includes(
+"chiudi la mappa"
+)
 
 ||
 
-normalized.includes("chiudi mappa")
+normalized.includes(
+"chiudi mappa"
+)
 
 ||
 
-normalized.includes("esci dalla mappa")
+normalized.includes(
+"esci dalla mappa"
+)
 
 ||
 
-normalized.includes("torna alla modalita normale")
+normalized.includes(
+"torna alla modalita normale"
+)
 
 ){
 
@@ -3411,7 +4080,6 @@ return true;
 
 }
 
-
 const patterns = [
 
 "mostrami ",
@@ -3424,19 +4092,18 @@ const patterns = [
 
 "localizza ",
 
-"cerca ",
-
 "visualizza "
 
 ];
-
 
 for(
 const pattern of patterns
 ){
 
 if(
-normalized.startsWith(pattern)
+normalized.startsWith(
+pattern
+)
 ){
 
 const place =
@@ -3444,10 +4111,11 @@ text.trim().substring(
 pattern.length
 ).trim();
 
-
 if(place.length > 1){
 
-searchLocation(place);
+searchLocation(
+place
+);
 
 return true;
 
@@ -3457,23 +4125,22 @@ return true;
 
 }
 
-
 return false;
 
 }
 
-
 /* =====================================================
-   WEB WINDOWS
+   WEB
 ===================================================== */
 
 function updateWebIndicator(){
 
 const count =
 webSearchWindows
-.querySelectorAll(".web-window")
+.querySelectorAll(
+".web-window"
+)
 .length;
-
 
 if(count > 0){
 
@@ -3485,9 +4152,7 @@ webSearchIndicator.textContent =
 "WEB WINDOWS: " +
 count;
 
-}
-
-else{
+}else{
 
 webSearchIndicator.classList.remove(
 "active"
@@ -3498,7 +4163,6 @@ webSearchIndicator.classList.remove(
 updateSystemPanel();
 
 }
-
 
 function bringWebWindowToFront(
 windowElement
@@ -3511,15 +4175,12 @@ String(highestWebZ);
 
 }
 
-
 function openWebSearch(query){
 
 if(!query)
 return;
 
-
 webWindowCounter++;
-
 
 const windowElement =
 document.createElement("div");
@@ -3527,28 +4188,22 @@ document.createElement("div");
 windowElement.className =
 "web-window";
 
-
 const offset =
 (webWindowCounter - 1) % 5;
-
 
 windowElement.style.left =
 (30 + offset * 45) +
 "px";
 
-
 windowElement.style.top =
 (90 + offset * 35) +
 "px";
 
-
 windowElement.style.zIndex =
 String(++highestWebZ);
 
-
 const safeTitle =
 escapeHtml(query);
-
 
 windowElement.innerHTML = `
 
@@ -3557,9 +4212,7 @@ windowElement.innerHTML = `
 <div class="web-window-title">
 
 <span class="web-window-number">
-
 WEB ${webWindowCounter}
-
 </span>
 
 ${safeTitle}
@@ -3570,16 +4223,12 @@ ${safeTitle}
 
 <button
 class="web-window-btn minimize-web">
-
 −
-
 </button>
 
 <button
 class="web-window-btn close-web">
-
 ×
-
 </button>
 
 </div>
@@ -3596,36 +4245,35 @@ referrerpolicy="no-referrer">
 
 <button
 class="web-window-open">
-
 ↗ APRI SITO
-
 </button>
 
 </div>
 `;
 
-
 webSearchWindows.appendChild(
 windowElement
 );
 
-
 const iframe =
-windowElement.querySelector("iframe");
+windowElement.querySelector(
+"iframe"
+);
 
 const openButton =
-windowElement.querySelector(".web-window-open");
-
+windowElement.querySelector(
+".web-window-open"
+);
 
 const searchUrl =
 "https://www.bing.com/search?q="
 +
-encodeURIComponent(query);
-
+encodeURIComponent(
+query
+);
 
 iframe.src =
 searchUrl;
-
 
 openButton.addEventListener(
 "click",
@@ -3642,7 +4290,6 @@ searchUrl,
 }
 );
 
-
 windowElement.addEventListener(
 "pointerdown",
 ()=>{
@@ -3654,12 +4301,10 @@ windowElement
 }
 );
 
-
 const minimizeButton =
 windowElement.querySelector(
 ".minimize-web"
 );
-
 
 minimizeButton.addEventListener(
 "click",
@@ -3674,12 +4319,10 @@ windowElement.classList.toggle(
 }
 );
 
-
 const closeButton =
 windowElement.querySelector(
 ".close-web"
 );
-
 
 closeButton.addEventListener(
 "click",
@@ -3694,9 +4337,8 @@ updateWebIndicator();
 }
 );
 
-
 /* =====================================================
-   DRAG
+   DRAG FINESTRE
 ===================================================== */
 
 const header =
@@ -3710,7 +4352,6 @@ let dragOffsetX = 0;
 
 let dragOffsetY = 0;
 
-
 header.addEventListener(
 "pointerdown",
 event=>{
@@ -3722,17 +4363,14 @@ event.target.closest(
 )
 return;
 
-
 dragging = true;
 
 bringWebWindowToFront(
 windowElement
 );
 
-
 const rect =
 windowElement.getBoundingClientRect();
-
 
 dragOffsetX =
 event.clientX -
@@ -3742,7 +4380,6 @@ dragOffsetY =
 event.clientY -
 rect.top;
 
-
 try{
 
 header.setPointerCapture(
@@ -3750,7 +4387,6 @@ event.pointerId
 );
 
 }catch(e){}
-
 
 event.preventDefault();
 
@@ -3760,7 +4396,6 @@ passive:false
 }
 );
 
-
 header.addEventListener(
 "pointermove",
 event=>{
@@ -3768,39 +4403,30 @@ event=>{
 if(!dragging)
 return;
 
-
 event.preventDefault();
-
 
 let newLeft =
 event.clientX -
 dragOffsetX;
 
-
 let newTop =
 event.clientY -
 dragOffsetY;
 
-
 const rect =
 windowElement.getBoundingClientRect();
-
 
 const minLeft =
 -rect.width + 120;
 
-
 const maxLeft =
 window.innerWidth - 120;
-
 
 const minTop =
 10;
 
-
 const maxTop =
 window.innerHeight - 70;
-
 
 newLeft =
 Math.max(
@@ -3811,7 +4437,6 @@ maxLeft
 )
 );
 
-
 newTop =
 Math.max(
 minTop,
@@ -3821,10 +4446,8 @@ maxTop
 )
 );
 
-
 windowElement.style.left =
 newLeft + "px";
-
 
 windowElement.style.top =
 newTop + "px";
@@ -3835,15 +4458,12 @@ passive:false
 }
 );
 
-
 function stopDragging(event){
 
 if(!dragging)
 return;
 
-
 dragging = false;
-
 
 try{
 
@@ -3854,7 +4474,6 @@ event.pointerId
 }catch(e){}
 
 }
-
 
 header.addEventListener(
 "pointerup",
@@ -3875,7 +4494,6 @@ dragging = false;
 }
 );
 
-
 updateWebIndicator();
 
 addMsg(
@@ -3889,16 +4507,10 @@ notify(
 
 }
 
-
-/* =====================================================
-   COMANDI WEB
-===================================================== */
-
 function handleWebCommand(text){
 
 const normalized =
 normalizeCommand(text);
-
 
 const patterns = [
 
@@ -3922,13 +4534,14 @@ const patterns = [
 
 ];
 
-
 for(
 const pattern of patterns
 ){
 
 if(
-normalized.startsWith(pattern)
+normalized.startsWith(
+pattern
+)
 ){
 
 const query =
@@ -3936,10 +4549,11 @@ text.trim().substring(
 pattern.length
 ).trim();
 
-
 if(query.length > 1){
 
-openWebSearch(query);
+openWebSearch(
+query
+);
 
 return true;
 
@@ -3949,21 +4563,14 @@ return true;
 
 }
 
-
 return false;
 
 }
-
-
-/* =====================================================
-   COMANDI FINESTRE
-===================================================== */
 
 function handleWebWindowCommand(text){
 
 const normalized =
 normalizeCommand(text);
-
 
 if(
 
@@ -3999,7 +4606,6 @@ return true;
 
 }
 
-
 if(
 
 normalized ===
@@ -4013,7 +4619,9 @@ normalized ===
 ){
 
 webSearchWindows
-.querySelectorAll(".web-window")
+.querySelectorAll(
+".web-window"
+)
 .forEach(
 windowElement=>
 windowElement.classList.add(
@@ -4029,11 +4637,9 @@ return true;
 
 }
 
-
 return false;
 
 }
-
 
 /* =====================================================
    TEMPO
@@ -4083,7 +4689,6 @@ Intl.DateTimeFormat()
 
 }
 
-
 /* =====================================================
    VOCI
 ===================================================== */
@@ -4095,16 +4700,16 @@ if(
 )
 return;
 
-
 deviceVoices =
-window.speechSynthesis.getVoices();
-
+window.speechSynthesis
+.getVoices();
 
 voiceSelector.innerHTML = "";
 
-
 const automatic =
-document.createElement("option");
+document.createElement(
+"option"
+);
 
 automatic.value = "";
 
@@ -4115,12 +4720,13 @@ voiceSelector.appendChild(
 automatic
 );
 
-
 deviceVoices.forEach(
 (voice,index)=>{
 
 const option =
-document.createElement("option");
+document.createElement(
+"option"
+);
 
 option.value =
 String(index);
@@ -4137,12 +4743,10 @@ option
 }
 );
 
-
 const savedVoice =
 localStorage.getItem(
 "jarvis_device_voice"
 );
-
 
 if(
 
@@ -4167,20 +4771,19 @@ Number(savedVoice)
 
 }
 
-
 if(
 "speechSynthesis" in window
 ){
 
 loadDeviceVoices();
 
-window.speechSynthesis.addEventListener(
+window.speechSynthesis
+.addEventListener(
 "voiceschanged",
 loadDeviceVoices
 );
 
 }
-
 
 /* =====================================================
    DEVICE TTS
@@ -4201,17 +4804,14 @@ return;
 
 }
 
-
 try{
 
 window.speechSynthesis.cancel();
-
 
 const utterance =
 new SpeechSynthesisUtterance(
 text
 );
-
 
 utterance.lang =
 "it-IT";
@@ -4225,15 +4825,12 @@ utterance.pitch =
 utterance.volume =
 1;
 
-
 if(selectedDeviceVoice){
 
 utterance.voice =
 selectedDeviceVoice;
 
-}
-
-else{
+}else{
 
 const italianVoice =
 deviceVoices.find(
@@ -4252,45 +4849,46 @@ italianVoice;
 
 }
 
-
 utterance.onstart =
 ()=>{
 
 audioPlaying = true;
 
-setState("speaking");
+setState(
+"speaking"
+);
 
 };
-
 
 utterance.onend =
 ()=>{
 
 audioPlaying = false;
 
-setState("idle");
+setState(
+"idle"
+);
 
 resolve(true);
 
 };
-
 
 utterance.onerror =
 ()=>{
 
 audioPlaying = false;
 
-setState("idle");
+setState(
+"idle"
+);
 
 resolve(false);
 
 };
 
-
 window.speechSynthesis.speak(
 utterance
 );
-
 
 setTimeout(
 ()=>{
@@ -4304,7 +4902,6 @@ window.speechSynthesis.resume();
 },
 100
 );
-
 
 }catch(error){
 
@@ -4320,7 +4917,6 @@ resolve(false);
 }
 );
 
-
 /* =====================================================
    ELEVENLABS
 ===================================================== */
@@ -4329,7 +4925,6 @@ async function speakElevenLabs(text){
 
 if(!text)
 return false;
-
 
 if(currentAudio){
 
@@ -4345,17 +4940,14 @@ currentAudio = null;
 
 }
 
-
 const controller =
 new AbortController();
-
 
 const timeout =
 setTimeout(
 ()=>controller.abort(),
 30000
 );
-
 
 try{
 
@@ -4388,26 +4980,21 @@ controller.signal
 }
 );
 
-
 if(!response.ok)
 return false;
-
 
 const contentType =
 response.headers
 .get("content-type")
 ||"";
 
-
 if(
 !contentType.includes("audio")
 )
 return false;
 
-
 const audioBlob =
 await response.blob();
-
 
 if(
 !audioBlob ||
@@ -4415,40 +5002,40 @@ audioBlob.size === 0
 )
 return false;
 
-
 const audioUrl =
 URL.createObjectURL(
 audioBlob
 );
 
-
 const audio =
-new Audio(audioUrl);
-
+new Audio(
+audioUrl
+);
 
 currentAudio =
 audio;
 
-
 audio.volume = 1;
-
 
 audio.onplay =
 ()=>{
 
 audioPlaying = true;
 
-setState("speaking");
+setState(
+"speaking"
+);
 
 };
-
 
 audio.onended =
 ()=>{
 
 audioPlaying = false;
 
-setState("idle");
+setState(
+"idle"
+);
 
 URL.revokeObjectURL(
 audioUrl
@@ -4459,50 +5046,49 @@ currentAudio === audio
 )
 currentAudio = null;
 
-
 if(conversationMode){
 
 setTimeout(
-()=>{
-startContinuousRecognition();
-},
-150
+startContinuousRecognition,
+200
 );
 
 }
 
 };
-
 
 audio.onerror =
 ()=>{
 
 audioPlaying = false;
 
-setState("idle");
+setState(
+"idle"
+);
 
 URL.revokeObjectURL(
 audioUrl
 );
 
+if(
+currentAudio === audio
+)
+currentAudio = null;
+
 if(conversationMode){
 
 setTimeout(
-()=>{
-startContinuousRecognition();
-},
-150
+startContinuousRecognition,
+200
 );
 
 }
 
 };
 
-
 await audio.play();
 
 return true;
-
 
 }catch(error){
 
@@ -4521,7 +5107,6 @@ clearTimeout(timeout);
 
 }
 
-
 /* =====================================================
    SPEAK
 ===================================================== */
@@ -4531,31 +5116,28 @@ async function speak(text){
 if(!text)
 return;
 
-
 const elevenSuccess =
-await speakElevenLabs(text);
-
+await speakElevenLabs(
+text
+);
 
 if(elevenSuccess)
 return;
 
-
-await speakDevice(text);
-
+await speakDevice(
+text
+);
 
 if(conversationMode){
 
 setTimeout(
-()=>{
-startContinuousRecognition();
-},
-150
+startContinuousRecognition,
+200
 );
 
 }
 
 }
-
 
 /* =====================================================
    VOICE UI
@@ -4572,14 +5154,12 @@ await speakDevice(
 }
 );
 
-
 voiceSelector.addEventListener(
 "change",
 ()=>{
 
 const value =
 voiceSelector.value;
-
 
 if(value === ""){
 
@@ -4593,10 +5173,8 @@ return;
 
 }
 
-
 const index =
 Number(value);
-
 
 if(
 Number.isInteger(index)
@@ -4617,7 +5195,6 @@ String(index)
 }
 );
 
-
 voiceBtn.addEventListener(
 "click",
 ()=>{
@@ -4630,7 +5207,6 @@ loadDeviceVoices();
 
 }
 );
-
 
 /* =====================================================
    CONVERSAZIONE
@@ -4661,7 +5237,6 @@ error
 
 }
 
-
 function stopRecognition(){
 
 if(!recognition)
@@ -4683,7 +5258,6 @@ micBtn.classList.remove(
 
 }
 
-
 function startContinuousRecognition(){
 
 if(!conversationMode)
@@ -4692,17 +5266,18 @@ return;
 if(listening)
 return;
 
+if(audioPlaying)
+return;
+
 startRecognition();
 
 }
-
 
 function stopContinuousRecognition(){
 
 conversationMode = false;
 
 recognitionStopping = true;
-
 
 if(recognition){
 
@@ -4713,7 +5288,6 @@ recognition.stop();
 }catch(e){}
 
 }
-
 
 listening = false;
 
@@ -4728,16 +5302,16 @@ conversationBtn.classList.remove(
 conversationBtn.textContent =
 "◉ CONVERSAZIONE";
 
-setState("idle");
+setState(
+"idle"
+);
 
 }
-
 
 function activateConversationMode(){
 
 if(conversationMode)
 return;
-
 
 conversationMode = true;
 
@@ -4748,22 +5322,22 @@ conversationBtn.classList.add(
 conversationBtn.textContent =
 "● CONVERSAZIONE ATTIVA";
 
-
 addMsg(
 "Modalità conversazione continua attivata."
 );
 
+notify(
+"VOICE LOOP ATTIVO"
+);
 
 startContinuousRecognition();
 
 }
 
-
 function deactivateConversationMode(){
 
 if(!conversationMode)
 return;
-
 
 stopContinuousRecognition();
 
@@ -4773,7 +5347,6 @@ addMsg(
 
 }
 
-
 conversationBtn.addEventListener(
 "click",
 ()=>{
@@ -4782,9 +5355,7 @@ if(conversationMode){
 
 deactivateConversationMode();
 
-}
-
-else{
+}else{
 
 activateConversationMode();
 
@@ -4793,7 +5364,6 @@ activateConversationMode();
 }
 );
 
-
 /* =====================================================
    SPEECH RECOGNITION
 ===================================================== */
@@ -4801,7 +5371,6 @@ activateConversationMode();
 const Recognition =
 window.SpeechRecognition ||
 window.webkitSpeechRecognition;
-
 
 if(Recognition){
 
@@ -4817,22 +5386,23 @@ false;
 recognition.interimResults =
 false;
 
+recognition.maxAlternatives =
+1;
 
 recognition.onstart =
 ()=>{
 
 listening = true;
 
-conversationStarting = false;
-
 micBtn.classList.add(
 "active"
 );
 
-setState("listening");
+setState(
+"listening"
+);
 
 };
-
 
 recognition.onresult =
 event=>{
@@ -4842,29 +5412,23 @@ event.results[
 event.results.length - 1
 ];
 
-
 if(!result)
 return;
-
 
 const text =
 result[0]
 .transcript
 .trim();
 
-
 if(!text)
 return;
-
 
 textInput.value =
 text;
 
-
 sendMessage();
 
 };
-
 
 recognition.onerror =
 error=>{
@@ -4880,30 +5444,30 @@ micBtn.classList.remove(
 "active"
 );
 
-
 if(
 conversationMode
 &&
-error.error !== "not-allowed"
+error.error !==
+"not-allowed"
 &&
-error.error !== "service-not-allowed"
+error.error !==
+"service-not-allowed"
 ){
 
 setTimeout(
 startContinuousRecognition,
-500
+800
+);
+
+}else{
+
+setState(
+"idle"
 );
 
 }
 
-else{
-
-setState("idle");
-
-}
-
 };
-
 
 recognition.onend =
 ()=>{
@@ -4914,34 +5478,34 @@ micBtn.classList.remove(
 "active"
 );
 
-
 if(
 conversationMode
 &&
 !recognitionStopping
+&&
+!audioPlaying
 ){
 
 setTimeout(
 startContinuousRecognition,
-250
+300
 );
 
-}
-
-else{
+}else{
 
 recognitionStopping = false;
 
 if(!conversationMode){
 
-setState("idle");
+setState(
+"idle"
+);
 
 }
 
 }
 
 };
-
 
 micBtn.addEventListener(
 "click",
@@ -4955,14 +5519,11 @@ return;
 
 }
 
-
 if(listening){
 
 stopRecognition();
 
-}
-
-else{
+}else{
 
 startRecognition();
 
@@ -4971,8 +5532,7 @@ startRecognition();
 }
 );
 
-}
-else{
+}else{
 
 micBtn.style.opacity =
 ".3";
@@ -4980,8 +5540,11 @@ micBtn.style.opacity =
 conversationBtn.style.opacity =
 ".35";
 
-}
+notify(
+"MICROFONO NON SUPPORTATO"
+);
 
+}
 
 /* =====================================================
    COMANDI CONVERSAZIONE
@@ -4991,7 +5554,6 @@ function handleConversationCommand(text){
 
 const normalized =
 normalizeCommand(text);
-
 
 const activateCommands = [
 
@@ -5011,7 +5573,6 @@ const activateCommands = [
 
 ];
 
-
 const deactivateCommands = [
 
 "disattiva modalita conversazione",
@@ -5026,9 +5587,10 @@ const deactivateCommands = [
 
 ];
 
-
 if(
-activateCommands.includes(normalized)
+activateCommands.includes(
+normalized
+)
 ){
 
 activateConversationMode();
@@ -5037,9 +5599,10 @@ return true;
 
 }
 
-
 if(
-deactivateCommands.includes(normalized)
+deactivateCommands.includes(
+normalized
+)
 ){
 
 deactivateConversationMode();
@@ -5048,28 +5611,36 @@ return true;
 
 }
 
-
 const hasConversation =
 normalized.includes(
 "conversazione"
 );
 
-
 const wantsActivate =
-normalized.includes("attiva")
+normalized.includes(
+"attiva"
+)
 ||
-normalized.includes("avvia")
+normalized.includes(
+"avvia"
+)
 ||
-normalized.includes("inizia");
-
+normalized.includes(
+"inizia"
+);
 
 const wantsDeactivate =
-normalized.includes("disattiva")
+normalized.includes(
+"disattiva"
+)
 ||
-normalized.includes("chiudi")
+normalized.includes(
+"chiudi"
+)
 ||
-normalized.includes("stop");
-
+normalized.includes(
+"stop"
+);
 
 if(
 hasConversation &&
@@ -5082,7 +5653,6 @@ return true;
 
 }
 
-
 if(
 hasConversation &&
 wantsDeactivate
@@ -5094,11 +5664,9 @@ return true;
 
 }
 
-
 return false;
 
 }
-
 
 /* =====================================================
    FULLSCREEN COMMAND
@@ -5108,7 +5676,6 @@ function handleFullscreenCommand(text){
 
 const normalized =
 normalizeCommand(text);
-
 
 const simplified =
 normalized
@@ -5130,19 +5697,36 @@ normalized
 
 .trim();
 
-
 if(
-simplified === "fullscreen"
+
+simplified ===
+"fullscreen"
+
 ||
-simplified === "schermo intero"
+
+simplified ===
+"schermo intero"
+
 ||
-simplified === "attiva fullscreen"
+
+simplified ===
+"attiva fullscreen"
+
 ||
-simplified === "attiva schermo intero"
+
+simplified ===
+"attiva schermo intero"
+
 ||
-simplified === "metti fullscreen"
+
+simplified ===
+"metti fullscreen"
+
 ||
-simplified === "metti in fullscreen"
+
+simplified ===
+"metti in fullscreen"
+
 ){
 
 enterFullscreen();
@@ -5151,15 +5735,26 @@ return true;
 
 }
 
-
 if(
-simplified === "disattiva fullscreen"
+
+simplified ===
+"disattiva fullscreen"
+
 ||
-simplified === "esci dal fullscreen"
+
+simplified ===
+"esci dal fullscreen"
+
 ||
-simplified === "esci fullscreen"
+
+simplified ===
+"esci fullscreen"
+
 ||
-simplified === "torna normale"
+
+simplified ===
+"torna normale"
+
 ){
 
 exitFullscreen();
@@ -5168,11 +5763,9 @@ return true;
 
 }
 
-
 return false;
 
 }
-
 
 /* =====================================================
    CONTROL CENTER
@@ -5195,6 +5788,15 @@ document.getElementById(
 "systemVoice"
 );
 
+const aiElement =
+document.getElementById(
+"systemAI"
+);
+
+const mapElement =
+document.getElementById(
+"systemMap"
+);
 
 if(memoryElement){
 
@@ -5205,18 +5807,18 @@ memory.length +
 
 }
 
-
 if(webElement){
 
 webElement.innerHTML =
 "WINDOWS: " +
 webSearchWindows
-.querySelectorAll(".web-window")
+.querySelectorAll(
+".web-window"
+)
 .length +
 "<br>ENGINE: BING";
 
 }
-
 
 if(voiceElement){
 
@@ -5241,18 +5843,72 @@ recognition
 
 }
 
+if(aiElement){
+
+aiElement.innerHTML =
+"STATUS: " +
+(
+navigator.onLine
+?
+"ONLINE"
+:
+"OFFLINE"
+)
++
+"<br>API: " +
+(
+apiOnline
+?
+"ONLINE"
+:
+"READY"
+);
+
+}
+
+if(mapElement){
+
+mapElement.innerHTML =
+"TACTICAL: " +
+(
+map
+?
+"READY"
+:
+"STANDBY"
+)
++
+"<br>PROVIDER: MAPTILER";
+
+}
 
 const hardware =
 document.getElementById(
 "systemHardware"
 );
 
-
 if(hardware){
 
-let battery =
-"UNAVAILABLE";
+const updateHardware =
+batteryText=>{
 
+hardware.innerHTML =
+"SCREEN: " +
+window.innerWidth +
+"x" +
+window.innerHeight +
+"<br>BATTERY: " +
+batteryText +
+"<br>NETWORK: " +
+(
+navigator.onLine
+?
+"ONLINE"
+:
+"OFFLINE"
+);
+
+};
 
 if(
 navigator.getBattery
@@ -5262,46 +5918,29 @@ navigator.getBattery()
 .then(
 batteryObject=>{
 
-hardware.innerHTML =
-"SCREEN: " +
-window.innerWidth +
-"x" +
-window.innerHeight +
-"<br>BATTERY: " +
+updateHardware(
 Math.round(
 batteryObject.level * 100
 ) +
 "%"
-+
-"<br>NETWORK: " +
-(
-navigator.onLine
-?
-"ONLINE"
-:
-"OFFLINE"
+);
+
+}
+)
+.catch(
+()=>{
+
+updateHardware(
+"UNAVAILABLE"
 );
 
 }
 );
 
-}
-else{
+}else{
 
-hardware.innerHTML =
-"SCREEN: " +
-window.innerWidth +
-"x" +
-window.innerHeight +
-"<br>BATTERY: " +
-battery +
-"<br>NETWORK: " +
-(
-navigator.onLine
-?
-"ONLINE"
-:
-"OFFLINE"
+updateHardware(
+"UNAVAILABLE"
 );
 
 }
@@ -5309,7 +5948,6 @@ navigator.onLine
 }
 
 }
-
 
 controlBtn.addEventListener(
 "click",
@@ -5324,7 +5962,6 @@ updateSystemPanel();
 }
 );
 
-
 controlClose.addEventListener(
 "click",
 ()=>{
@@ -5336,7 +5973,6 @@ controlCenter.classList.remove(
 }
 );
 
-
 document.getElementById(
 "showMemoryBtn"
 )
@@ -5344,30 +5980,33 @@ document.getElementById(
 "click",
 ()=>{
 
-if(!memory.length){
+const memories =
+memory
+.filter(
+item =>
+item.role === "memory"
+)
+.slice(-15);
+
+if(!memories.length){
 
 addMsg(
-"La memoria JARVIS è vuota."
+"La memoria personale è vuota."
 );
 
 return;
 
 }
 
-
 const preview =
-memory
-.slice(-10)
+memories
 .map(
 (item,index)=>
 (index+1) +
 ". " +
-item.role +
-": " +
 item.content
 )
 .join("\n");
-
 
 addMsg(
 preview
@@ -5375,7 +6014,6 @@ preview
 
 }
 );
-
 
 document.getElementById(
 "clearMemoryBtn"
@@ -5386,9 +6024,13 @@ document.getElementById(
 
 memory = [];
 
+try{
+
 localStorage.removeItem(
 MEMORY_KEY
 );
+
+}catch(e){}
 
 updateSystemPanel();
 
@@ -5403,7 +6045,6 @@ addMsg(
 }
 );
 
-
 /* =====================================================
    PROCESS AI
 ===================================================== */
@@ -5411,53 +6052,51 @@ addMsg(
 async function processAi(text){
 
 if(
-handleFullscreenCommand(text)
+handleMemoryCommand(text)
 )
 return;
 
+if(
+handleFullscreenCommand(text)
+)
+return;
 
 if(
 handleConversationCommand(text)
 )
 return;
 
-
 if(
 handleWebWindowCommand(text)
 )
 return;
-
 
 if(
 handleWebCommand(text)
 )
 return;
 
-
 if(
 handleMapCommand(text)
 )
 return;
 
-
-setState("thinking");
-
+setState(
+"thinking"
+);
 
 try{
 
 const temporal =
 getTimeData();
 
-
 addMemory(
 "user",
 text
 );
 
-
 const controller =
 new AbortController();
-
 
 const timeout =
 setTimeout(
@@ -5467,9 +6106,7 @@ controller.abort();
 30000
 );
 
-
 let response;
-
 
 try{
 
@@ -5490,7 +6127,7 @@ body:JSON.stringify({
 message:text,
 
 memory:
-memory.slice(-4),
+memory.slice(-12),
 
 currentTime:
 temporal.currentTime,
@@ -5512,13 +6149,11 @@ controller.signal
 }
 );
 
-}
-finally{
+}finally{
 
 clearTimeout(timeout);
 
 }
-
 
 if(!response.ok){
 
@@ -5528,7 +6163,6 @@ await response.text();
 let errorMessage =
 "HTTP " +
 response.status;
-
 
 try{
 
@@ -5559,25 +6193,26 @@ errorText.substring(
 
 }
 
-
 throw new Error(
 errorMessage
 );
 
 }
 
+apiOnline = true;
+
+updateSystemPanel();
 
 const data =
 await response.json();
 
-
 const reply =
-typeof data.response === "string"
+typeof data.response ===
+"string"
 ?
 data.response.trim()
 :
 "";
-
 
 if(!reply){
 
@@ -5587,21 +6222,24 @@ throw new Error(
 
 }
 
-
-addMsg(reply);
+addMsg(
+reply
+);
 
 addMemory(
 "assistant",
 reply
 );
 
+speak(
+reply
+).catch(
+console.error
+);
 
-speak(reply)
-.catch(console.error);
-
-
-setState("idle");
-
+setState(
+"idle"
+);
 
 }catch(error){
 
@@ -5610,14 +6248,17 @@ console.error(
 error
 );
 
+apiOnline = false;
+
+updateSystemPanel();
 
 let message =
 error.message ||
 "Errore sconosciuto";
 
-
 if(
-error.name === "AbortError"
+error.name ===
+"AbortError"
 ){
 
 message =
@@ -5626,7 +6267,8 @@ message =
 }
 
 else if(
-message === "Failed to fetch"
+message ===
+"Failed to fetch"
 ){
 
 message =
@@ -5634,64 +6276,80 @@ message =
 
 }
 
-
 addMsg(
 "ERRORE: " +
 message
 );
 
-
-setState("error");
-
+setState(
+"error"
+);
 
 setTimeout(
 ()=>{
-setState("idle");
+setState(
+"idle"
+);
 },
-1200
+1500
 );
 
 }
 
 }
 
-
 /* =====================================================
    INVIO
 ===================================================== */
 
-function sendMessage(){
+let sending = false;
+
+async function sendMessage(){
+
+if(sending)
+return;
 
 const text =
 textInput.value.trim();
 
-
 if(!text)
 return;
 
-
 textInput.value = "";
 
+addMsg(
+text
+);
 
-addMsg(text);
+sending = true;
 
+try{
 
-processAi(text);
+await processAi(
+text
+);
+
+}finally{
+
+sending = false;
 
 }
 
+}
 
 sendBtn.addEventListener(
 "click",
 sendMessage
 );
 
-
 textInput.addEventListener(
 "keydown",
 event=>{
 
-if(event.key === "Enter"){
+if(
+event.key ===
+"Enter"
+){
 
 event.preventDefault();
 
@@ -5702,7 +6360,6 @@ sendMessage();
 }
 );
 
-
 /* =====================================================
    RESIZE
 ===================================================== */
@@ -5711,7 +6368,10 @@ window.addEventListener(
 "resize",
 ()=>{
 
-if(camera && renderer){
+if(
+camera &&
+renderer
+){
 
 camera.aspect =
 window.innerWidth /
@@ -5734,7 +6394,6 @@ updateSystemPanel();
 }
 );
 
-
 /* =====================================================
    ONLINE / OFFLINE
 ===================================================== */
@@ -5752,10 +6411,11 @@ updateSystemPanel();
 }
 );
 
-
 window.addEventListener(
 "offline",
 ()=>{
+
+apiOnline = false;
 
 notify(
 "CONNESSIONE OFFLINE"
@@ -5766,16 +6426,105 @@ updateSystemPanel();
 }
 );
 
+/* =====================================================
+   ESC
+===================================================== */
+
+document.addEventListener(
+"keydown",
+event=>{
+
+if(
+event.key ===
+"Escape"
+){
+
+if(
+controlCenter.classList.contains(
+"active"
+)
+){
+
+controlCenter.classList.remove(
+"active"
+);
+
+}
+
+if(
+voicePanel.classList.contains(
+"active"
+)
+){
+
+voicePanel.classList.remove(
+"active"
+);
+
+}
+
+}
+
+}
+);
+
+/* =====================================================
+   TEST API
+===================================================== */
+
+async function checkApi(){
+
+try{
+
+const controller =
+new AbortController();
+
+const timeout =
+setTimeout(
+()=>{
+controller.abort();
+},
+5000
+);
+
+const response =
+await fetch(
+API,
+{
+method:"GET",
+signal:
+controller.signal
+}
+);
+
+clearTimeout(timeout);
+
+apiOnline =
+response.ok;
+
+}catch(error){
+
+apiOnline = false;
+
+}
+
+updateSystemPanel();
+
+}
 
 /* =====================================================
    AVVIO
 ===================================================== */
 
-setState("idle");
+setState(
+"idle"
+);
 
 updateFullscreenUI();
 
 updateSystemPanel();
+
+checkApi();
 
 notify(
 "J.A.R.V.I.S. SYSTEM ONLINE"

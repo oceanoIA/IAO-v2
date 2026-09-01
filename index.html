@@ -1,8 +1,19 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
 
-<title>J.A.R.V.I.S.</title><link rel="stylesheet"
-      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
+
+<style>
 
 *{
 box-sizing:border-box;
@@ -207,6 +218,8 @@ border-color:#00ffff;
 background:rgba(0,255,255,.1);
 }
 
+/* ================= CONVERSAZIONE ================= */
+
 #conversationBtn{
 position:fixed;
 left:22px;
@@ -230,6 +243,8 @@ border-color:rgba(0,255,255,.7);
 background:rgba(0,255,255,.08);
 box-shadow:0 0 18px rgba(0,255,255,.12);
 }
+
+/* ================= FULLSCREEN ================= */
 
 #fullscreenBtn{
 position:fixed;
@@ -261,6 +276,8 @@ border-color:rgba(0,255,255,.75);
 background:rgba(0,255,255,.09);
 box-shadow:0 0 18px rgba(0,255,255,.14);
 }
+
+/* ================= VOCE ================= */
 
 #voiceBtn{
 position:fixed;
@@ -321,6 +338,8 @@ margin-top:10px;
 background:rgba(0,255,255,.04);
 cursor:pointer;
 }
+
+/* ================= MAPPA ================= */
 
 #tacticalMap{
 position:fixed;
@@ -446,6 +465,8 @@ transform:scale(1.18)
 }
 }
 
+/* ================= WEB WINDOWS ================= */
+
 #webSearchWindows{
 position:fixed;
 inset:0;
@@ -569,6 +590,8 @@ pointer-events:none;
 display:block
 }
 
+/* ================= MOBILE ================= */
+
 @media(max-width:600px){
 
 .jarvis-title{
@@ -668,19 +691,62 @@ left:2.2cm;
 }
 }
 
-</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div class="jarvis-title" id="jarvisTitle">
+</style>
+
+</head>
+
+<body>
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+<div class="jarvis-title"
+     id="jarvisTitle">
 J.A.R.V.I.S
-</div><div class="datetime"><div id="clock" class="time">
+</div>
+
+<div class="datetime">
+
+<div id="clock"
+     class="time">
 00:00:00
-</div><div id="date" class="date">
+</div>
+
+<div id="date"
+     class="date">
 00 AGO 2026
-</div></div><div id="tacticalMap"><div id="map"></div><div class="map-overlay"></div><div class="map-header">
+</div>
+
+</div>
+
+<div id="tacticalMap">
+
+<div id="map"></div>
+
+<div class="map-overlay"></div>
+
+<div class="map-header">
 TACTICAL MAP
-</div><button id="closeMap">
+</div>
+
+<button id="closeMap">
 ×
-</button></div><div id="webSearchWindows"></div><div id="webSearchIndicator">
+</button>
+
+</div>
+
+<div id="webSearchWindows"></div>
+
+<div id="webSearchIndicator">
 WEB WINDOWS: 0
-</div><div id="chat"></div><div class="command-wrapper"><input
+</div>
+
+<div id="chat"></div>
+
+<div class="command-wrapper">
+
+<input
 id="textInput"
 type="text"
 autocomplete="off"
@@ -688,27 +754,59 @@ placeholder="Chiedi qualcosa a JARVIS...">
 
 <button id="micBtn">
 <span class="mic-icon"></span>
-</button><button id="sendBtn">
+</button>
+
+<button id="sendBtn">
 INVIA
-</button></div><button id="conversationBtn">
+</button>
+
+</div>
+
+<button id="conversationBtn">
 ◉ CONVERSAZIONE
-</button><button id="fullscreenBtn">
+</button>
+
+<button id="fullscreenBtn">
 ⛶ FULLSCREEN
-</button><button id="voiceBtn">
+</button>
+
+<button id="voiceBtn">
 ⚙ VOCE
-</button><div id="voicePanel"><div class="voice-title">
+</button>
+
+<div id="voicePanel">
+
+<div class="voice-title">
 VOCE J.A.R.V.I.S.
-</div><select id="voiceSelector"><option value="">
+</div>
+
+<select id="voiceSelector">
+
+<option value="">
 Voce dispositivo automatica
-</option></select><button id="voiceTest">
+</option>
+
+</select>
+
+<button id="voiceTest">
 TESTA VOCE
-</button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
+</button>
+
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
+
+<script type="importmap">
+
 {
 "imports":{
 "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
 }
 }
-</script><script type="module">
+
+</script>
+
+<script type="module">
 
 import * as THREE from "three";
 
@@ -806,6 +904,7 @@ JSON.parse(saved);
 
 if(Array.isArray(parsed))
 memory=parsed.slice(-MAX_MEMORY);
+
 }
 
 }catch(e){
@@ -850,6 +949,7 @@ memory=
 memory.slice(-MAX_MEMORY);
 
 saveMemory();
+
 }
 
 /* ================= OROLOGIO ================= */
@@ -872,6 +972,7 @@ date.textContent=
 `${String(now.getDate()).padStart(2,"0")} `+
 `${months[now.getMonth()]} `+
 `${now.getFullYear()}`;
+
 }
 
 updateClock();
@@ -881,7 +982,9 @@ updateClock,
 1000
 );
 
-/* ================= THREE ================= */
+/* =====================================================
+THREE
+===================================================== */
 
 const scene=
 new THREE.Scene();
@@ -974,9 +1077,12 @@ ctx.fillRect(
 return new THREE.CanvasTexture(
 canvas
 );
+
 }
 
-/* ================= PARTICELLE ================= */
+/* =====================================================
+PARTICELLE / NEURONI
+===================================================== */
 
 /*
    AUMENTATO DA 3000 A 6000
@@ -1041,6 +1147,7 @@ Math.sin(theta);
 
 positions[i*3+2]=
 r*Math.cos(phi);
+
 }
 
 geometry.setAttribute(
@@ -1071,6 +1178,7 @@ depthWrite:false,
 
 blending:
 THREE.AdditiveBlending
+
 });
 
 const particles=
@@ -1083,11 +1191,25 @@ scene.add(
 particles
 );
 
-/* ================= STATO ================= */
+/* =====================================================
+STATO
+===================================================== */
 
 let targetEnergy=.15;
 
 let energy=.15;
+
+/*
+   Modalità speciale durante THINKING
+*/
+
+let thinkingMode=false;
+
+let thinkingStartTime=0;
+
+let thinkingShape=0;
+
+let lastThinkingShape=-1;
 
 const normalColor=
 new THREE.Color(
@@ -1099,25 +1221,209 @@ new THREE.Color(
 0x8fffff
 );
 
+const thinkingColor=
+new THREE.Color(
+0x00ffff
+);
+
+const wormholeColor=
+new THREE.Color(
+0x66eaff
+);
+
+const torusColor=
+new THREE.Color(
+0x9fffff
+);
+
 const currentColor=
 normalColor.clone();
 
 function setState(state){
 
-if(state==="thinking")
+if(state==="thinking"){
+
 targetEnergy=2;
 
-else if(state==="speaking")
-targetEnergy=.8;
+if(!thinkingMode){
 
-else if(state==="listening")
-targetEnergy=.55;
+thinkingMode=true;
 
-else
-targetEnergy=.15;
+thinkingStartTime=
+performance.now()*.001;
+
+thinkingShape=0;
+
+lastThinkingShape=-1;
+
 }
 
-/* ================= ANIMAZIONE ================= */
+}
+
+else if(state==="speaking"){
+
+targetEnergy=.8;
+
+thinkingMode=false;
+
+}
+
+else if(state==="listening"){
+
+targetEnergy=.55;
+
+thinkingMode=false;
+
+}
+
+else{
+
+targetEnergy=.15;
+
+thinkingMode=false;
+
+}
+
+}
+
+/* =====================================================
+FORME NEURALI DURANTE IL PENSIERO
+===================================================== */
+
+function calculateThinkingPosition(
+i,
+time
+){
+
+const seed=
+seeds[i];
+
+const theta=
+angles[i*2];
+
+const phi=
+angles[i*2+1];
+
+const phase=
+time-thinkingStartTime;
+
+/*
+   Cambia forma ogni circa 2.8 secondi.
+*/
+
+const shapeIndex=
+Math.floor(
+phase/2.8
+)%3;
+
+/* ================= WORMHOLE ================= */
+
+if(shapeIndex===0){
+
+const progress=
+(i/COUNT)*Math.PI*16+
+seed*.12+
+phase*5.5;
+
+const radius=
+.18+
+(i%1000)/1000*.95;
+
+const tunnelWave=
+Math.sin(
+progress*.35+
+phase*3
+)*.10;
+
+const rr=
+radius+tunnelWave;
+
+const x=
+rr*Math.cos(progress);
+
+const y=
+rr*Math.sin(progress);
+
+const z=
+(Math.sin(progress*.5+
+seed)*.34);
+
+return [x,y,z];
+
+}
+
+/* ================= CIAMBELLA ================= */
+
+if(shapeIndex===1){
+
+const u=
+(i/COUNT)*Math.PI*2+
+seed*.008+
+phase*7;
+
+const v=
+((i%900)/900)*Math.PI*2+
+seed*.015;
+
+const major=
+.82;
+
+const minor=
+.30+
+Math.sin(
+phase*4+
+seed
+)*.035;
+
+const x=
+(major+
+minor*Math.cos(v))*
+Math.cos(u);
+
+const y=
+minor*
+Math.sin(v);
+
+const z=
+(major+
+minor*Math.cos(v))*
+Math.sin(u);
+
+return [x,y,z];
+
+}
+
+/* ================= VORTICE ================= */
+
+const p=
+i/COUNT;
+
+const spiral=
+p*Math.PI*30+
+phase*6;
+
+const radius=
+.08+
+p*1.05;
+
+const x=
+radius*
+Math.cos(spiral);
+
+const y=
+radius*
+Math.sin(spiral);
+
+const z=
+(p-.5)*2.0;
+
+return [x,y,z];
+
+}
+
+/* =====================================================
+ANIMAZIONE
+===================================================== */
 
 function animate(){
 
@@ -1131,6 +1437,52 @@ performance.now()*.001;
 energy+=
 (targetEnergy-energy)*
 .045;
+
+/*
+   Colore normale / thinking
+*/
+
+if(thinkingMode){
+
+const shapeIndex=
+Math.floor(
+(time-thinkingStartTime)/2.8
+)%3;
+
+if(shapeIndex!==lastThinkingShape){
+
+lastThinkingShape=
+shapeIndex;
+
+}
+
+if(shapeIndex===0){
+
+currentColor.lerp(
+wormholeColor,
+.08
+);
+
+}
+else if(shapeIndex===1){
+
+currentColor.lerp(
+torusColor,
+.08
+);
+
+}
+else{
+
+currentColor.lerp(
+thinkingColor,
+.08
+);
+
+}
+
+}
+else{
 
 currentColor.lerp(
 activeColor,
@@ -1146,6 +1498,8 @@ normalColor,
 
 }
 
+}
+
 material.color=
 currentColor;
 
@@ -1155,6 +1509,47 @@ energy*.008;
 
 const pos=
 geometry.attributes.position.array;
+
+/* =====================================================
+THINKING
+===================================================== */
+
+if(thinkingMode){
+
+for(let i=0;i<COUNT;i++){
+
+const index=i*3;
+
+const p=
+calculateThinkingPosition(
+i,
+time
+);
+
+const breathing=
+1+
+Math.sin(
+time*3+
+seeds[i]
+)*.025;
+
+pos[index]=
+p[0]*breathing;
+
+pos[index+1]=
+p[1]*breathing;
+
+pos[index+2]=
+p[2]*breathing;
+
+}
+
+}
+else{
+
+/* =====================================================
+NORMALE SFERA NEURALE
+===================================================== */
 
 for(let i=0;i<COUNT;i++){
 
@@ -1172,8 +1567,6 @@ angles[i*2+1];
 const seed=
 seeds[i];
 
-/* ================= MOVIMENTO NORMALE ================= */
-
 const pulse=
 Math.sin(
 time*2+
@@ -1185,116 +1578,22 @@ Math.sin(
 theta*6+
 time*2+
 seed
-)*.18*energy;
+)*.18*
+energy;
 
 const wave=
 Math.cos(
 phi*7-
 time*1.8+
 seed
-)*.12*energy;
+)*.12*
+energy;
 
-let rr=
+const rr=
 r+
 pulse+
 strangeShape+
 wave;
-
-/* =====================================================
-   PUNTE DINAMICHE DURANTE IL PENSIERO
-===================================================== */
-
-if(targetEnergy>1){
-
-const nx=
-Math.sin(phi)*
-Math.cos(theta);
-
-const ny=
-Math.sin(phi)*
-Math.sin(theta);
-
-const nz=
-Math.cos(phi);
-
-/*
-   Le forme si spostano lentamente.
-*/
-
-const spikeTime=
-time*.35;
-
-const spike1=
-Math.sin(
-nx*5+
-ny*7+
-nz*4+
-spikeTime
-);
-
-const spike2=
-Math.sin(
-nx*9-
-nz*6+
-spikeTime*.7
-);
-
-const spike3=
-Math.cos(
-ny*8+
-nz*5-
-spikeTime*.9
-);
-
-/*
-   Unione delle tre forme.
-*/
-
-const spikeShape=
-Math.max(
-0,
-spike1*.55+
-spike2*.30+
-spike3*.15
-);
-
-/*
-   Seleziona solo alcune zone
-   della superficie.
-*/
-
-const spikeMask=
-Math.pow(
-Math.max(
-0,
-spikeShape-.35
-),
-2.2
-);
-
-/*
-   Lunghezza variabile delle punte.
-*/
-
-const spikeLength=
-spikeMask*
-(
-.15+
-Math.sin(
-time*.8+
-seed
-)*.10
-)*
-Math.min(
-1,
-energy*.8
-);
-
-rr+=
-spikeLength;
-}
-
-/* ================= POSIZIONE ================= */
 
 let x=
 rr*
@@ -1310,27 +1609,28 @@ let z=
 rr*
 Math.cos(phi);
 
-/* ================= MOVIMENTO EXTRA ================= */
-
 x+=
 Math.sin(
 time*2.4+
 phi*8+
 seed
-)*.08*energy;
+)*.08*
+energy;
 
 y+=
 Math.cos(
 time*2.1+
 theta*9+
 seed
-)*.08*energy;
+)*.08*
+energy;
 
 z+=
 Math.sin(
 time*2.7+
 (theta+phi)*7
-)*.10*energy;
+)*.10*
+energy;
 
 pos[index]=x;
 
@@ -1340,7 +1640,26 @@ pos[index+2]=z;
 
 }
 
+}
+
 geometry.attributes.position.needsUpdate=true;
+
+/* ================= ROTAZIONE ================= */
+
+if(thinkingMode){
+
+particles.rotation.y+=
+.008+
+energy*.004;
+
+particles.rotation.x+=
+.003;
+
+particles.rotation.z+=
+.002;
+
+}
+else{
 
 particles.rotation.y+=
 .0005+
@@ -1352,10 +1671,13 @@ Math.sin(time*.25)*.04;
 particles.rotation.z=
 Math.cos(time*.18)*.025;
 
+}
+
 renderer.render(
 scene,
 camera
 );
+
 }
 
 animate();
@@ -1384,6 +1706,7 @@ addMsg(
 );
 
 return;
+
 }
 
 map=
@@ -1444,6 +1767,7 @@ map.resize();
 },
 400
 );
+
 }
 
 function closeTacticalMap(){
@@ -1454,6 +1778,7 @@ tacticalMap.classList.remove(
 
 jarvisTitle.style.display=
 "block";
+
 }
 
 closeMap.addEventListener(
@@ -1471,6 +1796,7 @@ return String(text)
 .replace(/>/g,"&gt;")
 .replace(/"/g,"&quot;")
 .replace(/'/g,"&#039;");
+
 }
 
 function addMsg(text){
@@ -1487,6 +1813,7 @@ element.textContent=text;
 chat.appendChild(
 element
 );
+
 }
 
 /* =====================================================
@@ -1501,6 +1828,7 @@ return !!(
 document.fullscreenElement ||
 document.webkitFullscreenElement
 );
+
 }
 
 async function enterFullscreen(){
@@ -1521,13 +1849,15 @@ document.documentElement.requestFullscreen
 
 await document.documentElement.requestFullscreen();
 
-}else if(
+}
+else if(
 document.documentElement.webkitRequestFullscreen
 ){
 
 document.documentElement.webkitRequestFullscreen();
 
-}else{
+}
+else{
 
 addMsg(
 "Fullscreen non supportato da questo browser."
@@ -1536,6 +1866,7 @@ addMsg(
 fullscreenChanging=false;
 
 return false;
+
 }
 
 fullscreenChanging=false;
@@ -1556,7 +1887,9 @@ addMsg(
 );
 
 return false;
+
 }
+
 }
 
 async function exitFullscreen(){
@@ -1567,7 +1900,8 @@ if(document.exitFullscreen){
 
 await document.exitFullscreen();
 
-}else if(
+}
+else if(
 document.webkitExitFullscreen
 ){
 
@@ -1585,7 +1919,9 @@ error
 );
 
 return false;
+
 }
+
 }
 
 async function toggleFullscreen(){
@@ -1594,11 +1930,13 @@ if(isFullscreen()){
 
 await exitFullscreen();
 
-}else{
+}
+else{
 
 await enterFullscreen();
 
 }
+
 }
 
 function updateFullscreenUI(){
@@ -1615,6 +1953,7 @@ fullscreenBtn.textContent=
 active
 ? "⛶ ESCI FULLSCREEN"
 : "⛶ FULLSCREEN";
+
 }
 
 fullscreenBtn.addEventListener(
@@ -1631,6 +1970,7 @@ updateFullscreenUI();
 document.addEventListener(
 "fullscreenchange",
 ()=>{
+
 updateFullscreenUI();
 
 setTimeout(
@@ -1640,12 +1980,14 @@ map.resize();
 },
 100
 );
+
 }
 );
 
 document.addEventListener(
 "webkitfullscreenchange",
 ()=>{
+
 updateFullscreenUI();
 
 setTimeout(
@@ -1655,6 +1997,7 @@ map.resize();
 },
 100
 );
+
 }
 );
 
@@ -1680,6 +2023,7 @@ return String(text)
 " "
 )
 .trim();
+
 }
 
 /* =====================================================
@@ -1786,11 +2130,13 @@ addMsg(
 );
 
 return true;
+
 }
 
 enterFullscreen();
 
 return true;
+
 }
 
 if(
@@ -1806,11 +2152,13 @@ addMsg(
 );
 
 return true;
+
 }
 
 exitFullscreen();
 
 return true;
+
 }
 
 const hasFullscreenWord=
@@ -1840,6 +2188,7 @@ wantsActivate
 enterFullscreen();
 
 return true;
+
 }
 
 if(
@@ -1850,9 +2199,11 @@ wantsDeactivate
 exitFullscreen();
 
 return true;
+
 }
 
 return false;
+
 }
 
 /* ================= MARKER ================= */
@@ -1870,6 +2221,7 @@ if(currentMarker){
 currentMarker.remove();
 
 currentMarker=null;
+
 }
 
 const markerElement=
@@ -1901,6 +2253,7 @@ offset:15
 .addTo(map);
 
 currentMarker.togglePopup();
+
 }
 
 /* ================= RICERCA POSIZIONE ================= */
@@ -1949,6 +2302,7 @@ place+
 );
 
 return;
+
 }
 
 const result=
@@ -2007,6 +2361,7 @@ place+
 );
 
 }
+
 }
 
 /* ================= COMANDI MAPPA ================= */
@@ -2047,6 +2402,7 @@ addMsg(
 );
 
 return true;
+
 }
 
 if(
@@ -2076,6 +2432,7 @@ addMsg(
 );
 
 return true;
+
 }
 
 const patterns=[
@@ -2117,10 +2474,13 @@ place
 return true;
 
 }
+
 }
+
 }
 
 return false;
+
 }
 
 /* =====================================================
@@ -2150,13 +2510,15 @@ webSearchIndicator.textContent=
 "WEB WINDOWS: "+
 count;
 
-}else{
+}
+else{
 
 webSearchIndicator.classList.remove(
 "active"
 );
 
 }
+
 }
 
 function bringWebWindowToFront(
@@ -2169,6 +2531,7 @@ windowElement.style.zIndex=
 String(
 highestWebZ
 );
+
 }
 
 /* =====================================================
@@ -2223,13 +2586,17 @@ ${safeTitle}
 <button
 class="web-window-btn minimize-web"
 title="Minimizza">
+
 −
+
 </button>
 
 <button
 class="web-window-btn close-web"
 title="Chiudi">
+
 ×
+
 </button>
 
 </div>
@@ -2458,6 +2825,7 @@ addMsg(
 "Ricerca web: "+
 query
 );
+
 }
 
 /* ================= COMANDI WEB ================= */
@@ -2508,10 +2876,13 @@ query
 return true;
 
 }
+
 }
+
 }
 
 return false;
+
 }
 
 /* ================= FINESTRE WEB ================= */
@@ -2542,6 +2913,7 @@ addMsg(
 );
 
 return true;
+
 }
 
 if(
@@ -2568,9 +2940,11 @@ addMsg(
 );
 
 return true;
+
 }
 
 return false;
+
 }
 
 /* ================= DATI TEMPORALI ================= */
@@ -2616,6 +2990,7 @@ Intl.DateTimeFormat()
 .timeZone
 
 };
+
 }
 
 /* ================= VOCI ================= */
@@ -2689,7 +3064,9 @@ selectedDeviceVoice=
 deviceVoices[
 Number(savedVoice)
 ];
+
 }
+
 }
 
 if(
@@ -2702,6 +3079,7 @@ window.speechSynthesis.addEventListener(
 "voiceschanged",
 loadDeviceVoices
 );
+
 }
 
 /* ================= DEVICE TTS ================= */
@@ -2749,7 +3127,8 @@ selectedDeviceVoice
 utterance.voice=
 selectedDeviceVoice;
 
-}else{
+}
+else{
 
 const italianVoice=
 deviceVoices.find(
@@ -2831,6 +3210,7 @@ resolve(false);
 
 }
 );
+
 }
 
 /* ================= ELEVENLABS ================= */
@@ -2851,6 +3231,7 @@ currentAudio.currentTime=0;
 }catch(e){}
 
 currentAudio=null;
+
 }
 
 const controller=
@@ -3020,6 +3401,7 @@ timeout
 );
 
 }
+
 }
 
 /* ================= INTERRUZIONE VOCE ================= */
@@ -3037,6 +3419,7 @@ currentAudio.currentTime=0;
 }catch(e){}
 
 currentAudio=null;
+
 }
 
 if(
@@ -3056,6 +3439,7 @@ audioPlaying=false;
 setState(
 "listening"
 );
+
 }
 
 /* ================= SPEAK ================= */
@@ -3086,6 +3470,7 @@ startContinuousRecognition();
 );
 
 }
+
 }
 
 /* ================= VOICE UI ================= */
@@ -3117,6 +3502,7 @@ localStorage.removeItem(
 );
 
 return;
+
 }
 
 const index=
@@ -3279,7 +3665,8 @@ startContinuousRecognition();
 500
 );
 
-}else{
+}
+else{
 
 setState(
 "idle"
@@ -3313,7 +3700,8 @@ startContinuousRecognition();
 250
 );
 
-}else{
+}
+else{
 
 recognitionStopping=
 false;
@@ -3480,7 +3868,8 @@ if(conversationMode){
 
 deactivateConversationMode();
 
-}else{
+}
+else{
 
 activateConversationMode();
 
@@ -3505,7 +3894,8 @@ if(listening){
 
 stopRecognition();
 
-}else{
+}
+else{
 
 startRecognition();
 
@@ -3514,7 +3904,8 @@ startRecognition();
 }
 );
 
-}else{
+}
+else{
 
 micBtn.style.opacity=
 ".3";
@@ -3564,6 +3955,7 @@ normalized
 activateConversationMode();
 
 return true;
+
 }
 
 if(
@@ -3575,6 +3967,7 @@ normalized
 deactivateConversationMode();
 
 return true;
+
 }
 
 const hasConversation=
@@ -3612,6 +4005,7 @@ wantsActivate
 activateConversationMode();
 
 return true;
+
 }
 
 if(
@@ -3622,14 +4016,21 @@ wantsDeactivate
 deactivateConversationMode();
 
 return true;
+
 }
 
 return false;
+
 }
 
 /* ================= PROCESS AI ================= */
 
 async function processAi(text){
+
+/*
+   I comandi locali vengono controllati
+   prima dell'AI.
+*/
 
 if(
 handleFullscreenCommand(text)
@@ -3655,6 +4056,11 @@ if(
 handleMapCommand(text)
 )
 return;
+
+/*
+   QUI PARTE IL THINKING:
+   i neuroni passano alle forme speciali.
+*/
 
 setState(
 "thinking"
@@ -3724,7 +4130,8 @@ controller.signal
 }
 );
 
-}finally{
+}
+finally{
 
 clearTimeout(
 timeout
@@ -3806,6 +4213,11 @@ reply
 console.error
 );
 
+/*
+   speak() porta automaticamente
+   i neuroni fuori dal thinking.
+*/
+
 setState(
 "idle"
 );
@@ -3828,7 +4240,8 @@ error.name==="AbortError"
 message=
 "Il server ha impiegato troppo tempo a rispondere.";
 
-}else if(
+}
+else if(
 message==="Failed to fetch"
 ){
 
@@ -3858,6 +4271,7 @@ startContinuousRecognition();
 }
 
 }
+
 }
 
 /* ================= INVIO ================= */
@@ -3879,6 +4293,7 @@ text
 processAi(
 text
 );
+
 }
 
 sendBtn.addEventListener(
@@ -3949,4 +4364,8 @@ setState(
 
 updateFullscreenUI();
 
-</script></body></html>
+</script>
+
+</body>
+
+</html>

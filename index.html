@@ -1361,48 +1361,1082 @@ function animate(){
   x+=
    Math.sin(
     time*2.4+
-    phi*8+
-    seed
-   )*.08*energy;
+/* ================= THREE ================= */
+
+const scene =
+ new THREE.Scene();
 
 
-  y+=
-   Math.cos(
-    time*2.1+
-    theta*9+
-    seed
-   )*.08*energy;
+const camera =
+ new THREE.PerspectiveCamera(
+  55,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+ );
 
 
-  z+=
+camera.position.z = 5.2;
+
+
+const renderer =
+ new THREE.WebGLRenderer({
+  antialias:true,
+  alpha:true
+ });
+
+
+renderer.setSize(
+ window.innerWidth,
+ window.innerHeight
+ );
+
+
+renderer.setPixelRatio(
+ Math.min(
+  window.devicePixelRatio,
+  2
+ )
+ );
+
+
+container.appendChild(
+ renderer.domElement
+ );
+
+
+/* =====================================================
+   J.A.R.V.I.S. TACTICAL CORE
+   STILE ISPIRATO ALL'IMMAGINE DI RIFERIMENTO
+===================================================== */
+
+
+/* ================= COLORI ================= */
+
+const CORE_COLOR =
+ new THREE.Color(
+  0x9fffea
+ );
+
+const CYAN_COLOR =
+ new THREE.Color(
+  0x00d9c8
+ );
+
+const DARK_TEAL =
+ new THREE.Color(
+  0x007f78
+ );
+
+const OUTER_COLOR =
+ new THREE.Color(
+  0x00b9ae
+ );
+
+
+/* ================= GRUPPO PRINCIPALE ================= */
+
+const coreGroup =
+ new THREE.Group();
+
+
+scene.add(
+ coreGroup
+ );
+
+
+/* =====================================================
+   GLOW CENTRALE
+===================================================== */
+
+function createGlowTexture(){
+
+ const canvas =
+  document.createElement(
+   "canvas"
+  );
+
+
+ canvas.width = 128;
+ canvas.height = 128;
+
+
+ const ctx =
+  canvas.getContext("2d");
+
+
+ const gradient =
+  ctx.createRadialGradient(
+   64,
+   64,
+   0,
+   64,
+   64,
+   64
+  );
+
+
+ gradient.addColorStop(
+  0,
+  "rgba(220,255,250,1)"
+ );
+
+
+ gradient.addColorStop(
+  .12,
+  "rgba(160,255,245,.95)"
+ );
+
+
+ gradient.addColorStop(
+  .28,
+  "rgba(0,255,220,.65)"
+ );
+
+
+ gradient.addColorStop(
+  .55,
+  "rgba(0,180,170,.22)"
+ );
+
+
+ gradient.addColorStop(
+  1,
+  "rgba(0,0,0,0)"
+ );
+
+
+ ctx.fillStyle =
+  gradient;
+
+
+ ctx.fillRect(
+  0,
+  0,
+  128,
+  128
+ );
+
+
+ return new THREE.CanvasTexture(
+  canvas
+ );
+}
+
+
+const glowTexture =
+ createGlowTexture();
+
+
+/* ================= GLOW CENTRALE ================= */
+
+const glowMaterial =
+ new THREE.SpriteMaterial({
+  map:glowTexture,
+  color:0x6ffff0,
+  transparent:true,
+  opacity:.28,
+  blending:THREE.AdditiveBlending,
+  depthWrite:false
+ });
+
+
+const centralGlow =
+ new THREE.Sprite(
+  glowMaterial
+ );
+
+
+centralGlow.scale.set(
+ 2.25,
+ 2.25,
+ 1
+ );
+
+
+coreGroup.add(
+ centralGlow
+ );
+
+
+/* =====================================================
+   SFERA CENTRALE TRIANGOLARE
+===================================================== */
+
+const coreGeometry =
+ new THREE.IcosahedronGeometry(
+  .78,
+  4
+ );
+
+
+const coreWire =
+ new THREE.WireframeGeometry(
+  coreGeometry
+ );
+
+
+const coreMaterial =
+ new THREE.LineBasicMaterial({
+  color:CORE_COLOR,
+  transparent:true,
+  opacity:.82,
+  blending:THREE.AdditiveBlending,
+  depthWrite:false
+ });
+
+
+const coreSphere =
+ new THREE.LineSegments(
+  coreWire,
+  coreMaterial
+ );
+
+
+coreGroup.add(
+ coreSphere
+ );
+
+
+/* ================= DOPPIA RETE ================= */
+
+const innerGeometry =
+ new THREE.IcosahedronGeometry(
+  .70,
+  3
+ );
+
+
+const innerWire =
+ new THREE.WireframeGeometry(
+  innerGeometry
+ );
+
+
+const innerMaterial =
+ new THREE.LineBasicMaterial({
+  color:0x57d9d0,
+  transparent:true,
+  opacity:.25,
+  blending:THREE.AdditiveBlending,
+  depthWrite:false
+ });
+
+
+const innerSphere =
+ new THREE.LineSegments(
+  innerWire,
+  innerMaterial
+ );
+
+
+coreGroup.add(
+ innerSphere
+ );
+
+
+/* =====================================================
+   ANELLI INTERNI
+===================================================== */
+
+function createRing(
+ radius,
+ tube,
+ color,
+ opacity,
+ rotation
+){
+
+ const geometry =
+  new THREE.TorusGeometry(
+   radius,
+   tube,
+   12,
+   160
+  );
+
+
+ const material =
+  new THREE.MeshBasicMaterial({
+   color:color,
+   transparent:true,
+   opacity:opacity,
+   blending:THREE.AdditiveBlending,
+   depthWrite:false
+  });
+
+
+ const ring =
+  new THREE.Mesh(
+   geometry,
+   material
+  );
+
+
+ ring.rotation.x =
+  rotation.x;
+
+
+ ring.rotation.y =
+  rotation.y;
+
+
+ ring.rotation.z =
+  rotation.z;
+
+
+ coreGroup.add(
+  ring
+ );
+
+
+ return ring;
+}
+
+
+const innerRing1 =
+ createRing(
+  .91,
+  .018,
+  0x75e6dc,
+  .55,
+  {
+   x:Math.PI/2,
+   y:0,
+   z:0
+  }
+ );
+
+
+const innerRing2 =
+ createRing(
+  1.02,
+  .012,
+  0x008f89,
+  .35,
+  {
+   x:Math.PI/2,
+   y:.05,
+   z:.02
+  }
+ );
+
+
+/* =====================================================
+   ANELLO SEGMENTATO
+===================================================== */
+
+const segmentGroup =
+ new THREE.Group();
+
+
+coreGroup.add(
+ segmentGroup
+ );
+
+
+const SEGMENTS =
+ 72;
+
+
+for(
+ let i=0;
+ i<SEGMENTS;
+ i++
+){
+
+ const angle =
+  (i / SEGMENTS) *
+  Math.PI *
+  2;
+
+
+ const radius =
+  1.17;
+
+
+ const width =
+  .065;
+
+
+ const height =
+  .19;
+
+
+ const geometry =
+  new THREE.BoxGeometry(
+   width,
+   height,
+   .018
+  );
+
+
+ const material =
+  new THREE.MeshBasicMaterial({
+   color:
+    i % 4 === 0
+     ? 0x008e87
+     : 0x005e5b,
+   transparent:true,
+   opacity:
+    i % 4 === 0
+     ? .58
+     : .30,
+   blending:
+    THREE.AdditiveBlending,
+   depthWrite:false
+  });
+
+
+ const segment =
+  new THREE.Mesh(
+   geometry,
+   material
+  );
+
+
+ segment.position.set(
+  Math.cos(angle) * radius,
+  Math.sin(angle) * radius,
+  0
+ );
+
+
+ segment.rotation.z =
+  angle +
+  Math.PI/2;
+
+
+ segmentGroup.add(
+  segment
+ );
+}
+
+
+/* =====================================================
+   ANELLI TECNOLOGICI ESTERNI
+===================================================== */
+
+const outerRing1 =
+ createRing(
+  1.38,
+  .018,
+  0x00a9a0,
+  .42,
+  {
+   x:Math.PI/2,
+   y:0,
+   z:0
+  }
+ );
+
+
+const outerRing2 =
+ createRing(
+  1.48,
+  .010,
+  0x007a75,
+  .30,
+  {
+   x:Math.PI/2,
+   y:.12,
+   z:.04
+  }
+ );
+
+
+const outerRing3 =
+ createRing(
+  1.58,
+  .008,
+  0x00c5b9,
+  .20,
+  {
+   x:Math.PI/2,
+   y:-.08,
+   z:.06
+  }
+ );
+
+
+/* =====================================================
+   ANELLI ORGANICI
+===================================================== */
+
+function createOrganicRing(
+ radius,
+ amplitude,
+ points,
+ opacity,
+ seed
+){
+
+ const positions =
+  new Float32Array(
+   points * 3
+  );
+
+
+ for(
+  let i=0;
+  i<points;
+  i++
+ ){
+
+  const angle =
+   (i / points) *
+   Math.PI *
+   2;
+
+
+  const noise =
    Math.sin(
-    time*2.7+
-    (theta+phi)*7
-   )*.10*energy;
+    angle * 3 +
+    seed
+   ) *
+   amplitude;
 
 
-  pos[index]=x;
+  const noise2 =
+   Math.sin(
+    angle * 7 -
+    seed * 1.7
+   ) *
+   amplitude *
+   .45;
 
-  pos[index+1]=y;
 
-  pos[index+2]=z;
+  const noise3 =
+   Math.cos(
+    angle * 11 +
+    seed * .8
+   ) *
+   amplitude *
+   .18;
+
+
+  const r =
+   radius +
+   noise +
+   noise2 +
+   noise3;
+
+
+  positions[i*3] =
+   Math.cos(angle) * r;
+
+
+  positions[i*3+1] =
+   Math.sin(angle) * r;
+
+
+  positions[i*3+2] =
+   Math.sin(
+    angle * 4 +
+    seed
+   ) *
+   amplitude *
+   .55;
+ }
+
+
+ const geometry =
+  new THREE.BufferGeometry();
+
+
+ geometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(
+   positions,
+   3
+  )
+ );
+
+
+ const material =
+  new THREE.LineBasicMaterial({
+   color:OUTER_COLOR,
+   transparent:true,
+   opacity:opacity,
+   blending:
+    THREE.AdditiveBlending,
+   depthWrite:false
+  });
+
+
+ const line =
+  new THREE.LineLoop(
+   geometry,
+   material
+  );
+
+
+ coreGroup.add(
+  line
+ );
+
+
+ return line;
+}
+
+
+const organicRing1 =
+ createOrganicRing(
+  1.58,
+  .045,
+  220,
+  .48,
+  1.2
+ );
+
+
+const organicRing2 =
+ createOrganicRing(
+  1.68,
+  .075,
+  240,
+  .30,
+  3.7
+ );
+
+
+const organicRing3 =
+ createOrganicRing(
+  1.77,
+  .055,
+  260,
+  .20,
+  7.2
+ );
+
+
+/* =====================================================
+   PARTICELLE ESTERNE
+===================================================== */
+
+const PARTICLES =
+ 650;
+
+
+const particleGeometry =
+ new THREE.BufferGeometry();
+
+
+const particlePositions =
+ new Float32Array(
+  PARTICLES * 3
+ );
+
+
+const particleSizes =
+ new Float32Array(
+  PARTICLES
+ );
+
+
+for(
+ let i=0;
+ i<PARTICLES;
+ i++
+ ){
+
+  const angle =
+   Math.random() *
+   Math.PI *
+   2;
+
+
+  const radius =
+   1.45 +
+   Math.random() *
+   .48;
+
+
+  const irregular =
+   Math.sin(
+    angle * 5
+   ) *
+   .05;
+
+
+  particlePositions[i*3] =
+   Math.cos(angle) *
+   (radius + irregular);
+
+
+  particlePositions[i*3+1] =
+   Math.sin(angle) *
+   (radius + irregular);
+
+
+  particlePositions[i*3+2] =
+   (Math.random()-.5) *
+   .25;
+
+
+  particleSizes[i] =
+   .015 +
+   Math.random() *
+   .035;
+ }
+
+
+particleGeometry.setAttribute(
+ "position",
+ new THREE.BufferAttribute(
+  particlePositions,
+  3
+ )
+ );
+
+
+particleGeometry.setAttribute(
+ "size",
+ new THREE.BufferAttribute(
+  particleSizes,
+  1
+ )
+ );
+
+
+const particleMaterial =
+ new THREE.PointsMaterial({
+  color:0x00bdb1,
+  size:.025,
+  map:glowTexture,
+  transparent:true,
+  opacity:.42,
+  depthWrite:false,
+  blending:
+   THREE.AdditiveBlending
+ });
+
+
+const outerParticles =
+ new THREE.Points(
+  particleGeometry,
+  particleMaterial
+ );
+
+
+coreGroup.add(
+ outerParticles
+ );
+
+
+/* =====================================================
+   STATO ENERGETICO
+===================================================== */
+
+let targetEnergy =
+ .15;
+
+
+let energy =
+ .15;
+
+
+const normalColor =
+ new THREE.Color(
+  0x00b9ae
+ );
+
+
+const activeColor =
+ new THREE.Color(
+  0xbafff5
+ );
+
+
+const currentColor =
+ normalColor.clone();
+
+
+function setState(state){
+
+ if(state==="thinking"){
+
+  targetEnergy =
+   2.0;
+
+ }else if(state==="speaking"){
+
+  targetEnergy =
+   .85;
+
+ }else if(state==="listening"){
+
+  targetEnergy =
+   .55;
+
+ }else{
+
+  targetEnergy =
+   .15;
+
+ }
+}
+
+
+/* =====================================================
+   ANIMAZIONE
+===================================================== */
+
+function animate(){
+
+ requestAnimationFrame(
+  animate
+ );
+
+
+ const time =
+  performance.now() *
+  .001;
+
+
+ /* ================= ENERGIA ================= */
+
+ energy +=
+  (
+   targetEnergy -
+   energy
+  ) *
+  .045;
+
+
+ /* ================= COLORE ================= */
+
+ currentColor.lerp(
+  activeColor,
+  energy *
+  .035
+ );
+
+
+ if(
+  energy < .3
+ ){
+
+  currentColor.lerp(
+   normalColor,
+   .025
+  );
 
  }
 
 
- geometry.attributes.position.needsUpdate=true;
+ coreMaterial.color =
+  currentColor;
 
 
- particles.rotation.y+=
-  .0005+
-  energy*.0008;
+ innerMaterial.color =
+  currentColor;
 
- particles.rotation.x=
-  Math.sin(time*.25)*.04;
 
- particles.rotation.z=
-  Math.cos(time*.18)*.025;
+ /* ================= PULSAZIONE ================= */
 
+ const pulse =
+  1 +
+  Math.sin(
+   time * 1.65
+  ) *
+  .035 *
+  (1 + energy);
+
+
+ const pulseFast =
+  1 +
+  Math.sin(
+   time * 3.2
+  ) *
+  .018 *
+  energy;
+
+
+ coreGroup.scale.set(
+  pulse,
+  pulse,
+  pulse
+ );
+
+
+ coreSphere.rotation.y +=
+  .0015 +
+  energy * .002;
+
+
+ coreSphere.rotation.x =
+  Math.sin(
+   time * .35
+  ) *
+  .035;
+
+
+ innerSphere.rotation.y -=
+  .0009 +
+  energy * .0015;
+
+
+ innerSphere.rotation.z =
+  Math.cos(
+   time * .25
+  ) *
+  .025;
+
+
+ /* ================= ANELLI ================= */
+
+ innerRing1.rotation.z +=
+  .0018 +
+  energy * .002;
+
+
+ innerRing2.rotation.z -=
+  .0012 +
+  energy * .0015;
+
+
+ outerRing1.rotation.z +=
+  .00055 +
+  energy * .0009;
+
+
+ outerRing2.rotation.z -=
+  .00075 +
+  energy * .0011;
+
+
+ outerRing3.rotation.z +=
+  .00035 +
+  energy * .0007;
+
+
+ /* ================= ANELLO SEGMENTATO ================= */
+
+ segmentGroup.rotation.z =
+  time *
+  (
+   .018 +
+   energy *
+   .012
+  );
+
+
+ segmentGroup.rotation.y =
+  Math.sin(
+   time * .3
+  ) *
+  .025;
+
+
+ /* ================= ANELLI ORGANICI ================= */
+
+ organicRing1.rotation.z +=
+  .00035 +
+  energy * .00045;
+
+
+ organicRing1.rotation.y =
+  Math.sin(
+   time * .22
+  ) *
+  .035;
+
+
+ organicRing2.rotation.z -=
+  .00025 +
+  energy * .0004;
+
+
+ organicRing2.rotation.x =
+  Math.cos(
+   time * .19
+  ) *
+  .045;
+
+
+ organicRing3.rotation.z +=
+  .00018 +
+  energy * .00035;
+
+
+ organicRing3.rotation.y =
+  Math.sin(
+   time * .15
+  ) *
+  .055;
+
+
+ /* ================= PARTICELLE ================= */
+
+ outerParticles.rotation.z +=
+  .0004 +
+  energy * .0006;
+
+
+ outerParticles.rotation.y +=
+  .00025;
+
+
+ particleMaterial.opacity =
+  .25 +
+  Math.min(
+   energy * .12,
+   .35
+  );
+
+
+ /* ================= GLOW ================= */
+
+ centralGlow.material.opacity =
+  .20 +
+  Math.sin(
+   time * 2
+  ) *
+  .025 +
+  energy *
+  .035;
+
+
+ const glowScale =
+  2.15 +
+  Math.sin(
+   time * 1.7
+  ) *
+  .08 +
+  energy *
+  .12;
+
+
+ centralGlow.scale.set(
+  glowScale,
+  glowScale,
+  1
+ );
+
+
+ /* ================= ROTAZIONE GENERALE ================= */
+
+ coreGroup.rotation.y +=
+  .00035 +
+  energy * .00055;
+
+
+ coreGroup.rotation.x =
+  Math.sin(
+   time * .18
+  ) *
+  .018;
+
+
+ coreGroup.rotation.z =
+  Math.cos(
+   time * .14
+  ) *
+  .012;
+
+
+ /* ================= RENDER ================= */
 
  renderer.render(
   scene,

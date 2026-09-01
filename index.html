@@ -1,686 +1,694 @@
-<!DOCTYPE html>  <html lang="it">  <head>  <meta charset="UTF-8">  <meta name="viewport"    content="width=device-width,initial-scale=1.0">
-
+<!DOCTYPE html>  <html lang="it">  <head>  <meta charset="UTF-8">  <meta name="viewport"    
+content="width=device-width,initial-scale=1.0">  
+  
 <title>J.A.R.V.I.S.</title>  <link rel="stylesheet"    
-href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">  <style>    *{
-box-sizing:border-box;
-margin:0;
-padding:0
-}
-
-html,body{
-width:100%;
-height:100%;
-overflow:hidden;
-background:#010405;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:
-radial-gradient(
-circle at center,
-#071719 0%,
-#020708 48%,
-#000 100%
-);
-}
-
-#webgl-container{
-position:fixed;
-inset:0;
-z-index:1;
-}
-
-.vignette{
-position:fixed;
-inset:0;
-z-index:3;
-pointer-events:none;
-background:
-radial-gradient(
-circle at center,
-transparent 30%,
-rgba(0,0,0,.2) 65%,
-rgba(0,0,0,.8) 100%
-);
-}
-
-.jarvis-title{
-position:fixed;
-top:2.4%;
-left:50%;
-transform:translateX(-50%);
-z-index:30;
-color:rgba(255,255,255,.86);
-font-size:clamp(20px,2.8vw,31px);
-font-weight:300;
-letter-spacing:clamp(5px,1vw,8px);
-white-space:nowrap;
-text-shadow:0 0 10px rgba(255,255,255,.12);
-pointer-events:none;
-}
-
-.datetime{
-position:fixed;
-top:18px;
-right:24px;
-z-index:30;
-display:flex;
-flex-direction:column;
-align-items:flex-end;
-gap:3px;
-font-family:monospace;
-pointer-events:none;
-}
-
-.time{
-color:rgba(150,255,255,.6);
-font-size:11px;
-letter-spacing:2px;
-}
-
-.date{
-color:rgba(150,255,255,.38);
-font-size:8px;
-letter-spacing:1px;
-}
-
-#chat{
-position:fixed;
-left:50%;
-bottom:92px;
-transform:translateX(-50%);
-z-index:40;
-width:min(620px,88%);
-text-align:center;
-pointer-events:none;
-}
-
-.msg{
-display:inline-block;
-max-width:100%;
-padding:10px 18px;
-border:1px solid rgba(0,255,255,.22);
-border-radius:24px;
-background:rgba(4,20,23,.4);
-backdrop-filter:blur(14px);
-color:rgba(235,255,255,.9);
-font-size:12px;
-line-height:1.45;
-white-space:pre-wrap;
-}
-
-.command-wrapper{
-position:fixed;
-left:50%;
-bottom:23px;
-transform:translateX(-50%);
-z-index:50;
-width:min(650px,90%);
-display:flex;
-align-items:center;
-padding:6px 7px 6px 20px;
-border:1px solid rgba(100,255,255,.28);
-border-radius:40px;
-background:rgba(5,20,23,.38);
-backdrop-filter:blur(20px);
-box-shadow:0 0 30px rgba(0,255,255,.05);
-}
-
-.command-wrapper:focus-within{
-border-color:rgba(0,255,255,.6);
-box-shadow:0 0 25px rgba(0,255,255,.12);
-}
-
-#textInput{
-flex:1;
-min-width:0;
-border:none;
-outline:none;
-background:transparent;
-color:white;
-font-size:14px;
-padding:12px 5px;
-}
-
-#textInput::placeholder{
-color:rgba(255,255,255,.3);
-}
-
-#micBtn{
-width:34px;
-height:34px;
-margin-right:7px;
-border:none;
-background:transparent;
-color:rgba(210,255,255,.65);
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.mic-icon{
-width:8px;
-height:14px;
-border:1.3px solid currentColor;
-border-radius:60px;
-position:relative;
-}
-
-.mic-icon:after{
-content:"";
-position:absolute;
-left:50%;
-bottom:-6px;
-width:12px;
-height:7px;
-transform:translateX(-50%);
-border:1.3px solid currentColor;
-border-top:none;
-border-radius:0 0 8px 8px;
-}
-
-#micBtn.active{
-color:#8fffff;
-filter:drop-shadow(0 0 8px rgba(0,255,255,.7));
-}
-
-#sendBtn{
-height:39px;
-padding:0 17px;
-border:1px solid rgba(0,255,255,.28);
-border-radius:22px;
-background:rgba(0,255,255,.05);
-color:rgba(220,255,255,.78);
-font-size:10px;
-letter-spacing:2px;
-cursor:pointer;
-}
-
-#sendBtn:hover{
-color:white;
-border-color:#00ffff;
-background:rgba(0,255,255,.1);
-}
-
-/* ================= CONVERSAZIONE ================= */
-
-#conversationBtn{
-position:fixed;
-left:22px;
-bottom:24px;
-z-index:60;
-height:39px;
-padding:0 15px;
-border:1px solid rgba(0,255,255,.25);
-border-radius:22px;
-background:rgba(3,15,18,.72);
-color:rgba(210,255,255,.7);
-font-size:10px;
-letter-spacing:1.5px;
-cursor:pointer;
-backdrop-filter:blur(12px);
-}
-
-#conversationBtn.active{
-color:#8fffff;
-border-color:rgba(0,255,255,.7);
-background:rgba(0,255,255,.08);
-box-shadow:0 0 18px rgba(0,255,255,.12);
-}
-
-/* ================= FULLSCREEN ================= */
-
-#fullscreenBtn{
-position:fixed;
-right:22px;
-bottom:24px;
-z-index:60;
-height:39px;
-padding:0 15px;
-border:1px solid rgba(0,255,255,.25);
-border-radius:22px;
-background:rgba(3,15,18,.72);
-color:rgba(210,255,255,.7);
-font-size:10px;
-letter-spacing:1.5px;
-cursor:pointer;
-backdrop-filter:blur(12px);
-transition:.2s;
-}
-
-#fullscreenBtn:hover{
-color:white;
-border-color:#00ffff;
-background:rgba(0,255,255,.08);
-}
-
-#fullscreenBtn.active{
-color:#8fffff;
-border-color:rgba(0,255,255,.75);
-background:rgba(0,255,255,.09);
-box-shadow:0 0 18px rgba(0,255,255,.14);
-}
-
-/* ================= VOCE ================= */
-
-#voiceBtn{
-position:fixed;
-right:22px;
-bottom:74px;
-z-index:60;
-height:39px;
-padding:0 15px;
-border:1px solid rgba(0,255,255,.25);
-border-radius:22px;
-background:rgba(3,15,18,.72);
-color:rgba(210,255,255,.7);
-font-size:10px;
-letter-spacing:1.5px;
-cursor:pointer;
-backdrop-filter:blur(12px);
-}
-
-#voicePanel{
-position:fixed;
-right:22px;
-bottom:122px;
-z-index:100;
-width:min(330px,calc(100% - 30px));
-padding:15px;
-display:none;
-border:1px solid rgba(0,255,255,.25);
-border-radius:18px;
-background:rgba(2,13,16,.94);
-backdrop-filter:blur(20px);
-}
-
-#voicePanel.active{
-display:block
-}
-
-.voice-title{
-color:rgba(220,255,255,.9);
-font-size:11px;
-letter-spacing:2px;
-margin-bottom:10px;
-}
-
-#voiceSelector,
-#voiceTest{
-width:100%;
-padding:10px;
-border:1px solid rgba(0,255,255,.2);
-border-radius:10px;
-outline:none;
-background:rgba(0,20,23,.9);
-color:rgba(220,255,255,.85);
-font-size:11px;
-}
-
-#voiceTest{
-margin-top:10px;
-background:rgba(0,255,255,.04);
-cursor:pointer;
-}
-
-/* ================= MAPPA ================= */
-
-#tacticalMap{
-position:fixed;
-inset:0;
-z-index:20;
-display:none;
-background:
-radial-gradient(
-circle at center,
-#081719 0%,
-#020708 65%,
-#000 100%
-);
-}
-
-#tacticalMap.active{
-display:block;
-animation:mapIn .45s ease;
-}
-
-@keyframes mapIn{
-from{
-opacity:0;
-transform:scale(1.015)
-}
-to{
-opacity:1;
-transform:scale(1)
-}
-}
-
-.map-header{
-position:absolute;
-top:2.4%;
-left:50%;
-transform:translateX(-50%);
-z-index:600;
-color:rgba(220,255,255,.9);
-font-size:clamp(24px,4vw,42px);
-font-weight:300;
-letter-spacing:clamp(6px,1.3vw,12px);
-white-space:nowrap;
-text-shadow:0 0 12px rgba(0,255,255,.25);
-pointer-events:none;
-}
-
-#map{
-position:absolute;
-top:3cm;
-right:3cm;
-bottom:3cm;
-left:3cm;
-overflow:hidden;
-border-radius:28px;
-background:#071012;
-box-shadow:
-0 0 35px rgba(0,0,0,.65),
-0 0 70px rgba(0,255,255,.035);
-border:1px solid rgba(0,255,255,.10);
-}
-
-.map-overlay{
-position:absolute;
-inset:0;
-z-index:400;
-pointer-events:none;
-border-radius:28px;
-box-shadow:inset 0 0 80px rgba(0,0,0,.28);
-}
-
-#closeMap{
-position:absolute;
-top:28px;
-left:34px;
-z-index:700;
-width:38px;
-height:38px;
-border:1px solid rgba(0,255,255,.35);
-border-radius:50%;
-background:rgba(0,15,18,.85);
-color:rgba(200,255,255,.85);
-cursor:pointer;
-font-size:19px;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.maplibregl-ctrl-group{
-background:rgba(0,15,18,.85)!important;
-border:1px solid rgba(0,255,255,.18)!important;
-border-radius:12px!important;
-overflow:hidden;
-}
-
-.maplibregl-ctrl-group button{
-background:transparent!important;
-}
-
-.maplibregl-ctrl-attrib{
-background:rgba(0,8,10,.65)!important;
-font-size:8px!important;
-}
-
-.jarvis-map-marker{
-width:20px;
-height:20px;
-border-radius:50%;
-border:2px solid #00ffff;
-background:rgba(0,255,255,.16);
-box-shadow:
-0 0 15px rgba(0,255,255,.9),
-0 0 35px rgba(0,255,255,.4);
-animation:markerPulse 1.5s infinite;
-}
-
-@keyframes markerPulse{
-0%,100%{
-transform:scale(1)
-}
-50%{
-transform:scale(1.18)
-}
-}
-
-/* ================= WEB WINDOWS ================= */
-
-#webSearchWindows{
-position:fixed;
-inset:0;
-z-index:200;
-pointer-events:none;
-}
-
-.web-window{
-position:absolute;
-width:430px;
-height:330px;
-min-width:250px;
-min-height:190px;
-background:rgba(2,12,15,.96);
-border:1px solid rgba(0,255,255,.28);
-border-radius:16px;
-box-shadow:
-0 0 25px rgba(0,255,255,.10),
-0 15px 50px rgba(0,0,0,.5);
-overflow:hidden;
-resize:both;
-pointer-events:auto;
-backdrop-filter:blur(15px);
-touch-action:none;
-}
-
-.web-window-header{
-position:relative;
-height:39px;
-display:flex;
-align-items:center;
-padding:0 8px 0 13px;
-background:rgba(0,25,29,.92);
-border-bottom:1px solid rgba(0,255,255,.15);
-cursor:grab;
-user-select:none;
--webkit-user-select:none;
-touch-action:none;
-}
-
-.web-window-header:active{
-cursor:grabbing;
-}
-
-.web-window-title{
-flex:1;
-min-width:0;
-color:rgba(210,255,255,.85);
-font-size:9px;
-letter-spacing:1.5px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}
-
-.web-window-number{
-color:rgba(0,255,255,.5);
-margin-right:8px;
-font-size:8px;
-}
-
-.web-window-controls{
-display:flex;
-gap:5px;
-}
-
-.web-window-btn{
-width:24px;
-height:24px;
-border:1px solid rgba(0,255,255,.16);
-border-radius:7px;
-background:rgba(0,255,255,.025);
-color:rgba(190,255,255,.7);
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:12px;
-}
-
-.web-window-btn:hover{
-color:white;
-border-color:#00ffff;
-}
-
-.web-window iframe{
-display:block;
-width:100%;
-height:calc(100% - 39px);
-border:none;
-background:white;
-}
-
-.web-window.minimized{
-height:39px!important;
-min-height:39px!important;
-resize:none;
-}
-
-.web-window.minimized iframe{
-display:none;
-}
-
-#webSearchIndicator{
-position:fixed;
-left:20px;
-bottom:20px;
-z-index:210;
-display:none;
-padding:8px 12px;
-border:1px solid rgba(0,255,255,.2);
-border-radius:15px;
-background:rgba(2,15,18,.75);
-color:rgba(180,255,255,.6);
-font-size:8px;
-letter-spacing:1.5px;
-pointer-events:none;
-}
-
-#webSearchIndicator.active{
-display:block
-}
-
-/* ================= MOBILE ================= */
-
-@media(max-width:600px){
-
-.jarvis-title{
-top:2.2%;
-font-size:23px;
-letter-spacing:5px;
-}
-
-.datetime{
-top:12px;
-right:13px;
-}
-
-.command-wrapper{
-width:calc(100% - 24px);
-bottom:17px;
-}
-
-#textInput{
-font-size:13px
-}
-
-#chat{
-bottom:80px
-}
-
-#map{
-top:3cm;
-right:3cm;
-bottom:3cm;
-left:3cm;
-border-radius:22px;
-}
-
-.map-overlay{
-border-radius:22px
-}
-
-.map-header{
-top:2.5%;
-font-size:23px;
-letter-spacing:5px;
-}
-
-#closeMap{
-top:24px;
-left:25px;
-width:34px;
-height:34px;
-}
-
-#voiceBtn{
-right:12px;
-bottom:112px;
-height:34px;
-font-size:9px;
-padding:0 11px;
-}
-
-#fullscreenBtn{
-right:12px;
-bottom:70px;
-height:34px;
-font-size:9px;
-padding:0 11px;
-}
-
-#conversationBtn{
-left:12px;
-bottom:70px;
-height:34px;
-font-size:9px;
-padding:0 11px;
-}
-
-#voicePanel{
-right:12px;
-bottom:150px;
-width:calc(100% - 24px);
-}
-
-.web-window{
-width:calc(100vw - 40px);
-height:300px;
-min-width:230px;
-min-height:180px;
-}
-}
-
-@media(max-width:430px){
-
-#map{
-top:2.2cm;
-right:2.2cm;
-bottom:2.2cm;
-left:2.2cm;
-}
-}
-
+href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">  <style>    
+    
+*{    
+ box-sizing:border-box;    
+ margin:0;    
+ padding:0    
+}    
+    
+html,body{    
+ width:100%;    
+ height:100%;    
+ overflow:hidden;    
+ background:#010405;    
+ font-family:Arial,sans-serif;    
+}    
+    
+body{    
+ background:    
+ radial-gradient(    
+  circle at center,    
+  #071719 0%,    
+  #020708 48%,    
+  #000 100%    
+ );    
+}    
+    
+#webgl-container{    
+ position:fixed;    
+ inset:0;    
+ z-index:1;    
+}    
+    
+.vignette{    
+ position:fixed;    
+ inset:0;    
+ z-index:3;    
+ pointer-events:none;    
+ background:    
+ radial-gradient(    
+  circle at center,    
+  transparent 30%,    
+  rgba(0,0,0,.2) 65%,    
+  rgba(0,0,0,.8) 100%    
+ );    
+}    
+    
+.jarvis-title{    
+ position:fixed;    
+ top:2.4%;    
+ left:50%;    
+ transform:translateX(-50%);    
+ z-index:30;    
+ color:rgba(255,255,255,.86);    
+ font-size:clamp(20px,2.8vw,31px);    
+ font-weight:300;    
+ letter-spacing:clamp(5px,1vw,8px);    
+ white-space:nowrap;    
+ text-shadow:0 0 10px rgba(255,255,255,.12);    
+ pointer-events:none;    
+}    
+    
+.datetime{    
+ position:fixed;    
+ top:18px;    
+ right:24px;    
+ z-index:30;    
+ display:flex;    
+ flex-direction:column;    
+ align-items:flex-end;    
+ gap:3px;    
+ font-family:monospace;    
+ pointer-events:none;    
+}    
+    
+.time{    
+ color:rgba(150,255,255,.6);    
+ font-size:11px;    
+ letter-spacing:2px;    
+}    
+    
+.date{    
+ color:rgba(150,255,255,.38);    
+ font-size:8px;    
+ letter-spacing:1px;    
+}    
+    
+#chat{    
+ position:fixed;    
+ left:50%;    
+ bottom:92px;    
+ transform:translateX(-50%);    
+ z-index:40;    
+ width:min(620px,88%);    
+ text-align:center;    
+ pointer-events:none;    
+}    
+    
+.msg{    
+ display:inline-block;    
+ max-width:100%;    
+ padding:10px 18px;    
+ border:1px solid rgba(0,255,255,.22);    
+ border-radius:24px;    
+ background:rgba(4,20,23,.4);    
+ backdrop-filter:blur(14px);    
+ color:rgba(235,255,255,.9);    
+ font-size:12px;    
+ line-height:1.45;    
+ white-space:pre-wrap;    
+}    
+    
+.command-wrapper{    
+ position:fixed;    
+ left:50%;    
+ bottom:23px;    
+ transform:translateX(-50%);    
+ z-index:50;    
+ width:min(650px,90%);    
+ display:flex;    
+ align-items:center;    
+ padding:6px 7px 6px 20px;    
+ border:1px solid rgba(100,255,255,.28);    
+ border-radius:40px;    
+ background:rgba(5,20,23,.38);    
+ backdrop-filter:blur(20px);    
+ box-shadow:0 0 30px rgba(0,255,255,.05);    
+}    
+    
+.command-wrapper:focus-within{    
+ border-color:rgba(0,255,255,.6);    
+ box-shadow:0 0 25px rgba(0,255,255,.12);    
+}    
+    
+#textInput{    
+ flex:1;    
+ min-width:0;    
+ border:none;    
+ outline:none;    
+ background:transparent;    
+ color:white;    
+ font-size:14px;    
+ padding:12px 5px;    
+}    
+    
+#textInput::placeholder{    
+ color:rgba(255,255,255,.3);    
+}    
+    
+#micBtn{    
+ width:34px;    
+ height:34px;    
+ margin-right:7px;    
+ border:none;    
+ background:transparent;    
+ color:rgba(210,255,255,.65);    
+ cursor:pointer;    
+ display:flex;    
+ align-items:center;    
+ justify-content:center;    
+}    
+    
+.mic-icon{    
+ width:8px;    
+ height:14px;    
+ border:1.3px solid currentColor;    
+ border-radius:60px;    
+ position:relative;    
+}    
+    
+.mic-icon:after{    
+ content:"";    
+ position:absolute;    
+ left:50%;    
+ bottom:-6px;    
+ width:12px;    
+ height:7px;    
+ transform:translateX(-50%);    
+ border:1.3px solid currentColor;    
+ border-top:none;    
+ border-radius:0 0 8px 8px;    
+}    
+    
+#micBtn.active{    
+ color:#8fffff;    
+ filter:drop-shadow(0 0 8px rgba(0,255,255,.7));    
+}    
+    
+#sendBtn{    
+ height:39px;    
+ padding:0 17px;    
+ border:1px solid rgba(0,255,255,.28);    
+ border-radius:22px;    
+ background:rgba(0,255,255,.05);    
+ color:rgba(220,255,255,.78);    
+ font-size:10px;    
+ letter-spacing:2px;    
+ cursor:pointer;    
+}    
+    
+#sendBtn:hover{    
+ color:white;    
+ border-color:#00ffff;    
+ background:rgba(0,255,255,.1);    
+}    
+    
+    
+/* ================= CONVERSAZIONE ================= */    
+    
+#conversationBtn{    
+ position:fixed;    
+ left:22px;    
+ bottom:24px;    
+ z-index:60;    
+ height:39px;    
+ padding:0 15px;    
+ border:1px solid rgba(0,255,255,.25);    
+ border-radius:22px;    
+ background:rgba(3,15,18,.72);    
+ color:rgba(210,255,255,.7);    
+ font-size:10px;    
+ letter-spacing:1.5px;    
+ cursor:pointer;    
+ backdrop-filter:blur(12px);    
+}    
+    
+#conversationBtn.active{    
+ color:#8fffff;    
+ border-color:rgba(0,255,255,.7);    
+ background:rgba(0,255,255,.08);    
+ box-shadow:0 0 18px rgba(0,255,255,.12);    
+}    
+    
+    
+/* ================= FULLSCREEN ================= */    
+    
+#fullscreenBtn{    
+ position:fixed;    
+ right:22px;    
+ bottom:24px;    
+ z-index:60;    
+ height:39px;    
+ padding:0 15px;    
+ border:1px solid rgba(0,255,255,.25);    
+ border-radius:22px;    
+ background:rgba(3,15,18,.72);    
+ color:rgba(210,255,255,.7);    
+ font-size:10px;    
+ letter-spacing:1.5px;    
+ cursor:pointer;    
+ backdrop-filter:blur(12px);    
+ transition:.2s;    
+}    
+    
+#fullscreenBtn:hover{    
+ color:white;    
+ border-color:#00ffff;    
+ background:rgba(0,255,255,.08);    
+}    
+    
+#fullscreenBtn.active{    
+ color:#8fffff;    
+ border-color:rgba(0,255,255,.75);    
+ background:rgba(0,255,255,.09);    
+ box-shadow:0 0 18px rgba(0,255,255,.14);    
+}    
+    
+    
+/* ================= VOCE ================= */    
+    
+#voiceBtn{    
+ position:fixed;    
+ right:22px;    
+ bottom:74px;    
+ z-index:60;    
+ height:39px;    
+ padding:0 15px;    
+ border:1px solid rgba(0,255,255,.25);    
+ border-radius:22px;    
+ background:rgba(3,15,18,.72);    
+ color:rgba(210,255,255,.7);    
+ font-size:10px;    
+ letter-spacing:1.5px;    
+ cursor:pointer;    
+ backdrop-filter:blur(12px);    
+}    
+    
+#voicePanel{    
+ position:fixed;    
+ right:22px;    
+ bottom:122px;    
+ z-index:100;    
+ width:min(330px,calc(100% - 30px));    
+ padding:15px;    
+ display:none;    
+ border:1px solid rgba(0,255,255,.25);    
+ border-radius:18px;    
+ background:rgba(2,13,16,.94);    
+ backdrop-filter:blur(20px);    
+}    
+    
+#voicePanel.active{    
+ display:block    
+}    
+    
+.voice-title{    
+ color:rgba(220,255,255,.9);    
+ font-size:11px;    
+ letter-spacing:2px;    
+ margin-bottom:10px;    
+}    
+    
+#voiceSelector,    
+#voiceTest{    
+ width:100%;    
+ padding:10px;    
+ border:1px solid rgba(0,255,255,.2);    
+ border-radius:10px;    
+ outline:none;    
+ background:rgba(0,20,23,.9);    
+ color:rgba(220,255,255,.85);    
+ font-size:11px;    
+}    
+    
+#voiceTest{    
+ margin-top:10px;    
+ background:rgba(0,255,255,.04);    
+ cursor:pointer;    
+}    
+    
+    
+/* ================= MAPPA ================= */    
+    
+#tacticalMap{    
+ position:fixed;    
+ inset:0;    
+ z-index:20;    
+ display:none;    
+ background:    
+ radial-gradient(    
+  circle at center,    
+  #081719 0%,    
+  #020708 65%,    
+  #000 100%    
+ );    
+}    
+    
+#tacticalMap.active{    
+ display:block;    
+ animation:mapIn .45s ease;    
+}    
+    
+@keyframes mapIn{    
+ from{    
+  opacity:0;    
+  transform:scale(1.015)    
+ }    
+ to{    
+  opacity:1;    
+  transform:scale(1)    
+ }    
+}    
+    
+.map-header{    
+ position:absolute;    
+ top:2.4%;    
+ left:50%;    
+ transform:translateX(-50%);    
+ z-index:600;    
+ color:rgba(220,255,255,.9);    
+ font-size:clamp(24px,4vw,42px);    
+ font-weight:300;    
+ letter-spacing:clamp(6px,1.3vw,12px);    
+ white-space:nowrap;    
+ text-shadow:0 0 12px rgba(0,255,255,.25);    
+ pointer-events:none;    
+}    
+    
+#map{    
+ position:absolute;    
+ top:3cm;    
+ right:3cm;    
+ bottom:3cm;    
+ left:3cm;    
+ overflow:hidden;    
+ border-radius:28px;    
+ background:#071012;    
+ box-shadow:    
+ 0 0 35px rgba(0,0,0,.65),    
+ 0 0 70px rgba(0,255,255,.035);    
+ border:1px solid rgba(0,255,255,.10);    
+}    
+    
+.map-overlay{    
+ position:absolute;    
+ inset:0;    
+ z-index:400;    
+ pointer-events:none;    
+ border-radius:28px;    
+ box-shadow:inset 0 0 80px rgba(0,0,0,.28);    
+}    
+    
+#closeMap{    
+ position:absolute;    
+ top:28px;    
+ left:34px;    
+ z-index:700;    
+ width:38px;    
+ height:38px;    
+ border:1px solid rgba(0,255,255,.35);    
+ border-radius:50%;    
+ background:rgba(0,15,18,.85);    
+ color:rgba(200,255,255,.85);    
+ cursor:pointer;    
+ font-size:19px;    
+ display:flex;    
+ align-items:center;    
+ justify-content:center;    
+}    
+    
+.maplibregl-ctrl-group{    
+ background:rgba(0,15,18,.85)!important;    
+ border:1px solid rgba(0,255,255,.18)!important;    
+ border-radius:12px!important;    
+ overflow:hidden;    
+}    
+    
+.maplibregl-ctrl-group button{    
+ background:transparent!important;    
+}    
+    
+.maplibregl-ctrl-attrib{    
+ background:rgba(0,8,10,.65)!important;    
+ font-size:8px!important;    
+}    
+    
+.jarvis-map-marker{    
+ width:20px;    
+ height:20px;    
+ border-radius:50%;    
+ border:2px solid #00ffff;    
+ background:rgba(0,255,255,.16);    
+ box-shadow:    
+ 0 0 15px rgba(0,255,255,.9),    
+ 0 0 35px rgba(0,255,255,.4);    
+ animation:markerPulse 1.5s infinite;    
+}    
+    
+@keyframes markerPulse{    
+ 0%,100%{    
+  transform:scale(1)    
+ }    
+ 50%{    
+  transform:scale(1.18)    
+ }    
+}    
+    
+    
+/* ================= WEB WINDOWS ================= */    
+    
+#webSearchWindows{    
+ position:fixed;    
+ inset:0;    
+ z-index:200;    
+ pointer-events:none;    
+}    
+    
+.web-window{    
+ position:absolute;    
+ width:430px;    
+ height:330px;    
+ min-width:250px;    
+ min-height:190px;    
+ background:rgba(2,12,15,.96);    
+ border:1px solid rgba(0,255,255,.28);    
+ border-radius:16px;    
+ box-shadow:    
+ 0 0 25px rgba(0,255,255,.10),    
+ 0 15px 50px rgba(0,0,0,.5);    
+ overflow:hidden;    
+ resize:both;    
+ pointer-events:auto;    
+ backdrop-filter:blur(15px);    
+ touch-action:none;    
+}    
+    
+.web-window-header{    
+ position:relative;    
+ height:39px;    
+ display:flex;    
+ align-items:center;    
+ padding:0 8px 0 13px;    
+ background:rgba(0,25,29,.92);    
+ border-bottom:1px solid rgba(0,255,255,.15);    
+ cursor:grab;    
+ user-select:none;    
+ -webkit-user-select:none;    
+ touch-action:none;    
+}    
+    
+.web-window-header:active{    
+ cursor:grabbing;    
+}    
+    
+.web-window-title{    
+ flex:1;    
+ min-width:0;    
+ color:rgba(210,255,255,.85);    
+ font-size:9px;    
+ letter-spacing:1.5px;    
+ white-space:nowrap;    
+ overflow:hidden;    
+ text-overflow:ellipsis;    
+}    
+    
+.web-window-number{    
+ color:rgba(0,255,255,.5);    
+ margin-right:8px;    
+ font-size:8px;    
+}    
+    
+.web-window-controls{    
+ display:flex;    
+ gap:5px;    
+}    
+    
+.web-window-btn{    
+ width:24px;    
+ height:24px;    
+ border:1px solid rgba(0,255,255,.16);    
+ border-radius:7px;    
+ background:rgba(0,255,255,.025);    
+ color:rgba(190,255,255,.7);    
+ cursor:pointer;    
+ display:flex;    
+ align-items:center;    
+ justify-content:center;    
+ font-size:12px;    
+}    
+    
+.web-window-btn:hover{    
+ color:white;    
+ border-color:#00ffff;    
+}    
+    
+.web-window iframe{    
+ display:block;    
+ width:100%;    
+ height:calc(100% - 39px);    
+ border:none;    
+ background:white;    
+}    
+    
+.web-window.minimized{    
+ height:39px!important;    
+ min-height:39px!important;    
+ resize:none;    
+}    
+    
+.web-window.minimized iframe{    
+ display:none;    
+}    
+    
+#webSearchIndicator{    
+ position:fixed;    
+ left:20px;    
+ bottom:20px;    
+ z-index:210;    
+ display:none;    
+ padding:8px 12px;    
+ border:1px solid rgba(0,255,255,.2);    
+ border-radius:15px;    
+ background:rgba(2,15,18,.75);    
+ color:rgba(180,255,255,.6);    
+ font-size:8px;    
+ letter-spacing:1.5px;    
+ pointer-events:none;    
+}    
+    
+#webSearchIndicator.active{    
+ display:block    
+}    
+    
+    
+/* ================= MOBILE ================= */    
+    
+@media(max-width:600px){    
+    
+ .jarvis-title{    
+  top:2.2%;    
+  font-size:23px;    
+  letter-spacing:5px;    
+ }    
+    
+ .datetime{    
+  top:12px;    
+  right:13px;    
+ }    
+    
+ .command-wrapper{    
+  width:calc(100% - 24px);    
+  bottom:17px;    
+ }    
+    
+ #textInput{    
+  font-size:13px    
+ }    
+    
+ #chat{    
+  bottom:80px    
+ }    
+    
+ #map{    
+  top:3cm;    
+  right:3cm;    
+  bottom:3cm;    
+  left:3cm;    
+  border-radius:22px;    
+ }    
+    
+ .map-overlay{    
+  border-radius:22px    
+ }    
+    
+ .map-header{    
+  top:2.5%;    
+  font-size:23px;    
+  letter-spacing:5px;    
+ }    
+    
+ #closeMap{    
+  top:24px;    
+  left:25px;    
+  width:34px;    
+  height:34px;    
+ }    
+    
+ #voiceBtn{    
+  right:12px;    
+  bottom:112px;    
+  height:34px;    
+  font-size:9px;    
+  padding:0 11px;    
+ }    
+    
+ #fullscreenBtn{    
+  right:12px;    
+  bottom:70px;    
+  height:34px;    
+  font-size:9px;    
+  padding:0 11px;    
+ }    
+    
+ #conversationBtn{    
+  left:12px;    
+  bottom:70px;    
+  height:34px;    
+  font-size:9px;    
+  padding:0 11px;    
+ }    
+    
+ #voicePanel{    
+  right:12px;    
+  bottom:150px;    
+  width:calc(100% - 24px);    
+ }    
+    
+ .web-window{    
+  width:calc(100vw - 40px);    
+  height:300px;    
+  min-width:230px;    
+  min-height:180px;    
+ }    
+}    
+    
+@media(max-width:430px){    
+    
+ #map{    
+  top:2.2cm;    
+  right:2.2cm;    
+  bottom:2.2cm;    
+  left:2.2cm;    
+ }    
+}    
+    
 </style>  </head>  <body>  <div id="webgl-container"></div>  <div class="vignette"></div>  <div class="jarvis-title"    
-id="jarvisTitle">
-J.A.R.V.I.S
-
+     id="jarvisTitle">    
+ J.A.R.V.I.S    
 </div>  <div class="datetime">   <div id="clock"    
       class="time">    
   00:00:00    
@@ -697,7 +705,9 @@ J.A.R.V.I.S
 id="textInput"    
 type="text"    
 autocomplete="off"    
-placeholder="Chiedi qualcosa a JARVIS...">   <button id="micBtn">    
+placeholder="Chiedi qualcosa a JARVIS...">  
+  
+ <button id="micBtn">    
   <span class="mic-icon"></span>    
  </button>   <button id="sendBtn">    
   INVIA    
@@ -713,3260 +723,3593 @@ placeholder="Chiedi qualcosa a JARVIS...">   <button id="micBtn">
    Voce dispositivo automatica    
   </option>   </select>   <button id="voiceTest">    
   TESTA VOCE    
- </button>  </div>  <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>  <script type="importmap">    {
-"imports":{
-"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
-}
-}
-
-</script>  <script type="module">
-
-import * as THREE from "three";
-
-/* ================= CONFIG ================= */
-
-const API=
-"https://iao-ai-v3.oceano-masoud.workers.dev/";
-
-const MEMORY_KEY=
-"jarvis_memory_v1";
-
-const MAX_MEMORY=30;
-
-const ELEVEN_VOICE_ID=
-"vkBFlAtUdZqNR4MqxSVr";
-
-let currentAudio=null;
-let audioPlaying=false;
-
-let deviceVoices=[];
-let selectedDeviceVoice=null;
-
-/* ================= ELEMENTI ================= */
-
-const container=
-document.getElementById("webgl-container");
-
-const chat=
-document.getElementById("chat");
-
-const textInput=
-document.getElementById("textInput");
-
-const sendBtn=
-document.getElementById("sendBtn");
-
-const micBtn=
-document.getElementById("micBtn");
-
-const clock=
-document.getElementById("clock");
-
-const date=
-document.getElementById("date");
-
-const tacticalMap=
-document.getElementById("tacticalMap");
-
-const closeMap=
-document.getElementById("closeMap");
-
-const jarvisTitle=
-document.getElementById("jarvisTitle");
-
-const mapHeader=
-document.querySelector(".map-header");
-
-const voiceBtn=
-document.getElementById("voiceBtn");
-
-const voicePanel=
-document.getElementById("voicePanel");
-
-const voiceSelector=
-document.getElementById("voiceSelector");
-
-const voiceTest=
-document.getElementById("voiceTest");
-
-const webSearchWindows=
-document.getElementById("webSearchWindows");
-
-const webSearchIndicator=
-document.getElementById("webSearchIndicator");
-
-const conversationBtn=
-document.getElementById("conversationBtn");
-
-const fullscreenBtn=
-document.getElementById("fullscreenBtn");
-
-/* ================= MEMORIA ================= */
-
-let memory=[];
-
-try{
-
-const saved=
-localStorage.getItem(MEMORY_KEY);
-
-if(saved){
-
-const parsed=
-JSON.parse(saved);
-
-if(Array.isArray(parsed))
-memory=parsed.slice(-MAX_MEMORY);
-}
-
-}catch(e){
-
-console.warn(
-"Memoria:",
-e
-);
-
-}
-
-function saveMemory(){
-
-try{
-
-localStorage.setItem(
-MEMORY_KEY,
-JSON.stringify(
-memory.slice(-MAX_MEMORY)
-)
-);
-
-}catch(e){
-
-console.warn(
-"Salvataggio memoria:",
-e
-);
-
-}
-
-}
-
-function addMemory(role,content){
-
-memory.push({
-role,
-content
-});
-
-memory=
-memory.slice(-MAX_MEMORY);
-
-saveMemory();
-}
-
-/* ================= OROLOGIO ================= */
-
-const months=[
-"GEN","FEB","MAR","APR","MAG","GIU",
-"LUG","AGO","SET","OTT","NOV","DIC"
-];
-
-function updateClock(){
-
-const now=new Date();
-
-clock.textContent=
-${String(now.getHours()).padStart(2,"0")}:+
-${String(now.getMinutes()).padStart(2,"0")}:+
-${String(now.getSeconds()).padStart(2,"0")};
-
-date.textContent=
-${String(now.getDate()).padStart(2,"0")} +
-${months[now.getMonth()]} +
-${now.getFullYear()};
-}
-
-updateClock();
-
-setInterval(
-updateClock,
-1000
-);
-
-/* ================= THREE ================= */
-
-const scene=
-new THREE.Scene();
-
-const camera=
-new THREE.PerspectiveCamera(
-55,
-window.innerWidth/window.innerHeight,
-0.1,
-1000
-);
-
-camera.position.z=5.2;
-
-const renderer=
-new THREE.WebGLRenderer({
-antialias:true,
-alpha:true
-});
-
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
-);
-
-renderer.setPixelRatio(
-Math.min(
-window.devicePixelRatio,
-2
-)
-);
-
-container.appendChild(
-renderer.domElement
-);
-
-/* ================= GLOW ================= */
-
-function createGlow(){
-
-const canvas=
-document.createElement("canvas");
-
-canvas.width=64;
-canvas.height=64;
-
-const ctx=
-canvas.getContext("2d");
-
-const gradient=
-ctx.createRadialGradient(
-32,32,0,
-32,32,32
-);
-
-gradient.addColorStop(
-0,
-"rgba(255,255,255,1)"
-);
-
-gradient.addColorStop(
-.2,
-"rgba(220,255,255,1)"
-);
-
-gradient.addColorStop(
-.4,
-"rgba(0,255,255,.9)"
-);
-
-gradient.addColorStop(
-.7,
-"rgba(0,150,190,.25)"
-);
-
-gradient.addColorStop(
-1,
-"rgba(0,0,0,0)"
-);
-
-ctx.fillStyle=gradient;
-
-ctx.fillRect(
-0,
-0,
-64,
-64
-);
-
-return new THREE.CanvasTexture(
-canvas
-);
-}
-
-/* ================= PARTICELLE ================= */
-
-const COUNT=6000;
-
-const geometry=
-new THREE.BufferGeometry();
-
-const positions=
-new Float32Array(
-COUNT*3
-);
-
-const radii=
-new Float32Array(
-COUNT
-);
-
-const angles=
-new Float32Array(
-COUNT*2
-);
-
-const seeds=
-new Float32Array(
-COUNT
-);
-
-for(let i=0;i<COUNT;i++){
-
-const r=
-1.10+
-Math.random()*.70;
-
-const theta=
-Math.random()*
-Math.PI*2;
-
-const phi=
-Math.acos(
-2*Math.random()-1
-);
-
-radii[i]=r;
-
-angles[i*2]=theta;
-
-angles[i*2+1]=phi;
-
-seeds[i]=
-Math.random()*100;
-
-positions[i3]=
-rMath.sin(phi)*
-Math.cos(theta);
-
-positions[i3+1]=
-rMath.sin(phi)*
-Math.sin(theta);
-
-positions[i3+2]=
-rMath.cos(phi);
-}
-
-geometry.setAttribute(
-"position",
-new THREE.BufferAttribute(
-positions,
-3
-)
-);
-
-const material=
-new THREE.PointsMaterial({
-
-color:
-new THREE.Color(
-0x00cfe8
-),
-
-size:.042,
-
-map:createGlow(),
-
-transparent:true,
-
-opacity:1,
-
-depthWrite:false,
-
-blending:
-THREE.AdditiveBlending
-});
-
-const particles=
-new THREE.Points(
-geometry,
-material
-);
-
-scene.add(
-particles
-);
-
-/* ================= STATO ================= */
-
-let targetEnergy=.15;
-
-let energy=.15;
-
-const normalColor=
-new THREE.Color(
-0x00cfe8
-);
-
-const activeColor=
-new THREE.Color(
-0x8fffff
-);
-
-const currentColor=
-normalColor.clone();
-
-function setState(state){
-
-if(state==="thinking")
-targetEnergy=2;
-
-else if(state==="speaking")
-targetEnergy=.8;
-
-else if(state==="listening")
-targetEnergy=.55;
-
-else
-targetEnergy=.15;
-}
-
-/* ================= ANIMAZIONE ================= */
-
-function animate(){
-
-requestAnimationFrame(
-animate
-);
-
-const time=
-performance.now()*.001;
-
-energy+=
-(targetEnergy-energy)*
-.045;
-
-currentColor.lerp(
-activeColor,
-energy*.04
-);
-
-if(energy<.3){
-
-currentColor.lerp(
-normalColor,
-.03
-);
-
-}
-
-material.color=
-currentColor;
-
-material.size=
-.032+
-energy*.008;
-
-const pos=
-geometry.attributes.position.array;
-
-for(let i=0;i<COUNT;i++){
-
-const index=i*3;
-
-const r=
-radii[i];
-
-const theta=
-angles[i*2];
-
-const phi=
-angles[i*2+1];
-
-const seed=
-seeds[i];
-
-const pulse=
-Math.sin(
-time2+seed
-).035;
-
-const strangeShape=
-Math.sin(
-theta6+
-time2+
-seed
-).18energy;
-
-const wave=
-Math.cos(
-phi7-
-time1.8+
-seed
-).12energy;
-
-const rr=
-r+
-pulse+
-strangeShape+
-wave;
-
-let x=
-rr*
-Math.sin(phi)*
-Math.cos(theta);
-
-let y=
-rr*
-Math.sin(phi)*
-Math.sin(theta);
-
-let z=
-rr*
-Math.cos(phi);
-
-x+=
-Math.sin(
-time2.4+
-phi8+
-seed
-).08energy;
-
-y+=
-Math.cos(
-time2.1+
-theta9+
-seed
-).08energy;
-
-z+=
-Math.sin(
-time2.7+
-(theta+phi)7
-).10energy;
-
-pos[index]=x;
-
-pos[index+1]=y;
-
-pos[index+2]=z;
-
-}
-
-geometry.attributes.position.needsUpdate=true;
-
-particles.rotation.y+=
-.0005+
-energy*.0008;
-
-particles.rotation.x=
-Math.sin(time*.25)*.04;
-
-particles.rotation.z=
-Math.cos(time*.18)*.025;
-
-renderer.render(
-scene,
-camera
-);
-}
-
-animate();
-
-/* ================= MAPLIBRE ================= */
-
-const MAPTILER_KEY=
-"NmSlgtsAdQyEWy7t0OJf";
-
-const MAPTILER_STYLE=
-"https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
-+MAPTILER_KEY;
-
-let map=null;
-
-let currentMarker=null;
-
-function initializeMap(){
-
-if(map)return;
-
-if(typeof maplibregl==="undefined"){
-
-addMsg(
-"Errore: MapTiler non disponibile."
-);
-
-return;
-}
-
-map=
-new maplibregl.Map({
-
-container:"map",
-
-style:MAPTILER_STYLE,
-
-center:[
-10.2118,
-45.5416
-],
-
-zoom:10,
-
-attributionControl:true,
-
-antialias:true
-
-});
-
-map.addControl(
-new maplibregl.NavigationControl({
-showCompass:true,
-showZoom:true
-}),
-"bottom-right"
-);
-
-map.on(
-"load",
-()=>{
-map.resize();
-}
-);
-
-}
-
-function openTacticalMap(){
-
-tacticalMap.classList.add(
-"active"
-);
-
-jarvisTitle.style.display=
-"none";
-
-mapHeader.style.display=
-"block";
-
-initializeMap();
-
-setTimeout(
-()=>{
-if(map)
-map.resize();
-},
-400
-);
-}
-
-function closeTacticalMap(){
-
-tacticalMap.classList.remove(
-"active"
-);
-
-jarvisTitle.style.display=
-"block";
-}
-
-closeMap.addEventListener(
-"click",
-closeTacticalMap
-);
-
-/* ================= UTILITY ================= */
-
-function escapeHtml(text){
-
-return String(text)
-.replace(/&/g,"&")
-.replace(/</g,"<")
-.replace(/>/g,">")
-.replace(/"/g,""")
-.replace(/'/g,"'");
-}
-
-function addMsg(text){
-
-chat.innerHTML="";
-
-const element=
-document.createElement("div");
-
-element.className="msg";
-
-element.textContent=text;
-
-chat.appendChild(
-element
-);
-}
-
-/* =====================================================
-FULLSCREEN
-===================================================== */
-
-let fullscreenChanging=false;
-
-function isFullscreen(){
-
-return !!(
-document.fullscreenElement ||
-document.webkitFullscreenElement
-);
-}
-
-async function enterFullscreen(){
-
-if(isFullscreen())
-return true;
-
-if(fullscreenChanging)
-return false;
-
-fullscreenChanging=true;
-
-try{
-
-if(
-document.documentElement.requestFullscreen
-){
-
-await document.documentElement.requestFullscreen();
-
-}else if(
-document.documentElement.webkitRequestFullscreen
-){
-
-document.documentElement.webkitRequestFullscreen();
-
-}else{
-
-addMsg(
-"Fullscreen non supportato da questo browser."
-);
-
-fullscreenChanging=false;
-
-return false;
-}
-
-fullscreenChanging=false;
-
-return true;
-
-}catch(error){
-
-console.warn(
-"Fullscreen:",
-error
-);
-
-fullscreenChanging=false;
-
-addMsg(
-"Il browser ha bloccato il fullscreen. Premi il pulsante FULLSCREEN."
-);
-
-return false;
-}
-}
-
-async function exitFullscreen(){
-
-try{
-
-if(document.exitFullscreen){
-
-await document.exitFullscreen();
-
-}else if(
-document.webkitExitFullscreen
-){
-
-document.webkitExitFullscreen();
-
-}
-
-return true;
-
-}catch(error){
-
-console.warn(
-"Uscita fullscreen:",
-error
-);
-
-return false;
-}
-}
-
-async function toggleFullscreen(){
-
-if(isFullscreen()){
-
-await exitFullscreen();
-
-}else{
-
-await enterFullscreen();
-
-}
-}
-
-function updateFullscreenUI(){
-
-const active=
-isFullscreen();
-
-fullscreenBtn.classList.toggle(
-"active",
-active
-);
-
-fullscreenBtn.textContent=
-active
-? "⛶ ESCI FULLSCREEN"
-: "⛶ FULLSCREEN";
-}
-
-fullscreenBtn.addEventListener(
-"click",
-async()=>{
-
-await toggleFullscreen();
-
-updateFullscreenUI();
-
-}
-);
-
-document.addEventListener(
-"fullscreenchange",
-()=>{
-updateFullscreenUI();
-
-setTimeout(
-()=>{
-if(map)
-map.resize();
-},
-100
-);
-}
-);
-
-document.addEventListener(
-"webkitfullscreenchange",
-()=>{
-updateFullscreenUI();
-
-setTimeout(
-()=>{
-if(map)
-map.resize();
-},
-100
-);
-}
-);
-
-/* =====================================================
-NORMALIZZAZIONE COMANDI
-===================================================== */
-
-function normalizeCommand(text){
-
-return String(text)
-.toLowerCase()
-.normalize("NFD")
-.replace(
-/[\u0300-\u036f]/g,
-""
-)
-.replace(
-/[.,!?;:]/g,
-" "
-)
-.replace(
-/\s+/g,
-" "
-)
-.trim();
-}
-
-/* =====================================================
-COMANDI FULLSCREEN
-===================================================== */
-
-function handleFullscreenCommand(text){
-
-const normalized=
-normalizeCommand(text);
-
-/*
-
-Rimuoviamo alcune parole riempitive.
-
-In questo modo JARVIS è più tollerante
-
-con il riconoscimento vocale.
-*/
-
-
-const simplified=
-normalized
-.replace(
-/\bper favore\b/g,
-""
-)
-.replace(
-/\bjarvis\b/g,
-""
-)
-.replace(
-/\bla modalita\b/g,
-"modalita"
-)
-.replace(
-/\bla modalita di\b/g,
-"modalita"
-)
-.replace(
-/\bmodalita a\b/g,
-"modalita"
-)
-.replace(
-/\bmodalita dello\b/g,
-"modalita"
-)
-.replace(
-/\bmodalita dello schermo\b/g,
-"modalita schermo"
-)
-.replace(
-/\s+/g,
-" "
-)
-.trim();
-
-const activatePatterns=[
-
-"attiva fullscreen",
-
-"attiva il fullscreen",
-
-"attiva la fullscreen",
-
-"attiva modalita fullscreen",
-
-"attiva la modalita fullscreen",
-
-"attiva modalita schermo intero",
-
-"attiva la modalita schermo intero",
-
-"attiva schermo intero",
-
-"metti fullscreen",
-
-"metti in fullscreen",
-
-"metti a fullscreen",
-
-"vai fullscreen",
-
-"vai in fullscreen",
-
-"fullscreen",
-
-"modalita fullscreen",
-
-"modalita schermo intero",
-
-"schermo intero",
-
-"a schermo intero",
-
-"passa a schermo intero",
-
-"passa in fullscreen"
-
-];
-
-const deactivatePatterns=[
-
-"disattiva fullscreen",
-
-"disattiva il fullscreen",
-
-"disattiva la fullscreen",
-
-"disattiva modalita fullscreen",
-
-"disattiva la modalita fullscreen",
-
-"disattiva schermo intero",
-
-"disattiva la modalita schermo intero",
-
-"esci dal fullscreen",
-
-"esci da fullscreen",
-
-"esci fullscreen",
-
-"esci da schermo intero",
-
-"esci dallo schermo intero",
-
-"torna normale",
-
-"torna alla modalita normale",
-
-"modalita normale",
-
-"schermo normale"
-
-];
-
-if(
-activatePatterns.includes(
-simplified
-)
-){
-
-if(isFullscreen()){
-
-addMsg(
-"Modalità fullscreen già attiva."
-);
-
-return true;
-}
-
-/*
-
-Il browser può bloccare questa chiamata
-
-se arriva da SpeechRecognition.
-*/
-
-
-enterFullscreen();
-
-return true;
-}
-
-if(
-deactivatePatterns.includes(
-simplified
-)
-){
-
-if(!isFullscreen()){
-
-addMsg(
-"Modalità fullscreen non attiva."
-);
-
-return true;
-}
-
-exitFullscreen();
-
-return true;
-}
-
-/*
-
-Riconoscimento più generico.
-
-Se la frase contiene fullscreen o schermo intero
-
-insieme a parole di attivazione, viene comunque
-
-considerata un comando.
-*/
-
-
-const hasFullscreenWord=
-simplified.includes("fullscreen") ||
-simplified.includes("full screen") ||
-simplified.includes("schermo intero");
-
-const wantsActivate=
-simplified.includes("attiva") ||
-simplified.includes("avvia") ||
-simplified.includes("inizia") ||
-simplified.includes("metti") ||
-simplified.includes("passa") ||
-simplified.includes("vai");
-
-const wantsDeactivate=
-simplified.includes("disattiva") ||
-simplified.includes("chiudi") ||
-simplified.includes("esci") ||
-simplified.includes("torna");
-
-if(
-hasFullscreenWord &&
-wantsActivate
-){
-
-enterFullscreen();
-
-return true;
-}
-
-if(
-hasFullscreenWord &&
-wantsDeactivate
-){
-
-exitFullscreen();
-
-return true;
-}
-
-return false;
-}
-
-/* ================= MARKER ================= */
-
-function createJarvisMarker(
-lat,
-lon,
-name
-){
-
-if(!map)return;
-
-if(currentMarker){
-
-currentMarker.remove();
-
-currentMarker=null;
-}
-
-const markerElement=
-document.createElement("div");
-
-markerElement.className=
-"jarvis-map-marker";
-
-currentMarker=
-new maplibregl.Marker({
-
-element:markerElement,
-
-anchor:"center"
-
-})
-.setLngLat([
-lon,
-lat
-])
-.setPopup(
-new maplibregl.Popup({
-offset:15
-})
-.setHTML(
-<b style="color:#00ffff">${escapeHtml(name)}</b>
-)
-)
-.addTo(map);
-
-currentMarker.togglePopup();
-}
-
-/* ================= RICERCA POSIZIONE ================= */
-
-async function searchLocation(place){
-
-try{
-
-openTacticalMap();
-
-addMsg(
-"Ricerca posizione: "+
-place
-);
-
-const url=
-"https://nominatim.openstreetmap.org/search"+
-"?format=json&limit=1&q="+
-encodeURIComponent(place);
-
-const response=
-await fetch(
-url,
-{
-headers:{
-"Accept":
-"application/json"
-}
-}
-);
-
-if(!response.ok)
-throw new Error(
-"Ricerca posizione fallita"
-);
-
-const results=
-await response.json();
-
-if(!results.length){
-
-addMsg(
-"Non riesco a trovare "+
-place+
-"."
-);
-
-return;
-}
-
-const result=
-results[0];
-
-const lat=
-parseFloat(result.lat);
-
-const lon=
-parseFloat(result.lon);
-
-if(!map)
-throw new Error(
-"Mappa non inizializzata"
-);
-
-map.flyTo({
-
-center:[
-lon,
-lat
-],
-
-zoom:12,
-
-speed:.8,
-
-curve:1.5,
-
-essential:true
-
-});
-
-createJarvisMarker(
-lat,
-lon,
-place
-);
-
-addMsg(
-"Posizione acquisita: "+
-place
-);
-
-}catch(error){
-
-console.error(
-"MAP ERROR:",
-error
-);
-
-addMsg(
-"Impossibile localizzare "+
-place+
-"."
-);
-
-}
-}
-
-/* ================= COMANDI MAPPA ================= */
-
-function handleMapCommand(text){
-
-const normalized=
-normalizeCommand(text);
-
-if(
-
-normalized.includes(
-"apri la mappa"
-) ||
-
-normalized.includes(
-"apri mappa"
-) ||
-
-normalized.includes(
-"mappa tattica"
-) ||
-
-normalized.includes(
-"modalita tattica"
-) ||
-
-normalized.includes(
-"attiva la mappa"
-)
-
-){
-
-openTacticalMap();
-
-addMsg(
-"Mappa tattica attivata."
-);
-
-return true;
-}
-
-if(
-
-normalized.includes(
-"chiudi la mappa"
-) ||
-
-normalized.includes(
-"chiudi mappa"
-) ||
-
-normalized.includes(
-"esci dalla mappa"
-) ||
-
-normalized.includes(
-"torna alla modalita normale"
-)
-
-){
-
-closeTacticalMap();
-
-addMsg(
-"Modalità tattica disattivata."
-);
-
-return true;
-}
-
-const patterns=[
-
-"mostrami ",
-
-"mostra ",
-
-"vai a ",
-
-"portami a ",
-
-"localizza ",
-
-"cerca ",
-
-"visualizza "
-
-];
-
-for(
-const pattern of patterns
-){
-
-if(
-normalized.startsWith(
-pattern
-)
-){
-
-const place=
-text
-.trim()
-.substring(
-pattern.length
-)
-.trim();
-
-if(place.length>1){
-
-searchLocation(    
- place    
+ </button>  </div>  <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>  <script type="importmap">    
+    
+{    
+ "imports":{    
+  "three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"    
+ }    
+}    
+    
+</script>  <script type="module">    
+    
+import * as THREE from "three";    
+    
+    
+/* ================= CONFIG ================= */    
+    
+const API=    
+ "https://iao-ai-v3.oceano-masoud.workers.dev/";    
+    
+const MEMORY_KEY=    
+ "jarvis_memory_v1";    
+    
+const MAX_MEMORY=30;    
+    
+const ELEVEN_VOICE_ID=    
+ "vkBFlAtUdZqNR4MqxSVr";    
+    
+    
+let currentAudio=null;    
+let audioPlaying=false;    
+    
+let deviceVoices=[];    
+let selectedDeviceVoice=null;    
+    
+    
+/* ================= ELEMENTI ================= */    
+    
+const container=    
+ document.getElementById("webgl-container");    
+    
+const chat=    
+ document.getElementById("chat");    
+    
+const textInput=    
+ document.getElementById("textInput");    
+    
+const sendBtn=    
+ document.getElementById("sendBtn");    
+    
+const micBtn=    
+ document.getElementById("micBtn");    
+    
+const clock=    
+ document.getElementById("clock");    
+    
+const date=    
+ document.getElementById("date");    
+    
+const tacticalMap=    
+ document.getElementById("tacticalMap");    
+    
+const closeMap=    
+ document.getElementById("closeMap");    
+    
+const jarvisTitle=    
+ document.getElementById("jarvisTitle");    
+    
+const mapHeader=    
+ document.querySelector(".map-header");    
+    
+const voiceBtn=    
+ document.getElementById("voiceBtn");    
+    
+const voicePanel=    
+ document.getElementById("voicePanel");    
+    
+const voiceSelector=    
+ document.getElementById("voiceSelector");    
+    
+const voiceTest=    
+ document.getElementById("voiceTest");    
+    
+const webSearchWindows=    
+ document.getElementById("webSearchWindows");    
+    
+const webSearchIndicator=    
+ document.getElementById("webSearchIndicator");    
+    
+const conversationBtn=    
+ document.getElementById("conversationBtn");    
+    
+const fullscreenBtn=    
+ document.getElementById("fullscreenBtn");    
+    
+    
+/* ================= MEMORIA ================= */    
+    
+let memory=[];    
+    
+try{    
+    
+ const saved=    
+  localStorage.getItem(MEMORY_KEY);    
+    
+ if(saved){    
+    
+  const parsed=    
+   JSON.parse(saved);    
+    
+  if(Array.isArray(parsed))    
+   memory=parsed.slice(-MAX_MEMORY);    
+ }    
+    
+}catch(e){    
+    
+ console.warn(    
+  "Memoria:",    
+  e    
+ );    
+    
+}    
+    
+    
+function saveMemory(){    
+    
+ try{    
+    
+  localStorage.setItem(    
+   MEMORY_KEY,    
+   JSON.stringify(    
+    memory.slice(-MAX_MEMORY)    
+   )    
+  );    
+    
+ }catch(e){    
+    
+  console.warn(    
+   "Salvataggio memoria:",    
+   e    
+  );    
+    
+ }    
+    
+}    
+    
+    
+function addMemory(role,content){    
+    
+ memory.push({    
+  role,    
+  content    
+ });    
+    
+ memory=    
+  memory.slice(-MAX_MEMORY);    
+    
+ saveMemory();    
+}    
+    
+    
+/* ================= OROLOGIO ================= */    
+    
+const months=[    
+ "GEN","FEB","MAR","APR","MAG","GIU",    
+ "LUG","AGO","SET","OTT","NOV","DIC"    
+];    
+    
+    
+function updateClock(){    
+    
+ const now=new Date();    
+    
+ clock.textContent=    
+  `${String(now.getHours()).padStart(2,"0")}:`+    
+  `${String(now.getMinutes()).padStart(2,"0")}:`+    
+  `${String(now.getSeconds()).padStart(2,"0")}`;    
+    
+ date.textContent=    
+  `${String(now.getDate()).padStart(2,"0")} `+    
+  `${months[now.getMonth()]} `+    
+  `${now.getFullYear()}`;    
+}    
+    
+    
+updateClock();    
+    
+setInterval(    
+ updateClock,    
+ 1000    
 );    
-
-return true;
-
-}
-}
-}
-
-return false;
-}
-
-/* =====================================================
-WEB WINDOWS
-===================================================== */
-
-let webWindowCounter=0;
-
-let highestWebZ=220;
-
-function updateWebIndicator(){
-
-const count=
-webSearchWindows
-.querySelectorAll(
-".web-window"
-)
-.length;
-
-if(count>0){
-
-webSearchIndicator.classList.add(
-"active"
-);
-
-webSearchIndicator.textContent=
-"WEB WINDOWS: "+
-count;
-
-}else{
-
-webSearchIndicator.classList.remove(
-"active"
-);
-
-}
-}
-
-function bringWebWindowToFront(
-windowElement
-){
-
-highestWebZ++;
-
-windowElement.style.zIndex=
-String(
-highestWebZ
-);
-}
-
-/* =====================================================
-CREA FINESTRA WEB
-===================================================== */
-
-function openWebSearch(query){
-
-if(!query)return;
-
-webWindowCounter++;
-
-const windowElement=
-document.createElement("div");
-
-windowElement.className=
-"web-window";
-
-const offset=
-(webWindowCounter-1)%6;
-
-windowElement.style.left=
-(20+offset*45)+"px";
-
-windowElement.style.top=
-(90+offset*35)+"px";
-
-windowElement.style.zIndex=
-String(
-++highestWebZ
-);
-
-const safeTitle=
-escapeHtml(query);
-
-windowElement.innerHTML=`
-
-  <div class="web-window-header">       <div class="web-window-title">    <span class="web-window-number">    
- WEB ${webWindowCounter}    
-</span>    
-
-${safeTitle}
-
-   </div>       <div class="web-window-controls">    <button    
- class="web-window-btn minimize-web"    
- title="Minimizza">    
-
- −    
-
-</button>    
-
-<button    
- class="web-window-btn close-web"    
- title="Chiudi">    
-
- ×    
-
-</button>
-
-   </div>      </div>      <iframe    
+    
+    
+/* ================= THREE ================= */    
+    
+const scene=    
+ new THREE.Scene();    
+    
+    
+const camera=    
+ new THREE.PerspectiveCamera(    
+  55,    
+  window.innerWidth/window.innerHeight,    
+  0.1,    
+  1000    
+ );    
+    
+    
+camera.position.z=5.2;    
+    
+    
+const renderer=    
+ new THREE.WebGLRenderer({    
+  antialias:true,    
+  alpha:true    
+ });    
+    
+    
+renderer.setSize(    
+ window.innerWidth,    
+ window.innerHeight    
+);    
+    
+    
+renderer.setPixelRatio(    
+ Math.min(    
+  window.devicePixelRatio,    
+  2    
+ )    
+);    
+    
+    
+container.appendChild(    
+ renderer.domElement    
+);    
+    
+    
+/* ================= GLOW ================= */    
+    
+function createGlow(){    
+    
+ const canvas=    
+  document.createElement("canvas");    
+    
+ canvas.width=64;    
+ canvas.height=64;    
+    
+ const ctx=    
+  canvas.getContext("2d");    
+    
+ const gradient=    
+  ctx.createRadialGradient(    
+   32,32,0,    
+   32,32,32    
+  );    
+    
+ gradient.addColorStop(    
+  0,    
+  "rgba(255,255,255,1)"    
+ );    
+    
+ gradient.addColorStop(    
+  .2,    
+  "rgba(220,255,255,1)"    
+ );    
+    
+ gradient.addColorStop(    
+  .4,    
+  "rgba(0,255,255,.9)"    
+ );    
+    
+ gradient.addColorStop(    
+  .7,    
+  "rgba(0,150,190,.25)"    
+ );    
+    
+ gradient.addColorStop(    
+  1,    
+  "rgba(0,0,0,0)"    
+ );    
+    
+ ctx.fillStyle=gradient;    
+    
+ ctx.fillRect(    
+  0,    
+  0,    
+  64,    
+  64    
+ );    
+    
+ return new THREE.CanvasTexture(    
+  canvas    
+ );    
+}    
+    
+    
+/* ================= PARTICELLE ================= */    
+    
+const COUNT=6000;    
+    
+const geometry=    
+ new THREE.BufferGeometry();    
+    
+const positions=    
+ new Float32Array(    
+  COUNT*3    
+ );    
+    
+const radii=    
+ new Float32Array(    
+  COUNT    
+ );    
+    
+const angles=    
+ new Float32Array(    
+  COUNT*2    
+ );    
+    
+const seeds=    
+ new Float32Array(    
+  COUNT    
+ );    
+    
+    
+for(let i=0;i<COUNT;i++){    
+    
+ const r=    
+  1.10+    
+  Math.random()*.70;    
+    
+ const theta=    
+  Math.random()*    
+  Math.PI*2;    
+    
+ const phi=    
+  Math.acos(    
+   2*Math.random()-1    
+  );    
+    
+ radii[i]=r;    
+    
+ angles[i*2]=theta;    
+    
+ angles[i*2+1]=phi;    
+    
+ seeds[i]=    
+  Math.random()*100;    
+    
+ positions[i*3]=    
+  r*Math.sin(phi)*    
+  Math.cos(theta);    
+    
+ positions[i*3+1]=    
+  r*Math.sin(phi)*    
+  Math.sin(theta);    
+    
+ positions[i*3+2]=    
+  r*Math.cos(phi);    
+}    
+    
+    
+geometry.setAttribute(    
+ "position",    
+ new THREE.BufferAttribute(    
+  positions,    
+  3    
+ )    
+);    
+    
+    
+const material=    
+ new THREE.PointsMaterial({    
+    
+  color:    
+   new THREE.Color(    
+    0x00cfe8    
+   ),    
+    
+  size:.042,    
+    
+  map:createGlow(),    
+    
+  transparent:true,    
+    
+  opacity:1,    
+    
+  depthWrite:false,    
+    
+  blending:    
+   THREE.AdditiveBlending    
+ });    
+    
+    
+const particles=    
+ new THREE.Points(    
+  geometry,    
+  material    
+ );    
+    
+    
+scene.add(    
+ particles    
+);    
+    
+    
+/* ================= STATO ================= */    
+    
+let targetEnergy=.15;    
+    
+let energy=.15;    
+    
+    
+const normalColor=    
+ new THREE.Color(    
+  0x00cfe8    
+ );    
+    
+const activeColor=    
+ new THREE.Color(    
+  0x8fffff    
+ );    
+    
+const currentColor=    
+ normalColor.clone();    
+    
+    
+function setState(state){    
+    
+ if(state==="thinking")    
+  targetEnergy=2;    
+    
+ else if(state==="speaking")    
+  targetEnergy=.8;    
+    
+ else if(state==="listening")    
+  targetEnergy=.55;    
+    
+ else    
+  targetEnergy=.15;    
+}    
+    
+    
+/* ================= ANIMAZIONE ================= */    
+    
+function animate(){    
+    
+ requestAnimationFrame(    
+  animate    
+ );    
+    
+ const time=    
+  performance.now()*.001;    
+    
+ energy+=    
+  (targetEnergy-energy)*    
+  .045;    
+    
+ currentColor.lerp(    
+  activeColor,    
+  energy*.04    
+ );    
+    
+ if(energy<.3){    
+    
+  currentColor.lerp(    
+   normalColor,    
+   .03    
+  );    
+    
+ }    
+    
+ material.color=    
+  currentColor;    
+    
+ material.size=    
+  .032+    
+  energy*.008;    
+    
+    
+ const pos=    
+  geometry.attributes.position.array;    
+    
+    
+ for(let i=0;i<COUNT;i++){    
+    
+  const index=i*3;    
+    
+  const r=    
+   radii[i];    
+    
+  const theta=    
+   angles[i*2];    
+    
+  const phi=    
+   angles[i*2+1];    
+    
+  const seed=    
+   seeds[i];    
+    
+    
+  const pulse=    
+   Math.sin(    
+    time*2+seed    
+   )*.035;    
+    
+    
+  const strangeShape=    
+   Math.sin(    
+    theta*6+    
+    time*2+    
+    seed    
+   )*.18*energy;    
+    
+    
+  const wave=    
+   Math.cos(    
+    phi*7-    
+    time*1.8+    
+    seed    
+   )*.12*energy;    
+    
+    
+  const rr=    
+   r+    
+   pulse+    
+   strangeShape+    
+   wave;    
+    
+    
+  let x=    
+   rr*    
+   Math.sin(phi)*    
+   Math.cos(theta);    
+    
+  let y=    
+   rr*    
+   Math.sin(phi)*    
+   Math.sin(theta);    
+    
+  let z=    
+   rr*    
+   Math.cos(phi);    
+    
+    
+  x+=    
+   Math.sin(    
+    time*2.4+    
+    phi*8+    
+    seed    
+   )*.08*energy;    
+    
+    
+  y+=    
+   Math.cos(    
+    time*2.1+    
+    theta*9+    
+    seed    
+   )*.08*energy;    
+    
+    
+  z+=    
+   Math.sin(    
+    time*2.7+    
+    (theta+phi)*7    
+   )*.10*energy;    
+    
+    
+  pos[index]=x;    
+    
+  pos[index+1]=y;    
+    
+  pos[index+2]=z;    
+    
+ }    
+    
+    
+ geometry.attributes.position.needsUpdate=true;    
+    
+    
+ particles.rotation.y+=    
+  .0005+    
+  energy*.0008;    
+    
+ particles.rotation.x=    
+  Math.sin(time*.25)*.04;    
+    
+ particles.rotation.z=    
+  Math.cos(time*.18)*.025;    
+    
+    
+ renderer.render(    
+  scene,    
+  camera    
+ );    
+}    
+    
+    
+animate();    
+    
+    
+/* ================= MAPLIBRE ================= */    
+    
+const MAPTILER_KEY=    
+ "NmSlgtsAdQyEWy7t0OJf";    
+    
+    
+const MAPTILER_STYLE=    
+ "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="    
+ +MAPTILER_KEY;    
+    
+    
+let map=null;    
+    
+let currentMarker=null;    
+    
+    
+function initializeMap(){    
+    
+ if(map)return;    
+    
+ if(typeof maplibregl==="undefined"){    
+    
+  addMsg(    
+   "Errore: MapTiler non disponibile."    
+  );    
+    
+  return;    
+ }    
+    
+    
+ map=    
+  new maplibregl.Map({    
+    
+   container:"map",    
+    
+   style:MAPTILER_STYLE,    
+    
+   center:[    
+    10.2118,    
+    45.5416    
+   ],    
+    
+   zoom:10,    
+    
+   attributionControl:true,    
+    
+   antialias:true    
+    
+  });    
+    
+    
+ map.addControl(    
+  new maplibregl.NavigationControl({    
+   showCompass:true,    
+   showZoom:true    
+  }),    
+  "bottom-right"    
+ );    
+    
+    
+ map.on(    
+  "load",    
+  ()=>{    
+   map.resize();    
+  }    
+ );    
+    
+}    
+    
+    
+function openTacticalMap(){    
+    
+ tacticalMap.classList.add(    
+  "active"    
+ );    
+    
+ jarvisTitle.style.display=    
+  "none";    
+    
+ mapHeader.style.display=    
+  "block";    
+    
+ initializeMap();    
+    
+ setTimeout(    
+  ()=>{    
+   if(map)    
+    map.resize();    
+  },    
+  400    
+ );    
+}    
+    
+    
+function closeTacticalMap(){    
+    
+ tacticalMap.classList.remove(    
+  "active"    
+ );    
+    
+ jarvisTitle.style.display=    
+  "block";    
+}    
+    
+    
+closeMap.addEventListener(    
+ "click",    
+ closeTacticalMap    
+);    
+    
+    
+/* ================= UTILITY ================= */    
+    
+function escapeHtml(text){    
+    
+ return String(text)    
+  .replace(/&/g,"&amp;")    
+  .replace(/</g,"&lt;")    
+  .replace(/>/g,"&gt;")    
+  .replace(/"/g,"&quot;")    
+  .replace(/'/g,"&#039;");    
+}    
+    
+    
+function addMsg(text){    
+    
+ chat.innerHTML="";    
+    
+ const element=    
+  document.createElement("div");    
+    
+ element.className="msg";    
+    
+ element.textContent=text;    
+    
+ chat.appendChild(    
+  element    
+ );    
+}    
+    
+    
+/* =====================================================    
+   FULLSCREEN    
+===================================================== */    
+    
+let fullscreenChanging=false;    
+    
+    
+function isFullscreen(){    
+    
+ return !!(    
+  document.fullscreenElement ||    
+  document.webkitFullscreenElement    
+ );    
+}    
+    
+    
+async function enterFullscreen(){    
+    
+ if(isFullscreen())    
+  return true;    
+    
+    
+ if(fullscreenChanging)    
+  return false;    
+    
+    
+ fullscreenChanging=true;    
+    
+    
+ try{    
+    
+  if(    
+   document.documentElement.requestFullscreen    
+  ){    
+    
+   await document.documentElement.requestFullscreen();    
+    
+  }else if(    
+   document.documentElement.webkitRequestFullscreen    
+  ){    
+    
+   document.documentElement.webkitRequestFullscreen();    
+    
+  }else{    
+    
+   addMsg(    
+    "Fullscreen non supportato da questo browser."    
+   );    
+    
+   fullscreenChanging=false;    
+    
+   return false;    
+  }    
+    
+    
+  fullscreenChanging=false;    
+    
+  return true;    
+    
+    
+ }catch(error){    
+    
+  console.warn(    
+   "Fullscreen:",    
+   error    
+  );    
+    
+  fullscreenChanging=false;    
+    
+  addMsg(    
+   "Il browser ha bloccato il fullscreen. Premi il pulsante FULLSCREEN."    
+  );    
+    
+  return false;    
+ }    
+}    
+    
+    
+async function exitFullscreen(){    
+    
+ try{    
+    
+  if(document.exitFullscreen){    
+    
+   await document.exitFullscreen();    
+    
+  }else if(    
+   document.webkitExitFullscreen    
+  ){    
+    
+   document.webkitExitFullscreen();    
+    
+  }    
+    
+  return true;    
+    
+ }catch(error){    
+    
+  console.warn(    
+   "Uscita fullscreen:",    
+   error    
+  );    
+    
+  return false;    
+ }    
+}    
+    
+    
+async function toggleFullscreen(){    
+    
+ if(isFullscreen()){    
+    
+  await exitFullscreen();    
+    
+ }else{    
+    
+  await enterFullscreen();    
+    
+ }    
+}    
+    
+    
+function updateFullscreenUI(){    
+    
+ const active=    
+  isFullscreen();    
+    
+ fullscreenBtn.classList.toggle(    
+  "active",    
+  active    
+ );    
+    
+ fullscreenBtn.textContent=    
+  active    
+   ? "⛶ ESCI FULLSCREEN"    
+   : "⛶ FULLSCREEN";    
+}    
+    
+    
+fullscreenBtn.addEventListener(    
+ "click",    
+ async()=>{    
+    
+  await toggleFullscreen();    
+    
+  updateFullscreenUI();    
+    
+ }    
+);    
+    
+    
+document.addEventListener(    
+ "fullscreenchange",    
+ ()=>{    
+  updateFullscreenUI();    
+    
+  setTimeout(    
+   ()=>{    
+    if(map)    
+     map.resize();    
+   },    
+   100    
+  );    
+ }    
+);    
+    
+    
+document.addEventListener(    
+ "webkitfullscreenchange",    
+ ()=>{    
+  updateFullscreenUI();    
+    
+  setTimeout(    
+   ()=>{    
+    if(map)    
+     map.resize();    
+   },    
+   100    
+  );    
+ }    
+);    
+    
+    
+/* =====================================================    
+   NORMALIZZAZIONE COMANDI    
+===================================================== */    
+    
+function normalizeCommand(text){    
+    
+ return String(text)    
+  .toLowerCase()    
+  .normalize("NFD")    
+  .replace(    
+   /[\u0300-\u036f]/g,    
+   ""    
+  )    
+  .replace(    
+   /[.,!?;:]/g,    
+   " "    
+  )    
+  .replace(    
+   /\s+/g,    
+   " "    
+  )    
+  .trim();    
+}    
+    
+    
+/* =====================================================    
+   COMANDI FULLSCREEN    
+===================================================== */    
+    
+function handleFullscreenCommand(text){    
+    
+ const normalized=    
+  normalizeCommand(text);    
+    
+    
+ /*    
+  * Rimuoviamo alcune parole riempitive.    
+  * In questo modo JARVIS è più tollerante    
+  * con il riconoscimento vocale.    
+  */    
+    
+ const simplified=    
+  normalized    
+   .replace(    
+    /\bper favore\b/g,    
+    ""    
+   )    
+   .replace(    
+    /\bjarvis\b/g,    
+    ""    
+   )    
+   .replace(    
+    /\bla modalita\b/g,    
+    "modalita"    
+   )    
+   .replace(    
+    /\bla modalita di\b/g,    
+    "modalita"    
+   )    
+   .replace(    
+    /\bmodalita a\b/g,    
+    "modalita"    
+   )    
+   .replace(    
+    /\bmodalita dello\b/g,    
+    "modalita"    
+   )    
+   .replace(    
+    /\bmodalita dello schermo\b/g,    
+    "modalita schermo"    
+   )    
+   .replace(    
+    /\s+/g,    
+    " "    
+   )    
+   .trim();    
+    
+    
+ const activatePatterns=[    
+    
+  "attiva fullscreen",    
+    
+  "attiva il fullscreen",    
+    
+  "attiva la fullscreen",    
+    
+  "attiva modalita fullscreen",    
+    
+  "attiva la modalita fullscreen",    
+    
+  "attiva modalita schermo intero",    
+    
+  "attiva la modalita schermo intero",    
+    
+  "attiva schermo intero",    
+    
+  "metti fullscreen",    
+    
+  "metti in fullscreen",    
+    
+  "metti a fullscreen",    
+    
+  "vai fullscreen",    
+    
+  "vai in fullscreen",    
+    
+  "fullscreen",    
+    
+  "modalita fullscreen",    
+    
+  "modalita schermo intero",    
+    
+  "schermo intero",    
+    
+  "a schermo intero",    
+    
+  "passa a schermo intero",    
+    
+  "passa in fullscreen"    
+    
+ ];    
+    
+    
+ const deactivatePatterns=[    
+    
+  "disattiva fullscreen",    
+    
+  "disattiva il fullscreen",    
+    
+  "disattiva la fullscreen",    
+    
+  "disattiva modalita fullscreen",    
+    
+  "disattiva la modalita fullscreen",    
+    
+  "disattiva schermo intero",    
+    
+  "disattiva la modalita schermo intero",    
+    
+  "esci dal fullscreen",    
+    
+  "esci da fullscreen",    
+    
+  "esci fullscreen",    
+    
+  "esci da schermo intero",    
+    
+  "esci dallo schermo intero",    
+    
+  "torna normale",    
+    
+  "torna alla modalita normale",    
+    
+  "modalita normale",    
+    
+  "schermo normale"    
+    
+ ];    
+    
+    
+ if(    
+  activatePatterns.includes(    
+   simplified    
+  )    
+ ){    
+    
+  if(isFullscreen()){    
+    
+   addMsg(    
+    "Modalità fullscreen già attiva."    
+   );    
+    
+   return true;    
+  }    
+    
+    
+  /*    
+   * Il browser può bloccare questa chiamata    
+   * se arriva da SpeechRecognition.    
+   */    
+    
+  enterFullscreen();    
+    
+  return true;    
+ }    
+    
+    
+ if(    
+  deactivatePatterns.includes(    
+   simplified    
+  )    
+ ){    
+    
+  if(!isFullscreen()){    
+    
+   addMsg(    
+    "Modalità fullscreen non attiva."    
+   );    
+    
+   return true;    
+  }    
+    
+  exitFullscreen();    
+    
+  return true;    
+ }    
+    
+    
+ /*    
+  * Riconoscimento più generico.    
+  * Se la frase contiene fullscreen o schermo intero    
+  * insieme a parole di attivazione, viene comunque    
+  * considerata un comando.    
+  */    
+    
+ const hasFullscreenWord=    
+  simplified.includes("fullscreen") ||    
+  simplified.includes("full screen") ||    
+  simplified.includes("schermo intero");    
+    
+    
+ const wantsActivate=    
+  simplified.includes("attiva") ||    
+  simplified.includes("avvia") ||    
+  simplified.includes("inizia") ||    
+  simplified.includes("metti") ||    
+  simplified.includes("passa") ||    
+  simplified.includes("vai");    
+    
+    
+ const wantsDeactivate=    
+  simplified.includes("disattiva") ||    
+  simplified.includes("chiudi") ||    
+  simplified.includes("esci") ||    
+  simplified.includes("torna");    
+    
+    
+ if(    
+  hasFullscreenWord &&    
+  wantsActivate    
+ ){    
+    
+  enterFullscreen();    
+    
+  return true;    
+ }    
+    
+    
+ if(    
+  hasFullscreenWord &&    
+  wantsDeactivate    
+ ){    
+    
+  exitFullscreen();    
+    
+  return true;    
+ }    
+    
+    
+ return false;    
+}    
+    
+    
+/* ================= MARKER ================= */    
+    
+function createJarvisMarker(    
+ lat,    
+ lon,    
+ name    
+){    
+    
+ if(!map)return;    
+    
+    
+ if(currentMarker){    
+    
+  currentMarker.remove();    
+    
+  currentMarker=null;    
+ }    
+    
+    
+ const markerElement=    
+  document.createElement("div");    
+    
+ markerElement.className=    
+  "jarvis-map-marker";    
+    
+    
+ currentMarker=    
+  new maplibregl.Marker({    
+    
+   element:markerElement,    
+    
+   anchor:"center"    
+    
+  })    
+  .setLngLat([    
+   lon,    
+   lat    
+  ])    
+  .setPopup(    
+   new maplibregl.Popup({    
+    offset:15    
+   })    
+   .setHTML(    
+    `<b style="color:#00ffff">${escapeHtml(name)}</b>`    
+   )    
+  )    
+  .addTo(map);    
+    
+    
+ currentMarker.togglePopup();    
+}    
+    
+    
+/* ================= RICERCA POSIZIONE ================= */    
+    
+async function searchLocation(place){    
+    
+ try{    
+    
+  openTacticalMap();    
+    
+  addMsg(    
+   "Ricerca posizione: "+    
+   place    
+  );    
+    
+    
+  const url=    
+   "https://nominatim.openstreetmap.org/search"+    
+   "?format=json&limit=1&q="+    
+   encodeURIComponent(place);    
+    
+    
+  const response=    
+   await fetch(    
+    url,    
+    {    
+     headers:{    
+      "Accept":    
+       "application/json"    
+     }    
+    }    
+   );    
+    
+    
+  if(!response.ok)    
+   throw new Error(    
+    "Ricerca posizione fallita"    
+   );    
+    
+    
+  const results=    
+   await response.json();    
+    
+    
+  if(!results.length){    
+    
+   addMsg(    
+    "Non riesco a trovare "+    
+    place+    
+    "."    
+   );    
+    
+   return;    
+  }    
+    
+    
+  const result=    
+   results[0];    
+    
+    
+  const lat=    
+   parseFloat(result.lat);    
+    
+  const lon=    
+   parseFloat(result.lon);    
+    
+    
+  if(!map)    
+   throw new Error(    
+    "Mappa non inizializzata"    
+   );    
+    
+    
+  map.flyTo({    
+    
+   center:[    
+    lon,    
+    lat    
+   ],    
+    
+   zoom:12,    
+    
+   speed:.8,    
+    
+   curve:1.5,    
+    
+   essential:true    
+    
+  });    
+    
+    
+  createJarvisMarker(    
+   lat,    
+   lon,    
+   place    
+  );    
+    
+    
+  addMsg(    
+   "Posizione acquisita: "+    
+   place    
+  );    
+    
+    
+ }catch(error){    
+    
+  console.error(    
+   "MAP ERROR:",    
+   error    
+  );    
+    
+  addMsg(    
+   "Impossibile localizzare "+    
+   place+    
+   "."    
+  );    
+    
+ }    
+}    
+    
+    
+/* ================= COMANDI MAPPA ================= */    
+    
+function handleMapCommand(text){    
+    
+ const normalized=    
+  normalizeCommand(text);    
+    
+    
+ if(    
+    
+  normalized.includes(    
+   "apri la mappa"    
+  ) ||    
+    
+  normalized.includes(    
+   "apri mappa"    
+  ) ||    
+    
+  normalized.includes(    
+   "mappa tattica"    
+  ) ||    
+    
+  normalized.includes(    
+   "modalita tattica"    
+  ) ||    
+    
+  normalized.includes(    
+   "attiva la mappa"    
+  )    
+    
+ ){    
+    
+  openTacticalMap();    
+    
+  addMsg(    
+   "Mappa tattica attivata."    
+  );    
+    
+  return true;    
+ }    
+    
+    
+ if(    
+    
+  normalized.includes(    
+   "chiudi la mappa"    
+  ) ||    
+    
+  normalized.includes(    
+   "chiudi mappa"    
+  ) ||    
+    
+  normalized.includes(    
+   "esci dalla mappa"    
+  ) ||    
+    
+  normalized.includes(    
+   "torna alla modalita normale"    
+  )    
+    
+ ){    
+    
+  closeTacticalMap();    
+    
+  addMsg(    
+   "Modalità tattica disattivata."    
+  );    
+    
+  return true;    
+ }    
+    
+    
+ const patterns=[    
+    
+  "mostrami ",    
+    
+  "mostra ",    
+    
+  "vai a ",    
+    
+  "portami a ",    
+    
+  "localizza ",    
+    
+  "cerca ",    
+    
+  "visualizza "    
+    
+ ];    
+    
+    
+ for(    
+  const pattern of patterns    
+ ){    
+    
+  if(    
+   normalized.startsWith(    
+    pattern    
+   )    
+  ){    
+    
+   const place=    
+    text    
+     .trim()    
+     .substring(    
+      pattern.length    
+     )    
+     .trim();    
+    
+    
+   if(place.length>1){    
+    
+    searchLocation(    
+     place    
+    );    
+    
+    return true;    
+   }    
+  }    
+ }    
+    
+    
+ return false;    
+}    
+    
+    
+/* =====================================================    
+   WEB WINDOWS    
+===================================================== */    
+    
+let webWindowCounter=0;    
+    
+let highestWebZ=220;    
+    
+    
+function updateWebIndicator(){    
+    
+ const count=    
+  webSearchWindows    
+   .querySelectorAll(    
+    ".web-window"    
+   )    
+   .length;    
+    
+    
+ if(count>0){    
+    
+  webSearchIndicator.classList.add(    
+   "active"    
+  );    
+    
+  webSearchIndicator.textContent=    
+   "WEB WINDOWS: "+    
+   count;    
+    
+ }else{    
+    
+  webSearchIndicator.classList.remove(    
+   "active"    
+  );    
+    
+ }    
+}    
+    
+    
+function bringWebWindowToFront(    
+ windowElement    
+){    
+    
+ highestWebZ++;    
+    
+ windowElement.style.zIndex=    
+  String(    
+   highestWebZ    
+  );    
+}    
+    
+    
+/* =====================================================    
+   CREA FINESTRA WEB    
+===================================================== */    
+    
+function openWebSearch(query){    
+    
+ if(!query)return;    
+    
+ webWindowCounter++;    
+    
+    
+ const windowElement=    
+  document.createElement("div");    
+    
+    
+ windowElement.className=    
+  "web-window";    
+    
+    
+ const offset=    
+  (webWindowCounter-1)%6;    
+    
+    
+ windowElement.style.left=    
+  (20+offset*45)+"px";    
+    
+    
+ windowElement.style.top=    
+  (90+offset*35)+"px";    
+    
+    
+ windowElement.style.zIndex=    
+  String(    
+   ++highestWebZ    
+  );    
+    
+    
+ const safeTitle=    
+  escapeHtml(query);    
+    
+    
+ windowElement.innerHTML=`    
+    
+  <div class="web-window-header">    
+    
+   <div class="web-window-title">    
+    
+    <span class="web-window-number">    
+     WEB ${webWindowCounter}    
+    </span>    
+    
+    ${safeTitle}    
+    
+   </div>    
+    
+   <div class="web-window-controls">    
+    
+    <button    
+     class="web-window-btn minimize-web"    
+     title="Minimizza">    
+    
+     −    
+    
+    </button>    
+    
+    <button    
+     class="web-window-btn close-web"    
+     title="Chiudi">    
+    
+     ×    
+    
+    </button>    
+    
+   </div>    
+    
+  </div>    
+    
+  <iframe    
    title="Ricerca web ${safeTitle}"    
    loading="eager">    
-  </iframe>    `;
-
-webSearchWindows.appendChild(
-windowElement
-);
-
-const iframe=
-windowElement.querySelector(
-"iframe"
-);
-
-iframe.src=
-"https://www.google.com/search?igu=1&q="+
-encodeURIComponent(query);
-
-windowElement.addEventListener(
-"pointerdown",
-()=>{
-bringWebWindowToFront(
-windowElement
-);
-}
-);
-
-const minimizeButton=
-windowElement.querySelector(
-".minimize-web"
-);
-
-minimizeButton.addEventListener(
-"click",
-event=>{
-
-event.stopPropagation();
-
-windowElement.classList.toggle(
-"minimized"
-);
-
-}
-);
-
-const closeButton=
-windowElement.querySelector(
-".close-web"
-);
-
-closeButton.addEventListener(
-"click",
-event=>{
-
-event.stopPropagation();
-
-windowElement.remove();
-
-updateWebIndicator();
-
-}
-);
-
-const header=
-windowElement.querySelector(
-".web-window-header"
-);
-
-let dragging=false;
-
-let dragOffsetX=0;
-
-let dragOffsetY=0;
-
-header.addEventListener(
-"pointerdown",
-event=>{
-
-if(
-event.target.closest(
-".web-window-btn"
-)
-){
-
-return;
-
-}
-
-dragging=true;
-
-bringWebWindowToFront(
-windowElement
-);
-
-const rect=
-windowElement.getBoundingClientRect();
-
-dragOffsetX=
-event.clientX-
-rect.left;
-
-dragOffsetY=
-event.clientY-
-rect.top;
-
-try{
-
-header.setPointerCapture(    
- event.pointerId    
-);
-
-}catch(e){}
-
-event.preventDefault();
-
-},
-{
-passive:false
-}
-);
-
-header.addEventListener(
-"pointermove",
-event=>{
-
-if(!dragging)return;
-
-event.preventDefault();
-
-let newLeft=
-event.clientX-
-dragOffsetX;
-
-let newTop=
-event.clientY-
-dragOffsetY;
-
-const rect=
-windowElement.getBoundingClientRect();
-
-const minLeft=
--rect.width+100;
-
-const maxLeft=
-window.innerWidth-80;
-
-const minTop=0;
-
-const maxTop=
-window.innerHeight-60;
-
-newLeft=
-Math.max(
-minLeft,
-Math.min(
-newLeft,
-maxLeft
-)
-);
-
-newTop=
-Math.max(
-minTop,
-Math.min(
-newTop,
-maxTop
-)
-);
-
-windowElement.style.left=
-newLeft+"px";
-
-windowElement.style.top=
-newTop+"px";
-
-},
-{
-passive:false
-}
-);
-
-function stopDragging(event){
-
-if(!dragging)return;
-
-dragging=false;
-
-try{
-
-header.releasePointerCapture(
-event.pointerId
-);
-
-}catch(e){}
-
-}
-
-header.addEventListener(
-"pointerup",
-stopDragging
-);
-
-header.addEventListener(
-"pointercancel",
-stopDragging
-);
-
-header.addEventListener(
-"lostpointercapture",
-()=>{
-dragging=false;
-}
-);
-
-updateWebIndicator();
-
-addMsg(
-"Ricerca web: "+
-query
-);
-}
-
-/* ================= COMANDI WEB ================= */
-
-function handleWebCommand(text){
-
-const normalized=
-normalizeCommand(text);
-
-const patterns=[
-
-"cerca sul web ",
-
-"cerca nel web ",
-
-"ricerca sul web ",
-
-"ricerca web ",
-
-"cerca online ",
-
-"cerca su internet ",
-
-"cerca in internet ",
-
-"fammi una ricerca su ",
-
-"fai una ricerca su "
-
-];
-
-for(
-const pattern of patterns
-){
-
-if(
-normalized.startsWith(
-pattern
-)
-){
-
-const query=
-text
-.trim()
-.substring(
-pattern.length
-)
-.trim();
-
-if(query.length>1){
-
-openWebSearch(    
- query    
-);    
-
-return true;
-
-}
-}
-}
-
-return false;
-}
-
-/* ================= FINESTRE WEB ================= */
-
-function handleWebWindowCommand(text){
-
-const normalized=
-normalizeCommand(text);
-
-if(
-
-normalized==="chiudi le ricerche web" ||
-
-normalized==="chiudi ricerca web" ||
-
-normalized==="chiudi tutte le ricerche" ||
-
-normalized==="chiudi tutte le finestre web"
-
-){
-
-webSearchWindows.innerHTML="";
-
-updateWebIndicator();
-
-addMsg(
-"Finestre web chiuse."
-);
-
-return true;
-}
-
-if(
-
-normalized==="minimizza le ricerche web" ||
-
-normalized==="minimizza tutte le ricerche"
-
-){
-
-webSearchWindows
-.querySelectorAll(
-".web-window"
-)
-.forEach(
-w=>
-w.classList.add(
-"minimized"
-)
-);
-
-addMsg(
-"Ricerche web minimizzate."
-);
-
-return true;
-}
-
-return false;
-}
-
-/* ================= DATI TEMPORALI ================= */
-
-function getTimeData(){
-
-const now=
-new Date();
-
-return{
-
-currentTime:
-now.toLocaleTimeString(
-"it-IT",
-{
-hour:"2-digit",
-minute:"2-digit",
-second:"2-digit"
-}
-),
-
-currentDate:
-now.toLocaleDateString(
-"it-IT",
-{
-day:"2-digit",
-month:"2-digit",
-year:"numeric"
-}
-),
-
-dayOfWeek:
-now.toLocaleDateString(
-"it-IT",
-{
-weekday:"long"
-}
-),
-
-timezone:
-Intl.DateTimeFormat()
-.resolvedOptions()
-.timeZone
-
-};
-}
-
-/* ================= VOCI ================= */
-
-function loadDeviceVoices(){
-
-if(
-!("speechSynthesis" in window)
-)
-return;
-
-deviceVoices=
-window.speechSynthesis
-.getVoices();
-
-voiceSelector.innerHTML="";
-
-const automatic=
-document.createElement(
-"option"
-);
-
-automatic.value="";
-
-automatic.textContent=
-"Voce dispositivo automatica";
-
-voiceSelector.appendChild(
-automatic
-);
-
-deviceVoices.forEach(
-(voice,index)=>{
-
-const option=
-document.createElement(
-"option"
-);
-
-option.value=
-String(index);
-
-option.textContent=
-${voice.name} — ${voice.lang};
-
-voiceSelector.appendChild(
-option
-);
-
-}
-);
-
-const savedVoice=
-localStorage.getItem(
-"jarvis_device_voice"
-);
-
-if(
-
-savedVoice!==null&&
-
-Number(savedVoice)<
-deviceVoices.length
-
-){
-
-voiceSelector.value=
-savedVoice;
-
-selectedDeviceVoice=
-deviceVoices[
-Number(savedVoice)
-];
-}
-}
-
-if(
-"speechSynthesis" in window
-){
-
-loadDeviceVoices();
-
-window.speechSynthesis.addEventListener(
-"voiceschanged",
-loadDeviceVoices
-);
-}
-
-/* ================= DEVICE TTS ================= */
-
-function speakDevice(text){
-
-return new Promise(
-resolve=>{
-
-if(
-!("speechSynthesis" in window)
-){
-
-resolve(false);    
-
-return;
-
-}
-
-try{
-
-window.speechSynthesis.cancel();    
-
-
-const utterance=    
- new SpeechSynthesisUtterance(    
+  </iframe>    
+    
+ `;    
+    
+    
+ webSearchWindows.appendChild(    
+  windowElement    
+ );    
+    
+    
+ const iframe=    
+  windowElement.querySelector(    
+   "iframe"    
+  );    
+    
+    
+ iframe.src=    
+  "https://www.google.com/search?igu=1&q="+    
+  encodeURIComponent(query);    
+    
+    
+ windowElement.addEventListener(    
+  "pointerdown",    
+  ()=>{    
+   bringWebWindowToFront(    
+    windowElement    
+   );    
+  }    
+ );    
+    
+    
+ const minimizeButton=    
+  windowElement.querySelector(    
+   ".minimize-web"    
+  );    
+    
+    
+ minimizeButton.addEventListener(    
+  "click",    
+  event=>{    
+    
+   event.stopPropagation();    
+    
+   windowElement.classList.toggle(    
+    "minimized"    
+   );    
+    
+  }    
+ );    
+    
+    
+ const closeButton=    
+  windowElement.querySelector(    
+   ".close-web"    
+  );    
+    
+    
+ closeButton.addEventListener(    
+  "click",    
+  event=>{    
+    
+   event.stopPropagation();    
+    
+   windowElement.remove();    
+    
+   updateWebIndicator();    
+    
+  }    
+ );    
+    
+    
+ const header=    
+  windowElement.querySelector(    
+   ".web-window-header"    
+  );    
+    
+    
+ let dragging=false;    
+    
+ let dragOffsetX=0;    
+    
+ let dragOffsetY=0;    
+    
+    
+ header.addEventListener(    
+  "pointerdown",    
+  event=>{    
+    
+   if(    
+    event.target.closest(    
+     ".web-window-btn"    
+    )    
+   ){    
+    
+    return;    
+   }    
+    
+    
+   dragging=true;    
+    
+    
+   bringWebWindowToFront(    
+    windowElement    
+   );    
+    
+    
+   const rect=    
+    windowElement.getBoundingClientRect();    
+    
+    
+   dragOffsetX=    
+    event.clientX-    
+    rect.left;    
+    
+    
+   dragOffsetY=    
+    event.clientY-    
+    rect.top;    
+    
+    
+   try{    
+    
+    header.setPointerCapture(    
+     event.pointerId    
+    );    
+    
+   }catch(e){}    
+    
+    
+   event.preventDefault();    
+    
+  },    
+  {    
+   passive:false    
+  }    
+ );    
+    
+    
+ header.addEventListener(    
+  "pointermove",    
+  event=>{    
+    
+   if(!dragging)return;    
+    
+   event.preventDefault();    
+    
+    
+   let newLeft=    
+    event.clientX-    
+    dragOffsetX;    
+    
+    
+   let newTop=    
+    event.clientY-    
+    dragOffsetY;    
+    
+    
+   const rect=    
+    windowElement.getBoundingClientRect();    
+    
+    
+   const minLeft=    
+    -rect.width+100;    
+    
+    
+   const maxLeft=    
+    window.innerWidth-80;    
+    
+    
+   const minTop=0;    
+    
+   const maxTop=    
+    window.innerHeight-60;    
+    
+    
+   newLeft=    
+    Math.max(    
+     minLeft,    
+     Math.min(    
+      newLeft,    
+      maxLeft    
+     )    
+    );    
+    
+    
+   newTop=    
+    Math.max(    
+     minTop,    
+     Math.min(    
+      newTop,    
+      maxTop    
+     )    
+    );    
+    
+    
+   windowElement.style.left=    
+    newLeft+"px";    
+    
+    
+   windowElement.style.top=    
+    newTop+"px";    
+    
+  },    
+  {    
+   passive:false    
+  }    
+ );    
+    
+    
+ function stopDragging(event){    
+    
+  if(!dragging)return;    
+    
+  dragging=false;    
+    
+    
+  try{    
+    
+   header.releasePointerCapture(    
+    event.pointerId    
+   );    
+    
+  }catch(e){}    
+    
+ }    
+    
+    
+ header.addEventListener(    
+  "pointerup",    
+  stopDragging    
+ );    
+    
+    
+ header.addEventListener(    
+  "pointercancel",    
+  stopDragging    
+ );    
+    
+    
+ header.addEventListener(    
+  "lostpointercapture",    
+  ()=>{    
+   dragging=false;    
+  }    
+ );    
+    
+    
+ updateWebIndicator();    
+    
+ addMsg(    
+  "Ricerca web: "+    
+  query    
+ );    
+}    
+    
+    
+/* ================= COMANDI WEB ================= */    
+    
+function handleWebCommand(text){    
+    
+ const normalized=    
+  normalizeCommand(text);    
+    
+    
+ const patterns=[    
+    
+  "cerca sul web ",    
+    
+  "cerca nel web ",    
+    
+  "ricerca sul web ",    
+    
+  "ricerca web ",    
+    
+  "cerca online ",    
+    
+  "cerca su internet ",    
+    
+  "cerca in internet ",    
+    
+  "fammi una ricerca su ",    
+    
+  "fai una ricerca su "    
+    
+ ];    
+    
+    
+ for(    
+  const pattern of patterns    
+ ){    
+    
+  if(    
+   normalized.startsWith(    
+    pattern    
+   )    
+  ){    
+    
+   const query=    
+    text    
+     .trim()    
+     .substring(    
+      pattern.length    
+     )    
+     .trim();    
+    
+    
+   if(query.length>1){    
+    
+    openWebSearch(    
+     query    
+    );    
+    
+    return true;    
+   }    
+  }    
+ }    
+    
+    
+ return false;    
+}    
+    
+    
+/* ================= FINESTRE WEB ================= */    
+    
+function handleWebWindowCommand(text){    
+    
+ const normalized=    
+  normalizeCommand(text);    
+    
+    
+ if(    
+    
+  normalized==="chiudi le ricerche web" ||    
+    
+  normalized==="chiudi ricerca web" ||    
+    
+  normalized==="chiudi tutte le ricerche" ||    
+    
+  normalized==="chiudi tutte le finestre web"    
+    
+ ){    
+    
+  webSearchWindows.innerHTML="";    
+    
+  updateWebIndicator();    
+    
+  addMsg(    
+   "Finestre web chiuse."    
+  );    
+    
+  return true;    
+ }    
+    
+    
+ if(    
+    
+  normalized==="minimizza le ricerche web" ||    
+    
+  normalized==="minimizza tutte le ricerche"    
+    
+ ){    
+    
+  webSearchWindows    
+   .querySelectorAll(    
+    ".web-window"    
+   )    
+   .forEach(    
+    w=>    
+     w.classList.add(    
+      "minimized"    
+     )    
+   );    
+    
+    
+  addMsg(    
+   "Ricerche web minimizzate."    
+  );    
+    
+  return true;    
+ }    
+    
+    
+ return false;    
+}    
+    
+    
+/* ================= DATI TEMPORALI ================= */    
+    
+function getTimeData(){    
+    
+ const now=    
+  new Date();    
+    
+    
+ return{    
+    
+  currentTime:    
+   now.toLocaleTimeString(    
+    "it-IT",    
+    {    
+     hour:"2-digit",    
+     minute:"2-digit",    
+     second:"2-digit"    
+    }    
+   ),    
+    
+    
+  currentDate:    
+   now.toLocaleDateString(    
+    "it-IT",    
+    {    
+     day:"2-digit",    
+     month:"2-digit",    
+     year:"numeric"    
+    }    
+   ),    
+    
+    
+  dayOfWeek:    
+   now.toLocaleDateString(    
+    "it-IT",    
+    {    
+     weekday:"long"    
+    }    
+   ),    
+    
+    
+  timezone:    
+   Intl.DateTimeFormat()    
+    .resolvedOptions()    
+    .timeZone    
+    
+ };    
+}    
+    
+    
+/* ================= VOCI ================= */    
+    
+function loadDeviceVoices(){    
+    
+ if(    
+  !("speechSynthesis" in window)    
+ )    
+  return;    
+    
+    
+ deviceVoices=    
+  window.speechSynthesis    
+   .getVoices();    
+    
+    
+ voiceSelector.innerHTML="";    
+    
+    
+ const automatic=    
+  document.createElement(    
+   "option"    
+  );    
+    
+    
+ automatic.value="";    
+    
+ automatic.textContent=    
+  "Voce dispositivo automatica";    
+    
+    
+ voiceSelector.appendChild(    
+  automatic    
+ );    
+    
+    
+ deviceVoices.forEach(    
+  (voice,index)=>{    
+    
+   const option=    
+    document.createElement(    
+     "option"    
+    );    
+    
+    
+   option.value=    
+    String(index);    
+    
+    
+   option.textContent=    
+    `${voice.name} — ${voice.lang}`;    
+    
+    
+   voiceSelector.appendChild(    
+    option    
+   );    
+    
+  }    
+ );    
+    
+    
+ const savedVoice=    
+  localStorage.getItem(    
+   "jarvis_device_voice"    
+  );    
+    
+    
+ if(    
+    
+  savedVoice!==null&&    
+    
+  Number(savedVoice)<    
+   deviceVoices.length    
+    
+ ){    
+    
+  voiceSelector.value=    
+   savedVoice;    
+    
+    
+  selectedDeviceVoice=    
+   deviceVoices[    
+    Number(savedVoice)    
+   ];    
+ }    
+}    
+    
+    
+if(    
+ "speechSynthesis" in window    
+){    
+    
+ loadDeviceVoices();    
+    
+    
+ window.speechSynthesis.addEventListener(    
+  "voiceschanged",    
+  loadDeviceVoices    
+ );    
+}    
+    
+    
+/* ================= DEVICE TTS ================= */    
+    
+function speakDevice(text){    
+    
+ return new Promise(    
+  resolve=>{    
+    
+   if(    
+    !("speechSynthesis" in window)    
+   ){    
+    
+    resolve(false);    
+    
+    return;    
+   }    
+    
+    
+   try{    
+    
+    window.speechSynthesis.cancel();    
+    
+    
+    const utterance=    
+     new SpeechSynthesisUtterance(    
+      text    
+     );    
+    
+    
+    utterance.lang=    
+     "it-IT";    
+    
+    utterance.rate=    
+     .95;    
+    
+    utterance.pitch=    
+     .9;    
+    
+    utterance.volume=    
+     1;    
+    
+    
+    if(    
+     selectedDeviceVoice    
+    ){    
+    
+     utterance.voice=    
+      selectedDeviceVoice;    
+    
+    }else{    
+    
+     const italianVoice=    
+      deviceVoices.find(    
+       voice=>    
+        voice.lang    
+         .toLowerCase()    
+         .startsWith("it")    
+      );    
+    
+    
+     if(italianVoice)    
+      utterance.voice=    
+       italianVoice;    
+    
+    }    
+    
+    
+    utterance.onstart=    
+     ()=>{    
+    
+      audioPlaying=true;    
+    
+      setState(    
+       "speaking"    
+      );    
+    
+     };    
+    
+    
+    utterance.onend=    
+     ()=>{    
+    
+      audioPlaying=false;    
+    
+      setState(    
+       "idle"    
+      );    
+    
+      resolve(true);    
+    
+     };    
+    
+    
+    utterance.onerror=    
+     ()=>{    
+    
+      audioPlaying=false;    
+    
+      setState(    
+       "idle"    
+      );    
+    
+      resolve(false);    
+    
+     };    
+    
+    
+    window.speechSynthesis.speak(    
+     utterance    
+    );    
+    
+    
+    setTimeout(    
+     ()=>{    
+    
+      try{    
+    
+       window.speechSynthesis.resume();    
+    
+      }catch(e){}    
+    
+     },    
+     100    
+    );    
+    
+    
+   }catch(error){    
+    
+    console.error(    
+     error    
+    );    
+    
+    resolve(false);    
+    
+   }    
+    
+  }    
+ );    
+}    
+    
+    
+/* ================= ELEVENLABS ================= */    
+    
+async function speakElevenLabs(text){    
+    
+ if(!text)    
+  return false;    
+    
+    
+ if(currentAudio){    
+    
+  try{    
+    
+   currentAudio.pause();    
+    
+   currentAudio.currentTime=0;    
+    
+  }catch(e){}    
+    
+    
+  currentAudio=null;    
+ }    
+    
+    
+ const controller=    
+  new AbortController();    
+    
+    
+ const timeout=    
+  setTimeout(    
+   ()=>controller.abort(),    
+   30000    
+  );    
+    
+    
+ try{    
+    
+  const response=    
+   await fetch(    
+    API,    
+    {    
+    
+     method:"POST",    
+    
+     headers:{    
+      "Content-Type":    
+       "application/json"    
+     },    
+    
+     body:JSON.stringify({    
+    
+      action:"tts",    
+    
+      text:text,    
+    
+      voiceId:    
+       ELEVEN_VOICE_ID    
+    
+     }),    
+    
+     signal:    
+      controller.signal    
+    
+    }    
+   );    
+    
+    
+  if(!response.ok)    
+   return false;    
+    
+    
+  const contentType=    
+   response.headers    
+    .get("content-type")||    
+   "";    
+    
+    
+  if(    
+   !contentType.includes(    
+    "audio"    
+   )    
+  )    
+   return false;    
+    
+    
+  const audioBlob=    
+   await response.blob();    
+    
+    
+  if(    
+   !audioBlob||    
+   audioBlob.size===0    
+  )    
+   return false;    
+    
+    
+  const audioUrl=    
+   URL.createObjectURL(    
+    audioBlob    
+   );    
+    
+    
+  const audio=    
+   new Audio(    
+    audioUrl    
+   );    
+    
+    
+  currentAudio=    
+   audio;    
+    
+    
+  audio.volume=1;    
+    
+    
+  audio.onplay=    
+   ()=>{    
+    
+    audioPlaying=true;    
+    
+    setState(    
+     "speaking"    
+    );    
+    
+   };    
+    
+    
+  audio.onended=    
+   ()=>{    
+    
+    audioPlaying=false;    
+    
+    setState(    
+     "idle"    
+    );    
+    
+    
+    URL.revokeObjectURL(    
+     audioUrl    
+    );    
+    
+    
+    if(    
+     currentAudio===audio    
+    )    
+     currentAudio=null;    
+    
+    
+    if(conversationMode){    
+    
+     setTimeout(    
+      ()=>{    
+       startContinuousRecognition();    
+      },    
+      150    
+     );    
+    
+    }    
+    
+   };    
+    
+    
+  audio.onerror=    
+   ()=>{    
+    
+    audioPlaying=false;    
+    
+    setState(    
+     "idle"    
+    );    
+    
+    
+    URL.revokeObjectURL(    
+     audioUrl    
+    );    
+    
+    
+    if(conversationMode){    
+    
+     setTimeout(    
+      ()=>{    
+       startContinuousRecognition();    
+      },    
+      150    
+     );    
+    
+    }    
+    
+   };    
+    
+    
+  await audio.play();    
+    
+    
+  return true;    
+    
+    
+ }catch(error){    
+    
+  console.warn(    
+   "ElevenLabs:",    
+   error    
+  );    
+    
+  return false;    
+    
+    
+ }finally{    
+    
+  clearTimeout(    
+   timeout    
+  );    
+    
+ }    
+}    
+    
+    
+/* ================= INTERRUZIONE VOCE ================= */    
+    
+function stopJarvisSpeaking(){    
+    
+ if(currentAudio){    
+    
+  try{    
+    
+   currentAudio.pause();    
+    
+   currentAudio.currentTime=0;    
+    
+  }catch(e){}    
+    
+    
+  currentAudio=null;    
+ }    
+    
+    
+ if(    
+  "speechSynthesis" in window    
+ ){    
+    
+  try{    
+    
+   window.speechSynthesis.cancel();    
+    
+  }catch(e){}    
+    
+ }    
+    
+    
+ audioPlaying=false;    
+    
+ setState(    
+  "listening"    
+ );    
+}    
+    
+    
+/* ================= SPEAK ================= */    
+    
+async function speak(text){    
+    
+ if(!text)return;    
+    
+    
+ const elevenSuccess=    
+  await speakElevenLabs(    
+   text    
+  );    
+    
+    
+ if(elevenSuccess)    
+  return;    
+    
+    
+ await speakDevice(    
   text    
  );    
-
-
-utterance.lang=    
- "it-IT";    
-
-utterance.rate=    
- .95;    
-
-utterance.pitch=    
- .9;    
-
-utterance.volume=    
- 1;    
-
-
-if(    
- selectedDeviceVoice    
-){    
-
- utterance.voice=    
-  selectedDeviceVoice;    
-
-}else{    
-
- const italianVoice=    
-  deviceVoices.find(    
-   voice=>    
-    voice.lang    
-     .toLowerCase()    
-     .startsWith("it")    
+    
+    
+ if(conversationMode){    
+    
+  setTimeout(    
+   ()=>{    
+    startContinuousRecognition();    
+   },    
+   150    
   );    
-
-
- if(italianVoice)    
-  utterance.voice=    
-   italianVoice;    
-
-}    
-
-
-utterance.onstart=    
- ()=>{    
-
-  audioPlaying=true;    
-
-  setState(    
-   "speaking"    
-  );    
-
- };    
-
-
-utterance.onend=    
- ()=>{    
-
-  audioPlaying=false;    
-
-  setState(    
-   "idle"    
-  );    
-
-  resolve(true);    
-
- };    
-
-
-utterance.onerror=    
- ()=>{    
-
-  audioPlaying=false;    
-
-  setState(    
-   "idle"    
-  );    
-
-  resolve(false);    
-
- };    
-
-
-window.speechSynthesis.speak(    
- utterance    
-);    
-
-
-setTimeout(    
- ()=>{    
-
-  try{    
-
-   window.speechSynthesis.resume();    
-
-  }catch(e){}    
-
- },    
- 100    
-);
-
-}catch(error){
-
-console.error(    
- error    
-);    
-
-resolve(false);
-
-}
-
-}
-);
-}
-
-/* ================= ELEVENLABS ================= */
-
-async function speakElevenLabs(text){
-
-if(!text)
-return false;
-
-if(currentAudio){
-
-try{
-
-currentAudio.pause();
-
-currentAudio.currentTime=0;
-
-}catch(e){}
-
-currentAudio=null;
-}
-
-const controller=
-new AbortController();
-
-const timeout=
-setTimeout(
-()=>controller.abort(),
-30000
-);
-
-try{
-
-const response=
-await fetch(
-API,
-{
-
-method:"POST",    
-
- headers:{    
-  "Content-Type":    
-   "application/json"    
- },    
-
- body:JSON.stringify({    
-
-  action:"tts",    
-
-  text:text,    
-
-  voiceId:    
-   ELEVEN_VOICE_ID    
-
- }),    
-
- signal:    
-  controller.signal    
-
-}
-
-);
-
-if(!response.ok)
-return false;
-
-const contentType=
-response.headers
-.get("content-type")||
-"";
-
-if(
-!contentType.includes(
-"audio"
-)
-)
-return false;
-
-const audioBlob=
-await response.blob();
-
-if(
-!audioBlob||
-audioBlob.size===0
-)
-return false;
-
-const audioUrl=
-URL.createObjectURL(
-audioBlob
-);
-
-const audio=
-new Audio(
-audioUrl
-);
-
-currentAudio=
-audio;
-
-audio.volume=1;
-
-audio.onplay=
-()=>{
-
-audioPlaying=true;    
-
-setState(    
- "speaking"    
-);
-
-};
-
-audio.onended=
-()=>{
-
-audioPlaying=false;    
-
-setState(    
- "idle"    
-);    
-
-
-URL.revokeObjectURL(    
- audioUrl    
-);    
-
-
-if(    
- currentAudio===audio    
-)    
- currentAudio=null;    
-
-
-if(conversationMode){    
-
- setTimeout(    
-  ()=>{    
-   startContinuousRecognition();    
-  },    
-  150    
- );    
-
-}
-
-};
-
-audio.onerror=
-()=>{
-
-audioPlaying=false;    
-
-setState(    
- "idle"    
-);    
-
-
-URL.revokeObjectURL(    
- audioUrl    
-);    
-
-
-if(conversationMode){    
-
- setTimeout(    
-  ()=>{    
-   startContinuousRecognition();    
-  },    
-  150    
- );    
-
-}
-
-};
-
-await audio.play();
-
-return true;
-
-}catch(error){
-
-console.warn(
-"ElevenLabs:",
-error
-);
-
-return false;
-
-}finally{
-
-clearTimeout(
-timeout
-);
-
-}
-}
-
-/* ================= INTERRUZIONE VOCE ================= */
-
-function stopJarvisSpeaking(){
-
-if(currentAudio){
-
-try{
-
-currentAudio.pause();
-
-currentAudio.currentTime=0;
-
-}catch(e){}
-
-currentAudio=null;
-}
-
-if(
-"speechSynthesis" in window
-){
-
-try{
-
-window.speechSynthesis.cancel();
-
-}catch(e){}
-
-}
-
-audioPlaying=false;
-
-setState(
-"listening"
-);
-}
-
-/* ================= SPEAK ================= */
-
-async function speak(text){
-
-if(!text)return;
-
-const elevenSuccess=
-await speakElevenLabs(
-text
-);
-
-if(elevenSuccess)
-return;
-
-await speakDevice(
-text
-);
-
-if(conversationMode){
-
-setTimeout(
-()=>{
-startContinuousRecognition();
-},
-150
-);
-
-}
-}
-
-/* ================= VOICE UI ================= */
-
-voiceTest.addEventListener(
-"click",
-async()=>{
-
-await speakDevice(
-"J.A.R.V.I.S. operativo. Sistema vocale funzionante."
-);
-
-}
-);
-
-voiceSelector.addEventListener(
-"change",
-()=>{
-
-const value=
-voiceSelector.value;
-
-if(value===""){
-
-selectedDeviceVoice=null;
-
-localStorage.removeItem(
-"jarvis_device_voice"
-);
-
-return;
-}
-
-const index=
-Number(value);
-
-if(
-
-Number.isInteger(index)&&
-
-deviceVoices[index]
-
-){
-
-selectedDeviceVoice=
-deviceVoices[index];
-
-localStorage.setItem(
-"jarvis_device_voice",
-String(index)
-);
-
-}
-
-}
-);
-
-voiceBtn.addEventListener(
-"click",
-()=>{
-
-voicePanel.classList.toggle(
-"active"
-);
-
-loadDeviceVoices();
-
-}
-);
-
-/* =====================================================
-MODALITÀ CONVERSAZIONE CONTINUA
-===================================================== */
-
-let conversationMode=false;
-
-let conversationStarting=false;
-
-/* ================= RICONOSCIMENTO ================= */
-
-const Recognition=
-window.SpeechRecognition||
-window.webkitSpeechRecognition;
-
-let recognition=null;
-
-let listening=false;
-
-let recognitionStopping=false;
-
-if(Recognition){
-
-recognition=
-new Recognition();
-
-recognition.lang=
-"it-IT";
-
-recognition.continuous=
-false;
-
-recognition.interimResults=
-false;
-
-recognition.onstart=
-()=>{
-
-listening=true;
-
-conversationStarting=
-false;
-
-micBtn.classList.add(
-"active"
-);
-
-setState(
-"listening"
-);
-
-};
-
-recognition.onresult=
-event=>{
-
-const result=
-event.results[
-event.results.length-1
-];
-
-if(!result)
-return;
-
-const text=
-result[0]
-.transcript
-.trim();
-
-if(!text)
-return;
-
-console.log(
-"JARVIS VOICE:",
-text
-);
-
-textInput.value=
-text;
-
-if(
-conversationMode&&
-audioPlaying
-){
-
-stopJarvisSpeaking();
-
-}
-
-sendMessage();
-
-};
-
-recognition.onerror=
-error=>{
-
-console.error(
-"Microfono:",
-error
-);
-
-listening=false;
-
-micBtn.classList.remove(
-"active"
-);
-
-if(
-
-conversationMode&&    
-
-error.error!=="not-allowed"&&    
-
-error.error!=="service-not-allowed"
-
-){
-
-setTimeout(    
- ()=>{    
-  startContinuousRecognition();    
- },    
- 500    
-);
-
-}else{
-
-setState(    
- "idle"    
-);
-
-}
-
-};
-
-recognition.onend=
-()=>{
-
-listening=false;
-
-micBtn.classList.remove(
-"active"
-);
-
-if(
-
-conversationMode&&    
-
-!recognitionStopping
-
-){
-
-setTimeout(    
- ()=>{    
-  startContinuousRecognition();    
- },    
- 250    
-);
-
-}else{
-
-recognitionStopping=    
- false;    
-
-
-if(!conversationMode)    
- setState(    
-  "idle"    
- );
-
-}
-
-};
-
-function startRecognition(){
-
-if(!recognition)
-return;
-
-if(listening)
-return;
-
-recognitionStopping=
-false;
-
-try{
-
-recognition.start();
-
-}catch(error){
-
-console.warn(
-"Avvio microfono:",
-error
-);
-
-setTimeout(
-()=>{
-
-if(!listening)    
-  startRecognition();    
-
-},    
-500
-
-);
-
-}
-
-}
-
-function stopRecognition(){
-
-if(!recognition)
-return;
-
-recognitionStopping=
-true;
-
-try{
-
-recognition.stop();
-
-}catch(e){}
-
-listening=false;
-
-micBtn.classList.remove(
-"active"
-);
-
-}
-
-function startContinuousRecognition(){
-
-if(!conversationMode)
-return;
-
-if(listening)
-return;
-
-startRecognition();
-
-}
-
-function stopContinuousRecognition(){
-
-conversationMode=
-false;
-
-recognitionStopping=
-true;
-
-try{
-
-recognition.stop();
-
-}catch(e){}
-
-listening=false;
-
-micBtn.classList.remove(
-"active"
-);
-
-conversationBtn.classList.remove(
-"active"
-);
-
-conversationBtn.textContent=
-"◉ CONVERSAZIONE";
-
-setState(
-"idle"
-);
-
-}
-
-function activateConversationMode(){
-
-if(conversationMode)
-return;
-
-conversationMode=
-true;
-
-conversationBtn.classList.add(
-"active"
-);
-
-conversationBtn.textContent=
-"● CONVERSAZIONE ATTIVA";
-
-addMsg(
-"Modalità conversazione continua attivata."
-);
-
-if(audioPlaying){
-
-stopJarvisSpeaking();
-
-}
-
-startContinuousRecognition();
-
-}
-
-function deactivateConversationMode(){
-
-if(!conversationMode)
-return;
-
-stopContinuousRecognition();
-
-addMsg(
-"Modalità conversazione continua disattivata."
-);
-
-}
-
-conversationBtn.addEventListener(
-"click",
-()=>{
-
-if(conversationMode){
-
-deactivateConversationMode();
-
-}else{
-
-activateConversationMode();
-
-}
-
-}
-);
-
-micBtn.addEventListener(
-"click",
-()=>{
-
-if(conversationMode){
-
-deactivateConversationMode();    
-
-return;
-
-}
-
-if(listening){
-
-stopRecognition();
-
-}else{
-
-startRecognition();
-
-}
-
-}
-);
-
-}else{
-
-micBtn.style.opacity=
-".3";
-
-conversationBtn.style.opacity=
-".35";
-
-}
-
-/* =====================================================
-COMANDI MODALITÀ CONVERSAZIONE
-===================================================== */
-
-function handleConversationCommand(text){
-
-const normalized=
-normalizeCommand(text);
-
-const activateCommands=[
-
-"attiva modalita conversazione",
-
-"attiva la modalita conversazione",
-
-"modalita conversazione",
-
-"avvia modalita conversazione",
-
-"inizia modalita conversazione",
-
-"conversazione continua",
-
-"attiva conversazione continua"
-
-];
-
-const deactivateCommands=[
-
-"disattiva modalita conversazione",
-
-"disattiva la modalita conversazione",
-
-"chiudi modalita conversazione",
-
-"stop modalita conversazione",
-
-"disattiva conversazione continua"
-
-];
-
-if(
-activateCommands.includes(
-normalized
-)
-){
-
-activateConversationMode();
-
-return true;
-}
-
-if(
-deactivateCommands.includes(
-normalized
-)
-){
-
-deactivateConversationMode();
-
-return true;
-}
-
-/*
-
-Comando generico:
-
-permette piccole differenze nella frase.
-*/
-
-
-const hasConversation=
-normalized.includes(
-"conversazione"
-);
-
-const wantsActivate=
-normalized.includes(
-"attiva"
-) ||
-normalized.includes(
-"avvia"
-) ||
-normalized.includes(
-"inizia"
-);
-
-const wantsDeactivate=
-normalized.includes(
-"disattiva"
-) ||
-normalized.includes(
-"chiudi"
-) ||
-normalized.includes(
-"stop"
-);
-
-if(
-hasConversation&&
-wantsActivate
-){
-
-activateConversationMode();
-
-return true;
-}
-
-if(
-hasConversation&&
-wantsDeactivate
-){
-
-deactivateConversationMode();
-
-return true;
-}
-
-return false;
-}
-
-/* ================= PROCESS AI ================= */
-
-async function processAi(text){
-
-/*
-
-I comandi locali vengono controllati
-
-prima dell'AI.
-*/
-
-
-if(
-handleFullscreenCommand(text)
-)
-return;
-
-if(
-handleConversationCommand(text)
-)
-return;
-
-if(
-handleWebWindowCommand(text)
-)
-return;
-
-if(
-handleWebCommand(text)
-)
-return;
-
-if(
-handleMapCommand(text)
-)
-return;
-
-setState(
-"thinking"
-);
-
-try{
-
-const temporal=
-getTimeData();
-
-addMemory(
-"user",
-text
-);
-
-const controller=
-new AbortController();
-
-const timeout=
-setTimeout(
-()=>{
-controller.abort();
-},
-30000
-);
-
-let response;
-
-try{
-
-response=
-await fetch(
-API,
-{
-
-method:"POST",    
-
-  headers:{    
-   "Content-Type":    
-    "application/json"    
-  },    
-
-  body:JSON.stringify({    
-
-   message:text,    
-
-   memory:    
-    memory.slice(-4),    
-
-   currentTime:    
-    temporal.currentTime,    
-
-   currentDate:    
-    temporal.currentDate,    
-
-   dayOfWeek:    
-    temporal.dayOfWeek,    
-
-   timezone:    
-    temporal.timezone    
-
-  }),    
-
-  signal:    
-   controller.signal    
-
+    
  }    
-);
-
-}finally{
-
-clearTimeout(
-timeout
-);
-
-}
-
-if(!response.ok){
-
-const errorText=
-await response.text();
-
-let errorMessage=
-"HTTP "+
-response.status;
-
-try{
-
-const errorData=    
- JSON.parse(    
-  errorText    
- );    
-
-
-if(    
- errorData&&    
- errorData.error    
-){    
-
- errorMessage=    
-  errorData.error;    
-
-}
-
-}catch(e){
-
-if(errorText){    
-
- errorMessage=    
-  errorText.substring(    
-   0,    
-   200    
+}    
+    
+    
+/* ================= VOICE UI ================= */    
+    
+voiceTest.addEventListener(    
+ "click",    
+ async()=>{    
+    
+  await speakDevice(    
+   "J.A.R.V.I.S. operativo. Sistema vocale funzionante."    
   );    
-
-}
-
-}
-
-throw new Error(
-errorMessage
-);
-
-}
-
-const data=
-await response.json();
-
-const reply=
-typeof data.response==="string"
-?data.response.trim()
-:"";
-
-if(!reply)
-throw new Error(
-"Risposta AI vuota"
-);
-
-addMsg(
-reply
-);
-
-addMemory(
-"assistant",
-reply
-);
-
-speak(
-reply
-).catch(
-console.error
-);
-
-setState(
-"idle"
-);
-
-}catch(error){
-
-console.error(
-"JARVIS ERROR:",
-error
-);
-
-let message=
-error.message||
-"Errore sconosciuto";
-
-if(
-error.name==="AbortError"
-){
-
-message=
-"Il server ha impiegato troppo tempo a rispondere.";
-
-}else if(
-message==="Failed to fetch"
-){
-
-message=
-"Errore di connessione al server JARVIS.";
-
-}
-
-addMsg(
-"ERRORE: "+
-message
-);
-
-setState(
-"idle"
-);
-
-if(conversationMode){
-
-setTimeout(
-()=>{
-startContinuousRecognition();
-},
-500
-);
-
-}
-
-}
-}
-
-/* ================= INVIO ================= */
-
-function sendMessage(){
-
-const text=
-textInput.value.trim();
-
-if(!text)
-return;
-
-textInput.value="";
-
-addMsg(
-text
-);
-
-processAi(
-text
-);
-}
-
-sendBtn.addEventListener(
-"click",
-sendMessage
-);
-
-textInput.addEventListener(
-"keydown",
-event=>{
-
-if(event.key==="Enter"){
-
-event.preventDefault();
-
-sendMessage();
-
-}
-
-}
-);
-
-/* ================= RESIZE ================= */
-
-window.addEventListener(
-"resize",
-()=>{
-
-camera.aspect=
-window.innerWidth/
-window.innerHeight;
-
-camera.updateProjectionMatrix();
-
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
-);
-
-if(map)
-map.resize();
-
-}
-);
-
-/* ================= CANCELLA MEMORIA ================= */
-
-window.clearJarvisMemory=
-function(){
-
-memory=[];
-
-localStorage.removeItem(
-MEMORY_KEY
-);
-
-console.log(
-"Memoria JARVIS cancellata."
-);
-
-};
-
-/* ================= AVVIO ================= */
-
-setState(
-"idle"
-);
-
-updateFullscreenUI();
-
-</script>  </body>
-
+    
+ }    
+);    
+    
+    
+voiceSelector.addEventListener(    
+ "change",    
+ ()=>{    
+    
+  const value=    
+   voiceSelector.value;    
+    
+    
+  if(value===""){    
+    
+   selectedDeviceVoice=null;    
+    
+    
+   localStorage.removeItem(    
+    "jarvis_device_voice"    
+   );    
+    
+    
+   return;    
+  }    
+    
+    
+  const index=    
+   Number(value);    
+    
+    
+  if(    
+    
+   Number.isInteger(index)&&    
+    
+   deviceVoices[index]    
+    
+  ){    
+    
+   selectedDeviceVoice=    
+    deviceVoices[index];    
+    
+    
+   localStorage.setItem(    
+    "jarvis_device_voice",    
+    String(index)    
+   );    
+    
+  }    
+    
+ }    
+);    
+    
+    
+voiceBtn.addEventListener(    
+ "click",    
+ ()=>{    
+    
+  voicePanel.classList.toggle(    
+   "active"    
+  );    
+    
+  loadDeviceVoices();    
+    
+ }    
+);    
+    
+    
+/* =====================================================    
+   MODALITÀ CONVERSAZIONE CONTINUA    
+===================================================== */    
+    
+let conversationMode=false;    
+    
+let conversationStarting=false;    
+    
+    
+/* ================= RICONOSCIMENTO ================= */    
+    
+const Recognition=    
+ window.SpeechRecognition||    
+ window.webkitSpeechRecognition;    
+    
+    
+let recognition=null;    
+    
+let listening=false;    
+    
+let recognitionStopping=false;    
+    
+    
+if(Recognition){    
+    
+ recognition=    
+  new Recognition();    
+    
+    
+ recognition.lang=    
+  "it-IT";    
+    
+    
+ recognition.continuous=    
+  false;    
+    
+    
+ recognition.interimResults=    
+  false;    
+    
+    
+ recognition.onstart=    
+  ()=>{    
+    
+   listening=true;    
+    
+   conversationStarting=    
+    false;    
+    
+   micBtn.classList.add(    
+    "active"    
+   );    
+    
+   setState(    
+    "listening"    
+   );    
+    
+  };    
+    
+    
+ recognition.onresult=    
+  event=>{    
+    
+   const result=    
+    event.results[    
+     event.results.length-1    
+    ];    
+    
+    
+   if(!result)    
+    return;    
+    
+    
+   const text=    
+    result[0]    
+     .transcript    
+     .trim();    
+    
+    
+   if(!text)    
+    return;    
+    
+    
+   console.log(    
+    "JARVIS VOICE:",    
+    text    
+   );    
+    
+    
+   textInput.value=    
+    text;    
+    
+    
+   if(    
+    conversationMode&&    
+    audioPlaying    
+   ){    
+    
+    stopJarvisSpeaking();    
+    
+   }    
+    
+    
+   sendMessage();    
+    
+  };    
+    
+    
+ recognition.onerror=    
+  error=>{    
+    
+   console.error(    
+    "Microfono:",    
+    error    
+   );    
+    
+    
+   listening=false;    
+    
+    
+   micBtn.classList.remove(    
+    "active"    
+   );    
+    
+    
+   if(    
+    
+    conversationMode&&    
+    
+    error.error!=="not-allowed"&&    
+    
+    error.error!=="service-not-allowed"    
+    
+   ){    
+    
+    setTimeout(    
+     ()=>{    
+      startContinuousRecognition();    
+     },    
+     500    
+    );    
+    
+   }else{    
+    
+    setState(    
+     "idle"    
+    );    
+    
+   }    
+    
+  };    
+    
+    
+ recognition.onend=    
+  ()=>{    
+    
+   listening=false;    
+    
+    
+   micBtn.classList.remove(    
+    "active"    
+   );    
+    
+    
+   if(    
+    
+    conversationMode&&    
+    
+    !recognitionStopping    
+    
+   ){    
+    
+    setTimeout(    
+     ()=>{    
+      startContinuousRecognition();    
+     },    
+     250    
+    );    
+    
+   }else{    
+    
+    recognitionStopping=    
+     false;    
+    
+    
+    if(!conversationMode)    
+     setState(    
+      "idle"    
+     );    
+    
+   }    
+    
+  };    
+    
+    
+ function startRecognition(){    
+    
+  if(!recognition)    
+   return;    
+    
+    
+  if(listening)    
+   return;    
+    
+    
+  recognitionStopping=    
+   false;    
+    
+    
+  try{    
+    
+   recognition.start();    
+    
+  }catch(error){    
+    
+   console.warn(    
+    "Avvio microfono:",    
+    error    
+   );    
+    
+    
+   setTimeout(    
+    ()=>{    
+    
+     if(!listening)    
+      startRecognition();    
+    
+    },    
+    500    
+   );    
+    
+  }    
+    
+ }    
+    
+    
+ function stopRecognition(){    
+    
+  if(!recognition)    
+   return;    
+    
+    
+  recognitionStopping=    
+   true;    
+    
+    
+  try{    
+    
+   recognition.stop();    
+    
+  }catch(e){}    
+    
+    
+  listening=false;    
+    
+    
+  micBtn.classList.remove(    
+   "active"    
+  );    
+    
+ }    
+    
+    
+ function startContinuousRecognition(){    
+    
+  if(!conversationMode)    
+   return;    
+    
+    
+  if(listening)    
+   return;    
+    
+    
+  startRecognition();    
+    
+ }    
+    
+    
+ function stopContinuousRecognition(){    
+    
+  conversationMode=    
+   false;    
+    
+    
+  recognitionStopping=    
+   true;    
+    
+    
+  try{    
+    
+   recognition.stop();    
+    
+  }catch(e){}    
+    
+    
+  listening=false;    
+    
+    
+  micBtn.classList.remove(    
+   "active"    
+  );    
+    
+    
+  conversationBtn.classList.remove(    
+   "active"    
+  );    
+    
+    
+  conversationBtn.textContent=    
+   "◉ CONVERSAZIONE";    
+    
+    
+  setState(    
+   "idle"    
+  );    
+    
+ }    
+    
+    
+ function activateConversationMode(){    
+    
+  if(conversationMode)    
+   return;    
+    
+    
+  conversationMode=    
+   true;    
+    
+    
+  conversationBtn.classList.add(    
+   "active"    
+  );    
+    
+    
+  conversationBtn.textContent=    
+   "● CONVERSAZIONE ATTIVA";    
+    
+    
+  addMsg(    
+   "Modalità conversazione continua attivata."    
+  );    
+    
+    
+  if(audioPlaying){    
+    
+   stopJarvisSpeaking();    
+    
+  }    
+    
+    
+  startContinuousRecognition();    
+    
+ }    
+    
+    
+ function deactivateConversationMode(){    
+    
+  if(!conversationMode)    
+   return;    
+    
+    
+  stopContinuousRecognition();    
+    
+    
+  addMsg(    
+   "Modalità conversazione continua disattivata."    
+  );    
+    
+ }    
+    
+    
+ conversationBtn.addEventListener(    
+  "click",    
+  ()=>{    
+    
+   if(conversationMode){    
+    
+    deactivateConversationMode();    
+    
+   }else{    
+    
+    activateConversationMode();    
+    
+   }    
+    
+  }    
+ );    
+    
+    
+ micBtn.addEventListener(    
+  "click",    
+  ()=>{    
+    
+   if(conversationMode){    
+    
+    deactivateConversationMode();    
+    
+    return;    
+   }    
+    
+    
+   if(listening){    
+    
+    stopRecognition();    
+    
+   }else{    
+    
+    startRecognition();    
+    
+   }    
+    
+  }    
+ );    
+    
+    
+}else{    
+    
+ micBtn.style.opacity=    
+  ".3";    
+    
+ conversationBtn.style.opacity=    
+  ".35";    
+    
+}    
+    
+    
+/* =====================================================    
+   COMANDI MODALITÀ CONVERSAZIONE    
+===================================================== */    
+    
+function handleConversationCommand(text){    
+    
+ const normalized=    
+  normalizeCommand(text);    
+    
+    
+ const activateCommands=[    
+    
+  "attiva modalita conversazione",    
+    
+  "attiva la modalita conversazione",    
+    
+  "modalita conversazione",    
+    
+  "avvia modalita conversazione",    
+    
+  "inizia modalita conversazione",    
+    
+  "conversazione continua",    
+    
+  "attiva conversazione continua"    
+    
+ ];    
+    
+    
+ const deactivateCommands=[    
+    
+  "disattiva modalita conversazione",    
+    
+  "disattiva la modalita conversazione",    
+    
+  "chiudi modalita conversazione",    
+    
+  "stop modalita conversazione",    
+    
+  "disattiva conversazione continua"    
+    
+ ];    
+    
+    
+ if(    
+  activateCommands.includes(    
+   normalized    
+  )    
+ ){    
+    
+  activateConversationMode();    
+    
+  return true;    
+ }    
+    
+    
+ if(    
+  deactivateCommands.includes(    
+   normalized    
+  )    
+ ){    
+    
+  deactivateConversationMode();    
+    
+  return true;    
+ }    
+    
+    
+ /*    
+  * Comando generico:    
+  * permette piccole differenze nella frase.    
+  */    
+    
+ const hasConversation=    
+  normalized.includes(    
+   "conversazione"    
+  );    
+    
+    
+ const wantsActivate=    
+  normalized.includes(    
+   "attiva"    
+  ) ||    
+  normalized.includes(    
+   "avvia"    
+  ) ||    
+  normalized.includes(    
+   "inizia"    
+  );    
+    
+    
+ const wantsDeactivate=    
+  normalized.includes(    
+   "disattiva"    
+  ) ||    
+  normalized.includes(    
+   "chiudi"    
+  ) ||    
+  normalized.includes(    
+   "stop"    
+  );    
+    
+    
+ if(    
+  hasConversation&&    
+  wantsActivate    
+ ){    
+    
+  activateConversationMode();    
+    
+  return true;    
+ }    
+    
+    
+ if(    
+  hasConversation&&    
+  wantsDeactivate    
+ ){    
+    
+  deactivateConversationMode();    
+    
+  return true;    
+ }    
+    
+    
+ return false;    
+}    
+    
+    
+/* ================= PROCESS AI ================= */    
+    
+async function processAi(text){    
+    
+ /*    
+  * I comandi locali vengono controllati    
+  * prima dell'AI.    
+  */    
+    
+    
+ if(    
+  handleFullscreenCommand(text)    
+ )    
+  return;    
+    
+    
+ if(    
+  handleConversationCommand(text)    
+ )    
+  return;    
+    
+    
+ if(    
+  handleWebWindowCommand(text)    
+ )    
+  return;    
+    
+    
+ if(    
+  handleWebCommand(text)    
+ )    
+  return;    
+    
+    
+ if(    
+  handleMapCommand(text)    
+ )    
+  return;    
+    
+    
+ setState(    
+  "thinking"    
+ );    
+    
+    
+ try{    
+    
+  const temporal=    
+   getTimeData();    
+    
+    
+  addMemory(    
+   "user",    
+   text    
+  );    
+    
+    
+  const controller=    
+   new AbortController();    
+    
+    
+  const timeout=    
+   setTimeout(    
+    ()=>{    
+     controller.abort();    
+    },    
+    30000    
+   );    
+    
+    
+  let response;    
+    
+    
+  try{    
+    
+   response=    
+    await fetch(    
+     API,    
+     {    
+    
+      method:"POST",    
+    
+      headers:{    
+       "Content-Type":    
+        "application/json"    
+      },    
+    
+      body:JSON.stringify({    
+    
+       message:text,    
+    
+       memory:    
+        memory.slice(-4),    
+    
+       currentTime:    
+        temporal.currentTime,    
+    
+       currentDate:    
+        temporal.currentDate,    
+    
+       dayOfWeek:    
+        temporal.dayOfWeek,    
+    
+       timezone:    
+        temporal.timezone    
+    
+      }),    
+    
+      signal:    
+       controller.signal    
+    
+     }    
+    );    
+    
+    
+  }finally{    
+    
+   clearTimeout(    
+    timeout    
+   );    
+    
+  }    
+    
+    
+  if(!response.ok){    
+    
+   const errorText=    
+    await response.text();    
+    
+    
+   let errorMessage=    
+    "HTTP "+    
+    response.status;    
+    
+    
+   try{    
+    
+    const errorData=    
+     JSON.parse(    
+      errorText    
+     );    
+    
+    
+    if(    
+     errorData&&    
+     errorData.error    
+    ){    
+    
+     errorMessage=    
+      errorData.error;    
+    
+    }    
+    
+   }catch(e){    
+    
+    if(errorText){    
+    
+     errorMessage=    
+      errorText.substring(    
+       0,    
+       200    
+      );    
+    
+    }    
+    
+   }    
+    
+    
+   throw new Error(    
+    errorMessage    
+   );    
+    
+  }    
+    
+    
+  const data=    
+   await response.json();    
+    
+    
+  const reply=    
+   typeof data.response==="string"    
+    ?data.response.trim()    
+    :"";    
+    
+    
+  if(!reply)    
+   throw new Error(    
+    "Risposta AI vuota"    
+   );    
+    
+    
+  addMsg(    
+   reply    
+  );    
+    
+    
+  addMemory(    
+   "assistant",    
+   reply    
+  );    
+    
+    
+  speak(    
+   reply    
+  ).catch(    
+   console.error    
+  );    
+    
+    
+  setState(    
+   "idle"    
+  );    
+    
+    
+ }catch(error){    
+    
+  console.error(    
+   "JARVIS ERROR:",    
+   error    
+  );    
+    
+    
+  let message=    
+   error.message||    
+   "Errore sconosciuto";    
+    
+    
+  if(    
+   error.name==="AbortError"    
+  ){    
+    
+   message=    
+    "Il server ha impiegato troppo tempo a rispondere.";    
+    
+  }else if(    
+   message==="Failed to fetch"    
+  ){    
+    
+   message=    
+    "Errore di connessione al server JARVIS.";    
+    
+  }    
+    
+    
+  addMsg(    
+   "ERRORE: "+    
+   message    
+  );    
+    
+    
+  setState(    
+   "idle"    
+  );    
+    
+    
+  if(conversationMode){    
+    
+   setTimeout(    
+    ()=>{    
+     startContinuousRecognition();    
+    },    
+    500    
+   );    
+    
+  }    
+    
+ }    
+}    
+    
+    
+/* ================= INVIO ================= */    
+    
+function sendMessage(){    
+    
+ const text=    
+  textInput.value.trim();    
+    
+    
+ if(!text)    
+  return;    
+    
+    
+ textInput.value="";    
+    
+    
+ addMsg(    
+  text    
+ );    
+    
+    
+ processAi(    
+  text    
+ );    
+}    
+    
+    
+sendBtn.addEventListener(    
+ "click",    
+ sendMessage    
+);    
+    
+    
+textInput.addEventListener(    
+ "keydown",    
+ event=>{    
+    
+  if(event.key==="Enter"){    
+    
+   event.preventDefault();    
+    
+   sendMessage();    
+    
+  }    
+    
+ }    
+);    
+    
+    
+/* ================= RESIZE ================= */    
+    
+window.addEventListener(    
+ "resize",    
+ ()=>{    
+    
+  camera.aspect=    
+   window.innerWidth/    
+   window.innerHeight;    
+    
+    
+  camera.updateProjectionMatrix();    
+    
+    
+  renderer.setSize(    
+   window.innerWidth,    
+   window.innerHeight    
+  );    
+    
+    
+  if(map)    
+   map.resize();    
+    
+ }    
+);    
+    
+    
+/* ================= CANCELLA MEMORIA ================= */    
+    
+window.clearJarvisMemory=    
+ function(){    
+    
+  memory=[];    
+    
+    
+  localStorage.removeItem(    
+   MEMORY_KEY    
+  );    
+    
+    
+  console.log(    
+   "Memoria JARVIS cancellata."    
+  );    
+    
+ };    
+    
+    
+/* ================= AVVIO ================= */    
+    
+setState(    
+ "idle"    
+);    
+    
+updateFullscreenUI();    
+    
+</script>  </body>    
 </html>

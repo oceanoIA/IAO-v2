@@ -1,8 +1,19 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="it">
 
-<title>J.A.R.V.I.S.</title><link rel="stylesheet"
-      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0">
+
+<title>J.A.R.V.I.S.</title>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
+
+<style>
 
 /* =====================================================
    BASE
@@ -34,7 +45,7 @@ circle at center,
 }
 
 /* =====================================================
-   THREE.JS
+   WEBGL
 ===================================================== */
 
 #webgl-container{
@@ -78,11 +89,13 @@ z-index:30;
 
 color:rgba(255,255,255,.86);
 
-font-size:clamp(20px,2.8vw,31px);
+font-size:
+clamp(20px,2.8vw,31px);
 
 font-weight:300;
 
-letter-spacing:clamp(5px,1vw,8px);
+letter-spacing:
+clamp(5px,1vw,8px);
 
 white-space:nowrap;
 
@@ -162,7 +175,8 @@ rgba(4,20,23,.4);
 
 backdrop-filter:blur(14px);
 
-color:rgba(235,255,255,.9);
+color:
+rgba(235,255,255,.9);
 
 font-size:12px;
 
@@ -179,7 +193,6 @@ word-break:break-word;
 
 .command-wrapper{
 position:fixed;
-
 left:50%;
 bottom:23px;
 
@@ -192,7 +205,8 @@ width:min(700px,90%);
 display:flex;
 align-items:center;
 
-padding:6px 7px 6px 20px;
+padding:
+6px 7px 6px 20px;
 
 border:
 1px solid rgba(100,255,255,.28);
@@ -209,7 +223,6 @@ box-shadow:
 }
 
 .command-wrapper:focus-within{
-
 border-color:
 rgba(0,255,255,.6);
 
@@ -218,13 +231,10 @@ box-shadow:
 }
 
 #textInput{
-
 flex:1;
-
 min-width:0;
 
 border:none;
-
 outline:none;
 
 background:transparent;
@@ -237,7 +247,6 @@ padding:12px 5px;
 }
 
 #textInput::placeholder{
-
 color:
 rgba(255,255,255,.3);
 }
@@ -247,7 +256,6 @@ rgba(255,255,255,.3);
 ===================================================== */
 
 #micBtn{
-
 width:34px;
 height:34px;
 
@@ -263,14 +271,11 @@ rgba(210,255,255,.65);
 cursor:pointer;
 
 display:flex;
-
 align-items:center;
-
 justify-content:center;
 }
 
 .mic-icon{
-
 width:8px;
 height:14px;
 
@@ -283,7 +288,6 @@ position:relative;
 }
 
 .mic-icon:after{
-
 content:"";
 
 position:absolute;
@@ -306,7 +310,6 @@ border-radius:
 }
 
 #micBtn.active{
-
 color:#8fffff;
 
 filter:
@@ -320,7 +323,6 @@ drop-shadow(
 ===================================================== */
 
 #sendBtn{
-
 height:39px;
 
 padding:0 17px;
@@ -344,7 +346,6 @@ cursor:pointer;
 }
 
 #sendBtn:hover{
-
 color:white;
 
 border-color:#00ffff;
@@ -354,16 +355,15 @@ rgba(0,255,255,.1);
 }
 
 /* =====================================================
-   CONTROL BUTTON
+   PULSANTI
 ===================================================== */
 
+#conversationBtn,
+#fullscreenBtn,
+#voiceBtn,
 #controlBtn{
 
 position:fixed;
-
-left:22px;
-
-bottom:24px;
 
 z-index:60;
 
@@ -393,6 +393,29 @@ backdrop-filter:blur(12px);
 transition:.2s;
 }
 
+#conversationBtn{
+left:22px;
+bottom:24px;
+}
+
+#fullscreenBtn{
+right:22px;
+bottom:24px;
+}
+
+#voiceBtn{
+right:22px;
+bottom:74px;
+}
+
+#controlBtn{
+left:22px;
+bottom:74px;
+}
+
+#conversationBtn:hover,
+#fullscreenBtn:hover,
+#voiceBtn:hover,
 #controlBtn:hover{
 
 color:white;
@@ -401,6 +424,104 @@ border-color:#00ffff;
 
 background:
 rgba(0,255,255,.08);
+}
+
+#conversationBtn.active,
+#fullscreenBtn.active{
+
+color:#8fffff;
+
+border-color:
+rgba(0,255,255,.7);
+
+background:
+rgba(0,255,255,.08);
+
+box-shadow:
+0 0 18px rgba(0,255,255,.12);
+}
+
+/* =====================================================
+   VOICE PANEL
+===================================================== */
+
+#voicePanel{
+
+position:fixed;
+
+right:22px;
+bottom:122px;
+
+z-index:100;
+
+width:min(
+330px,
+calc(100% - 30px)
+);
+
+padding:15px;
+
+display:none;
+
+border:
+1px solid rgba(0,255,255,.25);
+
+border-radius:18px;
+
+background:
+rgba(2,13,16,.96);
+
+backdrop-filter:blur(20px);
+
+box-shadow:
+0 15px 50px rgba(0,0,0,.5);
+}
+
+#voicePanel.active{
+display:block;
+}
+
+.voice-title{
+color:
+rgba(220,255,255,.9);
+
+font-size:11px;
+
+letter-spacing:2px;
+
+margin-bottom:10px;
+}
+
+#voiceSelector,
+#voiceTest{
+
+width:100%;
+
+padding:10px;
+
+border:
+1px solid rgba(0,255,255,.2);
+
+border-radius:10px;
+
+outline:none;
+
+background:
+rgba(0,20,23,.9);
+
+color:
+rgba(220,255,255,.85);
+
+font-size:11px;
+}
+
+#voiceTest{
+margin-top:10px;
+
+background:
+rgba(0,255,255,.04);
+
+cursor:pointer;
 }
 
 /* =====================================================
@@ -412,7 +533,6 @@ rgba(0,255,255,.08);
 position:fixed;
 
 top:50%;
-
 left:50%;
 
 transform:
@@ -462,6 +582,7 @@ controlIn .2s ease forwards;
 
 from{
 opacity:0;
+
 transform:
 translate(-50%,-50%)
 scale(.96);
@@ -469,11 +590,11 @@ scale(.96);
 
 to{
 opacity:1;
+
 transform:
 translate(-50%,-50%)
 scale(1);
 }
-
 }
 
 .control-title{
@@ -558,7 +679,6 @@ top:15px;
 right:15px;
 
 width:32px;
-
 height:32px;
 
 border:
@@ -618,86 +738,6 @@ color:white;
 }
 
 /* =====================================================
-   VOICE PANEL
-===================================================== */
-
-#voicePanel{
-
-position:fixed;
-
-right:20px;
-
-bottom:25px;
-
-z-index:100;
-
-width:min(
-330px,
-calc(100% - 30px)
-);
-
-padding:15px;
-
-display:none;
-
-border:
-1px solid rgba(0,255,255,.25);
-
-border-radius:18px;
-
-background:
-rgba(2,13,16,.96);
-
-backdrop-filter:blur(20px);
-}
-
-#voicePanel.active{
-display:block;
-}
-
-.voice-title{
-
-color:
-rgba(220,255,255,.9);
-
-font-size:11px;
-
-letter-spacing:2px;
-
-margin-bottom:10px;
-}
-
-#voiceSelector,
-#voiceTest{
-
-width:100%;
-
-padding:10px;
-
-border:
-1px solid rgba(0,255,255,.2);
-
-border-radius:10px;
-
-outline:none;
-
-background:
-rgba(0,20,23,.9);
-
-color:
-rgba(220,255,255,.85);
-
-font-size:11px;
-}
-
-#voiceTest{
-
-margin-top:10px;
-
-cursor:pointer;
-}
-
-/* =====================================================
    MAPPA
 ===================================================== */
 
@@ -739,7 +779,6 @@ to{
 opacity:1;
 transform:scale(1);
 }
-
 }
 
 .map-header{
@@ -750,7 +789,8 @@ top:2.4%;
 
 left:50%;
 
-transform:translateX(-50%);
+transform:
+translateX(-50%);
 
 z-index:600;
 
@@ -789,7 +829,8 @@ border-radius:28px;
 background:#071012;
 
 box-shadow:
-0 0 35px rgba(0,0,0,.65);
+0 0 35px rgba(0,0,0,.65),
+0 0 70px rgba(0,255,255,.035);
 
 border:
 1px solid rgba(0,255,255,.10);
@@ -816,13 +857,11 @@ inset 0 0 80px rgba(0,0,0,.28);
 position:absolute;
 
 top:28px;
-
 left:34px;
 
 z-index:700;
 
 width:38px;
-
 height:38px;
 
 border:
@@ -839,6 +878,11 @@ rgba(200,255,255,.85);
 cursor:pointer;
 
 font-size:19px;
+
+display:flex;
+
+align-items:center;
+justify-content:center;
 }
 
 .maplibregl-ctrl-group{
@@ -856,7 +900,6 @@ overflow:hidden;
 }
 
 .maplibregl-ctrl-group button{
-
 background:
 transparent!important;
 }
@@ -872,7 +915,6 @@ font-size:8px!important;
 .jarvis-map-marker{
 
 width:20px;
-
 height:20px;
 
 border-radius:50%;
@@ -900,7 +942,6 @@ transform:scale(1);
 50%{
 transform:scale(1.18);
 }
-
 }
 
 /* =====================================================
@@ -923,11 +964,9 @@ pointer-events:none;
 position:absolute;
 
 width:720px;
-
 height:520px;
 
 min-width:320px;
-
 min-height:240px;
 
 max-width:
@@ -952,6 +991,10 @@ overflow:hidden;
 
 pointer-events:auto;
 
+backdrop-filter:blur(15px);
+
+touch-action:none;
+
 display:flex;
 
 flex-direction:column;
@@ -961,8 +1004,9 @@ resize:both;
 
 .web-window-header{
 
-height:50px;
+position:relative;
 
+height:50px;
 min-height:50px;
 
 display:flex;
@@ -981,6 +1025,10 @@ border-bottom:
 cursor:grab;
 
 user-select:none;
+
+-webkit-user-select:none;
+
+touch-action:none;
 }
 
 .web-window-header:active{
@@ -1007,17 +1055,28 @@ overflow:hidden;
 text-overflow:ellipsis;
 }
 
+.web-window-number{
+
+color:
+rgba(0,255,255,.55);
+
+margin-right:9px;
+
+font-size:8px;
+}
+
 .web-window-controls{
 
 display:flex;
 
 gap:6px;
+
+align-items:center;
 }
 
 .web-window-btn{
 
 width:32px;
-
 height:32px;
 
 border:
@@ -1033,7 +1092,23 @@ rgba(190,255,255,.75);
 
 cursor:pointer;
 
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
 font-size:15px;
+}
+
+.web-window-btn:hover{
+
+color:white;
+
+border-color:#00ffff;
+
+background:
+rgba(0,255,255,.08);
 }
 
 .web-window-body{
@@ -1052,10 +1127,11 @@ background:#fff;
 display:block;
 
 width:100%;
-
 height:100%;
 
 border:none;
+
+background:white;
 }
 
 .web-window-open{
@@ -1063,7 +1139,6 @@ border:none;
 position:absolute;
 
 right:12px;
-
 bottom:12px;
 
 z-index:20;
@@ -1080,11 +1155,25 @@ border-radius:18px;
 background:
 rgba(2,20,23,.92);
 
-color:#9fffff;
+color:
+#9fffff;
 
 font-size:9px;
 
+letter-spacing:1px;
+
 cursor:pointer;
+
+box-shadow:
+0 0 15px rgba(0,255,255,.15);
+}
+
+.web-window-open:hover{
+
+background:
+rgba(0,255,255,.15);
+
+color:white;
 }
 
 .web-window.minimized{
@@ -1103,6 +1192,46 @@ display:none;
 }
 
 /* =====================================================
+   WEB INDICATOR
+===================================================== */
+
+#webSearchIndicator{
+
+position:fixed;
+
+left:20px;
+
+bottom:125px;
+
+z-index:210;
+
+display:none;
+
+padding:8px 12px;
+
+border:
+1px solid rgba(0,255,255,.2);
+
+border-radius:15px;
+
+background:
+rgba(2,15,18,.75);
+
+color:
+rgba(180,255,255,.6);
+
+font-size:8px;
+
+letter-spacing:1.5px;
+
+pointer-events:none;
+}
+
+#webSearchIndicator.active{
+display:block;
+}
+
+/* =====================================================
    NOTIFICHE
 ===================================================== */
 
@@ -1111,7 +1240,6 @@ display:none;
 position:fixed;
 
 top:70px;
-
 left:20px;
 
 z-index:800;
@@ -1144,6 +1272,9 @@ font-size:9px;
 
 letter-spacing:1px;
 
+box-shadow:
+0 0 20px rgba(0,255,255,.08);
+
 animation:
 notificationIn .25s ease;
 }
@@ -1159,7 +1290,6 @@ to{
 opacity:1;
 transform:translateX(0);
 }
-
 }
 
 /* =====================================================
@@ -1180,7 +1310,6 @@ letter-spacing:5px;
 .datetime{
 
 top:12px;
-
 right:13px;
 }
 
@@ -1192,22 +1321,12 @@ calc(100% - 24px);
 bottom:17px;
 }
 
-#chat{
-
-bottom:80px;
+#textInput{
+font-size:13px;
 }
 
-#controlBtn{
-
-left:12px;
-
-bottom:70px;
-
-height:34px;
-
-font-size:9px;
-
-padding:0 11px;
+#chat{
+bottom:80px;
 }
 
 #map{
@@ -1221,7 +1340,6 @@ border-radius:22px;
 }
 
 .map-overlay{
-
 border-radius:22px;
 }
 
@@ -1237,12 +1355,70 @@ letter-spacing:5px;
 #closeMap{
 
 top:24px;
-
 left:25px;
 
 width:34px;
+height:34px;
+}
+
+#voiceBtn{
+
+right:12px;
+bottom:112px;
 
 height:34px;
+
+font-size:9px;
+
+padding:0 11px;
+}
+
+#fullscreenBtn{
+
+right:12px;
+bottom:70px;
+
+height:34px;
+
+font-size:9px;
+
+padding:0 11px;
+}
+
+#conversationBtn{
+
+left:12px;
+
+bottom:70px;
+
+height:34px;
+
+font-size:9px;
+
+padding:0 11px;
+}
+
+#controlBtn{
+
+left:12px;
+
+bottom:112px;
+
+height:34px;
+
+font-size:9px;
+
+padding:0 11px;
+}
+
+#voicePanel{
+
+right:12px;
+
+bottom:150px;
+
+width:
+calc(100% - 24px);
 }
 
 #controlCenter{
@@ -1257,7 +1433,6 @@ padding:18px;
 }
 
 .control-grid{
-
 grid-template-columns:1fr;
 }
 
@@ -1280,12 +1455,22 @@ top:80px!important;
 resize:none;
 }
 
+.web-window-header{
+
+height:50px;
+min-height:50px;
+}
+
+.web-window-btn{
+
+width:32px;
+height:32px;
+}
+
 #hudNotifications{
 
 left:10px;
-
 right:10px;
-
 top:65px;
 }
 
@@ -1296,11 +1481,8 @@ top:65px;
 #map{
 
 top:2.2cm;
-
 right:2.2cm;
-
 bottom:2.2cm;
-
 left:2.2cm;
 }
 
@@ -1320,128 +1502,326 @@ background:rgba(0,0,0,.2);
 
 ::-webkit-scrollbar-thumb{
 background:rgba(0,255,255,.2);
-
 border-radius:5px;
 }
 
-</style></head><body><!-- =====================================================
-     NEURAL CORE
-===================================================== --><div id="webgl-container"></div><div class="vignette"></div><!-- =====================================================
-     TITLE
-===================================================== --><div
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     WEBGL
+===================================================== -->
+
+<div id="webgl-container"></div>
+
+<div class="vignette"></div>
+
+
+<!-- =====================================================
+     TITOLO
+===================================================== -->
+
+<div
 class="jarvis-title"
-id="jarvisTitle">J.A.R.V.I.S.
+id="jarvisTitle">
 
-</div><!-- =====================================================
-     CLOCK
-===================================================== --><div class="datetime"><div
+J.A.R.V.I.S.
+
+</div>
+
+
+<!-- =====================================================
+     DATA / ORA
+===================================================== -->
+
+<div class="datetime">
+
+<div
 id="clock"
-class="time">00:00:00
+class="time">
 
-</div><div
+00:00:00
+
+</div>
+
+<div
 id="date"
-class="date">00 AGO 2026
+class="date">
 
-</div></div><!-- =====================================================
-     MAP
-===================================================== --><div id="tacticalMap"><div id="map"></div><div class="map-overlay"></div><div class="map-header">TACTICAL MAP
+00 AGO 2026
 
-</div><button id="closeMap">
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MAPPA
+===================================================== -->
+
+<div id="tacticalMap">
+
+<div id="map"></div>
+
+<div class="map-overlay"></div>
+
+<div class="map-header">
+TACTICAL MAP
+</div>
+
+<button id="closeMap">
 ×
-</button></div><!-- =====================================================
+</button>
+
+</div>
+
+
+<!-- =====================================================
      WEB
-===================================================== --><div id="webSearchWindows"></div><!-- =====================================================
-     NOTIFICATIONS
-===================================================== --><div id="hudNotifications"></div><!-- =====================================================
+===================================================== -->
+
+<div id="webSearchWindows"></div>
+
+<div id="webSearchIndicator">
+WEB WINDOWS: 0
+</div>
+
+
+<!-- =====================================================
+     NOTIFICHE
+===================================================== -->
+
+<div id="hudNotifications"></div>
+
+
+<!-- =====================================================
      CHAT
-===================================================== --><div id="chat"></div><!-- =====================================================
-     COMMAND INPUT
-===================================================== --><div class="command-wrapper"><input
+===================================================== -->
+
+<div id="chat"></div>
+
+
+<!-- =====================================================
+     INPUT
+===================================================== -->
+
+<div class="command-wrapper">
+
+<input
 id="textInput"
 type="text"
 autocomplete="off"
 placeholder="Chiedi qualcosa a JARVIS...">
 
-<button id="micBtn"><span class="mic-icon"></span>
+<button id="micBtn">
+<span class="mic-icon"></span>
+</button>
 
-</button><button id="sendBtn">INVIA
+<button id="sendBtn">
+INVIA
+</button>
 
-</button></div><!-- =====================================================
-     ONLY EXTRA CONTROL
-===================================================== --><button id="controlBtn">⚙ CONTROL CENTER
+</div>
 
-</button><!-- =====================================================
-     VOICE PANEL
-===================================================== --><div id="voicePanel"><div class="voice-title">VOCE J.A.R.V.I.S.
 
-</div><select id="voiceSelector"><option value="">
+<!-- =====================================================
+     PULSANTI
+===================================================== -->
+
+<button id="conversationBtn">
+◉ CONVERSAZIONE
+</button>
+
+<button id="controlBtn">
+⚙ CONTROL CENTER
+</button>
+
+<button id="fullscreenBtn">
+⛶ FULLSCREEN
+</button>
+
+<button id="voiceBtn">
+⚙ VOCE
+</button>
+
+
+<!-- =====================================================
+     VOCE
+===================================================== -->
+
+<div id="voicePanel">
+
+<div class="voice-title">
+VOCE J.A.R.V.I.S.
+</div>
+
+<select id="voiceSelector">
+
+<option value="">
 Voce dispositivo automatica
-</option></select><button id="voiceTest">TESTA VOCE
+</option>
 
-</button></div><!-- =====================================================
+</select>
+
+<button id="voiceTest">
+TESTA VOCE
+</button>
+
+</div>
+
+
+<!-- =====================================================
      CONTROL CENTER
-===================================================== --><div id="controlCenter"><button
+===================================================== -->
+
+<div id="controlCenter">
+
+<button
 class="control-close"
 id="controlClose">
 
 ×
 
-</button><div class="control-title">J.A.R.V.I.S. CONTROL CENTER
+</button>
 
-</div><div class="control-subtitle">SYSTEM MANAGEMENT INTERFACE
+<div class="control-title">
+J.A.R.V.I.S. CONTROL CENTER
+</div>
 
-</div><div class="control-grid"><div class="control-card"><h3>AI</h3><p id="systemAI">STATUS: ONLINE<br>
-API: CHECKING...
+<div class="control-subtitle">
+SYSTEM MANAGEMENT INTERFACE
+</div>
 
-</p></div><div class="control-card"><h3>VOICE</h3><p id="systemVoice">SPEECH: CHECKING...<br>
+<div class="control-grid">
+
+
+<div class="control-card">
+
+<h3>AI</h3>
+
+<p id="systemAI">
+STATUS: ONLINE<br>
+API: CONNECTING...
+</p>
+
+</div>
+
+
+<div class="control-card">
+
+<h3>VOICE</h3>
+
+<p id="systemVoice">
+SPEECH: READY<br>
 MIC: CHECKING...
+</p>
 
-</p></div><div class="control-card"><h3>MEMORY</h3><p id="systemMemory">ENTRIES: 0<br>
+</div>
+
+
+<div class="control-card">
+
+<h3>MEMORY</h3>
+
+<p id="systemMemory">
+ENTRIES: 0<br>
 STORAGE: LOCAL
+</p>
 
-</p><div class="memory-actions"><button
+<div class="memory-actions">
+
+<button
 class="memory-button"
 id="showMemoryBtn">
 
 VISUALIZZA
 
-</button><button
+</button>
+
+<button
 class="memory-button"
 id="clearMemoryBtn">
 
 CANCELLA
 
-</button></div></div><div class="control-card"><h3>MAP</h3><p id="systemMap">TACTICAL: READY<br>
-PROVIDER: MAPLIBRE
+</button>
 
-</p></div><div class="control-card"><h3>WEB</h3><p id="systemWeb">WINDOWS: 0<br>
+</div>
+
+</div>
+
+
+<div class="control-card">
+
+<h3>MAP</h3>
+
+<p id="systemMap">
+TACTICAL: READY<br>
+PROVIDER: MAPTILER
+</p>
+
+</div>
+
+
+<div class="control-card">
+
+<h3>WEB</h3>
+
+<p id="systemWeb">
+WINDOWS: 0<br>
 ENGINE: BING
+</p>
 
-</p></div><div class="control-card"><h3>SYSTEM</h3><p id="systemHardware">SCREEN: --<br>
+</div>
+
+
+<div class="control-card">
+
+<h3>SYSTEM</h3>
+
+<p id="systemHardware">
+SCREEN: --<br>
 BATTERY: --<br>
 NETWORK: --
+</p>
 
-</p></div></div></div><!-- =====================================================
-     MAPLIBRE
-===================================================== --><script
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     LIBRERIE
+===================================================== -->
+
+<script
 src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
-</script><!-- =====================================================
-     THREE IMPORT MAP
-===================================================== --><script type="importmap">
+</script>
 
+
+<script type="importmap">
 {
 "imports":{
 "three":
 "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
 }
 }
+</script>
 
-</script><script type="module">
+
+<script type="module">
 
 import * as THREE from "three";
 
+
 /* =====================================================
-   CONFIG
+   CONFIGURAZIONE
 ===================================================== */
 
 const API =
@@ -1450,54 +1830,47 @@ const API =
 const MEMORY_KEY =
 "jarvis_memory_v1";
 
-const MAX_MEMORY =
-30;
+const MAX_MEMORY = 30;
 
 const ELEVEN_VOICE_ID =
 "vkBFlAtUdZqNR4MqxSVr";
 
-const NEURON_COUNT =
-7000;
+const NEURON_COUNT = 7000;
+
 
 /* =====================================================
-   VARIABLES
+   VARIABILI
 ===================================================== */
 
-let currentAudio =
-null;
+let currentAudio = null;
 
-let deviceVoices =
-[];
+let audioPlaying = false;
 
-let selectedDeviceVoice =
-null;
+let deviceVoices = [];
 
-let recognition =
-null;
+let selectedDeviceVoice = null;
 
-let listening =
-false;
+let conversationMode = false;
 
-let recognitionStopping =
-false;
+let recognition = null;
 
-let map =
-null;
+let listening = false;
 
-let currentMarker =
-null;
+let recognitionStopping = false;
 
-let webWindowCounter =
-0;
+let map = null;
 
-let highestWebZ =
-220;
+let currentMarker = null;
 
-let fullscreenChanging =
-false;
+let webWindowCounter = 0;
+
+let highestWebZ = 220;
+
+let fullscreenChanging = false;
+
 
 /* =====================================================
-   DOM
+   ELEMENTI
 ===================================================== */
 
 const container =
@@ -1506,53 +1879,65 @@ document.getElementById(
 );
 
 const chat =
-document.getElementById(
-"chat"
-);
+document.getElementById("chat");
 
 const textInput =
-document.getElementById(
-"textInput"
-);
+document.getElementById("textInput");
 
 const sendBtn =
-document.getElementById(
-"sendBtn"
-);
+document.getElementById("sendBtn");
 
 const micBtn =
-document.getElementById(
-"micBtn"
-);
+document.getElementById("micBtn");
 
 const clock =
-document.getElementById(
-"clock"
-);
+document.getElementById("clock");
 
 const date =
-document.getElementById(
-"date"
-);
+document.getElementById("date");
 
 const tacticalMap =
-document.getElementById(
-"tacticalMap"
-);
+document.getElementById("tacticalMap");
 
 const closeMap =
-document.getElementById(
-"closeMap"
-);
+document.getElementById("closeMap");
 
 const jarvisTitle =
-document.getElementById(
-"jarvisTitle"
-);
+document.getElementById("jarvisTitle");
 
 const mapHeader =
-document.querySelector(
-".map-header"
+document.querySelector(".map-header");
+
+const voiceBtn =
+document.getElementById("voiceBtn");
+
+const voicePanel =
+document.getElementById("voicePanel");
+
+const voiceSelector =
+document.getElementById("voiceSelector");
+
+const voiceTest =
+document.getElementById("voiceTest");
+
+const webSearchWindows =
+document.getElementById(
+"webSearchWindows"
+);
+
+const webSearchIndicator =
+document.getElementById(
+"webSearchIndicator"
+);
+
+const conversationBtn =
+document.getElementById(
+"conversationBtn"
+);
+
+const fullscreenBtn =
+document.getElementById(
+"fullscreenBtn"
 );
 
 const controlBtn =
@@ -1575,28 +1960,9 @@ document.getElementById(
 "hudNotifications"
 );
 
-const voicePanel =
-document.getElementById(
-"voicePanel"
-);
-
-const voiceSelector =
-document.getElementById(
-"voiceSelector"
-);
-
-const voiceTest =
-document.getElementById(
-"voiceTest"
-);
-
-const webSearchWindows =
-document.getElementById(
-"webSearchWindows"
-);
 
 /* =====================================================
-   MEMORY
+   MEMORIA
 ===================================================== */
 
 let memory = [];
@@ -1611,15 +1977,12 @@ MEMORY_KEY
 if(saved){
 
 const parsed =
-JSON.parse(saved
-);
+JSON.parse(saved);
 
 if(Array.isArray(parsed)){
 
 memory =
-parsed.slice(
--MAX_MEMORY
-);
+parsed.slice(-MAX_MEMORY);
 
 }
 
@@ -1628,11 +1991,12 @@ parsed.slice(
 }catch(error){
 
 console.warn(
-"Memory error:",
+"Memoria non disponibile:",
 error
 );
 
 }
+
 
 function saveMemory(){
 
@@ -1641,16 +2005,14 @@ try{
 localStorage.setItem(
 MEMORY_KEY,
 JSON.stringify(
-memory.slice(
--MAX_MEMORY
-)
+memory.slice(-MAX_MEMORY)
 )
 );
 
 }catch(error){
 
 console.warn(
-"Memory save error:",
+"Errore salvataggio memoria:",
 error
 );
 
@@ -1658,25 +2020,19 @@ error
 
 }
 
+
 function addMemory(
 role,
 content
 ){
 
 memory.push({
-
 role:role,
-
-content:content,
-
-time:new Date().toISOString()
-
+content:content
 });
 
 memory =
-memory.slice(
--MAX_MEMORY
-);
+memory.slice(-MAX_MEMORY);
 
 saveMemory();
 
@@ -1684,16 +2040,15 @@ updateSystemPanel();
 
 }
 
+
 /* =====================================================
-   NOTIFICATIONS
+   NOTIFICHE
 ===================================================== */
 
 function notify(message){
 
 const element =
-document.createElement(
-"div"
-);
+document.createElement("div");
 
 element.className =
 "hud-notification";
@@ -1712,18 +2067,45 @@ element.style.opacity =
 "0";
 
 setTimeout(
-()=>element.remove(),
+()=>{
+element.remove();
+},
 300
 );
 
 },
-3000
+3500
 );
 
 }
 
+
 /* =====================================================
-   CLOCK
+   CHAT
+===================================================== */
+
+function addMsg(text){
+
+chat.innerHTML = "";
+
+const element =
+document.createElement("div");
+
+element.className =
+"msg";
+
+element.textContent =
+String(text);
+
+chat.appendChild(
+element
+);
+
+}
+
+
+/* =====================================================
+   OROLOGIO
 ===================================================== */
 
 const months = [
@@ -1743,6 +2125,7 @@ const months = [
 
 ];
 
+
 function updateClock(){
 
 const now =
@@ -1753,36 +2136,46 @@ clock.textContent =
 String(
 now.getHours()
 ).padStart(2,"0")
+
 +
 ":"
+
 +
 String(
 now.getMinutes()
 ).padStart(2,"0")
+
 +
 ":"
+
 +
 String(
 now.getSeconds()
 ).padStart(2,"0");
+
 
 date.textContent =
 
 String(
 now.getDate()
 ).padStart(2,"0")
+
 +
 " "
+
 +
 months[
 now.getMonth()
 ]
+
 +
 " "
+
 +
 now.getFullYear();
 
 }
+
 
 updateClock();
 
@@ -1791,11 +2184,12 @@ updateClock,
 1000
 );
 
+
 /* =====================================================
-   THREE.JS NEURAL CORE
-   7000 PARTICELLE
-   NESSUN ANELLO
+   THREE.JS — NEURAL CORE
+   7000 NEURONI
    NESSUN COLLEGAMENTO
+   NESSUN ANELLO
 ===================================================== */
 
 let scene = null;
@@ -1810,60 +2204,42 @@ let geometry = null;
 
 let material = null;
 
-/*
-   IMPORTANTISSIMO:
-   questi array sono GLOBALI.
-   Il vecchio codice li creava dentro
-   initializeNeuralCore(), causando il crash
-   di animate().
-*/
+let animationStarted = false;
 
-let neuronRadii =
-new Float32Array(
-NEURON_COUNT
-);
+let targetEnergy = .15;
 
-let neuronTheta =
-new Float32Array(
-NEURON_COUNT
-);
+let energy = .15;
 
-let neuronPhi =
-new Float32Array(
-NEURON_COUNT
-);
+let radii = null;
 
-let neuronSeeds =
-new Float32Array(
-NEURON_COUNT
-);
+let thetaValues = null;
 
-let animationStarted =
-false;
+let phiValues = null;
 
-let targetEnergy =
-0.15;
+let seeds = null;
 
-let energy =
-0.15;
+
+/* =====================================================
+   TEXTURE DEI NEURONI
+===================================================== */
 
 function createGlowTexture(){
 
 const canvas =
-document.createElement(
-"canvas"
-);
+document.createElement("canvas");
 
-canvas.width =
-64;
+canvas.width = 64;
 
-canvas.height =
-64;
+canvas.height = 64;
 
 const ctx =
-canvas.getContext(
-"2d"
-);
+canvas.getContext("2d");
+
+if(!ctx){
+
+return null;
+
+}
 
 const gradient =
 ctx.createRadialGradient(
@@ -1881,17 +2257,17 @@ gradient.addColorStop(
 );
 
 gradient.addColorStop(
-0.18,
+.18,
 "rgba(220,255,255,1)"
 );
 
 gradient.addColorStop(
-0.4,
+.40,
 "rgba(0,255,255,.9)"
 );
 
 gradient.addColorStop(
-0.7,
+.70,
 "rgba(0,150,190,.25)"
 );
 
@@ -1916,12 +2292,18 @@ canvas
 
 }
 
+
+/* =====================================================
+   INIZIALIZZAZIONE THREE
+===================================================== */
+
 function initializeNeuralCore(){
 
 try{
 
 scene =
 new THREE.Scene();
+
 
 camera =
 new THREE.PerspectiveCamera(
@@ -1935,6 +2317,7 @@ window.innerHeight,
 camera.position.z =
 5.2;
 
+
 renderer =
 new THREE.WebGLRenderer({
 
@@ -1947,36 +2330,66 @@ powerPreference:
 
 });
 
+
 renderer.setSize(
 window.innerWidth,
 window.innerHeight
 );
 
+
 renderer.setPixelRatio(
 Math.min(
 window.devicePixelRatio || 1,
-2
+1.75
 )
 );
 
-container.innerHTML =
-"";
+
+container.innerHTML = "";
 
 container.appendChild(
 renderer.domElement
 );
 
+
 /* =====================================================
-   7000 NEURONS
+   7000 NEURONI
 ===================================================== */
 
 geometry =
 new THREE.BufferGeometry();
 
+
 const positions =
 new Float32Array(
 NEURON_COUNT * 3
 );
+
+
+radii =
+new Float32Array(
+NEURON_COUNT
+);
+
+thetaValues =
+new Float32Array(
+NEURON_COUNT
+);
+
+phiValues =
+new Float32Array(
+NEURON_COUNT
+);
+
+seeds =
+new Float32Array(
+NEURON_COUNT
+);
+
+
+/* =====================================================
+   DISTRIBUZIONE SFERICA
+===================================================== */
 
 for(
 let i = 0;
@@ -1985,8 +2398,8 @@ i++
 ){
 
 const radius =
-1.05 +
-Math.random() * 0.78;
+1.10 +
+Math.random() * 0.70;
 
 const theta =
 Math.random() *
@@ -1997,39 +2410,39 @@ Math.acos(
 2 * Math.random() - 1
 );
 
-neuronRadii[i] =
+radii[i] =
 radius;
 
-neuronTheta[i] =
+thetaValues[i] =
 theta;
 
-neuronPhi[i] =
+phiValues[i] =
 phi;
 
-neuronSeeds[i] =
-Math.random() * 1000;
+seeds[i] =
+Math.random() * 100;
+
 
 const index =
 i * 3;
 
-positions[index] =
 
+positions[index] =
 radius *
 Math.sin(phi) *
 Math.cos(theta);
 
 positions[index + 1] =
-
 radius *
 Math.sin(phi) *
 Math.sin(theta);
 
 positions[index + 2] =
-
 radius *
 Math.cos(phi);
 
 }
+
 
 geometry.setAttribute(
 "position",
@@ -2039,12 +2452,14 @@ positions,
 )
 );
 
-/*
-   SOLO PUNTI.
-   Nessuna Line.
-   Nessun Ring.
-   Nessun collegamento.
-*/
+
+/* =====================================================
+   MATERIAL
+===================================================== */
+
+const glowTexture =
+createGlowTexture();
+
 
 material =
 new THREE.PointsMaterial({
@@ -2058,21 +2473,23 @@ size:
 0.038,
 
 map:
-createGlowTexture(),
+glowTexture,
 
-transparent:
-true,
+transparent:true,
 
-opacity:
-1,
+opacity:1,
 
-depthWrite:
-false,
+depthWrite:false,
 
 blending:
 THREE.AdditiveBlending
 
 });
+
+
+/* =====================================================
+   SOLO NEURONI
+===================================================== */
 
 particles =
 new THREE.Points(
@@ -2084,11 +2501,15 @@ scene.add(
 particles
 );
 
-animationStarted =
-true;
+
+/* =====================================================
+   AVVIO
+===================================================== */
+
+animationStarted = true;
 
 notify(
-"7000 NEURONS ONLINE"
+"NEURAL CORE ONLINE — 7000 NEURONS"
 );
 
 animate();
@@ -2100,13 +2521,13 @@ console.error(
 error
 );
 
-container.innerHTML =
-"";
+animationStarted = false;
+
+container.innerHTML = "";
+
 
 const errorElement =
-document.createElement(
-"div"
-);
+document.createElement("div");
 
 errorElement.style.position =
 "absolute";
@@ -2143,8 +2564,9 @@ errorElement
 
 }
 
+
 /* =====================================================
-   COLORS
+   COLORI
 ===================================================== */
 
 const normalColor =
@@ -2160,47 +2582,52 @@ new THREE.Color(
 const currentColor =
 normalColor.clone();
 
+
+/* =====================================================
+   STATO
+===================================================== */
+
 function setState(state){
+
+if(!material)
+return;
+
 
 if(state === "thinking"){
 
-targetEnergy =
-1.8;
+targetEnergy = 2;
 
 }
 
 else if(state === "speaking"){
 
-targetEnergy =
-0.75;
+targetEnergy = .8;
 
 }
 
 else if(state === "listening"){
 
-targetEnergy =
-0.5;
+targetEnergy = .55;
 
 }
 
 else if(state === "error"){
 
-targetEnergy =
-1.3;
+targetEnergy = 1.4;
 
 }
 
 else{
 
-targetEnergy =
-0.15;
+targetEnergy = .15;
 
 }
 
 }
+
 
 /* =====================================================
-   ANIMATION
+   ANIMAZIONE
 ===================================================== */
 
 function animate(){
@@ -2212,27 +2639,30 @@ requestAnimationFrame(
 animate
 );
 
+
 const time =
-performance.now() *
-0.001;
+performance.now() * 0.001;
+
 
 energy +=
 (
 targetEnergy -
 energy
-) *
-0.045;
+) * 0.045;
 
-const colorAmount =
-Math.min(
-energy * 0.04,
-1
-);
+
+/* =====================================================
+   COLORE
+===================================================== */
 
 currentColor.lerp(
 activeColor,
-colorAmount
+Math.min(
+energy * 0.04,
+1
+)
 );
+
 
 if(energy < 0.3){
 
@@ -2243,16 +2673,23 @@ normalColor,
 
 }
 
+
 material.color =
 currentColor;
 
+
 material.size =
-0.034 +
-energy * 0.007;
+0.038 +
+energy * 0.006;
+
+
+/* =====================================================
+   MOVIMENTO DEI 7000 NEURONI
+===================================================== */
 
 const pos =
-geometry.attributes
-.position.array;
+geometry.attributes.position.array;
+
 
 for(
 let i = 0;
@@ -2264,52 +2701,45 @@ const index =
 i * 3;
 
 const theta =
-neuronTheta[i];
+thetaValues[i];
 
 const phi =
-neuronPhi[i];
+phiValues[i];
 
 const baseRadius =
-neuronRadii[i];
+radii[i];
 
 const seed =
-neuronSeeds[i];
+seeds[i];
+
 
 /*
-   Movimento organico leggero.
-   Nessun anello e nessun collegamento.
+   Movimento molto leggero.
+   La struttura rimane quella della sfera.
 */
 
 const pulse =
 Math.sin(
-time * 1.7 +
+time * 2 +
 seed
-) *
-0.025;
+) * 0.025;
+
 
 const wave =
-Math.sin(
-theta * 5 +
-time * 1.2 +
+Math.cos(
+phi * 5 -
+time * 1.5 +
 seed
 ) *
-0.055 *
+0.035 *
 energy;
 
-const depthWave =
-Math.cos(
-phi * 6 -
-time * 1.1 +
-seed
-) *
-0.045 *
-energy;
 
 const radius =
 baseRadius +
 pulse +
-wave +
-depthWave;
+wave;
+
 
 pos[index] =
 
@@ -2317,11 +2747,13 @@ radius *
 Math.sin(phi) *
 Math.cos(theta);
 
+
 pos[index + 1] =
 
 radius *
 Math.sin(phi) *
 Math.sin(theta);
+
 
 pos[index + 2] =
 
@@ -2330,26 +2762,33 @@ Math.cos(phi);
 
 }
 
-geometry.attributes
-.position
-.needsUpdate =
+
+geometry.attributes.position.needsUpdate =
 true;
 
+
+/* =====================================================
+   ROTAZIONE LENTA
+===================================================== */
+
 particles.rotation.y +=
-0.00035 +
-energy * 0.00045;
+0.00045 +
+energy * 0.0006;
 
 particles.rotation.x =
 Math.sin(
-time * 0.22
-) *
-0.035;
+time * 0.25
+) * 0.04;
 
 particles.rotation.z =
 Math.cos(
-time * 0.16
-) *
-0.02;
+time * 0.18
+) * 0.025;
+
+
+/* =====================================================
+   RENDER
+===================================================== */
 
 renderer.render(
 scene,
@@ -2358,7 +2797,9 @@ camera
 
 }
 
+
 initializeNeuralCore();
+
 
 /* =====================================================
    MAPTILER
@@ -2367,21 +2808,20 @@ initializeNeuralCore();
 const MAPTILER_KEY =
 "NmSlgtsAdQyEWy7t0OJf";
 
-const MAPTILER_STYLE =
 
+const MAPTILER_STYLE =
 "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
 +
 MAPTILER_KEY;
+
 
 function initializeMap(){
 
 if(map)
 return;
 
-if(
-typeof maplibregl ===
-"undefined"
-){
+
+if(typeof maplibregl === "undefined"){
 
 addMsg(
 "Errore: MapLibre non disponibile."
@@ -2391,46 +2831,38 @@ return;
 
 }
 
+
+try{
+
 map =
 new maplibregl.Map({
 
-container:
-"map",
+container:"map",
 
-style:
-MAPTILER_STYLE,
+style:MAPTILER_STYLE,
 
 center:[
 10.2118,
 45.5416
 ],
 
-zoom:
-10,
+zoom:10,
 
-attributionControl:
-true,
+attributionControl:true,
 
-antialias:
-true
+antialias:true
 
 });
 
+
 map.addControl(
-
 new maplibregl.NavigationControl({
-
-showCompass:
-true,
-
-showZoom:
-true
-
+showCompass:true,
+showZoom:true
 }),
-
 "bottom-right"
-
 );
+
 
 map.on(
 "load",
@@ -2445,7 +2877,34 @@ notify(
 }
 );
 
+
+map.on(
+"error",
+event=>{
+
+console.warn(
+"MAP ERROR:",
+event
+);
+
 }
+);
+
+}catch(error){
+
+console.error(
+"MAP INIT ERROR:",
+error
+);
+
+addMsg(
+"Impossibile inizializzare la mappa."
+);
+
+}
+
+}
+
 
 function openTacticalMap(){
 
@@ -2473,6 +2932,7 @@ map.resize();
 
 }
 
+
 function closeTacticalMap(){
 
 tacticalMap.classList.remove(
@@ -2484,67 +2944,33 @@ jarvisTitle.style.display =
 
 }
 
+
 closeMap.addEventListener(
 "click",
 closeTacticalMap
 );
 
+
 /* =====================================================
-   UTILITY
+   ESCAPE HTML
 ===================================================== */
 
 function escapeHtml(text){
 
 return String(text)
 
-.replace(
-/&/g,
-"&amp;"
-)
+.replace(/&/g,"&amp;")
 
-.replace(
-/</g,
-"&lt;"
-)
+.replace(/</g,"&lt;")
 
-.replace(
-/>/g,
-"&gt;"
-)
+.replace(/>/g,"&gt;")
 
-.replace(
-/"/g,
-"&quot;"
-)
+.replace(/"/g,"&quot;")
 
-.replace(
-/'/g,
-"&#039;"
-);
+.replace(/'/g,"&#039;");
 
 }
 
-function addMsg(text){
-
-chat.innerHTML =
-"";
-
-const element =
-document.createElement(
-"div"
-);
-
-element.className =
-"msg";
-
-element.textContent =
-text;
-
-chat.appendChild(
-element
-);
-
-}
 
 /* =====================================================
    FULLSCREEN
@@ -2559,6 +2985,7 @@ document.webkitFullscreenElement
 
 }
 
+
 async function enterFullscreen(){
 
 if(isFullscreen())
@@ -2567,14 +2994,12 @@ return true;
 if(fullscreenChanging)
 return false;
 
-fullscreenChanging =
-true;
+fullscreenChanging = true;
 
 try{
 
 if(
-document.documentElement
-.requestFullscreen
+document.documentElement.requestFullscreen
 ){
 
 await document.documentElement
@@ -2583,8 +3008,7 @@ await document.documentElement
 }
 
 else if(
-document.documentElement
-.webkitRequestFullscreen
+document.documentElement.webkitRequestFullscreen
 ){
 
 document.documentElement
@@ -2598,8 +3022,7 @@ addMsg(
 "Fullscreen non supportato."
 );
 
-fullscreenChanging =
-false;
+fullscreenChanging = false;
 
 return false;
 
@@ -2608,6 +3031,8 @@ return false;
 notify(
 "FULLSCREEN ATTIVO"
 );
+
+fullscreenChanging = false;
 
 return true;
 
@@ -2618,20 +3043,18 @@ console.warn(
 error
 );
 
+fullscreenChanging = false;
+
 addMsg(
 "Il browser ha bloccato il fullscreen."
 );
 
 return false;
 
-}finally{
-
-fullscreenChanging =
-false;
-
 }
 
 }
+
 
 async function exitFullscreen(){
 
@@ -2661,8 +3084,76 @@ return false;
 
 }
 
+
+async function toggleFullscreen(){
+
+if(isFullscreen()){
+
+await exitFullscreen();
+
+}
+else{
+
+await enterFullscreen();
+
+}
+
+}
+
+
+function updateFullscreenUI(){
+
+const active =
+isFullscreen();
+
+fullscreenBtn.classList.toggle(
+"active",
+active
+);
+
+fullscreenBtn.textContent =
+active
+?
+"⛶ ESCI FULLSCREEN"
+:
+"⛶ FULLSCREEN";
+
+}
+
+
+fullscreenBtn.addEventListener(
+"click",
+async()=>{
+
+await toggleFullscreen();
+
+updateFullscreenUI();
+
+}
+);
+
+
+document.addEventListener(
+"fullscreenchange",
+()=>{
+
+updateFullscreenUI();
+
+if(map){
+
+setTimeout(
+()=>map.resize(),
+100
+);
+
+}
+
+}
+);
+
+
 /* =====================================================
-   NORMALIZE
+   NORMALIZZAZIONE
 ===================================================== */
 
 function normalizeCommand(text){
@@ -2671,9 +3162,7 @@ return String(text)
 
 .toLowerCase()
 
-.normalize(
-"NFD"
-)
+.normalize("NFD")
 
 .replace(
 /[\u0300-\u036f]/g,
@@ -2694,8 +3183,9 @@ return String(text)
 
 }
 
+
 /* =====================================================
-   MAP MARKER
+   MARKER MAPPA
 ===================================================== */
 
 function createJarvisMarker(
@@ -2707,22 +3197,22 @@ name
 if(!map)
 return;
 
+
 if(currentMarker){
 
 currentMarker.remove();
 
-currentMarker =
-null;
+currentMarker = null;
 
 }
 
+
 const markerElement =
-document.createElement(
-"div"
-);
+document.createElement("div");
 
 markerElement.className =
 "jarvis-map-marker";
+
 
 currentMarker =
 new maplibregl.Marker({
@@ -2758,12 +3248,14 @@ ${escapeHtml(name)}
 
 .addTo(map);
 
+
 currentMarker.togglePopup();
 
 }
 
+
 /* =====================================================
-   SEARCH LOCATION
+   RICERCA POSIZIONE
 ===================================================== */
 
 async function searchLocation(place){
@@ -2777,15 +3269,14 @@ addMsg(
 place
 );
 
-const url =
 
+const url =
 "https://nominatim.openstreetmap.org/search"
 +
 "?format=json&limit=1&q="
 +
-encodeURIComponent(
-place
-);
+encodeURIComponent(place);
+
 
 const response =
 await fetch(
@@ -2798,13 +3289,19 @@ headers:{
 }
 );
 
-if(!response.ok)
+
+if(!response.ok){
+
 throw new Error(
 "Ricerca posizione fallita"
 );
 
+}
+
+
 const results =
 await response.json();
+
 
 if(!results.length){
 
@@ -2818,18 +3315,25 @@ return;
 
 }
 
+
 const result =
 results[0];
 
 const lat =
-parseFloat(
-result.lat
-);
+parseFloat(result.lat);
 
 const lon =
-parseFloat(
-result.lon
+parseFloat(result.lon);
+
+
+if(!map){
+
+throw new Error(
+"Mappa non inizializzata"
 );
+
+}
+
 
 map.flyTo({
 
@@ -2838,25 +3342,23 @@ lon,
 lat
 ],
 
-zoom:
-12,
+zoom:12,
 
-speed:
-0.8,
+speed:.8,
 
-curve:
-1.5,
+curve:1.5,
 
-essential:
-true
+essential:true
 
 });
+
 
 createJarvisMarker(
 lat,
 lon,
 place
 );
+
 
 addMsg(
 "Posizione acquisita: " +
@@ -2884,14 +3386,16 @@ place +
 
 }
 
+
 /* =====================================================
-   MAP COMMANDS
+   COMANDI MAPPA
 ===================================================== */
 
 function handleMapCommand(text){
 
 const normalized =
 normalizeCommand(text);
+
 
 if(
 
@@ -2917,6 +3421,12 @@ normalized.includes(
 "modalita tattica"
 )
 
+||
+
+normalized.includes(
+"attiva la mappa"
+)
+
 ){
 
 openTacticalMap();
@@ -2928,6 +3438,7 @@ addMsg(
 return true;
 
 }
+
 
 if(
 
@@ -2947,6 +3458,12 @@ normalized.includes(
 "esci dalla mappa"
 )
 
+||
+
+normalized.includes(
+"torna alla modalita normale"
+)
+
 ){
 
 closeTacticalMap();
@@ -2958,6 +3475,7 @@ addMsg(
 return true;
 
 }
+
 
 const patterns = [
 
@@ -2971,18 +3489,19 @@ const patterns = [
 
 "localizza ",
 
+"cerca ",
+
 "visualizza "
 
 ];
+
 
 for(
 const pattern of patterns
 ){
 
 if(
-normalized.startsWith(
-pattern
-)
+normalized.startsWith(pattern)
 ){
 
 const place =
@@ -2990,11 +3509,10 @@ text.trim().substring(
 pattern.length
 ).trim();
 
+
 if(place.length > 1){
 
-searchLocation(
-place
-);
+searchLocation(place);
 
 return true;
 
@@ -3004,19 +3522,49 @@ return true;
 
 }
 
+
 return false;
 
 }
 
+
 /* =====================================================
-   WEB
+   WEB WINDOWS
 ===================================================== */
 
 function updateWebIndicator(){
 
+const count =
+webSearchWindows
+.querySelectorAll(
+".web-window"
+)
+.length;
+
+
+if(count > 0){
+
+webSearchIndicator.classList.add(
+"active"
+);
+
+webSearchIndicator.textContent =
+"WEB WINDOWS: " +
+count;
+
+}
+else{
+
+webSearchIndicator.classList.remove(
+"active"
+);
+
+}
+
 updateSystemPanel();
 
 }
+
 
 function bringWebWindowToFront(
 windowElement
@@ -3025,53 +3573,46 @@ windowElement
 highestWebZ++;
 
 windowElement.style.zIndex =
-String(
-highestWebZ
-);
+String(highestWebZ);
 
 }
+
 
 function openWebSearch(query){
 
 if(!query)
 return;
 
+
 webWindowCounter++;
 
+
 const windowElement =
-document.createElement(
-"div"
-);
+document.createElement("div");
 
 windowElement.className =
 "web-window";
 
+
 const offset =
 (webWindowCounter - 1) % 5;
 
+
 windowElement.style.left =
-(
-30 +
-offset * 45
-) +
+(30 + offset * 45) +
 "px";
 
 windowElement.style.top =
-(
-90 +
-offset * 35
-) +
+(90 + offset * 35) +
 "px";
 
 windowElement.style.zIndex =
-String(
-++highestWebZ
-);
+String(++highestWebZ);
+
 
 const safeTitle =
-escapeHtml(
-query
-);
+escapeHtml(query);
+
 
 windowElement.innerHTML = `
 
@@ -3079,18 +3620,25 @@ windowElement.innerHTML = `
 
 <div class="web-window-title">
 
-WEB ${webWindowCounter} —
+<span class="web-window-number">
+
+WEB ${webWindowCounter}
+
+</span>
+
 ${safeTitle}
 
 </div>
 
 <div class="web-window-controls">
 
-<button class="web-window-btn minimize-web">
+<button
+class="web-window-btn minimize-web">
 −
 </button>
 
-<button class="web-window-btn close-web">
+<button
+class="web-window-btn close-web">
 ×
 </button>
 
@@ -3101,21 +3649,26 @@ ${safeTitle}
 <div class="web-window-body">
 
 <iframe
-title="Ricerca web"
+title="Ricerca web ${safeTitle}"
 loading="eager"
 referrerpolicy="no-referrer">
 </iframe>
 
-<button class="web-window-open">
+<button
+class="web-window-open">
+
 ↗ APRI SITO
+
 </button>
 
 </div>
 `;
 
+
 webSearchWindows.appendChild(
 windowElement
 );
+
 
 const iframe =
 windowElement.querySelector(
@@ -3127,16 +3680,16 @@ windowElement.querySelector(
 ".web-window-open"
 );
 
-const searchUrl =
 
+const searchUrl =
 "https://www.bing.com/search?q="
 +
-encodeURIComponent(
-query
-);
+encodeURIComponent(query);
+
 
 iframe.src =
 searchUrl;
+
 
 openButton.addEventListener(
 "click",
@@ -3153,6 +3706,7 @@ searchUrl,
 }
 );
 
+
 windowElement.addEventListener(
 "pointerdown",
 ()=>{
@@ -3164,10 +3718,12 @@ windowElement
 }
 );
 
+
 const minimizeButton =
 windowElement.querySelector(
 ".minimize-web"
 );
+
 
 minimizeButton.addEventListener(
 "click",
@@ -3182,10 +3738,12 @@ windowElement.classList.toggle(
 }
 );
 
+
 const closeButton =
 windowElement.querySelector(
 ".close-web"
 );
+
 
 closeButton.addEventListener(
 "click",
@@ -3200,8 +3758,9 @@ updateWebIndicator();
 }
 );
 
+
 /* =====================================================
-   DRAG
+   DRAG FINESTRA
 ===================================================== */
 
 const header =
@@ -3209,14 +3768,12 @@ windowElement.querySelector(
 ".web-window-header"
 );
 
-let dragging =
-false;
+let dragging = false;
 
-let dragOffsetX =
-0;
+let dragOffsetX = 0;
 
-let dragOffsetY =
-0;
+let dragOffsetY = 0;
+
 
 header.addEventListener(
 "pointerdown",
@@ -3229,15 +3786,17 @@ event.target.closest(
 )
 return;
 
-dragging =
-true;
+
+dragging = true;
 
 bringWebWindowToFront(
 windowElement
 );
 
+
 const rect =
 windowElement.getBoundingClientRect();
+
 
 dragOffsetX =
 event.clientX -
@@ -3247,6 +3806,7 @@ dragOffsetY =
 event.clientY -
 rect.top;
 
+
 try{
 
 header.setPointerCapture(
@@ -3254,6 +3814,7 @@ event.pointerId
 );
 
 }catch(e){}
+
 
 event.preventDefault();
 
@@ -3263,6 +3824,7 @@ passive:false
 }
 );
 
+
 header.addEventListener(
 "pointermove",
 event=>{
@@ -3270,7 +3832,9 @@ event=>{
 if(!dragging)
 return;
 
+
 event.preventDefault();
+
 
 let newLeft =
 event.clientX -
@@ -3280,46 +3844,36 @@ let newTop =
 event.clientY -
 dragOffsetY;
 
+
 const rect =
 windowElement.getBoundingClientRect();
 
-const minLeft =
--rect.width + 120;
-
-const maxLeft =
-window.innerWidth - 120;
-
-const minTop =
-10;
-
-const maxTop =
-window.innerHeight - 70;
 
 newLeft =
 Math.max(
-minLeft,
+-rect.width + 120,
 Math.min(
 newLeft,
-maxLeft
+window.innerWidth - 120
 )
 );
+
 
 newTop =
 Math.max(
-minTop,
+10,
 Math.min(
 newTop,
-maxTop
+window.innerHeight - 70
 )
 );
 
+
 windowElement.style.left =
-newLeft +
-"px";
+newLeft + "px";
 
 windowElement.style.top =
-newTop +
-"px";
+newTop + "px";
 
 },
 {
@@ -3327,12 +3881,13 @@ passive:false
 }
 );
 
-header.addEventListener(
-"pointerup",
-event=>{
 
-dragging =
-false;
+function stopDragging(event){
+
+if(!dragging)
+return;
+
+dragging = false;
 
 try{
 
@@ -3343,15 +3898,25 @@ event.pointerId
 }catch(e){}
 
 }
+
+
+header.addEventListener(
+"pointerup",
+stopDragging
 );
 
 header.addEventListener(
 "pointercancel",
+stopDragging
+);
+
+header.addEventListener(
+"lostpointercapture",
 ()=>{
-dragging =
-false;
+dragging = false;
 }
 );
+
 
 updateWebIndicator();
 
@@ -3366,14 +3931,16 @@ notify(
 
 }
 
+
 /* =====================================================
-   WEB COMMAND
+   COMANDI WEB
 ===================================================== */
 
 function handleWebCommand(text){
 
 const normalized =
 normalizeCommand(text);
+
 
 const patterns = [
 
@@ -3397,14 +3964,13 @@ const patterns = [
 
 ];
 
+
 for(
 const pattern of patterns
 ){
 
 if(
-normalized.startsWith(
-pattern
-)
+normalized.startsWith(pattern)
 ){
 
 const query =
@@ -3412,11 +3978,10 @@ text.trim().substring(
 pattern.length
 ).trim();
 
+
 if(query.length > 1){
 
-openWebSearch(
-query
-);
+openWebSearch(query);
 
 return true;
 
@@ -3426,18 +3991,21 @@ return true;
 
 }
 
+
 return false;
 
 }
 
+
 /* =====================================================
-   WEB WINDOWS COMMANDS
+   COMANDI FINESTRE
 ===================================================== */
 
 function handleWebWindowCommand(text){
 
 const normalized =
 normalizeCommand(text);
+
 
 if(
 
@@ -3461,8 +4029,7 @@ normalized ===
 
 ){
 
-webSearchWindows.innerHTML =
-"";
+webSearchWindows.innerHTML = "";
 
 updateWebIndicator();
 
@@ -3473,6 +4040,7 @@ addMsg(
 return true;
 
 }
+
 
 if(
 
@@ -3491,8 +4059,8 @@ webSearchWindows
 ".web-window"
 )
 .forEach(
-element=>
-element.classList.add(
+windowElement=>
+windowElement.classList.add(
 "minimized"
 )
 );
@@ -3505,12 +4073,14 @@ return true;
 
 }
 
+
 return false;
 
 }
 
+
 /* =====================================================
-   TIME DATA
+   TEMPO
 ===================================================== */
 
 function getTimeData(){
@@ -3557,8 +4127,9 @@ Intl.DateTimeFormat()
 
 }
 
+
 /* =====================================================
-   DEVICE VOICES
+   VOCI
 ===================================================== */
 
 function loadDeviceVoices(){
@@ -3568,20 +4139,18 @@ if(
 )
 return;
 
-deviceVoices =
-window.speechSynthesis
-.getVoices();
 
-voiceSelector.innerHTML =
-"";
+deviceVoices =
+window.speechSynthesis.getVoices();
+
+
+voiceSelector.innerHTML = "";
+
 
 const automatic =
-document.createElement(
-"option"
-);
+document.createElement("option");
 
-automatic.value =
-"";
+automatic.value = "";
 
 automatic.textContent =
 "Voce dispositivo automatica";
@@ -3590,13 +4159,12 @@ voiceSelector.appendChild(
 automatic
 );
 
+
 deviceVoices.forEach(
 (voice,index)=>{
 
 const option =
-document.createElement(
-"option"
-);
+document.createElement("option");
 
 option.value =
 String(index);
@@ -3613,33 +4181,36 @@ option
 }
 );
 
-const saved =
+
+const savedVoice =
 localStorage.getItem(
 "jarvis_device_voice"
 );
 
+
 if(
 
-saved !== null
+savedVoice !== null
 
 &&
 
-Number(saved) <
+Number(savedVoice) <
 deviceVoices.length
 
 ){
 
 voiceSelector.value =
-saved;
+savedVoice;
 
 selectedDeviceVoice =
 deviceVoices[
-Number(saved)
+Number(savedVoice)
 ];
 
 }
 
 }
+
 
 if(
 "speechSynthesis" in window
@@ -3647,16 +4218,16 @@ if(
 
 loadDeviceVoices();
 
-window.speechSynthesis
-.addEventListener(
+window.speechSynthesis.addEventListener(
 "voiceschanged",
 loadDeviceVoices
 );
 
 }
 
+
 /* =====================================================
-   DEVICE SPEECH
+   DEVICE TTS
 ===================================================== */
 
 function speakDevice(text){
@@ -3674,9 +4245,11 @@ return;
 
 }
 
+
 try{
 
 window.speechSynthesis.cancel();
+
 
 const utterance =
 new SpeechSynthesisUtterance(
@@ -3687,23 +4260,21 @@ utterance.lang =
 "it-IT";
 
 utterance.rate =
-0.95;
+.95;
 
 utterance.pitch =
-0.9;
+.9;
 
 utterance.volume =
 1;
 
-if(
-selectedDeviceVoice
-){
+
+if(selectedDeviceVoice){
 
 utterance.voice =
 selectedDeviceVoice;
 
 }
-
 else{
 
 const italianVoice =
@@ -3711,9 +4282,7 @@ deviceVoices.find(
 voice=>
 voice.lang
 .toLowerCase()
-.startsWith(
-"it"
-)
+.startsWith("it")
 );
 
 if(italianVoice){
@@ -3725,46 +4294,49 @@ italianVoice;
 
 }
 
+
 utterance.onstart =
 ()=>{
 
-setState(
-"speaking"
-);
+audioPlaying = true;
+
+setState("speaking");
 
 };
+
 
 utterance.onend =
 ()=>{
 
-setState(
-"idle"
-);
+audioPlaying = false;
+
+setState("idle");
 
 resolve(true);
 
 };
 
+
 utterance.onerror =
 ()=>{
 
-setState(
-"idle"
-);
+audioPlaying = false;
+
+setState("idle");
 
 resolve(false);
 
 };
 
-window.speechSynthesis
-.speak(
+
+window.speechSynthesis.speak(
 utterance
 );
 
 }catch(error){
 
 console.error(
-"Speech error:",
+"Speech:",
 error
 );
 
@@ -3775,16 +4347,16 @@ resolve(false);
 }
 );
 
+
 /* =====================================================
    ELEVENLABS
 ===================================================== */
 
-async function speakElevenLabs(
-text
-){
+async function speakElevenLabs(text){
 
 if(!text)
 return false;
+
 
 if(currentAudio){
 
@@ -3797,19 +4369,21 @@ currentAudio.currentTime =
 
 }catch(e){}
 
-currentAudio =
-null;
+currentAudio = null;
 
 }
 
+
 const controller =
 new AbortController();
+
 
 const timeout =
 setTimeout(
 ()=>controller.abort(),
 30000
 );
+
 
 try{
 
@@ -3842,26 +4416,26 @@ controller.signal
 }
 );
 
+
 if(!response.ok)
 return false;
 
+
 const contentType =
-response.headers
-.get(
+response.headers.get(
 "content-type"
-)
-||
-"";
+) || "";
+
 
 if(
-!contentType.includes(
-"audio"
-)
+!contentType.includes("audio")
 )
 return false;
 
+
 const audioBlob =
 await response.blob();
+
 
 if(
 !audioBlob ||
@@ -3869,37 +4443,40 @@ audioBlob.size === 0
 )
 return false;
 
+
 const audioUrl =
 URL.createObjectURL(
 audioBlob
 );
 
+
 const audio =
-new Audio(
-audioUrl
-);
+new Audio(audioUrl);
+
 
 currentAudio =
 audio;
 
-audio.volume =
-1;
+
+audio.volume = 1;
+
 
 audio.onplay =
 ()=>{
 
-setState(
-"speaking"
-);
+audioPlaying = true;
+
+setState("speaking");
 
 };
+
 
 audio.onended =
 ()=>{
 
-setState(
-"idle"
-);
+audioPlaying = false;
+
+setState("idle");
 
 URL.revokeObjectURL(
 audioUrl
@@ -3908,29 +4485,45 @@ audioUrl
 if(
 currentAudio === audio
 )
-currentAudio =
-null;
+currentAudio = null;
+
+
+if(conversationMode){
+
+setTimeout(
+startContinuousRecognition,
+150
+);
+
+}
 
 };
+
 
 audio.onerror =
 ()=>{
 
-setState(
-"idle"
-);
+audioPlaying = false;
+
+setState("idle");
 
 URL.revokeObjectURL(
 audioUrl
 );
 
 if(
-currentAudio === audio
-)
-currentAudio =
-null;
+conversationMode
+){
+
+setTimeout(
+startContinuousRecognition,
+150
+);
+
+}
 
 };
+
 
 await audio.play();
 
@@ -3947,13 +4540,12 @@ return false;
 
 }finally{
 
-clearTimeout(
-timeout
-);
+clearTimeout(timeout);
 
 }
 
 }
+
 
 /* =====================================================
    SPEAK
@@ -3964,22 +4556,32 @@ async function speak(text){
 if(!text)
 return;
 
+
 const elevenSuccess =
-await speakElevenLabs(
-text
-);
+await speakElevenLabs(text);
+
 
 if(elevenSuccess)
 return;
 
-await speakDevice(
-text
+
+await speakDevice(text);
+
+
+if(conversationMode){
+
+setTimeout(
+startContinuousRecognition,
+150
 );
 
 }
 
+}
+
+
 /* =====================================================
-   VOICE PANEL
+   VOICE UI
 ===================================================== */
 
 voiceTest.addEventListener(
@@ -3993,6 +4595,7 @@ await speakDevice(
 }
 );
 
+
 voiceSelector.addEventListener(
 "change",
 ()=>{
@@ -4000,10 +4603,10 @@ voiceSelector.addEventListener(
 const value =
 voiceSelector.value;
 
+
 if(value === ""){
 
-selectedDeviceVoice =
-null;
+selectedDeviceVoice = null;
 
 localStorage.removeItem(
 "jarvis_device_voice"
@@ -4013,8 +4616,10 @@ return;
 
 }
 
+
 const index =
 Number(value);
+
 
 if(
 Number.isInteger(index)
@@ -4035,13 +4640,24 @@ String(index)
 }
 );
 
-/* =====================================================
-   MICROPHONE
-===================================================== */
 
-const Recognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
+voiceBtn.addEventListener(
+"click",
+()=>{
+
+voicePanel.classList.toggle(
+"active"
+);
+
+loadDeviceVoices();
+
+}
+);
+
+
+/* =====================================================
+   CONVERSAZIONE
+===================================================== */
 
 function startRecognition(){
 
@@ -4051,8 +4667,7 @@ return;
 if(listening)
 return;
 
-recognitionStopping =
-false;
+recognitionStopping = false;
 
 try{
 
@@ -4061,7 +4676,7 @@ recognition.start();
 }catch(error){
 
 console.warn(
-"Recognition:",
+"Microfono:",
 error
 );
 
@@ -4069,13 +4684,13 @@ error
 
 }
 
+
 function stopRecognition(){
 
 if(!recognition)
 return;
 
-recognitionStopping =
-true;
+recognitionStopping = true;
 
 try{
 
@@ -4083,18 +4698,128 @@ recognition.stop();
 
 }catch(e){}
 
-listening =
-false;
+listening = false;
 
 micBtn.classList.remove(
 "active"
 );
 
-setState(
-"idle"
+}
+
+
+function startContinuousRecognition(){
+
+if(!conversationMode)
+return;
+
+if(listening)
+return;
+
+startRecognition();
+
+}
+
+
+function stopContinuousRecognition(){
+
+conversationMode = false;
+
+recognitionStopping = true;
+
+
+if(recognition){
+
+try{
+
+recognition.stop();
+
+}catch(e){}
+
+}
+
+
+listening = false;
+
+micBtn.classList.remove(
+"active"
+);
+
+conversationBtn.classList.remove(
+"active"
+);
+
+conversationBtn.textContent =
+"◉ CONVERSAZIONE";
+
+setState("idle");
+
+}
+
+
+function activateConversationMode(){
+
+if(conversationMode)
+return;
+
+conversationMode = true;
+
+conversationBtn.classList.add(
+"active"
+);
+
+conversationBtn.textContent =
+"● CONVERSAZIONE ATTIVA";
+
+addMsg(
+"Modalità conversazione continua attivata."
+);
+
+startContinuousRecognition();
+
+}
+
+
+function deactivateConversationMode(){
+
+if(!conversationMode)
+return;
+
+stopContinuousRecognition();
+
+addMsg(
+"Modalità conversazione continua disattivata."
 );
 
 }
+
+
+conversationBtn.addEventListener(
+"click",
+()=>{
+
+if(conversationMode){
+
+deactivateConversationMode();
+
+}
+else{
+
+activateConversationMode();
+
+}
+
+}
+);
+
+
+/* =====================================================
+   SPEECH RECOGNITION
+===================================================== */
+
+const Recognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
 
 if(Recognition){
 
@@ -4110,21 +4835,20 @@ false;
 recognition.interimResults =
 false;
 
+
 recognition.onstart =
 ()=>{
 
-listening =
-true;
+listening = true;
 
 micBtn.classList.add(
 "active"
 );
 
-setState(
-"listening"
-);
+setState("listening");
 
 };
+
 
 recognition.onresult =
 event=>{
@@ -4137,13 +4861,16 @@ event.results.length - 1
 if(!result)
 return;
 
+
 const text =
 result[0]
 .transcript
 .trim();
 
+
 if(!text)
 return;
+
 
 textInput.value =
 text;
@@ -4152,59 +4879,103 @@ sendMessage();
 
 };
 
+
 recognition.onerror =
 error=>{
 
 console.error(
-"Microphone:",
+"Microfono:",
 error
 );
 
-listening =
-false;
+listening = false;
 
 micBtn.classList.remove(
 "active"
 );
 
-setState(
-"idle"
+
+if(
+conversationMode
+&&
+error.error !==
+"not-allowed"
+&&
+error.error !==
+"service-not-allowed"
+){
+
+setTimeout(
+startContinuousRecognition,
+700
 );
 
+}
+else{
+
+setState("idle");
+
+}
+
 };
+
 
 recognition.onend =
 ()=>{
 
-listening =
-false;
+listening = false;
 
 micBtn.classList.remove(
 "active"
 );
 
-if(!recognitionStopping){
 
-setState(
-"idle"
+if(
+conversationMode
+&&
+!recognitionStopping
+){
+
+setTimeout(
+startContinuousRecognition,
+300
 );
 
 }
+else{
 
-recognitionStopping =
-false;
+recognitionStopping = false;
+
+if(!conversationMode){
+
+setState("idle");
+
+}
+
+}
 
 };
+
 
 micBtn.addEventListener(
 "click",
 ()=>{
 
+if(conversationMode){
+
+deactivateConversationMode();
+
+return;
+
+}
+
+
 if(listening){
 
 stopRecognition();
 
-}else{
+}
+else{
 
 startRecognition();
 
@@ -4213,107 +4984,199 @@ startRecognition();
 }
 );
 
-}else{
+}
+else{
 
 micBtn.style.opacity =
 ".3";
 
+conversationBtn.style.opacity =
+".35";
+
 }
+
+
+/* =====================================================
+   COMANDI CONVERSAZIONE
+===================================================== */
+
+function handleConversationCommand(text){
+
+const normalized =
+normalizeCommand(text);
+
+
+const activateCommands = [
+
+"attiva modalita conversazione",
+
+"attiva la modalita conversazione",
+
+"modalita conversazione",
+
+"avvia modalita conversazione",
+
+"inizia modalita conversazione",
+
+"conversazione continua",
+
+"attiva conversazione continua"
+
+];
+
+
+const deactivateCommands = [
+
+"disattiva modalita conversazione",
+
+"disattiva la modalita conversazione",
+
+"chiudi modalita conversazione",
+
+"stop modalita conversazione",
+
+"disattiva conversazione continua"
+
+];
+
+
+if(
+activateCommands.includes(
+normalized
+)
+){
+
+activateConversationMode();
+
+return true;
+
+}
+
+
+if(
+deactivateCommands.includes(
+normalized
+)
+){
+
+deactivateConversationMode();
+
+return true;
+
+}
+
+
+return false;
+
+}
+
+
+/* =====================================================
+   FULLSCREEN COMMAND
+===================================================== */
+
+function handleFullscreenCommand(text){
+
+const normalized =
+normalizeCommand(text);
+
+
+const simplified =
+normalized
+
+.replace(
+/\bper favore\b/g,
+""
+)
+
+.replace(
+/\bjarvis\b/g,
+""
+)
+
+.replace(
+/\s+/g,
+" "
+)
+
+.trim();
+
+
+if(
+
+simplified ===
+"fullscreen"
+
+||
+
+simplified ===
+"schermo intero"
+
+||
+
+simplified ===
+"attiva fullscreen"
+
+||
+
+simplified ===
+"attiva schermo intero"
+
+||
+
+simplified ===
+"metti fullscreen"
+
+||
+
+simplified ===
+"metti in fullscreen"
+
+){
+
+enterFullscreen();
+
+return true;
+
+}
+
+
+if(
+
+simplified ===
+"disattiva fullscreen"
+
+||
+
+simplified ===
+"esci dal fullscreen"
+
+||
+
+simplified ===
+"esci fullscreen"
+
+||
+
+simplified ===
+"torna normale"
+
+){
+
+exitFullscreen();
+
+return true;
+
+}
+
+
+return false;
+
+}
+
 
 /* =====================================================
    CONTROL CENTER
-===================================================== */
-
-controlBtn.addEventListener(
-"click",
-()=>{
-
-controlCenter.classList.toggle(
-"active"
-);
-
-updateSystemPanel();
-
-}
-);
-
-controlClose.addEventListener(
-"click",
-()=>{
-
-controlCenter.classList.remove(
-"active"
-);
-
-}
-);
-
-document.getElementById(
-"showMemoryBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-if(!memory.length){
-
-addMsg(
-"La memoria JARVIS è vuota."
-);
-
-return;
-
-}
-
-const preview =
-memory
-.slice(-10)
-.map(
-(item,index)=>
-(index + 1) +
-". " +
-item.role +
-": " +
-item.content
-)
-.join("\n");
-
-addMsg(
-preview
-);
-
-}
-);
-
-document.getElementById(
-"clearMemoryBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-memory =
-[];
-
-localStorage.removeItem(
-MEMORY_KEY
-);
-
-updateSystemPanel();
-
-notify(
-"MEMORIA CANCELLATA"
-);
-
-addMsg(
-"Memoria JARVIS cancellata."
-);
-
-}
-);
-
-/* =====================================================
-   SYSTEM PANEL
 ===================================================== */
 
 function updateSystemPanel(){
@@ -4338,10 +5201,6 @@ document.getElementById(
 "systemAI"
 );
 
-const mapElement =
-document.getElementById(
-"systemMap"
-);
 
 if(memoryElement){
 
@@ -4353,25 +5212,30 @@ memory.length +
 
 }
 
+
 if(webElement){
 
 webElement.innerHTML =
 
 "WINDOWS: " +
+
 webSearchWindows
 .querySelectorAll(
 ".web-window"
 )
 .length +
+
 "<br>ENGINE: BING";
 
 }
+
 
 if(voiceElement){
 
 voiceElement.innerHTML =
 
 "SPEECH: " +
+
 (
 "speechSynthesis" in window
 ?
@@ -4379,8 +5243,11 @@ voiceElement.innerHTML =
 :
 "OFFLINE"
 )
+
 +
+
 "<br>MIC: " +
+
 (
 recognition
 ?
@@ -4391,40 +5258,35 @@ recognition
 
 }
 
+
 if(aiElement){
 
 aiElement.innerHTML =
 
-"STATUS: ONLINE" +
-"<br>API: " +
-(
-navigator.onLine
-?
-"ONLINE"
-:
-"OFFLINE"
-);
+"STATUS: ONLINE"
+
++
+
+"<br>API: READY";
 
 }
 
-if(mapElement){
-
-mapElement.innerHTML =
-
-"TACTICAL: READY" +
-"<br>PROVIDER: MAPLIBRE";
-
-}
 
 const hardware =
 document.getElementById(
 "systemHardware"
 );
 
+
 if(hardware){
 
-const updateHardware =
-batteryText=>{
+const network =
+navigator.onLine
+?
+"ONLINE"
+:
+"OFFLINE";
+
 
 hardware.innerHTML =
 
@@ -4432,18 +5294,11 @@ hardware.innerHTML =
 window.innerWidth +
 "x" +
 window.innerHeight +
-"<br>BATTERY: " +
-batteryText +
-"<br>NETWORK: " +
-(
-navigator.onLine
-?
-"ONLINE"
-:
-"OFFLINE"
-);
 
-};
+"<br>BATTERY: --" +
+
+"<br>NETWORK: " +
+network;
 
 if(
 navigator.getBattery
@@ -4451,154 +5306,206 @@ navigator.getBattery
 
 navigator.getBattery()
 .then(
-battery=>{
+batteryObject=>{
 
-updateHardware(
+hardware.innerHTML =
+
+"SCREEN: " +
+window.innerWidth +
+"x" +
+window.innerHeight +
+
+"<br>BATTERY: " +
 
 Math.round(
-battery.level * 100
+batteryObject.level * 100
 ) +
-"%"
 
-);
+"%" +
+
+"<br>NETWORK: " +
+network;
 
 }
 )
 .catch(
+()=>{}
+);
+
+}
+
+}
+
+}
+
+
+controlBtn.addEventListener(
+"click",
 ()=>{
 
-updateHardware(
-"UNAVAILABLE"
+controlCenter.classList.toggle(
+"active"
+);
+
+updateSystemPanel();
+
+}
+);
+
+
+controlClose.addEventListener(
+"click",
+()=>{
+
+controlCenter.classList.remove(
+"active"
 );
 
 }
 );
 
-}else{
-
-updateHardware(
-"UNAVAILABLE"
-);
-
-}
-
-}
-
-}
 
 /* =====================================================
-   AI
+   MOSTRA MEMORIA
+===================================================== */
+
+document.getElementById(
+"showMemoryBtn"
+)
+.addEventListener(
+"click",
+()=>{
+
+if(!memory.length){
+
+addMsg(
+"La memoria JARVIS è vuota."
+);
+
+return;
+
+}
+
+
+const preview =
+memory
+.slice(-10)
+.map(
+(item,index)=>
+(index + 1) +
+". " +
+item.role +
+": " +
+item.content
+)
+.join("\n");
+
+
+addMsg(
+preview
+);
+
+}
+);
+
+
+/* =====================================================
+   CANCELLA MEMORIA
+===================================================== */
+
+document.getElementById(
+"clearMemoryBtn"
+)
+.addEventListener(
+"click",
+()=>{
+
+memory = [];
+
+localStorage.removeItem(
+MEMORY_KEY
+);
+
+updateSystemPanel();
+
+notify(
+"MEMORIA CANCELLATA"
+);
+
+addMsg(
+"Memoria JARVIS cancellata."
+);
+
+}
+);
+
+
+/* =====================================================
+   PROCESS AI
 ===================================================== */
 
 async function processAi(text){
+
+if(
+handleFullscreenCommand(text)
+)
+return;
+
+
+if(
+handleConversationCommand(text)
+)
+return;
+
 
 if(
 handleWebWindowCommand(text)
 )
 return;
 
+
 if(
 handleWebCommand(text)
 )
 return;
+
 
 if(
 handleMapCommand(text)
 )
 return;
 
-const normalized =
-normalizeCommand(text);
 
-/* =====================================================
-   QUICK COMMANDS
-===================================================== */
+setState("thinking");
 
-if(
-normalized ===
-"che ore sono"
-||
-normalized ===
-"che ora e"
-){
-
-const data =
-getTimeData();
-
-addMsg(
-"Adesso sono le " +
-data.currentTime +
-"."
-);
-
-speak(
-"Adesso sono le " +
-data.currentTime
-);
-
-return;
-
-}
-
-if(
-normalized ===
-"attiva fullscreen"
-||
-normalized ===
-"fullscreen"
-||
-normalized ===
-"schermo intero"
-){
-
-await enterFullscreen();
-
-return;
-
-}
-
-if(
-normalized ===
-"esci fullscreen"
-||
-normalized ===
-"esci dal fullscreen"
-){
-
-await exitFullscreen();
-
-return;
-
-}
-
-/* =====================================================
-   AI REQUEST
-===================================================== */
-
-setState(
-"thinking"
-);
-
-addMemory(
-"user",
-text
-);
 
 try{
 
 const temporal =
 getTimeData();
 
+
+addMemory(
+"user",
+text
+);
+
+
 const controller =
 new AbortController();
 
+
 const timeout =
 setTimeout(
-()=>controller.abort(),
+()=>{
+controller.abort();
+},
 30000
 );
 
+
 let response;
+
 
 try{
 
@@ -4619,7 +5526,7 @@ body:JSON.stringify({
 message:text,
 
 memory:
-memory.slice(-8),
+memory.slice(-4),
 
 currentTime:
 temporal.currentTime,
@@ -4641,33 +5548,64 @@ controller.signal
 }
 );
 
-}finally{
+}
+finally{
 
-clearTimeout(
-timeout
-);
+clearTimeout(timeout);
 
 }
+
 
 if(!response.ok){
 
 const errorText =
 await response.text();
 
-throw new Error(
+let errorMessage =
 "HTTP " +
-response.status +
-" " +
+response.status;
+
+
+try{
+
+const errorData =
+JSON.parse(errorText);
+
+if(
+errorData &&
+errorData.error
+){
+
+errorMessage =
+errorData.error;
+
+}
+
+}catch(e){
+
+if(errorText){
+
+errorMessage =
 errorText.substring(
 0,
-120
-)
+200
 );
 
 }
 
+}
+
+
+throw new Error(
+errorMessage
+);
+
+}
+
+
 const data =
 await response.json();
+
 
 const reply =
 typeof data.response ===
@@ -4677,6 +5615,7 @@ data.response.trim()
 :
 "";
 
+
 if(!reply){
 
 throw new Error(
@@ -4685,22 +5624,23 @@ throw new Error(
 
 }
 
-addMsg(
-reply
-);
+
+addMsg(reply);
 
 addMemory(
 "assistant",
 reply
 );
 
-speak(
-reply
+
+speak(reply)
+.catch(
+console.error
 );
 
-setState(
-"idle"
-);
+
+setState("idle");
+
 
 }catch(error){
 
@@ -4709,9 +5649,11 @@ console.error(
 error
 );
 
+
 let message =
 error.message ||
 "Errore sconosciuto";
+
 
 if(
 error.name ===
@@ -4722,7 +5664,6 @@ message =
 "Il server ha impiegato troppo tempo a rispondere.";
 
 }
-
 else if(
 message ===
 "Failed to fetch"
@@ -4733,17 +5674,20 @@ message =
 
 }
 
+
 addMsg(
 "ERRORE: " +
 message
 );
 
-setState(
-"error"
-);
+
+setState("error");
+
 
 setTimeout(
-()=>setState("idle"),
+()=>{
+setState("idle");
+},
 1200
 );
 
@@ -4751,8 +5695,9 @@ setTimeout(
 
 }
 
+
 /* =====================================================
-   SEND
+   INVIO
 ===================================================== */
 
 function sendMessage(){
@@ -4760,26 +5705,25 @@ function sendMessage(){
 const text =
 textInput.value.trim();
 
+
 if(!text)
 return;
 
-textInput.value =
-"";
 
-addMsg(
-text
-);
+textInput.value = "";
 
-processAi(
-text
-);
+addMsg(text);
+
+processAi(text);
 
 }
+
 
 sendBtn.addEventListener(
 "click",
 sendMessage
 );
+
 
 textInput.addEventListener(
 "keydown",
@@ -4798,6 +5742,7 @@ sendMessage();
 
 }
 );
+
 
 /* =====================================================
    RESIZE
@@ -4825,13 +5770,17 @@ window.innerHeight
 
 }
 
-if(map)
+if(map){
+
 map.resize();
+
+}
 
 updateSystemPanel();
 
 }
 );
+
 
 /* =====================================================
    ONLINE / OFFLINE
@@ -4850,6 +5799,7 @@ updateSystemPanel();
 }
 );
 
+
 window.addEventListener(
 "offline",
 ()=>{
@@ -4863,43 +5813,14 @@ updateSystemPanel();
 }
 );
 
-/* =====================================================
-   ESC
-===================================================== */
-
-document.addEventListener(
-"keydown",
-event=>{
-
-if(
-event.key ===
-"Escape"
-){
-
-if(
-controlCenter.classList.contains(
-"active"
-)
-){
-
-controlCenter.classList.remove(
-"active"
-);
-
-}
-
-}
-
-}
-);
 
 /* =====================================================
-   START
+   AVVIO
 ===================================================== */
 
-setState(
-"idle"
-);
+setState("idle");
+
+updateFullscreenUI();
 
 updateSystemPanel();
 
@@ -4907,4 +5828,8 @@ notify(
 "J.A.R.V.I.S. SYSTEM ONLINE"
 );
 
-</script></body></html>
+</script>
+
+</body>
+
+</html>

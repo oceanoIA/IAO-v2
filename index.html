@@ -52,7 +52,6 @@ circle at center,
 position:fixed;
 inset:0;
 z-index:1;
-overflow:hidden;
 }
 
 #webgl-container canvas{
@@ -70,9 +69,9 @@ pointer-events:none;
 background:
 radial-gradient(
 circle at center,
-transparent 25%,
-rgba(0,0,0,.18) 58%,
-rgba(0,0,0,.82) 100%
+transparent 30%,
+rgba(0,0,0,.2) 65%,
+rgba(0,0,0,.8) 100%
 );
 }
 
@@ -172,7 +171,7 @@ border:
 border-radius:24px;
 
 background:
-rgba(4,20,23,.42);
+rgba(4,20,23,.4);
 
 backdrop-filter:blur(14px);
 
@@ -186,9 +185,6 @@ line-height:1.45;
 white-space:pre-wrap;
 
 word-break:break-word;
-
-box-shadow:
-0 0 25px rgba(0,255,255,.035);
 }
 
 /* =====================================================
@@ -218,7 +214,7 @@ border:
 border-radius:40px;
 
 background:
-rgba(5,20,23,.42);
+rgba(5,20,23,.38);
 
 backdrop-filter:blur(20px);
 
@@ -1252,7 +1248,7 @@ display:block;
 }
 
 /* =====================================================
-   NOTIFICHE HUD
+   NOTIFICHE
 ===================================================== */
 
 #hudNotifications{
@@ -1542,6 +1538,7 @@ border-radius:5px;
 
 <body>
 
+
 <!-- =====================================================
      WEBGL
 ===================================================== -->
@@ -1549,6 +1546,7 @@ border-radius:5px;
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
+
 
 <!-- =====================================================
      TITOLO
@@ -1562,21 +1560,31 @@ J.A.R.V.I.S.
 
 </div>
 
+
 <!-- =====================================================
      DATA / ORA
 ===================================================== -->
 
 <div class="datetime">
 
-<div id="clock" class="time">
+<div
+id="clock"
+class="time">
+
 00:00:00
+
 </div>
 
-<div id="date" class="date">
+<div
+id="date"
+class="date">
+
 00 AGO 2026
+
 </div>
 
 </div>
+
 
 <!-- =====================================================
      MAPPA
@@ -1589,7 +1597,9 @@ J.A.R.V.I.S.
 <div class="map-overlay"></div>
 
 <div class="map-header">
+
 TACTICAL MAP
+
 </div>
 
 <button id="closeMap">
@@ -1597,6 +1607,7 @@ TACTICAL MAP
 </button>
 
 </div>
+
 
 <!-- =====================================================
      WEB
@@ -1608,17 +1619,20 @@ TACTICAL MAP
 WEB WINDOWS: 0
 </div>
 
+
 <!-- =====================================================
      NOTIFICHE
 ===================================================== -->
 
 <div id="hudNotifications"></div>
 
+
 <!-- =====================================================
      CHAT
 ===================================================== -->
 
 <div id="chat"></div>
+
 
 <!-- =====================================================
      INPUT
@@ -1639,39 +1653,53 @@ placeholder="Chiedi qualcosa a JARVIS...">
 </button>
 
 <button id="sendBtn">
+
 INVIA
+
 </button>
 
 </div>
+
 
 <!-- =====================================================
      PULSANTI
 ===================================================== -->
 
 <button id="conversationBtn">
+
 ◉ CONVERSAZIONE
+
 </button>
 
 <button id="controlBtn">
+
 ⚙ CONTROL CENTER
+
 </button>
 
 <button id="fullscreenBtn">
+
 ⛶ FULLSCREEN
+
 </button>
 
 <button id="voiceBtn">
+
 ⚙ VOCE
+
 </button>
 
+
 <!-- =====================================================
-     VOCE
+     VOICE PANEL
 ===================================================== -->
 
 <div id="voicePanel">
 
 <div class="voice-title">
+
 VOCE J.A.R.V.I.S.
+
 </div>
 
 <select id="voiceSelector">
@@ -1683,10 +1711,13 @@ Voce dispositivo automatica
 </select>
 
 <button id="voiceTest">
+
 TESTA VOCE
+
 </button>
 
 </div>
+
 
 <!-- =====================================================
      CONTROL CENTER
@@ -1697,48 +1728,63 @@ TESTA VOCE
 <button
 class="control-close"
 id="controlClose">
+
 ×
+
 </button>
 
 <div class="control-title">
+
 J.A.R.V.I.S. CONTROL CENTER
+
 </div>
 
 <div class="control-subtitle">
+
 SYSTEM MANAGEMENT INTERFACE
+
 </div>
 
 <div class="control-grid">
+
 
 <div class="control-card">
 
 <h3>AI</h3>
 
 <p id="systemAI">
+
 STATUS: ONLINE<br>
 API: CHECKING...
+
 </p>
 
 </div>
+
 
 <div class="control-card">
 
 <h3>VOICE</h3>
 
 <p id="systemVoice">
-SPEECH: READY<br>
+
+SPEECH: CHECKING...<br>
 MIC: CHECKING...
+
 </p>
 
 </div>
+
 
 <div class="control-card">
 
 <h3>MEMORY</h3>
 
 <p id="systemMemory">
+
 ENTRIES: 0<br>
 STORAGE: LOCAL
+
 </p>
 
 <div class="memory-actions">
@@ -1746,79 +1792,90 @@ STORAGE: LOCAL
 <button
 class="memory-button"
 id="showMemoryBtn">
+
 VISUALIZZA
+
 </button>
 
 <button
 class="memory-button"
 id="clearMemoryBtn">
+
 CANCELLA
+
 </button>
 
 </div>
 
 </div>
+
 
 <div class="control-card">
 
 <h3>MAP</h3>
 
 <p id="systemMap">
+
 TACTICAL: READY<br>
 PROVIDER: MAPTILER
+
 </p>
 
 </div>
+
 
 <div class="control-card">
 
 <h3>WEB</h3>
 
 <p id="systemWeb">
+
 WINDOWS: 0<br>
 ENGINE: BING
+
 </p>
 
 </div>
+
 
 <div class="control-card">
 
 <h3>SYSTEM</h3>
 
 <p id="systemHardware">
+
 SCREEN: --<br>
 BATTERY: --<br>
 NETWORK: --
+
 </p>
 
 </div>
 
+
 </div>
 
 </div>
+
 
 <!-- =====================================================
      LIBRERIE
+     
+     IMPORTANTE:
+     Three.js viene caricato normalmente.
+     NIENTE importmap.
 ===================================================== -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.min.js">
+</script>
 
 <script
 src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
 </script>
 
-<script type="importmap">
 
-{
-"imports":{
-"three":
-"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
-}
-}
-
-</script>
-
-<script type="module">
-
-import * as THREE from "three";
+<script>
 
 /* =====================================================
    CONFIG
@@ -1828,12 +1885,13 @@ const API =
 "https://iao-ai-v3.oceano-masoud.workers.dev/";
 
 const MEMORY_KEY =
-"jarvis_memory_v2";
+"jarvis_memory_v1";
 
-const MAX_MEMORY = 40;
+const MAX_MEMORY = 30;
 
 const ELEVEN_VOICE_ID =
 "vkBFlAtUdZqNR4MqxSVr";
+
 
 /* =====================================================
    VARIABILI
@@ -1857,7 +1915,7 @@ let recognitionStopping = false;
 
 let map = null;
 
-let currentMarkers = [];
+let currentMarker = null;
 
 let webWindowCounter = 0;
 
@@ -1865,16 +1923,13 @@ let highestWebZ = 220;
 
 let fullscreenChanging = false;
 
-let apiOnline = false;
 
 /* =====================================================
    ELEMENTI
 ===================================================== */
 
 const container =
-document.getElementById(
-"webgl-container"
-);
+document.getElementById("webgl-container");
 
 const chat =
 document.getElementById("chat");
@@ -1922,39 +1977,90 @@ const webSearchWindows =
 document.getElementById("webSearchWindows");
 
 const webSearchIndicator =
-document.getElementById(
-"webSearchIndicator"
-);
+document.getElementById("webSearchIndicator");
 
 const conversationBtn =
-document.getElementById(
-"conversationBtn"
-);
+document.getElementById("conversationBtn");
 
 const fullscreenBtn =
-document.getElementById(
-"fullscreenBtn"
-);
+document.getElementById("fullscreenBtn");
 
 const controlBtn =
-document.getElementById(
-"controlBtn"
-);
+document.getElementById("controlBtn");
 
 const controlCenter =
-document.getElementById(
-"controlCenter"
-);
+document.getElementById("controlCenter");
 
 const controlClose =
-document.getElementById(
-"controlClose"
-);
+document.getElementById("controlClose");
 
 const hudNotifications =
-document.getElementById(
-"hudNotifications"
+document.getElementById("hudNotifications");
+
+
+/* =====================================================
+   UTILITY
+===================================================== */
+
+function escapeHtml(text){
+
+return String(text)
+
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+function addMsg(text){
+
+chat.innerHTML = "";
+
+const element =
+document.createElement("div");
+
+element.className = "msg";
+
+element.textContent =
+String(text);
+
+chat.appendChild(element);
+
+}
+
+
+function notify(message){
+
+const element =
+document.createElement("div");
+
+element.className =
+"hud-notification";
+
+element.textContent =
+message;
+
+hudNotifications.appendChild(element);
+
+setTimeout(
+()=>{
+
+element.style.opacity = "0";
+
+setTimeout(
+()=>element.remove(),
+300
 );
+
+},
+3500
+);
+
+}
+
 
 /* =====================================================
    MEMORIA
@@ -1965,9 +2071,7 @@ let memory = [];
 try{
 
 const saved =
-localStorage.getItem(
-MEMORY_KEY
-);
+localStorage.getItem(MEMORY_KEY);
 
 if(saved){
 
@@ -1992,6 +2096,7 @@ error
 
 }
 
+
 function saveMemory(){
 
 try{
@@ -2014,22 +2119,16 @@ error
 
 }
 
-function addMemory(
-role,
-content
-){
 
-if(!content)
-return;
+function addMemory(role,content){
 
 memory.push({
 
-role:String(role),
+role:role,
 
-content:String(content),
+content:content,
 
-timestamp:
-new Date().toISOString()
+time:new Date().toISOString()
 
 });
 
@@ -2042,208 +2141,6 @@ updateSystemPanel();
 
 }
 
-/* =====================================================
-   MEMORIA INTELLIGENTE LOCALE
-===================================================== */
-
-function handleMemoryCommand(text){
-
-const normalized =
-normalizeCommand(text);
-
-const rememberPatterns = [
-
-"ricorda che ",
-
-"ricordati che ",
-
-"memorizza che ",
-
-"salva che ",
-
-"ricorda "
-
-];
-
-for(
-const pattern of rememberPatterns
-){
-
-if(
-normalized.startsWith(pattern)
-){
-
-const original =
-text.trim();
-
-const content =
-original.substring(
-pattern.length
-).trim();
-
-if(content.length < 2){
-
-addMsg(
-"Dimmi cosa devo ricordare."
-);
-
-return true;
-
-}
-
-addMemory(
-"memory",
-content
-);
-
-notify(
-"INFORMAZIONE MEMORIZZATA"
-);
-
-addMsg(
-"Ricorderò: " +
-content
-);
-
-return true;
-
-}
-
-}
-
-if(
-
-normalized ===
-"cosa ricordi"
-
-||
-
-normalized ===
-"mostra memoria"
-
-||
-
-normalized ===
-"mostrami la memoria"
-
-){
-
-if(!memory.length){
-
-addMsg(
-"La memoria JARVIS è vuota."
-);
-
-return true;
-
-}
-
-const memories =
-memory
-.filter(
-item =>
-item.role === "memory"
-)
-.slice(-10)
-.map(
-(item,index)=>
-(index + 1) +
-". " +
-item.content
-)
-.join("\n");
-
-addMsg(
-memories ||
-"La memoria personale è vuota."
-);
-
-return true;
-
-}
-
-if(
-
-normalized ===
-"cancella memoria"
-
-||
-
-normalized ===
-"cancella tutta la memoria"
-
-||
-
-normalized ===
-"elimina memoria"
-
-){
-
-memory = [];
-
-try{
-
-localStorage.removeItem(
-MEMORY_KEY
-);
-
-}catch(e){}
-
-updateSystemPanel();
-
-notify(
-"MEMORIA CANCELLATA"
-);
-
-addMsg(
-"Memoria JARVIS cancellata."
-);
-
-return true;
-
-}
-
-return false;
-
-}
-
-/* =====================================================
-   NOTIFICHE
-===================================================== */
-
-function notify(message){
-
-const element =
-document.createElement("div");
-
-element.className =
-"hud-notification";
-
-element.textContent =
-message;
-
-hudNotifications.appendChild(
-element
-);
-
-setTimeout(
-()=>{
-
-element.style.opacity = "0";
-
-element.style.transform =
-"translateX(-15px)";
-
-setTimeout(
-()=>element.remove(),
-300
-);
-
-},
-3500
-);
-
-}
 
 /* =====================================================
    OROLOGIO
@@ -2265,6 +2162,7 @@ const months = [
 "DIC"
 
 ];
+
 
 function updateClock(){
 
@@ -2324,12 +2222,14 @@ now.getFullYear();
 
 }
 
+
 updateClock();
 
 setInterval(
 updateClock,
 1000
 );
+
 
 /* =====================================================
    THREE.JS — NEURAL CORE
@@ -2341,56 +2241,43 @@ let camera = null;
 
 let renderer = null;
 
-let neuralParticles = null;
+let particles = null;
 
-let neuralGeometry = null;
+let geometry = null;
 
-let neuralMaterial = null;
-
-let connectionLines = null;
-
-let connectionGeometry = null;
-
-let connectionMaterial = null;
-
-let coreMesh = null;
-
-let coreMaterial = null;
-
-let rings = [];
+let material = null;
 
 let animationStarted = false;
 
-let webglWorking = false;
+let targetEnergy = 0.15;
 
-let targetEnergy = .15;
+let energy = 0.15;
 
-let energy = .15;
+let positionsArray = null;
 
-let currentState =
-"idle";
+let radiiArray = null;
+
+let thetaArray = null;
+
+let phiArray = null;
+
+let seedArray = null;
+
 
 /* =====================================================
-   TEXTURE GLOW
+   GLOW TEXTURE
 ===================================================== */
 
 function createGlowTexture(){
 
 const canvas =
-document.createElement(
-"canvas"
-);
+document.createElement("canvas");
 
 canvas.width = 64;
 canvas.height = 64;
 
 const ctx =
-canvas.getContext(
-"2d"
-);
-
-if(!ctx)
-return null;
+canvas.getContext("2d");
 
 const gradient =
 ctx.createRadialGradient(
@@ -2408,18 +2295,18 @@ gradient.addColorStop(
 );
 
 gradient.addColorStop(
-.18,
-"rgba(220,255,255,.95)"
+0.18,
+"rgba(220,255,255,1)"
 );
 
 gradient.addColorStop(
-.38,
-"rgba(0,255,255,.75)"
+0.38,
+"rgba(0,255,255,.95)"
 );
 
 gradient.addColorStop(
-.65,
-"rgba(0,160,200,.25)"
+0.65,
+"rgba(0,150,190,.35)"
 );
 
 gradient.addColorStop(
@@ -2438,9 +2325,7 @@ ctx.fillRect(
 );
 
 const texture =
-new THREE.CanvasTexture(
-canvas
-);
+new THREE.CanvasTexture(canvas);
 
 texture.needsUpdate = true;
 
@@ -2448,13 +2333,25 @@ return texture;
 
 }
 
+
 /* =====================================================
-   INITIALIZE NEURAL CORE
+   INIZIALIZZAZIONE NEURAL CORE
 ===================================================== */
 
 function initializeNeuralCore(){
 
 try{
+
+if(
+typeof THREE === "undefined"
+){
+
+throw new Error(
+"Three.js non disponibile"
+);
+
+}
+
 
 scene =
 new THREE.Scene();
@@ -2462,20 +2359,25 @@ new THREE.Scene();
 
 camera =
 new THREE.PerspectiveCamera(
+
 55,
+
 window.innerWidth /
 window.innerHeight,
+
 0.1,
+
 100
+
 );
 
-camera.position.z =
-5.4;
 
+camera.position.set(
+0,
+0,
+5.2
+);
 
-/* =====================================================
-   RENDERER
-===================================================== */
 
 renderer =
 new THREE.WebGLRenderer({
@@ -2484,35 +2386,31 @@ antialias:true,
 
 alpha:true,
 
-powerPreference:
-"high-performance",
-
-failIfMajorPerformanceCaveat:false
+powerPreference:"high-performance"
 
 });
+
+
+renderer.setSize(
+window.innerWidth,
+window.innerHeight,
+false
+);
+
 
 renderer.setPixelRatio(
 Math.min(
 window.devicePixelRatio || 1,
-1.6
+1.8
 )
 );
 
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
-);
 
 renderer.setClearColor(
 0x000000,
 0
 );
 
-renderer.domElement.style.width =
-"100%";
-
-renderer.domElement.style.height =
-"100%";
 
 container.innerHTML = "";
 
@@ -2520,84 +2418,33 @@ container.appendChild(
 renderer.domElement
 );
 
-webglWorking = true;
-
-
-/* =====================================================
-   CORE GLOW
-===================================================== */
-
-const coreGeometry =
-new THREE.SphereGeometry(
-0.78,
-32,
-32
-);
-
-coreMaterial =
-new THREE.MeshBasicMaterial({
-
-color:0x00cfe8,
-
-transparent:true,
-
-opacity:.075,
-
-blending:
-THREE.AdditiveBlending,
-
-depthWrite:false
-
-});
-
-coreMesh =
-new THREE.Mesh(
-coreGeometry,
-coreMaterial
-);
-
-scene.add(
-coreMesh
-);
-
 
 /* =====================================================
    PARTICELLE
 ===================================================== */
 
-const mobile =
-window.innerWidth < 700 ||
-window.devicePixelRatio > 2;
+const COUNT = 2600;
 
-const COUNT =
-mobile
-?
-1300
-:
-2200;
-
-neuralGeometry =
+geometry =
 new THREE.BufferGeometry();
 
-const positions =
+
+positionsArray =
 new Float32Array(
 COUNT * 3
 );
 
-const basePositions =
-new Float32Array(
-COUNT * 3
-);
+radiiArray =
+new Float32Array(COUNT);
 
-const velocities =
-new Float32Array(
-COUNT * 3
-);
+thetaArray =
+new Float32Array(COUNT);
 
-const phases =
-new Float32Array(
-COUNT
-);
+phiArray =
+new Float32Array(COUNT);
+
+seedArray =
+new Float32Array(COUNT);
 
 
 for(
@@ -2607,9 +2454,8 @@ i++
 ){
 
 const radius =
-0.9 +
-Math.random() *
-0.95;
+1.05 +
+Math.random() * 0.68;
 
 const theta =
 Math.random() *
@@ -2620,331 +2466,177 @@ Math.acos(
 2 * Math.random() - 1
 );
 
+
+radiiArray[i] =
+radius;
+
+thetaArray[i] =
+theta;
+
+phiArray[i] =
+phi;
+
+seedArray[i] =
+Math.random() * 1000;
+
+
 const index =
 i * 3;
 
-const x =
+
+positionsArray[index] =
+
 radius *
 Math.sin(phi) *
 Math.cos(theta);
 
-const y =
+
+positionsArray[index + 1] =
+
 radius *
 Math.sin(phi) *
 Math.sin(theta);
 
-const z =
+
+positionsArray[index + 2] =
+
 radius *
 Math.cos(phi);
 
-positions[index] =
-x;
-
-positions[index+1] =
-y;
-
-positions[index+2] =
-z;
-
-basePositions[index] =
-x;
-
-basePositions[index+1] =
-y;
-
-basePositions[index+2] =
-z;
-
-velocities[index] =
-.15 +
-Math.random() * .35;
-
-velocities[index+1] =
-.15 +
-Math.random() * .35;
-
-velocities[index+2] =
-.15 +
-Math.random() * .35;
-
-phases[i] =
-Math.random() *
-Math.PI *
-2;
-
 }
 
-neuralGeometry.setAttribute(
+
+geometry.setAttribute(
+
 "position",
+
 new THREE.BufferAttribute(
-positions,
+positionsArray,
 3
 )
+
 );
 
 
-/* =====================================================
-   PARTICLE MATERIAL
-===================================================== */
+material =
+new THREE.PointsMaterial({
 
-const glowTexture =
-createGlowTexture();
+color:0x00d9ff,
 
-const materialOptions = {
+size:0.055,
 
-color:
-0x00d9ee,
-
-size:
-mobile ? .055 : .045,
+map:createGlowTexture(),
 
 transparent:true,
 
-opacity:.95,
+opacity:0.95,
 
 depthWrite:false,
 
 blending:
 THREE.AdditiveBlending
 
-};
+});
 
-if(glowTexture){
 
-materialOptions.map =
-glowTexture;
-
-}
-
-neuralMaterial =
-new THREE.PointsMaterial(
-materialOptions
-);
-
-neuralParticles =
+particles =
 new THREE.Points(
-neuralGeometry,
-neuralMaterial
-);
-
-scene.add(
-neuralParticles
-);
-
-
-/* =====================================================
-   CONNECTIONS
-===================================================== */
-
-const connectionCount =
-mobile ? 90 : 150;
-
-connectionGeometry =
-new THREE.BufferGeometry();
-
-const connectionPositions =
-new Float32Array(
-connectionCount * 6
-);
-
-for(
-let i=0;
-i<connectionCount;
-i++
-){
-
-const a =
-Math.floor(
-Math.random() * COUNT
-);
-
-const b =
-Math.floor(
-Math.random() * COUNT
-);
-
-const ai =
-a * 3;
-
-const bi =
-b * 3;
-
-const ci =
-i * 6;
-
-connectionPositions[ci] =
-basePositions[ai];
-
-connectionPositions[ci+1] =
-basePositions[ai+1];
-
-connectionPositions[ci+2] =
-basePositions[ai+2];
-
-connectionPositions[ci+3] =
-basePositions[bi];
-
-connectionPositions[ci+4] =
-basePositions[bi+1];
-
-connectionPositions[ci+5] =
-basePositions[bi+2];
-
-}
-
-connectionGeometry.setAttribute(
-"position",
-new THREE.BufferAttribute(
-connectionPositions,
-3
-)
-);
-
-connectionMaterial =
-new THREE.LineBasicMaterial({
-
-color:0x00cfe8,
-
-transparent:true,
-
-opacity:.13,
-
-blending:
-THREE.AdditiveBlending,
-
-depthWrite:false
-
-});
-
-connectionLines =
-new THREE.LineSegments(
-connectionGeometry,
-connectionMaterial
-);
-
-scene.add(
-connectionLines
-);
-
-
-/* =====================================================
-   ORBITAL RINGS
-===================================================== */
-
-const ringConfigs = [
-
-{
-radius:1.25,
-tube:.009,
-rotation:[.8,0.2,.1]
-},
-
-{
-radius:1.48,
-tube:.007,
-rotation:[1.3,.5,.6]
-},
-
-{
-radius:1.72,
-tube:.006,
-rotation:[.3,1.0,.2]
-}
-
-];
-
-ringConfigs.forEach(
-(config,index)=>{
-
-const geometry =
-new THREE.TorusGeometry(
-config.radius,
-config.tube,
-8,
-96
-);
-
-const material =
-new THREE.MeshBasicMaterial({
-
-color:
-index === 1
-?
-0x65faff
-:
-0x00bcd4,
-
-transparent:true,
-
-opacity:
-index === 1 ? .28 : .18,
-
-blending:
-THREE.AdditiveBlending,
-
-depthWrite:false
-
-});
-
-const ring =
-new THREE.Mesh(
 geometry,
 material
 );
 
-ring.rotation.x =
-config.rotation[0];
-
-ring.rotation.y =
-config.rotation[1];
-
-ring.rotation.z =
-config.rotation[2];
 
 scene.add(
-ring
+particles
 );
 
-rings.push(ring);
+
+/* =====================================================
+   ANELLI NEURALI
+===================================================== */
+
+const ringMaterial =
+new THREE.MeshBasicMaterial({
+
+color:0x00d9ff,
+
+transparent:true,
+
+opacity:0.13,
+
+wireframe:true
 
 });
 
 
-/* =====================================================
-   WEBGL ERROR EVENTS
-===================================================== */
+const ring1 =
+new THREE.Mesh(
 
-renderer.domElement.addEventListener(
-"webglcontextlost",
-event=>{
+new THREE.TorusGeometry(
+1.32,
+0.008,
+8,
+160
+),
 
-event.preventDefault();
+ringMaterial.clone()
 
-webglWorking = false;
-
-setState("error");
-
-notify(
-"WEBGL CONTEXT PERSO"
 );
 
-}
+
+const ring2 =
+new THREE.Mesh(
+
+new THREE.TorusGeometry(
+1.52,
+0.006,
+8,
+160
+),
+
+ringMaterial.clone()
+
 );
 
-renderer.domElement.addEventListener(
-"webglcontextrestored",
-()=>{
 
-webglWorking = true;
+const ring3 =
+new THREE.Mesh(
 
-setState("idle");
+new THREE.TorusGeometry(
+1.72,
+0.004,
+8,
+160
+),
 
-notify(
-"WEBGL RIPRISTINATO"
+ringMaterial.clone()
+
 );
 
-}
+
+ring1.rotation.x =
+Math.PI / 2;
+
+ring2.rotation.y =
+Math.PI / 3;
+
+ring3.rotation.x =
+Math.PI / 3;
+
+
+scene.add(
+ring1,
+ring2,
+ring3
 );
+
+
+particles.userData.rings = [
+ring1,
+ring2,
+ring3
+];
+
 
 animationStarted = true;
 
@@ -2954,14 +2646,15 @@ notify(
 
 animate();
 
+
 }catch(error){
 
 console.error(
-"THREE.JS ERROR:",
+"NEURAL CORE ERROR:",
 error
 );
 
-webglWorking = false;
+animationStarted = false;
 
 container.innerHTML = "";
 
@@ -2981,7 +2674,7 @@ errorElement.style.transform =
 "translate(-50%,-50%)";
 
 errorElement.style.color =
-"rgba(0,255,255,.55)";
+"rgba(0,255,255,.65)";
 
 errorElement.style.fontFamily =
 "monospace";
@@ -2992,8 +2685,12 @@ errorElement.style.fontSize =
 errorElement.style.letterSpacing =
 "2px";
 
-errorElement.textContent =
-"NEURAL CORE OFFLINE";
+errorElement.style.textAlign =
+"center";
+
+errorElement.innerHTML =
+"NEURAL CORE OFFLINE<br><br>" +
+escapeHtml(error.message);
 
 container.appendChild(
 errorElement
@@ -3003,76 +2700,64 @@ errorElement
 
 }
 
+
 /* =====================================================
-   STATO SFERA
+   STATO CORE
 ===================================================== */
 
-const idleColor =
+const normalColor =
 new THREE.Color(
 0x00cfe8
 );
 
-const blueColor =
+const activeColor =
 new THREE.Color(
-0x36eaff
-);
-
-const thinkingColor =
-new THREE.Color(
-0x8fffff
-);
-
-const errorColor =
-new THREE.Color(
-0xff5577
+0x9fffff
 );
 
 const currentColor =
-idleColor.clone();
+normalColor.clone();
+
 
 function setState(state){
-
-currentState =
-state;
 
 switch(state){
 
 case "thinking":
 
-targetEnergy = 1.9;
+targetEnergy = 2.2;
 
 break;
 
 case "speaking":
 
-targetEnergy = .9;
+targetEnergy = 0.9;
 
 break;
 
 case "listening":
 
-targetEnergy = .65;
+targetEnergy = 0.65;
 
 break;
 
 case "error":
 
-targetEnergy = 1.7;
+targetEnergy = 1.6;
 
 break;
 
 default:
 
-targetEnergy = .15;
-
-break;
+targetEnergy = 0.15;
 
 }
 
 }
+
 
 /* =====================================================
-   ANIMAZIONE NEURALE
+   ANIMAZIONE
 ===================================================== */
 
 function animate(){
@@ -3080,19 +2765,16 @@ function animate(){
 if(!animationStarted)
 return;
 
+
 requestAnimationFrame(
 animate
 );
 
-if(!renderer ||
-!neuralParticles ||
-!neuralGeometry
-)
-return;
 
 const time =
 performance.now() *
 0.001;
+
 
 energy +=
 (
@@ -3102,265 +2784,225 @@ energy
 0.045;
 
 
-/* =====================================================
-   COLORE
-===================================================== */
+currentColor.lerp(
+activeColor,
+Math.min(
+energy * 0.05,
+1
+)
+);
 
-let desiredColor;
 
-if(currentState === "error"){
-
-desiredColor =
-errorColor;
-
-}
-
-else if(
-currentState === "thinking"
+if(
+energy < 0.35
 ){
-
-desiredColor =
-thinkingColor;
-
-}
-
-else if(
-currentState === "listening" ||
-currentState === "speaking"
-){
-
-desiredColor =
-blueColor;
-
-}
-
-else{
-
-desiredColor =
-idleColor;
-
-}
 
 currentColor.lerp(
-desiredColor,
-.045
+normalColor,
+0.04
 );
-
-neuralMaterial.color =
-currentColor;
-
-if(connectionMaterial){
-
-connectionMaterial.color =
-currentColor;
-
-connectionMaterial.opacity =
-.08 +
-energy * .11;
-
-}
-
-if(coreMaterial){
-
-coreMaterial.color =
-currentColor;
-
-coreMaterial.opacity =
-.045 +
-energy * .045;
 
 }
 
 
-/* =====================================================
-   PARTICELLE
-===================================================== */
+material.color =
+currentColor;
 
-const positions =
-neuralGeometry
-.attributes
-.position
-.array;
 
-const base =
-new Float32Array(
-positions.length
-);
+material.size =
+0.042 +
+energy * 0.012;
+
+
+const pos =
+geometry.attributes
+.position.array;
+
+
+const count =
+radiiArray.length;
+
 
 for(
 let i=0;
-i<positions.length;
-i++
-){
-
-base[i] =
-positions[i];
-
-}
-
-for(
-let i=0;
-i<positions.length / 3;
+i<count;
 i++
 ){
 
 const index =
 i * 3;
 
-const bx =
-base[index];
+const theta =
+thetaArray[i];
 
-const by =
-base[index+1];
+const phi =
+phiArray[i];
 
-const bz =
-base[index+2];
+const baseRadius =
+radiiArray[i];
 
-const length =
-Math.sqrt(
-bx*bx +
-by*by +
-bz*bz
-) || 1;
+const seed =
+seedArray[i];
 
-const nx =
-bx / length;
-
-const ny =
-by / length;
-
-const nz =
-bz / length;
-
-const phase =
-i * .37;
-
-const wave =
-Math.sin(
-time * 1.7 +
-phase
-) *
-.025;
 
 const pulse =
-energy *
-(
-0.035 +
-0.025 *
+
 Math.sin(
-time * 2 +
-phase
-)
-);
-
-const scale =
-1 +
-wave +
-pulse;
-
-positions[index] =
-bx *
-scale;
-
-positions[index+1] =
-by *
-scale;
-
-positions[index+2] =
-bz *
-scale;
-
-}
-
-
-/* =====================================================
-   ROTAZIONE
-===================================================== */
-
-neuralParticles.rotation.y +=
-.00035 +
-energy * .0012;
-
-neuralParticles.rotation.x =
-Math.sin(
-time * .18
+time * 1.8 +
+seed
 ) *
-.045;
+0.025;
 
-neuralParticles.rotation.z =
+
+const vortex =
+
+Math.sin(
+theta * 5 +
+time * 1.7 +
+seed
+) *
+0.16 *
+energy;
+
+
+const wave =
+
 Math.cos(
-time * .15
+phi * 6 -
+time * 1.4 +
+seed
 ) *
-.035;
+0.10 *
+energy;
 
 
-/* =====================================================
-   CORE PULSE
-===================================================== */
+const rr =
 
-if(coreMesh){
+baseRadius +
+pulse +
+vortex +
+wave;
 
-const coreScale =
-1 +
-energy *
-.07 +
+
+let x =
+
+rr *
+Math.sin(phi) *
+Math.cos(theta);
+
+
+let y =
+
+rr *
+Math.sin(phi) *
+Math.sin(theta);
+
+
+let z =
+
+rr *
+Math.cos(phi);
+
+
+x +=
+
 Math.sin(
-time * 3
+time * 2.1 +
+phi * 8 +
+seed
 ) *
-.015;
+0.07 *
+energy;
 
-coreMesh.scale.set(
-coreScale,
-coreScale,
-coreScale
-);
+
+y +=
+
+Math.cos(
+time * 2.0 +
+theta * 7 +
+seed
+) *
+0.07 *
+energy;
+
+
+z +=
+
+Math.sin(
+time * 2.4 +
+(theta + phi) * 7 +
+seed
+) *
+0.08 *
+energy;
+
+
+pos[index] =
+x;
+
+pos[index + 1] =
+y;
+
+pos[index + 2] =
+z;
 
 }
 
 
-/* =====================================================
-   RINGS
-===================================================== */
-
-rings.forEach(
-(ring,index)=>{
-
-ring.rotation.y +=
-.00025 +
-energy *
-(.00025 + index * .00005);
-
-ring.rotation.x +=
-Math.sin(
-time * .15 +
-index
-) *
-.00008;
-
-const scale =
-1 +
-energy *
-.025 *
-(index + 1);
-
-ring.scale.set(
-scale,
-scale,
-scale
-);
-
-}
-);
-
-neuralGeometry
-.attributes
+geometry.attributes
 .position
 .needsUpdate = true;
 
 
-/* =====================================================
-   RENDER
-===================================================== */
+particles.rotation.y +=
+0.00045 +
+energy * 0.0008;
+
+
+particles.rotation.x =
+Math.sin(
+time * 0.23
+) *
+0.035;
+
+
+particles.rotation.z =
+Math.cos(
+time * 0.17
+) *
+0.025;
+
+
+const rings =
+particles.userData.rings;
+
+
+if(rings){
+
+rings[0].rotation.z +=
+0.0015 +
+energy * 0.002;
+
+rings[0].rotation.x =
+Math.sin(time * .4) * .5;
+
+
+rings[1].rotation.x +=
+0.001;
+
+rings[1].rotation.z +=
+0.0018 +
+energy * .001;
+
+
+rings[2].rotation.y +=
+0.0013;
+
+rings[2].rotation.x +=
+0.0005;
+
+}
+
 
 renderer.render(
 scene,
@@ -3369,7 +3011,13 @@ camera
 
 }
 
+
+/* =====================================================
+   START THREE
+===================================================== */
+
 initializeNeuralCore();
+
 
 /* =====================================================
    MAPTILER
@@ -3378,21 +3026,24 @@ initializeNeuralCore();
 const MAPTILER_KEY =
 "NmSlgtsAdQyEWy7t0OJf";
 
+
 const MAPTILER_STYLE =
+
 "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
+
 +
-encodeURIComponent(
-MAPTILER_KEY
-);
+
+MAPTILER_KEY;
+
 
 function initializeMap(){
 
 if(map)
 return;
 
+
 if(
-typeof maplibregl ===
-"undefined"
+typeof maplibregl === "undefined"
 ){
 
 addMsg(
@@ -3400,12 +3051,13 @@ addMsg(
 );
 
 notify(
-"MAPLIBRE OFFLINE"
+"MAP SYSTEM OFFLINE"
 );
 
 return;
 
 }
+
 
 try{
 
@@ -3429,13 +3081,21 @@ antialias:true
 
 });
 
+
 map.addControl(
+
 new maplibregl.NavigationControl({
+
 showCompass:true,
+
 showZoom:true
+
 }),
+
 "bottom-right"
+
 );
+
 
 map.on(
 "load",
@@ -3447,26 +3107,27 @@ notify(
 "MAP SYSTEM ONLINE"
 );
 
-updateSystemPanel();
-
 }
 );
+
 
 map.on(
 "error",
 event=>{
 
 console.warn(
-"MAP ERROR:",
+"MapLibre:",
 event
 );
 
-});
+}
+);
+
 
 }catch(error){
 
 console.error(
-"MAP INIT:",
+"MAP ERROR:",
 error
 );
 
@@ -3477,6 +3138,7 @@ addMsg(
 }
 
 }
+
 
 function openTacticalMap(){
 
@@ -3504,6 +3166,7 @@ map.resize();
 
 }
 
+
 function closeTacticalMap(){
 
 tacticalMap.classList.remove(
@@ -3515,295 +3178,16 @@ jarvisTitle.style.display =
 
 }
 
+
 closeMap.addEventListener(
 "click",
 closeTacticalMap
 );
 
-/* =====================================================
-   UTILITY
-===================================================== */
-
-function escapeHtml(text){
-
-return String(text)
-
-.replace(
-/&/g,
-"&amp;"
-)
-
-.replace(
-/</g,
-"&lt;"
-)
-
-.replace(
-/>/g,
-"&gt;"
-)
-
-.replace(
-/"/g,
-"&quot;"
-)
-
-.replace(
-/'/g,
-"&#039;"
-);
-
-}
-
-function addMsg(text){
-
-chat.innerHTML = "";
-
-const element =
-document.createElement("div");
-
-element.className =
-"msg";
-
-element.textContent =
-text;
-
-chat.appendChild(
-element
-);
-
-}
-
-/* =====================================================
-   FULLSCREEN
-===================================================== */
-
-function isFullscreen(){
-
-return !!(
-document.fullscreenElement ||
-document.webkitFullscreenElement
-);
-
-}
-
-async function enterFullscreen(){
-
-if(isFullscreen())
-return true;
-
-if(fullscreenChanging)
-return false;
-
-fullscreenChanging = true;
-
-try{
-
-if(
-document.documentElement
-.requestFullscreen
-){
-
-await document.documentElement
-.requestFullscreen();
-
-}
-
-else if(
-document.documentElement
-.webkitRequestFullscreen
-){
-
-document.documentElement
-.webkitRequestFullscreen();
-
-}
-
-else{
-
-fullscreenChanging = false;
-
-addMsg(
-"Fullscreen non supportato."
-);
-
-return false;
-
-}
-
-notify(
-"FULLSCREEN ATTIVO"
-);
-
-fullscreenChanging = false;
-
-return true;
-
-}catch(error){
-
-console.warn(
-"Fullscreen:",
-error
-);
-
-fullscreenChanging = false;
-
-addMsg(
-"Il browser ha bloccato il fullscreen."
-);
-
-return false;
-
-}
-
-}
-
-async function exitFullscreen(){
-
-try{
-
-if(
-document.exitFullscreen
-){
-
-await document.exitFullscreen();
-
-}
-
-else if(
-document.webkitExitFullscreen
-){
-
-document.webkitExitFullscreen();
-
-}
-
-return true;
-
-}catch(error){
-
-return false;
-
-}
-
-}
-
-async function toggleFullscreen(){
-
-if(isFullscreen()){
-
-await exitFullscreen();
-
-}else{
-
-await enterFullscreen();
-
-}
-
-}
-
-function updateFullscreenUI(){
-
-const active =
-isFullscreen();
-
-fullscreenBtn.classList.toggle(
-"active",
-active
-);
-
-fullscreenBtn.textContent =
-active
-?
-"⛶ ESCI FULLSCREEN"
-:
-"⛶ FULLSCREEN";
-
-}
-
-fullscreenBtn.addEventListener(
-"click",
-async()=>{
-
-await toggleFullscreen();
-
-updateFullscreenUI();
-
-}
-);
-
-document.addEventListener(
-"fullscreenchange",
-()=>{
-
-updateFullscreenUI();
-
-if(map){
-
-setTimeout(
-()=>map.resize(),
-100
-);
-
-}
-
-}
-);
-
-/* =====================================================
-   NORMALIZZAZIONE
-===================================================== */
-
-function normalizeCommand(text){
-
-return String(text)
-
-.toLowerCase()
-
-.normalize(
-"NFD"
-)
-
-.replace(
-/[\u0300-\u036f]/g,
-""
-)
-
-.replace(
-/[.,!?;:]/g,
-" "
-)
-
-.replace(
-/\s+/g,
-" "
-)
-
-.trim();
-
-}
 
 /* =====================================================
    MAP MARKER
 ===================================================== */
-
-function clearMarkers(){
-
-currentMarkers.forEach(
-marker=>{
-
-try{
-
-marker.remove();
-
-}catch(e){}
-
-}
-);
-
-currentMarkers = [];
-
-}
 
 function createJarvisMarker(
 lat,
@@ -3814,19 +3198,31 @@ name
 if(!map)
 return;
 
+
+if(currentMarker){
+
+currentMarker.remove();
+
+currentMarker = null;
+
+}
+
+
 const markerElement =
 document.createElement("div");
 
 markerElement.className =
 "jarvis-map-marker";
 
-const marker =
+
+currentMarker =
 new maplibregl.Marker({
 
 element:
 markerElement,
 
-anchor:"center"
+anchor:
+"center"
 
 })
 
@@ -3843,9 +3239,11 @@ offset:15
 
 .setHTML(
 
-`<b style="color:#00ffff">
-${escapeHtml(name)}
-</b>`
+"<b style='color:#00ffff'>" +
+
+escapeHtml(name) +
+
+"</b>"
 
 )
 
@@ -3853,16 +3251,14 @@ ${escapeHtml(name)}
 
 .addTo(map);
 
-currentMarkers.push(
-marker
-);
 
-marker.togglePopup();
+currentMarker.togglePopup();
 
 }
 
+
 /* =====================================================
-   RICERCA POSIZIONE
+   SEARCH LOCATION
 ===================================================== */
 
 async function searchLocation(place){
@@ -3876,12 +3272,15 @@ addMsg(
 place
 );
 
+
 const url =
-"https://nominatim.openstreetmap.org/search"
-+
-"?format=json&limit=1&q="
-+
+
+"https://nominatim.openstreetmap.org/search" +
+
+"?format=json&limit=1&q=" +
+
 encodeURIComponent(place);
+
 
 const response =
 await fetch(
@@ -3894,14 +3293,19 @@ headers:{
 }
 );
 
-if(!response.ok)
+
+if(!response.ok){
+
 throw new Error(
-"HTTP " +
-response.status
+"Ricerca posizione fallita"
 );
+
+}
+
 
 const results =
 await response.json();
+
 
 if(!results.length){
 
@@ -3915,8 +3319,10 @@ return;
 
 }
 
+
 const result =
 results[0];
+
 
 const lat =
 parseFloat(result.lat);
@@ -3924,21 +3330,15 @@ parseFloat(result.lat);
 const lon =
 parseFloat(result.lon);
 
-if(
-!Number.isFinite(lat) ||
-!Number.isFinite(lon)
-){
+
+if(!map){
 
 throw new Error(
-"Coordinate non valide"
+"Mappa non inizializzata"
 );
 
 }
 
-if(!map)
-throw new Error(
-"Mappa non inizializzata"
-);
 
 map.flyTo({
 
@@ -3957,11 +3357,13 @@ essential:true
 
 });
 
+
 createJarvisMarker(
 lat,
 lon,
 place
 );
+
 
 addMsg(
 "Posizione acquisita: " +
@@ -3971,6 +3373,7 @@ place
 notify(
 "POSIZIONE ACQUISITA"
 );
+
 
 }catch(error){
 
@@ -3985,22 +3388,20 @@ place +
 "."
 );
 
-notify(
-"RICERCA POSIZIONE FALLITA"
-);
-
 }
 
 }
+
 
 /* =====================================================
-   COMANDI MAPPA
+   MAP COMMAND
 ===================================================== */
 
 function handleMapCommand(text){
 
 const normalized =
 normalizeCommand(text);
+
 
 if(
 
@@ -4044,6 +3445,7 @@ return true;
 
 }
 
+
 if(
 
 normalized.includes(
@@ -4080,6 +3482,7 @@ return true;
 
 }
 
+
 const patterns = [
 
 "mostrami ",
@@ -4096,26 +3499,26 @@ const patterns = [
 
 ];
 
+
 for(
 const pattern of patterns
 ){
 
 if(
-normalized.startsWith(
-pattern
-)
+normalized.startsWith(pattern)
 ){
 
 const place =
-text.trim().substring(
+text.trim()
+.substring(
 pattern.length
-).trim();
+)
+.trim();
+
 
 if(place.length > 1){
 
-searchLocation(
-place
-);
+searchLocation(place);
 
 return true;
 
@@ -4125,9 +3528,11 @@ return true;
 
 }
 
+
 return false;
 
 }
+
 
 /* =====================================================
    WEB
@@ -4141,6 +3546,7 @@ webSearchWindows
 ".web-window"
 )
 .length;
+
 
 if(count > 0){
 
@@ -4160,9 +3566,11 @@ webSearchIndicator.classList.remove(
 
 }
 
+
 updateSystemPanel();
 
 }
+
 
 function bringWebWindowToFront(
 windowElement
@@ -4175,12 +3583,15 @@ String(highestWebZ);
 
 }
 
+
 function openWebSearch(query){
 
 if(!query)
 return;
 
+
 webWindowCounter++;
+
 
 const windowElement =
 document.createElement("div");
@@ -4188,22 +3599,28 @@ document.createElement("div");
 windowElement.className =
 "web-window";
 
+
 const offset =
 (webWindowCounter - 1) % 5;
+
 
 windowElement.style.left =
 (30 + offset * 45) +
 "px";
 
+
 windowElement.style.top =
 (90 + offset * 35) +
 "px";
 
+
 windowElement.style.zIndex =
 String(++highestWebZ);
 
+
 const safeTitle =
 escapeHtml(query);
+
 
 windowElement.innerHTML = `
 
@@ -4212,7 +3629,9 @@ windowElement.innerHTML = `
 <div class="web-window-title">
 
 <span class="web-window-number">
+
 WEB ${webWindowCounter}
+
 </span>
 
 ${safeTitle}
@@ -4223,12 +3642,16 @@ ${safeTitle}
 
 <button
 class="web-window-btn minimize-web">
+
 −
+
 </button>
 
 <button
 class="web-window-btn close-web">
+
 ×
+
 </button>
 
 </div>
@@ -4245,35 +3668,43 @@ referrerpolicy="no-referrer">
 
 <button
 class="web-window-open">
+
 ↗ APRI SITO
+
 </button>
 
 </div>
+
 `;
+
 
 webSearchWindows.appendChild(
 windowElement
 );
+
 
 const iframe =
 windowElement.querySelector(
 "iframe"
 );
 
+
 const openButton =
 windowElement.querySelector(
 ".web-window-open"
 );
 
+
 const searchUrl =
-"https://www.bing.com/search?q="
-+
-encodeURIComponent(
-query
-);
+
+"https://www.bing.com/search?q=" +
+
+encodeURIComponent(query);
+
 
 iframe.src =
 searchUrl;
+
 
 openButton.addEventListener(
 "click",
@@ -4283,12 +3714,12 @@ event.stopPropagation();
 
 window.open(
 searchUrl,
-"_blank",
-"noopener,noreferrer"
+"_blank"
 );
 
 }
 );
+
 
 windowElement.addEventListener(
 "pointerdown",
@@ -4301,10 +3732,12 @@ windowElement
 }
 );
 
+
 const minimizeButton =
 windowElement.querySelector(
 ".minimize-web"
 );
+
 
 minimizeButton.addEventListener(
 "click",
@@ -4319,10 +3752,12 @@ windowElement.classList.toggle(
 }
 );
 
+
 const closeButton =
 windowElement.querySelector(
 ".close-web"
 );
+
 
 closeButton.addEventListener(
 "click",
@@ -4337,8 +3772,9 @@ updateWebIndicator();
 }
 );
 
+
 /* =====================================================
-   DRAG FINESTRE
+   DRAG WINDOW
 ===================================================== */
 
 const header =
@@ -4352,6 +3788,7 @@ let dragOffsetX = 0;
 
 let dragOffsetY = 0;
 
+
 header.addEventListener(
 "pointerdown",
 event=>{
@@ -4363,22 +3800,28 @@ event.target.closest(
 )
 return;
 
+
 dragging = true;
+
 
 bringWebWindowToFront(
 windowElement
 );
 
+
 const rect =
 windowElement.getBoundingClientRect();
+
 
 dragOffsetX =
 event.clientX -
 rect.left;
 
+
 dragOffsetY =
 event.clientY -
 rect.top;
+
 
 try{
 
@@ -4388,6 +3831,7 @@ event.pointerId
 
 }catch(e){}
 
+
 event.preventDefault();
 
 },
@@ -4396,6 +3840,7 @@ passive:false
 }
 );
 
+
 header.addEventListener(
 "pointermove",
 event=>{
@@ -4403,51 +3848,47 @@ event=>{
 if(!dragging)
 return;
 
+
 event.preventDefault();
+
 
 let newLeft =
 event.clientX -
 dragOffsetX;
 
+
 let newTop =
 event.clientY -
 dragOffsetY;
 
+
 const rect =
 windowElement.getBoundingClientRect();
 
-const minLeft =
--rect.width + 120;
-
-const maxLeft =
-window.innerWidth - 120;
-
-const minTop =
-10;
-
-const maxTop =
-window.innerHeight - 70;
 
 newLeft =
 Math.max(
-minLeft,
+-rect.width + 120,
 Math.min(
 newLeft,
-maxLeft
+window.innerWidth - 120
 )
 );
+
 
 newTop =
 Math.max(
-minTop,
+10,
 Math.min(
 newTop,
-maxTop
+window.innerHeight - 70
 )
 );
 
+
 windowElement.style.left =
 newLeft + "px";
+
 
 windowElement.style.top =
 newTop + "px";
@@ -4458,12 +3899,15 @@ passive:false
 }
 );
 
+
 function stopDragging(event){
 
 if(!dragging)
 return;
 
+
 dragging = false;
+
 
 try{
 
@@ -4474,6 +3918,7 @@ event.pointerId
 }catch(e){}
 
 }
+
 
 header.addEventListener(
 "pointerup",
@@ -4494,12 +3939,15 @@ dragging = false;
 }
 );
 
+
 updateWebIndicator();
+
 
 addMsg(
 "Ricerca web: " +
 query
 );
+
 
 notify(
 "RICERCA WEB APERTA"
@@ -4507,10 +3955,16 @@ notify(
 
 }
 
+
+/* =====================================================
+   WEB COMMAND
+===================================================== */
+
 function handleWebCommand(text){
 
 const normalized =
 normalizeCommand(text);
+
 
 const patterns = [
 
@@ -4534,26 +3988,26 @@ const patterns = [
 
 ];
 
+
 for(
 const pattern of patterns
 ){
 
 if(
-normalized.startsWith(
-pattern
-)
+normalized.startsWith(pattern)
 ){
 
 const query =
-text.trim().substring(
+text.trim()
+.substring(
 pattern.length
-).trim();
+)
+.trim();
+
 
 if(query.length > 1){
 
-openWebSearch(
-query
-);
+openWebSearch(query);
 
 return true;
 
@@ -4563,14 +4017,21 @@ return true;
 
 }
 
+
 return false;
 
 }
+
+
+/* =====================================================
+   WEB WINDOW COMMAND
+===================================================== */
 
 function handleWebWindowCommand(text){
 
 const normalized =
 normalizeCommand(text);
+
 
 if(
 
@@ -4606,6 +4067,7 @@ return true;
 
 }
 
+
 if(
 
 normalized ===
@@ -4637,12 +4099,46 @@ return true;
 
 }
 
+
 return false;
 
 }
 
+
 /* =====================================================
-   TEMPO
+   NORMALIZE
+===================================================== */
+
+function normalizeCommand(text){
+
+return String(text)
+
+.toLowerCase()
+
+.normalize("NFD")
+
+.replace(
+/[\u0300-\u036f]/g,
+""
+)
+
+.replace(
+/[.,!?;:]/g,
+" "
+)
+
+.replace(
+/\s+/g,
+" "
+)
+
+.trim();
+
+}
+
+
+/* =====================================================
+   TIME
 ===================================================== */
 
 function getTimeData(){
@@ -4689,8 +4185,204 @@ Intl.DateTimeFormat()
 
 }
 
+
 /* =====================================================
-   VOCI
+   FULLSCREEN
+===================================================== */
+
+function isFullscreen(){
+
+return !!(
+document.fullscreenElement ||
+document.webkitFullscreenElement
+);
+
+}
+
+
+async function enterFullscreen(){
+
+if(isFullscreen())
+return true;
+
+
+if(fullscreenChanging)
+return false;
+
+
+fullscreenChanging = true;
+
+
+try{
+
+if(
+document.documentElement.requestFullscreen
+){
+
+await document.documentElement
+.requestFullscreen();
+
+}
+
+else if(
+document.documentElement
+.webkitRequestFullscreen
+){
+
+document.documentElement
+.webkitRequestFullscreen();
+
+}
+
+else{
+
+addMsg(
+"Fullscreen non supportato."
+);
+
+fullscreenChanging = false;
+
+return false;
+
+}
+
+
+notify(
+"FULLSCREEN ATTIVO"
+);
+
+
+fullscreenChanging = false;
+
+return true;
+
+
+}catch(error){
+
+console.warn(
+"Fullscreen:",
+error
+);
+
+fullscreenChanging = false;
+
+addMsg(
+"Il browser ha bloccato il fullscreen."
+);
+
+return false;
+
+}
+
+}
+
+
+async function exitFullscreen(){
+
+try{
+
+if(
+document.exitFullscreen
+){
+
+await document.exitFullscreen();
+
+}
+
+else if(
+document.webkitExitFullscreen
+){
+
+document.webkitExitFullscreen();
+
+}
+
+return true;
+
+}catch(error){
+
+return false;
+
+}
+
+}
+
+
+async function toggleFullscreen(){
+
+if(isFullscreen()){
+
+await exitFullscreen();
+
+}else{
+
+await enterFullscreen();
+
+}
+
+}
+
+
+function updateFullscreenUI(){
+
+const active =
+isFullscreen();
+
+
+fullscreenBtn.classList.toggle(
+"active",
+active
+);
+
+
+fullscreenBtn.textContent =
+
+active
+
+?
+
+"⛶ ESCI FULLSCREEN"
+
+:
+
+"⛶ FULLSCREEN";
+
+}
+
+
+fullscreenBtn.addEventListener(
+"click",
+async()=>{
+
+await toggleFullscreen();
+
+updateFullscreenUI();
+
+}
+);
+
+
+document.addEventListener(
+"fullscreenchange",
+()=>{
+
+updateFullscreenUI();
+
+if(map){
+
+setTimeout(
+()=>map.resize(),
+100
+);
+
+}
+
+}
+);
+
+
+/* =====================================================
+   VOICES
 ===================================================== */
 
 function loadDeviceVoices(){
@@ -4700,25 +4392,31 @@ if(
 )
 return;
 
+
 deviceVoices =
 window.speechSynthesis
 .getVoices();
 
+
 voiceSelector.innerHTML = "";
+
 
 const automatic =
 document.createElement(
 "option"
 );
 
+
 automatic.value = "";
 
 automatic.textContent =
 "Voce dispositivo automatica";
 
+
 voiceSelector.appendChild(
 automatic
 );
+
 
 deviceVoices.forEach(
 (voice,index)=>{
@@ -4743,20 +4441,19 @@ option
 }
 );
 
+
 const savedVoice =
 localStorage.getItem(
 "jarvis_device_voice"
 );
 
+
 if(
-
 savedVoice !== null
-
 &&
-
-Number(savedVoice) <
-deviceVoices.length
-
+deviceVoices[
+Number(savedVoice)
+]
 ){
 
 voiceSelector.value =
@@ -4771,11 +4468,13 @@ Number(savedVoice)
 
 }
 
+
 if(
 "speechSynthesis" in window
 ){
 
 loadDeviceVoices();
+
 
 window.speechSynthesis
 .addEventListener(
@@ -4785,8 +4484,9 @@ loadDeviceVoices
 
 }
 
+
 /* =====================================================
-   DEVICE TTS
+   DEVICE SPEECH
 ===================================================== */
 
 function speakDevice(text){
@@ -4804,26 +4504,30 @@ return;
 
 }
 
+
 try{
 
 window.speechSynthesis.cancel();
+
 
 const utterance =
 new SpeechSynthesisUtterance(
 text
 );
 
+
 utterance.lang =
 "it-IT";
 
 utterance.rate =
-.95;
+0.95;
 
 utterance.pitch =
-.9;
+0.9;
 
 utterance.volume =
 1;
+
 
 if(selectedDeviceVoice){
 
@@ -4840,6 +4544,7 @@ voice.lang
 .startsWith("it")
 );
 
+
 if(italianVoice){
 
 utterance.voice =
@@ -4848,6 +4553,7 @@ italianVoice;
 }
 
 }
+
 
 utterance.onstart =
 ()=>{
@@ -4859,6 +4565,7 @@ setState(
 );
 
 };
+
 
 utterance.onend =
 ()=>{
@@ -4873,6 +4580,7 @@ resolve(true);
 
 };
 
+
 utterance.onerror =
 ()=>{
 
@@ -4886,9 +4594,12 @@ resolve(false);
 
 };
 
-window.speechSynthesis.speak(
+
+window.speechSynthesis
+.speak(
 utterance
 );
+
 
 setTimeout(
 ()=>{
@@ -4902,6 +4613,7 @@ window.speechSynthesis.resume();
 },
 100
 );
+
 
 }catch(error){
 
@@ -4917,6 +4629,7 @@ resolve(false);
 }
 );
 
+
 /* =====================================================
    ELEVENLABS
 ===================================================== */
@@ -4925,6 +4638,7 @@ async function speakElevenLabs(text){
 
 if(!text)
 return false;
+
 
 if(currentAudio){
 
@@ -4940,14 +4654,17 @@ currentAudio = null;
 
 }
 
+
 const controller =
 new AbortController();
+
 
 const timeout =
 setTimeout(
 ()=>controller.abort(),
 30000
 );
+
 
 try{
 
@@ -4980,42 +4697,56 @@ controller.signal
 }
 );
 
+
 if(!response.ok)
 return false;
+
 
 const contentType =
 response.headers
 .get("content-type")
 ||"";
 
+
 if(
 !contentType.includes("audio")
-)
+){
+
 return false;
+
+}
+
 
 const audioBlob =
 await response.blob();
 
+
 if(
 !audioBlob ||
 audioBlob.size === 0
-)
+){
+
 return false;
+
+}
+
 
 const audioUrl =
 URL.createObjectURL(
 audioBlob
 );
 
+
 const audio =
-new Audio(
-audioUrl
-);
+new Audio(audioUrl);
+
 
 currentAudio =
 audio;
 
+
 audio.volume = 1;
+
 
 audio.onplay =
 ()=>{
@@ -5027,6 +4758,7 @@ setState(
 );
 
 };
+
 
 audio.onended =
 ()=>{
@@ -5043,19 +4775,24 @@ audioUrl
 
 if(
 currentAudio === audio
-)
+){
+
 currentAudio = null;
+
+}
+
 
 if(conversationMode){
 
 setTimeout(
 startContinuousRecognition,
-200
+150
 );
 
 }
 
 };
+
 
 audio.onerror =
 ()=>{
@@ -5070,25 +4807,22 @@ URL.revokeObjectURL(
 audioUrl
 );
 
-if(
-currentAudio === audio
-)
-currentAudio = null;
-
 if(conversationMode){
 
 setTimeout(
 startContinuousRecognition,
-200
+150
 );
 
 }
 
 };
 
+
 await audio.play();
 
 return true;
+
 
 }catch(error){
 
@@ -5099,6 +4833,7 @@ error
 
 return false;
 
+
 }finally{
 
 clearTimeout(timeout);
@@ -5106,6 +4841,7 @@ clearTimeout(timeout);
 }
 
 }
+
 
 /* =====================================================
    SPEAK
@@ -5116,28 +4852,29 @@ async function speak(text){
 if(!text)
 return;
 
+
 const elevenSuccess =
-await speakElevenLabs(
-text
-);
+await speakElevenLabs(text);
+
 
 if(elevenSuccess)
 return;
 
-await speakDevice(
-text
-);
+
+await speakDevice(text);
+
 
 if(conversationMode){
 
 setTimeout(
 startContinuousRecognition,
-200
+150
 );
 
 }
 
 }
+
 
 /* =====================================================
    VOICE UI
@@ -5154,12 +4891,14 @@ await speakDevice(
 }
 );
 
+
 voiceSelector.addEventListener(
 "change",
 ()=>{
 
 const value =
 voiceSelector.value;
+
 
 if(value === ""){
 
@@ -5173,8 +4912,10 @@ return;
 
 }
 
+
 const index =
 Number(value);
+
 
 if(
 Number.isInteger(index)
@@ -5195,6 +4936,7 @@ String(index)
 }
 );
 
+
 voiceBtn.addEventListener(
 "click",
 ()=>{
@@ -5208,8 +4950,9 @@ loadDeviceVoices();
 }
 );
 
+
 /* =====================================================
-   CONVERSAZIONE
+   CONVERSATION
 ===================================================== */
 
 function startRecognition(){
@@ -5217,10 +4960,13 @@ function startRecognition(){
 if(!recognition)
 return;
 
+
 if(listening)
 return;
 
+
 recognitionStopping = false;
+
 
 try{
 
@@ -5237,18 +4983,22 @@ error
 
 }
 
+
 function stopRecognition(){
 
 if(!recognition)
 return;
 
+
 recognitionStopping = true;
+
 
 try{
 
 recognition.stop();
 
 }catch(e){}
+
 
 listening = false;
 
@@ -5258,26 +5008,28 @@ micBtn.classList.remove(
 
 }
 
+
 function startContinuousRecognition(){
 
 if(!conversationMode)
 return;
 
+
 if(listening)
 return;
 
-if(audioPlaying)
-return;
 
 startRecognition();
 
 }
+
 
 function stopContinuousRecognition(){
 
 conversationMode = false;
 
 recognitionStopping = true;
+
 
 if(recognition){
 
@@ -5288,6 +5040,7 @@ recognition.stop();
 }catch(e){}
 
 }
+
 
 listening = false;
 
@@ -5308,44 +5061,50 @@ setState(
 
 }
 
+
 function activateConversationMode(){
 
 if(conversationMode)
 return;
 
+
 conversationMode = true;
+
 
 conversationBtn.classList.add(
 "active"
 );
 
+
 conversationBtn.textContent =
 "● CONVERSAZIONE ATTIVA";
+
 
 addMsg(
 "Modalità conversazione continua attivata."
 );
 
-notify(
-"VOICE LOOP ATTIVO"
-);
 
 startContinuousRecognition();
 
 }
+
 
 function deactivateConversationMode(){
 
 if(!conversationMode)
 return;
 
+
 stopContinuousRecognition();
+
 
 addMsg(
 "Modalità conversazione continua disattivata."
 );
 
 }
+
 
 conversationBtn.addEventListener(
 "click",
@@ -5364,6 +5123,7 @@ activateConversationMode();
 }
 );
 
+
 /* =====================================================
    SPEECH RECOGNITION
 ===================================================== */
@@ -5372,22 +5132,24 @@ const Recognition =
 window.SpeechRecognition ||
 window.webkitSpeechRecognition;
 
+
 if(Recognition){
 
 recognition =
 new Recognition();
 
+
 recognition.lang =
 "it-IT";
+
 
 recognition.continuous =
 false;
 
+
 recognition.interimResults =
 false;
 
-recognition.maxAlternatives =
-1;
 
 recognition.onstart =
 ()=>{
@@ -5404,6 +5166,7 @@ setState(
 
 };
 
+
 recognition.onresult =
 event=>{
 
@@ -5412,23 +5175,29 @@ event.results[
 event.results.length - 1
 ];
 
+
 if(!result)
 return;
+
 
 const text =
 result[0]
 .transcript
 .trim();
 
+
 if(!text)
 return;
+
 
 textInput.value =
 text;
 
+
 sendMessage();
 
 };
+
 
 recognition.onerror =
 error=>{
@@ -5444,6 +5213,7 @@ micBtn.classList.remove(
 "active"
 );
 
+
 if(
 conversationMode
 &&
@@ -5456,7 +5226,7 @@ error.error !==
 
 setTimeout(
 startContinuousRecognition,
-800
+700
 );
 
 }else{
@@ -5469,6 +5239,7 @@ setState(
 
 };
 
+
 recognition.onend =
 ()=>{
 
@@ -5478,12 +5249,11 @@ micBtn.classList.remove(
 "active"
 );
 
+
 if(
 conversationMode
 &&
 !recognitionStopping
-&&
-!audioPlaying
 ){
 
 setTimeout(
@@ -5507,6 +5277,7 @@ setState(
 
 };
 
+
 micBtn.addEventListener(
 "click",
 ()=>{
@@ -5518,6 +5289,7 @@ deactivateConversationMode();
 return;
 
 }
+
 
 if(listening){
 
@@ -5532,6 +5304,7 @@ startRecognition();
 }
 );
 
+
 }else{
 
 micBtn.style.opacity =
@@ -5540,20 +5313,18 @@ micBtn.style.opacity =
 conversationBtn.style.opacity =
 ".35";
 
-notify(
-"MICROFONO NON SUPPORTATO"
-);
-
 }
 
+
 /* =====================================================
-   COMANDI CONVERSAZIONE
+   CONVERSATION COMMAND
 ===================================================== */
 
 function handleConversationCommand(text){
 
 const normalized =
 normalizeCommand(text);
+
 
 const activateCommands = [
 
@@ -5573,6 +5344,7 @@ const activateCommands = [
 
 ];
 
+
 const deactivateCommands = [
 
 "disattiva modalita conversazione",
@@ -5587,6 +5359,7 @@ const deactivateCommands = [
 
 ];
 
+
 if(
 activateCommands.includes(
 normalized
@@ -5598,6 +5371,7 @@ activateConversationMode();
 return true;
 
 }
+
 
 if(
 deactivateCommands.includes(
@@ -5611,10 +5385,12 @@ return true;
 
 }
 
+
 const hasConversation =
 normalized.includes(
 "conversazione"
 );
+
 
 const wantsActivate =
 normalized.includes(
@@ -5629,6 +5405,7 @@ normalized.includes(
 "inizia"
 );
 
+
 const wantsDeactivate =
 normalized.includes(
 "disattiva"
@@ -5642,6 +5419,7 @@ normalized.includes(
 "stop"
 );
 
+
 if(
 hasConversation &&
 wantsActivate
@@ -5652,6 +5430,7 @@ activateConversationMode();
 return true;
 
 }
+
 
 if(
 hasConversation &&
@@ -5664,9 +5443,11 @@ return true;
 
 }
 
+
 return false;
 
 }
+
 
 /* =====================================================
    FULLSCREEN COMMAND
@@ -5676,6 +5457,7 @@ function handleFullscreenCommand(text){
 
 const normalized =
 normalizeCommand(text);
+
 
 const simplified =
 normalized
@@ -5696,6 +5478,7 @@ normalized
 )
 
 .trim();
+
 
 if(
 
@@ -5735,6 +5518,7 @@ return true;
 
 }
 
+
 if(
 
 simplified ===
@@ -5763,9 +5547,11 @@ return true;
 
 }
 
+
 return false;
 
 }
+
 
 /* =====================================================
    CONTROL CENTER
@@ -5793,37 +5579,42 @@ document.getElementById(
 "systemAI"
 );
 
-const mapElement =
-document.getElementById(
-"systemMap"
-);
 
 if(memoryElement){
 
 memoryElement.innerHTML =
+
 "ENTRIES: " +
 memory.length +
+
 "<br>STORAGE: LOCAL";
 
 }
 
+
 if(webElement){
 
 webElement.innerHTML =
+
 "WINDOWS: " +
+
 webSearchWindows
 .querySelectorAll(
 ".web-window"
 )
 .length +
+
 "<br>ENGINE: BING";
 
 }
 
+
 if(voiceElement){
 
 voiceElement.innerHTML =
+
 "SPEECH: " +
+
 (
 "speechSynthesis" in window
 ?
@@ -5831,8 +5622,11 @@ voiceElement.innerHTML =
 :
 "OFFLINE"
 )
+
 +
+
 "<br>MIC: " +
+
 (
 recognition
 ?
@@ -5843,111 +5637,102 @@ recognition
 
 }
 
+
 if(aiElement){
 
 aiElement.innerHTML =
-"STATUS: " +
-(
-navigator.onLine
-?
-"ONLINE"
-:
-"OFFLINE"
-)
-+
-"<br>API: " +
-(
-apiOnline
-?
-"ONLINE"
-:
-"READY"
-);
+
+"STATUS: ONLINE<br>" +
+
+"API: READY";
 
 }
 
-if(mapElement){
-
-mapElement.innerHTML =
-"TACTICAL: " +
-(
-map
-?
-"READY"
-:
-"STANDBY"
-)
-+
-"<br>PROVIDER: MAPTILER";
-
-}
 
 const hardware =
 document.getElementById(
 "systemHardware"
 );
 
-if(hardware){
 
-const updateHardware =
-batteryText=>{
+if(!hardware)
+return;
 
-hardware.innerHTML =
-"SCREEN: " +
+
+const screen =
 window.innerWidth +
 "x" +
-window.innerHeight +
-"<br>BATTERY: " +
-batteryText +
-"<br>NETWORK: " +
-(
+window.innerHeight;
+
+
+const network =
 navigator.onLine
 ?
 "ONLINE"
 :
-"OFFLINE"
-);
+"OFFLINE";
 
-};
 
 if(
 navigator.getBattery
 ){
 
 navigator.getBattery()
+
 .then(
 batteryObject=>{
 
-updateHardware(
+hardware.innerHTML =
+
+"SCREEN: " +
+screen +
+
+"<br>BATTERY: " +
+
 Math.round(
 batteryObject.level * 100
 ) +
-"%"
-);
+
+"%" +
+
+"<br>NETWORK: " +
+network;
 
 }
 )
+
 .catch(
 ()=>{
 
-updateHardware(
-"UNAVAILABLE"
-);
+hardware.innerHTML =
+
+"SCREEN: " +
+screen +
+
+"<br>BATTERY: UNKNOWN" +
+
+"<br>NETWORK: " +
+network;
 
 }
 );
 
 }else{
 
-updateHardware(
-"UNAVAILABLE"
-);
+hardware.innerHTML =
+
+"SCREEN: " +
+screen +
+
+"<br>BATTERY: UNAVAILABLE" +
+
+"<br>NETWORK: " +
+network;
 
 }
 
 }
 
-}
 
 controlBtn.addEventListener(
 "click",
@@ -5962,6 +5747,7 @@ updateSystemPanel();
 }
 );
 
+
 controlClose.addEventListener(
 "click",
 ()=>{
@@ -5973,6 +5759,11 @@ controlCenter.classList.remove(
 }
 );
 
+
+/* =====================================================
+   SHOW MEMORY
+===================================================== */
+
 document.getElementById(
 "showMemoryBtn"
 )
@@ -5980,33 +5771,32 @@ document.getElementById(
 "click",
 ()=>{
 
-const memories =
-memory
-.filter(
-item =>
-item.role === "memory"
-)
-.slice(-15);
-
-if(!memories.length){
+if(!memory.length){
 
 addMsg(
-"La memoria personale è vuota."
+"La memoria JARVIS è vuota."
 );
 
 return;
 
 }
 
+
 const preview =
-memories
+memory
+.slice(-10)
 .map(
 (item,index)=>
-(index+1) +
+
+(index + 1) +
 ". " +
+item.role +
+": " +
 item.content
+
 )
 .join("\n");
+
 
 addMsg(
 preview
@@ -6014,6 +5804,11 @@ preview
 
 }
 );
+
+
+/* =====================================================
+   CLEAR MEMORY
+===================================================== */
 
 document.getElementById(
 "clearMemoryBtn"
@@ -6024,13 +5819,9 @@ document.getElementById(
 
 memory = [];
 
-try{
-
 localStorage.removeItem(
 MEMORY_KEY
 );
-
-}catch(e){}
 
 updateSystemPanel();
 
@@ -6045,68 +5836,73 @@ addMsg(
 }
 );
 
+
 /* =====================================================
-   PROCESS AI
+   AI
 ===================================================== */
 
 async function processAi(text){
-
-if(
-handleMemoryCommand(text)
-)
-return;
 
 if(
 handleFullscreenCommand(text)
 )
 return;
 
+
 if(
 handleConversationCommand(text)
 )
 return;
+
 
 if(
 handleWebWindowCommand(text)
 )
 return;
 
+
 if(
 handleWebCommand(text)
 )
 return;
+
 
 if(
 handleMapCommand(text)
 )
 return;
 
+
 setState(
 "thinking"
 );
+
 
 try{
 
 const temporal =
 getTimeData();
 
+
 addMemory(
 "user",
 text
 );
 
+
 const controller =
 new AbortController();
 
+
 const timeout =
 setTimeout(
-()=>{
-controller.abort();
-},
+()=>controller.abort(),
 30000
 );
 
+
 let response;
+
 
 try{
 
@@ -6127,7 +5923,7 @@ body:JSON.stringify({
 message:text,
 
 memory:
-memory.slice(-12),
+memory.slice(-4),
 
 currentTime:
 temporal.currentTime,
@@ -6155,19 +5951,23 @@ clearTimeout(timeout);
 
 }
 
+
 if(!response.ok){
 
 const errorText =
 await response.text();
 
+
 let errorMessage =
 "HTTP " +
 response.status;
+
 
 try{
 
 const errorData =
 JSON.parse(errorText);
+
 
 if(
 errorData &&
@@ -6193,26 +5993,30 @@ errorText.substring(
 
 }
 
+
 throw new Error(
 errorMessage
 );
 
 }
 
-apiOnline = true;
-
-updateSystemPanel();
 
 const data =
 await response.json();
 
+
 const reply =
 typeof data.response ===
 "string"
+
 ?
+
 data.response.trim()
+
 :
+
 "";
+
 
 if(!reply){
 
@@ -6222,24 +6026,28 @@ throw new Error(
 
 }
 
+
 addMsg(
 reply
 );
+
 
 addMemory(
 "assistant",
 reply
 );
 
-speak(
-reply
-).catch(
+
+speak(reply)
+.catch(
 console.error
 );
+
 
 setState(
 "idle"
 );
+
 
 }catch(error){
 
@@ -6248,13 +6056,11 @@ console.error(
 error
 );
 
-apiOnline = false;
-
-updateSystemPanel();
 
 let message =
 error.message ||
 "Errore sconosciuto";
+
 
 if(
 error.name ===
@@ -6266,6 +6072,7 @@ message =
 
 }
 
+
 else if(
 message ===
 "Failed to fetch"
@@ -6276,71 +6083,68 @@ message =
 
 }
 
+
 addMsg(
 "ERRORE: " +
 message
 );
 
+
 setState(
 "error"
 );
 
+
 setTimeout(
 ()=>{
+
 setState(
 "idle"
 );
+
 },
-1500
+1200
 );
 
 }
 
 }
 
+
 /* =====================================================
-   INVIO
+   SEND
 ===================================================== */
 
-let sending = false;
-
-async function sendMessage(){
-
-if(sending)
-return;
+function sendMessage(){
 
 const text =
 textInput.value.trim();
 
+
 if(!text)
 return;
 
+
 textInput.value = "";
+
 
 addMsg(
 text
 );
 
-sending = true;
 
-try{
-
-await processAi(
+processAi(
 text
 );
 
-}finally{
-
-sending = false;
-
 }
 
-}
 
 sendBtn.addEventListener(
 "click",
 sendMessage
 );
+
 
 textInput.addEventListener(
 "keydown",
@@ -6360,6 +6164,7 @@ sendMessage();
 }
 );
 
+
 /* =====================================================
    RESIZE
 ===================================================== */
@@ -6377,22 +6182,35 @@ camera.aspect =
 window.innerWidth /
 window.innerHeight;
 
+
 camera.updateProjectionMatrix();
+
 
 renderer.setSize(
 window.innerWidth,
-window.innerHeight
+window.innerHeight,
+false
 );
 
 }
 
-if(map)
+
+if(map){
+
+try{
+
 map.resize();
+
+}catch(e){}
+
+}
+
 
 updateSystemPanel();
 
 }
 );
+
 
 /* =====================================================
    ONLINE / OFFLINE
@@ -6411,11 +6229,10 @@ updateSystemPanel();
 }
 );
 
+
 window.addEventListener(
 "offline",
 ()=>{
-
-apiOnline = false;
 
 notify(
 "CONNESSIONE OFFLINE"
@@ -6426,94 +6243,53 @@ updateSystemPanel();
 }
 );
 
-/* =====================================================
-   ESC
-===================================================== */
-
-document.addEventListener(
-"keydown",
-event=>{
-
-if(
-event.key ===
-"Escape"
-){
-
-if(
-controlCenter.classList.contains(
-"active"
-)
-){
-
-controlCenter.classList.remove(
-"active"
-);
-
-}
-
-if(
-voicePanel.classList.contains(
-"active"
-)
-){
-
-voicePanel.classList.remove(
-"active"
-);
-
-}
-
-}
-
-}
-);
 
 /* =====================================================
-   TEST API
+   API CHECK
 ===================================================== */
 
 async function checkApi(){
 
 try{
 
-const controller =
-new AbortController();
-
-const timeout =
-setTimeout(
-()=>{
-controller.abort();
-},
-5000
-);
-
 const response =
 await fetch(
 API,
 {
-method:"GET",
-signal:
-controller.signal
+method:"GET"
 }
 );
 
-clearTimeout(timeout);
 
-apiOnline =
-response.ok;
+if(response.ok){
+
+notify(
+"API JARVIS ONLINE"
+);
+
+}else{
+
+notify(
+"API JARVIS: HTTP " +
+response.status
+);
+
+}
 
 }catch(error){
 
-apiOnline = false;
+console.warn(
+"API CHECK:",
+error
+);
 
 }
 
-updateSystemPanel();
-
 }
+
 
 /* =====================================================
-   AVVIO
+   START
 ===================================================== */
 
 setState(
@@ -6524,10 +6300,20 @@ updateFullscreenUI();
 
 updateSystemPanel();
 
-checkApi();
-
 notify(
 "J.A.R.V.I.S. SYSTEM ONLINE"
+);
+
+
+/*
+   Il controllo API viene eseguito dopo
+   l'avvio grafico, così un eventuale
+   errore del server NON blocca Three.js.
+*/
+
+setTimeout(
+checkApi,
+1200
 );
 
 </script>

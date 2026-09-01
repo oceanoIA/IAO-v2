@@ -1,27 +1,9 @@
-<!DOCTYPE html>
-<html lang="it">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link rel="stylesheet"
-href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
-
-<style>
-
-*{
-box-sizing:border-box;
-margin:0;
-padding:0
-}
-
-html,body{
+<!DOCTYPE html>  <html lang="it">  <head>  <meta charset="UTF-8">  <meta name="viewport"    content="width=device-width,initial-scale=1.0">  <title>J.A.R.V.I.S.</title>  <link rel="stylesheet"      
+href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">  <style>    *{  
+box-sizing:border-box;  
+margin:0;  
+padding:0  
+}  html,body{
 width:100%;
 height:100%;
 overflow:hidden;
@@ -691,122 +673,47 @@ left:2.2cm;
 }
 }
 
-</style>
-
-</head>
-
-<body>
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-<div class="jarvis-title"
+</style>  </head>  <body>  <div id="webgl-container"></div>  <div class="vignette"></div>  <div class="jarvis-title"      
 id="jarvisTitle">
 J.A.R.V.I.S
-</div>
 
-<div class="datetime">
-
-<div id="clock"
-class="time">
-00:00:00
-</div>
-
-<div id="date"
-class="date">
-00 AGO 2026
-</div>
-
-</div>
-
-<div id="tacticalMap">
-
-<div id="map"></div>
-
-<div class="map-overlay"></div>
-
-<div class="map-header">
-TACTICAL MAP
-</div>
-
-<button id="closeMap">
-×
-</button>
-
-</div>
-
-<div id="webSearchWindows"></div>
-
-<div id="webSearchIndicator">
-WEB WINDOWS: 0
-</div>
-
-<div id="chat"></div>
-
-<div class="command-wrapper">
-
-<input
-id="textInput"
-type="text"
-autocomplete="off"
-placeholder="Chiedi qualcosa a JARVIS...">
-
-<button id="micBtn">
-<span class="mic-icon"></span>
-</button>
-
-<button id="sendBtn">
-INVIA
-</button>
-
-</div>
-
-<button id="conversationBtn">
-◉ CONVERSAZIONE
-</button>
-
-<button id="fullscreenBtn">
-⛶ FULLSCREEN
-</button>
-
-<button id="voiceBtn">
-⚙ VOCE
-</button>
-
-<div id="voicePanel">
-
-<div class="voice-title">
-VOCE J.A.R.V.I.S.
-</div>
-
-<select id="voiceSelector">
-
-<option value="">
-Voce dispositivo automatica
-</option>
-
-</select>
-
-<button id="voiceTest">
-TESTA VOCE
-</button>
-
-</div>
-
-<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
-
-<script type="importmap">
-
-{
-"imports":{
-"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"
-}
-}
-
-</script>
-
-<script type="module">
+</div>  <div class="datetime">   <div id="clock"      
+      class="time">      
+  00:00:00      
+ </div>   <div id="date"      
+      class="date">      
+  00 AGO 2026      
+ </div>  </div>  <div id="tacticalMap">   <div id="map"></div>   <div class="map-overlay"></div>   <div class="map-header">      
+  TACTICAL MAP      
+ </div>   <button id="closeMap">      
+  ×      
+ </button>  </div>  <div id="webSearchWindows"></div>  <div id="webSearchIndicator">      
+ WEB WINDOWS: 0      
+</div>  <div id="chat"></div>  <div class="command-wrapper">  <input      
+id="textInput"      
+type="text"      
+autocomplete="off"      
+placeholder="Chiedi qualcosa a JARVIS...">   <button id="micBtn">      
+  <span class="mic-icon"></span>      
+ </button>   <button id="sendBtn">      
+  INVIA      
+ </button>  </div>  <button id="conversationBtn">      
+ ◉ CONVERSAZIONE      
+</button>  <button id="fullscreenBtn">      
+ ⛶ FULLSCREEN      
+</button>  <button id="voiceBtn">      
+ ⚙ VOCE      
+</button>  <div id="voicePanel">   <div class="voice-title">      
+  VOCE J.A.R.V.I.S.      
+ </div>   <select id="voiceSelector">    <option value="">      
+   Voce dispositivo automatica      
+  </option>   </select>   <button id="voiceTest">      
+  TESTA VOCE      
+ </button>  </div>  <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>  <script type="importmap">    {  
+"imports":{  
+"three":"https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js"  
+}  
+}  </script>  <script type="module">
 
 import * as THREE from "three";
 
@@ -904,7 +811,6 @@ JSON.parse(saved);
 
 if(Array.isArray(parsed))
 memory=parsed.slice(-MAX_MEMORY);
-
 }
 
 }catch(e){
@@ -963,15 +869,14 @@ function updateClock(){
 const now=new Date();
 
 clock.textContent=
-`${String(now.getHours()).padStart(2,"0")}:`+
-`${String(now.getMinutes()).padStart(2,"0")}:`+
-`${String(now.getSeconds()).padStart(2,"0")}`;
+${String(now.getHours()).padStart(2,"0")}:+
+${String(now.getMinutes()).padStart(2,"0")}:+
+${String(now.getSeconds()).padStart(2,"0")};
 
 date.textContent=
-`${String(now.getDate()).padStart(2,"0")} `+
-`${months[now.getMonth()]} `+
-`${now.getFullYear()}`;
-
+${String(now.getDate()).padStart(2,"0")} +
+${months[now.getMonth()]} +
+${now.getFullYear()};
 }
 
 updateClock();
@@ -981,9 +886,7 @@ updateClock,
 1000
 );
 
-/* =====================================================
-THREE — SFERA J.A.R.V.I.S.
-===================================================== */
+/* ================= THREE ================= */
 
 const scene=
 new THREE.Scene();
@@ -1027,16 +930,16 @@ function createGlow(){
 const canvas=
 document.createElement("canvas");
 
-canvas.width=128;
-canvas.height=128;
+canvas.width=64;
+canvas.height=64;
 
 const ctx=
 canvas.getContext("2d");
 
 const gradient=
 ctx.createRadialGradient(
-64,64,0,
-64,64,64
+32,32,0,
+32,32,32
 );
 
 gradient.addColorStop(
@@ -1045,23 +948,18 @@ gradient.addColorStop(
 );
 
 gradient.addColorStop(
-.12,
+.2,
 "rgba(220,255,255,1)"
 );
 
 gradient.addColorStop(
-.28,
-"rgba(80,255,255,.95)"
+.4,
+"rgba(0,255,255,.9)"
 );
 
 gradient.addColorStop(
-.52,
-"rgba(0,210,255,.55)"
-);
-
-gradient.addColorStop(
-.75,
-"rgba(0,120,190,.18)"
+.7,
+"rgba(0,150,190,.25)"
 );
 
 gradient.addColorStop(
@@ -1074,108 +972,20 @@ ctx.fillStyle=gradient;
 ctx.fillRect(
 0,
 0,
-128,
-128
+64,
+64
 );
 
 return new THREE.CanvasTexture(
 canvas
 );
-
 }
 
-/* ================= SFERA GEODETICA ================= */
+/* ================= PARTICELLE ================= */
 
-const sphereGroup=
-new THREE.Group();
+const COUNT=3000;
 
-scene.add(
-sphereGroup
-);
-
-/*
-La sfera viene costruita con una
-geometria icosaedrica suddivisa.
-
-Questo crea una vera superficie
-geodetica composta da triangoli.
-*/
-
-const geoSphere=
-new THREE.IcosahedronGeometry(
-1.38,
-4
-);
-
-const wireMaterial=
-new THREE.MeshBasicMaterial({
-
-color:0x00d9ef,
-
-wireframe:true,
-
-transparent:true,
-
-opacity:.48,
-
-blending:
-THREE.AdditiveBlending,
-
-depthWrite:false
-
-});
-
-const geoMesh=
-new THREE.Mesh(
-geoSphere,
-wireMaterial
-);
-
-sphereGroup.add(
-geoMesh
-);
-
-/* ================= SECONDA MAGLIA ================= */
-
-const innerGeometry=
-new THREE.IcosahedronGeometry(
-1.30,
-3
-);
-
-const innerMaterial=
-new THREE.MeshBasicMaterial({
-
-color:0x007f9f,
-
-wireframe:true,
-
-transparent:true,
-
-opacity:.22,
-
-blending:
-THREE.AdditiveBlending,
-
-depthWrite:false
-
-});
-
-const innerMesh=
-new THREE.Mesh(
-innerGeometry,
-innerMaterial
-);
-
-sphereGroup.add(
-innerMesh
-);
-
-/* ================= PARTICELLE SUPERFICIE ================= */
-
-const COUNT=2600;
-
-const particleGeometry=
+const geometry=
 new THREE.BufferGeometry();
 
 const positions=
@@ -1183,12 +993,26 @@ new Float32Array(
 COUNT*3
 );
 
-const particleSeeds=
+const radii=
+new Float32Array(
+COUNT
+);
+
+const angles=
+new Float32Array(
+COUNT*2
+);
+
+const seeds=
 new Float32Array(
 COUNT
 );
 
 for(let i=0;i<COUNT;i++){
+
+const r=
+1.10+
+Math.random()*.70;
 
 const theta=
 Math.random()*
@@ -1199,33 +1023,28 @@ Math.acos(
 2*Math.random()-1
 );
 
-const radius=
-1.34+
-(Math.random()-.5)*.045;
+radii[i]=r;
 
-const index=
-i*3;
+angles[i*2]=theta;
 
-positions[index]=
-radius*
-Math.sin(phi)*
+angles[i*2+1]=phi;
+
+seeds[i]=
+Math.random()*100;
+
+positions[i3]=
+rMath.sin(phi)*
 Math.cos(theta);
 
-positions[index+1]=
-radius*
-Math.sin(phi)*
+positions[i3+1]=
+rMath.sin(phi)*
 Math.sin(theta);
 
-positions[index+2]=
-radius*
-Math.cos(phi);
-
-particleSeeds[i]=
-Math.random()*1000;
-
+positions[i3+2]=
+rMath.cos(phi);
 }
 
-particleGeometry.setAttribute(
+geometry.setAttribute(
 "position",
 new THREE.BufferAttribute(
 positions,
@@ -1233,237 +1052,36 @@ positions,
 )
 );
 
-const particleMaterial=
+const material=
 new THREE.PointsMaterial({
 
 color:
 new THREE.Color(
-0x00eaff
+0x00cfe8
 ),
 
-size:.025,
+size:.042,
 
 map:createGlow(),
 
 transparent:true,
 
-opacity:.85,
+opacity:1,
 
 depthWrite:false,
 
 blending:
 THREE.AdditiveBlending
-
 });
 
 const particles=
 new THREE.Points(
-particleGeometry,
-particleMaterial
-);
-
-sphereGroup.add(
-particles
-);
-
-/* ================= NUCLEO LIQUIDO ================= */
-
-const coreGeometry=
-new THREE.SphereGeometry(
-.72,
-48,
-48
-);
-
-const coreMaterial=
-new THREE.MeshBasicMaterial({
-
-color:0x003f4b,
-
-transparent:true,
-
-opacity:.22,
-
-blending:
-THREE.AdditiveBlending,
-
-depthWrite:false
-
-});
-
-const core=
-new THREE.Mesh(
-coreGeometry,
-coreMaterial
-);
-
-sphereGroup.add(
-core
-);
-
-/* ================= ANELLI HUD ================= */
-
-const ringGroup=
-new THREE.Group();
-
-scene.add(
-ringGroup
-);
-
-function createRing(
-radius,
-tube,
-opacity,
-rotation
-){
-
-const geometry=
-new THREE.TorusGeometry(
-radius,
-tube,
-12,
-160
-);
-
-const material=
-new THREE.MeshBasicMaterial({
-
-color:0x00eaff,
-
-transparent:true,
-
-opacity:opacity,
-
-blending:
-THREE.AdditiveBlending,
-
-depthWrite:false
-
-});
-
-const ring=
-new THREE.Mesh(
 geometry,
 material
 );
 
-ring.rotation.x=
-rotation.x;
-
-ring.rotation.y=
-rotation.y;
-
-ring.rotation.z=
-rotation.z;
-
-ringGroup.add(
-ring
-);
-
-return ring;
-}
-
-const ring1=
-createRing(
-1.68,
-.008,
-.25,
-{x:Math.PI/2,y:0,z:0}
-);
-
-const ring2=
-createRing(
-1.82,
-.005,
-.16,
-{x:Math.PI/2.7,y:.35,z:.2}
-);
-
-const ring3=
-createRing(
-2.00,
-.003,
-.10,
-{x:1.15,y:.4,z:.8}
-);
-
-const ring4=
-createRing(
-2.18,
-.002,
-.06,
-{x:.35,y:1.2,z:.5}
-);
-
-/* ================= PUNTI ORBITALI ================= */
-
-const orbitGeometry=
-new THREE.BufferGeometry();
-
-const orbitPositions=
-new Float32Array(
-180*3
-);
-
-for(let i=0;i<180;i++){
-
-const angle=
-(i/180)*
-Math.PI*2;
-
-const radius=
-1.72+
-Math.random()*.38;
-
-orbitPositions[i*3]=
-Math.cos(angle)*
-radius;
-
-orbitPositions[i*3+1]=
-(Math.random()-.5)*.06;
-
-orbitPositions[i*3+2]=
-Math.sin(angle)*
-radius;
-
-}
-
-orbitGeometry.setAttribute(
-"position",
-new THREE.BufferAttribute(
-orbitPositions,
-3
-)
-);
-
-const orbitMaterial=
-new THREE.PointsMaterial({
-
-color:0x8fffff,
-
-size:.035,
-
-map:createGlow(),
-
-transparent:true,
-
-opacity:.8,
-
-depthWrite:false,
-
-blending:
-THREE.AdditiveBlending
-
-});
-
-const orbitPoints=
-new THREE.Points(
-orbitGeometry,
-orbitMaterial
-);
-
-ringGroup.add(
-orbitPoints
+scene.add(
+particles
 );
 
 /* ================= STATO ================= */
@@ -1498,10 +1116,9 @@ targetEnergy=.55;
 
 else
 targetEnergy=.15;
-
 }
 
-/* ================= ANIMAZIONE LIQUIDA ================= */
+/* ================= ANIMAZIONE ================= */
 
 function animate(){
 
@@ -1516,14 +1133,9 @@ energy+=
 (targetEnergy-energy)*
 .045;
 
-/* ---- COLORE ---- */
-
 currentColor.lerp(
 activeColor,
-Math.min(
-energy*.04,
-1
-)
+energy*.04
 );
 
 if(energy<.3){
@@ -1535,235 +1147,115 @@ normalColor,
 
 }
 
-wireMaterial.color=
+material.color=
 currentColor;
 
-particleMaterial.color=
-currentColor;
-
-/* ---- LIQUIDITÀ DELLA MAGLIA ---- */
-
-const spherePositions=
-geoSphere.attributes.position.array;
-
-for(
-let i=0;
-i<spherePositions.length;
-i+=3
-){
-
-const x=
-spherePositions[i];
-
-const y=
-spherePositions[i+1];
-
-const z=
-spherePositions[i+2];
-
-const length=
-Math.sqrt(
-x*x+y*y+z*z
-);
-
-const nx=x/length;
-const ny=y/length;
-const nz=z/length;
-
-const wave1=
-Math.sin(
-nx*5+
-time*1.7
-);
-
-const wave2=
-Math.cos(
-ny*7-
-time*1.4
-);
-
-const wave3=
-Math.sin(
-nz*9+
-time*1.1
-);
-
-const deformation=
-(
-wave1*.012+
-wave2*.010+
-wave3*.008
-)*
-(1+energy*.7);
-
-spherePositions[i]=
-nx*(1.38+deformation);
-
-spherePositions[i+1]=
-ny*(1.38+deformation);
-
-spherePositions[i+2]=
-nz*(1.38+deformation);
-
-}
-
-geoSphere.attributes.position.needsUpdate=
-true;
-
-/* ---- SECONDA MAGLIA ---- */
-
-innerMesh.rotation.y=
--time*.045;
-
-innerMesh.rotation.x=
-Math.sin(time*.2)*.06;
-
-/* ---- PARTICELLE ---- */
+material.size=
+.032+
+energy*.008;
 
 const pos=
-particleGeometry.attributes.position.array;
+geometry.attributes.position.array;
 
 for(let i=0;i<COUNT;i++){
 
-const index=
-i*3;
+const index=i*3;
 
-let x=
-pos[index];
+const r=
+radii[i];
 
-let y=
-pos[index+1];
+const theta=
+angles[i*2];
 
-let z=
-pos[index+2];
-
-const length=
-Math.sqrt(
-x*x+y*y+z*z
-);
-
-const nx=x/length;
-const ny=y/length;
-const nz=z/length;
+const phi=
+angles[i*2+1];
 
 const seed=
-particleSeeds[i];
+seeds[i];
 
-const liquid=
+const pulse=
 Math.sin(
-nx*8+
-ny*5+
-time*2+
+time2+seed
+).035;
+
+const strangeShape=
+Math.sin(
+theta6+
+time2+
 seed
-);
+).18energy;
 
-const liquid2=
+const wave=
 Math.cos(
-nz*9-
-time*1.5+
-seed*.4
-);
+phi7-
+time1.8+
+seed
+).12energy;
 
-const radius=
-1.34+
-liquid*.018+
-liquid2*.012+
-energy*.008;
+const rr=
+r+
+pulse+
+strangeShape+
+wave;
 
-pos[index]=
-nx*radius;
+let x=
+rr*
+Math.sin(phi)*
+Math.cos(theta);
 
-pos[index+1]=
-ny*radius;
+let y=
+rr*
+Math.sin(phi)*
+Math.sin(theta);
 
-pos[index+2]=
-nz*radius;
+let z=
+rr*
+Math.cos(phi);
+
+x+=
+Math.sin(
+time2.4+
+phi8+
+seed
+).08energy;
+
+y+=
+Math.cos(
+time2.1+
+theta9+
+seed
+).08energy;
+
+z+=
+Math.sin(
+time2.7+
+(theta+phi)7
+).10energy;
+
+pos[index]=x;
+
+pos[index+1]=y;
+
+pos[index+2]=z;
 
 }
 
-particleGeometry.attributes.position.needsUpdate=
-true;
+geometry.attributes.position.needsUpdate=true;
 
-/* ---- CORE ---- */
+particles.rotation.y+=
+.0005+
+energy*.0008;
 
-core.scale.setScalar(
-1+
-Math.sin(time*2.2)*.025+
-energy*.015
-);
+particles.rotation.x=
+Math.sin(time*.25)*.04;
 
-coreMaterial.opacity=
-.15+
-Math.min(
-energy*.045,
-.18
-);
-
-/* ---- SFERA ---- */
-
-sphereGroup.rotation.y+=
-.0012+
-energy*.0012;
-
-sphereGroup.rotation.x=
-Math.sin(time*.23)*.035;
-
-sphereGroup.rotation.z=
-Math.cos(time*.17)*.025;
-
-/* ---- ANELLI ---- */
-
-ring1.rotation.z+=
-.0015+
-energy*.001;
-
-ring2.rotation.x+=
-.0008;
-
-ring2.rotation.z-=
-.0011;
-
-ring3.rotation.y+=
-.00065;
-
-ring3.rotation.x-=
-.00035;
-
-ring4.rotation.z+=
-.00045;
-
-orbitPoints.rotation.y+=
-.0025+
-energy*.001;
-
-/* ---- LUMINOSITÀ ---- */
-
-wireMaterial.opacity=
-.35+
-Math.min(
-energy*.08,
-.25
-);
-
-particleMaterial.opacity=
-.55+
-Math.min(
-energy*.12,
-.4
-);
-
-orbitMaterial.opacity=
-.55+
-Math.min(
-energy*.1,
-.35
-);
+particles.rotation.z=
+Math.cos(time*.18)*.025;
 
 renderer.render(
 scene,
 camera
 );
-
 }
 
 animate();
@@ -1852,7 +1344,6 @@ map.resize();
 },
 400
 );
-
 }
 
 function closeTacticalMap(){
@@ -1863,7 +1354,6 @@ tacticalMap.classList.remove(
 
 jarvisTitle.style.display=
 "block";
-
 }
 
 closeMap.addEventListener(
@@ -1876,12 +1366,11 @@ closeTacticalMap
 function escapeHtml(text){
 
 return String(text)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
+.replace(/&/g,"&")
+.replace(/</g,"<")
+.replace(/>/g,">")
+.replace(/"/g,""")
+.replace(/'/g,"'");
 }
 
 function addMsg(text){
@@ -1898,7 +1387,6 @@ element.textContent=text;
 chat.appendChild(
 element
 );
-
 }
 
 /* =====================================================
@@ -1913,7 +1401,6 @@ return !!(
 document.fullscreenElement ||
 document.webkitFullscreenElement
 );
-
 }
 
 async function enterFullscreen(){
@@ -1949,7 +1436,6 @@ addMsg(
 fullscreenChanging=false;
 
 return false;
-
 }
 
 fullscreenChanging=false;
@@ -1970,9 +1456,7 @@ addMsg(
 );
 
 return false;
-
 }
-
 }
 
 async function exitFullscreen(){
@@ -2001,9 +1485,7 @@ error
 );
 
 return false;
-
 }
-
 }
 
 async function toggleFullscreen(){
@@ -2017,7 +1499,6 @@ await exitFullscreen();
 await enterFullscreen();
 
 }
-
 }
 
 function updateFullscreenUI(){
@@ -2034,7 +1515,6 @@ fullscreenBtn.textContent=
 active
 ? "⛶ ESCI FULLSCREEN"
 : "⛶ FULLSCREEN";
-
 }
 
 fullscreenBtn.addEventListener(
@@ -2051,7 +1531,6 @@ updateFullscreenUI();
 document.addEventListener(
 "fullscreenchange",
 ()=>{
-
 updateFullscreenUI();
 
 setTimeout(
@@ -2061,14 +1540,12 @@ map.resize();
 },
 100
 );
-
 }
 );
 
 document.addEventListener(
 "webkitfullscreenchange",
 ()=>{
-
 updateFullscreenUI();
 
 setTimeout(
@@ -2078,7 +1555,6 @@ map.resize();
 },
 100
 );
-
 }
 );
 
@@ -2104,7 +1580,6 @@ return String(text)
 " "
 )
 .trim();
-
 }
 
 /* =====================================================
@@ -2115,6 +1590,15 @@ function handleFullscreenCommand(text){
 
 const normalized=
 normalizeCommand(text);
+
+/*
+
+Rimuoviamo alcune parole riempitive.
+
+In questo modo JARVIS è più tollerante
+
+con il riconoscimento vocale.
+*/
 
 const simplified=
 normalized
@@ -2155,24 +1639,43 @@ normalized
 const activatePatterns=[
 
 "attiva fullscreen",
+
 "attiva il fullscreen",
+
 "attiva la fullscreen",
+
 "attiva modalita fullscreen",
+
 "attiva la modalita fullscreen",
+
 "attiva modalita schermo intero",
+
 "attiva la modalita schermo intero",
+
 "attiva schermo intero",
+
 "metti fullscreen",
+
 "metti in fullscreen",
+
 "metti a fullscreen",
+
 "vai fullscreen",
+
 "vai in fullscreen",
+
 "fullscreen",
+
 "modalita fullscreen",
+
 "modalita schermo intero",
+
 "schermo intero",
+
 "a schermo intero",
+
 "passa a schermo intero",
+
 "passa in fullscreen"
 
 ];
@@ -2180,20 +1683,35 @@ const activatePatterns=[
 const deactivatePatterns=[
 
 "disattiva fullscreen",
+
 "disattiva il fullscreen",
+
 "disattiva la fullscreen",
+
 "disattiva modalita fullscreen",
+
 "disattiva la modalita fullscreen",
+
 "disattiva schermo intero",
+
 "disattiva la modalita schermo intero",
+
 "esci dal fullscreen",
+
 "esci da fullscreen",
+
 "esci fullscreen",
+
 "esci da schermo intero",
+
 "esci dallo schermo intero",
+
 "torna normale",
+
 "torna alla modalita normale",
+
 "modalita normale",
+
 "schermo normale"
 
 ];
@@ -2211,13 +1729,18 @@ addMsg(
 );
 
 return true;
-
 }
+
+/*
+
+Il browser può bloccare questa chiamata
+
+se arriva da SpeechRecognition.
+*/
 
 enterFullscreen();
 
 return true;
-
 }
 
 if(
@@ -2233,14 +1756,23 @@ addMsg(
 );
 
 return true;
-
 }
 
 exitFullscreen();
 
 return true;
-
 }
+
+/*
+
+Riconoscimento più generico.
+
+Se la frase contiene fullscreen o schermo intero
+
+insieme a parole di attivazione, viene comunque
+
+considerata un comando.
+*/
 
 const hasFullscreenWord=
 simplified.includes("fullscreen") ||
@@ -2269,7 +1801,6 @@ wantsActivate
 enterFullscreen();
 
 return true;
-
 }
 
 if(
@@ -2280,11 +1811,9 @@ wantsDeactivate
 exitFullscreen();
 
 return true;
-
 }
 
 return false;
-
 }
 
 /* ================= MARKER ================= */
@@ -2302,7 +1831,6 @@ if(currentMarker){
 currentMarker.remove();
 
 currentMarker=null;
-
 }
 
 const markerElement=
@@ -2328,13 +1856,12 @@ new maplibregl.Popup({
 offset:15
 })
 .setHTML(
-`<b style="color:#00ffff">${escapeHtml(name)}</b>`
+<b style="color:#00ffff">${escapeHtml(name)}</b>
 )
 )
 .addTo(map);
 
 currentMarker.togglePopup();
-
 }
 
 /* ================= RICERCA POSIZIONE ================= */
@@ -2383,7 +1910,6 @@ place+
 );
 
 return;
-
 }
 
 const result=
@@ -2442,7 +1968,6 @@ place+
 );
 
 }
-
 }
 
 /* ================= COMANDI MAPPA ================= */
@@ -2483,7 +2008,6 @@ addMsg(
 );
 
 return true;
-
 }
 
 if(
@@ -2513,17 +2037,22 @@ addMsg(
 );
 
 return true;
-
 }
 
 const patterns=[
 
 "mostrami ",
+
 "mostra ",
+
 "vai a ",
+
 "portami a ",
+
 "localizza ",
+
 "cerca ",
+
 "visualizza "
 
 ];
@@ -2555,13 +2084,10 @@ place
 return true;
 
 }
-
 }
-
 }
 
 return false;
-
 }
 
 /* =====================================================
@@ -2598,7 +2124,6 @@ webSearchIndicator.classList.remove(
 );
 
 }
-
 }
 
 function bringWebWindowToFront(
@@ -2611,7 +2136,6 @@ windowElement.style.zIndex=
 String(
 highestWebZ
 );
-
 }
 
 /* =====================================================
@@ -2649,44 +2173,24 @@ escapeHtml(query);
 
 windowElement.innerHTML=`
 
-<div class="web-window-header">
+  <div class="web-window-header">       <div class="web-window-title">    <span class="web-window-number">      
+ WEB ${webWindowCounter}      
+</span>      ${safeTitle}
 
-<div class="web-window-title">
+   </div>       <div class="web-window-controls">    <button      
+ class="web-window-btn minimize-web"      
+ title="Minimizza">      −
 
-<span class="web-window-number">
-WEB ${webWindowCounter}
-</span>
-
-${safeTitle}
-
-</div>
-
-<div class="web-window-controls">
-
-<button
-class="web-window-btn minimize-web"
-title="Minimizza">
-−
-</button>
-
-<button
-class="web-window-btn close-web"
+</button>      <button      
+class="web-window-btn close-web"      
 title="Chiudi">
+
 ×
-</button>
 
-</div>
-
-</div>
-
-<iframe
-title="Ricerca web ${safeTitle}"
-loading="eager">
-</iframe>
-
-`;
-
-webSearchWindows.appendChild(
+</button>     </div>      </div>      <iframe      
+   title="Ricerca web ${safeTitle}"      
+   loading="eager">      
+  </iframe>    `;  webSearchWindows.appendChild(
 windowElement
 );
 
@@ -2901,7 +2405,6 @@ addMsg(
 "Ricerca web: "+
 query
 );
-
 }
 
 /* ================= COMANDI WEB ================= */
@@ -2914,13 +2417,21 @@ normalizeCommand(text);
 const patterns=[
 
 "cerca sul web ",
+
 "cerca nel web ",
+
 "ricerca sul web ",
+
 "ricerca web ",
+
 "cerca online ",
+
 "cerca su internet ",
+
 "cerca in internet ",
+
 "fammi una ricerca su ",
+
 "fai una ricerca su "
 
 ];
@@ -2952,13 +2463,10 @@ query
 return true;
 
 }
-
 }
-
 }
 
 return false;
-
 }
 
 /* ================= FINESTRE WEB ================= */
@@ -2989,7 +2497,6 @@ addMsg(
 );
 
 return true;
-
 }
 
 if(
@@ -3016,11 +2523,9 @@ addMsg(
 );
 
 return true;
-
 }
 
 return false;
-
 }
 
 /* ================= DATI TEMPORALI ================= */
@@ -3066,7 +2571,6 @@ Intl.DateTimeFormat()
 .timeZone
 
 };
-
 }
 
 /* ================= VOCI ================= */
@@ -3110,7 +2614,7 @@ option.value=
 String(index);
 
 option.textContent=
-`${voice.name} — ${voice.lang}`;
+${voice.name} — ${voice.lang};
 
 voiceSelector.appendChild(
 option
@@ -3140,9 +2644,7 @@ selectedDeviceVoice=
 deviceVoices[
 Number(savedVoice)
 ];
-
 }
-
 }
 
 if(
@@ -3155,7 +2657,6 @@ window.speechSynthesis.addEventListener(
 "voiceschanged",
 loadDeviceVoices
 );
-
 }
 
 /* ================= DEVICE TTS ================= */
@@ -3285,7 +2786,6 @@ resolve(false);
 
 }
 );
-
 }
 
 /* ================= ELEVENLABS ================= */
@@ -3306,7 +2806,6 @@ currentAudio.currentTime=0;
 }catch(e){}
 
 currentAudio=null;
-
 }
 
 const controller=
@@ -3347,6 +2846,7 @@ signal:
 controller.signal
 
 }
+
 );
 
 if(!response.ok)
@@ -3476,7 +2976,6 @@ timeout
 );
 
 }
-
 }
 
 /* ================= INTERRUZIONE VOCE ================= */
@@ -3494,7 +2993,6 @@ currentAudio.currentTime=0;
 }catch(e){}
 
 currentAudio=null;
-
 }
 
 if(
@@ -3514,7 +3012,6 @@ audioPlaying=false;
 setState(
 "listening"
 );
-
 }
 
 /* ================= SPEAK ================= */
@@ -3545,7 +3042,6 @@ startContinuousRecognition();
 );
 
 }
-
 }
 
 /* ================= VOICE UI ================= */
@@ -3577,7 +3073,6 @@ localStorage.removeItem(
 );
 
 return;
-
 }
 
 const index=
@@ -3818,6 +3313,7 @@ startRecognition();
 
 },
 500
+
 );
 
 }
@@ -3997,11 +3493,17 @@ normalizeCommand(text);
 const activateCommands=[
 
 "attiva modalita conversazione",
+
 "attiva la modalita conversazione",
+
 "modalita conversazione",
+
 "avvia modalita conversazione",
+
 "inizia modalita conversazione",
+
 "conversazione continua",
+
 "attiva conversazione continua"
 
 ];
@@ -4009,9 +3511,13 @@ const activateCommands=[
 const deactivateCommands=[
 
 "disattiva modalita conversazione",
+
 "disattiva la modalita conversazione",
+
 "chiudi modalita conversazione",
+
 "stop modalita conversazione",
+
 "disattiva conversazione continua"
 
 ];
@@ -4025,7 +3531,6 @@ normalized
 activateConversationMode();
 
 return true;
-
 }
 
 if(
@@ -4037,8 +3542,14 @@ normalized
 deactivateConversationMode();
 
 return true;
-
 }
+
+/*
+
+Comando generico:
+
+permette piccole differenze nella frase.
+*/
 
 const hasConversation=
 normalized.includes(
@@ -4075,7 +3586,6 @@ wantsActivate
 activateConversationMode();
 
 return true;
-
 }
 
 if(
@@ -4086,16 +3596,21 @@ wantsDeactivate
 deactivateConversationMode();
 
 return true;
-
 }
 
 return false;
-
 }
 
 /* ================= PROCESS AI ================= */
 
 async function processAi(text){
+
+/*
+
+I comandi locali vengono controllati
+
+prima dell'AI.
+*/
 
 if(
 handleFullscreenCommand(text)
@@ -4324,7 +3839,6 @@ startContinuousRecognition();
 }
 
 }
-
 }
 
 /* ================= INVIO ================= */
@@ -4346,7 +3860,6 @@ text
 processAi(
 text
 );
-
 }
 
 sendBtn.addEventListener(
@@ -4417,8 +3930,6 @@ setState(
 
 updateFullscreenUI();
 
-</script>
+</script>  </body>
 
-</body>
-
-</html>
+</html>  I neuroni alza la quantità

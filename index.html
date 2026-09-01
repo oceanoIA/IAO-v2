@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0">
-
-<title>J.A.R.V.I.S.</title>
-
-<link rel="stylesheet"
-      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
-
-<style>
+<title>J.A.R.V.I.S.</title><link rel="stylesheet"
+      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"><style>
 
 *{
 box-sizing:border-box;
@@ -21,7 +10,8 @@ margin:0;
 padding:0;
 }
 
-html,body{
+html,
+body{
 width:100%;
 height:100%;
 overflow:hidden;
@@ -50,6 +40,7 @@ position:fixed;
 inset:0;
 z-index:3;
 pointer-events:none;
+
 background:
 radial-gradient(
 circle at center,
@@ -65,12 +56,19 @@ top:2.4%;
 left:50%;
 transform:translateX(-50%);
 z-index:30;
+
 color:rgba(255,255,255,.86);
+
 font-size:clamp(20px,2.8vw,31px);
 font-weight:300;
+
 letter-spacing:clamp(5px,1vw,8px);
+
 white-space:nowrap;
-text-shadow:0 0 10px rgba(255,255,255,.12);
+
+text-shadow:
+0 0 10px rgba(255,255,255,.12);
+
 pointer-events:none;
 }
 
@@ -79,11 +77,14 @@ position:fixed;
 top:18px;
 right:24px;
 z-index:30;
+
 display:flex;
 flex-direction:column;
 align-items:flex-end;
 gap:3px;
+
 font-family:monospace;
+
 pointer-events:none;
 }
 
@@ -103,24 +104,37 @@ letter-spacing:1px;
 position:fixed;
 left:50%;
 bottom:92px;
+
 transform:translateX(-50%);
+
 z-index:40;
+
 width:min(620px,88%);
+
 text-align:center;
+
 pointer-events:none;
 }
 
 .msg{
 display:inline-block;
+
 max-width:100%;
+
 padding:10px 18px;
+
 border:1px solid rgba(0,255,255,.22);
 border-radius:24px;
+
 background:rgba(4,20,23,.4);
+
 backdrop-filter:blur(14px);
+
 color:rgba(235,255,255,.9);
+
 font-size:12px;
 line-height:1.45;
+
 white-space:pre-wrap;
 }
 
@@ -128,32 +142,49 @@ white-space:pre-wrap;
 position:fixed;
 left:50%;
 bottom:23px;
+
 transform:translateX(-50%);
+
 z-index:50;
+
 width:min(650px,90%);
+
 display:flex;
 align-items:center;
+
 padding:6px 7px 6px 20px;
+
 border:1px solid rgba(100,255,255,.28);
 border-radius:40px;
+
 background:rgba(5,20,23,.38);
+
 backdrop-filter:blur(20px);
-box-shadow:0 0 30px rgba(0,255,255,.05);
+
+box-shadow:
+0 0 30px rgba(0,255,255,.05);
 }
 
 .command-wrapper:focus-within{
 border-color:rgba(0,255,255,.6);
-box-shadow:0 0 25px rgba(0,255,255,.12);
+
+box-shadow:
+0 0 25px rgba(0,255,255,.12);
 }
 
 #textInput{
 flex:1;
 min-width:0;
+
 border:none;
 outline:none;
+
 background:transparent;
+
 color:white;
+
 font-size:14px;
+
 padding:12px 5px;
 }
 
@@ -164,11 +195,17 @@ color:rgba(255,255,255,.3);
 #micBtn{
 width:34px;
 height:34px;
+
 margin-right:7px;
+
 border:none;
+
 background:transparent;
+
 color:rgba(210,255,255,.65);
+
 cursor:pointer;
+
 display:flex;
 align-items:center;
 justify-content:center;
@@ -177,44 +214,65 @@ justify-content:center;
 .mic-icon{
 width:8px;
 height:14px;
+
 border:1.3px solid currentColor;
 border-radius:60px;
+
 position:relative;
 }
 
 .mic-icon:after{
 content:"";
+
 position:absolute;
+
 left:50%;
 bottom:-6px;
+
 width:12px;
 height:7px;
+
 transform:translateX(-50%);
+
 border:1.3px solid currentColor;
 border-top:none;
-border-radius:0 0 8px 8px;
+
+border-radius:
+0 0 8px 8px;
 }
 
 #micBtn.active{
 color:#8fffff;
-filter:drop-shadow(0 0 8px rgba(0,255,255,.7));
+
+filter:
+drop-shadow(
+0 0 8px rgba(0,255,255,.7)
+);
 }
 
 #sendBtn{
 height:39px;
+
 padding:0 17px;
+
 border:1px solid rgba(0,255,255,.28);
 border-radius:22px;
+
 background:rgba(0,255,255,.05);
+
 color:rgba(220,255,255,.78);
+
 font-size:10px;
 letter-spacing:2px;
+
 cursor:pointer;
 }
 
 #sendBtn:hover{
 color:white;
+
 border-color:#00ffff;
+
 background:rgba(0,255,255,.1);
 }
 
@@ -222,90 +280,145 @@ background:rgba(0,255,255,.1);
 
 #conversationBtn{
 position:fixed;
+
 left:22px;
 bottom:24px;
+
 z-index:60;
+
 height:39px;
+
 padding:0 15px;
+
 border:1px solid rgba(0,255,255,.25);
 border-radius:22px;
+
 background:rgba(3,15,18,.72);
+
 color:rgba(210,255,255,.7);
+
 font-size:10px;
 letter-spacing:1.5px;
+
 cursor:pointer;
+
 backdrop-filter:blur(12px);
 }
 
 #conversationBtn.active{
 color:#8fffff;
-border-color:rgba(0,255,255,.7);
-background:rgba(0,255,255,.08);
-box-shadow:0 0 18px rgba(0,255,255,.12);
+
+border-color:
+rgba(0,255,255,.7);
+
+background:
+rgba(0,255,255,.08);
+
+box-shadow:
+0 0 18px rgba(0,255,255,.12);
 }
 
 /* ================= FULLSCREEN ================= */
 
 #fullscreenBtn{
 position:fixed;
+
 right:22px;
 bottom:24px;
+
 z-index:60;
+
 height:39px;
+
 padding:0 15px;
+
 border:1px solid rgba(0,255,255,.25);
 border-radius:22px;
+
 background:rgba(3,15,18,.72);
+
 color:rgba(210,255,255,.7);
+
 font-size:10px;
 letter-spacing:1.5px;
+
 cursor:pointer;
+
 backdrop-filter:blur(12px);
+
 transition:.2s;
 }
 
 #fullscreenBtn:hover{
 color:white;
+
 border-color:#00ffff;
-background:rgba(0,255,255,.08);
+
+background:
+rgba(0,255,255,.08);
 }
 
 #fullscreenBtn.active{
 color:#8fffff;
-border-color:rgba(0,255,255,.75);
-background:rgba(0,255,255,.09);
-box-shadow:0 0 18px rgba(0,255,255,.14);
+
+border-color:
+rgba(0,255,255,.75);
+
+background:
+rgba(0,255,255,.09);
+
+box-shadow:
+0 0 18px rgba(0,255,255,.14);
 }
 
 /* ================= VOCE ================= */
 
 #voiceBtn{
 position:fixed;
+
 right:22px;
 bottom:74px;
+
 z-index:60;
+
 height:39px;
+
 padding:0 15px;
+
 border:1px solid rgba(0,255,255,.25);
 border-radius:22px;
+
 background:rgba(3,15,18,.72);
+
 color:rgba(210,255,255,.7);
+
 font-size:10px;
 letter-spacing:1.5px;
+
 cursor:pointer;
+
+backdrop-filter:blur(12px);
 }
 
 #voicePanel{
 position:fixed;
+
 right:22px;
 bottom:122px;
+
 z-index:100;
+
 width:min(330px,calc(100% - 30px));
+
 padding:15px;
+
 display:none;
+
 border:1px solid rgba(0,255,255,.25);
 border-radius:18px;
+
 background:rgba(2,13,16,.94);
+
 backdrop-filter:blur(20px);
 }
 
@@ -315,26 +428,37 @@ display:block;
 
 .voice-title{
 color:rgba(220,255,255,.9);
+
 font-size:11px;
 letter-spacing:2px;
+
 margin-bottom:10px;
 }
 
 #voiceSelector,
 #voiceTest{
 width:100%;
+
 padding:10px;
+
 border:1px solid rgba(0,255,255,.2);
 border-radius:10px;
+
 outline:none;
+
 background:rgba(0,20,23,.9);
+
 color:rgba(220,255,255,.85);
+
 font-size:11px;
 }
 
 #voiceTest{
 margin-top:10px;
-background:rgba(0,255,255,.04);
+
+background:
+rgba(0,255,255,.04);
+
 cursor:pointer;
 }
 
@@ -342,9 +466,13 @@ cursor:pointer;
 
 #tacticalMap{
 position:fixed;
+
 inset:0;
+
 z-index:20;
+
 display:none;
+
 background:
 radial-gradient(
 circle at center,
@@ -356,7 +484,9 @@ circle at center,
 
 #tacticalMap.active{
 display:block;
-animation:mapIn .45s ease;
+
+animation:
+mapIn .45s ease;
 }
 
 @keyframes mapIn{
@@ -375,87 +505,142 @@ transform:scale(1);
 
 .map-header{
 position:absolute;
+
 top:2.4%;
 left:50%;
+
 transform:translateX(-50%);
+
 z-index:600;
+
 color:rgba(220,255,255,.9);
+
 font-size:clamp(24px,4vw,42px);
+
 font-weight:300;
-letter-spacing:clamp(6px,1.3vw,12px);
+
+letter-spacing:
+clamp(6px,1.3vw,12px);
+
 white-space:nowrap;
-text-shadow:0 0 12px rgba(0,255,255,.25);
+
+text-shadow:
+0 0 12px rgba(0,255,255,.25);
+
 pointer-events:none;
 }
 
 #map{
 position:absolute;
+
 top:3cm;
 right:3cm;
 bottom:3cm;
 left:3cm;
+
 overflow:hidden;
+
 border-radius:28px;
+
 background:#071012;
+
 box-shadow:
 0 0 35px rgba(0,0,0,.65),
 0 0 70px rgba(0,255,255,.035);
-border:1px solid rgba(0,255,255,.10);
+
+border:
+1px solid rgba(0,255,255,.10);
 }
 
 .map-overlay{
 position:absolute;
+
 inset:0;
+
 z-index:400;
+
 pointer-events:none;
+
 border-radius:28px;
-box-shadow:inset 0 0 80px rgba(0,0,0,.28);
+
+box-shadow:
+inset 0 0 80px rgba(0,0,0,.28);
 }
 
 #closeMap{
 position:absolute;
+
 top:28px;
 left:34px;
+
 z-index:700;
+
 width:38px;
 height:38px;
-border:1px solid rgba(0,255,255,.35);
+
+border:
+1px solid rgba(0,255,255,.35);
+
 border-radius:50%;
-background:rgba(0,15,18,.85);
-color:rgba(200,255,255,.85);
+
+background:
+rgba(0,15,18,.85);
+
+color:
+rgba(200,255,255,.85);
+
 cursor:pointer;
+
 font-size:19px;
+
 display:flex;
 align-items:center;
 justify-content:center;
 }
 
 .maplibregl-ctrl-group{
-background:rgba(0,15,18,.85)!important;
-border:1px solid rgba(0,255,255,.18)!important;
-border-radius:12px!important;
+background:
+rgba(0,15,18,.85)!important;
+
+border:
+1px solid rgba(0,255,255,.18)!important;
+
+border-radius:
+12px!important;
+
 overflow:hidden;
 }
 
 .maplibregl-ctrl-group button{
-background:transparent!important;
+background:
+transparent!important;
 }
 
 .maplibregl-ctrl-attrib{
-background:rgba(0,8,10,.65)!important;
+background:
+rgba(0,8,10,.65)!important;
+
 font-size:8px!important;
 }
 
 .jarvis-map-marker{
 width:20px;
 height:20px;
+
 border-radius:50%;
-border:2px solid #00ffff;
-background:rgba(0,255,255,.16);
+
+border:
+2px solid #00ffff;
+
+background:
+rgba(0,255,255,.16);
+
 box-shadow:
 0 0 15px rgba(0,255,255,.9),
 0 0 35px rgba(0,255,255,.4);
-animation:markerPulse 1.5s infinite;
+
+animation:
+markerPulse 1.5s infinite;
 }
 
 @keyframes markerPulse{
@@ -474,22 +659,32 @@ transform:scale(1.18);
 
 #webSearchWindows{
 position:fixed;
+
 inset:0;
+
 z-index:200;
+
 pointer-events:none;
 }
 
 .web-window{
 position:absolute;
+
 width:620px;
 height:460px;
+
 min-width:300px;
 min-height:220px;
+
 max-width:90vw;
 max-height:80vh;
 
-background:rgba(2,12,15,.97);
-border:1px solid rgba(0,255,255,.35);
+background:
+rgba(2,12,15,.97);
+
+border:
+1px solid rgba(0,255,255,.35);
+
 border-radius:16px;
 
 box-shadow:
@@ -497,6 +692,7 @@ box-shadow:
 0 15px 60px rgba(0,0,0,.6);
 
 overflow:hidden;
+
 pointer-events:auto;
 
 touch-action:none;
@@ -504,18 +700,26 @@ touch-action:none;
 
 .web-window-header{
 position:relative;
+
 height:42px;
+
 display:flex;
 align-items:center;
 
-padding:0 8px 0 13px;
+padding:
+0 8px 0 13px;
 
-background:rgba(0,25,29,.95);
-border-bottom:1px solid rgba(0,255,255,.18);
+background:
+rgba(0,25,29,.95);
+
+border-bottom:
+1px solid rgba(0,255,255,.18);
 
 cursor:grab;
+
 user-select:none;
 -webkit-user-select:none;
+
 touch-action:none;
 }
 
@@ -525,25 +729,35 @@ cursor:grabbing;
 
 .web-window-title{
 flex:1;
+
 min-width:0;
 
-color:rgba(210,255,255,.85);
+color:
+rgba(210,255,255,.85);
+
 font-size:9px;
+
 letter-spacing:1.5px;
 
 white-space:nowrap;
+
 overflow:hidden;
+
 text-overflow:ellipsis;
 }
 
 .web-window-number{
-color:rgba(0,255,255,.5);
+color:
+rgba(0,255,255,.5);
+
 margin-right:8px;
+
 font-size:8px;
 }
 
 .web-window-controls{
 display:flex;
+
 gap:5px;
 }
 
@@ -551,11 +765,16 @@ gap:5px;
 width:27px;
 height:27px;
 
-border:1px solid rgba(0,255,255,.18);
+border:
+1px solid rgba(0,255,255,.18);
+
 border-radius:7px;
 
-background:rgba(0,255,255,.025);
-color:rgba(190,255,255,.7);
+background:
+rgba(0,255,255,.025);
+
+color:
+rgba(190,255,255,.7);
 
 cursor:pointer;
 
@@ -568,18 +787,24 @@ font-size:13px;
 
 .web-window-btn:hover{
 color:white;
+
 border-color:#00ffff;
-background:rgba(0,255,255,.08);
+
+background:
+rgba(0,255,255,.08);
 }
 
 .web-window-content{
 position:absolute;
+
 left:0;
 right:0;
+
 top:42px;
 bottom:0;
 
 background:#071012;
+
 overflow:auto;
 
 -webkit-overflow-scrolling:touch;
@@ -587,82 +812,111 @@ overflow:auto;
 
 .web-search-page{
 padding:25px;
+
 font-family:Arial,sans-serif;
+
 color:white;
 }
 
 .web-search-title{
 font-size:18px;
+
 letter-spacing:2px;
+
 color:#8fffff;
+
 margin-bottom:18px;
 }
 
 .web-search-query{
 font-size:12px;
-color:rgba(220,255,255,.55);
+
+color:
+rgba(220,255,255,.55);
+
 margin-bottom:20px;
 }
 
 .web-result{
 display:block;
+
 padding:15px;
+
 margin-bottom:12px;
 
-border:1px solid rgba(0,255,255,.16);
+border:
+1px solid rgba(0,255,255,.16);
+
 border-radius:12px;
 
-background:rgba(0,255,255,.025);
+background:
+rgba(0,255,255,.025);
 
 text-decoration:none;
+
 color:white;
 
 transition:.2s;
 }
 
 .web-result:hover{
-border-color:rgba(0,255,255,.55);
-background:rgba(0,255,255,.06);
+border-color:
+rgba(0,255,255,.55);
+
+background:
+rgba(0,255,255,.06);
 }
 
 .web-result-title{
 font-size:13px;
+
 color:#8fffff;
+
 margin-bottom:7px;
 }
 
 .web-result-url{
 font-size:9px;
-color:rgba(170,255,255,.45);
+
+color:
+rgba(170,255,255,.45);
+
 margin-bottom:6px;
 }
 
 .web-result-description{
 font-size:10px;
+
 line-height:1.5;
-color:rgba(235,255,255,.7);
+
+color:
+rgba(235,255,255,.7);
 }
 
 .web-window.minimized{
 height:42px!important;
+
 min-height:42px!important;
 }
 
-.web-window.minimized .web-window-content{
+.web-window.minimized
+.web-window-content{
 display:none;
 }
 
 .web-resize-handle{
 position:absolute;
+
 right:0;
 bottom:0;
 
-width:32px;
-height:32px;
+width:34px;
+height:34px;
 
 z-index:20;
 
 cursor:nwse-resize;
+
 touch-action:none;
 
 background:
@@ -682,21 +936,29 @@ transparent 66%
 
 #webSearchIndicator{
 position:fixed;
+
 left:20px;
 bottom:20px;
+
 z-index:210;
 
 display:none;
 
 padding:8px 12px;
 
-border:1px solid rgba(0,255,255,.2);
+border:
+1px solid rgba(0,255,255,.2);
+
 border-radius:15px;
 
-background:rgba(2,15,18,.75);
-color:rgba(180,255,255,.6);
+background:
+rgba(2,15,18,.75);
+
+color:
+rgba(180,255,255,.6);
 
 font-size:8px;
+
 letter-spacing:1.5px;
 
 pointer-events:none;
@@ -706,42 +968,28 @@ pointer-events:none;
 display:block;
 }
 
-@media(max-width:700px){
-
-.web-window{
-width:calc(100vw - 30px);
-height:70vh;
-min-width:280px;
-min-height:220px;
-}
-
-.web-window-content{
-overflow:auto;
-}
-
-.web-search-page{
-padding:18px;
-}
-
-}
-
 /* ================= MOBILE ================= */
 
-@media(max-width:600px){
+@media(max-width:700px){
 
 .jarvis-title{
 top:2.2%;
+
 font-size:23px;
+
 letter-spacing:5px;
 }
 
 .datetime{
 top:12px;
+
 right:13px;
 }
 
 .command-wrapper{
-width:calc(100% - 24px);
+width:
+calc(100% - 24px);
+
 bottom:17px;
 }
 
@@ -758,6 +1006,7 @@ top:3cm;
 right:3cm;
 bottom:3cm;
 left:3cm;
+
 border-radius:22px;
 }
 
@@ -767,13 +1016,16 @@ border-radius:22px;
 
 .map-header{
 top:2.5%;
+
 font-size:23px;
+
 letter-spacing:5px;
 }
 
 #closeMap{
 top:24px;
 left:25px;
+
 width:34px;
 height:34px;
 }
@@ -781,38 +1033,56 @@ height:34px;
 #voiceBtn{
 right:12px;
 bottom:112px;
+
 height:34px;
+
 font-size:9px;
+
 padding:0 11px;
 }
 
 #fullscreenBtn{
 right:12px;
 bottom:70px;
+
 height:34px;
+
 font-size:9px;
+
 padding:0 11px;
 }
 
 #conversationBtn{
 left:12px;
 bottom:70px;
+
 height:34px;
+
 font-size:9px;
+
 padding:0 11px;
 }
 
 #voicePanel{
 right:12px;
 bottom:150px;
-width:calc(100% - 24px);
+
+width:
+calc(100% - 24px);
 }
 
 .web-window{
-width:calc(100vw - 30px);
-height:420px;
-min-width:250px;
-min-height:200px;
+width:
+calc(100vw - 30px);
+
+height:70vh;
+
+min-width:280px;
+min-height:220px;
+}
+
+.web-search-page{
+padding:18px;
 }
 
 }
@@ -828,115 +1098,47 @@ left:2.2cm;
 
 }
 
-/* ================= SCROLLBAR WEB ================= */
-
-.web-window iframe{
-color-scheme:light;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div id="webgl-container"></div>
-
-<div class="vignette"></div>
-
-<div class="jarvis-title" id="jarvisTitle">
+</style></head><body><div id="webgl-container"></div><div class="vignette"></div><div
+class="jarvis-title"
+id="jarvisTitle">
 J.A.R.V.I.S
-</div>
-
-<div class="datetime">
-
-<div id="clock" class="time">
+</div><div class="datetime"><div
+id="clock"
+class="time">
 00:00:00
-</div>
-
-<div id="date" class="date">
+</div><div
+id="date"
+class="date">
 00 AGO 2026
-</div>
-
-</div>
-
-<div id="tacticalMap">
-
-<div id="map"></div>
-
-<div class="map-overlay"></div>
-
-<div class="map-header">
+</div></div><div id="tacticalMap"><div id="map"></div><div class="map-overlay"></div><div class="map-header">
 TACTICAL MAP
-</div>
-
-<button id="closeMap">
+</div><button id="closeMap">
 ×
-</button>
-
-</div>
-
-<div id="webSearchWindows"></div>
-
-<div id="webSearchIndicator">
+</button></div><div id="webSearchWindows"></div><div id="webSearchIndicator">
 WEB WINDOWS: 0
-</div>
-
-<div id="chat"></div>
-
-<div class="command-wrapper">
-
-<input
+</div><div id="chat"></div><div class="command-wrapper"><input
 id="textInput"
 type="text"
 autocomplete="off"
 placeholder="Chiedi qualcosa a JARVIS...">
 
-<button id="micBtn">
-<span class="mic-icon"></span>
-</button>
+<button id="micBtn"><span class="mic-icon"></span>
 
-<button id="sendBtn">
+</button><button id="sendBtn">
 INVIA
-</button>
-
-</div>
-
-<button id="conversationBtn">
+</button></div><button id="conversationBtn">
 ◉ CONVERSAZIONE
-</button>
-
-<button id="fullscreenBtn">
+</button><button id="fullscreenBtn">
 ⛶ FULLSCREEN
-</button>
-
-<button id="voiceBtn">
+</button><button id="voiceBtn">
 ⚙ VOCE
-</button>
-
-<div id="voicePanel">
-
-<div class="voice-title">
+</button><div id="voicePanel"><div class="voice-title">
 VOCE J.A.R.V.I.S.
-</div>
-
-<select id="voiceSelector">
-
-<option value="">
+</div><select id="voiceSelector"><option value="">
 Voce dispositivo automatica
-</option>
-
-</select>
-
-<button id="voiceTest">
+</option></select><button id="voiceTest">
 TESTA VOCE
-</button>
-
-</div>
-
-<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
-
-<script type="importmap">
+</button></div><script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script><script type="importmap">
 
 {
 "imports":{
@@ -944,9 +1146,7 @@ TESTA VOCE
 }
 }
 
-</script>
-
-<script type="module">
+</script><script type="module">
 
 import * as THREE from "three";
 
@@ -964,69 +1164,109 @@ const ELEVEN_VOICE_ID=
 "vkBFlAtUdZqNR4MqxSVr";
 
 let currentAudio=null;
+
 let audioPlaying=false;
 
 let deviceVoices=[];
+
 let selectedDeviceVoice=null;
 
 /* ================= ELEMENTI ================= */
 
 const container=
-document.getElementById("webgl-container");
+document.getElementById(
+"webgl-container"
+);
 
 const chat=
-document.getElementById("chat");
+document.getElementById(
+"chat"
+);
 
 const textInput=
-document.getElementById("textInput");
+document.getElementById(
+"textInput"
+);
 
 const sendBtn=
-document.getElementById("sendBtn");
+document.getElementById(
+"sendBtn"
+);
 
 const micBtn=
-document.getElementById("micBtn");
+document.getElementById(
+"micBtn"
+);
 
 const clock=
-document.getElementById("clock");
+document.getElementById(
+"clock"
+);
 
 const date=
-document.getElementById("date");
+document.getElementById(
+"date"
+);
 
 const tacticalMap=
-document.getElementById("tacticalMap");
+document.getElementById(
+"tacticalMap"
+);
 
 const closeMap=
-document.getElementById("closeMap");
+document.getElementById(
+"closeMap"
+);
 
 const jarvisTitle=
-document.getElementById("jarvisTitle");
+document.getElementById(
+"jarvisTitle"
+);
 
 const mapHeader=
-document.querySelector(".map-header");
+document.querySelector(
+".map-header"
+);
 
 const voiceBtn=
-document.getElementById("voiceBtn");
+document.getElementById(
+"voiceBtn"
+);
 
 const voicePanel=
-document.getElementById("voicePanel");
+document.getElementById(
+"voicePanel"
+);
 
 const voiceSelector=
-document.getElementById("voiceSelector");
+document.getElementById(
+"voiceSelector"
+);
 
 const voiceTest=
-document.getElementById("voiceTest");
+document.getElementById(
+"voiceTest"
+);
 
 const webSearchWindows=
-document.getElementById("webSearchWindows");
+document.getElementById(
+"webSearchWindows"
+);
 
 const webSearchIndicator=
-document.getElementById("webSearchIndicator");
+document.getElementById(
+"webSearchIndicator"
+);
 
 const conversationBtn=
-document.getElementById("conversationBtn");
+document.getElementById(
+"conversationBtn"
+);
 
 const fullscreenBtn=
-document.getElementById("fullscreenBtn");
+document.getElementById(
+"fullscreenBtn"
+);
 
 /* ================= MEMORIA ================= */
 
@@ -1035,15 +1275,21 @@ let memory=[];
 try{
 
 const saved=
-localStorage.getItem(MEMORY_KEY);
+localStorage.getItem(
+MEMORY_KEY
+);
 
 if(saved){
 
 const parsed=
 JSON.parse(saved);
 
-if(Array.isArray(parsed))
-memory=parsed.slice(-MAX_MEMORY);
+if(Array.isArray(parsed)){
+
+memory=
+parsed.slice(-MAX_MEMORY);
+
+}
 
 }
 
@@ -1078,11 +1324,14 @@ e
 
 }
 
-function addMemory(role,content){
-
-memory.push({
+function addMemory(
 role,
 content
+){
+
+memory.push({
+role:role,
+content:content
 });
 
 memory=
@@ -1095,23 +1344,54 @@ saveMemory();
 /* ================= OROLOGIO ================= */
 
 const months=[
-"GEN","FEB","MAR","APR","MAG","GIU",
-"LUG","AGO","SET","OTT","NOV","DIC"
+
+"GEN",
+"FEB",
+"MAR",
+"APR",
+"MAG",
+"GIU",
+"LUG",
+"AGO",
+"SET",
+"OTT",
+"NOV",
+"DIC"
+
 ];
 
 function updateClock(){
 
-const now=new Date();
+const now=
+new Date();
 
 clock.textContent=
-`${String(now.getHours()).padStart(2,"0")}:`+
-`${String(now.getMinutes()).padStart(2,"0")}:`+
-`${String(now.getSeconds()).padStart(2,"0")}`;
+String(
+now.getHours()
+).padStart(2,"0")
++
+":"+
+String(
+now.getMinutes()
+).padStart(2,"0")
++
+":"+
+String(
+now.getSeconds()
+).padStart(2,"0");
 
 date.textContent=
-`${String(now.getDate()).padStart(2,"0")} `+
-`${months[now.getMonth()]} `+
-`${now.getFullYear()}`;
+String(
+now.getDate()
+).padStart(2,"0")
++
+" "+
+months[
+now.getMonth()
+]
++
+" "+
+now.getFullYear();
 
 }
 
@@ -1130,17 +1410,22 @@ new THREE.Scene();
 const camera=
 new THREE.PerspectiveCamera(
 55,
-window.innerWidth/window.innerHeight,
+window.innerWidth/
+window.innerHeight,
 0.1,
 1000
 );
 
-camera.position.z=5.2;
+camera.position.z=
+5.2;
 
 const renderer=
 new THREE.WebGLRenderer({
+
 antialias:true,
+
 alpha:true
+
 });
 
 renderer.setSize(
@@ -1164,13 +1449,17 @@ renderer.domElement
 function createGlow(){
 
 const canvas=
-document.createElement("canvas");
+document.createElement(
+"canvas"
+);
 
 canvas.width=64;
 canvas.height=64;
 
 const ctx=
-canvas.getContext("2d");
+canvas.getContext(
+"2d"
+);
 
 const gradient=
 ctx.createRadialGradient(
@@ -1203,7 +1492,8 @@ gradient.addColorStop(
 "rgba(0,0,0,0)"
 );
 
-ctx.fillStyle=gradient;
+ctx.fillStyle=
+gradient;
 
 ctx.fillRect(
 0,
@@ -1245,7 +1535,11 @@ new Float32Array(
 COUNT
 );
 
-for(let i=0;i<COUNT;i++){
+for(
+let i=0;
+i<COUNT;
+i++
+){
 
 const r=
 1.10+
@@ -1262,25 +1556,31 @@ Math.acos(
 
 radii[i]=r;
 
-angles[i*2]=theta;
+angles[i*2]=
+theta;
 
-angles[i*2+1]=phi;
+angles[i*2+1]=
+phi;
 
 seeds[i]=
 Math.random()*100;
 
-const index=i*3;
+const index=
+i*3;
 
 positions[index]=
-r*Math.sin(phi)*
+r*
+Math.sin(phi)*
 Math.cos(theta);
 
 positions[index+1]=
-r*Math.sin(phi)*
+r*
+Math.sin(phi)*
 Math.sin(theta);
 
 positions[index+2]=
-r*Math.cos(phi);
+r*
+Math.cos(phi);
 
 }
 
@@ -1346,17 +1646,27 @@ normalColor.clone();
 
 function setState(state){
 
-if(state==="thinking")
+if(state==="thinking"){
+
 targetEnergy=2;
 
-else if(state==="speaking")
+}else if(
+state==="speaking"
+){
+
 targetEnergy=.8;
 
-else if(state==="listening")
+}else if(
+state==="listening"
+){
+
 targetEnergy=.55;
 
-else
+}else{
+
 targetEnergy=.15;
+
+}
 
 }
 
@@ -1377,7 +1687,10 @@ energy+=
 
 currentColor.lerp(
 activeColor,
-Math.min(energy*.04,1)
+Math.min(
+energy*.04,
+1
+)
 );
 
 if(energy<.3){
@@ -1397,11 +1710,17 @@ material.size=
 energy*.008;
 
 const pos=
-geometry.attributes.position.array;
+geometry.attributes
+.position.array;
 
-for(let i=0;i<COUNT;i++){
+for(
+let i=0;
+i<COUNT;
+i++
+){
 
-const index=i*3;
+const index=
+i*3;
 
 const r=
 radii[i];
@@ -1488,17 +1807,23 @@ pos[index+2]=z;
 
 }
 
-geometry.attributes.position.needsUpdate=true;
+geometry.attributes
+.position
+.needsUpdate=true;
 
 particles.rotation.y+=
 .0005+
 energy*.0008;
 
 particles.rotation.x=
-Math.sin(time*.25)*.04;
+Math.sin(
+time*.25
+)*.04;
 
 particles.rotation.z=
-Math.cos(time*.18)*.025;
+Math.cos(
+time*.18
+)*.025;
 
 renderer.render(
 scene,
@@ -1525,9 +1850,12 @@ let currentMarker=null;
 
 function initializeMap(){
 
-if(map)return;
+if(map)
+return;
 
-if(typeof maplibregl==="undefined"){
+if(
+typeof maplibregl==="undefined"
+){
 
 addMsg(
 "Errore: MapTiler non disponibile."
@@ -1559,8 +1887,11 @@ antialias:true
 
 map.addControl(
 new maplibregl.NavigationControl({
+
 showCompass:true,
+
 showZoom:true
+
 }),
 "bottom-right"
 );
@@ -1568,7 +1899,9 @@ showZoom:true
 map.on(
 "load",
 ()=>{
+
 map.resize();
+
 }
 );
 
@@ -1590,8 +1923,10 @@ initializeMap();
 
 setTimeout(
 ()=>{
+
 if(map)
 map.resize();
+
 },
 400
 );
@@ -1619,11 +1954,31 @@ closeTacticalMap
 function escapeHtml(text){
 
 return String(text)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+
+.replace(
+/&/g,
+"&amp;"
+)
+
+.replace(
+/</g,
+"&lt;"
+)
+
+.replace(
+/>/g,
+"&gt;"
+)
+
+.replace(
+/"/g,
+"&quot;"
+)
+
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
 
@@ -1632,11 +1987,15 @@ function addMsg(text){
 chat.innerHTML="";
 
 const element=
-document.createElement("div");
+document.createElement(
+"div"
+);
 
-element.className="msg";
+element.className=
+"msg";
 
-element.textContent=text;
+element.textContent=
+text;
 
 chat.appendChild(
 element
@@ -1644,9 +2003,7 @@ element
 
 }
 
-/* =====================================================
-FULLSCREEN
-===================================================== */
+/* ================= FULLSCREEN ================= */
 
 let fullscreenChanging=false;
 
@@ -1672,16 +2029,20 @@ fullscreenChanging=true;
 try{
 
 if(
-document.documentElement.requestFullscreen
+document.documentElement
+.requestFullscreen
 ){
 
-await document.documentElement.requestFullscreen();
+await document.documentElement
+.requestFullscreen();
 
 }else if(
-document.documentElement.webkitRequestFullscreen
+document.documentElement
+.webkitRequestFullscreen
 ){
 
-document.documentElement.webkitRequestFullscreen();
+document.documentElement
+.webkitRequestFullscreen();
 
 }else{
 
@@ -1722,7 +2083,9 @@ async function exitFullscreen(){
 
 try{
 
-if(document.exitFullscreen){
+if(
+document.exitFullscreen
+){
 
 await document.exitFullscreen();
 
@@ -1775,8 +2138,10 @@ active
 
 fullscreenBtn.textContent=
 active
-? "⛶ ESCI FULLSCREEN"
-: "⛶ FULLSCREEN";
+?
+"⛶ ESCI FULLSCREEN"
+:
+"⛶ FULLSCREEN";
 
 }
 
@@ -1799,8 +2164,10 @@ updateFullscreenUI();
 
 setTimeout(
 ()=>{
+
 if(map)
 map.resize();
+
 },
 100
 );
@@ -1816,8 +2183,10 @@ updateFullscreenUI();
 
 setTimeout(
 ()=>{
+
 if(map)
 map.resize();
+
 },
 100
 );
@@ -1825,34 +2194,36 @@ map.resize();
 }
 );
 
-/* =====================================================
-NORMALIZZAZIONE COMANDI
-===================================================== */
+/* ================= NORMALIZZAZIONE ================= */
 
 function normalizeCommand(text){
 
 return String(text)
+
 .toLowerCase()
+
 .normalize("NFD")
+
 .replace(
 /[\u0300-\u036f]/g,
 ""
 )
+
 .replace(
 /[.,!?;:]/g,
 " "
 )
+
 .replace(
 /\s+/g,
 " "
 )
+
 .trim();
 
 }
 
-/* =====================================================
-COMANDI FULLSCREEN
-===================================================== */
+/* ================= FULLSCREEN COMMAND ================= */
 
 function handleFullscreenCommand(text){
 
@@ -1861,38 +2232,32 @@ normalizeCommand(text);
 
 const simplified=
 normalized
+
 .replace(
 /\bper favore\b/g,
 ""
 )
+
 .replace(
 /\bjarvis\b/g,
 ""
 )
-.replace(
-/\bla modalita\b/g,
-"modalita"
-)
-.replace(
-/\bla modalita di\b/g,
-"modalita"
-)
+
 .replace(
 /\bmodalita a\b/g,
 "modalita"
 )
-.replace(
-/\bmodalita dello\b/g,
-"modalita"
-)
+
 .replace(
 /\bmodalita dello schermo\b/g,
 "modalita schermo"
 )
+
 .replace(
 /\s+/g,
 " "
 )
+
 .trim();
 
 const activatePatterns=[
@@ -1907,7 +2272,6 @@ const activatePatterns=[
 "attiva schermo intero",
 "metti fullscreen",
 "metti in fullscreen",
-"metti a fullscreen",
 "vai fullscreen",
 "vai in fullscreen",
 "fullscreen",
@@ -1986,26 +2350,42 @@ return true;
 }
 
 const hasFullscreenWord=
-simplified.includes("fullscreen") ||
-simplified.includes("full screen") ||
-simplified.includes("schermo intero");
+simplified.includes(
+"fullscreen"
+)
+||
+simplified.includes(
+"full screen"
+)
+||
+simplified.includes(
+"schermo intero"
+);
 
 const wantsActivate=
-simplified.includes("attiva") ||
-simplified.includes("avvia") ||
-simplified.includes("inizia") ||
-simplified.includes("metti") ||
-simplified.includes("passa") ||
+simplified.includes("attiva")
+||
+simplified.includes("avvia")
+||
+simplified.includes("inizia")
+||
+simplified.includes("metti")
+||
+simplified.includes("passa")
+||
 simplified.includes("vai");
 
 const wantsDeactivate=
-simplified.includes("disattiva") ||
-simplified.includes("chiudi") ||
-simplified.includes("esci") ||
+simplified.includes("disattiva")
+||
+simplified.includes("chiudi")
+||
+simplified.includes("esci")
+||
 simplified.includes("torna");
 
 if(
-hasFullscreenWord &&
+hasFullscreenWord&&
 wantsActivate
 ){
 
@@ -2016,7 +2396,7 @@ return true;
 }
 
 if(
-hasFullscreenWord &&
+hasFullscreenWord&&
 wantsDeactivate
 ){
 
@@ -2038,7 +2418,8 @@ lon,
 name
 ){
 
-if(!map)return;
+if(!map)
+return;
 
 if(currentMarker){
 
@@ -2049,7 +2430,9 @@ currentMarker=null;
 }
 
 const markerElement=
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 markerElement.className=
 "jarvis-map-marker";
@@ -2062,18 +2445,30 @@ element:markerElement,
 anchor:"center"
 
 })
+
 .setLngLat([
 lon,
 lat
 ])
+
 .setPopup(
+
 new maplibregl.Popup({
 offset:15
 })
+
 .setHTML(
-`<b style="color:#00ffff">${escapeHtml(name)}</b>`
+
+"<b style=\"color:#00ffff\">"
++
+escapeHtml(name)
++
+"</b>"
+
 )
+
 )
+
 .addTo(map);
 
 currentMarker.togglePopup();
@@ -2133,10 +2528,14 @@ const result=
 results[0];
 
 const lat=
-parseFloat(result.lat);
+parseFloat(
+result.lat
+);
 
 const lon=
-parseFloat(result.lon);
+parseFloat(
+result.lon
+);
 
 if(!map)
 throw new Error(
@@ -2199,19 +2598,27 @@ if(
 
 normalized.includes(
 "apri la mappa"
-) ||
+)
+
+||
 
 normalized.includes(
 "apri mappa"
-) ||
+)
+
+||
 
 normalized.includes(
 "mappa tattica"
-) ||
+)
+
+||
 
 normalized.includes(
 "modalita tattica"
-) ||
+)
+
+||
 
 normalized.includes(
 "attiva la mappa"
@@ -2233,15 +2640,21 @@ if(
 
 normalized.includes(
 "chiudi la mappa"
-) ||
+)
+
+||
 
 normalized.includes(
 "chiudi mappa"
-) ||
+)
+
+||
 
 normalized.includes(
 "esci dalla mappa"
-) ||
+)
+
+||
 
 normalized.includes(
 "torna alla modalita normale"
@@ -2307,9 +2720,7 @@ return false;
 
 }
 
-/* =====================================================
-WEB WINDOWS
-===================================================== */
+/* ================= WEB WINDOWS ================= */
 
 let webWindowCounter=0;
 
@@ -2326,7 +2737,8 @@ webSearchWindows
 
 if(count>0){
 
-webSearchIndicator.classList.add(
+webSearchIndicator
+.classList.add(
 "active"
 );
 
@@ -2336,7 +2748,8 @@ count;
 
 }else{
 
-webSearchIndicator.classList.remove(
+webSearchIndicator
+.classList.remove(
 "active"
 );
 
@@ -2357,9 +2770,7 @@ highestWebZ
 
 }
 
-/* =====================================================
-CREA FINESTRA WEB
-===================================================== */
+/* ================= CREA FINESTRA WEB ================= */
 
 function openWebSearch(query){
 
@@ -2369,7 +2780,9 @@ return;
 webWindowCounter++;
 
 const windowElement=
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 windowElement.className=
 "web-window";
@@ -2378,10 +2791,10 @@ const offset=
 (webWindowCounter-1)%5;
 
 windowElement.style.left=
-(30+offset*45)+"px";
+(20+offset*35)+"px";
 
 windowElement.style.top=
-(80+offset*35)+"px";
+(80+offset*30)+"px";
 
 windowElement.style.zIndex=
 String(
@@ -2390,10 +2803,6 @@ String(
 
 const safeTitle=
 escapeHtml(query);
-
-const searchUrl=
-"https://www.google.com/search?igu=1&q="+
-encodeURIComponent(query);
 
 windowElement.innerHTML=`
 
@@ -2412,38 +2821,42 @@ ${safeTitle}
 <div class="web-window-controls">
 
 <button
-class="web-window-btn open-web"
-title="Apri nel browser">
-
-↗
-
-</button>
-
-<button
 class="web-window-btn minimize-web"
 title="Minimizza">
-
 −
-
 </button>
 
 <button
 class="web-window-btn close-web"
 title="Chiudi">
-
 ×
-
 </button>
 
 </div>
 
 </div>
 
-<iframe
-title="Ricerca web ${safeTitle}"
-loading="eager"
-referrerpolicy="no-referrer">
-</iframe>
+<div class="web-window-content">
+
+<div class="web-search-page">
+
+<div class="web-search-title">
+RICERCA WEB
+</div>
+
+<div class="web-search-query">
+Ricerca: ${safeTitle}
+</div>
+
+<div id="webResults-${webWindowCounter}">
+Caricamento risultati...
+</div>
+
+</div>
+
+</div>
+
+<div class="web-resize-handle"></div>
 
 `;
 
@@ -2451,40 +2864,222 @@ webSearchWindows.appendChild(
 windowElement
 );
 
-const iframe=
-windowElement.querySelector(
-"iframe"
-);
-
-iframe.src=
-searchUrl;
-
-windowElement.addEventListener(
-"pointerdown",
-()=>{
 bringWebWindowToFront(
 windowElement
 );
+
+const resultsContainer=
+windowElement.querySelector(
+"#webResults-"+
+webWindowCounter
+);
+
+/* ================= RICERCA ================= */
+
+fetch(
+
+"https://api.duckduckgo.com/?q="+
+encodeURIComponent(query)+
+"&format=json&no_html=1&skip_disambig=1"
+
+)
+
+.then(
+response=>
+response.json()
+)
+
+.then(
+data=>{
+
+resultsContainer.innerHTML="";
+
+let results=[];
+
+if(data.AbstractText){
+
+results.push({
+
+title:
+data.Heading||
+query,
+
+url:
+data.AbstractURL||
+"#",
+
+description:
+data.AbstractText
+
+});
+
+}
+
+if(
+Array.isArray(
+data.RelatedTopics
+)
+){
+
+data.RelatedTopics
+.forEach(
+topic=>{
+
+if(
+topic&&
+topic.FirstURL&&
+topic.Text
+){
+
+results.push({
+
+title:
+topic.Text.substring(
+0,
+100
+),
+
+url:
+topic.FirstURL,
+
+description:
+topic.Text
+
+});
+
+}
+
 }
 );
 
-/* ================= APRI BROWSER ================= */
+}
 
-const openButton=
-windowElement.querySelector(
-".open-web"
+if(!results.length){
+
+resultsContainer.innerHTML=`
+
+<div class="web-result">
+
+<div class="web-result-title">
+Nessun risultato diretto
+</div>
+
+<div class="web-result-description">
+
+La ricerca non ha restituito
+risultati leggibili direttamente.
+
+</div>
+
+</div>
+
+<a
+class="web-result"
+target="_blank"
+rel="noopener noreferrer"
+href="https://www.google.com/search?q=${encodeURIComponent(query)}">
+
+<div class="web-result-title">
+APRI RICERCA COMPLETA
+</div>
+
+<div class="web-result-url">
+Google
+</div>
+
+<div class="web-result-description">
+Apri i risultati completi nel browser.
+</div>
+
+</a>
+
+`;
+
+return;
+
+}
+
+results
+.slice(0,8)
+.forEach(
+result=>{
+
+const resultElement=
+document.createElement(
+"a"
 );
 
-openButton.addEventListener(
-"click",
-event=>{
+resultElement.className=
+"web-result";
 
-event.stopPropagation();
+resultElement.href=
+result.url;
 
-window.open(
-searchUrl,
-"_blank"
+resultElement.target=
+"_blank";
+
+resultElement.rel=
+"noopener noreferrer";
+
+resultElement.innerHTML=`
+
+<div class="web-result-title">
+${escapeHtml(result.title)}
+</div>
+
+<div class="web-result-url">
+${escapeHtml(result.url)}
+</div>
+
+<div class="web-result-description">
+${escapeHtml(result.description)}
+</div>
+
+`;
+
+resultsContainer.appendChild(
+resultElement
 );
+
+}
+);
+
+}
+)
+
+.catch(
+error=>{
+
+console.error(
+"Ricerca web:",
+error
+);
+
+resultsContainer.innerHTML=`
+
+<a
+class="web-result"
+target="_blank"
+rel="noopener noreferrer"
+href="https://www.google.com/search?q=${encodeURIComponent(query)}">
+
+<div class="web-result-title">
+APRI RICERCA NEL BROWSER
+</div>
+
+<div class="web-result-url">
+Google
+</div>
+
+<div class="web-result-description">
+La ricerca interna non è disponibile.
+Tocca qui per aprire la ricerca
+direttamente nel browser.
+</div>
+
+</a>
+
+`;
 
 }
 );
@@ -2529,6 +3124,19 @@ updateWebIndicator();
 }
 );
 
+/* ================= PORTA DAVANTI ================= */
+
+windowElement.addEventListener(
+"pointerdown",
+()=>{
+
+bringWebWindowToFront(
+windowElement
+);
+
+}
+);
+
 /* ================= TRASCINAMENTO ================= */
 
 const header=
@@ -2550,11 +3158,8 @@ if(
 event.target.closest(
 ".web-window-btn"
 )
-){
-
+)
 return;
-
-}
 
 dragging=true;
 
@@ -2563,7 +3168,8 @@ windowElement
 );
 
 const rect=
-windowElement.getBoundingClientRect();
+windowElement
+.getBoundingClientRect();
 
 dragOffsetX=
 event.clientX-
@@ -2598,51 +3204,39 @@ return;
 
 event.preventDefault();
 
-let newLeft=
+let left=
 event.clientX-
 dragOffsetX;
 
-let newTop=
+let top=
 event.clientY-
 dragOffsetY;
 
 const rect=
-windowElement.getBoundingClientRect();
+windowElement
+.getBoundingClientRect();
 
-const minLeft=
--rect.width+100;
-
-const maxLeft=
-window.innerWidth-80;
-
-const minTop=0;
-
-const maxTop=
-window.innerHeight-60;
-
-newLeft=
-Math.max(
-minLeft,
+left=Math.max(
+-rect.width+100,
 Math.min(
-newLeft,
-maxLeft
+left,
+window.innerWidth-100
 )
 );
 
-newTop=
-Math.max(
-minTop,
+top=Math.max(
+0,
 Math.min(
-newTop,
-maxTop
+top,
+window.innerHeight-60
 )
 );
 
 windowElement.style.left=
-newLeft+"px";
+left+"px";
 
 windowElement.style.top=
-newTop+"px";
+top+"px";
 
 },
 {
@@ -2651,9 +3245,6 @@ passive:false
 );
 
 function stopDragging(event){
-
-if(!dragging)
-return;
 
 dragging=false;
 
@@ -2677,10 +3268,143 @@ header.addEventListener(
 stopDragging
 );
 
-header.addEventListener(
-"lostpointercapture",
+/* ================= RIDIMENSIONAMENTO ================= */
+
+const resizeHandle=
+windowElement.querySelector(
+".web-resize-handle"
+);
+
+let resizing=false;
+
+let startX=0;
+
+let startY=0;
+
+let startWidth=0;
+
+let startHeight=0;
+
+resizeHandle.addEventListener(
+"pointerdown",
+event=>{
+
+event.preventDefault();
+
+event.stopPropagation();
+
+resizing=true;
+
+bringWebWindowToFront(
+windowElement
+);
+
+const rect=
+windowElement
+.getBoundingClientRect();
+
+startX=
+event.clientX;
+
+startY=
+event.clientY;
+
+startWidth=
+rect.width;
+
+startHeight=
+rect.height;
+
+try{
+
+resizeHandle.setPointerCapture(
+event.pointerId
+);
+
+}catch(e){}
+
+},
+{
+passive:false
+}
+);
+
+resizeHandle.addEventListener(
+"pointermove",
+event=>{
+
+if(!resizing)
+return;
+
+event.preventDefault();
+
+const deltaX=
+event.clientX-
+startX;
+
+const deltaY=
+event.clientY-
+startY;
+
+let width=
+startWidth+
+deltaX;
+
+let height=
+startHeight+
+deltaY;
+
+width=Math.max(
+300,
+Math.min(
+width,
+window.innerWidth*.9
+)
+);
+
+height=Math.max(
+220,
+Math.min(
+height,
+window.innerHeight*.8
+)
+);
+
+windowElement.style.width=
+width+"px";
+
+windowElement.style.height=
+height+"px";
+
+},
+{
+passive:false
+}
+);
+
+resizeHandle.addEventListener(
+"pointerup",
+event=>{
+
+resizing=false;
+
+try{
+
+resizeHandle.releasePointerCapture(
+event.pointerId
+);
+
+}catch(e){}
+
+}
+);
+
+resizeHandle.addEventListener(
+"pointercancel",
 ()=>{
-dragging=false;
+
+resizing=false;
+
 }
 );
 
@@ -2759,13 +3483,23 @@ normalizeCommand(text);
 
 if(
 
-normalized==="chiudi le ricerche web" ||
+normalized===
+"chiudi le ricerche web"
 
-normalized==="chiudi ricerca web" ||
+||
 
-normalized==="chiudi tutte le ricerche" ||
+normalized===
+"chiudi ricerca web"
 
-normalized==="chiudi tutte le finestre web"
+||
+
+normalized===
+"chiudi tutte le ricerche"
+
+||
+
+normalized===
+"chiudi tutte le finestre web"
 
 ){
 
@@ -2783,9 +3517,13 @@ return true;
 
 if(
 
-normalized==="minimizza le ricerche web" ||
+normalized===
+"minimizza le ricerche web"
 
-normalized==="minimizza tutte le ricerche"
+||
+
+normalized===
+"minimizza tutte le ricerche"
 
 ){
 
@@ -2899,7 +3637,9 @@ option.value=
 String(index);
 
 option.textContent=
-`${voice.name} — ${voice.lang}`;
+voice.name+
+" — "+
+voice.lang;
 
 voiceSelector.appendChild(
 option
@@ -2916,7 +3656,6 @@ localStorage.getItem(
 if(
 
 savedVoice!==null&&
-
 Number(savedVoice)<
 deviceVoices.length
 
@@ -2940,7 +3679,8 @@ if(
 
 loadDeviceVoices();
 
-window.speechSynthesis.addEventListener(
+window.speechSynthesis
+.addEventListener(
 "voiceschanged",
 loadDeviceVoices
 );
@@ -3202,7 +3942,8 @@ audioUrl
 );
 
 if(
-currentAudio===audio
+currentAudio===
+audio
 )
 currentAudio=null;
 
@@ -3378,7 +4119,6 @@ Number(value);
 if(
 
 Number.isInteger(index)&&
-
 deviceVoices[index]
 
 ){
@@ -3409,15 +4149,11 @@ loadDeviceVoices();
 }
 );
 
-/* =====================================================
-MODALITÀ CONVERSAZIONE CONTINUA
-===================================================== */
+/* ================= CONVERSAZIONE ================= */
 
 let conversationMode=false;
 
 let conversationStarting=false;
-
-/* ================= RICONOSCIMENTO ================= */
 
 const Recognition=
 window.SpeechRecognition||
@@ -3565,8 +4301,7 @@ startContinuousRecognition();
 
 }else{
 
-recognitionStopping=
-false;
+recognitionStopping=false;
 
 if(!conversationMode)
 setState(
@@ -3585,8 +4320,7 @@ return;
 if(listening)
 return;
 
-recognitionStopping=
-false;
+recognitionStopping=false;
 
 try{
 
@@ -3618,8 +4352,7 @@ function stopRecognition(){
 if(!recognition)
 return;
 
-recognitionStopping=
-true;
+recognitionStopping=true;
 
 try{
 
@@ -3649,11 +4382,9 @@ startRecognition();
 
 function stopContinuousRecognition(){
 
-conversationMode=
-false;
+conversationMode=false;
 
-recognitionStopping=
-true;
+recognitionStopping=true;
 
 try{
 
@@ -3686,8 +4417,7 @@ function activateConversationMode(){
 if(conversationMode)
 return;
 
-conversationMode=
-true;
+conversationMode=true;
 
 conversationBtn.classList.add(
 "active"
@@ -3775,9 +4505,7 @@ conversationBtn.style.opacity=
 
 }
 
-/* =====================================================
-COMANDI MODALITÀ CONVERSAZIONE
-===================================================== */
+/* ================= COMANDI CONVERSAZIONE ================= */
 
 function handleConversationCommand(text){
 
@@ -3838,10 +4566,12 @@ normalized.includes(
 const wantsActivate=
 normalized.includes(
 "attiva"
-) ||
+)
+||
 normalized.includes(
 "avvia"
-) ||
+)
+||
 normalized.includes(
 "inizia"
 );
@@ -3849,10 +4579,12 @@ normalized.includes(
 const wantsDeactivate=
 normalized.includes(
 "disattiva"
-) ||
+)
+||
 normalized.includes(
 "chiudi"
-) ||
+)
+||
 normalized.includes(
 "stop"
 );
@@ -4038,9 +4770,12 @@ const data=
 await response.json();
 
 const reply=
-typeof data.response==="string"
-?data.response.trim()
-:"";
+typeof data.response===
+"string"
+?
+data.response.trim()
+:
+"";
 
 if(!reply)
 throw new Error(
@@ -4078,14 +4813,16 @@ error.message||
 "Errore sconosciuto";
 
 if(
-error.name==="AbortError"
+error.name===
+"AbortError"
 ){
 
 message=
 "Il server ha impiegato troppo tempo a rispondere.";
 
 }else if(
-message==="Failed to fetch"
+message===
+"Failed to fetch"
 ){
 
 message=
@@ -4148,7 +4885,10 @@ textInput.addEventListener(
 "keydown",
 event=>{
 
-if(event.key==="Enter"){
+if(
+event.key===
+"Enter"
+){
 
 event.preventDefault();
 
@@ -4207,8 +4947,4 @@ setState(
 
 updateFullscreenUI();
 
-</script>
-
-</body>
-
-</html>
+</script></body></html>

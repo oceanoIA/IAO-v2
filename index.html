@@ -6,12 +6,12 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+      content="width=device-width,initial-scale=1.0">
 
 <title>J.A.R.V.I.S.</title>
 
 <link rel="stylesheet"
-href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
+      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
 
 <style>
 
@@ -44,12 +44,6 @@ circle at center,
 );
 }
 
-button,
-input,
-select{
-font-family:inherit;
-}
-
 /* =====================================================
    WEBGL
 ===================================================== */
@@ -58,6 +52,12 @@ font-family:inherit;
 position:fixed;
 inset:0;
 z-index:1;
+}
+
+#webgl-container canvas{
+display:block;
+width:100%;
+height:100%;
 }
 
 .vignette{
@@ -223,6 +223,7 @@ box-shadow:
 }
 
 .command-wrapper:focus-within{
+
 border-color:
 rgba(0,255,255,.6);
 
@@ -231,10 +232,13 @@ box-shadow:
 }
 
 #textInput{
+
 flex:1;
+
 min-width:0;
 
 border:none;
+
 outline:none;
 
 background:transparent;
@@ -247,6 +251,7 @@ padding:12px 5px;
 }
 
 #textInput::placeholder{
+
 color:
 rgba(255,255,255,.3);
 }
@@ -256,6 +261,7 @@ rgba(255,255,255,.3);
 ===================================================== */
 
 #micBtn{
+
 width:34px;
 height:34px;
 
@@ -276,6 +282,7 @@ justify-content:center;
 }
 
 .mic-icon{
+
 width:8px;
 height:14px;
 
@@ -288,6 +295,7 @@ position:relative;
 }
 
 .mic-icon:after{
+
 content:"";
 
 position:absolute;
@@ -310,6 +318,7 @@ border-radius:
 }
 
 #micBtn.active{
+
 color:#8fffff;
 
 filter:
@@ -323,6 +332,7 @@ drop-shadow(
 ===================================================== */
 
 #sendBtn{
+
 height:39px;
 
 padding:0 17px;
@@ -346,6 +356,7 @@ cursor:pointer;
 }
 
 #sendBtn:hover{
+
 color:white;
 
 border-color:#00ffff;
@@ -417,6 +428,7 @@ bottom:74px;
 #fullscreenBtn:hover,
 #voiceBtn:hover,
 #controlBtn:hover{
+
 color:white;
 
 border-color:#00ffff;
@@ -425,7 +437,9 @@ background:
 rgba(0,255,255,.08);
 }
 
-#conversationBtn.active{
+#conversationBtn.active,
+#fullscreenBtn.active{
+
 color:#8fffff;
 
 border-color:
@@ -466,12 +480,12 @@ border:
 border-radius:18px;
 
 background:
-rgba(2,13,16,.94);
+rgba(2,13,16,.96);
 
 backdrop-filter:blur(20px);
 
 box-shadow:
-0 20px 60px rgba(0,0,0,.55);
+0 15px 50px rgba(0,0,0,.5);
 }
 
 #voicePanel.active{
@@ -479,6 +493,7 @@ display:block;
 }
 
 .voice-title{
+
 color:
 rgba(220,255,255,.9);
 
@@ -491,6 +506,7 @@ margin-bottom:10px;
 
 #voiceSelector,
 #voiceTest{
+
 width:100%;
 
 padding:10px;
@@ -512,6 +528,7 @@ font-size:11px;
 }
 
 #voiceTest{
+
 margin-top:10px;
 
 background:
@@ -528,106 +545,154 @@ cursor:pointer;
 
 position:fixed;
 
-inset:0;
+top:50%;
+
+left:50%;
+
+transform:
+translate(-50%,-50%)
+scale(.96);
+
+width:min(
+760px,
+calc(100vw - 30px)
+);
+
+max-height:
+calc(100vh - 80px);
+
+overflow:auto;
 
 z-index:500;
 
 display:none;
 
-align-items:center;
-
-justify-content:center;
-
-background:
-rgba(0,4,6,.66);
-
-backdrop-filter:blur(10px);
-}
-
-#controlCenter.active{
-display:flex;
-}
-
-.control-panel{
-
-position:relative;
-
-width:min(850px,92vw);
-
-height:min(650px,88vh);
+padding:22px;
 
 border:
-1px solid rgba(0,255,255,.35);
+1px solid rgba(0,255,255,.3);
 
 border-radius:24px;
 
 background:
-linear-gradient(
-145deg,
-rgba(3,20,24,.98),
-rgba(1,8,11,.98)
-);
+rgba(2,12,15,.96);
+
+backdrop-filter:blur(25px);
 
 box-shadow:
-0 0 50px rgba(0,255,255,.08),
-0 30px 100px rgba(0,0,0,.75);
-
-overflow:hidden;
-
-display:flex;
-
-flex-direction:column;
+0 0 50px rgba(0,255,255,.1),
+0 25px 100px rgba(0,0,0,.7);
 }
 
-.control-header{
+#controlCenter.active{
 
-height:72px;
+display:block;
 
-min-height:72px;
-
-display:flex;
-
-align-items:center;
-
-padding:0 24px;
-
-border-bottom:
-1px solid rgba(0,255,255,.18);
-
-background:
-rgba(0,25,29,.55);
+animation:
+controlIn .2s ease forwards;
 }
 
-.control-heading{
-flex:1;
+@keyframes controlIn{
+
+from{
+opacity:0;
+transform:
+translate(-50%,-50%)
+scale(.96);
+}
+
+to{
+opacity:1;
+transform:
+translate(-50%,-50%)
+scale(1);
+}
 }
 
 .control-title{
 
-color:
-rgba(235,255,255,.95);
-
-font-size:17px;
+font-size:20px;
 
 letter-spacing:4px;
+
+color:
+rgba(230,255,255,.92);
+
+margin-bottom:5px;
 }
 
 .control-subtitle{
 
-margin-top:5px;
-
-color:
-rgba(100,220,220,.45);
-
-font-size:8px;
+font-size:9px;
 
 letter-spacing:2px;
+
+color:
+rgba(0,255,255,.45);
+
+margin-bottom:20px;
 }
 
-#closeControl{
+.control-grid{
 
-width:38px;
-height:38px;
+display:grid;
+
+grid-template-columns:
+repeat(2,minmax(0,1fr));
+
+gap:12px;
+}
+
+.control-card{
+
+min-height:105px;
+
+padding:16px;
+
+border:
+1px solid rgba(0,255,255,.14);
+
+border-radius:15px;
+
+background:
+rgba(0,255,255,.025);
+}
+
+.control-card h3{
+
+font-size:10px;
+
+letter-spacing:2px;
+
+color:
+rgba(0,255,255,.75);
+
+margin-bottom:12px;
+}
+
+.control-card p{
+
+font-family:monospace;
+
+font-size:11px;
+
+line-height:1.8;
+
+color:
+rgba(220,255,255,.65);
+}
+
+.control-close{
+
+position:absolute;
+
+top:15px;
+
+right:15px;
+
+width:32px;
+
+height:32px;
 
 border:
 1px solid rgba(0,255,255,.25);
@@ -638,482 +703,51 @@ background:
 rgba(0,255,255,.04);
 
 color:
-rgba(210,255,255,.75);
-
-font-size:20px;
+rgba(220,255,255,.8);
 
 cursor:pointer;
 }
 
-.control-content{
+/* =====================================================
+   MEMORY
+===================================================== */
 
-flex:1;
+.memory-actions{
 
-min-height:0;
-
-display:flex;
-}
-
-.control-sidebar{
-
-width:190px;
-
-padding:15px;
-
-border-right:
-1px solid rgba(0,255,255,.14);
-
-overflow-y:auto;
-}
-
-.control-tab{
-
-width:100%;
-
-height:45px;
-
-margin-bottom:7px;
-
-border:
-1px solid transparent;
-
-border-radius:11px;
-
-background:
-transparent;
-
-color:
-rgba(190,240,240,.55);
-
-text-align:left;
-
-padding:0 14px;
-
-font-size:10px;
-
-letter-spacing:1.5px;
-
-cursor:pointer;
-
-transition:.2s;
-}
-
-.control-tab:hover{
-
-background:
-rgba(0,255,255,.045);
-
-color:
-rgba(220,255,255,.9);
-}
-
-.control-tab.active{
-
-border-color:
-rgba(0,255,255,.24);
-
-background:
-rgba(0,255,255,.08);
-
-color:#9fffff;
-
-box-shadow:
-inset 3px 0 rgba(0,255,255,.7);
-}
-
-.control-main{
-
-flex:1;
-
-min-width:0;
-
-overflow-y:auto;
-
-padding:24px;
-}
-
-.control-section{
-display:none;
-}
-
-.control-section.active{
-display:block;
-}
-
-.section-title{
-
-color:
-rgba(220,255,255,.9);
-
-font-size:13px;
-
-letter-spacing:2px;
-
-margin-bottom:18px;
-}
-
-.status-grid{
-
-display:grid;
-
-grid-template-columns:
-repeat(2,minmax(0,1fr));
-
-gap:12px;
-}
-
-.status-card{
-
-padding:16px;
-
-border:
-1px solid rgba(0,255,255,.14);
-
-border-radius:15px;
-
-background:
-rgba(0,255,255,.025);
-}
-
-.status-label{
-
-color:
-rgba(150,230,230,.42);
-
-font-size:8px;
-
-letter-spacing:1.5px;
-
-margin-bottom:8px;
-}
-
-.status-value{
-
-color:
-rgba(220,255,255,.88);
-
-font-size:13px;
-
-word-break:break-word;
-}
-
-.status-online{
-color:#7fffff;
-}
-
-.status-offline{
-color:#ff8888;
-}
-
-.control-info{
-
-padding:16px;
-
-margin-bottom:12px;
-
-border:
-1px solid rgba(0,255,255,.13);
-
-border-radius:15px;
-
-background:
-rgba(0,255,255,.025);
-
-color:
-rgba(210,250,250,.7);
-
-font-size:11px;
-
-line-height:1.6;
-}
-
-.control-action{
-
-width:100%;
-
-height:42px;
-
-margin-top:10px;
-
-border:
-1px solid rgba(0,255,255,.25);
-
-border-radius:11px;
-
-background:
-rgba(0,255,255,.045);
-
-color:
-rgba(210,255,255,.75);
-
-cursor:pointer;
-
-font-size:9px;
-
-letter-spacing:1.5px;
-}
-
-.control-action:hover{
-
-border-color:#00ffff;
-
-color:white;
-
-background:
-rgba(0,255,255,.09);
-}
-
-.danger-action{
-
-border-color:
-rgba(255,90,90,.28);
-
-color:
-rgba(255,170,170,.75);
-}
-
-.danger-action:hover{
-
-border-color:
-rgba(255,90,90,.7);
-
-background:
-rgba(255,60,60,.07);
-}
-
-.memory-list{
-
-max-height:310px;
-
-overflow-y:auto;
-
-margin-top:12px;
-}
-
-.memory-item{
-
-padding:11px;
-
-margin-bottom:7px;
-
-border:
-1px solid rgba(0,255,255,.1);
-
-border-radius:10px;
-
-background:
-rgba(0,0,0,.15);
-
-font-size:10px;
-
-line-height:1.5;
-}
-
-.memory-role{
-
-color:
-rgba(0,255,255,.55);
-
-font-size:8px;
-
-letter-spacing:1px;
-
-margin-bottom:4px;
-}
-
-.memory-content{
-
-color:
-rgba(220,250,250,.7);
-
-word-break:break-word;
-}
-
-.setting-row{
+margin-top:15px;
 
 display:flex;
 
-align-items:center;
+gap:8px;
 
-justify-content:space-between;
-
-gap:15px;
-
-padding:15px 0;
-
-border-bottom:
-1px solid rgba(0,255,255,.08);
+flex-wrap:wrap;
 }
 
-.setting-name{
+.memory-button{
 
-color:
-rgba(220,255,255,.78);
-
-font-size:10px;
-}
-
-.setting-desc{
-
-margin-top:4px;
-
-color:
-rgba(150,220,220,.4);
-
-font-size:8px;
-}
-
-.toggle{
-
-width:45px;
-height:24px;
-
-border-radius:20px;
+padding:9px 12px;
 
 border:
 1px solid rgba(0,255,255,.2);
 
-background:
-rgba(0,0,0,.25);
-
-cursor:pointer;
-
-position:relative;
-}
-
-.toggle:after{
-
-content:"";
-
-position:absolute;
-
-width:16px;
-height:16px;
-
-top:3px;
-left:3px;
-
-border-radius:50%;
-
-background:
-rgba(180,255,255,.45);
-
-transition:.2s;
-}
-
-.toggle.active{
-
-background:
-rgba(0,255,255,.12);
-
-border-color:
-rgba(0,255,255,.55);
-}
-
-.toggle.active:after{
-
-left:24px;
-
-background:#8fffff;
-
-box-shadow:
-0 0 10px rgba(0,255,255,.7);
-}
-
-.control-footer{
-
-height:30px;
-
-min-height:30px;
-
-border-top:
-1px solid rgba(0,255,255,.1);
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-color:
-rgba(100,220,220,.3);
-
-font-family:monospace;
-
-font-size:7px;
-
-letter-spacing:2px;
-}
-
-/* =====================================================
-   NOTIFICHE HUD
-===================================================== */
-
-#hudNotifications{
-
-position:fixed;
-
-right:20px;
-
-top:75px;
-
-z-index:800;
-
-width:min(310px,calc(100vw - 30px));
-
-display:flex;
-
-flex-direction:column;
-
-gap:8px;
-
-pointer-events:none;
-}
-
-.hud-notification{
-
-padding:11px 14px;
-
-border:
-1px solid rgba(0,255,255,.25);
-
-border-left:
-2px solid rgba(0,255,255,.8);
-
 border-radius:10px;
 
 background:
-rgba(2,18,21,.9);
-
-backdrop-filter:blur(15px);
-
-box-shadow:
-0 10px 30px rgba(0,0,0,.35);
+rgba(0,255,255,.04);
 
 color:
-rgba(220,255,255,.82);
+rgba(220,255,255,.7);
 
-font-family:monospace;
+font-size:9px;
 
-font-size:8px;
-
-letter-spacing:1px;
-
-animation:
-hudIn .25s ease;
+cursor:pointer;
 }
 
-@keyframes hudIn{
+.memory-button:hover{
 
-from{
-opacity:0;
-transform:translateX(20px);
-}
+border-color:#00ffff;
 
-to{
-opacity:1;
-transform:translateX(0);
-}
+color:white;
 }
 
 /* =====================================================
@@ -1343,11 +977,11 @@ pointer-events:none;
 
 position:absolute;
 
-width:680px;
+width:720px;
 height:520px;
 
-min-width:340px;
-min-height:260px;
+min-width:320px;
+min-height:240px;
 
 max-width:
 calc(100vw - 30px);
@@ -1378,15 +1012,17 @@ touch-action:none;
 display:flex;
 
 flex-direction:column;
+
+resize:both;
 }
 
 .web-window-header{
 
 position:relative;
 
-height:48px;
+height:50px;
 
-min-height:48px;
+min-height:50px;
 
 display:flex;
 
@@ -1411,7 +1047,6 @@ touch-action:none;
 }
 
 .web-window-header:active{
-
 cursor:grabbing;
 }
 
@@ -1544,13 +1179,26 @@ font-size:9px;
 letter-spacing:1px;
 
 cursor:pointer;
+
+box-shadow:
+0 0 15px rgba(0,255,255,.15);
+}
+
+.web-window-open:hover{
+
+background:
+rgba(0,255,255,.15);
+
+color:white;
 }
 
 .web-window.minimized{
 
-height:48px!important;
+height:50px!important;
 
-min-height:48px!important;
+min-height:50px!important;
+
+resize:none;
 }
 
 .web-window.minimized
@@ -1560,7 +1208,7 @@ display:none;
 }
 
 /* =====================================================
-   WEB INDICATOR
+   INDICATORE WEB
 ===================================================== */
 
 #webSearchIndicator{
@@ -1568,7 +1216,8 @@ display:none;
 position:fixed;
 
 left:20px;
-bottom:20px;
+
+bottom:125px;
 
 z-index:210;
 
@@ -1595,8 +1244,69 @@ pointer-events:none;
 }
 
 #webSearchIndicator.active{
-
 display:block;
+}
+
+/* =====================================================
+   NOTIFICHE HUD
+===================================================== */
+
+#hudNotifications{
+
+position:fixed;
+
+top:70px;
+
+left:20px;
+
+z-index:800;
+
+display:flex;
+
+flex-direction:column;
+
+gap:8px;
+
+pointer-events:none;
+}
+
+.hud-notification{
+
+padding:9px 13px;
+
+border-left:
+2px solid #00ffff;
+
+background:
+rgba(2,15,18,.86);
+
+color:
+rgba(210,255,255,.75);
+
+font-family:monospace;
+
+font-size:9px;
+
+letter-spacing:1px;
+
+box-shadow:
+0 0 20px rgba(0,255,255,.08);
+
+animation:
+notificationIn .25s ease;
+}
+
+@keyframes notificationIn{
+
+from{
+opacity:0;
+transform:translateX(-15px);
+}
+
+to{
+opacity:1;
+transform:translateX(0);
+}
 }
 
 /* =====================================================
@@ -1699,6 +1409,7 @@ padding:0 11px;
 #conversationBtn{
 
 left:12px;
+
 bottom:70px;
 
 height:34px;
@@ -1711,6 +1422,7 @@ padding:0 11px;
 #controlBtn{
 
 left:12px;
+
 bottom:112px;
 
 height:34px;
@@ -1730,21 +1442,39 @@ width:
 calc(100% - 24px);
 }
 
+#controlCenter{
+
+width:
+calc(100% - 20px);
+
+max-height:
+calc(100vh - 40px);
+
+padding:18px;
+}
+
+.control-grid{
+
+grid-template-columns:1fr;
+}
+
 .web-window{
 
 width:
-calc(100vw - 20px);
+calc(100vw - 28px);
 
 height:
-calc(100vh - 130px);
+calc(100vh - 150px);
 
 min-width:270px;
 
 min-height:230px;
 
-left:10px!important;
+left:14px!important;
 
-top:65px!important;
+top:80px!important;
+
+resize:none;
 }
 
 .web-window-header{
@@ -1756,87 +1486,17 @@ min-height:50px;
 
 .web-window-btn{
 
-width:34px;
-height:34px;
+width:32px;
+height:32px;
 }
 
-.control-panel{
+#hudNotifications{
 
-width:94vw;
+left:10px;
 
-height:90vh;
+right:10px;
 
-border-radius:18px;
-}
-
-.control-content{
-
-flex-direction:column;
-}
-
-.control-sidebar{
-
-width:100%;
-
-height:58px;
-
-min-height:58px;
-
-display:flex;
-
-gap:6px;
-
-padding:7px;
-
-border-right:none;
-
-border-bottom:
-1px solid rgba(0,255,255,.14);
-
-overflow-x:auto;
-
-overflow-y:hidden;
-}
-
-.control-tab{
-
-min-width:92px;
-
-height:43px;
-
-margin:0;
-
-text-align:center;
-
-padding:0 8px;
-
-font-size:8px;
-}
-
-.control-main{
-
-padding:17px;
-}
-
-.status-grid{
-
-grid-template-columns:1fr;
-}
-
-.control-header{
-
-height:62px;
-
-min-height:62px;
-
-padding:0 15px;
-}
-
-.control-title{
-
-font-size:13px;
-
-letter-spacing:3px;
+top:65px;
 }
 
 }
@@ -1859,7 +1519,6 @@ left:2.2cm;
 
 ::-webkit-scrollbar{
 width:5px;
-height:5px;
 }
 
 ::-webkit-scrollbar-track{
@@ -1867,15 +1526,17 @@ background:rgba(0,0,0,.2);
 }
 
 ::-webkit-scrollbar-thumb{
-background:rgba(0,255,255,.18);
-border-radius:10px;
+background:rgba(0,255,255,.2);
+border-radius:5px;
 }
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <!-- =====================================================
      WEBGL
@@ -1884,6 +1545,7 @@ border-radius:10px;
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
+
 
 <!-- =====================================================
      TITOLO
@@ -1896,6 +1558,7 @@ id="jarvisTitle">
 J.A.R.V.I.S.
 
 </div>
+
 
 <!-- =====================================================
      DATA / ORA
@@ -1921,6 +1584,7 @@ class="date">
 
 </div>
 
+
 <!-- =====================================================
      MAPPA
 ===================================================== -->
@@ -1943,17 +1607,17 @@ TACTICAL MAP
 
 </div>
 
+
 <!-- =====================================================
-     WEB WINDOWS
+     WEB
 ===================================================== -->
 
 <div id="webSearchWindows"></div>
 
 <div id="webSearchIndicator">
-
 WEB WINDOWS: 0
-
 </div>
+
 
 <!-- =====================================================
      NOTIFICHE
@@ -1961,11 +1625,13 @@ WEB WINDOWS: 0
 
 <div id="hudNotifications"></div>
 
+
 <!-- =====================================================
      CHAT
 ===================================================== -->
 
 <div id="chat"></div>
+
 
 <!-- =====================================================
      INPUT
@@ -1993,6 +1659,7 @@ INVIA
 
 </div>
 
+
 <!-- =====================================================
      PULSANTI
 ===================================================== -->
@@ -2005,7 +1672,7 @@ INVIA
 
 <button id="controlBtn">
 
-▣ CONTROL
+⚙ CONTROL CENTER
 
 </button>
 
@@ -2021,8 +1688,9 @@ INVIA
 
 </button>
 
+
 <!-- =====================================================
-     VOICE PANEL
+     VOCE
 ===================================================== -->
 
 <div id="voicePanel">
@@ -2036,9 +1704,7 @@ VOCE J.A.R.V.I.S.
 <select id="voiceSelector">
 
 <option value="">
-
 Voce dispositivo automatica
-
 </option>
 
 </select>
@@ -2051,17 +1717,20 @@ TESTA VOCE
 
 </div>
 
+
 <!-- =====================================================
      CONTROL CENTER
 ===================================================== -->
 
 <div id="controlCenter">
 
-<div class="control-panel">
+<button
+class="control-close"
+id="controlClose">
 
-<div class="control-header">
+×
 
-<div class="control-heading">
+</button>
 
 <div class="control-title">
 
@@ -2071,742 +1740,119 @@ J.A.R.V.I.S. CONTROL CENTER
 
 <div class="control-subtitle">
 
-CENTRAL SYSTEM INTERFACE
+SYSTEM MANAGEMENT INTERFACE
 
 </div>
 
+<div class="control-grid">
+
+
+<div class="control-card">
+
+<h3>AI</h3>
+
+<p id="systemAI">
+STATUS: ONLINE<br>
+API: CONNECTING...
+</p>
+
 </div>
 
-<button id="closeControl">
 
-×
+<div class="control-card">
 
-</button>
+<h3>VOICE</h3>
+
+<p id="systemVoice">
+SPEECH: READY<br>
+MIC: CHECKING...
+</p>
 
 </div>
 
-<div class="control-content">
 
-<div class="control-sidebar">
+<div class="control-card">
 
-<button
-class="control-tab active"
-data-section="ai">
+<h3>MEMORY</h3>
 
-◈ AI
+<p id="systemMemory">
+ENTRIES: 0<br>
+STORAGE: LOCAL
+</p>
 
-</button>
-
-<button
-class="control-tab"
-data-section="voice">
-
-◉ VOICE
-
-</button>
+<div class="memory-actions">
 
 <button
-class="control-tab"
-data-section="memory">
+class="memory-button"
+id="showMemoryBtn">
 
-▣ MEMORY
-
-</button>
-
-<button
-class="control-tab"
-data-section="map">
-
-⌖ MAP
-
-</button>
-
-<button
-class="control-tab"
-data-section="web">
-
-◎ WEB
+VISUALIZZA
 
 </button>
 
 <button
-class="control-tab"
-data-section="system">
+class="memory-button"
+id="clearMemoryBtn">
 
-▤ SYSTEM
-
-</button>
-
-<button
-class="control-tab"
-data-section="settings">
-
-⚙ SETTINGS
-
-</button>
-
-<button
-class="control-tab"
-data-section="privacy">
-
-◉ PRIVACY
+CANCELLA
 
 </button>
 
 </div>
 
-<div class="control-main">
-
-<!-- AI -->
-
-<section
-class="control-section active"
-data-section-content="ai">
-
-<div class="section-title">
-
-AI STATUS
-
-</div>
-
-<div class="status-grid">
-
-<div class="status-card">
-
-<div class="status-label">
-JARVIS CORE
-</div>
-
-<div
-id="aiCoreStatus"
-class="status-value status-online">
-
-ONLINE
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-API
-</div>
-
-<div
-id="apiStatus"
-class="status-value">
-
-CHECKING...
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-MEMORY
-</div>
-
-<div
-id="aiMemoryCount"
-class="status-value">
-
-0
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-ENGINE
-</div>
-
-<div class="status-value">
-
-NEURAL ENGINE
-
-</div>
-
-</div>
-
-</div>
-
-<div class="control-info">
-
-J.A.R.V.I.S. utilizza il server AI configurato
-nell'interfaccia per elaborare le richieste.
-La memoria inviata all'API è limitata agli ultimi
-elementi disponibili nel sistema.
-
-</div>
-
-<button
-id="testApiBtn"
-class="control-action">
-
-TESTA CONNESSIONE API
-
-</button>
-
-</section>
-
-<!-- VOICE -->
-
-<section
-class="control-section"
-data-section-content="voice">
-
-<div class="section-title">
-
-VOICE SYSTEM
-
-</div>
-
-<div class="status-grid">
-
-<div class="status-card">
-
-<div class="status-label">
-MICROPHONE
-</div>
-
-<div
-id="systemMicStatus"
-class="status-value">
-
-READY
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-VOICE ENGINE
-</div>
-
-<div
-id="systemVoiceStatus"
-class="status-value">
-
-READY
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-CONVERSATION
-</div>
-
-<div
-id="conversationStatus"
-class="status-value">
-
-OFF
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-DEVICE VOICES
-</div>
-
-<div
-id="voiceCount"
-class="status-value">
-
-0
-
-</div>
-
-</div>
-
-</div>
-
-<button
-id="openVoiceBtn"
-class="control-action">
-
-APRI CONFIGURAZIONE VOCE
-
-</button>
-
-</section>
-
-<!-- MEMORY -->
-
-<section
-class="control-section"
-data-section-content="memory">
-
-<div class="section-title">
-
-MEMORY CORE
-
-</div>
-
-<div class="status-grid">
-
-<div class="status-card">
-
-<div class="status-label">
-MEMORY ITEMS
-</div>
-
-<div
-id="memoryCount"
-class="status-value">
-
-0
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-STORAGE
-</div>
-
-<div class="status-value">
-
-LOCAL STORAGE
-
-</div>
-
-</div>
-
-</div>
-
-<div
-id="memoryList"
-class="memory-list">
-
-</div>
-
-<button
-id="refreshMemoryBtn"
-class="control-action">
-
-AGGIORNA MEMORIA
-
-</button>
-
-<button
-id="clearMemoryBtn"
-class="control-action danger-action">
-
-CANCELLA TUTTA LA MEMORIA
-
-</button>
-
-</section>
-
-<!-- MAP -->
-
-<section
-class="control-section"
-data-section-content="map">
-
-<div class="section-title">
-
-TACTICAL MAP
-
-</div>
-
-<div class="status-grid">
-
-<div class="status-card">
-
-<div class="status-label">
-MAP ENGINE
-</div>
-
-<div
-id="mapStatus"
-class="status-value">
-
-READY
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-MARKER
-</div>
-
-<div
-id="markerStatus"
-class="status-value">
-
-0
-
-</div>
-
-</div>
-
-</div>
-
-<div class="control-info">
-
-La mappa utilizza MapLibre GL e lo stile
-MapTiler configurato nel progetto.
-
-</div>
-
-<button
-id="openMapBtn"
-class="control-action">
-
-APRI TACTICAL MAP
-
-</button>
-
-</section>
-
-<!-- WEB -->
-
-<section
-class="control-section"
-data-section-content="web">
-
-<div class="section-title">
-
-WEB SYSTEM
-
-</div>
-
-<div class="status-grid">
-
-<div class="status-card">
-
-<div class="status-label">
-WEB WINDOWS
-</div>
-
-<div
-id="webWindowCount"
-class="status-value">
-
-0
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-SEARCH ENGINE
-</div>
-
-<div class="status-value">
-
-BING
-
-</div>
-
-</div>
-
-</div>
-
-<button
-id="closeWebBtn"
-class="control-action">
-
-CHIUDI TUTTE LE FINESTRE WEB
-
-</button>
-
-<button
-id="minimizeWebBtn"
-class="control-action">
-
-MINIMIZZA FINESTRE WEB
-
-</button>
-
-</section>
-
-<!-- SYSTEM -->
-
-<section
-class="control-section"
-data-section-content="system">
-
-<div class="section-title">
-
-SYSTEM DIAGNOSTICS
-
-</div>
-
-<div class="status-grid">
-
-<div class="status-card">
-
-<div class="status-label">
-CONNECTION
-</div>
-
-<div
-id="networkStatus"
-class="status-value">
-
-CHECKING...
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-BATTERY
-</div>
-
-<div
-id="batteryStatus"
-class="status-value">
-
-N/D
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-SCREEN
-</div>
-
-<div
-id="screenStatus"
-class="status-value">
-
-0 × 0
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-BROWSER
-</div>
-
-<div
-id="browserStatus"
-class="status-value">
-
-WEB
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-LANGUAGE
-</div>
-
-<div
-id="languageStatus"
-class="status-value">
-
-IT
-
-</div>
-
-</div>
-
-<div class="status-card">
-
-<div class="status-label">
-TIMEZONE
-</div>
-
-<div
-id="timezoneStatus"
-class="status-value">
-
-N/D
-
-</div>
-
-</div>
-
-</div>
-
-<button
-id="refreshSystemBtn"
-class="control-action">
-
-AGGIORNA DIAGNOSTICA
-
-</button>
-
-</section>
-
-<!-- SETTINGS -->
-
-<section
-class="control-section"
-data-section-content="settings">
-
-<div class="section-title">
-
-SETTINGS
-
-</div>
-
-<div class="setting-row">
-
-<div>
-
-<div class="setting-name">
-NOTIFICHE HUD
 </div>
 
-<div class="setting-desc">
-Mostra notifiche di sistema
-</div>
-
-</div>
-
-<button
-class="toggle active"
-id="hudToggle">
-
-</button>
-
-</div>
-
-<div class="setting-row">
-
-<div>
-
-<div class="setting-name">
-RISPOSTA VOCALE
-</div>
-
-<div class="setting-desc">
-JARVIS legge le risposte ad alta voce
-</div>
-
-</div>
-
-<button
-class="toggle active"
-id="speechToggle">
-
-</button>
-
-</div>
-
-<div class="setting-row">
 
-<div>
+<div class="control-card">
 
-<div class="setting-name">
-AUTO FOCUS
-</div>
-
-<div class="setting-desc">
-Riporta il campo testo in primo piano
-</div>
-
-</div>
-
-<button
-class="toggle active"
-id="focusToggle">
-
-</button>
-
-</div>
-
-</section>
+<h3>MAP</h3>
 
-<!-- PRIVACY -->
+<p id="systemMap">
+TACTICAL: READY<br>
+PROVIDER: MAPTILER
+</p>
 
-<section
-class="control-section"
-data-section-content="privacy">
-
-<div class="section-title">
-
-PRIVACY
-
 </div>
-
-<div class="control-info">
-
-<strong>MEMORIA LOCALE</strong><br><br>
 
-La memoria conversazionale salvata dal sistema
-rimane nel localStorage del browser e può essere
-cancellata dal pannello MEMORY.
 
-</div>
+<div class="control-card">
 
-<div class="control-info">
+<h3>WEB</h3>
 
-<strong>DATI INVIATI ALL'API</strong><br><br>
+<p id="systemWeb">
+WINDOWS: 0<br>
+ENGINE: BING
+</p>
 
-Quando invii una richiesta AI, il sistema può
-inviare il messaggio, una parte della memoria
-recente e alcuni dati temporali necessari al
-funzionamento dell'assistente.
-
 </div>
-
-<button
-id="privacyClearBtn"
-class="control-action danger-action">
 
-CANCELLA MEMORIA LOCALE
 
-</button>
+<div class="control-card">
 
-</section>
+<h3>SYSTEM</h3>
 
-</div>
+<p id="systemHardware">
+SCREEN: --<br>
+BATTERY: --<br>
+NETWORK: --
+</p>
 
 </div>
 
-<div class="control-footer">
 
-J.A.R.V.I.S. // CONTROL CENTER // SYSTEM ONLINE
-
 </div>
 
 </div>
 
-</div>
 
 <!-- =====================================================
      LIBRERIE
 ===================================================== -->
 
-<script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
+<script
+src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
+</script>
+
 
 <script type="importmap">
 
@@ -2819,9 +1865,11 @@ J.A.R.V.I.S. // CONTROL CENTER // SYSTEM ONLINE
 
 </script>
 
+
 <script type="module">
 
 import * as THREE from "three";
+
 
 /* =====================================================
    CONFIG
@@ -2838,15 +1886,39 @@ const MAX_MEMORY = 30;
 const ELEVEN_VOICE_ID =
 "vkBFlAtUdZqNR4MqxSVr";
 
+
+/* =====================================================
+   VARIABILI
+===================================================== */
+
 let currentAudio = null;
+
 let audioPlaying = false;
 
 let deviceVoices = [];
+
 let selectedDeviceVoice = null;
 
-let hudNotificationsEnabled = true;
-let speechEnabled = true;
-let autoFocusEnabled = true;
+let conversationMode = false;
+
+let conversationStarting = false;
+
+let recognition = null;
+
+let listening = false;
+
+let recognitionStopping = false;
+
+let map = null;
+
+let currentMarker = null;
+
+let webWindowCounter = 0;
+
+let highestWebZ = 220;
+
+let fullscreenChanging = false;
+
 
 /* =====================================================
    ELEMENTI
@@ -2915,11 +1987,12 @@ document.getElementById("controlBtn");
 const controlCenter =
 document.getElementById("controlCenter");
 
-const closeControl =
-document.getElementById("closeControl");
+const controlClose =
+document.getElementById("controlClose");
 
 const hudNotifications =
 document.getElementById("hudNotifications");
+
 
 /* =====================================================
    MEMORIA
@@ -2948,9 +2021,13 @@ parsed.slice(-MAX_MEMORY);
 
 }catch(error){
 
-console.warn("Memoria:",error);
+console.warn(
+"Memoria non disponibile:",
+error
+);
 
 }
+
 
 function saveMemory(){
 
@@ -2974,11 +2051,15 @@ error
 
 }
 
-function addMemory(role,content){
 
-memory.push({
+function addMemory(
 role,
 content
+){
+
+memory.push({
+role:role,
+content:content
 });
 
 memory =
@@ -2986,18 +2067,16 @@ memory.slice(-MAX_MEMORY);
 
 saveMemory();
 
-updateControlCenter();
+updateSystemPanel();
 
 }
+
 
 /* =====================================================
    NOTIFICHE
 ===================================================== */
 
 function notify(message){
-
-if(!hudNotificationsEnabled)
-return;
 
 const element =
 document.createElement("div");
@@ -3008,30 +2087,31 @@ element.className =
 element.textContent =
 message;
 
-hudNotifications.appendChild(
-element
+hudNotifications.appendChild(element);
+
+setTimeout(
+()=>{
+
+element.style.opacity = "0";
+
+setTimeout(
+()=>element.remove(),
+300
 );
 
-setTimeout(()=>{
-
-element.style.opacity="0";
-element.style.transform=
-"translateX(20px)";
-element.style.transition=".25s";
-
-setTimeout(()=>{
-element.remove();
-},250);
-
-},3000);
+},
+3500
+);
 
 }
+
 
 /* =====================================================
    OROLOGIO
 ===================================================== */
 
 const months = [
+
 "GEN",
 "FEB",
 "MAR",
@@ -3044,7 +2124,9 @@ const months = [
 "OTT",
 "NOV",
 "DIC"
+
 ];
+
 
 function updateClock(){
 
@@ -3068,6 +2150,7 @@ String(
 now.getSeconds()
 ).padStart(2,"0");
 
+
 date.textContent =
 String(
 now.getDate()
@@ -3085,6 +2168,7 @@ now.getFullYear();
 
 }
 
+
 updateClock();
 
 setInterval(
@@ -3092,65 +2176,50 @@ updateClock,
 1000
 );
 
-/* =====================================================
-   THREE.JS
-===================================================== */
-
-const scene =
-new THREE.Scene();
-
-const camera =
-new THREE.PerspectiveCamera(
-55,
-window.innerWidth /
-window.innerHeight,
-0.1,
-1000
-);
-
-camera.position.z=5.2;
-
-const renderer =
-new THREE.WebGLRenderer({
-antialias:true,
-alpha:true
-});
-
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
-);
-
-renderer.setPixelRatio(
-Math.min(
-window.devicePixelRatio,
-2
-)
-);
-
-container.appendChild(
-renderer.domElement
-);
 
 /* =====================================================
-   GLOW
+   THREE.JS — CORE NEURALE
 ===================================================== */
 
-function createGlow(){
+let scene = null;
+
+let camera = null;
+
+let renderer = null;
+
+let particles = null;
+
+let geometry = null;
+
+let material = null;
+
+let animationStarted = false;
+
+let targetEnergy = .15;
+
+let energy = .15;
+
+
+function createGlowTexture(){
 
 const canvas =
 document.createElement("canvas");
 
-canvas.width=64;
-canvas.height=64;
+canvas.width = 64;
+
+canvas.height = 64;
 
 const ctx =
 canvas.getContext("2d");
 
 const gradient =
 ctx.createRadialGradient(
-32,32,0,
-32,32,32
+32,
+32,
+0,
+32,
+32,
+32
 );
 
 gradient.addColorStop(
@@ -3178,10 +2247,14 @@ gradient.addColorStop(
 "rgba(0,0,0,0)"
 );
 
-ctx.fillStyle=gradient;
+ctx.fillStyle =
+gradient;
 
 ctx.fillRect(
-0,0,64,64
+0,
+0,
+64,
+64
 );
 
 return new THREE.CanvasTexture(
@@ -3190,28 +2263,91 @@ canvas
 
 }
 
+
+function initializeNeuralCore(){
+
+try{
+
+scene =
+new THREE.Scene();
+
+
+camera =
+new THREE.PerspectiveCamera(
+55,
+window.innerWidth /
+window.innerHeight,
+.1,
+1000
+);
+
+
+camera.position.z =
+5.2;
+
+
+renderer =
+new THREE.WebGLRenderer({
+
+antialias:true,
+
+alpha:true,
+
+powerPreference:"high-performance"
+
+});
+
+
+renderer.setSize(
+window.innerWidth,
+window.innerHeight
+);
+
+
+renderer.setPixelRatio(
+Math.min(
+window.devicePixelRatio || 1,
+2
+)
+);
+
+
+container.innerHTML = "";
+
+container.appendChild(
+renderer.domElement
+);
+
+
 /* =====================================================
    PARTICELLE
 ===================================================== */
 
-const COUNT=3000;
+const COUNT = 3000;
 
-const geometry =
+geometry =
 new THREE.BufferGeometry();
 
 const positions =
 new Float32Array(
-COUNT*3
+COUNT * 3
 );
 
 const radii =
-new Float32Array(COUNT);
+new Float32Array(
+COUNT
+);
 
 const angles =
-new Float32Array(COUNT*2);
+new Float32Array(
+COUNT * 2
+);
 
 const seeds =
-new Float32Array(COUNT);
+new Float32Array(
+COUNT
+);
+
 
 for(
 let i=0;
@@ -3219,45 +2355,52 @@ i<COUNT;
 i++
 ){
 
-const r =
+const radius =
 1.10 +
-Math.random()*.70;
+Math.random() * .70;
 
 const theta =
-Math.random()*
-Math.PI*2;
+Math.random() *
+Math.PI * 2;
 
 const phi =
 Math.acos(
-2*Math.random()-1
+2 * Math.random() - 1
 );
 
-radii[i]=r;
+radii[i] =
+radius;
 
-angles[i*2]=theta;
+angles[i*2] =
+theta;
 
-angles[i*2+1]=phi;
+angles[i*2+1] =
+phi;
 
-seeds[i]=
-Math.random()*100;
+seeds[i] =
+Math.random() * 100;
 
-const index=i*3;
 
-positions[index]=
-r*
-Math.sin(phi)*
+const index =
+i * 3;
+
+
+positions[index] =
+radius *
+Math.sin(phi) *
 Math.cos(theta);
 
-positions[index+1]=
-r*
-Math.sin(phi)*
+positions[index+1] =
+radius *
+Math.sin(phi) *
 Math.sin(theta);
 
-positions[index+2]=
-r*
+positions[index+2] =
+radius *
 Math.cos(phi);
 
 }
+
 
 geometry.setAttribute(
 "position",
@@ -3267,17 +2410,16 @@ positions,
 )
 );
 
-const material =
+
+material =
 new THREE.PointsMaterial({
 
 color:
-new THREE.Color(
-0x00cfe8
-),
+new THREE.Color(0x00cfe8),
 
 size:.042,
 
-map:createGlow(),
+map:createGlowTexture(),
 
 transparent:true,
 
@@ -3290,85 +2432,164 @@ THREE.AdditiveBlending
 
 });
 
-const particles =
+
+particles =
 new THREE.Points(
 geometry,
 material
 );
 
-scene.add(particles);
+
+scene.add(
+particles
+);
+
+
+animationStarted = true;
+
+notify(
+"NEURAL CORE ONLINE"
+);
+
+animate();
+
+}catch(error){
+
+console.error(
+"THREE.JS ERROR:",
+error
+);
+
+container.innerHTML = "";
+
+const errorElement =
+document.createElement("div");
+
+errorElement.style.position =
+"absolute";
+
+errorElement.style.left =
+"50%";
+
+errorElement.style.top =
+"50%";
+
+errorElement.style.transform =
+"translate(-50%,-50%)";
+
+errorElement.style.color =
+"rgba(0,255,255,.55)";
+
+errorElement.style.fontFamily =
+"monospace";
+
+errorElement.style.fontSize =
+"10px";
+
+errorElement.style.letterSpacing =
+"2px";
+
+errorElement.textContent =
+"NEURAL CORE OFFLINE";
+
+container.appendChild(
+errorElement
+);
+
+}
+
+}
+
 
 /* =====================================================
-   STATO
+   STATO SFERA
 ===================================================== */
 
-let targetEnergy=.15;
-let energy=.15;
-
 const normalColor =
-new THREE.Color(0x00cfe8);
+new THREE.Color(
+0x00cfe8
+);
 
 const activeColor =
-new THREE.Color(0x8fffff);
+new THREE.Color(
+0x8fffff
+);
 
 const currentColor =
 normalColor.clone();
 
+
 function setState(state){
 
-if(state==="thinking"){
+if(state === "thinking"){
 
-targetEnergy=2;
-
-}
-
-else if(state==="speaking"){
-
-targetEnergy=.8;
+targetEnergy = 2;
 
 }
 
-else if(state==="listening"){
+else if(state === "speaking"){
 
-targetEnergy=.55;
+targetEnergy = .8;
+
+}
+
+else if(state === "listening"){
+
+targetEnergy = .55;
+
+}
+
+else if(state === "error"){
+
+targetEnergy = 1.4;
 
 }
 
 else{
 
-targetEnergy=.15;
+targetEnergy = .15;
 
 }
 
 }
+
 
 /* =====================================================
-   ANIMAZIONE
+   ANIMAZIONE SFERA
 ===================================================== */
 
 function animate(){
+
+if(!animationStarted)
+return;
 
 requestAnimationFrame(
 animate
 );
 
+
 const time =
-performance.now()*.001;
+performance.now() * .001;
+
 
 energy +=
 (
-targetEnergy-energy
-)*.045;
+targetEnergy -
+energy
+) *
+.045;
+
 
 currentColor.lerp(
 activeColor,
 Math.min(
-energy*.04,
+energy * .04,
 1
 )
 );
 
-if(energy<.3){
+
+if(energy < .3){
 
 currentColor.lerp(
 normalColor,
@@ -3377,121 +2598,168 @@ normalColor,
 
 }
 
+
 material.color =
 currentColor;
 
 material.size =
-.032+
-energy*.008;
+.032 +
+energy * .008;
+
 
 const pos =
 geometry.attributes.position.array;
 
+
 for(
 let i=0;
-i<COUNT;
+i<3000;
 i++
 ){
 
-const index=i*3;
+const index =
+i * 3;
 
-const r=radii[i];
+const r =
+new Number(
+geometry.attributes
+.position
+.array[index] * 0 + 1
+);
 
-const theta=
+
+/*
+   I valori originali vengono ricostruiti
+   usando coordinate sferiche salvate.
+*/
+
+const theta =
 angles[i*2];
 
-const phi=
+const phi =
 angles[i*2+1];
 
-const seed=
+const baseRadius =
+radii[i];
+
+const seed =
 seeds[i];
+
 
 const pulse =
 Math.sin(
-time*2+seed
-)*.035;
+time * 2 +
+seed
+) *
+.035;
+
 
 const strangeShape =
 Math.sin(
-theta*6+
-time*2+
+theta * 6 +
+time * 2 +
 seed
-)*
-.18*
+) *
+.18 *
 energy;
+
 
 const wave =
 Math.cos(
-phi*7-
-time*1.8+
+phi * 7 -
+time * 1.8 +
 seed
-)*
-.12*
+) *
+.12 *
 energy;
 
+
 const rr =
-r+
-pulse+
-strangeShape+
+baseRadius +
+pulse +
+strangeShape +
 wave;
 
+
 let x =
-rr*
-Math.sin(phi)*
+rr *
+Math.sin(phi) *
 Math.cos(theta);
 
+
 let y =
-rr*
-Math.sin(phi)*
+rr *
+Math.sin(phi) *
 Math.sin(theta);
 
+
 let z =
-rr*
+rr *
 Math.cos(phi);
+
 
 x +=
 Math.sin(
-time*2.4+
-phi*8+
+time * 2.4 +
+phi * 8 +
 seed
-)*
-.08*
+) *
+.08 *
 energy;
+
 
 y +=
 Math.cos(
-time*2.1+
-theta*9+
+time * 2.1 +
+theta * 9 +
 seed
-)*
-.08*
+) *
+.08 *
 energy;
+
 
 z +=
 Math.sin(
-time*2.7+
-(theta+phi)*7
-)*
-.10*
+time * 2.7 +
+(theta + phi) * 7
+) *
+.10 *
 energy;
 
-pos[index]=x;
-pos[index+1]=y;
-pos[index+2]=z;
+
+pos[index] =
+x;
+
+pos[index+1] =
+y;
+
+pos[index+2] =
+z;
 
 }
 
-geometry.attributes.position.needsUpdate=true;
+
+geometry.attributes
+.position
+.needsUpdate = true;
+
 
 particles.rotation.y +=
-.0005+
-energy*.0008;
+.0005 +
+energy * .0008;
 
 particles.rotation.x =
-Math.sin(time*.25)*.04;
+Math.sin(
+time * .25
+) *
+.04;
 
 particles.rotation.z =
-Math.cos(time*.18)*.025;
+Math.cos(
+time * .18
+) *
+.025;
+
 
 renderer.render(
 scene,
@@ -3500,7 +2768,9 @@ camera
 
 }
 
-animate();
+
+initializeNeuralCore();
+
 
 /* =====================================================
    MAPTILER
@@ -3509,31 +2779,29 @@ animate();
 const MAPTILER_KEY =
 "NmSlgtsAdQyEWy7t0OJf";
 
+
 const MAPTILER_STYLE =
 "https://api.maptiler.com/maps/01a050ff-ecff-7fb2-911f-81c59fc71217/style.json?key="
 +
 MAPTILER_KEY;
 
-let map=null;
-let currentMarker=null;
 
 function initializeMap(){
 
 if(map)
 return;
 
-if(
-typeof maplibregl===
-"undefined"
-){
+
+if(typeof maplibregl === "undefined"){
 
 addMsg(
-"Errore: MapTiler non disponibile."
+"Errore: MapLibre non disponibile."
 );
 
 return;
 
 }
+
 
 map =
 new maplibregl.Map({
@@ -3555,6 +2823,7 @@ antialias:true
 
 });
 
+
 map.addControl(
 new maplibregl.NavigationControl({
 showCompass:true,
@@ -3563,6 +2832,7 @@ showZoom:true
 "bottom-right"
 );
 
+
 map.on(
 "load",
 ()=>{
@@ -3570,13 +2840,14 @@ map.on(
 map.resize();
 
 notify(
-"TACTICAL MAP ONLINE"
+"MAP SYSTEM ONLINE"
 );
 
 }
 );
 
 }
+
 
 function openTacticalMap(){
 
@@ -3584,9 +2855,11 @@ tacticalMap.classList.add(
 "active"
 );
 
-jarvisTitle.style.display="none";
+jarvisTitle.style.display =
+"none";
 
-mapHeader.style.display="block";
+mapHeader.style.display =
+"block";
 
 initializeMap();
 
@@ -3602,20 +2875,24 @@ map.resize();
 
 }
 
+
 function closeTacticalMap(){
 
 tacticalMap.classList.remove(
 "active"
 );
 
-jarvisTitle.style.display="block";
+jarvisTitle.style.display =
+"block";
 
 }
+
 
 closeMap.addEventListener(
 "click",
 closeTacticalMap
 );
+
 
 /* =====================================================
    UTILITY
@@ -3637,407 +2914,38 @@ return String(text)
 
 }
 
+
 function addMsg(text){
 
-chat.innerHTML="";
+chat.innerHTML = "";
 
 const element =
 document.createElement("div");
 
-element.className="msg";
+element.className =
+"msg";
 
-element.textContent=text;
+element.textContent =
+text;
 
 chat.appendChild(element);
 
 }
 
-/* =====================================================
-   CONTROL CENTER
-===================================================== */
-
-function openControlCenter(){
-
-controlCenter.classList.add(
-"active"
-);
-
-updateControlCenter();
-
-notify(
-"CONTROL CENTER OPEN"
-);
-
-}
-
-function closeControlCenter(){
-
-controlCenter.classList.remove(
-"active"
-);
-
-}
-
-controlBtn.addEventListener(
-"click",
-openControlCenter
-);
-
-closeControl.addEventListener(
-"click",
-closeControlCenter
-);
-
-controlCenter.addEventListener(
-"click",
-event=>{
-
-if(
-event.target===
-controlCenter
-){
-
-closeControlCenter();
-
-}
-
-});
-
-/* =====================================================
-   TABS
-===================================================== */
-
-document.querySelectorAll(
-".control-tab"
-)
-.forEach(
-button=>{
-
-button.addEventListener(
-"click",
-()=>{
-
-const section =
-button.dataset.section;
-
-document.querySelectorAll(
-".control-tab"
-)
-.forEach(
-item=>
-item.classList.remove(
-"active"
-)
-);
-
-document.querySelectorAll(
-".control-section"
-)
-.forEach(
-item=>
-item.classList.remove(
-"active"
-)
-);
-
-button.classList.add(
-"active"
-);
-
-const target =
-document.querySelector(
-`[data-section-content="${section}"]`
-);
-
-if(target)
-target.classList.add("active");
-
-updateControlCenter();
-
-}
-);
-
-}
-);
-
-/* =====================================================
-   CONTROL CENTER UPDATE
-===================================================== */
-
-function updateControlCenter(){
-
-const memoryCount =
-memory.length;
-
-const memoryCountElement =
-document.getElementById(
-"memoryCount"
-);
-
-const aiMemoryCount =
-document.getElementById(
-"aiMemoryCount"
-);
-
-if(memoryCountElement)
-memoryCountElement.textContent=
-String(memoryCount);
-
-if(aiMemoryCount)
-aiMemoryCount.textContent=
-String(memoryCount);
-
-const webCount =
-webSearchWindows
-.querySelectorAll(
-".web-window"
-)
-.length;
-
-const webWindowCount =
-document.getElementById(
-"webWindowCount"
-);
-
-if(webWindowCount)
-webWindowCount.textContent=
-String(webCount);
-
-const network =
-navigator.onLine;
-
-const networkElement =
-document.getElementById(
-"networkStatus"
-);
-
-if(networkElement){
-
-networkElement.textContent =
-network?
-"ONLINE":
-"OFFLINE";
-
-networkElement.className =
-"status-value "+
-(
-network?
-"status-online":
-"status-offline"
-);
-
-}
-
-const conversationElement =
-document.getElementById(
-"conversationStatus"
-);
-
-if(conversationElement){
-
-conversationElement.textContent =
-conversationMode?
-"ACTIVE":
-"OFF";
-
-}
-
-const voiceCountElement =
-document.getElementById(
-"voiceCount"
-);
-
-if(voiceCountElement){
-
-voiceCountElement.textContent =
-String(
-deviceVoices.length
-);
-
-}
-
-const micStatus =
-document.getElementById(
-"systemMicStatus"
-);
-
-if(micStatus){
-
-micStatus.textContent =
-recognition?
-(
-listening?
-"LISTENING":
-"READY"
-):
-"NOT SUPPORTED";
-
-}
-
-const markerStatus =
-document.getElementById(
-"markerStatus"
-);
-
-if(markerStatus){
-
-markerStatus.textContent =
-currentMarker?
-"1":
-"0";
-
-}
-
-updateSystemInfo();
-
-renderMemory();
-
-}
-
-/* =====================================================
-   MEMORIA UI
-===================================================== */
-
-function renderMemory(){
-
-const list =
-document.getElementById(
-"memoryList"
-);
-
-if(!list)
-return;
-
-list.innerHTML="";
-
-if(memory.length===0){
-
-const empty =
-document.createElement("div");
-
-empty.className=
-"control-info";
-
-empty.textContent=
-"Memoria vuota.";
-
-list.appendChild(empty);
-
-return;
-
-}
-
-memory
-.slice()
-.reverse()
-.forEach(
-(item,index)=>{
-
-const element =
-document.createElement("div");
-
-element.className=
-"memory-item";
-
-const role =
-document.createElement("div");
-
-role.className=
-"memory-role";
-
-role.textContent=
-item.role||
-"UNKNOWN";
-
-const content =
-document.createElement("div");
-
-content.className=
-"memory-content";
-
-content.textContent=
-item.content||
-"";
-
-element.appendChild(role);
-
-element.appendChild(content);
-
-list.appendChild(element);
-
-}
-);
-
-}
-
-document.getElementById(
-"refreshMemoryBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-renderMemory();
-
-notify(
-"MEMORY REFRESHED"
-);
-
-}
-);
-
-function clearAllMemory(){
-
-memory=[];
-
-localStorage.removeItem(
-MEMORY_KEY
-);
-
-renderMemory();
-
-updateControlCenter();
-
-addMsg(
-"Memoria J.A.R.V.I.S. cancellata."
-);
-
-notify(
-"MEMORY CLEARED"
-);
-
-}
-
-document.getElementById(
-"clearMemoryBtn"
-)
-.addEventListener(
-"click",
-clearAllMemory
-);
-
-document.getElementById(
-"privacyClearBtn"
-)
-.addEventListener(
-"click",
-clearAllMemory
-);
 
 /* =====================================================
    FULLSCREEN
 ===================================================== */
 
-let fullscreenChanging=false;
-
 function isFullscreen(){
 
 return !!(
-document.fullscreenElement||
+document.fullscreenElement ||
 document.webkitFullscreenElement
 );
 
 }
+
 
 async function enterFullscreen(){
 
@@ -4047,14 +2955,11 @@ return true;
 if(fullscreenChanging)
 return false;
 
-fullscreenChanging=true;
+fullscreenChanging = true;
 
 try{
 
-if(
-document.documentElement
-.requestFullscreen
-){
+if(document.documentElement.requestFullscreen){
 
 await document.documentElement
 .requestFullscreen();
@@ -4077,16 +2982,16 @@ addMsg(
 "Fullscreen non supportato."
 );
 
-fullscreenChanging=false;
+fullscreenChanging = false;
 
 return false;
 
 }
 
-fullscreenChanging=false;
+fullscreenChanging = false;
 
 notify(
-"FULLSCREEN ACTIVE"
+"FULLSCREEN ATTIVO"
 );
 
 return true;
@@ -4098,7 +3003,7 @@ console.warn(
 error
 );
 
-fullscreenChanging=false;
+fullscreenChanging = false;
 
 addMsg(
 "Il browser ha bloccato il fullscreen."
@@ -4109,6 +3014,7 @@ return false;
 }
 
 }
+
 
 async function exitFullscreen(){
 
@@ -4138,18 +3044,27 @@ return false;
 
 }
 
+
 async function toggleFullscreen(){
 
-if(isFullscreen())
+if(isFullscreen()){
+
 await exitFullscreen();
-else
+
+}
+
+else{
+
 await enterFullscreen();
 
 }
 
+}
+
+
 function updateFullscreenUI(){
 
-const active=
+const active =
 isFullscreen();
 
 fullscreenBtn.classList.toggle(
@@ -4157,12 +3072,15 @@ fullscreenBtn.classList.toggle(
 active
 );
 
-fullscreenBtn.textContent=
-active?
-"⛶ ESCI FULLSCREEN":
+fullscreenBtn.textContent =
+active
+?
+"⛶ ESCI FULLSCREEN"
+:
 "⛶ FULLSCREEN";
 
 }
+
 
 fullscreenBtn.addEventListener(
 "click",
@@ -4175,20 +3093,25 @@ updateFullscreenUI();
 }
 );
 
+
 document.addEventListener(
 "fullscreenchange",
 ()=>{
 
 updateFullscreenUI();
 
-if(map)
+if(map){
+
 setTimeout(
 ()=>map.resize(),
 100
 );
 
 }
+
+}
 );
+
 
 /* =====================================================
    NORMALIZZAZIONE
@@ -4221,122 +3144,9 @@ return String(text)
 
 }
 
-/* =====================================================
-   FULLSCREEN COMMAND
-===================================================== */
-
-function handleFullscreenCommand(text){
-
-const normalized=
-normalizeCommand(text);
-
-const simplified=
-normalized
-
-.replace(
-/\bper favore\b/g,
-""
-)
-
-.replace(
-/\bjarvis\b/g,
-""
-)
-
-.replace(
-/\s+/g,
-" "
-)
-
-.trim();
-
-const activatePatterns=[
-
-"attiva fullscreen",
-"attiva il fullscreen",
-"attiva la fullscreen",
-"attiva modalita fullscreen",
-"attiva la modalita fullscreen",
-"attiva schermo intero",
-"metti fullscreen",
-"metti in fullscreen",
-"vai fullscreen",
-"vai in fullscreen",
-"fullscreen",
-"modalita fullscreen",
-"schermo intero",
-"passa a schermo intero"
-
-];
-
-const deactivatePatterns=[
-
-"disattiva fullscreen",
-"disattiva il fullscreen",
-"disattiva la fullscreen",
-"disattiva modalita fullscreen",
-"disattiva la modalita fullscreen",
-"disattiva schermo intero",
-"esci dal fullscreen",
-"esci da fullscreen",
-"esci fullscreen",
-"esci da schermo intero",
-"torna normale",
-"modalita normale",
-"schermo normale"
-
-];
-
-if(
-activatePatterns.includes(
-simplified
-)
-){
-
-if(isFullscreen()){
-
-addMsg(
-"Modalità fullscreen già attiva."
-);
-
-return true;
-
-}
-
-enterFullscreen();
-
-return true;
-
-}
-
-if(
-deactivatePatterns.includes(
-simplified
-)
-){
-
-if(!isFullscreen()){
-
-addMsg(
-"Modalità fullscreen non attiva."
-);
-
-return true;
-
-}
-
-exitFullscreen();
-
-return true;
-
-}
-
-return false;
-
-}
 
 /* =====================================================
-   MARKER MAPPA
+   MAP MARKER
 ===================================================== */
 
 function createJarvisMarker(
@@ -4348,24 +3158,28 @@ name
 if(!map)
 return;
 
+
 if(currentMarker){
 
 currentMarker.remove();
 
-currentMarker=null;
+currentMarker = null;
 
 }
+
 
 const markerElement =
 document.createElement("div");
 
-markerElement.className=
+markerElement.className =
 "jarvis-map-marker";
+
 
 currentMarker =
 new maplibregl.Marker({
 
 element:markerElement,
+
 anchor:"center"
 
 })
@@ -4393,11 +3207,11 @@ ${escapeHtml(name)}
 
 .addTo(map);
 
+
 currentMarker.togglePopup();
 
-updateControlCenter();
-
 }
+
 
 /* =====================================================
    RICERCA POSIZIONE
@@ -4410,9 +3224,10 @@ try{
 openTacticalMap();
 
 addMsg(
-"Ricerca posizione: "+
+"Ricerca posizione: " +
 place
 );
+
 
 const url =
 "https://nominatim.openstreetmap.org/search"
@@ -4420,6 +3235,7 @@ const url =
 "?format=json&limit=1&q="
 +
 encodeURIComponent(place);
+
 
 const response =
 await fetch(
@@ -4432,19 +3248,22 @@ headers:{
 }
 );
 
+
 if(!response.ok)
 throw new Error(
 "Ricerca posizione fallita"
 );
 
+
 const results =
 await response.json();
+
 
 if(!results.length){
 
 addMsg(
-"Non riesco a trovare "+
-place+
+"Non riesco a trovare " +
+place +
 "."
 );
 
@@ -4452,19 +3271,22 @@ return;
 
 }
 
-const result=
+
+const result =
 results[0];
 
-const lat=
+const lat =
 parseFloat(result.lat);
 
-const lon=
+const lon =
 parseFloat(result.lon);
+
 
 if(!map)
 throw new Error(
 "Mappa non inizializzata"
 );
+
 
 map.flyTo({
 
@@ -4483,19 +3305,21 @@ essential:true
 
 });
 
+
 createJarvisMarker(
 lat,
 lon,
 place
 );
 
+
 addMsg(
-"Posizione acquisita: "+
+"Posizione acquisita: " +
 place
 );
 
 notify(
-"LOCATION ACQUIRED"
+"POSIZIONE ACQUISITA"
 );
 
 }catch(error){
@@ -4506,8 +3330,8 @@ error
 );
 
 addMsg(
-"Impossibile localizzare "+
-place+
+"Impossibile localizzare " +
+place +
 "."
 );
 
@@ -4515,44 +3339,36 @@ place+
 
 }
 
+
 /* =====================================================
    COMANDI MAPPA
 ===================================================== */
 
 function handleMapCommand(text){
 
-const normalized=
+const normalized =
 normalizeCommand(text);
+
 
 if(
 
-normalized.includes(
-"apri la mappa"
-)
+normalized.includes("apri la mappa")
 
 ||
 
-normalized.includes(
-"apri mappa"
-)
+normalized.includes("apri mappa")
 
 ||
 
-normalized.includes(
-"mappa tattica"
-)
+normalized.includes("mappa tattica")
 
 ||
 
-normalized.includes(
-"modalita tattica"
-)
+normalized.includes("modalita tattica")
 
 ||
 
-normalized.includes(
-"attiva la mappa"
-)
+normalized.includes("attiva la mappa")
 
 ){
 
@@ -4566,29 +3382,22 @@ return true;
 
 }
 
+
 if(
 
-normalized.includes(
-"chiudi la mappa"
-)
+normalized.includes("chiudi la mappa")
 
 ||
 
-normalized.includes(
-"chiudi mappa"
-)
+normalized.includes("chiudi mappa")
 
 ||
 
-normalized.includes(
-"esci dalla mappa"
-)
+normalized.includes("esci dalla mappa")
 
 ||
 
-normalized.includes(
-"torna alla modalita normale"
-)
+normalized.includes("torna alla modalita normale")
 
 ){
 
@@ -4602,26 +3411,32 @@ return true;
 
 }
 
-const patterns=[
+
+const patterns = [
 
 "mostrami ",
+
 "mostra ",
+
 "vai a ",
+
 "portami a ",
+
 "localizza ",
+
 "cerca ",
+
 "visualizza "
 
 ];
+
 
 for(
 const pattern of patterns
 ){
 
 if(
-normalized.startsWith(
-pattern
-)
+normalized.startsWith(pattern)
 ){
 
 const place =
@@ -4629,7 +3444,8 @@ text.trim().substring(
 pattern.length
 ).trim();
 
-if(place.length>1){
+
+if(place.length > 1){
 
 searchLocation(place);
 
@@ -4641,48 +3457,48 @@ return true;
 
 }
 
+
 return false;
 
 }
+
 
 /* =====================================================
    WEB WINDOWS
 ===================================================== */
 
-let webWindowCounter=0;
-
-let highestWebZ=220;
-
 function updateWebIndicator(){
 
 const count =
 webSearchWindows
-.querySelectorAll(
-".web-window"
-)
+.querySelectorAll(".web-window")
 .length;
 
-if(count>0){
 
-webSearchIndicator
-.classList.add("active");
+if(count > 0){
 
-webSearchIndicator.textContent=
-"WEB WINDOWS: "+
+webSearchIndicator.classList.add(
+"active"
+);
+
+webSearchIndicator.textContent =
+"WEB WINDOWS: " +
 count;
 
 }
 
 else{
 
-webSearchIndicator
-.classList.remove("active");
+webSearchIndicator.classList.remove(
+"active"
+);
 
 }
 
-updateControlCenter();
+updateSystemPanel();
 
 }
+
 
 function bringWebWindowToFront(
 windowElement
@@ -4690,46 +3506,51 @@ windowElement
 
 highestWebZ++;
 
-windowElement.style.zIndex=
+windowElement.style.zIndex =
 String(highestWebZ);
 
 }
+
 
 function openWebSearch(query){
 
 if(!query)
 return;
 
+
 webWindowCounter++;
+
 
 const windowElement =
 document.createElement("div");
 
-windowElement.className=
+windowElement.className =
 "web-window";
 
-const offset=
-(webWindowCounter-1)%5;
 
-windowElement.style.left=
-(
-30+
-offset*45
-)+"px";
+const offset =
+(webWindowCounter - 1) % 5;
 
-windowElement.style.top=
-(
-90+
-offset*35
-)+"px";
 
-windowElement.style.zIndex=
+windowElement.style.left =
+(30 + offset * 45) +
+"px";
+
+
+windowElement.style.top =
+(90 + offset * 35) +
+"px";
+
+
+windowElement.style.zIndex =
 String(++highestWebZ);
 
-const safeTitle=
+
+const safeTitle =
 escapeHtml(query);
 
-windowElement.innerHTML=`
+
+windowElement.innerHTML = `
 
 <div class="web-window-header">
 
@@ -4781,29 +3602,30 @@ class="web-window-open">
 </button>
 
 </div>
-
 `;
+
 
 webSearchWindows.appendChild(
 windowElement
 );
 
+
 const iframe =
-windowElement.querySelector(
-"iframe"
-);
+windowElement.querySelector("iframe");
 
 const openButton =
-windowElement.querySelector(
-".web-window-open"
-);
+windowElement.querySelector(".web-window-open");
 
-const searchUrl=
-"https://www.bing.com/search?q="+
+
+const searchUrl =
+"https://www.bing.com/search?q="
++
 encodeURIComponent(query);
 
-iframe.src=
+
+iframe.src =
 searchUrl;
+
 
 openButton.addEventListener(
 "click",
@@ -4820,6 +3642,7 @@ searchUrl,
 }
 );
 
+
 windowElement.addEventListener(
 "pointerdown",
 ()=>{
@@ -4831,10 +3654,12 @@ windowElement
 }
 );
 
+
 const minimizeButton =
 windowElement.querySelector(
 ".minimize-web"
 );
+
 
 minimizeButton.addEventListener(
 "click",
@@ -4849,10 +3674,12 @@ windowElement.classList.toggle(
 }
 );
 
+
 const closeButton =
 windowElement.querySelector(
 ".close-web"
 );
+
 
 closeButton.addEventListener(
 "click",
@@ -4867,6 +3694,7 @@ updateWebIndicator();
 }
 );
 
+
 /* =====================================================
    DRAG
 ===================================================== */
@@ -4876,9 +3704,12 @@ windowElement.querySelector(
 ".web-window-header"
 );
 
-let dragging=false;
-let dragOffsetX=0;
-let dragOffsetY=0;
+let dragging = false;
+
+let dragOffsetX = 0;
+
+let dragOffsetY = 0;
+
 
 header.addEventListener(
 "pointerdown",
@@ -4891,22 +3722,26 @@ event.target.closest(
 )
 return;
 
-dragging=true;
+
+dragging = true;
 
 bringWebWindowToFront(
 windowElement
 );
 
+
 const rect =
 windowElement.getBoundingClientRect();
 
-dragOffsetX=
-event.clientX-
+
+dragOffsetX =
+event.clientX -
 rect.left;
 
-dragOffsetY=
-event.clientY-
+dragOffsetY =
+event.clientY -
 rect.top;
+
 
 try{
 
@@ -4916,6 +3751,7 @@ event.pointerId
 
 }catch(e){}
 
+
 event.preventDefault();
 
 },
@@ -4923,6 +3759,7 @@ event.preventDefault();
 passive:false
 }
 );
+
 
 header.addEventListener(
 "pointermove",
@@ -4931,31 +3768,41 @@ event=>{
 if(!dragging)
 return;
 
+
 event.preventDefault();
 
-let newLeft=
-event.clientX-
+
+let newLeft =
+event.clientX -
 dragOffsetX;
 
-let newTop=
-event.clientY-
+
+let newTop =
+event.clientY -
 dragOffsetY;
 
-const rect=
+
+const rect =
 windowElement.getBoundingClientRect();
 
-const minLeft=
--rect.width+120;
 
-const maxLeft=
-window.innerWidth-120;
+const minLeft =
+-rect.width + 120;
 
-const minTop=10;
 
-const maxTop=
-window.innerHeight-70;
+const maxLeft =
+window.innerWidth - 120;
 
-newLeft=
+
+const minTop =
+10;
+
+
+const maxTop =
+window.innerHeight - 70;
+
+
+newLeft =
 Math.max(
 minLeft,
 Math.min(
@@ -4964,7 +3811,8 @@ maxLeft
 )
 );
 
-newTop=
+
+newTop =
 Math.max(
 minTop,
 Math.min(
@@ -4973,11 +3821,13 @@ maxTop
 )
 );
 
-windowElement.style.left=
-newLeft+"px";
 
-windowElement.style.top=
-newTop+"px";
+windowElement.style.left =
+newLeft + "px";
+
+
+windowElement.style.top =
+newTop + "px";
 
 },
 {
@@ -4985,12 +3835,15 @@ passive:false
 }
 );
 
+
 function stopDragging(event){
 
 if(!dragging)
 return;
 
-dragging=false;
+
+dragging = false;
+
 
 try{
 
@@ -5001,6 +3854,7 @@ event.pointerId
 }catch(e){}
 
 }
+
 
 header.addEventListener(
 "pointerup",
@@ -5016,55 +3870,65 @@ header.addEventListener(
 "lostpointercapture",
 ()=>{
 
-dragging=false;
+dragging = false;
 
 }
 );
+
 
 updateWebIndicator();
 
 addMsg(
-"Ricerca web: "+
+"Ricerca web: " +
 query
 );
 
 notify(
-"WEB SEARCH OPENED"
+"RICERCA WEB APERTA"
 );
 
 }
 
+
 /* =====================================================
-   WEB COMMAND
+   COMANDI WEB
 ===================================================== */
 
 function handleWebCommand(text){
 
-const normalized=
+const normalized =
 normalizeCommand(text);
 
-const patterns=[
+
+const patterns = [
 
 "cerca sul web ",
+
 "cerca nel web ",
+
 "ricerca sul web ",
+
 "ricerca web ",
+
 "cerca online ",
+
 "cerca su internet ",
+
 "cerca in internet ",
+
 "fammi una ricerca su ",
+
 "fai una ricerca su "
 
 ];
+
 
 for(
 const pattern of patterns
 ){
 
 if(
-normalized.startsWith(
-pattern
-)
+normalized.startsWith(pattern)
 ){
 
 const query =
@@ -5072,7 +3936,8 @@ text.trim().substring(
 pattern.length
 ).trim();
 
-if(query.length>1){
+
+if(query.length > 1){
 
 openWebSearch(query);
 
@@ -5084,38 +3949,45 @@ return true;
 
 }
 
+
 return false;
 
 }
 
+
 /* =====================================================
-   WEB WINDOW COMMANDS
+   COMANDI FINESTRE
 ===================================================== */
 
 function handleWebWindowCommand(text){
 
-const normalized=
+const normalized =
 normalizeCommand(text);
+
 
 if(
 
-normalized==="chiudi le ricerche web"
+normalized ===
+"chiudi le ricerche web"
 
 ||
 
-normalized==="chiudi ricerca web"
+normalized ===
+"chiudi ricerca web"
 
 ||
 
-normalized==="chiudi tutte le ricerche"
+normalized ===
+"chiudi tutte le ricerche"
 
 ||
 
-normalized==="chiudi tutte le finestre web"
+normalized ===
+"chiudi tutte le finestre web"
 
 ){
 
-webSearchWindows.innerHTML="";
+webSearchWindows.innerHTML = "";
 
 updateWebIndicator();
 
@@ -5123,28 +3995,25 @@ addMsg(
 "Finestre web chiuse."
 );
 
-notify(
-"WEB WINDOWS CLOSED"
-);
-
 return true;
 
 }
 
+
 if(
 
-normalized==="minimizza le ricerche web"
+normalized ===
+"minimizza le ricerche web"
 
 ||
 
-normalized==="minimizza tutte le ricerche"
+normalized ===
+"minimizza tutte le ricerche"
 
 ){
 
 webSearchWindows
-.querySelectorAll(
-".web-window"
-)
+.querySelectorAll(".web-window")
 .forEach(
 windowElement=>
 windowElement.classList.add(
@@ -5160,17 +4029,19 @@ return true;
 
 }
 
+
 return false;
 
 }
 
+
 /* =====================================================
-   DATI TEMPORALI
+   TEMPO
 ===================================================== */
 
 function getTimeData(){
 
-const now=
+const now =
 new Date();
 
 return{
@@ -5212,6 +4083,7 @@ Intl.DateTimeFormat()
 
 }
 
+
 /* =====================================================
    VOCI
 ===================================================== */
@@ -5223,36 +4095,39 @@ if(
 )
 return;
 
-deviceVoices=
-window.speechSynthesis
-.getVoices();
 
-voiceSelector.innerHTML="";
+deviceVoices =
+window.speechSynthesis.getVoices();
 
-const automatic=
+
+voiceSelector.innerHTML = "";
+
+
+const automatic =
 document.createElement("option");
 
-automatic.value="";
+automatic.value = "";
 
-automatic.textContent=
+automatic.textContent =
 "Voce dispositivo automatica";
 
 voiceSelector.appendChild(
 automatic
 );
 
+
 deviceVoices.forEach(
 (voice,index)=>{
 
-const option=
+const option =
 document.createElement("option");
 
-option.value=
+option.value =
 String(index);
 
-option.textContent=
-voice.name+
-" — "+
+option.textContent =
+voice.name +
+" — " +
 voice.lang;
 
 voiceSelector.appendChild(
@@ -5262,35 +4137,36 @@ option
 }
 );
 
-const savedVoice=
+
+const savedVoice =
 localStorage.getItem(
 "jarvis_device_voice"
 );
 
+
 if(
 
-savedVoice!==null
+savedVoice !== null
 
 &&
 
-Number(savedVoice)<
+Number(savedVoice) <
 deviceVoices.length
 
 ){
 
-voiceSelector.value=
+voiceSelector.value =
 savedVoice;
 
-selectedDeviceVoice=
+selectedDeviceVoice =
 deviceVoices[
 Number(savedVoice)
 ];
 
 }
 
-updateControlCenter();
-
 }
+
 
 if(
 "speechSynthesis" in window
@@ -5298,13 +4174,13 @@ if(
 
 loadDeviceVoices();
 
-window.speechSynthesis
-.addEventListener(
+window.speechSynthesis.addEventListener(
 "voiceschanged",
 loadDeviceVoices
 );
 
 }
+
 
 /* =====================================================
    DEVICE TTS
@@ -5325,33 +4201,41 @@ return;
 
 }
 
+
 try{
 
 window.speechSynthesis.cancel();
 
-const utterance=
+
+const utterance =
 new SpeechSynthesisUtterance(
 text
 );
 
-utterance.lang="it-IT";
 
-utterance.rate=.95;
+utterance.lang =
+"it-IT";
 
-utterance.pitch=.9;
+utterance.rate =
+.95;
 
-utterance.volume=1;
+utterance.pitch =
+.9;
+
+utterance.volume =
+1;
+
 
 if(selectedDeviceVoice){
 
-utterance.voice=
+utterance.voice =
 selectedDeviceVoice;
 
 }
 
 else{
 
-const italianVoice=
+const italianVoice =
 deviceVoices.find(
 voice=>
 voice.lang
@@ -5359,23 +4243,30 @@ voice.lang
 .startsWith("it")
 );
 
-if(italianVoice)
-utterance.voice=
+if(italianVoice){
+
+utterance.voice =
 italianVoice;
 
 }
 
-utterance.onstart=()=>{
+}
 
-audioPlaying=true;
+
+utterance.onstart =
+()=>{
+
+audioPlaying = true;
 
 setState("speaking");
 
 };
 
-utterance.onend=()=>{
 
-audioPlaying=false;
+utterance.onend =
+()=>{
+
+audioPlaying = false;
 
 setState("idle");
 
@@ -5383,9 +4274,11 @@ resolve(true);
 
 };
 
-utterance.onerror=()=>{
 
-audioPlaying=false;
+utterance.onerror =
+()=>{
+
+audioPlaying = false;
 
 setState("idle");
 
@@ -5393,9 +4286,11 @@ resolve(false);
 
 };
 
+
 window.speechSynthesis.speak(
 utterance
 );
+
 
 setTimeout(
 ()=>{
@@ -5410,9 +4305,13 @@ window.speechSynthesis.resume();
 100
 );
 
+
 }catch(error){
 
-console.error(error);
+console.error(
+"Speech:",
+error
+);
 
 resolve(false);
 
@@ -5420,6 +4319,7 @@ resolve(false);
 
 }
 );
+
 
 /* =====================================================
    ELEVENLABS
@@ -5430,32 +4330,36 @@ async function speakElevenLabs(text){
 if(!text)
 return false;
 
+
 if(currentAudio){
 
 try{
 
 currentAudio.pause();
 
-currentAudio.currentTime=0;
+currentAudio.currentTime = 0;
 
 }catch(e){}
 
-currentAudio=null;
+currentAudio = null;
 
 }
 
-const controller=
+
+const controller =
 new AbortController();
 
-const timeout=
+
+const timeout =
 setTimeout(
 ()=>controller.abort(),
 30000
 );
 
+
 try{
 
-const response=
+const response =
 await fetch(
 API,
 {
@@ -5484,51 +4388,65 @@ controller.signal
 }
 );
 
+
 if(!response.ok)
 return false;
 
-const contentType=
-response.headers.get(
-"content-type"
-)||"";
+
+const contentType =
+response.headers
+.get("content-type")
+||"";
+
 
 if(
 !contentType.includes("audio")
 )
 return false;
 
-const audioBlob=
+
+const audioBlob =
 await response.blob();
 
+
 if(
-!audioBlob||
-audioBlob.size===0
+!audioBlob ||
+audioBlob.size === 0
 )
 return false;
 
-const audioUrl=
+
+const audioUrl =
 URL.createObjectURL(
 audioBlob
 );
 
-const audio=
+
+const audio =
 new Audio(audioUrl);
 
-currentAudio=audio;
 
-audio.volume=1;
+currentAudio =
+audio;
 
-audio.onplay=()=>{
 
-audioPlaying=true;
+audio.volume = 1;
+
+
+audio.onplay =
+()=>{
+
+audioPlaying = true;
 
 setState("speaking");
 
 };
 
-audio.onended=()=>{
 
-audioPlaying=false;
+audio.onended =
+()=>{
+
+audioPlaying = false;
 
 setState("idle");
 
@@ -5536,8 +4454,11 @@ URL.revokeObjectURL(
 audioUrl
 );
 
-if(currentAudio===audio)
-currentAudio=null;
+if(
+currentAudio === audio
+)
+currentAudio = null;
+
 
 if(conversationMode){
 
@@ -5552,9 +4473,11 @@ startContinuousRecognition();
 
 };
 
-audio.onerror=()=>{
 
-audioPlaying=false;
+audio.onerror =
+()=>{
+
+audioPlaying = false;
 
 setState("idle");
 
@@ -5574,10 +4497,12 @@ startContinuousRecognition();
 }
 
 };
+
 
 await audio.play();
 
 return true;
+
 
 }catch(error){
 
@@ -5596,24 +4521,41 @@ clearTimeout(timeout);
 
 }
 
+
 /* =====================================================
    SPEAK
 ===================================================== */
 
 async function speak(text){
 
-if(!text||!speechEnabled)
+if(!text)
 return;
 
-const elevenSuccess=
+
+const elevenSuccess =
 await speakElevenLabs(text);
+
 
 if(elevenSuccess)
 return;
 
+
 await speakDevice(text);
 
+
+if(conversationMode){
+
+setTimeout(
+()=>{
+startContinuousRecognition();
+},
+150
+);
+
 }
+
+}
+
 
 /* =====================================================
    VOICE UI
@@ -5630,16 +4572,18 @@ await speakDevice(
 }
 );
 
+
 voiceSelector.addEventListener(
 "change",
 ()=>{
 
-const value=
+const value =
 voiceSelector.value;
 
-if(value===""){
 
-selectedDeviceVoice=null;
+if(value === ""){
+
+selectedDeviceVoice = null;
 
 localStorage.removeItem(
 "jarvis_device_voice"
@@ -5649,8 +4593,10 @@ return;
 
 }
 
-const index=
+
+const index =
 Number(value);
+
 
 if(
 Number.isInteger(index)
@@ -5658,7 +4604,7 @@ Number.isInteger(index)
 deviceVoices[index]
 ){
 
-selectedDeviceVoice=
+selectedDeviceVoice =
 deviceVoices[index];
 
 localStorage.setItem(
@@ -5670,6 +4616,7 @@ String(index)
 
 }
 );
+
 
 voiceBtn.addEventListener(
 "click",
@@ -5684,171 +4631,10 @@ loadDeviceVoices();
 }
 );
 
-document.getElementById(
-"openVoiceBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-voicePanel.classList.add(
-"active"
-);
-
-loadDeviceVoices();
-
-}
-);
 
 /* =====================================================
    CONVERSAZIONE
 ===================================================== */
-
-let conversationMode=false;
-let conversationStarting=false;
-
-const Recognition=
-window.SpeechRecognition||
-window.webkitSpeechRecognition;
-
-let recognition=null;
-let listening=false;
-let recognitionStopping=false;
-
-if(Recognition){
-
-recognition=
-new Recognition();
-
-recognition.lang="it-IT";
-
-recognition.continuous=false;
-
-recognition.interimResults=false;
-
-recognition.onstart=()=>{
-
-listening=true;
-
-conversationStarting=false;
-
-micBtn.classList.add(
-"active"
-);
-
-setState("listening");
-
-updateControlCenter();
-
-};
-
-recognition.onresult=
-event=>{
-
-const result=
-event.results[
-event.results.length-1
-];
-
-if(!result)
-return;
-
-const text=
-result[0]
-.transcript
-.trim();
-
-if(!text)
-return;
-
-textInput.value=text;
-
-if(
-conversationMode&&
-audioPlaying
-){
-
-stopJarvisSpeaking();
-
-}
-
-sendMessage();
-
-};
-
-recognition.onerror=
-error=>{
-
-console.error(
-"Microfono:",
-error
-);
-
-listening=false;
-
-micBtn.classList.remove(
-"active"
-);
-
-if(
-conversationMode&&
-error.error!=="not-allowed"&&
-error.error!=="service-not-allowed"
-){
-
-setTimeout(
-()=>{
-startContinuousRecognition();
-},
-500
-);
-
-}
-
-else{
-
-setState("idle");
-
-}
-
-updateControlCenter();
-
-};
-
-recognition.onend=()=>{
-
-listening=false;
-
-micBtn.classList.remove(
-"active"
-);
-
-if(
-conversationMode&&
-!recognitionStopping
-){
-
-setTimeout(
-()=>{
-startContinuousRecognition();
-},
-250
-);
-
-}
-
-else{
-
-recognitionStopping=false;
-
-if(!conversationMode)
-setState("idle");
-
-}
-
-updateControlCenter();
-
-};
 
 function startRecognition(){
 
@@ -5858,7 +4644,7 @@ return;
 if(listening)
 return;
 
-recognitionStopping=false;
+recognitionStopping = false;
 
 try{
 
@@ -5867,30 +4653,21 @@ recognition.start();
 }catch(error){
 
 console.warn(
-"Avvio microfono:",
+"Microfono:",
 error
 );
 
-setTimeout(
-()=>{
-
-if(!listening)
-startRecognition();
-
-},
-500
-);
-
 }
 
 }
+
 
 function stopRecognition(){
 
 if(!recognition)
 return;
 
-recognitionStopping=true;
+recognitionStopping = true;
 
 try{
 
@@ -5898,13 +4675,14 @@ recognition.stop();
 
 }catch(e){}
 
-listening=false;
+listening = false;
 
 micBtn.classList.remove(
 "active"
 );
 
 }
+
 
 function startContinuousRecognition(){
 
@@ -5918,11 +4696,13 @@ startRecognition();
 
 }
 
+
 function stopContinuousRecognition(){
 
-conversationMode=false;
+conversationMode = false;
 
-recognitionStopping=true;
+recognitionStopping = true;
+
 
 if(recognition){
 
@@ -5934,7 +4714,8 @@ recognition.stop();
 
 }
 
-listening=false;
+
+listening = false;
 
 micBtn.classList.remove(
 "active"
@@ -5944,47 +4725,45 @@ conversationBtn.classList.remove(
 "active"
 );
 
-conversationBtn.textContent=
+conversationBtn.textContent =
 "◉ CONVERSAZIONE";
 
 setState("idle");
 
-updateControlCenter();
-
 }
+
 
 function activateConversationMode(){
 
 if(conversationMode)
 return;
 
-conversationMode=true;
+
+conversationMode = true;
 
 conversationBtn.classList.add(
 "active"
 );
 
-conversationBtn.textContent=
+conversationBtn.textContent =
 "● CONVERSAZIONE ATTIVA";
+
 
 addMsg(
 "Modalità conversazione continua attivata."
 );
 
-notify(
-"VOICE MODE ACTIVE"
-);
 
 startContinuousRecognition();
 
-updateControlCenter();
-
 }
+
 
 function deactivateConversationMode(){
 
 if(!conversationMode)
 return;
+
 
 stopContinuousRecognition();
 
@@ -5992,23 +4771,177 @@ addMsg(
 "Modalità conversazione continua disattivata."
 );
 
-notify(
-"VOICE MODE OFF"
-);
-
 }
+
 
 conversationBtn.addEventListener(
 "click",
 ()=>{
 
-if(conversationMode)
+if(conversationMode){
+
 deactivateConversationMode();
-else
+
+}
+
+else{
+
 activateConversationMode();
 
 }
+
+}
 );
+
+
+/* =====================================================
+   SPEECH RECOGNITION
+===================================================== */
+
+const Recognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+
+if(Recognition){
+
+recognition =
+new Recognition();
+
+recognition.lang =
+"it-IT";
+
+recognition.continuous =
+false;
+
+recognition.interimResults =
+false;
+
+
+recognition.onstart =
+()=>{
+
+listening = true;
+
+conversationStarting = false;
+
+micBtn.classList.add(
+"active"
+);
+
+setState("listening");
+
+};
+
+
+recognition.onresult =
+event=>{
+
+const result =
+event.results[
+event.results.length - 1
+];
+
+
+if(!result)
+return;
+
+
+const text =
+result[0]
+.transcript
+.trim();
+
+
+if(!text)
+return;
+
+
+textInput.value =
+text;
+
+
+sendMessage();
+
+};
+
+
+recognition.onerror =
+error=>{
+
+console.error(
+"Microfono:",
+error
+);
+
+listening = false;
+
+micBtn.classList.remove(
+"active"
+);
+
+
+if(
+conversationMode
+&&
+error.error !== "not-allowed"
+&&
+error.error !== "service-not-allowed"
+){
+
+setTimeout(
+startContinuousRecognition,
+500
+);
+
+}
+
+else{
+
+setState("idle");
+
+}
+
+};
+
+
+recognition.onend =
+()=>{
+
+listening = false;
+
+micBtn.classList.remove(
+"active"
+);
+
+
+if(
+conversationMode
+&&
+!recognitionStopping
+){
+
+setTimeout(
+startContinuousRecognition,
+250
+);
+
+}
+
+else{
+
+recognitionStopping = false;
+
+if(!conversationMode){
+
+setState("idle");
+
+}
+
+}
+
+};
+
 
 micBtn.addEventListener(
 "click",
@@ -6022,21 +4955,33 @@ return;
 
 }
 
-if(listening)
+
+if(listening){
+
 stopRecognition();
-else
+
+}
+
+else{
+
 startRecognition();
+
+}
 
 }
 );
 
-}else{
+}
+else{
 
-micBtn.style.opacity=".3";
+micBtn.style.opacity =
+".3";
 
-conversationBtn.style.opacity=".35";
+conversationBtn.style.opacity =
+".35";
 
 }
+
 
 /* =====================================================
    COMANDI CONVERSAZIONE
@@ -6044,35 +4989,46 @@ conversationBtn.style.opacity=".35";
 
 function handleConversationCommand(text){
 
-const normalized=
+const normalized =
 normalizeCommand(text);
 
-const activateCommands=[
+
+const activateCommands = [
 
 "attiva modalita conversazione",
+
 "attiva la modalita conversazione",
+
 "modalita conversazione",
+
 "avvia modalita conversazione",
+
 "inizia modalita conversazione",
+
 "conversazione continua",
+
 "attiva conversazione continua"
 
 ];
 
-const deactivateCommands=[
+
+const deactivateCommands = [
 
 "disattiva modalita conversazione",
+
 "disattiva la modalita conversazione",
+
 "chiudi modalita conversazione",
+
 "stop modalita conversazione",
+
 "disattiva conversazione continua"
 
 ];
 
+
 if(
-activateCommands.includes(
-normalized
-)
+activateCommands.includes(normalized)
 ){
 
 activateConversationMode();
@@ -6081,10 +5037,9 @@ return true;
 
 }
 
+
 if(
-deactivateCommands.includes(
-normalized
-)
+deactivateCommands.includes(normalized)
 ){
 
 deactivateConversationMode();
@@ -6093,424 +5048,361 @@ return true;
 
 }
 
+
+const hasConversation =
+normalized.includes(
+"conversazione"
+);
+
+
+const wantsActivate =
+normalized.includes("attiva")
+||
+normalized.includes("avvia")
+||
+normalized.includes("inizia");
+
+
+const wantsDeactivate =
+normalized.includes("disattiva")
+||
+normalized.includes("chiudi")
+||
+normalized.includes("stop");
+
+
+if(
+hasConversation &&
+wantsActivate
+){
+
+activateConversationMode();
+
+return true;
+
+}
+
+
+if(
+hasConversation &&
+wantsDeactivate
+){
+
+deactivateConversationMode();
+
+return true;
+
+}
+
+
 return false;
 
 }
 
+
 /* =====================================================
-   STOP VOCE
+   FULLSCREEN COMMAND
 ===================================================== */
 
-function stopJarvisSpeaking(){
+function handleFullscreenCommand(text){
 
-if(currentAudio){
+const normalized =
+normalizeCommand(text);
 
-try{
 
-currentAudio.pause();
+const simplified =
+normalized
 
-currentAudio.currentTime=0;
+.replace(
+/\bper favore\b/g,
+""
+)
 
-}catch(e){}
+.replace(
+/\bjarvis\b/g,
+""
+)
 
-currentAudio=null;
+.replace(
+/\s+/g,
+" "
+)
 
-}
+.trim();
+
 
 if(
-"speechSynthesis" in window
+simplified === "fullscreen"
+||
+simplified === "schermo intero"
+||
+simplified === "attiva fullscreen"
+||
+simplified === "attiva schermo intero"
+||
+simplified === "metti fullscreen"
+||
+simplified === "metti in fullscreen"
 ){
 
-try{
+enterFullscreen();
 
-window.speechSynthesis.cancel();
-
-}catch(e){}
+return true;
 
 }
 
-audioPlaying=false;
-
-setState("listening");
-
-}
-
-/* =====================================================
-   TEST API
-===================================================== */
-
-async function testApi(){
-
-const apiStatus=
-document.getElementById(
-"apiStatus"
-);
-
-apiStatus.textContent=
-"CHECKING...";
-
-try{
-
-const controller=
-new AbortController();
-
-const timeout=
-setTimeout(
-()=>controller.abort(),
-8000
-);
-
-const response=
-await fetch(
-API,
-{
-method:"GET",
-signal:
-controller.signal
-}
-);
-
-clearTimeout(timeout);
-
-if(response.ok){
-
-apiStatus.textContent=
-"ONLINE";
-
-apiStatus.className=
-"status-value status-online";
-
-notify(
-"API CONNECTION ONLINE"
-);
-
-}
-
-else{
-
-apiStatus.textContent=
-"HTTP "+
-response.status;
-
-apiStatus.className=
-"status-value status-offline";
-
-}
-
-}catch(error){
-
-apiStatus.textContent=
-"OFFLINE";
-
-apiStatus.className=
-"status-value status-offline";
-
-}
-
-}
-
-document.getElementById(
-"testApiBtn"
-)
-.addEventListener(
-"click",
-testApi
-);
-
-/* =====================================================
-   SYSTEM INFO
-===================================================== */
-
-async function updateSystemInfo(){
-
-const screenStatus=
-document.getElementById(
-"screenStatus"
-);
-
-if(screenStatus){
-
-screenStatus.textContent=
-window.innerWidth+
-" × "+
-window.innerHeight;
-
-}
-
-const languageStatus=
-document.getElementById(
-"languageStatus"
-);
-
-if(languageStatus){
-
-languageStatus.textContent=
-navigator.language||
-"N/D";
-
-}
-
-const timezoneStatus=
-document.getElementById(
-"timezoneStatus"
-);
-
-if(timezoneStatus){
-
-timezoneStatus.textContent=
-Intl.DateTimeFormat()
-.resolvedOptions()
-.timeZone||
-"N/D";
-
-}
-
-const browserStatus=
-document.getElementById(
-"browserStatus"
-);
-
-if(browserStatus){
-
-browserStatus.textContent=
-navigator.userAgent
-.includes("Chrome")?
-"CHROME":
-navigator.userAgent
-.includes("Firefox")?
-"FIREFOX":
-navigator.userAgent
-.includes("Safari")?
-"SAFARI":
-"WEB";
-
-}
-
-const batteryStatus=
-document.getElementById(
-"batteryStatus"
-);
 
 if(
-batteryStatus &&
+simplified === "disattiva fullscreen"
+||
+simplified === "esci dal fullscreen"
+||
+simplified === "esci fullscreen"
+||
+simplified === "torna normale"
+){
+
+exitFullscreen();
+
+return true;
+
+}
+
+
+return false;
+
+}
+
+
+/* =====================================================
+   CONTROL CENTER
+===================================================== */
+
+function updateSystemPanel(){
+
+const memoryElement =
+document.getElementById(
+"systemMemory"
+);
+
+const webElement =
+document.getElementById(
+"systemWeb"
+);
+
+const voiceElement =
+document.getElementById(
+"systemVoice"
+);
+
+
+if(memoryElement){
+
+memoryElement.innerHTML =
+"ENTRIES: " +
+memory.length +
+"<br>STORAGE: LOCAL";
+
+}
+
+
+if(webElement){
+
+webElement.innerHTML =
+"WINDOWS: " +
+webSearchWindows
+.querySelectorAll(".web-window")
+.length +
+"<br>ENGINE: BING";
+
+}
+
+
+if(voiceElement){
+
+voiceElement.innerHTML =
+"SPEECH: " +
+(
+"speechSynthesis" in window
+?
+"READY"
+:
+"OFFLINE"
+)
++
+"<br>MIC: " +
+(
+recognition
+?
+"AVAILABLE"
+:
+"UNAVAILABLE"
+);
+
+}
+
+
+const hardware =
+document.getElementById(
+"systemHardware"
+);
+
+
+if(hardware){
+
+let battery =
+"UNAVAILABLE";
+
+
+if(
 navigator.getBattery
 ){
 
-try{
+navigator.getBattery()
+.then(
+batteryObject=>{
 
-const battery=
-await navigator.getBattery();
-
-batteryStatus.textContent=
+hardware.innerHTML =
+"SCREEN: " +
+window.innerWidth +
+"x" +
+window.innerHeight +
+"<br>BATTERY: " +
 Math.round(
-battery.level*100
-)+
-"% "+
+batteryObject.level * 100
+) +
+"%"
++
+"<br>NETWORK: " +
 (
-battery.charging?
-"CHARGING":
-"BATTERY"
-);
-
-}catch(e){
-
-batteryStatus.textContent=
-"N/D";
-
-}
-
-}
-
-else if(batteryStatus){
-
-batteryStatus.textContent=
-"N/D";
-
-}
-
-const networkStatus=
-document.getElementById(
-"networkStatus"
-);
-
-if(networkStatus){
-
-networkStatus.textContent=
-navigator.onLine?
-"ONLINE":
-"OFFLINE";
-
-}
-
-}
-
-window.addEventListener(
-"online",
-()=>{
-
-updateControlCenter();
-
-notify(
-"NETWORK ONLINE"
+navigator.onLine
+?
+"ONLINE"
+:
+"OFFLINE"
 );
 
 }
 );
 
-window.addEventListener(
-"offline",
-()=>{
+}
+else{
 
-updateControlCenter();
-
-notify(
-"NETWORK OFFLINE"
+hardware.innerHTML =
+"SCREEN: " +
+window.innerWidth +
+"x" +
+window.innerHeight +
+"<br>BATTERY: " +
+battery +
+"<br>NETWORK: " +
+(
+navigator.onLine
+?
+"ONLINE"
+:
+"OFFLINE"
 );
 
 }
-);
 
-document.getElementById(
-"refreshSystemBtn"
-)
-.addEventListener(
+}
+
+}
+
+
+controlBtn.addEventListener(
 "click",
 ()=>{
 
-updateSystemInfo();
-
-notify(
-"SYSTEM DIAGNOSTICS UPDATED"
-);
-
-}
-);
-
-/* =====================================================
-   MAP CONTROL
-===================================================== */
-
-document.getElementById(
-"openMapBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-closeControlCenter();
-
-openTacticalMap();
-
-}
-);
-
-/* =====================================================
-   WEB CONTROL
-===================================================== */
-
-document.getElementById(
-"closeWebBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-webSearchWindows.innerHTML="";
-
-updateWebIndicator();
-
-notify(
-"WEB WINDOWS CLOSED"
-);
-
-}
-);
-
-document.getElementById(
-"minimizeWebBtn"
-)
-.addEventListener(
-"click",
-()=>{
-
-webSearchWindows
-.querySelectorAll(
-".web-window"
-)
-.forEach(
-windowElement=>
-windowElement.classList.add(
-"minimized"
-)
-);
-
-notify(
-"WEB WINDOWS MINIMIZED"
-);
-
-}
-);
-
-/* =====================================================
-   SETTINGS TOGGLES
-===================================================== */
-
-function setupToggle(
-id,
-callback
-){
-
-const toggle=
-document.getElementById(id);
-
-toggle.addEventListener(
-"click",
-()=>{
-
-toggle.classList.toggle(
+controlCenter.classList.toggle(
 "active"
 );
 
-callback(
-toggle.classList.contains(
+updateSystemPanel();
+
+}
+);
+
+
+controlClose.addEventListener(
+"click",
+()=>{
+
+controlCenter.classList.remove(
 "active"
+);
+
+}
+);
+
+
+document.getElementById(
+"showMemoryBtn"
 )
+.addEventListener(
+"click",
+()=>{
+
+if(!memory.length){
+
+addMsg(
+"La memoria JARVIS è vuota."
+);
+
+return;
+
+}
+
+
+const preview =
+memory
+.slice(-10)
+.map(
+(item,index)=>
+(index+1) +
+". " +
+item.role +
+": " +
+item.content
+)
+.join("\n");
+
+
+addMsg(
+preview
 );
 
 }
 );
 
-}
 
-setupToggle(
-"hudToggle",
-value=>{
+document.getElementById(
+"clearMemoryBtn"
+)
+.addEventListener(
+"click",
+()=>{
 
-hudNotificationsEnabled=value;
+memory = [];
+
+localStorage.removeItem(
+MEMORY_KEY
+);
+
+updateSystemPanel();
+
+notify(
+"MEMORIA CANCELLATA"
+);
+
+addMsg(
+"Memoria JARVIS cancellata."
+);
 
 }
 );
 
-setupToggle(
-"speechToggle",
-value=>{
-
-speechEnabled=value;
-
-if(!value)
-stopJarvisSpeaking();
-
-}
-);
-
-setupToggle(
-"focusToggle",
-value=>{
-
-autoFocusEnabled=value;
-
-}
-);
 
 /* =====================================================
    PROCESS AI
@@ -6523,42 +5415,51 @@ handleFullscreenCommand(text)
 )
 return;
 
+
 if(
 handleConversationCommand(text)
 )
 return;
+
 
 if(
 handleWebWindowCommand(text)
 )
 return;
 
+
 if(
 handleWebCommand(text)
 )
 return;
+
 
 if(
 handleMapCommand(text)
 )
 return;
 
+
 setState("thinking");
+
 
 try{
 
-const temporal=
+const temporal =
 getTimeData();
+
 
 addMemory(
 "user",
 text
 );
 
-const controller=
+
+const controller =
 new AbortController();
 
-const timeout=
+
+const timeout =
 setTimeout(
 ()=>{
 controller.abort();
@@ -6566,11 +5467,13 @@ controller.abort();
 30000
 );
 
+
 let response;
+
 
 try{
 
-response=
+response =
 await fetch(
 API,
 {
@@ -6610,33 +5513,34 @@ controller.signal
 );
 
 }
-
 finally{
 
 clearTimeout(timeout);
 
 }
 
+
 if(!response.ok){
 
-const errorText=
+const errorText =
 await response.text();
 
-let errorMessage=
-"HTTP "+
+let errorMessage =
+"HTTP " +
 response.status;
+
 
 try{
 
-const errorData=
+const errorData =
 JSON.parse(errorText);
 
 if(
-errorData&&
+errorData &&
 errorData.error
 ){
 
-errorMessage=
+errorMessage =
 errorData.error;
 
 }
@@ -6645,7 +5549,7 @@ errorData.error;
 
 if(errorText){
 
-errorMessage=
+errorMessage =
 errorText.substring(
 0,
 200
@@ -6655,27 +5559,34 @@ errorText.substring(
 
 }
 
+
 throw new Error(
 errorMessage
 );
 
 }
 
-const data=
+
+const data =
 await response.json();
 
-const reply=
-typeof data.response===
-"string"
+
+const reply =
+typeof data.response === "string"
 ?
 data.response.trim()
 :
 "";
 
-if(!reply)
+
+if(!reply){
+
 throw new Error(
 "Risposta AI vuota"
 );
+
+}
+
 
 addMsg(reply);
 
@@ -6684,18 +5595,13 @@ addMemory(
 reply
 );
 
-if(speechEnabled){
 
 speak(reply)
 .catch(console.error);
 
-}
 
 setState("idle");
 
-notify(
-"AI RESPONSE READY"
-);
 
 }catch(error){
 
@@ -6704,51 +5610,51 @@ console.error(
 error
 );
 
-let message=
-error.message||
+
+let message =
+error.message ||
 "Errore sconosciuto";
 
+
 if(
-error.name===
-"AbortError"
+error.name === "AbortError"
 ){
 
-message=
+message =
 "Il server ha impiegato troppo tempo a rispondere.";
 
 }
 
 else if(
-message===
-"Failed to fetch"
+message === "Failed to fetch"
 ){
 
-message=
+message =
 "Errore di connessione al server JARVIS.";
 
 }
 
+
 addMsg(
-"ERRORE: "+
+"ERRORE: " +
 message
 );
 
-setState("idle");
 
-if(conversationMode){
+setState("error");
+
 
 setTimeout(
 ()=>{
-startContinuousRecognition();
+setState("idle");
 },
-500
+1200
 );
 
 }
 
 }
 
-}
 
 /* =====================================================
    INVIO
@@ -6756,41 +5662,36 @@ startContinuousRecognition();
 
 function sendMessage(){
 
-const text=
+const text =
 textInput.value.trim();
+
 
 if(!text)
 return;
 
-textInput.value="";
+
+textInput.value = "";
+
 
 addMsg(text);
 
+
 processAi(text);
 
-if(autoFocusEnabled){
-
-setTimeout(
-()=>{
-textInput.focus();
-},
-50
-);
-
 }
 
-}
 
 sendBtn.addEventListener(
 "click",
 sendMessage
 );
 
+
 textInput.addEventListener(
 "keydown",
 event=>{
 
-if(event.key==="Enter"){
+if(event.key === "Enter"){
 
 event.preventDefault();
 
@@ -6801,6 +5702,7 @@ sendMessage();
 }
 );
 
+
 /* =====================================================
    RESIZE
 ===================================================== */
@@ -6809,8 +5711,10 @@ window.addEventListener(
 "resize",
 ()=>{
 
-camera.aspect=
-window.innerWidth/
+if(camera && renderer){
+
+camera.aspect =
+window.innerWidth /
 window.innerHeight;
 
 camera.updateProjectionMatrix();
@@ -6820,50 +5724,48 @@ window.innerWidth,
 window.innerHeight
 );
 
+}
+
 if(map)
 map.resize();
 
-updateSystemInfo();
+updateSystemPanel();
 
 }
 );
 
-/* =====================================================
-   CANCELLA MEMORIA
-===================================================== */
-
-window.clearJarvisMemory=
-function(){
-
-memory=[];
-
-localStorage.removeItem(
-MEMORY_KEY
-);
-
-updateControlCenter();
-
-console.log(
-"Memoria JARVIS cancellata."
-);
-
-};
 
 /* =====================================================
-   COMANDI GLOBALI
+   ONLINE / OFFLINE
 ===================================================== */
 
-window.openJarvisControlCenter=
-openControlCenter;
+window.addEventListener(
+"online",
+()=>{
 
-window.closeJarvisControlCenter=
-closeControlCenter;
+notify(
+"CONNESSIONE ONLINE"
+);
 
-window.openJarvisMap=
-openTacticalMap;
+updateSystemPanel();
 
-window.closeJarvisMap=
-closeTacticalMap;
+}
+);
+
+
+window.addEventListener(
+"offline",
+()=>{
+
+notify(
+"CONNESSIONE OFFLINE"
+);
+
+updateSystemPanel();
+
+}
+);
+
 
 /* =====================================================
    AVVIO
@@ -6873,26 +5775,11 @@ setState("idle");
 
 updateFullscreenUI();
 
-updateControlCenter();
-
-updateSystemInfo();
-
-testApi();
+updateSystemPanel();
 
 notify(
-"J.A.R.V.I.S. ONLINE"
+"J.A.R.V.I.S. SYSTEM ONLINE"
 );
-
-if(autoFocusEnabled){
-
-setTimeout(
-()=>{
-textInput.focus();
-},
-500
-);
-
-}
 
 </script>
 

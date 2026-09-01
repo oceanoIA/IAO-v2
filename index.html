@@ -24,8 +24,8 @@ body{
 background:
 radial-gradient(
 circle at center,
-#071719 0%,
-#020708 48%,
+#041618 0%,
+#020809 48%,
 #000 100%
 );
 }
@@ -45,8 +45,8 @@ background:
 radial-gradient(
 circle at center,
 transparent 30%,
-rgba(0,0,0,.2) 65%,
-rgba(0,0,0,.8) 100%
+rgba(0,0,0,.3) 65%,
+rgba(0,0,0,.85) 100%
 );
 }
 
@@ -61,7 +61,7 @@ font-size:clamp(20px,2.8vw,31px);
 font-weight:300;
 letter-spacing:clamp(5px,1vw,8px);
 white-space:nowrap;
-text-shadow:0 0 10px rgba(255,255,255,.12);
+text-shadow:0 0 10px rgba(0,229,192,.2);
 pointer-events:none;
 }
 
@@ -79,13 +79,13 @@ pointer-events:none;
 }
 
 .time{
-color:rgba(150,255,255,.6);
+color:rgba(120,245,220,.65);
 font-size:11px;
 letter-spacing:2px;
 }
 
 .date{
-color:rgba(150,255,255,.38);
+color:rgba(120,245,220,.4);
 font-size:8px;
 letter-spacing:1px;
 }
@@ -105,11 +105,11 @@ pointer-events:none;
 display:inline-block;
 max-width:100%;
 padding:10px 18px;
-border:1px solid rgba(0,255,255,.22);
+border:1px solid rgba(0,229,192,.22);
 border-radius:24px;
-background:rgba(4,20,23,.4);
+background:rgba(4,23,24,.45);
 backdrop-filter:blur(14px);
-color:rgba(235,255,255,.9);
+color:rgba(230,255,250,.92);
 font-size:12px;
 line-height:1.45;
 white-space:pre-wrap;
@@ -125,16 +125,16 @@ width:min(650px,90%);
 display:flex;
 align-items:center;
 padding:6px 7px 6px 20px;
-border:1px solid rgba(100,255,255,.28);
+border:1px solid rgba(0,229,192,.28);
 border-radius:40px;
-background:rgba(5,20,23,.38);
+background:rgba(4,22,23,.4);
 backdrop-filter:blur(20px);
-box-shadow:0 0 30px rgba(0,255,255,.05);
+box-shadow:0 0 30px rgba(0,229,192,.05);
 }
 
 .command-wrapper:focus-within{
-border-color:rgba(0,255,255,.6);
-box-shadow:0 0 25px rgba(0,255,255,.12);
+border-color:rgba(0,229,192,.6);
+box-shadow:0 0 25px rgba(0,229,192,.15);
 }
 
 #textInput{
@@ -158,7 +158,7 @@ height:34px;
 margin-right:7px;
 border:none;
 background:transparent;
-color:rgba(210,255,255,.65);
+color:rgba(180,255,235,.7);
 cursor:pointer;
 display:flex;
 align-items:center;
@@ -187,17 +187,17 @@ border-radius:0 0 8px 8px;
 }
 
 #micBtn.active{
-color:#8fffff;
-filter:drop-shadow(0 0 8px rgba(0,255,255,.7));
+color:#00e5c0;
+filter:drop-shadow(0 0 8px rgba(0,229,192,.8));
 }
 
 #sendBtn{
 height:39px;
 padding:0 17px;
-border:1px solid rgba(0,255,255,.28);
+border:1px solid rgba(0,229,192,.28);
 border-radius:22px;
-background:rgba(0,255,255,.05);
-color:rgba(220,255,255,.78);
+background:rgba(0,229,192,.05);
+color:rgba(210,255,245,.8);
 font-size:10px;
 letter-spacing:2px;
 cursor:pointer;
@@ -205,8 +205,8 @@ cursor:pointer;
 
 #sendBtn:hover{
 color:white;
-border-color:#00ffff;
-background:rgba(0,255,255,.1);
+border-color:#00e5c0;
+background:rgba(0,229,192,.12);
 }
 
 /* ================= CONVERSAZIONE ================= */
@@ -218,10 +218,10 @@ bottom:24px;
 z-index:60;
 height:39px;
 padding:0 15px;
-border:1px solid rgba(0,255,255,.25);
+border:1px solid rgba(0,229,192,.25);
 border-radius:22px;
-background:rgba(3,15,18,.72);
-color:rgba(210,255,255,.7);
+background:rgba(3,18,20,.75);
+color:rgba(200,255,240,.75);
 font-size:10px;
 letter-spacing:1.5px;
 cursor:pointer;
@@ -229,10 +229,10 @@ backdrop-filter:blur(12px);
 }
 
 #conversationBtn.active{
-color:#8fffff;
-border-color:rgba(0,255,255,.7);
-background:rgba(0,255,255,.08);
-box-shadow:0 0 18px rgba(0,255,255,.12);
+color:#00e5c0;
+border-color:rgba(0,229,192,.7);
+background:rgba(0,229,192,.08);
+box-shadow:0 0 18px rgba(0,229,192,.15);
 }
 
 /* ================= FULLSCREEN ================= */
@@ -244,10 +244,10 @@ bottom:24px;
 z-index:60;
 height:39px;
 padding:0 15px;
-border:1px solid rgba(0,255,255,.25);
+border:1px solid rgba(0,229,192,.25);
 border-radius:22px;
-background:rgba(3,15,18,.72);
-color:rgba(210,255,255,.7);
+background:rgba(3,18,20,.75);
+color:rgba(200,255,240,.75);
 font-size:10px;
 letter-spacing:1.5px;
 cursor:pointer;
@@ -257,15 +257,15 @@ transition:.2s;
 
 #fullscreenBtn:hover{
 color:white;
-border-color:#00ffff;
-background:rgba(0,255,255,.08);
+border-color:#00e5c0;
+background:rgba(0,229,192,.08);
 }
 
 #fullscreenBtn.active{
-color:#8fffff;
-border-color:rgba(0,255,255,.75);
-background:rgba(0,255,255,.09);
-box-shadow:0 0 18px rgba(0,255,255,.14);
+color:#00e5c0;
+border-color:rgba(0,229,192,.75);
+background:rgba(0,229,192,.09);
+box-shadow:0 0 18px rgba(0,229,192,.16);
 }
 
 /* ================= VOCE ================= */
@@ -277,10 +277,10 @@ bottom:74px;
 z-index:60;
 height:39px;
 padding:0 15px;
-border:1px solid rgba(0,255,255,.25);
+border:1px solid rgba(0,229,192,.25);
 border-radius:22px;
-background:rgba(3,15,18,.72);
-color:rgba(210,255,255,.7);
+background:rgba(3,18,20,.75);
+color:rgba(200,255,240,.75);
 font-size:10px;
 letter-spacing:1.5px;
 cursor:pointer;
@@ -295,9 +295,9 @@ z-index:100;
 width:min(330px,calc(100% - 30px));
 padding:15px;
 display:none;
-border:1px solid rgba(0,255,255,.25);
+border:1px solid rgba(0,229,192,.25);
 border-radius:18px;
-background:rgba(2,13,16,.94);
+background:rgba(2,15,17,.95);
 backdrop-filter:blur(20px);
 }
 
@@ -306,7 +306,7 @@ display:block
 }
 
 .voice-title{
-color:rgba(220,255,255,.9);
+color:rgba(220,255,245,.9);
 font-size:11px;
 letter-spacing:2px;
 margin-bottom:10px;
@@ -316,17 +316,17 @@ margin-bottom:10px;
 #voiceTest{
 width:100%;
 padding:10px;
-border:1px solid rgba(0,255,255,.2);
+border:1px solid rgba(0,229,192,.2);
 border-radius:10px;
 outline:none;
-background:rgba(0,20,23,.9);
-color:rgba(220,255,255,.85);
+background:rgba(0,23,25,.9);
+color:rgba(220,255,245,.85);
 font-size:11px;
 }
 
 #voiceTest{
 margin-top:10px;
-background:rgba(0,255,255,.04);
+background:rgba(0,229,192,.04);
 cursor:pointer;
 }
 
@@ -340,8 +340,8 @@ display:none;
 background:
 radial-gradient(
 circle at center,
-#081719 0%,
-#020708 65%,
+#08191b 0%,
+#020809 65%,
 #000 100%
 );
 }
@@ -368,12 +368,12 @@ top:2.4%;
 left:50%;
 transform:translateX(-50%);
 z-index:600;
-color:rgba(220,255,255,.9);
+color:rgba(220,255,245,.9);
 font-size:clamp(24px,4vw,42px);
 font-weight:300;
 letter-spacing:clamp(6px,1.3vw,12px);
 white-space:nowrap;
-text-shadow:0 0 12px rgba(0,255,255,.25);
+text-shadow:0 0 12px rgba(0,229,192,.25);
 pointer-events:none;
 }
 
@@ -385,11 +385,11 @@ bottom:3cm;
 left:3cm;
 overflow:hidden;
 border-radius:28px;
-background:#071012;
+background:#071113;
 box-shadow:
 0 0 35px rgba(0,0,0,.65),
-0 0 70px rgba(0,255,255,.035);
-border:1px solid rgba(0,255,255,.10);
+0 0 70px rgba(0,229,192,.035);
+border:1px solid rgba(0,229,192,.10);
 }
 
 .map-overlay{
@@ -408,10 +408,10 @@ left:34px;
 z-index:700;
 width:38px;
 height:38px;
-border:1px solid rgba(0,255,255,.35);
+border:1px solid rgba(0,229,192,.35);
 border-radius:50%;
-background:rgba(0,15,18,.85);
-color:rgba(200,255,255,.85);
+background:rgba(0,18,20,.85);
+color:rgba(200,255,240,.85);
 cursor:pointer;
 font-size:19px;
 display:flex;
@@ -420,8 +420,8 @@ justify-content:center;
 }
 
 .maplibregl-ctrl-group{
-background:rgba(0,15,18,.85)!important;
-border:1px solid rgba(0,255,255,.18)!important;
+background:rgba(0,18,20,.85)!important;
+border:1px solid rgba(0,229,192,.18)!important;
 border-radius:12px!important;
 overflow:hidden;
 }
@@ -439,11 +439,11 @@ font-size:8px!important;
 width:20px;
 height:20px;
 border-radius:50%;
-border:2px solid #00ffff;
-background:rgba(0,255,255,.16);
+border:2px solid #00e5c0;
+background:rgba(0,229,192,.16);
 box-shadow:
-0 0 15px rgba(0,255,255,.9),
-0 0 35px rgba(0,255,255,.4);
+0 0 15px rgba(0,229,192,.9),
+0 0 35px rgba(0,229,192,.4);
 animation:markerPulse 1.5s infinite;
 }
 
@@ -471,11 +471,11 @@ width:430px;
 height:330px;
 min-width:250px;
 min-height:190px;
-background:rgba(2,12,15,.96);
-border:1px solid rgba(0,255,255,.28);
+background:rgba(2,14,16,.96);
+border:1px solid rgba(0,229,192,.28);
 border-radius:16px;
 box-shadow:
-0 0 25px rgba(0,255,255,.10),
+0 0 25px rgba(0,229,192,.10),
 0 15px 50px rgba(0,0,0,.5);
 overflow:hidden;
 resize:both;
@@ -490,8 +490,8 @@ height:39px;
 display:flex;
 align-items:center;
 padding:0 8px 0 13px;
-background:rgba(0,25,29,.92);
-border-bottom:1px solid rgba(0,255,255,.15);
+background:rgba(0,28,31,.92);
+border-bottom:1px solid rgba(0,229,192,.15);
 cursor:grab;
 user-select:none;
 -webkit-user-select:none;
@@ -505,7 +505,7 @@ cursor:grabbing;
 .web-window-title{
 flex:1;
 min-width:0;
-color:rgba(210,255,255,.85);
+color:rgba(210,255,245,.85);
 font-size:9px;
 letter-spacing:1.5px;
 white-space:nowrap;
@@ -514,7 +514,7 @@ text-overflow:ellipsis;
 }
 
 .web-window-number{
-color:rgba(0,255,255,.5);
+color:rgba(0,229,192,.5);
 margin-right:8px;
 font-size:8px;
 }
@@ -527,10 +527,10 @@ gap:5px;
 .web-window-btn{
 width:24px;
 height:24px;
-border:1px solid rgba(0,255,255,.16);
+border:1px solid rgba(0,229,192,.16);
 border-radius:7px;
-background:rgba(0,255,255,.025);
-color:rgba(190,255,255,.7);
+background:rgba(0,229,192,.025);
+color:rgba(190,255,240,.7);
 cursor:pointer;
 display:flex;
 align-items:center;
@@ -540,7 +540,7 @@ font-size:12px;
 
 .web-window-btn:hover{
 color:white;
-border-color:#00ffff;
+border-color:#00e5c0;
 }
 
 .web-window iframe{
@@ -568,10 +568,10 @@ bottom:20px;
 z-index:210;
 display:none;
 padding:8px 12px;
-border:1px solid rgba(0,255,255,.2);
+border:1px solid rgba(0,229,192,.2);
 border-radius:15px;
-background:rgba(2,15,18,.75);
-color:rgba(180,255,255,.6);
+background:rgba(2,17,19,.75);
+color:rgba(180,255,240,.6);
 font-size:8px;
 letter-spacing:1.5px;
 pointer-events:none;
@@ -819,105 +819,141 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 container.appendChild(renderer.domElement);
 
-/* ================= NUOVO NUCLEO HUD (SFERA GEODETICA & ANELLI) ================= */
+/* ================= NUOVO NUCLEO EXACT REPLICATED FROM IMAGE ================= */
 
 const jarvisGroup = new THREE.Group();
 scene.add(jarvisGroup);
 
-// 1. Sfera Geodetica Wireframe (La palla al centro)
-const geoGeometry = new THREE.IcosahedronGeometry(1.0, 3);
-const wireframeGeo = new THREE.WireframeGeometry(geoGeometry);
-const geoMaterial = new THREE.LineBasicMaterial({
-  color: 0x8fffff,
-  transparent: true,
-  opacity: 0.75
-});
-const sphereWireframe = new THREE.LineSegments(wireframeGeo, geoMaterial);
-jarvisGroup.add(sphereWireframe);
-
-// 2. Anello Concentrico Interno (Segmentato)
-const ring1Geo = new THREE.RingGeometry(1.25, 1.35, 64);
-const ring1Mat = new THREE.MeshBasicMaterial({
-  color: 0x00cfe8,
-  side: THREE.DoubleSide,
-  transparent: true,
-  opacity: 0.5,
-  wireframe: true
-});
-const innerRing = new THREE.Mesh(ring1Geo, ring1Mat);
-jarvisGroup.add(innerRing);
-
-// 3. Anello Concentrico Esterno (Bordo Sottile)
-const ring2Geo = new THREE.RingGeometry(1.5, 1.52, 64);
-const ring2Mat = new THREE.MeshBasicMaterial({
-  color: 0x00cfe8,
-  side: THREE.DoubleSide,
-  transparent: true,
-  opacity: 0.35
-});
-const outerRing = new THREE.Mesh(ring2Geo, ring2Mat);
-jarvisGroup.add(outerRing);
-
-/* ================= GLOW TEXTURE & PARTICELLE DI BOTTO ================= */
-
-function createGlow(){
+// Texture per particelle luminose
+function createGlowTexture(){
   const canvas=document.createElement("canvas");
   canvas.width=64;
   canvas.height=64;
   const ctx=canvas.getContext("2d");
   const gradient=ctx.createRadialGradient(32,32,0, 32,32,32);
   gradient.addColorStop(0, "rgba(255,255,255,1)");
-  gradient.addColorStop(.2, "rgba(220,255,255,1)");
-  gradient.addColorStop(.4, "rgba(0,255,255,.9)");
-  gradient.addColorStop(.7, "rgba(0,150,190,.25)");
+  gradient.addColorStop(.3, "rgba(0,229,192,0.9)");
+  gradient.addColorStop(.7, "rgba(0,180,150,0.25)");
   gradient.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle=gradient;
   ctx.fillRect(0,0,64,64);
   return new THREE.CanvasTexture(canvas);
 }
 
-const COUNT=1500;
-const particleGeometry=new THREE.BufferGeometry();
-const positions=new Float32Array(COUNT*3);
-const radii=new Float32Array(COUNT);
-const angles=new Float32Array(COUNT*2);
-const seeds=new Float32Array(COUNT);
+const glowMap = createGlowTexture();
 
-for(let i=0; i<COUNT; i++){
-  const r=1.6 + Math.random()*.5;
-  const theta=Math.random()*Math.PI*2;
-  const phi=Math.acos(2*Math.random()-1);
-  radii[i]=r;
-  angles[i*2]=theta;
-  angles[i*2+1]=phi;
-  seeds[i]=Math.random()*100;
+// 1. Sfera Geodetica centrale (Icosaedro wireframe con nodi vertice)
+const innerGeo = new THREE.IcosahedronGeometry(0.55, 3);
+const geoWire = new THREE.WireframeGeometry(innerGeo);
+const geoMat = new THREE.LineBasicMaterial({
+  color: 0x00e5c0,
+  transparent: true,
+  opacity: 0.65
+});
+const innerSphere = new THREE.LineSegments(geoWire, geoMat);
+jarvisGroup.add(innerSphere);
 
-  positions[i*3]=r*Math.sin(phi)*Math.cos(theta);
-  positions[i*3+1]=r*Math.sin(phi)*Math.sin(theta);
-  positions[i*3+2]=r*Math.cos(phi);
-}
+// Nodi luminosi sui vertici della sfera geodetica
+const spherePointsMat = new THREE.PointsMaterial({
+  color: 0x80fff0,
+  size: 0.045,
+  map: glowMap,
+  transparent: true,
+  opacity: 0.85,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
+});
+const spherePoints = new THREE.Points(innerGeo, spherePointsMat);
+jarvisGroup.add(spherePoints);
 
-particleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-const particleMaterial=new THREE.PointsMaterial({
-  color:new THREE.Color(0x00cfe8),
-  size:.04,
-  map:createGlow(),
-  transparent:true,
-  opacity:0.8,
-  depthWrite:false,
-  blending:THREE.AdditiveBlending
+// 2. Anelli Concentrici di profondità (effetto imbuto/tunnel visibile in foto)
+const tunnelRings = [];
+const ringDepths = [0, -0.15, -0.35, -0.6];
+const ringRadii  = [0.95, 1.2, 1.45, 1.7];
+const ringOpacities = [0.45, 0.35, 0.25, 0.15];
+
+ringDepths.forEach((z, idx) => {
+  const r = ringRadii[idx];
+  const ringGeo = new THREE.RingGeometry(r, r + 0.012, 96);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: 0x00e5c0,
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: ringOpacities[idx]
+  });
+  const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+  ringMesh.position.z = z;
+  jarvisGroup.add(ringMesh);
+  tunnelRings.push(ringMesh);
 });
 
-const particles=new THREE.Points(particleGeometry, particleMaterial);
-jarvisGroup.add(particles);
+// 3. Onda Organica Esterna (Wave Ring)
+const WAVE_POINTS = 240;
+const waveGeometry = new THREE.BufferGeometry();
+const wavePositions = new Float32Array(WAVE_POINTS * 3);
+const baseWaveRadii = new Float32Array(WAVE_POINTS);
+
+for(let i=0; i<WAVE_POINTS; i++){
+  baseWaveRadii[i] = 1.95;
+}
+
+waveGeometry.setAttribute("position", new THREE.BufferAttribute(wavePositions, 3));
+const waveMaterial = new THREE.LineBasicMaterial({
+  color: 0x00e5c0,
+  transparent: true,
+  opacity: 0.75,
+  linewidth: 1.5
+});
+const waveLine = new THREE.LineLoop(waveGeometry, waveMaterial);
+jarvisGroup.add(waveLine);
+
+// Secondo livello dell'onda organica per effetto tridimensionale sfumato
+const waveLineInner = new THREE.LineLoop(waveGeometry, new THREE.LineBasicMaterial({
+  color: 0x00b395,
+  transparent: true,
+  opacity: 0.4
+}));
+waveLineInner.position.z = -0.1;
+jarvisGroup.add(waveLineInner);
+
+// 4. Ambient Particelle Fluttuanti intorno
+const COUNT = 1200;
+const particleGeometry = new THREE.BufferGeometry();
+const particlePositions = new Float32Array(COUNT * 3);
+const particleSeeds = new Float32Array(COUNT);
+
+for(let i=0; i<COUNT; i++){
+  const r = 0.6 + Math.random() * 1.6;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+
+  particlePositions[i*3] = r * Math.sin(phi) * Math.cos(theta);
+  particlePositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+  particlePositions[i*3+2] = r * Math.cos(phi);
+  particleSeeds[i] = Math.random() * 100;
+}
+
+particleGeometry.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3));
+const particleMaterial = new THREE.PointsMaterial({
+  color: 0x00e5c0,
+  size: 0.035,
+  map: glowMap,
+  transparent: true,
+  opacity: 0.65,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending
+});
+
+const ambientParticles = new THREE.Points(particleGeometry, particleMaterial);
+jarvisGroup.add(ambientParticles);
 
 /* ================= STATO & ANIMAZIONE ================= */
 
 let targetEnergy=.15;
 let energy=.15;
 
-const normalColor=new THREE.Color(0x00cfe8);
-const activeColor=new THREE.Color(0x8fffff);
+const normalColor=new THREE.Color(0x00e5c0);
+const activeColor=new THREE.Color(0x80fff0);
 const currentColor=normalColor.clone();
 
 function setState(state){
@@ -937,52 +973,45 @@ function animate(){
     currentColor.lerp(normalColor, .03);
   }
 
-  // Animazione Sfera Geodetica Wireframe
-  sphereWireframe.rotation.y += 0.005 + energy * 0.01;
-  sphereWireframe.rotation.x = Math.sin(time * 0.5) * 0.15;
-  geoMaterial.color = currentColor;
-  
-  // Pulsazione scala sfera in base allo stato
-  const sphereScale = 1.0 + Math.sin(time * 3) * 0.03 + energy * 0.05;
-  sphereWireframe.scale.set(sphereScale, sphereScale, sphereScale);
+  // 1. Rotazione e pulsazione sfera centrale
+  innerSphere.rotation.y = time * 0.25;
+  innerSphere.rotation.x = Math.sin(time * 0.4) * 0.15;
+  spherePoints.rotation.y = innerSphere.rotation.y;
+  spherePoints.rotation.x = innerSphere.rotation.x;
 
-  // Animazione Anelli Concentrici HUD
-  innerRing.rotation.z -= 0.008 + energy * 0.01;
-  outerRing.rotation.z += 0.004 + energy * 0.005;
-  ring1Mat.color = currentColor;
-  ring2Mat.color = currentColor;
+  geoMat.color = currentColor;
+  spherePointsMat.color = currentColor;
 
-  // Animazione Particelle esterne
-  particleMaterial.color=currentColor;
-  const pos=particleGeometry.attributes.position.array;
+  const sphereScale = 1.0 + Math.sin(time * 2.5) * 0.02 + energy * 0.06;
+  innerSphere.scale.set(sphereScale, sphereScale, sphereScale);
+  spherePoints.scale.set(sphereScale, sphereScale, sphereScale);
 
-  for(let i=0;i<COUNT;i++){
-    const index=i*3;
-    const r=radii[i];
-    const theta=angles[i*2];
-    const phi=angles[i*2+1];
-    const seed=seeds[i];
+  // 2. Anelli di profondità
+  tunnelRings.forEach((ring, idx) => {
+    ring.rotation.z = (idx % 2 === 0 ? 1 : -1) * time * (0.05 + idx * 0.02);
+    ring.material.color = currentColor;
+  });
 
-    const pulse=Math.sin(time*2+seed)*.035;
-    const strangeShape=Math.sin(theta*6+time*2+seed)*.18*energy;
-    const wave=Math.cos(phi*7-time*1.8+seed)*.12*energy;
-    const rr=r+pulse+strangeShape+wave;
+  // 3. Update onda fluido-sinusoidale (Wave Ring esterno)
+  const wavePos = waveGeometry.attributes.position.array;
+  for(let i = 0; i < WAVE_POINTS; i++){
+    const angle = (i / WAVE_POINTS) * Math.PI * 2;
+    // Onde sinusoidali sovrapposte per simulare il contorno della foto
+    const wave1 = Math.sin(angle * 8 + time * 2) * 0.08 * (1 + energy);
+    const wave2 = Math.cos(angle * 14 - time * 1.5) * 0.04 * (1 + energy);
+    const wave3 = Math.sin(angle * 4 + time * 0.8) * 0.05;
 
-    let x=rr*Math.sin(phi)*Math.cos(theta);
-    let y=rr*Math.sin(phi)*Math.sin(theta);
-    let z=rr*Math.cos(phi);
-
-    x+=Math.sin(time*2.4+phi*8+seed)*.08*energy;
-    y+=Math.cos(time*2.1+theta*9+seed)*.08*energy;
-    z+=Math.sin(time*2.7+(theta+phi)*7)*.10*energy;
-
-    pos[index]=x;
-    pos[index+1]=y;
-    pos[index+2]=z;
+    const r = baseWaveRadii[i] + wave1 + wave2 + wave3;
+    wavePos[i * 3]     = Math.cos(angle) * r;
+    wavePos[i * 3 + 1] = Math.sin(angle) * r;
+    wavePos[i * 3 + 2] = Math.sin(angle * 6 + time * 3) * 0.05;
   }
-  particleGeometry.attributes.position.needsUpdate=true;
+  waveGeometry.attributes.position.needsUpdate = true;
+  waveMaterial.color = currentColor;
 
-  particles.rotation.y += .0005 + energy*.0008;
+  // 4. Particelle ambientali
+  ambientParticles.rotation.y = time * 0.03;
+  particleMaterial.color = currentColor;
 
   renderer.render(scene, camera);
 }
@@ -1230,7 +1259,7 @@ function createJarvisMarker(lat, lon, name){
   .setLngLat([lon, lat])
   .setPopup(
     new maplibregl.Popup({offset:15})
-    .setHTML(`<b style="color:#00ffff">${escapeHtml(name)}</b>`)
+    .setHTML(`<b style="color:#00e5c0">${escapeHtml(name)}</b>`)
   )
   .addTo(map);
 
@@ -1693,7 +1722,6 @@ voiceBtn.addEventListener("click", ()=>{
 /* ================= MODALITÀ CONVERSAZIONE CONTINUA ================= */
 
 let conversationMode=false;
-let conversationStarting=false;
 
 /* ================= RICONOSCIMENTO VOCALE ================= */
 
@@ -1710,7 +1738,6 @@ if(Recognition){
 
   recognition.onstart=()=>{
     listening=true;
-    conversationStarting=false;
     micBtn.classList.add("active");
     setState("listening");
   };

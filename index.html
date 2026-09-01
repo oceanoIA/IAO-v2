@@ -479,12 +479,14 @@ z-index:200;
 pointer-events:none;
 }
 
-.web-window{
+..web-window{
 position:absolute;
 width:600px;
 height:450px;
 min-width:300px;
 min-height:220px;
+max-width:90vw;
+max-height:80vh;
 background:rgba(2,12,15,.96);
 border:1px solid rgba(0,255,255,.28);
 border-radius:16px;
@@ -495,7 +497,7 @@ overflow:hidden;
 resize:both;
 pointer-events:auto;
 backdrop-filter:blur(15px);
-touch-action:none;
+touch-action:auto;
 }
 
 .web-window-header{

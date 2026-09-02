@@ -5293,3 +5293,79 @@ window.addEventListener(
 if(
 camera &&
 renderer
+){
+
+camera.aspect =
+window.innerWidth /
+window.innerHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(
+window.innerWidth,
+window.innerHeight
+);
+
+}
+
+if(map){
+
+map.resize();
+
+}
+
+updateSystemPanel();
+
+}
+);
+
+
+/* =====================================================
+   ONLINE / OFFLINE
+===================================================== */
+
+window.addEventListener(
+"online",
+()=>{
+
+notify(
+"CONNESSIONE ONLINE"
+);
+
+updateSystemPanel();
+
+}
+);
+
+
+window.addEventListener(
+"offline",
+()=>{
+
+notify(
+"CONNESSIONE OFFLINE"
+);
+
+updateSystemPanel();
+
+}
+);
+
+
+/* =====================================================
+   AVVIO
+===================================================== */
+
+setState("idle");
+
+updateSystemPanel();
+
+notify(
+"J.A.R.V.I.S. SYSTEM ONLINE"
+);
+
+</script>
+
+</body>
+
+</html>

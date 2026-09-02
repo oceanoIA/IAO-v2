@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="it">
 
 <head>
@@ -194,40 +193,31 @@ word-break:break-word;
 ===================================================== */
 
 .msg.jarvis-response{
-
 opacity:1;
-
 }
 
 .jarvis-char{
-
 display:inline;
-
 opacity:0;
 
 animation:
 jarvisCharIn .012s ease-out forwards;
-
 }
 
 @keyframes jarvisCharIn{
 
 from{
-
 opacity:0;
 
 transform:
 translateX(-5px);
-
 }
 
 to{
-
 opacity:1;
 
 transform:
 translateX(0);
-
 }
 
 }
@@ -642,6 +632,7 @@ controlIn .2s ease forwards;
 
 from{
 opacity:0;
+
 transform:
 translate(-50%,-50%)
 scale(.96);
@@ -649,6 +640,7 @@ scale(.96);
 
 to{
 opacity:1;
+
 transform:
 translate(-50%,-50%)
 scale(1);
@@ -1577,17 +1569,9 @@ border-radius:5px;
 
 <body>
 
-<!-- =====================================================
-     NEURAL CORE
-===================================================== -->
-
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
-
-<!-- =====================================================
-     TITOLO
-===================================================== -->
 
 <div
 class="jarvis-title"
@@ -1596,10 +1580,6 @@ id="jarvisTitle">
 J.A.R.V.I.S.
 
 </div>
-
-<!-- =====================================================
-     DATA
-===================================================== -->
 
 <div class="datetime">
 
@@ -1617,10 +1597,6 @@ class="date">
 
 </div>
 
-<!-- =====================================================
-     MAPPA
-===================================================== -->
-
 <div id="tacticalMap">
 
 <div id="map"></div>
@@ -1637,31 +1613,15 @@ TACTICAL MAP
 
 </div>
 
-<!-- =====================================================
-     WEB
-===================================================== -->
-
 <div id="webSearchWindows"></div>
 
 <div id="webSearchIndicator">
 WEB WINDOWS: 0
 </div>
 
-<!-- =====================================================
-     NOTIFICHE
-===================================================== -->
-
 <div id="hudNotifications"></div>
 
-<!-- =====================================================
-     CHAT
-===================================================== -->
-
 <div id="chat"></div>
-
-<!-- =====================================================
-     INPUT
-===================================================== -->
 
 <div class="command-wrapper">
 
@@ -1685,10 +1645,6 @@ INVIA
 
 </div>
 
-<!-- =====================================================
-     PULSANTI
-===================================================== -->
-
 <button id="conversationBtn">
 ◉ CONVERSAZIONE
 </button>
@@ -1704,10 +1660,6 @@ INVIA
 <button id="voiceBtn">
 ⚙ VOCE
 </button>
-
-<!-- =====================================================
-     VOCE
-===================================================== -->
 
 <div id="voicePanel">
 
@@ -1728,10 +1680,6 @@ TESTA VOCE
 </button>
 
 </div>
-
-<!-- =====================================================
-     CONTROL CENTER
-===================================================== -->
 
 <div id="controlCenter">
 
@@ -1838,17 +1786,9 @@ NETWORK: --
 
 </div>
 
-<!-- =====================================================
-     MAPLIBRE
-===================================================== -->
-
 <script
 src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
 </script>
-
-<!-- =====================================================
-     THREE.JS
-===================================================== -->
 
 <script type="module">
 
@@ -2238,19 +2178,14 @@ let renderer;
 let particles;
 
 let neuronPositions;
-
 let neuronSeeds;
-
 let neuronBaseRadius;
-
 let neuronTheta;
-
 let neuronPhi;
 
 let animationFrame = null;
 
 let neuralEnergy = 0.15;
-
 let targetEnergy = 0.15;
 
 
@@ -2261,21 +2196,15 @@ let targetEnergy = 0.15;
 let audioContext = null;
 
 let audioAnalyser = null;
-
 let audioSource = null;
-
 let audioData = null;
 
 let microphoneStream = null;
-
 let microphoneSource = null;
-
 let microphoneAnalyser = null;
-
 let microphoneData = null;
 
 let audioReactiveLevel = 0;
-
 let microphoneReactiveLevel = 0;
 
 
@@ -2391,7 +2320,8 @@ if(
 !audioData
 ){
 
-audioReactiveLevel *= 0.92;
+audioReactiveLevel *=
+0.92;
 
 return;
 
@@ -2430,7 +2360,7 @@ audioReactiveLevel
 
 
 /* =====================================================
-   MICROFONO REATTIVO
+   MICROFONO REATTIVO — RMS REAL-TIME
 ===================================================== */
 
 async function startMicrophoneVisualizer(){
@@ -2440,13 +2370,33 @@ try{
 if(
 !navigator.mediaDevices ||
 !navigator.mediaDevices.getUserMedia
-)
+){
+
 return;
+
+}
 
 if(microphoneStream)
 return;
 
-ensureAudioContext();
+if(!ensureAudioContext())
+return;
+
+if(
+audioContext.state ===
+"suspended"
+){
+
+await audioContext.resume();
+
+}
+
+
+/*
+   Prende il microfono reale.
+   Il segnale NON viene mandato
+   agli altoparlanti.
+*/
 
 microphoneStream =
 await navigator.mediaDevices.getUserMedia({
@@ -2461,28 +2411,49 @@ video:false
 
 });
 
+
 microphoneSource =
 audioContext.createMediaStreamSource(
 microphoneStream
 );
 
+
 microphoneAnalyser =
 audioContext.createAnalyser();
 
+
 microphoneAnalyser.fftSize =
-256;
+512;
 
 microphoneAnalyser.smoothingTimeConstant =
-0.65;
+0.72;
+
+
+/*
+   Per il volume della voce
+   utilizziamo il dominio temporale,
+   quindi misuriamo direttamente
+   l'ampiezza del segnale.
+*/
 
 microphoneData =
 new Uint8Array(
-microphoneAnalyser.frequencyBinCount
+microphoneAnalyser.fftSize
 );
+
 
 microphoneSource.connect(
 microphoneAnalyser
 );
+
+
+/*
+   IMPORTANTE:
+   nessun connect() verso
+   audioContext.destination.
+   Evitiamo il ritorno della voce
+   negli altoparlanti.
+*/
 
 }catch(error){
 
@@ -2525,6 +2496,14 @@ microphoneReactiveLevel = 0;
 }
 
 
+/*
+   Calcola il vero RMS del microfono.
+
+   Questo rende la sfera più grande
+   quando parli piano e molto più
+   grande quando aumenti la voce.
+*/
+
 function updateMicrophoneReactiveLevel(){
 
 if(
@@ -2539,11 +2518,14 @@ return;
 
 }
 
-microphoneAnalyser.getByteFrequencyData(
+
+microphoneAnalyser.getByteTimeDomainData(
 microphoneData
 );
 
+
 let sum = 0;
+
 
 for(
 let i=0;
@@ -2551,22 +2533,57 @@ i<microphoneData.length;
 i++
 ){
 
+const value =
+(
+microphoneData[i] -
+128
+) /
+128;
+
 sum +=
-microphoneData[i];
+value * value;
 
 }
 
-const average =
+
+const rms =
+Math.sqrt(
 sum /
-microphoneData.length /
-255;
+microphoneData.length
+);
+
+
+/*
+   Soglia minima per eliminare
+   il rumore ambientale leggero.
+*/
+
+const normalized =
+Math.min(
+1,
+Math.max(
+0,
+(
+rms -
+0.012
+) *
+8
+)
+);
+
+
+/*
+   Smoothing rapido:
+   la sfera segue la voce
+   quasi istantaneamente.
+*/
 
 microphoneReactiveLevel +=
 (
-average -
+normalized -
 microphoneReactiveLevel
 ) *
-0.38;
+0.30;
 
 }
 
@@ -2959,7 +2976,7 @@ targetEnergy = 0.15;
 
 
 /* =====================================================
-   ANIMAZIONE
+   ANIMAZIONE NEURALE REAL-TIME
 ===================================================== */
 
 function animateNeuralCore(){
@@ -2985,7 +3002,7 @@ performance.now() *
 
 
 /* =====================================================
-   AUDIO IN TEMPO REALE
+   AUDIO REAL-TIME
 ===================================================== */
 
 updateAudioReactiveLevel();
@@ -2993,44 +3010,77 @@ updateAudioReactiveLevel();
 updateMicrophoneReactiveLevel();
 
 
-const activeAudioLevel =
-Math.max(
-audioReactiveLevel,
+/*
+   Microfono:
+   reagisce solo mentre JARVIS
+   sta effettivamente ascoltando.
+
+   Audio JARVIS:
+   reagisce solo mentre JARVIS
+   sta parlando.
+*/
+
+const micLevel =
+listening
+?
 microphoneReactiveLevel
+:
+0;
+
+
+const ttsLevel =
+audioPlaying
+?
+audioReactiveLevel
+:
+0;
+
+
+const voiceLevel =
+Math.max(
+micLevel,
+ttsLevel
 );
 
 
 /*
-   Amplificazione controllata
-   per rendere visibile anche
-   la voce più bassa.
+   Amplificazione controllata.
 */
 
 const voiceEnergy =
 Math.min(
-2.8,
-activeAudioLevel * 5.8
+2.4,
+voiceLevel * 3.2
 );
 
 
 /*
-   La sfera usa sia lo stato
-   neurale sia la voce reale.
+   Energia normale del sistema.
+   Quando parli o JARVIS parla,
+   la voce può aumentare l'energia.
 */
 
-const totalEnergy =
+const desiredEnergy =
+(
+listening ||
+audioPlaying
+)
+?
 Math.max(
-neuralEnergy,
+targetEnergy,
+0.65 +
 voiceEnergy
-);
+)
+:
+targetEnergy;
 
 
 neuralEnergy +=
 (
-targetEnergy -
+desiredEnergy -
 neuralEnergy
 ) *
-0.045;
+0.12;
 
 
 /* =====================================================
@@ -3109,31 +3159,33 @@ neuralEnergy;
 const voicePulse =
 Math.sin(
 theta * 5 +
-time * 5.5 +
+time * 7 +
 seed
 ) *
-0.12 *
+0.055 *
 voiceEnergy;
 
 
 const voiceWave =
 Math.sin(
 phi * 8 -
-time * 4.5 +
+time * 5 +
 seed * 0.4
 ) *
-0.08 *
+0.045 *
 voiceEnergy;
 
 
 /*
-   Espansione globale tipo Siri:
-   la sfera si apre quando la voce aumenta.
+   Espansione globale.
+
+   Più forte è la voce,
+   più la sfera si espande.
 */
 
 const voiceExpansion =
 voiceEnergy *
-0.14;
+0.10;
 
 
 const radiusNow =
@@ -3155,10 +3207,12 @@ radiusNow *
 sinPhi *
 Math.cos(theta);
 
+
 positionArray[index + 1] =
 radiusNow *
 sinPhi *
 Math.sin(theta);
+
 
 positionArray[index + 2] =
 radiusNow *
@@ -3174,13 +3228,13 @@ particles.geometry
 
 
 /* =====================================================
-   ROTAZIONE
+   ROTAZIONE REATTIVA
 ===================================================== */
 
 particles.rotation.y +=
 0.0005 +
 neuralEnergy * 0.0007 +
-voiceEnergy * 0.0015;
+voiceEnergy * 0.0008;
 
 
 particles.rotation.x =
@@ -3190,7 +3244,7 @@ time * 0.35
 (
 0.025 +
 neuralEnergy * 0.018 +
-voiceEnergy * 0.035
+voiceEnergy * 0.025
 );
 
 
@@ -3201,7 +3255,7 @@ time * 0.22
 (
 0.01 +
 neuralEnergy * 0.012 +
-voiceEnergy * 0.025
+voiceEnergy * 0.018
 );
 
 
@@ -3212,7 +3266,7 @@ voiceEnergy * 0.025
 particles.material.size =
 0.045 +
 neuralEnergy * 0.009 +
-voiceEnergy * 0.018;
+voiceEnergy * 0.012;
 
 
 renderer.render(
@@ -4366,8 +4420,6 @@ audioPlaying = false;
 
 setState("idle");
 
-resolve(true);
-
 };
 
 utterance.onerror =
@@ -4659,8 +4711,13 @@ recognition.interimResults =
 false;
 
 
+/*
+   Quando il riconoscimento parte,
+   la sfera entra in modalità ascolto.
+*/
+
 recognition.onstart =
-async()=>{
+()=>{
 
 listening = true;
 
@@ -4670,16 +4727,12 @@ micBtn.classList.add(
 
 setState("listening");
 
-
-/*
-   Avvia anche l'analisi
-   visiva del microfono.
-*/
-
-await startMicrophoneVisualizer();
-
 };
 
+
+/*
+   Risultato del riconoscimento vocale.
+*/
 
 recognition.onresult =
 event=>{
@@ -4708,6 +4761,10 @@ sendMessage();
 };
 
 
+/*
+   Errore microfono.
+*/
+
 recognition.onerror =
 error=>{
 
@@ -4729,6 +4786,10 @@ setState("idle");
 };
 
 
+/*
+   Fine ascolto.
+*/
+
 recognition.onend =
 ()=>{
 
@@ -4749,20 +4810,60 @@ setState("idle");
 };
 
 
+/*
+   Avvio microfono.
+
+   PRIMA viene avviato il
+   visualizzatore audio reale,
+   POI parte SpeechRecognition.
+*/
+
 micBtn.addEventListener(
 "click",
-()=>{
+async()=>{
 
 if(listening){
 
 try{
+
 recognition.stop();
+
 }catch(e){}
 
-}else{
+return;
+
+}
+
 
 try{
+
+await startMicrophoneVisualizer();
+
+
+if(
+audioContext &&
+audioContext.state ===
+"suspended"
+){
+
+await audioContext.resume();
+
+}
+
+
 recognition.start();
+
+}catch(error){
+
+console.warn(
+"Avvio microfono:",
+error
+);
+
+try{
+
+recognition.start();
+
 }catch(e){
 
 console.warn(e);

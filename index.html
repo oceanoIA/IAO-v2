@@ -2255,6 +2255,323 @@ let targetEnergy = 0.15;
 
 
 /* =====================================================
+   AUDIO REATTIVO ALLA SFERA
+===================================================== */
+
+let audioContext = null;
+
+let audioAnalyser = null;
+
+let audioSource = null;
+
+let audioData = null;
+
+let microphoneStream = null;
+
+let microphoneSource = null;
+
+let microphoneAnalyser = null;
+
+let microphoneData = null;
+
+let audioReactiveLevel = 0;
+
+let microphoneReactiveLevel = 0;
+
+
+/* =====================================================
+   AUDIO CONTEXT
+===================================================== */
+
+function ensureAudioContext(){
+
+try{
+
+if(!audioContext){
+
+audioContext =
+new (
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+}
+
+if(
+audioContext.state ===
+"suspended"
+){
+
+audioContext.resume();
+
+}
+
+return true;
+
+}catch(error){
+
+console.warn(
+"AudioContext:",
+error
+);
+
+return false;
+
+}
+
+}
+
+
+/* =====================================================
+   ANALIZZATORE AUDIO J.A.R.V.I.S.
+===================================================== */
+
+function connectAudioAnalyser(audio){
+
+try{
+
+if(!ensureAudioContext())
+return;
+
+if(audioSource){
+
+try{
+audioSource.disconnect();
+}catch(e){}
+
+}
+
+audioAnalyser =
+audioContext.createAnalyser();
+
+audioAnalyser.fftSize =
+256;
+
+audioAnalyser.smoothingTimeConstant =
+0.72;
+
+audioData =
+new Uint8Array(
+audioAnalyser.frequencyBinCount
+);
+
+audioSource =
+audioContext.createMediaElementSource(
+audio
+);
+
+audioSource.connect(
+audioAnalyser
+);
+
+audioAnalyser.connect(
+audioContext.destination
+);
+
+}catch(error){
+
+console.warn(
+"Analizzatore audio JARVIS:",
+error
+);
+
+}
+
+}
+
+
+/* =====================================================
+   LIVELLO AUDIO JARVIS
+===================================================== */
+
+function updateAudioReactiveLevel(){
+
+if(
+!audioAnalyser ||
+!audioData
+){
+
+audioReactiveLevel *= 0.92;
+
+return;
+
+}
+
+audioAnalyser.getByteFrequencyData(
+audioData
+);
+
+let sum = 0;
+
+for(
+let i=0;
+i<audioData.length;
+i++
+){
+
+sum +=
+audioData[i];
+
+}
+
+const average =
+sum /
+audioData.length /
+255;
+
+audioReactiveLevel +=
+(
+average -
+audioReactiveLevel
+) *
+0.32;
+
+}
+
+
+/* =====================================================
+   MICROFONO REATTIVO
+===================================================== */
+
+async function startMicrophoneVisualizer(){
+
+try{
+
+if(
+!navigator.mediaDevices ||
+!navigator.mediaDevices.getUserMedia
+)
+return;
+
+if(microphoneStream)
+return;
+
+ensureAudioContext();
+
+microphoneStream =
+await navigator.mediaDevices.getUserMedia({
+
+audio:{
+echoCancellation:true,
+noiseSuppression:true,
+autoGainControl:true
+},
+
+video:false
+
+});
+
+microphoneSource =
+audioContext.createMediaStreamSource(
+microphoneStream
+);
+
+microphoneAnalyser =
+audioContext.createAnalyser();
+
+microphoneAnalyser.fftSize =
+256;
+
+microphoneAnalyser.smoothingTimeConstant =
+0.65;
+
+microphoneData =
+new Uint8Array(
+microphoneAnalyser.frequencyBinCount
+);
+
+microphoneSource.connect(
+microphoneAnalyser
+);
+
+}catch(error){
+
+console.warn(
+"Visualizzatore microfono:",
+error
+);
+
+}
+
+}
+
+
+function stopMicrophoneVisualizer(){
+
+if(
+microphoneStream
+){
+
+microphoneStream
+.getTracks()
+.forEach(
+track=>{
+track.stop();
+}
+);
+
+}
+
+microphoneStream = null;
+
+microphoneSource = null;
+
+microphoneAnalyser = null;
+
+microphoneData = null;
+
+microphoneReactiveLevel = 0;
+
+}
+
+
+function updateMicrophoneReactiveLevel(){
+
+if(
+!microphoneAnalyser ||
+!microphoneData
+){
+
+microphoneReactiveLevel *=
+0.90;
+
+return;
+
+}
+
+microphoneAnalyser.getByteFrequencyData(
+microphoneData
+);
+
+let sum = 0;
+
+for(
+let i=0;
+i<microphoneData.length;
+i++
+){
+
+sum +=
+microphoneData[i];
+
+}
+
+const average =
+sum /
+microphoneData.length /
+255;
+
+microphoneReactiveLevel +=
+(
+average -
+microphoneReactiveLevel
+) *
+0.38;
+
+}
+
+
+/* =====================================================
    TEXTURE NEURONE
 ===================================================== */
 
@@ -2667,6 +2984,47 @@ performance.now() *
 0.001;
 
 
+/* =====================================================
+   AUDIO IN TEMPO REALE
+===================================================== */
+
+updateAudioReactiveLevel();
+
+updateMicrophoneReactiveLevel();
+
+
+const activeAudioLevel =
+Math.max(
+audioReactiveLevel,
+microphoneReactiveLevel
+);
+
+
+/*
+   Amplificazione controllata
+   per rendere visibile anche
+   la voce più bassa.
+*/
+
+const voiceEnergy =
+Math.min(
+2.8,
+activeAudioLevel * 5.8
+);
+
+
+/*
+   La sfera usa sia lo stato
+   neurale sia la voce reale.
+*/
+
+const totalEnergy =
+Math.max(
+neuralEnergy,
+voiceEnergy
+);
+
+
 neuralEnergy +=
 (
 targetEnergy -
@@ -2674,6 +3032,10 @@ neuralEnergy
 ) *
 0.045;
 
+
+/* =====================================================
+   POSIZIONI
+===================================================== */
 
 const positionArray =
 particles.geometry
@@ -2704,6 +3066,10 @@ const seed =
 neuronSeeds[i];
 
 
+/* =====================================================
+   RESPIRO BASE
+===================================================== */
+
 const pulse =
 Math.sin(
 time * 1.8 +
@@ -2711,6 +3077,10 @@ seed
 ) *
 0.035;
 
+
+/* =====================================================
+   ONDA NEURALE
+===================================================== */
 
 const wave =
 Math.sin(
@@ -2732,11 +3102,48 @@ seed * 0.7
 neuralEnergy;
 
 
+/* =====================================================
+   REAZIONE ALLA VOCE
+===================================================== */
+
+const voicePulse =
+Math.sin(
+theta * 5 +
+time * 5.5 +
+seed
+) *
+0.12 *
+voiceEnergy;
+
+
+const voiceWave =
+Math.sin(
+phi * 8 -
+time * 4.5 +
+seed * 0.4
+) *
+0.08 *
+voiceEnergy;
+
+
+/*
+   Espansione globale tipo Siri:
+   la sfera si apre quando la voce aumenta.
+*/
+
+const voiceExpansion =
+voiceEnergy *
+0.14;
+
+
 const radiusNow =
 radius +
 pulse +
 wave +
-secondaryWave;
+secondaryWave +
+voicePulse +
+voiceWave +
+voiceExpansion;
 
 
 const sinPhi =
@@ -2766,9 +3173,15 @@ particles.geometry
 .needsUpdate = true;
 
 
+/* =====================================================
+   ROTAZIONE
+===================================================== */
+
 particles.rotation.y +=
 0.0005 +
-neuralEnergy * 0.0007;
+neuralEnergy * 0.0007 +
+voiceEnergy * 0.0015;
+
 
 particles.rotation.x =
 Math.sin(
@@ -2776,8 +3189,10 @@ time * 0.35
 ) *
 (
 0.025 +
-neuralEnergy * 0.018
+neuralEnergy * 0.018 +
+voiceEnergy * 0.035
 );
+
 
 particles.rotation.z =
 Math.cos(
@@ -2785,13 +3200,19 @@ time * 0.22
 ) *
 (
 0.01 +
-neuralEnergy * 0.012
+neuralEnergy * 0.012 +
+voiceEnergy * 0.025
 );
 
 
+/* =====================================================
+   DIMENSIONE NEURONI
+===================================================== */
+
 particles.material.size =
 0.045 +
-neuralEnergy * 0.009;
+neuralEnergy * 0.009 +
+voiceEnergy * 0.018;
 
 
 renderer.render(
@@ -3867,6 +4288,10 @@ loadDeviceVoices;
 }
 
 
+/* =====================================================
+   VOCE DISPOSITIVO
+===================================================== */
+
 function speakDevice(text){
 
 return new Promise(
@@ -3964,8 +4389,6 @@ utterance
 
 );
 
-}
-
 
 /* =====================================================
    ELEVENLABS
@@ -4031,6 +4454,16 @@ new Audio(url);
 currentAudio =
 audio;
 
+
+/* =====================================================
+   ANALISI AUDIO REALE
+===================================================== */
+
+connectAudioAnalyser(
+audio
+);
+
+
 audio.onplay =
 ()=>{
 
@@ -4045,6 +4478,8 @@ audio.onended =
 
 audioPlaying = false;
 
+audioReactiveLevel = 0;
+
 setState("idle");
 
 URL.revokeObjectURL(
@@ -4052,6 +4487,20 @@ url
 );
 
 currentAudio = null;
+
+if(audioSource){
+
+try{
+audioSource.disconnect();
+}catch(e){}
+
+}
+
+audioSource = null;
+
+audioAnalyser = null;
+
+audioData = null;
 
 };
 
@@ -4060,6 +4509,8 @@ audio.onerror =
 
 audioPlaying = false;
 
+audioReactiveLevel = 0;
+
 setState("idle");
 
 URL.revokeObjectURL(
@@ -4067,6 +4518,20 @@ url
 );
 
 currentAudio = null;
+
+if(audioSource){
+
+try{
+audioSource.disconnect();
+}catch(e){}
+
+}
+
+audioSource = null;
+
+audioAnalyser = null;
+
+audioData = null;
 
 };
 
@@ -4195,7 +4660,7 @@ false;
 
 
 recognition.onstart =
-()=>{
+async()=>{
 
 listening = true;
 
@@ -4204,6 +4669,14 @@ micBtn.classList.add(
 );
 
 setState("listening");
+
+
+/*
+   Avvia anche l'analisi
+   visiva del microfono.
+*/
+
+await startMicrophoneVisualizer();
 
 };
 
@@ -4249,6 +4722,8 @@ micBtn.classList.remove(
 "active"
 );
 
+stopMicrophoneVisualizer();
+
 setState("idle");
 
 };
@@ -4262,6 +4737,8 @@ listening = false;
 micBtn.classList.remove(
 "active"
 );
+
+stopMicrophoneVisualizer();
 
 if(!audioPlaying){
 
@@ -4816,79 +5293,3 @@ window.addEventListener(
 if(
 camera &&
 renderer
-){
-
-camera.aspect =
-window.innerWidth /
-window.innerHeight;
-
-camera.updateProjectionMatrix();
-
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
-);
-
-}
-
-if(map){
-
-map.resize();
-
-}
-
-updateSystemPanel();
-
-}
-);
-
-
-/* =====================================================
-   ONLINE / OFFLINE
-===================================================== */
-
-window.addEventListener(
-"online",
-()=>{
-
-notify(
-"CONNESSIONE ONLINE"
-);
-
-updateSystemPanel();
-
-}
-);
-
-
-window.addEventListener(
-"offline",
-()=>{
-
-notify(
-"CONNESSIONE OFFLINE"
-);
-
-updateSystemPanel();
-
-}
-);
-
-
-/* =====================================================
-   AVVIO
-===================================================== */
-
-setState("idle");
-
-updateSystemPanel();
-
-notify(
-"J.A.R.V.I.S. SYSTEM ONLINE"
-);
-
-</script>
-
-</body>
-
-</html>

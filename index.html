@@ -190,6 +190,45 @@ word-break:break-word;
 }
 
 /* =====================================================
+   DISSOLVENZA RISPOSTA J.A.R.V.I.S.
+===================================================== */
+
+.msg.jarvis-response{
+
+animation:
+jarvisResponseIn .55s ease-out forwards;
+
+}
+
+@keyframes jarvisResponseIn{
+
+from{
+
+opacity:0;
+
+transform:
+translateY(8px);
+
+filter:
+blur(3px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:
+translateY(0);
+
+filter:
+blur(0);
+
+}
+
+}
+
+/* =====================================================
    INPUT
 ===================================================== */
 
@@ -1825,11 +1864,6 @@ const MEMORY_KEY =
 
 const MAX_MEMORY = 30;
 
-/*
-   RIDOTTO DA 7000 A 5500
-   PER RENDERE I NEURONI PIÙ RADI
-*/
-
 const NEURON_COUNT = 5500;
 
 const MAPTILER_KEY =
@@ -2057,7 +2091,10 @@ element.remove();
    MESSAGGI
 ===================================================== */
 
-function addMsg(text){
+function addMsg(
+text,
+jarvisResponse = false
+){
 
 chat.innerHTML = "";
 
@@ -2066,6 +2103,14 @@ document.createElement("div");
 
 element.className =
 "msg";
+
+if(jarvisResponse){
+
+element.classList.add(
+"jarvis-response"
+);
+
+}
 
 element.textContent =
 String(text);
@@ -2341,7 +2386,6 @@ NEURON_COUNT
 
 /* =====================================================
    DISTRIBUZIONE SFERICA
-   SFERA PIÙ PICCOLA MA NEURONI PIÙ RADI
 ===================================================== */
 
 for(
@@ -2358,12 +2402,6 @@ const phi =
 Math.acos(
 2 * Math.random() - 1
 );
-
-/*
-   Sfera complessivamente più piccola.
-   La variazione del raggio rende i neuroni
-   più sparsi e meno compatti.
-*/
 
 const radius =
 0.82 +
@@ -2467,63 +2505,11 @@ particles
 );
 
 
-/*
-   NIENTE LINEE.
-   NIENTE ANELLI.
-   SOLO NEURONI.
-*/
-
-
 notify(
 "NEURAL CORE ONLINE — 5500 NEURONS"
 );
 
 animateNeuralCore();
-
-}catch(error){
-
-console.error(
-"ERRORE THREE.JS:",
-error
-);
-
-container.innerHTML = "";
-
-const errorElement =
-document.createElement("div");
-
-errorElement.style.position =
-"absolute";
-
-errorElement.style.left =
-"50%";
-
-errorElement.style.top =
-"50%";
-
-errorElement.style.transform =
-"translate(-50%,-50%)";
-
-errorElement.style.color =
-"#ffd400";
-
-errorElement.style.fontFamily =
-"monospace";
-
-errorElement.style.fontSize =
-"11px";
-
-errorElement.style.letterSpacing =
-"2px";
-
-errorElement.textContent =
-"NEURAL CORE ERROR";
-
-container.appendChild(
-errorElement
-);
-
-}
 
 }
 
@@ -2535,10 +2521,6 @@ errorElement
 function setState(state){
 
 if(state === "thinking"){
-
-/*
-   MOVIMENTO MOLTO PIÙ INTENSO
-*/
 
 targetEnergy = 2.8;
 
@@ -2634,10 +2616,6 @@ const seed =
 neuronSeeds[i];
 
 
-/*
-   Movimento base.
-*/
-
 const pulse =
 Math.sin(
 time * 1.8 +
@@ -2645,11 +2623,6 @@ seed
 ) *
 0.035;
 
-
-/*
-   Onda molto più evidente
-   durante le fasi attive.
-*/
 
 const wave =
 Math.sin(
@@ -2660,11 +2633,6 @@ seed
 0.085 *
 neuralEnergy;
 
-
-/*
-   Secondo movimento indipendente
-   per rendere la sfera più viva.
-*/
 
 const secondaryWave =
 Math.sin(
@@ -2709,11 +2677,6 @@ particles.geometry
 .position
 .needsUpdate = true;
 
-
-/*
-   Rotazione più evidente
-   quando JARVIS è attivo.
-*/
 
 particles.rotation.y +=
 0.0005 +
@@ -4548,7 +4511,10 @@ data.dayOfWeek +
 data.currentDate +
 ".";
 
-addMsg(reply);
+addMsg(
+reply,
+true
+);
 
 speak(reply);
 
@@ -4574,12 +4540,12 @@ const controller =
 new AbortController();
 
 const timeout =
-    setTimeout(
-        ()=>{
-            controller.abort();
-        },
-        30000
-    );
+setTimeout(
+()=>{
+controller.abort();
+},
+30000
+);
 
 
 const response =
@@ -4657,7 +4623,10 @@ throw new Error(
 }
 
 
-addMsg(reply);
+addMsg(
+reply,
+true
+);
 
 addMemory(
 "assistant",

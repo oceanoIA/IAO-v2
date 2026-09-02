@@ -728,14 +728,14 @@ transform:scale(1.25);
 }
 
 /* =====================================================
-   REAL-TIME GRAPH
+   EARTH — TACTICAL GLOBE
 ===================================================== */
 
-.home-live-graph{
+.home-earth{
 
 position:relative;
 
-height:76px;
+height:180px;
 
 margin-top:12px;
 
@@ -745,70 +745,43 @@ border:
 border-radius:12px;
 
 background:
-linear-gradient(
-180deg,
+radial-gradient(
+circle at center,
 rgba(255,255,255,.035),
-rgba(255,255,255,.008)
+rgba(0,0,0,.40)
 );
 
 overflow:hidden;
 }
 
-.home-live-graph:before{
-
-content:"";
-
-position:absolute;
-
-inset:0;
-
-background:
-linear-gradient(
-90deg,
-transparent 24%,
-rgba(255,255,255,.045) 25%,
-transparent 26%,
-transparent 49%,
-rgba(255,255,255,.045) 50%,
-transparent 51%,
-transparent 74%,
-rgba(255,255,255,.045) 75%,
-transparent 76%
-),
-linear-gradient(
-0deg,
-transparent 24%,
-rgba(255,255,255,.045) 25%,
-transparent 26%,
-transparent 49%,
-rgba(255,255,255,.045) 50%,
-transparent 51%,
-transparent 74%,
-rgba(255,255,255,.045) 75%,
-transparent 76%
-);
-}
-
-#systemGraph{
+#earthGlobe{
 
 position:absolute;
 
 inset:0;
 
 width:100%;
+height:100%;
 
+pointer-events:none;
+}
+
+#earthGlobe canvas{
+
+display:block;
+
+width:100%;
 height:100%;
 }
 
-.live-graph-label{
+.earth-label{
 
 position:absolute;
 
-top:7px;
+top:8px;
+left:10px;
 
-left:9px;
-
-z-index:2;
+z-index:3;
 
 font-family:monospace;
 
@@ -817,28 +790,35 @@ font-size:6px;
 letter-spacing:1.5px;
 
 color:
-rgba(240,245,255,.55);
+rgba(240,245,255,.58);
+
+pointer-events:none;
 }
 
-.live-graph-value{
+.earth-status{
 
 position:absolute;
 
-right:9px;
+bottom:8px;
+right:10px;
 
-top:7px;
-
-z-index:2;
+z-index:3;
 
 font-family:monospace;
 
-font-size:7px;
+font-size:6px;
 
 letter-spacing:1px;
 
 color:
-rgba(255,255,255,.78);
+rgba(240,245,255,.45);
+
+pointer-events:none;
 }
+
+/* =====================================================
+   STATUS CARDS
+===================================================== */
 
 .home-panel-grid{
 
@@ -1669,8 +1649,8 @@ transform-origin:
 top right;
 }
 
-.home-live-graph{
-height:68px;
+.home-earth{
+height:160px;
 }
 
 .command-wrapper{
@@ -1906,21 +1886,17 @@ ONLINE
 
 </div>
 
-<div class="home-live-graph">
+<div class="home-earth">
 
-<div class="live-graph-label">
-NEURAL ACTIVITY // LIVE
+<div class="earth-label">
+EARTH // TACTICAL
 </div>
 
-<div
-class="live-graph-value"
-id="graphValue">
-015%
-</div>
+<div id="earthGlobe"></div>
 
-<canvas
-id="systemGraph">
-</canvas>
+<div class="earth-status">
+GLOBAL // ONLINE
+</div>
 
 </div>
 
@@ -2223,15 +2199,29 @@ document.getElementById(
 "hudNotifications"
 );
 
-const systemGraph =
+
+/* =====================================================
+   EARTH — TACTICAL GLOBE
+===================================================== */
+
+const earthContainer =
 document.getElementById(
-"systemGraph"
+"earthGlobe"
 );
 
-const graphValue =
-document.getElementById(
-"graphValue"
-);
+let earthScene = null;
+
+let earthCamera = null;
+
+let earthRenderer = null;
+
+let earthGroup = null;
+
+let earthMesh = null;
+
+let earthWire = null;
+
+let earthRing = null;
 
 
 /* =====================================================
@@ -2724,6 +2714,567 @@ setInterval(
 updateClock,
 1000
 );
+
+
+/* =====================================================
+   EARTH TEXTURE
+===================================================== */
+
+function createEarthTexture(){
+
+const canvas =
+document.createElement(
+"canvas"
+);
+
+canvas.width = 1024;
+
+canvas.height = 512;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+/* SFONDO */
+
+const background =
+ctx.createRadialGradient(
+512,
+256,
+20,
+512,
+256,
+520
+);
+
+background.addColorStop(
+0,
+"rgba(18,22,27,.96)"
+);
+
+background.addColorStop(
+.65,
+"rgba(4,7,10,.98)"
+);
+
+background.addColorStop(
+1,
+"rgba(0,0,0,1)"
+);
+
+ctx.fillStyle =
+background;
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+/* =====================================================
+   CONTINENTI
+===================================================== */
+
+function project(
+lon,
+lat
+){
+
+return[
+(lon + 180) / 360 *
+canvas.width,
+(90 - lat) / 180 *
+canvas.height
+];
+
+}
+
+
+function drawLand(
+points
+){
+
+ctx.beginPath();
+
+points.forEach(
+(point,index)=>{
+
+const p =
+project(
+point[0],
+point[1]
+);
+
+if(index === 0){
+
+ctx.moveTo(
+p[0],
+p[1]
+);
+
+}else{
+
+ctx.lineTo(
+p[0],
+p[1]
+);
+
+}
+
+}
+);
+
+ctx.closePath();
+
+ctx.fillStyle =
+"rgba(225,232,240,.86)";
+
+ctx.shadowColor =
+"rgba(255,255,255,.28)";
+
+ctx.shadowBlur = 4;
+
+ctx.fill();
+
+ctx.shadowBlur = 0;
+
+ctx.strokeStyle =
+"rgba(255,255,255,.30)";
+
+ctx.lineWidth = 1;
+
+ctx.stroke();
+
+}
+
+
+/* NORD AMERICA */
+
+drawLand([
+
+[-168,72],
+[-140,70],
+[-130,55],
+[-125,50],
+[-100,45],
+[-82,25],
+[-95,15],
+[-110,20],
+[-120,30],
+[-135,35],
+[-150,50],
+[-165,55]
+
+]);
+
+
+/* SUD AMERICA */
+
+drawLand([
+
+[-82,12],
+[-60,10],
+[-50,-5],
+[-55,-25],
+[-65,-55],
+[-72,-45],
+[-78,-25],
+[-85,-5]
+
+]);
+
+
+/* GREENLAND */
+
+drawLand([
+
+[-73,83],
+[-20,83],
+[-18,60],
+[-45,58],
+[-65,65]
+
+]);
+
+
+/* EUROPA */
+
+drawLand([
+
+[-10,36],
+[10,35],
+[30,45],
+[40,60],
+[20,70],
+[0,62],
+[-10,50]
+
+]);
+
+
+/* ASIA */
+
+drawLand([
+
+[30,40],
+[55,35],
+[75,25],
+[100,10],
+[120,20],
+[145,30],
+[160,45],
+[140,65],
+[100,75],
+[60,70],
+[35,60]
+
+]);
+
+
+/* AFRICA */
+
+drawLand([
+
+[-17,35],
+[5,37],
+[30,30],
+[45,10],
+[40,-10],
+[25,-35],
+[10,-35],
+[-5,-20],
+[-15,5],
+[-20,20]
+
+]);
+
+
+/* AUSTRALIA */
+
+drawLand([
+
+[112,-10],
+[150,-10],
+[155,-30],
+[135,-42],
+[115,-35]
+
+]);
+
+
+/* MADAGASCAR */
+
+drawLand([
+
+[47,-13],
+[50,-25],
+[44,-26]
+
+]);
+
+
+const texture =
+new THREE.CanvasTexture(
+canvas
+);
+
+texture.needsUpdate = true;
+
+return texture;
+
+}
+
+
+/* =====================================================
+   CREA GLOBO TATTICO
+===================================================== */
+
+function initializeEarthGlobe(){
+
+if(
+!earthContainer
+)
+return;
+
+const width =
+Math.max(
+1,
+earthContainer.clientWidth
+);
+
+const height =
+Math.max(
+1,
+earthContainer.clientHeight
+);
+
+
+earthScene =
+new THREE.Scene();
+
+
+earthCamera =
+new THREE.PerspectiveCamera(
+32,
+width / height,
+0.1,
+100
+);
+
+earthCamera.position.z =
+3.15;
+
+
+earthRenderer =
+new THREE.WebGLRenderer({
+
+antialias:true,
+
+alpha:true,
+
+powerPreference:
+"high-performance"
+
+});
+
+
+earthRenderer.setPixelRatio(
+Math.min(
+window.devicePixelRatio || 1,
+2
+)
+);
+
+earthRenderer.setSize(
+width,
+height,
+false
+);
+
+earthRenderer.setClearColor(
+0x000000,
+0
+);
+
+earthRenderer.domElement.style.pointerEvents =
+"none";
+
+
+earthContainer.innerHTML = "";
+
+earthContainer.appendChild(
+earthRenderer.domElement
+);
+
+
+earthGroup =
+new THREE.Group();
+
+earthScene.add(
+earthGroup
+);
+
+
+/* =====================================================
+   BASE DELLA TERRA
+===================================================== */
+
+const sphereGeometry =
+new THREE.SphereGeometry(
+1,
+64,
+48
+);
+
+
+const baseMaterial =
+new THREE.MeshBasicMaterial({
+
+color:
+0x020406
+
+});
+
+
+const baseSphere =
+new THREE.Mesh(
+sphereGeometry,
+baseMaterial
+);
+
+earthGroup.add(
+baseSphere
+);
+
+
+/* =====================================================
+   CONTINENTI
+===================================================== */
+
+const earthTexture =
+createEarthTexture();
+
+
+earthMesh =
+new THREE.Mesh(
+
+sphereGeometry,
+
+new THREE.MeshBasicMaterial({
+
+map:
+earthTexture,
+
+transparent:true,
+
+opacity:.94
+
+})
+
+);
+
+earthGroup.add(
+earthMesh
+);
+
+
+/* =====================================================
+   BORDO SFERICO
+===================================================== */
+
+const wireGeometry =
+new THREE.WireframeGeometry(
+sphereGeometry
+);
+
+
+earthWire =
+new THREE.LineSegments(
+
+wireGeometry,
+
+new THREE.LineBasicMaterial({
+
+color:
+0xffffff,
+
+transparent:true,
+
+opacity:.045
+
+})
+
+);
+
+earthGroup.add(
+earthWire
+);
+
+
+/* =====================================================
+   ANELLO ORBITALE
+===================================================== */
+
+const ringGeometry =
+new THREE.TorusGeometry(
+1.18,
+.006,
+8,
+160
+);
+
+
+earthRing =
+new THREE.Mesh(
+
+ringGeometry,
+
+new THREE.MeshBasicMaterial({
+
+color:
+0xffffff,
+
+transparent:true,
+
+opacity:.16
+
+})
+
+);
+
+earthRing.rotation.x =
+Math.PI / 2.8;
+
+earthRing.rotation.z =
+.2;
+
+earthGroup.add(
+earthRing
+);
+
+
+/* =====================================================
+   POSIZIONE
+===================================================== */
+
+earthGroup.scale.set(
+1.02,
+1.02,
+1.02
+);
+
+earthGroup.rotation.z =
+-0.08;
+
+}
+
+
+/* =====================================================
+   RESIZE EARTH
+===================================================== */
+
+function resizeEarthGlobe(){
+
+if(
+!earthContainer ||
+!earthCamera ||
+!earthRenderer
+)
+return;
+
+const width =
+Math.max(
+1,
+earthContainer.clientWidth
+);
+
+const height =
+Math.max(
+1,
+earthContainer.clientHeight
+);
+
+earthCamera.aspect =
+width / height;
+
+earthCamera.updateProjectionMatrix();
+
+earthRenderer.setSize(
+width,
+height,
+false
+);
+
+}
 
 
 /* =====================================================
@@ -3393,7 +3944,7 @@ voiceLevel +=
 targetVoiceLevel -
 voiceLevel
 ) *
-0.16;
+0.11;
 
 
 /* =====================================================
@@ -3402,7 +3953,7 @@ voiceLevel
 
 const voiceEnergy =
 voiceLevel *
-3.6;
+1.4;
 
 const combinedTarget =
 Math.max(
@@ -3426,35 +3977,8 @@ voiceLevel > .02
 
 
 /* =====================================================
-   GRAFICO LIVE
+   RESPIRAZIONE GLOBALE
 ===================================================== */
-
-drawSystemGraph(
-Math.min(
-1,
-Math.max(
-0,
-voiceLevel * .75 +
-Math.max(
-0,
-neuralEnergy -
-.15
-) / 3.2
-)
-)
-);
-
-
-const positionArray =
-particles.geometry
-.attributes
-.position
-.array;
-
-
-/*
-   RESPIRAZIONE GLOBALE.
-*/
 
 const breathing =
 Math.sin(
@@ -3462,7 +3986,7 @@ time * 1.15
 ) *
 (
 0.035 +
-voiceLevel * 0.075
+voiceLevel * 0.025
 );
 
 
@@ -3472,7 +3996,7 @@ time * 0.55
 ) *
 (
 0.018 +
-voiceLevel * 0.035
+voiceLevel * 0.012
 );
 
 
@@ -3512,7 +4036,7 @@ seed
 ) *
 (
 0.018 +
-voiceLevel * 0.025
+voiceLevel * 0.010
 );
 
 
@@ -3522,13 +4046,13 @@ theta * 7 +
 phi * 4 +
 time * (
 2.0 +
-voiceLevel * 5.0
+voiceLevel * 2.0
 ) +
 seed
 ) *
 (
 0.045 +
-voiceLevel * 0.085
+voiceLevel * 0.025
 ) *
 activity;
 
@@ -3538,13 +4062,13 @@ Math.sin(
 phi * 10 -
 time * (
 1.55 +
-voiceLevel * 4.0
+voiceLevel * 1.7
 ) +
 seed * 0.55
 ) *
 (
 0.032 +
-voiceLevel * 0.065
+voiceLevel * 0.020
 ) *
 activity;
 
@@ -3554,13 +4078,13 @@ Math.sin(
 theta * 13 +
 time * (
 3.0 +
-voiceLevel * 7.0
+voiceLevel * 2.5
 ) +
 seed * 0.25
 ) *
 (
 0.018 +
-voiceLevel * 0.045
+voiceLevel * 0.014
 ) *
 activity;
 
@@ -3580,13 +4104,13 @@ const activePulse =
 Math.sin(
 time * (
 3.2 +
-voiceLevel * 9.0
+voiceLevel * 3.0
 ) +
 seed * 0.4
 ) *
 (
 0.018 +
-voiceLevel * 0.055
+voiceLevel * 0.015
 ) *
 Math.max(
 0,
@@ -3601,8 +4125,8 @@ activity - 0.5
 const voiceExpansion =
 voiceLevel *
 (
-0.06 +
-0.075 *
+0.018 +
+0.022 *
 Math.sin(
 time * 7 +
 seed * .15
@@ -3659,32 +4183,32 @@ particles.geometry
 particles.rotation.y +=
 0.00035 +
 neuralEnergy * 0.00045 +
-voiceLevel * 0.0035;
+voiceLevel * 0.0008;
 
 particles.rotation.x =
 Math.sin(
 time * (
 0.28 +
-voiceLevel * .65
+voiceLevel * .25
 )
 ) *
 (
 0.018 +
 neuralEnergy * 0.012 +
-voiceLevel * .045
+voiceLevel * .015
 );
 
 particles.rotation.z =
 Math.cos(
 time * (
 0.20 +
-voiceLevel * .5
+voiceLevel * .20
 )
 ) *
 (
 0.008 +
 neuralEnergy * 0.009 +
-voiceLevel * .032
+voiceLevel * .010
 );
 
 
@@ -3695,7 +4219,7 @@ voiceLevel * .032
 particles.material.size =
 0.043 +
 neuralEnergy * 0.0085 +
-voiceLevel * 0.045;
+voiceLevel * 0.012;
 
 
 particles.material.opacity =
@@ -3704,7 +4228,35 @@ Math.min(
 0.18,
 neuralEnergy * 0.045
 ) +
-voiceLevel * .08;
+voiceLevel * .025;
+
+
+/* =====================================================
+   TERRA
+===================================================== */
+
+if(
+earthGroup &&
+earthRenderer &&
+earthScene &&
+earthCamera
+){
+
+earthGroup.rotation.y +=
+0.0018;
+
+earthGroup.rotation.x =
+Math.sin(
+time * .35
+) *
+.03;
+
+earthRenderer.render(
+earthScene,
+earthCamera
+);
+
+}
 
 
 renderer.render(
@@ -3716,212 +4268,10 @@ camera
 
 
 /* =====================================================
-   GRAFICO LIVE — HUD
-===================================================== */
-
-const graphHistory =
-new Array(72)
-.fill(.15);
-
-
-function drawSystemGraph(value){
-
-if(!systemGraph)
-return;
-
-const rect =
-systemGraph.getBoundingClientRect();
-
-const width =
-Math.max(
-1,
-Math.floor(
-rect.width *
-(window.devicePixelRatio || 1)
-)
-);
-
-const height =
-Math.max(
-1,
-Math.floor(
-rect.height *
-(window.devicePixelRatio || 1)
-)
-);
-
-if(
-systemGraph.width !== width ||
-systemGraph.height !== height
-){
-
-systemGraph.width =
-width;
-
-systemGraph.height =
-height;
-
-}
-
-const ctx =
-systemGraph.getContext("2d");
-
-if(!ctx)
-return;
-
-const w =
-systemGraph.width;
-
-const h =
-systemGraph.height;
-
-
-graphHistory.push(
-Math.max(
-.03,
-Math.min(
-1,
-value
-)
-)
-);
-
-graphHistory.shift();
-
-
-ctx.clearRect(
-0,
-0,
-w,
-h
-);
-
-
-/* =====================================================
-   LINEA GRAFICO
-===================================================== */
-
-ctx.beginPath();
-
-for(
-let i=0;
-i<graphHistory.length;
-i++
-){
-
-const x =
-(
-i /
-(graphHistory.length - 1)
-) *
-w;
-
-const y =
-h -
-(
-graphHistory[i] *
-(h * .72)
-) -
-h * .12;
-
-if(i === 0){
-
-ctx.moveTo(
-x,
-y
-);
-
-}else{
-
-ctx.lineTo(
-x,
-y
-);
-
-}
-
-}
-
-ctx.strokeStyle =
-"rgba(255,255,255,.78)";
-
-ctx.lineWidth =
-1.2 *
-(window.devicePixelRatio || 1);
-
-ctx.shadowBlur =
-8 *
-(window.devicePixelRatio || 1);
-
-ctx.shadowColor =
-"rgba(255,255,255,.55)";
-
-ctx.stroke();
-
-ctx.shadowBlur = 0;
-
-
-/* =====================================================
-   AREA SOTTO IL GRAFICO
-===================================================== */
-
-ctx.lineTo(
-w,
-h
-);
-
-ctx.lineTo(
-0,
-h
-);
-
-ctx.closePath();
-
-const fill =
-ctx.createLinearGradient(
-0,
-0,
-0,
-h
-);
-
-fill.addColorStop(
-0,
-"rgba(255,255,255,.09)"
-);
-
-fill.addColorStop(
-1,
-"rgba(255,255,255,0)"
-);
-
-ctx.fillStyle =
-fill;
-
-ctx.fill();
-
-
-const percentage =
-Math.round(
-value * 100
-);
-
-graphValue.textContent =
-String(
-percentage
-).padStart(
-3,
-"0"
-)
-+
-"%";
-
-}
-
-
-/* =====================================================
    AVVIO THREE
 ===================================================== */
+
+initializeEarthGlobe();
 
 initializeNeuralCore();
 
@@ -5837,6 +6187,8 @@ window.innerHeight
 );
 
 }
+
+resizeEarthGlobe();
 
 if(map){
 

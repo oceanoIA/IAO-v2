@@ -190,27 +190,34 @@ word-break:break-word;
 }
 
 /* =====================================================
-   DISSOLVENZA RISPOSTA J.A.R.V.I.S.
+   SCRITTURA LATERALE RISPOSTA J.A.R.V.I.S.
 ===================================================== */
 
 .msg.jarvis-response{
 
-animation:
-jarvisResponseIn .55s ease-out forwards;
+opacity:1;
 
 }
 
-@keyframes jarvisResponseIn{
+.jarvis-char{
+
+display:inline;
+
+opacity:0;
+
+animation:
+jarvisCharIn .035s ease-out forwards;
+
+}
+
+@keyframes jarvisCharIn{
 
 from{
 
 opacity:0;
 
 transform:
-translateY(8px);
-
-filter:
-blur(3px);
+translateX(-5px);
 
 }
 
@@ -219,10 +226,7 @@ to{
 opacity:1;
 
 transform:
-translateY(0);
-
-filter:
-blur(0);
+translateX(0);
 
 }
 
@@ -1864,11 +1868,6 @@ const MEMORY_KEY =
 
 const MAX_MEMORY = 30;
 
-/*
-   RIDOTTO DA 7000 A 5500
-   PER RENDERE I NEURONI PIÙ RADI
-*/
-
 const NEURON_COUNT = 5500;
 
 const MAPTILER_KEY =
@@ -2116,8 +2115,41 @@ jarvisResponse
 ""
 );
 
+if(jarvisResponse){
+
+const chars =
+Array.from(String(text));
+
+chars.forEach(
+(char,index)=>{
+
+const span =
+document.createElement("span");
+
+span.className =
+"jarvis-char";
+
+span.textContent =
+char;
+
+span.style.animationDelay =
+(index * 0.035) +
+"s";
+
+element.appendChild(
+span
+);
+
+}
+
+);
+
+}else{
+
 element.textContent =
 String(text);
+
+}
 
 chat.appendChild(
 element
@@ -2390,7 +2422,6 @@ NEURON_COUNT
 
 /* =====================================================
    DISTRIBUZIONE SFERICA
-   SFERA PIÙ PICCOLA MA NEURONI PIÙ RADI
 ===================================================== */
 
 for(

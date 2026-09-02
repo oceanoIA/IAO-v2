@@ -206,7 +206,7 @@ display:inline;
 opacity:0;
 
 animation:
-jarvisCharIn .012s ease-out forwards;
+jarvisCharIn .035s ease-out forwards;
 
 }
 
@@ -2133,7 +2133,7 @@ span.textContent =
 char;
 
 span.style.animationDelay =
-(index * 0.012) +
+(index * 0.035) +
 "s";
 
 element.appendChild(
@@ -2642,7 +2642,7 @@ targetEnergy = 0.15;
 
 
 /* =====================================================
-   ANIMAZIONE
+   ANIMAZIONE — SFERA STILE ORB
 ===================================================== */
 
 function animateNeuralCore(){
@@ -2672,7 +2672,7 @@ neuralEnergy +=
 targetEnergy -
 neuralEnergy
 ) *
-0.045;
+0.035;
 
 
 const positionArray =
@@ -2680,6 +2680,39 @@ particles.geometry
 .attributes
 .position
 .array;
+
+
+/*
+   RESPIRAZIONE GLOBALE.
+   La sfera si espande e si contrae
+   lentamente anche quando è inattiva.
+*/
+
+const breathing =
+Math.sin(
+time * 1.15
+) *
+0.035;
+
+
+const slowBreathing =
+Math.sin(
+time * 0.55
+) *
+0.018;
+
+
+/*
+   ONDA ORGANICA.
+   Più lo stato è attivo,
+   più la superficie reagisce.
+*/
+
+const activity =
+Math.max(
+0.12,
+neuralEnergy
+);
 
 
 for(
@@ -2704,39 +2737,98 @@ const seed =
 neuronSeeds[i];
 
 
-const pulse =
+/*
+   Movimento individuale molto leggero.
+*/
+
+const individual =
 Math.sin(
-time * 1.8 +
+time * 1.35 +
 seed
 ) *
-0.035;
+0.018;
 
 
-const wave =
+/*
+   Onde che attraversano
+   la superficie della sfera.
+*/
+
+const wave1 =
 Math.sin(
-theta * 9 +
-time * 1.8 +
+theta * 7 +
+phi * 4 +
+time * 2.0 +
 seed
-) *
-0.085 *
-neuralEnergy;
-
-
-const secondaryWave =
-Math.sin(
-phi * 12 +
-time * 1.25 +
-seed * 0.7
 ) *
 0.045 *
-neuralEnergy;
+activity;
 
+
+const wave2 =
+Math.sin(
+phi * 10 -
+time * 1.55 +
+seed * 0.55
+) *
+0.032 *
+activity;
+
+
+const wave3 =
+Math.sin(
+theta * 13 +
+time * 3.0 +
+seed * 0.25
+) *
+0.018 *
+activity;
+
+
+/*
+   Pulsazione centrale.
+*/
+
+const pulse =
+(
+breathing +
+slowBreathing
+) *
+(
+0.75 +
+activity * 0.22
+);
+
+
+/*
+   Quando JARVIS è attivo,
+   la superficie diventa più viva.
+*/
+
+const activePulse =
+Math.sin(
+time * 3.2 +
+seed * 0.4
+) *
+0.018 *
+Math.max(
+0,
+activity - 0.5
+);
+
+
+/*
+   Raggio finale.
+*/
 
 const radiusNow =
 radius +
 pulse +
-wave +
-secondaryWave;
+individual +
+wave1 +
+wave2 +
+wave3 +
+activePulse;
 
 
 const sinPhi =
@@ -2766,32 +2858,49 @@ particles.geometry
 .needsUpdate = true;
 
 
+/*
+   Rotazione lentissima in idle,
+   più presente quando JARVIS lavora.
+*/
+
 particles.rotation.y +=
-0.0005 +
-neuralEnergy * 0.0007;
+0.00035 +
+neuralEnergy * 0.00045;
 
 particles.rotation.x =
 Math.sin(
-time * 0.35
+time * 0.28
 ) *
 (
-0.025 +
-neuralEnergy * 0.018
+0.018 +
+neuralEnergy * 0.012
 );
 
 particles.rotation.z =
 Math.cos(
-time * 0.22
+time * 0.20
 ) *
 (
-0.01 +
-neuralEnergy * 0.012
+0.008 +
+neuralEnergy * 0.009
 );
 
 
+/*
+   La luminosità e la dimensione
+   reagiscono all'attività.
+*/
+
 particles.material.size =
-0.045 +
-neuralEnergy * 0.009;
+0.043 +
+neuralEnergy * 0.0085;
+
+particles.material.opacity =
+0.82 +
+Math.min(
+0.18,
+neuralEnergy * 0.045
+);
 
 
 renderer.render(

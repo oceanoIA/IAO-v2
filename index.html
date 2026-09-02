@@ -209,9 +209,7 @@ box-shadow:
 }
 
 .msg.jarvis-response{
-
 opacity:1;
-
 }
 
 .jarvis-char{
@@ -228,21 +226,15 @@ jarvisCharIn .035s ease-out forwards;
 @keyframes jarvisCharIn{
 
 from{
-
 opacity:0;
-
 transform:
 translateX(-5px);
-
 }
 
 to{
-
 opacity:1;
-
 transform:
 translateX(0);
-
 }
 
 }
@@ -505,10 +497,8 @@ box-shadow:
    PULSANTI
 ===================================================== */
 
-#conversationBtn,
 #fullscreenBtn,
-#voiceBtn,
-#controlBtn{
+#voiceBtn{
 
 position:fixed;
 
@@ -540,11 +530,6 @@ backdrop-filter:blur(12px);
 transition:.2s;
 }
 
-#conversationBtn{
-left:22px;
-bottom:24px;
-}
-
 #fullscreenBtn{
 right:22px;
 bottom:24px;
@@ -555,15 +540,8 @@ right:22px;
 bottom:74px;
 }
 
-#controlBtn{
-left:22px;
-bottom:74px;
-}
-
-#conversationBtn:hover,
 #fullscreenBtn:hover,
-#voiceBtn:hover,
-#controlBtn:hover{
+#voiceBtn:hover{
 
 color:white;
 
@@ -576,7 +554,6 @@ box-shadow:
 0 0 18px rgba(255,255,255,.12);
 }
 
-#conversationBtn.active,
 #fullscreenBtn.active{
 
 color:#ffffff;
@@ -605,7 +582,7 @@ top:14%;
 
 z-index:45;
 
-width:285px;
+width:300px;
 
 padding:16px;
 
@@ -617,8 +594,8 @@ border-radius:20px;
 background:
 linear-gradient(
 145deg,
-rgba(14,14,18,.86),
-rgba(5,5,8,.72)
+rgba(14,14,18,.88),
+rgba(5,5,8,.74)
 );
 
 backdrop-filter:blur(22px);
@@ -646,12 +623,35 @@ background:
 linear-gradient(
 90deg,
 transparent,
-rgba(255,255,255,.72),
+rgba(255,255,255,.78),
 transparent
 );
 
 box-shadow:
 0 0 12px rgba(255,255,255,.45);
+}
+
+#homeSystemPanel:after{
+
+content:"";
+
+position:absolute;
+
+top:42px;
+bottom:0;
+left:0;
+
+width:1px;
+
+background:
+linear-gradient(
+180deg,
+transparent,
+rgba(255,255,255,.16),
+transparent
+);
+
+opacity:.7;
 }
 
 .home-panel-header{
@@ -708,6 +708,136 @@ background:#ffffff;
 box-shadow:
 0 0 8px rgba(255,255,255,.9),
 0 0 16px rgba(255,255,255,.35);
+
+animation:
+statusPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes statusPulse{
+
+0%,100%{
+opacity:.55;
+transform:scale(.85);
+}
+
+50%{
+opacity:1;
+transform:scale(1.25);
+}
+
+}
+
+/* =====================================================
+   REAL-TIME GRAPH
+===================================================== */
+
+.home-live-graph{
+
+position:relative;
+
+height:76px;
+
+margin-top:12px;
+
+border:
+1px solid rgba(235,242,255,.11);
+
+border-radius:12px;
+
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,.035),
+rgba(255,255,255,.008)
+);
+
+overflow:hidden;
+}
+
+.home-live-graph:before{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+background:
+linear-gradient(
+90deg,
+transparent 24%,
+rgba(255,255,255,.045) 25%,
+transparent 26%,
+transparent 49%,
+rgba(255,255,255,.045) 50%,
+transparent 51%,
+transparent 74%,
+rgba(255,255,255,.045) 75%,
+transparent 76%
+),
+linear-gradient(
+0deg,
+transparent 24%,
+rgba(255,255,255,.045) 25%,
+transparent 26%,
+transparent 49%,
+rgba(255,255,255,.045) 50%,
+transparent 51%,
+transparent 74%,
+rgba(255,255,255,.045) 75%,
+transparent 76%
+);
+}
+
+#systemGraph{
+
+position:absolute;
+
+inset:0;
+
+width:100%;
+
+height:100%;
+}
+
+.live-graph-label{
+
+position:absolute;
+
+top:7px;
+
+left:9px;
+
+z-index:2;
+
+font-family:monospace;
+
+font-size:6px;
+
+letter-spacing:1.5px;
+
+color:
+rgba(240,245,255,.55);
+}
+
+.live-graph-value{
+
+position:absolute;
+
+right:9px;
+
+top:7px;
+
+z-index:2;
+
+font-family:monospace;
+
+font-size:7px;
+
+letter-spacing:1px;
+
+color:
+rgba(255,255,255,.78);
 }
 
 .home-panel-grid{
@@ -719,14 +849,14 @@ repeat(2,minmax(0,1fr));
 
 gap:8px;
 
-margin-top:12px;
+margin-top:10px;
 }
 
 .home-status-card{
 
 position:relative;
 
-min-height:72px;
+min-height:68px;
 
 padding:11px;
 
@@ -760,6 +890,21 @@ border:
 
 box-shadow:
 0 0 20px rgba(255,255,255,.03);
+
+animation:
+cardOrbit 4s infinite linear;
+}
+
+@keyframes cardOrbit{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
 }
 
 .home-status-card h3{
@@ -898,232 +1043,6 @@ cursor:pointer;
 #voiceTest:hover{
 
 border-color:#ffffff;
-
-background:
-rgba(255,255,255,.12);
-}
-
-/* =====================================================
-   CONTROL CENTER
-===================================================== */
-
-#controlCenter{
-
-position:fixed;
-
-top:50%;
-left:50%;
-
-transform:
-translate(-50%,-50%)
-scale(.96);
-
-width:min(
-760px,
-calc(100vw - 30px)
-);
-
-max-height:
-calc(100vh - 80px);
-
-overflow:auto;
-
-z-index:500;
-
-display:none;
-
-padding:22px;
-
-border:
-1px solid rgba(235,242,255,.38);
-
-border-radius:24px;
-
-background:
-rgba(7,7,10,.98);
-
-backdrop-filter:blur(25px);
-
-box-shadow:
-0 0 50px rgba(255,255,255,.12),
-0 25px 100px rgba(0,0,0,.8);
-}
-
-#controlCenter.active{
-
-display:block;
-
-animation:
-controlIn .2s ease forwards;
-}
-
-@keyframes controlIn{
-
-from{
-opacity:0;
-transform:
-translate(-50%,-50%)
-scale(.96);
-}
-
-to{
-opacity:1;
-transform:
-translate(-50%,-50%)
-scale(1);
-}
-
-}
-
-.control-title{
-
-font-size:20px;
-
-letter-spacing:4px;
-
-color:
-rgba(240,244,252,.96);
-
-margin-bottom:5px;
-}
-
-.control-subtitle{
-
-font-size:9px;
-
-letter-spacing:2px;
-
-color:
-rgba(225,232,245,.64);
-
-margin-bottom:20px;
-}
-
-.control-grid{
-
-display:grid;
-
-grid-template-columns:
-repeat(2,minmax(0,1fr));
-
-gap:12px;
-}
-
-.control-card{
-
-min-height:105px;
-
-padding:16px;
-
-border:
-1px solid rgba(235,242,255,.18);
-
-border-radius:15px;
-
-background:
-rgba(255,255,255,.025);
-}
-
-.control-card h3{
-
-font-size:10px;
-
-letter-spacing:2px;
-
-color:
-rgba(235,242,255,.88);
-
-margin-bottom:12px;
-}
-
-.control-card p{
-
-font-family:monospace;
-
-font-size:11px;
-
-line-height:1.8;
-
-color:
-rgba(220,228,240,.74);
-}
-
-.control-close{
-
-position:absolute;
-
-top:15px;
-
-right:15px;
-
-width:32px;
-
-height:32px;
-
-border:
-1px solid rgba(235,242,255,.30);
-
-border-radius:50%;
-
-background:
-rgba(255,255,255,.06);
-
-color:
-rgba(225,232,245,.88);
-
-cursor:pointer;
-}
-
-.control-close:hover{
-
-border-color:#ffffff;
-
-color:white;
-
-box-shadow:
-0 0 12px rgba(255,255,255,.18);
-}
-
-/* =====================================================
-   MEMORY
-===================================================== */
-
-.memory-actions{
-
-margin-top:15px;
-
-display:flex;
-
-gap:8px;
-
-flex-wrap:wrap;
-}
-
-.memory-button{
-
-padding:9px 12px;
-
-border:
-1px solid rgba(235,242,255,.25);
-
-border-radius:10px;
-
-background:
-rgba(255,255,255,.06);
-
-color:
-rgba(225,232,245,.78);
-
-font-size:9px;
-
-cursor:pointer;
-}
-
-.memory-button:hover{
-
-border-color:#ffffff;
-
-color:white;
 
 background:
 rgba(255,255,255,.12);
@@ -1750,6 +1669,10 @@ transform-origin:
 top right;
 }
 
+.home-live-graph{
+height:68px;
+}
+
 .command-wrapper{
 
 width:
@@ -1802,7 +1725,7 @@ height:34px;
 
 right:12px;
 
-bottom:112px;
+bottom:70px;
 
 height:34px;
 
@@ -1815,33 +1738,7 @@ padding:0 11px;
 
 right:12px;
 
-bottom:70px;
-
-height:34px;
-
-font-size:9px;
-
-padding:0 11px;
-}
-
-#conversationBtn{
-
-left:12px;
-
-bottom:70px;
-
-height:34px;
-
-font-size:9px;
-
-padding:0 11px;
-}
-
-#controlBtn{
-
-left:12px;
-
-bottom:112px;
+bottom:28px;
 
 height:34px;
 
@@ -1854,26 +1751,10 @@ padding:0 11px;
 
 right:12px;
 
-bottom:150px;
+bottom:112px;
 
 width:
 calc(100% - 24px);
-}
-
-#controlCenter{
-
-width:
-calc(100% - 20px);
-
-max-height:
-calc(100vh - 40px);
-
-padding:18px;
-}
-
-.control-grid{
-
-grid-template-columns:1fr;
 }
 
 .web-window{
@@ -2022,6 +1903,24 @@ SYSTEM STATUS
 ONLINE
 
 </div>
+
+</div>
+
+<div class="home-live-graph">
+
+<div class="live-graph-label">
+NEURAL ACTIVITY // LIVE
+</div>
+
+<div
+class="live-graph-value"
+id="graphValue">
+015%
+</div>
+
+<canvas
+id="systemGraph">
+</canvas>
 
 </div>
 
@@ -2179,14 +2078,6 @@ INVIA
      PULSANTI
 ===================================================== -->
 
-<button id="conversationBtn">
-◉ CONVERSAZIONE
-</button>
-
-<button id="controlBtn">
-⚙ CONTROL CENTER
-</button>
-
 <button id="fullscreenBtn">
 ⛶ FULLSCREEN
 </button>
@@ -2216,115 +2107,6 @@ Voce dispositivo automatica
 <button id="voiceTest">
 TESTA VOCE
 </button>
-
-</div>
-
-<!-- =====================================================
-     CONTROL CENTER
-===================================================== -->
-
-<div id="controlCenter">
-
-<button
-class="control-close"
-id="controlClose">
-×
-</button>
-
-<div class="control-title">
-J.A.R.V.I.S. CONTROL CENTER
-</div>
-
-<div class="control-subtitle">
-SYSTEM MANAGEMENT INTERFACE
-</div>
-
-<div class="control-grid">
-
-<div class="control-card">
-
-<h3>AI</h3>
-
-<p id="systemAI">
-STATUS: ONLINE<br>
-API: READY
-</p>
-
-</div>
-
-<div class="control-card">
-
-<h3>VOICE</h3>
-
-<p id="systemVoice">
-SPEECH: READY<br>
-MIC: CHECKING...
-</p>
-
-</div>
-
-<div class="control-card">
-
-<h3>MEMORY</h3>
-
-<p id="systemMemory">
-ENTRIES: 0<br>
-STORAGE: LOCAL
-</p>
-
-<div class="memory-actions">
-
-<button
-class="memory-button"
-id="showMemoryBtn">
-VISUALIZZA
-</button>
-
-<button
-class="memory-button"
-id="clearMemoryBtn">
-CANCELLA
-</button>
-
-</div>
-
-</div>
-
-<div class="control-card">
-
-<h3>MAP</h3>
-
-<p id="systemMap">
-TACTICAL: READY<br>
-PROVIDER: MAPTILER
-</p>
-
-</div>
-
-<div class="control-card">
-
-<h3>WEB</h3>
-
-<p id="systemWeb">
-WINDOWS: 0<br>
-ENGINE: BING
-</p>
-
-</div>
-
-<div class="control-card">
-
-<h3>SYSTEM</h3>
-
-<p id="systemHardware">
-SCREEN: --<br>
-BATTERY: --<br>
-NETWORK: --
-</p>
-
-</div>
-
-</div>
 
 </div>
 
@@ -2431,34 +2213,24 @@ document.getElementById(
 "webSearchIndicator"
 );
 
-const conversationBtn =
-document.getElementById(
-"conversationBtn"
-);
-
 const fullscreenBtn =
 document.getElementById(
 "fullscreenBtn"
 );
 
-const controlBtn =
-document.getElementById(
-"controlBtn"
-);
-
-const controlCenter =
-document.getElementById(
-"controlCenter"
-);
-
-const controlClose =
-document.getElementById(
-"controlClose"
-);
-
 const hudNotifications =
 document.getElementById(
 "hudNotifications"
+);
+
+const systemGraph =
+document.getElementById(
+"systemGraph"
+);
+
+const graphValue =
+document.getElementById(
+"graphValue"
 );
 
 
@@ -2981,6 +2753,225 @@ let targetEnergy = 0.15;
 
 
 /* =====================================================
+   VOCE — ANALISI IN TEMPO REALE
+===================================================== */
+
+let audioContext = null;
+
+let microphoneStream = null;
+
+let microphoneSource = null;
+
+let analyser = null;
+
+let audioDataArray = null;
+
+let voiceLevel = 0;
+
+let targetVoiceLevel = 0;
+
+let voiceMonitorActive = false;
+
+
+/* =====================================================
+   AVVIA ANALIZZATORE VOCALE
+===================================================== */
+
+async function startVoiceMonitor(){
+
+if(voiceMonitorActive)
+return;
+
+if(
+!navigator.mediaDevices ||
+!navigator.mediaDevices.getUserMedia
+){
+
+return;
+
+}
+
+try{
+
+microphoneStream =
+await navigator.mediaDevices.getUserMedia({
+audio:{
+echoCancellation:true,
+noiseSuppression:true,
+autoGainControl:true
+}
+});
+
+audioContext =
+new (
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+if(
+audioContext.state === "suspended"
+){
+
+await audioContext.resume();
+
+}
+
+microphoneSource =
+audioContext.createMediaStreamSource(
+microphoneStream
+);
+
+analyser =
+audioContext.createAnalyser();
+
+analyser.fftSize = 512;
+
+analyser.smoothingTimeConstant = .72;
+
+audioDataArray =
+new Uint8Array(
+analyser.fftSize
+);
+
+microphoneSource.connect(
+analyser
+);
+
+voiceMonitorActive = true;
+
+}catch(error){
+
+console.warn(
+"Voice monitor:",
+error
+);
+
+voiceMonitorActive = false;
+
+}
+
+}
+
+
+/* =====================================================
+   FERMA ANALIZZATORE VOCALE
+===================================================== */
+
+function stopVoiceMonitor(){
+
+voiceMonitorActive = false;
+
+targetVoiceLevel = 0;
+
+if(microphoneStream){
+
+microphoneStream
+.getTracks()
+.forEach(
+track=>{
+track.stop();
+}
+);
+
+microphoneStream = null;
+
+}
+
+if(microphoneSource){
+
+try{
+microphoneSource.disconnect();
+}catch(e){}
+
+microphoneSource = null;
+
+}
+
+if(analyser){
+
+try{
+analyser.disconnect();
+}catch(e){}
+
+analyser = null;
+
+}
+
+if(audioContext){
+
+try{
+audioContext.close();
+}catch(e){}
+
+audioContext = null;
+
+}
+
+audioDataArray = null;
+
+}
+
+
+/* =====================================================
+   LETTURA LIVELLO VOCALE
+===================================================== */
+
+function updateVoiceLevel(){
+
+if(
+!voiceMonitorActive ||
+!analyser ||
+!audioDataArray
+){
+
+targetVoiceLevel = 0;
+
+return;
+
+}
+
+analyser.getByteTimeDomainData(
+audioDataArray
+);
+
+let sum = 0;
+
+for(
+let i=0;
+i<audioDataArray.length;
+i++
+){
+
+const value =
+(audioDataArray[i] - 128) /
+128;
+
+sum += value * value;
+
+}
+
+const rms =
+Math.sqrt(
+sum /
+audioDataArray.length
+);
+
+const amplified =
+Math.min(
+1,
+rms * 5.5
+);
+
+targetVoiceLevel =
+Math.pow(
+amplified,
+0.72
+);
+
+}
+
+
+/* =====================================================
    TEXTURE NEURONE — BIANCO FUTURISTICO
 ===================================================== */
 
@@ -3272,13 +3263,6 @@ particles
 );
 
 
-/*
-   NIENTE LINEE.
-   NIENTE ANELLI.
-   SOLO NEURONI BIANCHI.
-*/
-
-
 notify(
 "NEURAL CORE ONLINE — 5500 NEURONS"
 );
@@ -3373,7 +3357,7 @@ targetEnergy = 0.15;
 
 
 /* =====================================================
-   ANIMAZIONE — SFERA STILE ORB
+   ANIMAZIONE — SFERA REATTIVA
 ===================================================== */
 
 function animateNeuralCore(){
@@ -3398,12 +3382,67 @@ performance.now() *
 0.001;
 
 
+/* =====================================================
+   AUDIO LIVE
+===================================================== */
+
+updateVoiceLevel();
+
+voiceLevel +=
+(
+targetVoiceLevel -
+voiceLevel
+) *
+0.16;
+
+
+/* =====================================================
+   ENERGIA
+===================================================== */
+
+const voiceEnergy =
+voiceLevel *
+3.6;
+
+const combinedTarget =
+Math.max(
+targetEnergy,
+targetEnergy +
+voiceEnergy
+);
+
 neuralEnergy +=
 (
-targetEnergy -
+combinedTarget -
 neuralEnergy
 ) *
-0.035;
+(
+voiceLevel > .02
+?
+.085
+:
+.035
+);
+
+
+/* =====================================================
+   GRAFICO LIVE
+===================================================== */
+
+drawSystemGraph(
+Math.min(
+1,
+Math.max(
+0,
+voiceLevel * .75 +
+Math.max(
+0,
+neuralEnergy -
+.15
+) / 3.2
+)
+)
+);
 
 
 const positionArray =
@@ -3421,14 +3460,20 @@ const breathing =
 Math.sin(
 time * 1.15
 ) *
-0.035;
+(
+0.035 +
+voiceLevel * 0.075
+);
 
 
 const slowBreathing =
 Math.sin(
 time * 0.55
 ) *
-0.018;
+(
+0.018 +
+voiceLevel * 0.035
+);
 
 
 const activity =
@@ -3465,37 +3510,58 @@ Math.sin(
 time * 1.35 +
 seed
 ) *
-0.018;
+(
+0.018 +
+voiceLevel * 0.025
+);
 
 
 const wave1 =
 Math.sin(
 theta * 7 +
 phi * 4 +
-time * 2.0 +
+time * (
+2.0 +
+voiceLevel * 5.0
+) +
 seed
 ) *
-0.045 *
+(
+0.045 +
+voiceLevel * 0.085
+) *
 activity;
 
 
 const wave2 =
 Math.sin(
 phi * 10 -
-time * 1.55 +
+time * (
+1.55 +
+voiceLevel * 4.0
+) +
 seed * 0.55
 ) *
-0.032 *
+(
+0.032 +
+voiceLevel * 0.065
+) *
 activity;
 
 
 const wave3 =
 Math.sin(
 theta * 13 +
-time * 3.0 +
+time * (
+3.0 +
+voiceLevel * 7.0
+) +
 seed * 0.25
 ) *
-0.018 *
+(
+0.018 +
+voiceLevel * 0.045
+) *
 activity;
 
 
@@ -3512,15 +3578,41 @@ activity * 0.22
 
 const activePulse =
 Math.sin(
-time * 3.2 +
+time * (
+3.2 +
+voiceLevel * 9.0
+) +
 seed * 0.4
 ) *
-0.018 *
+(
+0.018 +
+voiceLevel * 0.055
+) *
 Math.max(
 0,
 activity - 0.5
 );
 
+
+/* =====================================================
+   ESPANSIONE VOCALE
+===================================================== */
+
+const voiceExpansion =
+voiceLevel *
+(
+0.06 +
+0.075 *
+Math.sin(
+time * 7 +
+seed * .15
+)
+);
+
+
+/* =====================================================
+   RAGGIO FINALE
+===================================================== */
 
 const radiusNow =
 radius +
@@ -3529,7 +3621,8 @@ individual +
 wave1 +
 wave2 +
 wave3 +
-activePulse;
+activePulse +
+voiceExpansion;
 
 
 const sinPhi =
@@ -3559,45 +3652,269 @@ particles.geometry
 .needsUpdate = true;
 
 
+/* =====================================================
+   ROTAZIONE
+===================================================== */
+
 particles.rotation.y +=
 0.00035 +
-neuralEnergy * 0.00045;
+neuralEnergy * 0.00045 +
+voiceLevel * 0.0035;
 
 particles.rotation.x =
 Math.sin(
-time * 0.28
+time * (
+0.28 +
+voiceLevel * .65
+)
 ) *
 (
 0.018 +
-neuralEnergy * 0.012
+neuralEnergy * 0.012 +
+voiceLevel * .045
 );
 
 particles.rotation.z =
 Math.cos(
-time * 0.20
+time * (
+0.20 +
+voiceLevel * .5
+)
 ) *
 (
 0.008 +
-neuralEnergy * 0.009
+neuralEnergy * 0.009 +
+voiceLevel * .032
 );
 
 
+/* =====================================================
+   DIMENSIONE NEURONI
+===================================================== */
+
 particles.material.size =
 0.043 +
-neuralEnergy * 0.0085;
+neuralEnergy * 0.0085 +
+voiceLevel * 0.045;
+
 
 particles.material.opacity =
 0.82 +
 Math.min(
 0.18,
 neuralEnergy * 0.045
-);
+) +
+voiceLevel * .08;
 
 
 renderer.render(
 scene,
 camera
 );
+
+}
+
+
+/* =====================================================
+   GRAFICO LIVE — HUD
+===================================================== */
+
+const graphHistory =
+new Array(72)
+.fill(.15);
+
+
+function drawSystemGraph(value){
+
+if(!systemGraph)
+return;
+
+const rect =
+systemGraph.getBoundingClientRect();
+
+const width =
+Math.max(
+1,
+Math.floor(
+rect.width *
+(window.devicePixelRatio || 1)
+)
+);
+
+const height =
+Math.max(
+1,
+Math.floor(
+rect.height *
+(window.devicePixelRatio || 1)
+)
+);
+
+if(
+systemGraph.width !== width ||
+systemGraph.height !== height
+){
+
+systemGraph.width =
+width;
+
+systemGraph.height =
+height;
+
+}
+
+const ctx =
+systemGraph.getContext("2d");
+
+if(!ctx)
+return;
+
+const w =
+systemGraph.width;
+
+const h =
+systemGraph.height;
+
+
+graphHistory.push(
+Math.max(
+.03,
+Math.min(
+1,
+value
+)
+)
+);
+
+graphHistory.shift();
+
+
+ctx.clearRect(
+0,
+0,
+w,
+h
+);
+
+
+/* =====================================================
+   LINEA GRAFICO
+===================================================== */
+
+ctx.beginPath();
+
+for(
+let i=0;
+i<graphHistory.length;
+i++
+){
+
+const x =
+(
+i /
+(graphHistory.length - 1)
+) *
+w;
+
+const y =
+h -
+(
+graphHistory[i] *
+(h * .72)
+) -
+h * .12;
+
+if(i === 0){
+
+ctx.moveTo(
+x,
+y
+);
+
+}else{
+
+ctx.lineTo(
+x,
+y
+);
+
+}
+
+}
+
+ctx.strokeStyle =
+"rgba(255,255,255,.78)";
+
+ctx.lineWidth =
+1.2 *
+(window.devicePixelRatio || 1);
+
+ctx.shadowBlur =
+8 *
+(window.devicePixelRatio || 1);
+
+ctx.shadowColor =
+"rgba(255,255,255,.55)";
+
+ctx.stroke();
+
+ctx.shadowBlur = 0;
+
+
+/* =====================================================
+   AREA SOTTO IL GRAFICO
+===================================================== */
+
+ctx.lineTo(
+w,
+h
+);
+
+ctx.lineTo(
+0,
+h
+);
+
+ctx.closePath();
+
+const fill =
+ctx.createLinearGradient(
+0,
+0,
+0,
+h
+);
+
+fill.addColorStop(
+0,
+"rgba(255,255,255,.09)"
+);
+
+fill.addColorStop(
+1,
+"rgba(255,255,255,0)"
+);
+
+ctx.fillStyle =
+fill;
+
+ctx.fill();
+
+
+const percentage =
+Math.round(
+value * 100
+);
+
+graphValue.textContent =
+String(
+percentage
+).padStart(
+3,
+"0"
+)
++
+"%";
 
 }
 
@@ -3614,6 +3931,7 @@ initializeNeuralCore();
 ===================================================== */
 
 let map = null;
+
 let currentMarker = null;
 
 
@@ -4066,6 +4384,7 @@ return false;
 ===================================================== */
 
 let webWindowCounter = 0;
+
 let highestWebZ = 220;
 
 
@@ -4995,7 +5314,7 @@ false;
 
 
 recognition.onstart =
-()=>{
+async ()=>{
 
 listening = true;
 
@@ -5004,6 +5323,14 @@ micBtn.classList.add(
 );
 
 setState("listening");
+
+/*
+   Avvia anche l'analisi del livello
+   della voce per rendere la sfera
+   reattiva in tempo reale.
+*/
+
+await startVoiceMonitor();
 
 };
 
@@ -5049,6 +5376,8 @@ micBtn.classList.remove(
 "active"
 );
 
+stopVoiceMonitor();
+
 setState("idle");
 
 };
@@ -5062,6 +5391,8 @@ listening = false;
 micBtn.classList.remove(
 "active"
 );
+
+stopVoiceMonitor();
 
 if(!audioPlaying){
 
@@ -5106,90 +5437,39 @@ micBtn.style.opacity =
 
 
 /* =====================================================
-   CONVERSAZIONE
-===================================================== */
-
-let conversationMode = false;
-
-
-conversationBtn.addEventListener(
-"click",
-()=>{
-
-conversationMode =
-!conversationMode;
-
-conversationBtn.classList.toggle(
-"active",
-conversationMode
-);
-
-conversationBtn.textContent =
-conversationMode
-?
-"● CONVERSAZIONE ATTIVA"
-:
-"◉ CONVERSAZIONE";
-
-if(conversationMode){
-
-addMsg(
-"Modalità conversazione attivata."
-);
-
-}else{
-
-addMsg(
-"Modalità conversazione disattivata."
-);
-
-}
-
-}
-);
-
-
-/* =====================================================
-   CONTROL CENTER
+   CONTROLLO SISTEMA
 ===================================================== */
 
 function updateSystemPanel(){
 
 const memoryElement =
 document.getElementById(
-"systemMemory"
-);
-
-const webElement =
-document.getElementById(
-"systemWeb"
+"homeMemory"
 );
 
 const voiceElement =
 document.getElementById(
-"systemVoice"
+"homeVoice"
 );
 
-const hardware =
-document.getElementById(
-"systemHardware"
-);
+const hardwareOnline =
+navigator.onLine;
 
 
 memoryElement.innerHTML =
 "ENTRIES: " +
 memory.length +
-"<br>STORAGE: LOCAL";
+"<br>LOCAL";
 
 
-webElement.innerHTML =
+homeWeb.innerHTML =
 "WINDOWS: " +
 webSearchWindows
 .querySelectorAll(
 ".web-window"
 )
 .length +
-"<br>ENGINE: BING";
+"<br>BING ENGINE";
 
 
 voiceElement.innerHTML =
@@ -5206,147 +5486,28 @@ voiceElement.innerHTML =
 (
 recognition
 ?
-"AVAILABLE"
-:
-"UNAVAILABLE"
-);
-
-
-hardware.innerHTML =
-"SCREEN: " +
-window.innerWidth +
-"x" +
-window.innerHeight +
-"<br>BATTERY: CHECKING..."+
-"<br>NETWORK: " +
-(
-navigator.onLine
-?
-"ONLINE"
-:
-"OFFLINE"
-);
-
-
-/* =====================================================
-   HOME PANEL UPDATE
-===================================================== */
-
-homeMemory.innerHTML =
-"ENTRIES: " +
-memory.length +
-"<br>LOCAL";
-
-homeWeb.innerHTML =
-"WINDOWS: " +
-webSearchWindows
-.querySelectorAll(
-".web-window"
-)
-.length +
-"<br>BING ENGINE";
-
-homeVoice.innerHTML =
-"SPEECH: " +
-(
-"speechSynthesis" in window
-?
-"READY"
-:
-"OFFLINE"
-)
-+
-"<br>MIC: " +
-(
-recognition
-?
 "READY"
 :
 "OFFLINE"
 );
+
 
 homeNetwork.innerHTML =
-navigator.onLine
+hardwareOnline
 ?
 "ONLINE<br>SECURE LINK"
 :
 "OFFLINE<br>NO LINK";
 
 
-if(
-navigator.getBattery
-){
-
-navigator.getBattery()
-.then(
-battery=>{
-
-hardware.innerHTML =
-"SCREEN: " +
-window.innerWidth +
-"x" +
-window.innerHeight +
-"<br>BATTERY: " +
-Math.round(
-battery.level * 100
-) +
-"%"+
-"<br>NETWORK: " +
-(
-navigator.onLine
-?
-"ONLINE"
-:
-"OFFLINE"
-);
-
 }
-)
-.catch(
-()=>{}
-);
-
-}
-
-}
-
-
-controlBtn.addEventListener(
-"click",
-()=>{
-
-controlCenter.classList.toggle(
-"active"
-);
-
-updateSystemPanel();
-
-}
-);
-
-
-controlClose.addEventListener(
-"click",
-()=>{
-
-controlCenter.classList.remove(
-"active"
-);
-
-}
-);
 
 
 /* =====================================================
    MEMORIA UI
 ===================================================== */
 
-document.getElementById(
-"showMemoryBtn"
-)
-.addEventListener(
-"click",
-()=>{
+function showMemory(){
 
 if(!memory.length){
 
@@ -5374,15 +5535,9 @@ item.content
 addMsg(preview);
 
 }
-);
 
 
-document.getElementById(
-"clearMemoryBtn"
-)
-.addEventListener(
-"click",
-()=>{
+function clearMemory(){
 
 memory = [];
 
@@ -5401,7 +5556,6 @@ addMsg(
 );
 
 }
-);
 
 
 /* =====================================================

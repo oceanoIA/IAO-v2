@@ -1864,6 +1864,11 @@ const MEMORY_KEY =
 
 const MAX_MEMORY = 30;
 
+/*
+   RIDOTTO DA 7000 A 5500
+   PER RENDERE I NEURONI PIÙ RADI
+*/
+
 const NEURON_COUNT = 5500;
 
 const MAPTILER_KEY =
@@ -2102,15 +2107,14 @@ const element =
 document.createElement("div");
 
 element.className =
-"msg";
-
-if(jarvisResponse){
-
-element.classList.add(
-"jarvis-response"
+"msg" +
+(
+jarvisResponse
+?
+" jarvis-response"
+:
+""
 );
-
-}
 
 element.textContent =
 String(text);
@@ -2386,6 +2390,7 @@ NEURON_COUNT
 
 /* =====================================================
    DISTRIBUZIONE SFERICA
+   SFERA PIÙ PICCOLA MA NEURONI PIÙ RADI
 ===================================================== */
 
 for(
@@ -2505,11 +2510,63 @@ particles
 );
 
 
+/*
+   NIENTE LINEE.
+   NIENTE ANELLI.
+   SOLO NEURONI.
+*/
+
+
 notify(
 "NEURAL CORE ONLINE — 5500 NEURONS"
 );
 
 animateNeuralCore();
+
+}catch(error){
+
+console.error(
+"ERRORE THREE.JS:",
+error
+);
+
+container.innerHTML = "";
+
+const errorElement =
+document.createElement("div");
+
+errorElement.style.position =
+"absolute";
+
+errorElement.style.left =
+"50%";
+
+errorElement.style.top =
+"50%";
+
+errorElement.style.transform =
+"translate(-50%,-50%)";
+
+errorElement.style.color =
+"#ffd400";
+
+errorElement.style.fontFamily =
+"monospace";
+
+errorElement.style.fontSize =
+"11px";
+
+errorElement.style.letterSpacing =
+"2px";
+
+errorElement.textContent =
+"NEURAL CORE ERROR";
+
+container.appendChild(
+errorElement
+);
+
+}
 
 }
 

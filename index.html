@@ -2784,6 +2784,172 @@ neuronPositions[index] =
 radius *
 sinPhi *
 Math.cos(theta);
+function initializeNeuralCore(){
+
+try{
+
+scene =
+new THREE.Scene();
+
+camera =
+new THREE.PerspectiveCamera(
+50,
+window.innerWidth /
+window.innerHeight,
+0.1,
+100
+);
+
+camera.position.z = 5;
+
+/* =====================================================
+   WEBGL ROBUSTO
+===================================================== */
+
+try{
+
+renderer =
+new THREE.WebGLRenderer({
+
+antialias:false,
+
+alpha:true,
+
+powerPreference:"default",
+
+depth:true,
+
+stencil:false,
+
+preserveDrawingBuffer:false
+
+});
+
+}catch(webglError){
+
+console.error(
+"WEBGL ERROR:",
+webglError
+);
+
+/*
+   Secondo tentativo con configurazione
+   ancora più compatibile.
+*/
+
+renderer =
+new THREE.WebGLRenderer({
+
+antialias:false,
+
+alpha:true
+
+});
+
+}
+
+renderer.setPixelRatio(
+Math.min(
+window.devicePixelRatio || 1,
+1.75
+)
+);
+
+renderer.setSize(
+window.innerWidth,
+window.innerHeight
+);
+
+renderer.setClearColor(
+0x000000,
+0
+);
+
+container.innerHTML = "";
+
+container.appendChild(
+renderer.domElement
+);
+
+/* =====================================================
+   GEOMETRIA NEURONI
+===================================================== */
+
+neuronPositions =
+new Float32Array(
+NEURON_COUNT * 3
+);
+
+neuronSeeds =
+new Float32Array(
+NEURON_COUNT
+);
+
+neuronBaseRadius =
+new Float32Array(
+NEURON_COUNT
+);
+
+neuronTheta =
+new Float32Array(
+NEURON_COUNT
+);
+
+neuronPhi =
+new Float32Array(
+NEURON_COUNT
+);
+
+/* =====================================================
+   DISTRIBUZIONE SFERICA
+===================================================== */
+
+for(
+let i=0;
+i<NEURON_COUNT;
+i++
+){
+
+const theta =
+Math.random() *
+Math.PI *
+2;
+
+const phi =
+Math.acos(
+2 *
+Math.random() -
+1
+);
+
+const radius =
+0.82 +
+Math.random() *
+0.62;
+
+const sinPhi =
+Math.sin(phi);
+
+const index =
+i * 3;
+
+neuronTheta[i] =
+theta;
+
+neuronPhi[i] =
+phi;
+
+neuronBaseRadius[i] =
+radius;
+
+neuronSeeds[i] =
+Math.random() *
+10000;
+
+neuronPositions[index] =
+radius *
+sinPhi *
+Math.cos(theta);
 
 neuronPositions[index + 1] =
 radius *
@@ -2857,9 +3023,10 @@ particles
 );
 
 /*
-   NIENTE LINEE.
-   NIENTE ANELLI.
    SOLO NEURONI.
+   5500 PARTICELLE.
+   NESSUNA LINEA.
+   NESSUN ANELLO.
 */
 
 notify(
@@ -2874,6 +3041,17 @@ console.error(
 "ERRORE THREE.JS:",
 error
 );
+
+console.error(
+"Dettaglio Neural Core:",
+error.message
+);
+
+/*
+   Se qualcosa fallisce, proviamo a
+   ripristinare completamente il contenitore
+   prima di mostrare l'errore.
+*/
 
 container.innerHTML = "";
 
@@ -2903,6 +3081,9 @@ errorElement.style.fontSize =
 
 errorElement.style.letterSpacing =
 "2px";
+
+errorElement.style.textAlign =
+"center";
 
 errorElement.textContent =
 "NEURAL CORE ERROR";

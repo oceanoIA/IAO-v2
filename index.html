@@ -145,48 +145,59 @@ letter-spacing:1px;
 }
 
 /* =====================================================
-   CHAT
+   CHAT — RISPOSTA LATERALE
 ===================================================== */
 
 #chat{
 position:fixed;
-left:50%;
-bottom:92px;
 
-transform:translateX(-50%);
+left:3.5%;
+top:16%;
 
 z-index:40;
 
-width:min(720px,88%);
+width:min(43vw,620px);
 
-text-align:center;
+max-height:
+calc(100vh - 250px);
 
-pointer-events:none;
+overflow-y:auto;
+overflow-x:hidden;
+
+padding-right:8px;
+
+text-align:left;
+
+pointer-events:auto;
 }
 
 .msg{
-display:inline-block;
+display:block;
+
+position:relative;
 
 max-width:100%;
 
-padding:10px 18px;
+padding:14px 52px 14px 18px;
+
+margin-bottom:12px;
 
 border:
 1px solid rgba(235,242,255,.30);
 
-border-radius:24px;
+border-radius:18px;
 
 background:
-rgba(15,15,18,.48);
+rgba(15,15,18,.62);
 
-backdrop-filter:blur(14px);
+backdrop-filter:blur(18px);
 
 color:
 rgba(242,246,255,.94);
 
 font-size:12px;
 
-line-height:1.45;
+line-height:1.55;
 
 white-space:pre-wrap;
 
@@ -194,11 +205,8 @@ word-break:break-word;
 
 box-shadow:
 0 0 20px rgba(255,255,255,.05);
-}
 
-/* =====================================================
-   SCRITTURA LATERALE RISPOSTA J.A.R.V.I.S.
-===================================================== */
+}
 
 .msg.jarvis-response{
 
@@ -237,6 +245,71 @@ translateX(0);
 
 }
 
+}
+
+/* =====================================================
+   PULSANTE COPIA
+===================================================== */
+
+.copy-btn{
+
+position:absolute;
+
+top:10px;
+right:10px;
+
+width:30px;
+height:30px;
+
+border:
+1px solid rgba(235,242,255,.28);
+
+border-radius:9px;
+
+background:
+rgba(255,255,255,.06);
+
+color:
+rgba(235,242,255,.82);
+
+cursor:pointer;
+
+font-size:13px;
+
+display:flex;
+
+align-items:center;
+justify-content:center;
+
+transition:.2s;
+
+backdrop-filter:blur(10px);
+}
+
+.copy-btn:hover{
+
+color:#ffffff;
+
+border-color:#ffffff;
+
+background:
+rgba(255,255,255,.14);
+
+box-shadow:
+0 0 14px rgba(255,255,255,.18);
+}
+
+.copy-btn.copied{
+
+color:#ffffff;
+
+border-color:#ffffff;
+
+background:
+rgba(255,255,255,.16);
+
+box-shadow:
+0 0 16px rgba(255,255,255,.22);
 }
 
 /* =====================================================
@@ -517,6 +590,223 @@ rgba(255,255,255,.10);
 box-shadow:
 0 0 18px rgba(255,255,255,.20),
 0 0 35px rgba(220,230,255,.08);
+}
+
+/* =====================================================
+   HOME SYSTEM PANEL
+===================================================== */
+
+#homeSystemPanel{
+
+position:fixed;
+
+right:24px;
+top:14%;
+
+z-index:45;
+
+width:285px;
+
+padding:16px;
+
+border:
+1px solid rgba(235,242,255,.28);
+
+border-radius:20px;
+
+background:
+linear-gradient(
+145deg,
+rgba(14,14,18,.86),
+rgba(5,5,8,.72)
+);
+
+backdrop-filter:blur(22px);
+
+box-shadow:
+0 0 30px rgba(255,255,255,.06),
+0 20px 60px rgba(0,0,0,.65);
+
+overflow:hidden;
+}
+
+#homeSystemPanel:before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+left:12px;
+right:12px;
+
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.72),
+transparent
+);
+
+box-shadow:
+0 0 12px rgba(255,255,255,.45);
+}
+
+.home-panel-header{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding-bottom:12px;
+
+border-bottom:
+1px solid rgba(235,242,255,.12);
+}
+
+.home-panel-title{
+
+font-size:11px;
+
+letter-spacing:2.5px;
+
+color:
+rgba(245,248,255,.94);
+}
+
+.home-panel-status{
+
+font-family:monospace;
+
+font-size:7px;
+
+letter-spacing:1px;
+
+color:
+rgba(235,242,255,.68);
+
+display:flex;
+
+align-items:center;
+
+gap:6px;
+}
+
+.home-status-dot{
+
+width:6px;
+height:6px;
+
+border-radius:50%;
+
+background:#ffffff;
+
+box-shadow:
+0 0 8px rgba(255,255,255,.9),
+0 0 16px rgba(255,255,255,.35);
+}
+
+.home-panel-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(2,minmax(0,1fr));
+
+gap:8px;
+
+margin-top:12px;
+}
+
+.home-status-card{
+
+position:relative;
+
+min-height:72px;
+
+padding:11px;
+
+border:
+1px solid rgba(235,242,255,.12);
+
+border-radius:12px;
+
+background:
+rgba(255,255,255,.025);
+
+overflow:hidden;
+}
+
+.home-status-card:after{
+
+content:"";
+
+position:absolute;
+
+right:-20px;
+bottom:-25px;
+
+width:65px;
+height:65px;
+
+border-radius:50%;
+
+border:
+1px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 0 20px rgba(255,255,255,.03);
+}
+
+.home-status-card h3{
+
+font-size:7px;
+
+letter-spacing:1.8px;
+
+color:
+rgba(235,242,255,.56);
+
+margin-bottom:8px;
+}
+
+.home-status-card p{
+
+font-family:monospace;
+
+font-size:9px;
+
+line-height:1.65;
+
+color:
+rgba(242,246,255,.88);
+}
+
+.home-panel-footer{
+
+margin-top:11px;
+
+padding-top:10px;
+
+border-top:
+1px solid rgba(235,242,255,.10);
+
+display:flex;
+
+justify-content:space-between;
+
+font-family:monospace;
+
+font-size:7px;
+
+letter-spacing:1px;
+
+color:
+rgba(220,228,240,.48);
 }
 
 /* =====================================================
@@ -1420,6 +1710,46 @@ top:12px;
 right:13px;
 }
 
+#chat{
+
+left:12px;
+
+top:13%;
+
+width:
+calc(100% - 24px);
+
+max-height:
+calc(100vh - 245px);
+
+}
+
+.msg{
+
+font-size:11px;
+
+padding:
+12px 48px 12px 14px;
+}
+
+#homeSystemPanel{
+
+right:12px;
+
+top:55px;
+
+width:
+calc(100% - 24px);
+
+max-width:310px;
+
+transform:
+scale(.88);
+
+transform-origin:
+top right;
+}
+
 .command-wrapper{
 
 width:
@@ -1431,11 +1761,6 @@ bottom:17px;
 #textInput{
 
 font-size:13px;
-}
-
-#chat{
-
-bottom:80px;
 }
 
 #map{
@@ -1605,6 +1930,14 @@ bottom:2.2cm;
 left:2.2cm;
 }
 
+#homeSystemPanel{
+
+top:52px;
+
+transform:
+scale(.82);
+}
+
 }
 
 /* =====================================================
@@ -1666,6 +1999,110 @@ class="time">
 id="date"
 class="date">
 00 AGO 2026
+</div>
+
+</div>
+
+<!-- =====================================================
+     HOME SYSTEM PANEL
+===================================================== -->
+
+<div id="homeSystemPanel">
+
+<div class="home-panel-header">
+
+<div class="home-panel-title">
+SYSTEM STATUS
+</div>
+
+<div class="home-panel-status">
+
+<span class="home-status-dot"></span>
+
+ONLINE
+
+</div>
+
+</div>
+
+<div class="home-panel-grid">
+
+<div class="home-status-card">
+
+<h3>AI CORE</h3>
+
+<p id="homeAI">
+ONLINE<br>
+API: READY
+</p>
+
+</div>
+
+<div class="home-status-card">
+
+<h3>MEMORY</h3>
+
+<p id="homeMemory">
+ENTRIES: 0<br>
+LOCAL
+</p>
+
+</div>
+
+<div class="home-status-card">
+
+<h3>VOICE</h3>
+
+<p id="homeVoice">
+SPEECH: READY<br>
+MIC: CHECKING
+</p>
+
+</div>
+
+<div class="home-status-card">
+
+<h3>NETWORK</h3>
+
+<p id="homeNetwork">
+ONLINE<br>
+SECURE LINK
+</p>
+
+</div>
+
+<div class="home-status-card">
+
+<h3>TACTICAL</h3>
+
+<p id="homeMap">
+MAP: READY<br>
+MAPTILER
+</p>
+
+</div>
+
+<div class="home-status-card">
+
+<h3>WEB</h3>
+
+<p id="homeWeb">
+WINDOWS: 0<br>
+BING ENGINE
+</p>
+
+</div>
+
+</div>
+
+<div class="home-panel-footer">
+
+<span>JARVIS // CORE</span>
+
+<span id="homeSystemTime">
+00:00:00
+</span>
+
 </div>
 
 </div>
@@ -2026,6 +2463,32 @@ document.getElementById(
 
 
 /* =====================================================
+   HOME PANEL
+===================================================== */
+
+const homeAI =
+document.getElementById("homeAI");
+
+const homeMemory =
+document.getElementById("homeMemory");
+
+const homeVoice =
+document.getElementById("homeVoice");
+
+const homeNetwork =
+document.getElementById("homeNetwork");
+
+const homeMap =
+document.getElementById("homeMap");
+
+const homeWeb =
+document.getElementById("homeWeb");
+
+const homeSystemTime =
+document.getElementById("homeSystemTime");
+
+
+/* =====================================================
    MEMORIA
 ===================================================== */
 
@@ -2145,12 +2608,80 @@ element.remove();
 
 
 /* =====================================================
+   RILEVA TESTO/CODICE COPIABILE
+===================================================== */
+
+function isCopyableResponse(
+userText,
+reply
+){
+
+const text =
+String(userText || "")
+.toLowerCase();
+
+const response =
+String(reply || "");
+
+const generationWords = [
+
+"genera",
+"generami",
+"genera un testo",
+"scrivi un testo",
+"scrivimi un testo",
+"crea un testo",
+"fammi un testo",
+"genera un codice",
+"generami un codice",
+"scrivi un codice",
+"scrivimi un codice",
+"crea un codice",
+"fammi un codice",
+"codice html",
+"codice css",
+"codice javascript",
+"codice python",
+"codice js",
+"codice java",
+"codice flutter",
+"html",
+"css",
+"javascript",
+"python",
+"typescript",
+"java",
+"c++",
+"c#",
+"json",
+"sql"
+];
+
+const asksForGeneration =
+generationWords.some(
+word =>
+text.includes(word)
+);
+
+const hasCodeBlock =
+response.includes("```");
+
+return (
+asksForGeneration ||
+hasCodeBlock
+);
+
+}
+
+
+/* =====================================================
    MESSAGGI
 ===================================================== */
 
 function addMsg(
 text,
-jarvisResponse = false
+jarvisResponse = false,
+copyable = false
 ){
 
 chat.innerHTML = "";
@@ -2204,6 +2735,142 @@ String(text);
 
 }
 
+
+/* =====================================================
+   COPIA
+===================================================== */
+
+if(copyable){
+
+const copyButton =
+document.createElement("button");
+
+copyButton.className =
+"copy-btn";
+
+copyButton.type =
+"button";
+
+copyButton.title =
+"Copia risposta";
+
+copyButton.textContent =
+"⧉";
+
+copyButton.addEventListener(
+"click",
+async event=>{
+
+event.stopPropagation();
+
+try{
+
+await navigator.clipboard.writeText(
+String(text)
+);
+
+copyButton.textContent =
+"✓";
+
+copyButton.classList.add(
+"copied"
+);
+
+notify(
+"TESTO COPIATO"
+);
+
+setTimeout(
+()=>{
+
+copyButton.textContent =
+"⧉";
+
+copyButton.classList.remove(
+"copied"
+);
+
+},
+1800
+);
+
+}catch(error){
+
+console.warn(
+"Clipboard:",
+error
+);
+
+const textarea =
+document.createElement("textarea");
+
+textarea.value =
+String(text);
+
+textarea.style.position =
+"fixed";
+
+textarea.style.opacity =
+"0";
+
+document.body.appendChild(
+textarea
+);
+
+textarea.select();
+
+try{
+
+document.execCommand(
+"copy"
+);
+
+copyButton.textContent =
+"✓";
+
+copyButton.classList.add(
+"copied"
+);
+
+notify(
+"TESTO COPIATO"
+);
+
+}catch(e){
+
+notify(
+"COPIA NON DISPONIBILE"
+);
+
+}
+
+textarea.remove();
+
+setTimeout(
+()=>{
+
+copyButton.textContent =
+"⧉";
+
+copyButton.classList.remove(
+"copied"
+);
+
+},
+1800
+);
+
+}
+
+}
+);
+
+element.appendChild(
+copyButton
+);
+
+}
+
 chat.appendChild(
 element
 );
@@ -2238,7 +2905,7 @@ function updateClock(){
 const now =
 new Date();
 
-clock.textContent =
+const currentTime =
 String(
 now.getHours()
 ).padStart(2,"0")
@@ -2254,6 +2921,12 @@ now.getMinutes()
 String(
 now.getSeconds()
 ).padStart(2,"0");
+
+clock.textContent =
+currentTime;
+
+homeSystemTime.textContent =
+currentTime;
 
 
 date.textContent =
@@ -4555,6 +5228,51 @@ navigator.onLine
 );
 
 
+/* =====================================================
+   HOME PANEL UPDATE
+===================================================== */
+
+homeMemory.innerHTML =
+"ENTRIES: " +
+memory.length +
+"<br>LOCAL";
+
+homeWeb.innerHTML =
+"WINDOWS: " +
+webSearchWindows
+.querySelectorAll(
+".web-window"
+)
+.length +
+"<br>BING ENGINE";
+
+homeVoice.innerHTML =
+"SPEECH: " +
+(
+"speechSynthesis" in window
+?
+"READY"
+:
+"OFFLINE"
+)
++
+"<br>MIC: " +
+(
+recognition
+?
+"READY"
+:
+"OFFLINE"
+);
+
+homeNetwork.innerHTML =
+navigator.onLine
+?
+"ONLINE<br>SECURE LINK"
+:
+"OFFLINE<br>NO LINK";
+
+
 if(
 navigator.getBattery
 ){
@@ -4838,9 +5556,17 @@ throw new Error(
 }
 
 
+const copyable =
+isCopyableResponse(
+text,
+reply
+);
+
+
 addMsg(
 reply,
-true
+true,
+copyable
 );
 
 addMemory(

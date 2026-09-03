@@ -496,7 +496,8 @@ box-shadow:
 ===================================================== */
 
 #fullscreenBtn,
-#voiceBtn{
+#voiceBtn,
+#handControlBtn{
 
 position:fixed;
 
@@ -538,8 +539,14 @@ right:22px;
 bottom:74px;
 }
 
+#handControlBtn{
+right:22px;
+bottom:124px;
+}
+
 #fullscreenBtn:hover,
-#voiceBtn:hover{
+#voiceBtn:hover,
+#handControlBtn:hover{
 
 color:white;
 
@@ -565,6 +572,21 @@ rgba(255,255,255,.10);
 box-shadow:
 0 0 18px rgba(255,255,255,.20),
 0 0 35px rgba(220,230,255,.08);
+}
+
+#handControlBtn.active{
+
+color:#ffffff;
+
+border-color:
+rgba(255,255,255,.88);
+
+background:
+rgba(255,255,255,.12);
+
+box-shadow:
+0 0 18px rgba(255,255,255,.22),
+0 0 35px rgba(220,230,255,.10);
 }
 
 /* =====================================================
@@ -1743,6 +1765,19 @@ font-size:9px;
 padding:0 11px;
 }
 
+#handControlBtn{
+
+right:12px;
+
+bottom:112px;
+
+height:34px;
+
+font-size:9px;
+
+padding:0 11px;
+}
+
 #voicePanel{
 
 right:12px;
@@ -2078,6 +2113,10 @@ INVIA
      PULSANTI
 ===================================================== -->
 
+<button id="handControlBtn">
+✋ MANO OFF
+</button>
+
 <button id="fullscreenBtn">
 ⛶ FULLSCREEN
 </button>
@@ -2111,6 +2150,28 @@ TESTA VOCE
 </div>
 
 <!-- =====================================================
+     CAMERA MANO
+     La webcam rimane spenta finché non viene premuto
+     il pulsante MANO OFF.
+===================================================== -->
+
+<video
+id="handCamera"
+autoplay
+playsinline
+muted
+style="
+position:fixed;
+width:1px;
+height:1px;
+opacity:0;
+pointer-events:none;
+left:-10px;
+top:-10px;
+">
+</video>
+
+<!-- =====================================================
      MAPLIBRE
 ===================================================== -->
 
@@ -2126,6 +2187,17 @@ src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
 
 import * as THREE from
 "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js";
+
+
+/* =====================================================
+   MEDIAPIPE HAND TRACKING
+===================================================== */
+
+import {
+FilesetResolver,
+HandLandmarker
+} from
+"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/+esm";
 
 
 /* =====================================================
@@ -2216,6 +2288,16 @@ document.getElementById(
 const fullscreenBtn =
 document.getElementById(
 "fullscreenBtn"
+);
+
+const handControlBtn =
+document.getElementById(
+"handControlBtn"
+);
+
+const handCamera =
+document.getElementById(
+"handCamera"
 );
 
 const hudNotifications =
@@ -3642,6 +3724,39 @@ let targetEnergy = 0.15;
 
 
 /* =====================================================
+   CONTROLLO MANO — VARIABILI
+===================================================== */
+
+let handLandmarker = null;
+
+let handStream = null;
+
+let handControlActive = false;
+
+let handTrackingReady = false;
+
+let handDetectionFrame = null;
+
+let handLastVideoTime = -1;
+
+let handPreviousX = null;
+
+let handRotationTarget = 0;
+
+let handRotation = 0;
+
+let handRollTarget = 0;
+
+let handRoll = 0;
+
+let handShapeTarget = 0;
+
+let handShape = 0;
+
+let handDetectionBusy = false;
+
+
+/* =====================================================
    VOCE — ANALISI IN TEMPO REALE
 ===================================================== */
 
@@ -4204,7 +4319,698 @@ errorElement
 
 }
 
+
+/* =====================================================
+   CONTROLLO MANO — AVVIO
+===================================================== */
+
+async function initializeHandTracking(){
+
+if(handLandmarker)
+return true;
+
+try{
+
+notify(
+"INIZIALIZZAZIONE HAND TRACKING"
+);
+
+const vision =
+await FilesetResolver.forVisionTasks(
+"https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
+);
+
+handLandmarker =
+await HandLandmarker.createFromOptions(
+vision,
+{
+
+baseOptions:{
+
+modelAssetPath:
+"https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+
+delegate:
+"GPU"
+
+},
+
+runningMode:
+"VIDEO",
+
+numHands:
+1,
+
+minHandDetectionConfidence:
+0.55,
+
+minHandPresenceConfidence:
+0.55,
+
+minTrackingConfidence:
+0.55
+
 }
+);
+
+handTrackingReady = true;
+
+return true;
+
+}catch(error){
+
+console.error(
+"Hand tracking:",
+error
+);
+
+handLandmarker = null;
+
+handTrackingReady = false;
+
+notify(
+"HAND TRACKING NON DISPONIBILE"
+);
+
+return false;
+
+}
+
+}
+
+
+/* =====================================================
+   CALCOLO ROTAZIONE PALMO
+===================================================== */
+
+function getPalmRoll(landmarks){
+
+if(
+!landmarks ||
+landmarks.length < 18
+)
+return 0;
+
+
+/*
+   Landmark MediaPipe:
+   0  = polso
+   5  = indice MCP
+   17 = mignolo MCP
+
+   Il vettore tra indice e mignolo permette di
+   stimare l'inclinazione laterale del palmo.
+*/
+
+const indexMcp =
+landmarks[5];
+
+const pinkyMcp =
+landmarks[17];
+
+const dx =
+pinkyMcp.x -
+indexMcp.x;
+
+const dy =
+pinkyMcp.y -
+indexMcp.y;
+
+let angle =
+Math.atan2(
+dy,
+dx
+);
+
+
+/*
+   Normalizzazione rispetto alla posizione
+   naturale del palmo nell'immagine.
+*/
+
+angle -= Math.PI;
+
+while(angle > Math.PI)
+angle -= Math.PI * 2;
+
+while(angle < -Math.PI)
+angle += Math.PI * 2;
+
+
+/*
+   Limitiamo l'effetto per evitare movimenti
+   troppo aggressivi.
+*/
+
+const normalized =
+THREE.MathUtils.clamp(
+angle / (Math.PI * .5),
+-1,
+1
+);
+
+return normalized;
+
+}
+
+
+/* =====================================================
+   ELABORAZIONE MANO
+===================================================== */
+
+function processHandLandmarks(result){
+
+if(
+!result ||
+!result.landmarks ||
+!result.landmarks.length
+){
+
+handPreviousX = null;
+
+handRotationTarget *= .96;
+
+handRollTarget *= .94;
+
+handShapeTarget *= .94;
+
+return;
+
+}
+
+const landmarks =
+result.landmarks[0];
+
+if(
+!landmarks ||
+landmarks.length < 18
+)
+return;
+
+
+/* =====================================================
+   POSIZIONE DEL PALMO
+===================================================== */
+
+const wrist =
+landmarks[0];
+
+const indexMcp =
+landmarks[5];
+
+const middleMcp =
+landmarks[9];
+
+const pinkyMcp =
+landmarks[17];
+
+
+/*
+   Centro del palmo.
+*/
+
+const palmX =
+(
+wrist.x +
+indexMcp.x +
+middleMcp.x +
+pinkyMcp.x
+) / 4;
+
+
+/* =====================================================
+   MOVIMENTO ORIZZONTALE
+===================================================== */
+
+if(handPreviousX !== null){
+
+const deltaX =
+palmX -
+handPreviousX;
+
+
+/*
+   Il movimento relativo della mano
+   controlla la rotazione del core.
+*/
+
+handRotationTarget +=
+deltaX * 7.5;
+
+handRotationTarget =
+THREE.MathUtils.clamp(
+handRotationTarget,
+-2.8,
+2.8
+);
+
+}
+
+handPreviousX =
+palmX;
+
+
+/* =====================================================
+   ROTAZIONE DEL PALMO
+===================================================== */
+
+const roll =
+getPalmRoll(
+landmarks
+);
+
+handRollTarget =
+roll;
+
+
+/* =====================================================
+   FORMA DEL CORE
+===================================================== */
+
+/*
+   La distanza media tra polso e nocche
+   viene usata come indicatore dell'apertura
+   del gesto della mano.
+
+   Mano più aperta → maggiore deformazione.
+*/
+
+const palmCenterX =
+(
+wrist.x +
+middleMcp.x
+) / 2;
+
+const palmCenterY =
+(
+wrist.y +
+middleMcp.y
+) / 2;
+
+const palmWidth =
+Math.hypot(
+indexMcp.x -
+pinkyMcp.x,
+indexMcp.y -
+pinkyMcp.y
+);
+
+const palmDepth =
+Math.hypot(
+palmCenterX -
+middleMcp.x,
+palmCenterY -
+middleMcp.y
+);
+
+const openness =
+THREE.MathUtils.clamp(
+palmWidth * 5.0 +
+palmDepth * 3.0,
+0,
+1
+);
+
+handShapeTarget =
+THREE.MathUtils.lerp(
+handShapeTarget,
+(
+openness * .75 +
+Math.abs(roll) * .35
+),
+.20
+);
+
+
+/* =====================================================
+   ENERGIA GESTUALE
+===================================================== */
+
+const handEnergy =
+Math.abs(roll) * .55 +
+openness * .20;
+
+if(
+handControlActive &&
+targetEnergy <= .16
+){
+
+targetEnergy =
+Math.max(
+.15,
+handEnergy
+);
+
+}
+
+}
+
+
+/* =====================================================
+   LOOP HAND TRACKING
+===================================================== */
+
+function handTrackingLoop(){
+
+if(!handControlActive)
+return;
+
+handDetectionFrame =
+requestAnimationFrame(
+handTrackingLoop
+);
+
+if(
+!handLandmarker ||
+!handCamera ||
+handCamera.readyState <
+HTMLMediaElement.HAVE_CURRENT_DATA
+)
+return;
+
+if(handDetectionBusy)
+return;
+
+if(
+handCamera.currentTime ===
+handLastVideoTime
+)
+return;
+
+handLastVideoTime =
+handCamera.currentTime;
+
+handDetectionBusy = true;
+
+try{
+
+const result =
+handLandmarker.detectForVideo(
+handCamera,
+performance.now()
+);
+
+processHandLandmarks(
+result
+);
+
+}catch(error){
+
+console.warn(
+"Hand detection:",
+error
+);
+
+}finally{
+
+handDetectionBusy = false;
+
+}
+
+}
+
+
+/* =====================================================
+   ATTIVA CONTROLLO MANO
+===================================================== */
+
+async function enableHandControl(){
+
+if(handControlActive)
+return;
+
+
+/* =====================================================
+   CONTROLLO SUPPORTO CAMERA
+===================================================== */
+
+if(
+!navigator.mediaDevices ||
+!navigator.mediaDevices.getUserMedia
+){
+
+notify(
+"CAMERA NON DISPONIBILE"
+);
+
+addMsg(
+"La fotocamera non è disponibile in questo browser."
+);
+
+return;
+
+}
+
+
+handControlBtn.disabled = true;
+
+handControlBtn.textContent =
+"✋ AVVIO...";
+
+
+try{
+
+const ready =
+await initializeHandTracking();
+
+if(!ready){
+
+handControlBtn.disabled = false;
+
+handControlBtn.textContent =
+"✋ MANO OFF";
+
+return;
+
+}
+
+
+/* =====================================================
+   RICHIESTA PERMESSO CAMERA
+===================================================== */
+
+handStream =
+await navigator.mediaDevices.getUserMedia({
+
+video:{
+
+facingMode:
+"user",
+
+width:{
+ideal:640
+},
+
+height:{
+ideal:480
+},
+
+frameRate:{
+ideal:30,
+max:30
+}
+
+},
+
+audio:false
+
+});
+
+
+handCamera.srcObject =
+handStream;
+
+await handCamera.play();
+
+
+handControlActive = true;
+
+handPreviousX = null;
+
+handLastVideoTime = -1;
+
+handRotationTarget =
+particles
+?
+particles.rotation.y
+:
+0;
+
+handRotation =
+handRotationTarget;
+
+handRollTarget = 0;
+
+handRoll = 0;
+
+handShapeTarget = 0;
+
+handShape = 0;
+
+
+handControlBtn.disabled = false;
+
+handControlBtn.classList.add(
+"active"
+);
+
+handControlBtn.textContent =
+"✋ MANO ON";
+
+
+notify(
+"HAND CONTROL ONLINE"
+);
+
+addMsg(
+"Controllo mano attivato. Muovi la mano a destra o sinistra per ruotare il Neural Core."
+);
+
+handTrackingLoop();
+
+}catch(error){
+
+console.error(
+"Camera mano:",
+error
+);
+
+stopHandControl();
+
+handControlBtn.disabled = false;
+
+handControlBtn.textContent =
+"✋ MANO OFF";
+
+
+if(
+error &&
+(
+error.name ===
+"NotAllowedError" ||
+error.name ===
+"PermissionDeniedError"
+)
+){
+
+notify(
+"PERMESSO CAMERA NEGATO"
+);
+
+addMsg(
+"Il controllo mano non può essere attivato senza il permesso della fotocamera."
+);
+
+}else{
+
+notify(
+"ERRORE CAMERA"
+);
+
+addMsg(
+"Impossibile avviare la fotocamera per il controllo mano."
+);
+
+}
+
+}
+
+}
+
+
+/* =====================================================
+   DISATTIVA CONTROLLO MANO
+===================================================== */
+
+function stopHandControl(){
+
+handControlActive = false;
+
+handPreviousX = null;
+
+handLastVideoTime = -1;
+
+handRotationTarget =
+particles
+?
+particles.rotation.y
+:
+0;
+
+handRollTarget = 0;
+
+handShapeTarget = 0;
+
+if(
+handDetectionFrame
+){
+
+cancelAnimationFrame(
+handDetectionFrame
+);
+
+handDetectionFrame = null;
+
+}
+
+if(handStream){
+
+handStream
+.getTracks()
+.forEach(
+track=>{
+track.stop();
+}
+);
+
+handStream = null;
+
+}
+
+if(handCamera){
+
+handCamera.pause();
+
+handCamera.srcObject = null;
+
+}
+
+handDetectionBusy = false;
+
+handControlBtn.classList.remove(
+"active"
+);
+
+handControlBtn.textContent =
+"✋ MANO OFF";
+
+}
+
+
+/* =====================================================
+   PULSANTE CONTROLLO MANO
+===================================================== */
+
+handControlBtn.addEventListener(
+"click",
+async ()=>{
+
+if(handControlActive){
+
+stopHandControl();
+
+notify(
+"HAND CONTROL OFF"
+);
+
+return;
+
+}
+
+await enableHandControl();
+
+}
+);
 
 
 /* =====================================================
@@ -4287,6 +5093,59 @@ voiceLevel
 
 
 /* =====================================================
+   CONTROLLO MANO SMOOTH
+===================================================== */
+
+if(handControlActive){
+
+handRotation +=
+(
+handRotationTarget -
+handRotation
+) *
+0.12;
+
+handRoll +=
+(
+handRollTarget -
+handRoll
+) *
+0.10;
+
+handShape +=
+(
+handShapeTarget -
+handShape
+) *
+0.10;
+
+}else{
+
+handRotation +=
+(
+0 -
+handRotation
+) *
+0.035;
+
+handRoll +=
+(
+0 -
+handRoll
+) *
+0.035;
+
+handShape +=
+(
+0 -
+handShape
+) *
+0.035;
+
+}
+
+
+/* =====================================================
    ENERGIA
 ===================================================== */
 
@@ -4294,12 +5153,31 @@ const voiceEnergy =
 voiceLevel *
 1.4;
 
+
+/*
+   L'energia manuale modifica il comportamento
+   senza sostituire gli stati normali di JARVIS.
+*/
+
+const manualEnergy =
+handControlActive
+?
+(
+Math.abs(handRoll) * .45 +
+handShape * .18
+)
+:
+0;
+
+
 const combinedTarget =
 Math.max(
 targetEnergy,
 targetEnergy +
-voiceEnergy
+voiceEnergy +
+manualEnergy
 );
+
 
 neuralEnergy +=
 (
@@ -4307,7 +5185,8 @@ combinedTarget -
 neuralEnergy
 ) *
 (
-voiceLevel > .02
+voiceLevel > .02 ||
+handControlActive
 ?
 .085
 :
@@ -4325,7 +5204,8 @@ time * 1.15
 ) *
 (
 0.035 +
-voiceLevel * 0.025
+voiceLevel * 0.025 +
+handShape * 0.018
 );
 
 
@@ -4335,7 +5215,8 @@ time * 0.55
 ) *
 (
 0.018 +
-voiceLevel * 0.012
+voiceLevel * 0.012 +
+handShape * 0.010
 );
 
 
@@ -4375,7 +5256,8 @@ seed
 ) *
 (
 0.018 +
-voiceLevel * 0.010
+voiceLevel * 0.010 +
+handShape * 0.008
 );
 
 
@@ -4385,13 +5267,15 @@ theta * 7 +
 phi * 4 +
 time * (
 2.0 +
-voiceLevel * 2.0
+voiceLevel * 2.0 +
+handShape * 1.0
 ) +
 seed
 ) *
 (
 0.045 +
-voiceLevel * 0.025
+voiceLevel * 0.025 +
+handShape * 0.020
 ) *
 activity;
 
@@ -4401,13 +5285,15 @@ Math.sin(
 phi * 10 -
 time * (
 1.55 +
-voiceLevel * 1.7
+voiceLevel * 1.7 +
+Math.abs(handRoll) * 1.5
 ) +
 seed * 0.55
 ) *
 (
 0.032 +
-voiceLevel * 0.020
+voiceLevel * 0.020 +
+handShape * 0.018
 ) *
 activity;
 
@@ -4417,13 +5303,15 @@ Math.sin(
 theta * 13 +
 time * (
 3.0 +
-voiceLevel * 2.5
+voiceLevel * 2.5 +
+Math.abs(handRoll) * 2.0
 ) +
 seed * 0.25
 ) *
 (
 0.018 +
-voiceLevel * 0.014
+voiceLevel * 0.014 +
+handShape * 0.015
 ) *
 activity;
 
@@ -4443,13 +5331,15 @@ const activePulse =
 Math.sin(
 time * (
 3.2 +
-voiceLevel * 3.0
+voiceLevel * 3.0 +
+handShape * 2.0
 ) +
 seed * 0.4
 ) *
 (
 0.018 +
-voiceLevel * 0.015
+voiceLevel * 0.015 +
+handShape * 0.012
 ) *
 Math.max(
 0,
@@ -4474,6 +5364,42 @@ seed * .15
 
 
 /* =====================================================
+   EFFETTO ROTAZIONE PALMO
+===================================================== */
+
+const palmShape =
+handRoll *
+Math.sin(
+phi * 5 +
+theta * 3 +
+time * 1.2
+) *
+0.055 *
+(
+handControlActive
+?
+1
+:
+0
+);
+
+
+/* =====================================================
+   DEFORMAZIONE GESTO MANO
+===================================================== */
+
+const handDeformation =
+handShape *
+Math.sin(
+theta * 4 +
+phi * 6 +
+time * 0.8 +
+seed * .03
+) *
+0.045;
+
+
+/* =====================================================
    RAGGIO FINALE
 ===================================================== */
 
@@ -4485,7 +5411,9 @@ wave1 +
 wave2 +
 wave3 +
 activePulse +
-voiceExpansion;
+voiceExpansion +
+palmShape +
+handDeformation;
 
 
 const sinPhi =
@@ -4524,6 +5452,34 @@ particles.rotation.y +=
 neuralEnergy * 0.00045 +
 voiceLevel * 0.0008;
 
+
+/*
+   Il movimento orizzontale della mano
+   imposta la rotazione principale.
+*/
+
+if(handControlActive){
+
+particles.rotation.y +=
+(
+handRotation -
+particles.rotation.y
+) *
+0.035;
+
+}else{
+
+/*
+   Comportamento originale quando il
+   controllo mano è spento.
+*/
+
+particles.rotation.y +=
+0;
+
+}
+
+
 particles.rotation.x =
 Math.sin(
 time * (
@@ -4536,6 +5492,18 @@ voiceLevel * .25
 neuralEnergy * 0.012 +
 voiceLevel * .015
 );
+
+
+/*
+   La rotazione del palmo modifica
+   leggermente l'inclinazione verticale
+   del core.
+*/
+
+particles.rotation.x +=
+handRoll *
+0.10;
+
 
 particles.rotation.z =
 Math.cos(
@@ -4551,6 +5519,15 @@ voiceLevel * .010
 );
 
 
+/*
+   Effetto secondario del palmo.
+*/
+
+particles.rotation.z +=
+handRoll *
+0.035;
+
+
 /* =====================================================
    DIMENSIONE NEURONI
 ===================================================== */
@@ -4558,7 +5535,8 @@ voiceLevel * .010
 particles.material.size =
 0.043 +
 neuralEnergy * 0.0085 +
-voiceLevel * 0.012;
+voiceLevel * 0.012 +
+handShape * 0.006;
 
 
 particles.material.opacity =
@@ -4567,7 +5545,8 @@ Math.min(
 0.18,
 neuralEnergy * 0.045
 ) +
-voiceLevel * .025;
+voiceLevel * .025 +
+handShape * .025;
 
 
 /* =====================================================
@@ -5542,16 +6521,6 @@ Intl.DateTimeFormat()
    CAPACITÀ REALI DI J.A.R.V.I.S.
 ===================================================== */
 
-/*
-   IMPORTANTE:
-
-   Questo registro descrive esclusivamente ciò che il browser
-   può realmente verificare o controllare.
-
-   FALSE / NON DISPONIBILE significa che JARVIS NON deve
-   dichiarare quella funzione come disponibile.
-*/
-
 const JARVIS_CAPABILITIES = {
 
 aiBackend: true,
@@ -5620,7 +6589,13 @@ phoneControl:
 false,
 
 otherDeviceControl:
-false
+false,
+
+handControl:
+!!(
+navigator.mediaDevices &&
+navigator.mediaDevices.getUserMedia
+)
 
 };
 
@@ -5749,14 +6724,6 @@ return data;
 /* =====================================================
    INFORMAZIONI DISPOSITIVO REALMENTE DISPONIBILI
 ===================================================== */
-
-/*
-   Il browser normalmente NON permette di conoscere con
-   certezza il modello commerciale del dispositivo.
-
-   Quindi non viene mai trasformato automaticamente in
-   "iPhone 14 Pro Max", "Samsung S24", ecc.
-*/
 
 function getDeviceInfo(){
 
@@ -5986,7 +6953,14 @@ await getBatteryData();
 return{
 
 capabilities:{
-...JARVIS_CAPABILITIES
+...JARVIS_CAPABILITIES,
+
+handControlActive:
+handControlActive,
+
+handTrackingReady:
+handTrackingReady
+
 },
 
 time:
@@ -6024,6 +6998,23 @@ available:
 locked:
 earthLatitude !== null &&
 earthLongitude !== null
+
+},
+
+handControl:
+{
+
+available:
+!!(
+navigator.mediaDevices &&
+navigator.mediaDevices.getUserMedia
+),
+
+active:
+handControlActive,
+
+trackingReady:
+handTrackingReady
 
 }
 
@@ -6421,6 +7412,60 @@ return true;
 
 
 /* =====================================================
+   CONTROLLO MANO
+===================================================== */
+
+if(
+
+normalized ===
+"controlla mano"
+||
+normalized ===
+"stato controllo mano"
+||
+normalized ===
+"controllo mano"
+||
+normalized ===
+"hand tracking"
+||
+normalized ===
+"hand control"
+
+){
+
+let reply;
+
+if(handControlActive){
+
+reply =
+"Il controllo mano è attivo. La fotocamera è in uso e il Neural Core sta ricevendo i movimenti della mano.";
+
+}else if(handTrackingReady){
+
+reply =
+"Il sistema di hand tracking è pronto, ma il controllo mano è disattivato.";
+
+}else{
+
+reply =
+"Il controllo mano è disponibile ma non è attualmente attivo.";
+
+}
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+
+/* =====================================================
    CAPACITÀ
 ===================================================== */
 
@@ -6482,6 +7527,9 @@ available.push("mappa tattica");
 if(capabilities.capabilities.webSearchWindows)
 available.push("finestre di ricerca web");
 
+if(capabilities.capabilities.handControl)
+available.push("controllo del Neural Core tramite movimenti della mano");
+
 const reply =
 "Le funzioni realmente disponibili in questa interfaccia sono:\n\n" +
 available
@@ -6489,7 +7537,8 @@ available
 item => "• " + item
 )
 .join("\n") +
-"\n\nNon ho collegamenti reali a telecamere di casa, serrature, luci, sistemi di sicurezza o altri telefoni.";
+"\n\nIl controllo mano utilizza la fotocamera solo quando viene attivato manualmente. " +
+"Non ho collegamenti reali a telecamere di casa, serrature, luci, sistemi di sicurezza o altri telefoni.";
 
 addMsg(
 reply,
@@ -7454,6 +8503,10 @@ const capabilityInstructions =
 
 "La geolocalizzazione è disponibile solo tramite il permesso del browser e le coordinate non devono essere inventate. " +
 
+"Il controllo mano usa la fotocamera solo quando handControlActive è true. " +
+
+"Non dichiarare mai che la fotocamera è attiva se handControlActive è false. " +
+
 "Rispondi in italiano quando l'utente parla italiano.";
 
 
@@ -7707,6 +8760,22 @@ notify(
 );
 
 updateSystemPanel();
+
+}
+);
+
+
+/* =====================================================
+   CHIUSURA / USCITA PAGINA
+===================================================== */
+
+window.addEventListener(
+"beforeunload",
+()=>{
+
+stopHandControl();
+
+stopVoiceMonitor();
 
 }
 );

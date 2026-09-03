@@ -145,7 +145,7 @@ letter-spacing:1px;
 }
 
 /* =====================================================
-   CHAT — RISPOSTA LATERALE
+   CHAT
 ===================================================== */
 
 #chat{
@@ -496,7 +496,8 @@ box-shadow:
 ===================================================== */
 
 #fullscreenBtn,
-#voiceBtn{
+#voiceBtn,
+#handBtn{
 
 position:fixed;
 
@@ -538,8 +539,14 @@ right:22px;
 bottom:74px;
 }
 
+#handBtn{
+right:22px;
+bottom:124px;
+}
+
 #fullscreenBtn:hover,
-#voiceBtn:hover{
+#voiceBtn:hover,
+#handBtn:hover{
 
 color:white;
 
@@ -552,7 +559,8 @@ box-shadow:
 0 0 18px rgba(255,255,255,.12);
 }
 
-#fullscreenBtn.active{
+#fullscreenBtn.active,
+#handBtn.active{
 
 color:#ffffff;
 
@@ -565,6 +573,80 @@ rgba(255,255,255,.10);
 box-shadow:
 0 0 18px rgba(255,255,255,.20),
 0 0 35px rgba(220,230,255,.08);
+}
+
+/* =====================================================
+   HAND TRACKING STATUS
+===================================================== */
+
+#handStatus{
+
+position:fixed;
+
+left:20px;
+
+bottom:125px;
+
+z-index:210;
+
+display:none;
+
+padding:8px 12px;
+
+border:
+1px solid rgba(235,242,255,.24);
+
+border-radius:15px;
+
+background:
+rgba(8,8,11,.82);
+
+color:
+rgba(225,232,245,.72);
+
+font-family:monospace;
+
+font-size:8px;
+
+letter-spacing:1.5px;
+
+pointer-events:none;
+
+backdrop-filter:blur(12px);
+}
+
+#handStatus.active{
+display:block;
+}
+
+#handStatus.hand-found{
+
+color:#ffffff;
+
+border-color:
+rgba(255,255,255,.55);
+
+box-shadow:
+0 0 18px rgba(255,255,255,.12);
+}
+
+/* =====================================================
+   CAMERA HAND TRACKING
+===================================================== */
+
+#handCamera{
+
+position:fixed;
+
+width:1px;
+height:1px;
+
+left:-10px;
+top:-10px;
+
+opacity:0;
+
+pointer-events:none;
 }
 
 /* =====================================================
@@ -726,7 +808,7 @@ transform:scale(1.25);
 }
 
 /* =====================================================
-   EARTH — TACTICAL GLOBE
+   EARTH
 ===================================================== */
 
 .home-earth{
@@ -962,7 +1044,7 @@ rgba(220,228,240,.48);
 position:fixed;
 
 right:22px;
-bottom:122px;
+bottom:172px;
 
 z-index:100;
 
@@ -1511,7 +1593,7 @@ position:fixed;
 
 left:20px;
 
-bottom:125px;
+bottom:155px;
 
 z-index:210;
 
@@ -1717,6 +1799,19 @@ width:34px;
 height:34px;
 }
 
+#handBtn{
+
+right:12px;
+
+bottom:119px;
+
+height:34px;
+
+font-size:8px;
+
+padding:0 10px;
+}
+
 #voiceBtn{
 
 right:12px;
@@ -1747,10 +1842,26 @@ padding:0 11px;
 
 right:12px;
 
-bottom:112px;
+bottom:162px;
 
 width:
 calc(100% - 24px);
+}
+
+#handStatus{
+
+left:10px;
+
+bottom:115px;
+
+font-size:7px;
+}
+
+#webSearchIndicator{
+
+left:10px;
+
+bottom:150px;
 }
 
 .web-window{
@@ -1847,6 +1958,17 @@ border-radius:5px;
 <div id="webgl-container"></div>
 
 <div class="vignette"></div>
+
+<!-- =====================================================
+     CAMERA HAND TRACKING
+===================================================== -->
+
+<video
+id="handCamera"
+autoplay
+playsinline
+muted>
+</video>
 
 <!-- =====================================================
      TITOLO
@@ -1983,11 +2105,11 @@ MAPTILER
 
 <div class="home-status-card">
 
-<h3>WEB</h3>
+<h3>HAND TRACKING</h3>
 
-<p id="homeWeb">
-WINDOWS: 0<br>
-BING ENGINE
+<p id="homeHand">
+CAMERA: OFF<br>
+HAND: WAITING
 </p>
 
 </div>
@@ -2037,6 +2159,14 @@ WEB WINDOWS: 0
 </div>
 
 <!-- =====================================================
+     HAND STATUS
+===================================================== -->
+
+<div id="handStatus">
+HAND TRACKING: OFF
+</div>
+
+<!-- =====================================================
      NOTIFICHE
 ===================================================== -->
 
@@ -2078,12 +2208,16 @@ INVIA
      PULSANTI
 ===================================================== -->
 
-<button id="fullscreenBtn">
-⛶ FULLSCREEN
+<button id="handBtn">
+✋ MANO
 </button>
 
 <button id="voiceBtn">
 ⚙ VOCE
+</button>
+
+<button id="fullscreenBtn">
+⛶ FULLSCREEN
 </button>
 
 <!-- =====================================================
@@ -2116,6 +2250,14 @@ TESTA VOCE
 
 <script
 src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">
+</script>
+
+<!-- =====================================================
+     MEDIAPIPE HAND TRACKING
+===================================================== -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js">
 </script>
 
 <!-- =====================================================
@@ -2225,7 +2367,92 @@ document.getElementById(
 
 
 /* =====================================================
-   EARTH — TACTICAL GLOBE
+   HAND TRACKING ELEMENTI
+===================================================== */
+
+const handBtn =
+document.getElementById(
+"handBtn"
+);
+
+const handCamera =
+document.getElementById(
+"handCamera"
+);
+
+const handStatus =
+document.getElementById(
+"handStatus"
+);
+
+const homeHand =
+document.getElementById(
+"homeHand"
+);
+
+
+/* =====================================================
+   HAND TRACKING STATO
+===================================================== */
+
+let handTrackingActive = false;
+
+let handTrackingReady = false;
+
+let handStream = null;
+
+let handsDetector = null;
+
+let handAnimationFrame = null;
+
+let lastHandTime = 0;
+
+let handFound = false;
+
+
+/*
+   Valori TARGET.
+   I neuroni non vengono modificati direttamente dalla camera:
+   prima aggiorniamo questi valori e poi l'animazione li
+   raggiunge lentamente.
+*/
+
+let handTargetX = 0;
+
+let handTargetY = 0;
+
+let handTargetScale = 1;
+
+let handTargetRotation = 0;
+
+
+/*
+   Valori SMOOTH.
+*/
+
+let handX = 0;
+
+let handY = 0;
+
+let handScale = 1;
+
+let handRotation = 0;
+
+
+/*
+   Offset per evitare che la posizione iniziale della mano
+   faccia saltare immediatamente il Core.
+*/
+
+let handReferenceX = null;
+
+let handReferenceY = null;
+
+let handReferenceRotation = null;
+
+
+/* =====================================================
+   EARTH
 ===================================================== */
 
 const earthContainer =
@@ -2412,72 +2639,6 @@ element.remove();
 
 
 /* =====================================================
-   RILEVA TESTO/CODICE COPIABILE
-===================================================== */
-
-function isCopyableResponse(
-userText,
-reply
-){
-
-const text =
-String(userText || "")
-.toLowerCase();
-
-const response =
-String(reply || "");
-
-const generationWords = [
-
-"genera",
-"generami",
-"genera un testo",
-"scrivi un testo",
-"scrivimi un testo",
-"crea un testo",
-"fammi un testo",
-"genera un codice",
-"generami un codice",
-"scrivi un codice",
-"scrivimi un codice",
-"crea un codice",
-"fammi un codice",
-"codice html",
-"codice css",
-"codice javascript",
-"codice python",
-"codice js",
-"codice flutter",
-"html",
-"css",
-"javascript",
-"python",
-"typescript",
-"java",
-"c++",
-"c#",
-"json",
-"sql"
-];
-
-const asksForGeneration =
-generationWords.some(
-word =>
-text.includes(word)
-);
-
-const hasCodeBlock =
-response.includes("```");
-
-return (
-asksForGeneration ||
-hasCodeBlock
-);
-
-}
-
-
-/* =====================================================
    MESSAGGI
 ===================================================== */
 
@@ -2539,10 +2700,6 @@ String(text);
 }
 
 
-/* =====================================================
-   COPIA
-===================================================== */
-
 if(copyable){
 
 const copyButton =
@@ -2602,65 +2759,6 @@ copyButton.classList.remove(
 console.warn(
 "Clipboard:",
 error
-);
-
-const textarea =
-document.createElement("textarea");
-
-textarea.value =
-String(text);
-
-textarea.style.position =
-"fixed";
-
-textarea.style.opacity =
-"0";
-
-document.body.appendChild(
-textarea
-);
-
-textarea.select();
-
-try{
-
-document.execCommand(
-"copy"
-);
-
-copyButton.textContent =
-"✓";
-
-copyButton.classList.add(
-"copied"
-);
-
-notify(
-"TESTO COPIATO"
-);
-
-}catch(e){
-
-notify(
-"COPIA NON DISPONIBILE"
-);
-
-}
-
-textarea.remove();
-
-setTimeout(
-()=>{
-
-copyButton.textContent =
-"⧉";
-
-copyButton.classList.remove(
-"copied"
-);
-
-},
-1800
 );
 
 }
@@ -2782,9 +2880,6 @@ canvas.width,
 canvas.height
 );
 
-
-/* SFONDO */
-
 const background =
 ctx.createRadialGradient(
 512,
@@ -2820,10 +2915,6 @@ canvas.width,
 canvas.height
 );
 
-
-/* =====================================================
-   CONTINENTI
-===================================================== */
 
 function project(
 lon,
@@ -2898,128 +2989,44 @@ ctx.stroke();
 }
 
 
-/* NORD AMERICA */
-
 drawLand([
-
-[-168,72],
-[-140,70],
-[-130,55],
-[-125,50],
-[-100,45],
-[-82,25],
-[-95,15],
-[-110,20],
-[-120,30],
-[-135,35],
-[-150,50],
-[-165,55]
-
+[-168,72],[-140,70],[-130,55],[-125,50],
+[-100,45],[-82,25],[-95,15],[-110,20],
+[-120,30],[-135,35],[-150,50],[-165,55]
 ]);
 
-
-/* SUD AMERICA */
-
 drawLand([
-
-[-82,12],
-[-60,10],
-[-50,-5],
-[-55,-25],
-[-65,-55],
-[-72,-45],
-[-78,-25],
-[-85,-5]
-
+[-82,12],[-60,10],[-50,-5],[-55,-25],
+[-65,-55],[-72,-45],[-78,-25],[-85,-5]
 ]);
 
-
-/* GREENLAND */
-
 drawLand([
-
-[-73,83],
-[-20,83],
-[-18,60],
-[-45,58],
-[-65,65]
-
+[-73,83],[-20,83],[-18,60],[-45,58],[-65,65]
 ]);
 
-
-/* EUROPA */
-
 drawLand([
-
-[-10,36],
-[10,35],
-[30,45],
-[40,60],
-[20,70],
-[0,62],
-[-10,50]
-
+[-10,36],[10,35],[30,45],[40,60],
+[20,70],[0,62],[-10,50]
 ]);
 
-
-/* ASIA */
-
 drawLand([
-
-[30,40],
-[55,35],
-[75,25],
-[100,10],
-[120,20],
-[145,30],
-[160,45],
-[140,65],
-[100,75],
-[60,70],
-[35,60]
-
+[30,40],[55,35],[75,25],[100,10],
+[120,20],[145,30],[160,45],[140,65],
+[100,75],[60,70],[35,60]
 ]);
 
-
-/* AFRICA */
-
 drawLand([
-
-[-17,35],
-[5,37],
-[30,30],
-[45,10],
-[40,-10],
-[25,-35],
-[10,-35],
-[-5,-20],
-[-15,5],
-[-20,20]
-
+[-17,35],[5,37],[30,30],[45,10],
+[40,-10],[25,-35],[10,-35],[-5,-20],
+[-15,5],[-20,20]
 ]);
 
-
-/* AUSTRALIA */
-
 drawLand([
-
-[112,-10],
-[150,-10],
-[155,-30],
-[135,-42],
-[115,-35]
-
+[112,-10],[150,-10],[155,-30],[135,-42],[115,-35]
 ]);
 
-
-/* MADAGASCAR */
-
 drawLand([
-
-[47,-13],
-[50,-25],
-[44,-26]
-
+[47,-13],[50,-25],[44,-26]
 ]);
 
 
@@ -3036,7 +3043,7 @@ return texture;
 
 
 /* =====================================================
-   CONVERSIONE LAT/LON → SFERA
+   LAT/LON
 ===================================================== */
 
 function latLonToVector3(
@@ -3074,7 +3081,7 @@ Math.sin(theta)
 
 
 /* =====================================================
-   AGGIORNA MARKER POSIZIONE
+   EARTH MARKER
 ===================================================== */
 
 function updateEarthLocationMarker(
@@ -3082,15 +3089,8 @@ lat,
 lon
 ){
 
-if(
-!earthGroup
-)
+if(!earthGroup)
 return;
-
-
-/* =====================================================
-   RIMUOVE EVENTUALE MARKER PRECEDENTE
-===================================================== */
 
 if(earthLocationMarker){
 
@@ -3121,10 +3121,6 @@ earthLocationPulse = null;
 }
 
 
-/* =====================================================
-   POSIZIONE
-===================================================== */
-
 const position =
 latLonToVector3(
 lat,
@@ -3136,10 +3132,6 @@ const surfaceNormal =
 position.clone()
 .normalize();
 
-
-/* =====================================================
-   PUNTO CENTRALE
-===================================================== */
 
 earthLocationMarker =
 new THREE.Mesh(
@@ -3171,10 +3163,6 @@ earthGroup.add(
 earthLocationMarker
 );
 
-
-/* =====================================================
-   ANELLO DI LOCALIZZAZIONE
-===================================================== */
 
 earthLocationPulse =
 new THREE.Mesh(
@@ -3222,10 +3210,6 @@ earthLocationPulse
 );
 
 
-/* =====================================================
-   TESTO COORDINATE
-===================================================== */
-
 earthCoordinates.textContent =
 "LAT " +
 lat.toFixed(4) +
@@ -3236,7 +3220,7 @@ lon.toFixed(4);
 
 
 /* =====================================================
-   LOCALIZZAZIONE DISPOSITIVO
+   LOCALIZZAZIONE
 ===================================================== */
 
 function requestEarthLocation(){
@@ -3248,17 +3232,12 @@ if(
 earthStatus.textContent =
 "LOCATION // UNAVAILABLE";
 
-earthCoordinates.textContent =
-"LAT --.---- // LON --.----";
-
 return;
 
 }
 
-
 earthStatus.textContent =
 "LOCATION // SEARCHING";
-
 
 navigator.geolocation.getCurrentPosition(
 
@@ -3290,20 +3269,12 @@ error
 earthCoordinates.textContent =
 "LAT --.---- // LON --.----";
 
-if(
-error.code ===
-1
-){
-
 earthStatus.textContent =
-"LOCATION // DENIED";
-
-}else{
-
-earthStatus.textContent =
+error.code === 1
+?
+"LOCATION // DENIED"
+:
 "LOCATION // UNAVAILABLE";
-
-}
 
 },
 
@@ -3317,20 +3288,16 @@ maximumAge:0
 
 }
 
-);
-
 }
 
 
 /* =====================================================
-   CREA GLOBO TATTICO
+   CREA GLOBO
 ===================================================== */
 
 function initializeEarthGlobe(){
 
-if(
-!earthContainer
-)
+if(!earthContainer)
 return;
 
 const width =
@@ -3374,7 +3341,6 @@ powerPreference:
 
 });
 
-
 earthRenderer.setPixelRatio(
 Math.min(
 window.devicePixelRatio || 1,
@@ -3412,10 +3378,6 @@ earthGroup
 );
 
 
-/* =====================================================
-   BASE DELLA TERRA
-===================================================== */
-
 const sphereGeometry =
 new THREE.SphereGeometry(
 1,
@@ -3424,29 +3386,21 @@ new THREE.SphereGeometry(
 );
 
 
-const baseMaterial =
-new THREE.MeshBasicMaterial({
-
-color:
-0x020406
-
-});
-
-
 const baseSphere =
 new THREE.Mesh(
+
 sphereGeometry,
-baseMaterial
+
+new THREE.MeshBasicMaterial({
+color:0x020406
+})
+
 );
 
 earthGroup.add(
 baseSphere
 );
 
-
-/* =====================================================
-   CONTINENTI
-===================================================== */
 
 const earthTexture =
 createEarthTexture();
@@ -3474,10 +3428,6 @@ earthGroup.add(
 earthMesh
 );
 
-
-/* =====================================================
-   BORDO SFERICO
-===================================================== */
 
 const wireGeometry =
 new THREE.WireframeGeometry(
@@ -3507,10 +3457,6 @@ earthGroup.add(
 earthWire
 );
 
-
-/* =====================================================
-   ANELLO ORBITALE
-===================================================== */
 
 const ringGeometry =
 new THREE.TorusGeometry(
@@ -3550,10 +3496,6 @@ earthRing
 );
 
 
-/* =====================================================
-   POSIZIONE GLOBO
-===================================================== */
-
 earthGroup.scale.set(
 1.02,
 1.02,
@@ -3562,11 +3504,6 @@ earthGroup.scale.set(
 
 earthGroup.rotation.z =
 -0.08;
-
-
-/* =====================================================
-   RICHIESTA POSIZIONE
-===================================================== */
 
 requestEarthLocation();
 
@@ -3613,7 +3550,7 @@ false
 
 
 /* =====================================================
-   THREE.JS — NEURONI
+   THREE NEURONI
 ===================================================== */
 
 let scene;
@@ -3642,7 +3579,7 @@ let targetEnergy = 0.15;
 
 
 /* =====================================================
-   VOCE — ANALISI IN TEMPO REALE
+   VOCE
 ===================================================== */
 
 let audioContext = null;
@@ -3663,7 +3600,7 @@ let voiceMonitorActive = false;
 
 
 /* =====================================================
-   AVVIA ANALIZZATORE VOCALE
+   VOICE MONITOR
 ===================================================== */
 
 async function startVoiceMonitor(){
@@ -3742,10 +3679,6 @@ voiceMonitorActive = false;
 }
 
 
-/* =====================================================
-   FERMA ANALIZZATORE VOCALE
-===================================================== */
-
 function stopVoiceMonitor(){
 
 voiceMonitorActive = false;
@@ -3800,10 +3733,6 @@ audioDataArray = null;
 
 }
 
-
-/* =====================================================
-   LETTURA LIVELLO VOCALE
-===================================================== */
 
 function updateVoiceLevel(){
 
@@ -3861,7 +3790,7 @@ amplified,
 
 
 /* =====================================================
-   TEXTURE NEURONE — BIANCO FUTURISTICO
+   TEXTURE NEURONE
 ===================================================== */
 
 function createNeuronTexture(){
@@ -4002,10 +3931,6 @@ renderer.domElement
 );
 
 
-/* =====================================================
-   GEOMETRIA
-===================================================== */
-
 neuronPositions =
 new Float32Array(
 NEURON_COUNT * 3
@@ -4031,10 +3956,6 @@ new Float32Array(
 NEURON_COUNT
 );
 
-
-/* =====================================================
-   DISTRIBUZIONE SFERICA
-===================================================== */
 
 for(
 let i=0;
@@ -4090,10 +4011,6 @@ Math.cos(phi);
 }
 
 
-/* =====================================================
-   BUFFER
-===================================================== */
-
 const geometry =
 new THREE.BufferGeometry();
 
@@ -4105,10 +4022,6 @@ neuronPositions,
 )
 );
 
-
-/* =====================================================
-   MATERIAL
-===================================================== */
 
 const material =
 new THREE.PointsMaterial({
@@ -4137,10 +4050,6 @@ sizeAttenuation:true
 
 });
 
-
-/* =====================================================
-   PARTICELLE
-===================================================== */
 
 particles =
 new THREE.Points(
@@ -4247,7 +4156,925 @@ targetEnergy = 0.15;
 
 
 /* =====================================================
-   ANIMAZIONE — SFERA REATTIVA
+   =====================================================
+   HAND TRACKING
+   =====================================================
+===================================================== */
+
+
+/*
+   Calcola la distanza 2D tra due landmark MediaPipe.
+*/
+
+function landmarkDistance(a,b){
+
+const dx =
+a.x - b.x;
+
+const dy =
+a.y - b.y;
+
+return Math.sqrt(
+dx * dx +
+dy * dy
+);
+
+}
+
+
+/*
+   Calcola il centro della mano.
+*/
+
+function getHandCenter(landmarks){
+
+const points = [
+
+landmarks[0],
+landmarks[5],
+landmarks[9],
+landmarks[13],
+landmarks[17]
+
+];
+
+let x = 0;
+let y = 0;
+
+points.forEach(
+point=>{
+x += point.x;
+y += point.y;
+}
+);
+
+return{
+
+x:x / points.length,
+y:y / points.length
+
+};
+
+}
+
+
+/*
+   Calcola quanto è aperta la mano.
+
+   0 = mano chiusa
+   1 = mano aperta
+
+   Usiamo le distanze delle punte rispetto al polso.
+*/
+
+function getHandOpenness(landmarks){
+
+const wrist =
+landmarks[0];
+
+const fingers = [
+
+landmarks[8],
+landmarks[12],
+landmarks[16],
+landmarks[20]
+
+];
+
+let total = 0;
+
+fingers.forEach(
+tip=>{
+
+total +=
+landmarkDistance(
+tip,
+wrist
+);
+
+}
+);
+
+const average =
+total / fingers.length;
+
+
+/*
+   Valori empirici per MediaPipe.
+*/
+
+return THREE.MathUtils.clamp(
+(
+average - 0.16
+) / 0.25,
+0,
+1
+);
+
+}
+
+
+/*
+   Rotazione del palmo.
+
+   Usiamo la linea tra indice e mignolo.
+*/
+
+function getPalmRotation(landmarks){
+
+const index =
+landmarks[5];
+
+const pinky =
+landmarks[17];
+
+const dx =
+pinky.x -
+index.x;
+
+const dy =
+pinky.y -
+index.y;
+
+return Math.atan2(
+dy,
+dx
+);
+
+}
+
+
+/*
+   Ricezione dei risultati MediaPipe.
+*/
+
+function onHandResults(results){
+
+if(
+!handTrackingActive
+)
+return;
+
+if(
+!results ||
+!results.multiHandLandmarks ||
+!results.multiHandLandmarks.length
+){
+
+handFound = false;
+
+handStatus.classList.remove(
+"hand-found"
+);
+
+handStatus.textContent =
+"HAND TRACKING: SEARCHING";
+
+homeHand.innerHTML =
+"CAMERA: ON<br>HAND: SEARCHING";
+
+return;
+
+}
+
+
+const landmarks =
+results.multiHandLandmarks[0];
+
+if(
+!landmarks ||
+landmarks.length < 21
+)
+return;
+
+
+handFound = true;
+
+handStatus.classList.add(
+"hand-found"
+);
+
+handStatus.textContent =
+"HAND TRACKING: LOCKED";
+
+homeHand.innerHTML =
+"CAMERA: ON<br>HAND: LOCKED";
+
+
+const center =
+getHandCenter(
+landmarks
+);
+
+
+/* =====================================================
+   POSIZIONE
+===================================================== */
+
+/*
+   MediaPipe:
+   x 0 = sinistra
+   x 1 = destra
+
+   invertiamo l'asse X perché la webcam normalmente
+   viene percepita come uno specchio.
+*/
+
+const normalizedX =
+(
+0.5 -
+center.x
+) * 2;
+
+const normalizedY =
+(
+0.5 -
+center.y
+) * 2;
+
+
+/*
+   Limiti del movimento.
+*/
+
+handTargetX =
+THREE.MathUtils.clamp(
+normalizedX,
+-1,
+1
+) *
+1.35;
+
+handTargetY =
+THREE.MathUtils.clamp(
+normalizedY,
+-1,
+1
+) *
+1.05;
+
+
+/* =====================================================
+   PINCH
+===================================================== */
+
+const thumb =
+landmarks[4];
+
+const index =
+landmarks[8];
+
+const pinchDistance =
+landmarkDistance(
+thumb,
+index
+);
+
+
+/*
+   Pinch piccolo = Core piccolo.
+
+   Distanza grande = Core grande.
+
+   Quando la mano è completamente aperta,
+   garantiamo comunque una grandezza elevata.
+*/
+
+const pinchScale =
+THREE.MathUtils.clamp(
+(
+pinchDistance - 0.025
+) / 0.22,
+0,
+1
+);
+
+const openness =
+getHandOpenness(
+landmarks
+);
+
+const finalScale =
+THREE.MathUtils.lerp(
+0.075,
+1.42,
+Math.max(
+pinchScale,
+openness * 0.82
+)
+);
+
+handTargetScale =
+finalScale;
+
+
+/* =====================================================
+   ROTAZIONE PALMO
+===================================================== */
+
+const palmRotation =
+getPalmRotation(
+landmarks
+);
+
+if(
+handReferenceRotation === null
+){
+
+handReferenceRotation =
+palmRotation;
+
+}
+
+let rotationDelta =
+palmRotation -
+handReferenceRotation;
+
+
+/*
+   Normalizza l'angolo tra -PI e +PI.
+*/
+
+while(
+rotationDelta > Math.PI
+){
+
+rotationDelta -=
+Math.PI * 2;
+
+}
+
+while(
+rotationDelta < -Math.PI
+){
+
+rotationDelta +=
+Math.PI * 2;
+
+}
+
+
+/*
+   Rotazione amplificata.
+*/
+
+handTargetRotation =
+rotationDelta *
+1.7;
+
+
+/* =====================================================
+   DATI LIVE
+===================================================== */
+
+lastHandTime =
+performance.now();
+
+}
+
+
+/*
+   Inizializza MediaPipe.
+*/
+
+function initializeHandDetector(){
+
+if(
+typeof Hands === "undefined"
+){
+
+console.error(
+"MediaPipe Hands non disponibile."
+);
+
+handStatus.textContent =
+"HAND TRACKING: LIBRARY ERROR";
+
+return false;
+
+}
+
+
+handsDetector =
+new Hands({
+
+locateFile:
+file =>
+`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+
+});
+
+
+handsDetector.setOptions({
+
+maxNumHands:1,
+
+modelComplexity:1,
+
+minDetectionConfidence:.62,
+
+minTrackingConfidence:.62
+
+});
+
+
+handsDetector.onResults(
+onHandResults
+);
+
+handTrackingReady = true;
+
+return true;
+
+}
+
+
+/*
+   Loop della camera.
+*/
+
+async function processHandCamera(){
+
+if(
+!handTrackingActive ||
+!handsDetector ||
+!handCamera.videoWidth
+){
+
+return;
+
+}
+
+try{
+
+await handsDetector.send({
+image:handCamera
+});
+
+}catch(error){
+
+console.warn(
+"Hand tracking frame:",
+error
+);
+
+}
+
+}
+
+
+/*
+   Avvia il controllo mano.
+*/
+
+async function startHandTracking(){
+
+if(
+handTrackingActive
+)
+return;
+
+
+if(
+!navigator.mediaDevices ||
+!navigator.mediaDevices.getUserMedia
+){
+
+notify(
+"CAMERA NON DISPONIBILE"
+);
+
+addMsg(
+"La fotocamera non è disponibile in questo browser."
+);
+
+return;
+
+}
+
+
+if(
+!handTrackingReady
+){
+
+const ready =
+initializeHandDetector();
+
+if(!ready){
+
+notify(
+"HAND TRACKING NON DISPONIBILE"
+);
+
+return;
+
+}
+
+}
+
+
+try{
+
+handStream =
+await navigator.mediaDevices.getUserMedia({
+
+video:{
+facingMode:"user",
+
+width:{
+ideal:1280
+},
+
+height:{
+ideal:720
+}
+},
+
+audio:false
+
+});
+
+
+handCamera.srcObject =
+handStream;
+
+await handCamera.play();
+
+
+handTrackingActive = true;
+
+handFound = false;
+
+handReferenceX = null;
+
+handReferenceY = null;
+
+handReferenceRotation = null;
+
+handStatus.classList.add(
+"active"
+);
+
+handStatus.classList.remove(
+"hand-found"
+);
+
+handStatus.textContent =
+"HAND TRACKING: SEARCHING";
+
+handBtn.classList.add(
+"active"
+);
+
+handBtn.textContent =
+"✋ MANO ON";
+
+homeHand.innerHTML =
+"CAMERA: ON<br>HAND: SEARCHING";
+
+
+notify(
+"HAND TRACKING ONLINE"
+);
+
+addMsg(
+"Controllo manuale del Neural Core attivato."
+);
+
+
+/*
+   Loop asincrono controllato.
+*/
+
+const loop =
+async timestamp=>{
+
+if(
+!handTrackingActive
+)
+return;
+
+if(
+timestamp - lastHandTime > 3000 &&
+handFound
+){
+
+handFound = false;
+
+handStatus.classList.remove(
+"hand-found"
+);
+
+handStatus.textContent =
+"HAND TRACKING: SEARCHING";
+
+homeHand.innerHTML =
+"CAMERA: ON<br>HAND: SEARCHING";
+
+}
+
+await processHandCamera();
+
+handAnimationFrame =
+requestAnimationFrame(
+loop
+);
+
+};
+
+handAnimationFrame =
+requestAnimationFrame(
+loop
+);
+
+}catch(error){
+
+console.error(
+"Camera hand tracking:",
+error
+);
+
+handTrackingActive = false;
+
+handBtn.classList.remove(
+"active"
+);
+
+handBtn.textContent =
+"✋ MANO";
+
+handStatus.classList.remove(
+"active"
+);
+
+homeHand.innerHTML =
+"CAMERA: OFF<br>HAND: WAITING";
+
+
+if(
+error &&
+error.name ===
+"NotAllowedError"
+){
+
+notify(
+"PERMESSO CAMERA NEGATO"
+);
+
+addMsg(
+"Accesso alla fotocamera negato. Concedi il permesso della fotocamera per usare il controllo della mano."
+);
+
+}else{
+
+notify(
+"ERRORE CAMERA"
+);
+
+}
+
+}
+
+}
+
+
+/*
+   Spegne completamente la camera.
+*/
+
+function stopHandTracking(){
+
+handTrackingActive = false;
+
+handFound = false;
+
+if(
+handAnimationFrame
+){
+
+cancelAnimationFrame(
+handAnimationFrame
+);
+
+handAnimationFrame = null;
+
+}
+
+
+if(handStream){
+
+handStream
+.getTracks()
+.forEach(
+track=>{
+track.stop();
+}
+);
+
+handStream = null;
+
+}
+
+handCamera.srcObject =
+null;
+
+handReferenceX = null;
+
+handReferenceY = null;
+
+handReferenceRotation = null;
+
+handStatus.classList.remove(
+"active"
+);
+
+handStatus.classList.remove(
+"hand-found"
+);
+
+handBtn.classList.remove(
+"active"
+);
+
+handBtn.textContent =
+"✋ MANO";
+
+homeHand.innerHTML =
+"CAMERA: OFF<br>HAND: WAITING";
+
+
+notify(
+"HAND TRACKING OFF"
+);
+
+}
+
+
+/*
+   Pulsante.
+*/
+
+handBtn.addEventListener(
+"click",
+()=>{
+
+if(
+handTrackingActive
+){
+
+stopHandTracking();
+
+}else{
+
+startHandTracking();
+
+}
+
+});
+
+
+/*
+   Comandi testuali per il controllo mano.
+*/
+
+function handleHandCommand(text){
+
+const normalized =
+normalizeCommand(text);
+
+
+if(
+
+normalized.includes(
+"attiva controllo mano"
+)
+
+||
+
+normalized.includes(
+"attiva controllo delle mani"
+)
+
+||
+
+normalized.includes(
+"attiva controllo con la mano"
+)
+
+||
+
+normalized.includes(
+"attiva telecamera mano"
+)
+
+||
+
+normalized.includes(
+"attiva camera mano"
+)
+
+||
+
+normalized ===
+"attiva mano"
+
+){
+
+startHandTracking();
+
+return true;
+
+}
+
+
+if(
+
+normalized.includes(
+"disattiva controllo mano"
+)
+
+||
+
+normalized.includes(
+"disattiva controllo delle mani"
+)
+
+||
+
+normalized.includes(
+"disattiva controllo con la mano"
+)
+
+||
+
+normalized.includes(
+"disattiva telecamera mano"
+)
+
+||
+
+normalized.includes(
+"disattiva camera mano"
+)
+
+||
+
+normalized ===
+"disattiva mano"
+
+){
+
+stopHandTracking();
+
+return true;
+
+}
+
+
+if(
+
+normalized ===
+"stato controllo mano"
+||
+normalized ===
+"stato mano"
+||
+normalized ===
+"stato telecamera mano"
+
+){
+
+const reply =
+handTrackingActive
+?
+(
+handFound
+?
+"Il controllo della mano è attivo e la mano è stata rilevata."
+:
+"Il controllo della mano è attivo, ma sto cercando la mano."
+)
+:
+"Il controllo della mano è disattivato.";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+return false;
+
+}
+
+
+/* =====================================================
+   ANIMAZIONE NEURAL CORE
 ===================================================== */
 
 function animateNeuralCore(){
@@ -4273,7 +5100,7 @@ performance.now() *
 
 
 /* =====================================================
-   AUDIO LIVE
+   AUDIO
 ===================================================== */
 
 updateVoiceLevel();
@@ -4316,7 +5143,67 @@ voiceLevel > .02
 
 
 /* =====================================================
-   RESPIRAZIONE GLOBALE
+   SMOOTH HAND CONTROL
+===================================================== */
+
+if(handTrackingActive){
+
+handX +=
+(
+handTargetX -
+handX
+) *
+.12;
+
+handY +=
+(
+handTargetY -
+handY
+) *
+.12;
+
+handScale +=
+(
+handTargetScale -
+handScale
+) *
+.13;
+
+handRotation +=
+(
+handTargetRotation -
+handRotation
+) *
+.11;
+
+}else{
+
+/*
+   Quando la mano viene spenta,
+   il Core ritorna gradualmente alla posizione originale.
+*/
+
+handX +=
+(0 - handX) *
+.035;
+
+handY +=
+(0 - handY) *
+.035;
+
+handScale +=
+(1 - handScale) *
+.035;
+
+handRotation +=
+(0 - handRotation) *
+.035;
+
+}
+
+
+/* =====================================================
+   RESPIRAZIONE
 ===================================================== */
 
 const breathing =
@@ -4457,10 +5344,6 @@ activity - 0.5
 );
 
 
-/* =====================================================
-   ESPANSIONE VOCALE
-===================================================== */
-
 const voiceExpansion =
 voiceLevel *
 (
@@ -4474,7 +5357,7 @@ seed * .15
 
 
 /* =====================================================
-   RAGGIO FINALE
+   RAGGIO
 ===================================================== */
 
 const radiusNow =
@@ -4516,13 +5399,61 @@ particles.geometry
 
 
 /* =====================================================
-   ROTAZIONE
+   ROTAZIONE AUTOMATICA + MANO
 ===================================================== */
 
 particles.rotation.y +=
 0.00035 +
 neuralEnergy * 0.00045 +
 voiceLevel * 0.0008;
+
+
+/*
+   La rotazione del palmo controlla direttamente Z.
+*/
+
+particles.rotation.z =
+handRotation +
+Math.cos(
+time * (
+0.20 +
+voiceLevel * .20
+)
+) *
+(
+0.008 +
+neuralEnergy * 0.009 +
+voiceLevel * .010
+);
+
+
+/*
+   Movimento verticale/orizzontale della mano.
+*/
+
+particles.position.x =
+handX;
+
+particles.position.y =
+handY;
+
+
+/*
+   Ingrandimento/riduzione del Core.
+
+   Il valore è applicato all'intero sistema:
+   quando indice e pollice si avvicinano,
+   tutto converge verso il centro.
+*/
+
+particles.scale.setScalar(
+handScale
+);
+
+
+/*
+   Leggera inclinazione automatica.
+*/
 
 particles.rotation.x =
 Math.sin(
@@ -4535,19 +5466,6 @@ voiceLevel * .25
 0.018 +
 neuralEnergy * 0.012 +
 voiceLevel * .015
-);
-
-particles.rotation.z =
-Math.cos(
-time * (
-0.20 +
-voiceLevel * .20
-)
-) *
-(
-0.008 +
-neuralEnergy * 0.009 +
-voiceLevel * .010
 );
 
 
@@ -4590,10 +5508,6 @@ time * .35
 ) *
 .03;
 
-
-/* =====================================================
-   PULSAZIONE MARKER
-===================================================== */
 
 if(earthLocationPulse){
 
@@ -4790,7 +5704,7 @@ return String(text)
 
 
 /* =====================================================
-   MARKER
+   ESCAPE
 ===================================================== */
 
 function escapeHtml(text){
@@ -4809,6 +5723,10 @@ return String(text)
 
 }
 
+
+/* =====================================================
+   MARKER
+===================================================== */
 
 function createJarvisMarker(
 lat,
@@ -5308,10 +6226,6 @@ updateWebIndicator();
 );
 
 
-/* =====================================================
-   DRAG FINESTRA
-===================================================== */
-
 const header =
 windowElement.querySelector(
 ".web-window-header"
@@ -5415,6 +6329,7 @@ dragging = false;
 
 }
 );
+
 
 header.addEventListener(
 "pointercancel",
@@ -5539,18 +6454,8 @@ Intl.DateTimeFormat()
 
 
 /* =====================================================
-   CAPACITÀ REALI DI J.A.R.V.I.S.
+   CAPACITÀ
 ===================================================== */
-
-/*
-   IMPORTANTE:
-
-   Questo registro descrive esclusivamente ciò che il browser
-   può realmente verificare o controllare.
-
-   FALSE / NON DISPONIBILE significa che JARVIS NON deve
-   dichiarare quella funzione come disponibile.
-*/
 
 const JARVIS_CAPABILITIES = {
 
@@ -5602,7 +6507,16 @@ webSearchBackend:
 false,
 
 cameraAccess:
-false,
+!!(
+navigator.mediaDevices &&
+navigator.mediaDevices.getUserMedia
+),
+
+handTracking:
+true,
+
+handTrackingActive:
+()=>handTrackingActive,
 
 homeCameras:
 false,
@@ -5626,7 +6540,7 @@ false
 
 
 /* =====================================================
-   BATTERIA REALE
+   BATTERIA
 ===================================================== */
 
 let batteryManager = null;
@@ -5666,29 +6580,18 @@ batteryManager.level * 100
 ),
 
 charging:
-!!batteryManager.charging,
-
-chargingTime:
-batteryManager.chargingTime,
-
-dischargingTime:
-batteryManager.dischargingTime
+!!batteryManager.charging
 
 };
 
 }catch(error){
-
-console.warn(
-"Battery API:",
-error
-);
 
 return{
 
 available:false,
 
 reason:
-"Impossibile leggere la batteria dal browser."
+"Impossibile leggere la batteria."
 
 };
 
@@ -5698,7 +6601,7 @@ reason:
 
 
 /* =====================================================
-   RETE REALE
+   RETE
 ===================================================== */
 
 function getNetworkData(){
@@ -5708,7 +6611,7 @@ navigator.connection ||
 navigator.mozConnection ||
 navigator.webkitConnection;
 
-const data = {
+return{
 
 online:
 navigator.onLine,
@@ -5741,22 +6644,12 @@ null
 
 };
 
-return data;
-
 }
 
 
 /* =====================================================
-   INFORMAZIONI DISPOSITIVO REALMENTE DISPONIBILI
+   DEVICE
 ===================================================== */
-
-/*
-   Il browser normalmente NON permette di conoscere con
-   certezza il modello commerciale del dispositivo.
-
-   Quindi non viene mai trasformato automaticamente in
-   "iPhone 14 Pro Max", "Samsung S24", ecc.
-*/
 
 function getDeviceInfo(){
 
@@ -5844,7 +6737,7 @@ userAgent:userAgent
 
 
 /* =====================================================
-   MICROFONO REALE
+   MICROFONO
 ===================================================== */
 
 function getMicrophoneStatus(){
@@ -5873,7 +6766,7 @@ voiceMonitorActive
 
 
 /* =====================================================
-   STATO FULLSCREEN REALE
+   FULLSCREEN
 ===================================================== */
 
 function getFullscreenStatus(){
@@ -5894,7 +6787,7 @@ isFullscreen()
 
 
 /* =====================================================
-   STATO MAPPA REALE
+   MAPPA
 ===================================================== */
 
 function getMapStatus(){
@@ -5922,7 +6815,7 @@ marker:
 
 
 /* =====================================================
-   STATO MEMORIA REALE
+   MEMORIA
 ===================================================== */
 
 function getMemoryStatus(){
@@ -5946,7 +6839,7 @@ MAX_MEMORY
 
 
 /* =====================================================
-   STATO WEB REALE
+   WEB
 ===================================================== */
 
 function getWebStatus(){
@@ -5975,7 +6868,39 @@ false
 
 
 /* =====================================================
-   SNAPSHOT CAPACITÀ REALI
+   HAND STATUS
+===================================================== */
+
+function getHandStatus(){
+
+return{
+
+available:
+!!(
+navigator.mediaDevices &&
+navigator.mediaDevices.getUserMedia
+),
+
+active:
+handTrackingActive,
+
+handDetected:
+handFound,
+
+camera:
+handTrackingActive
+?
+"ACTIVE"
+:
+"OFF"
+
+};
+
+}
+
+
+/* =====================================================
+   SNAPSHOT
 ===================================================== */
 
 async function getJarvisCapabilitiesSnapshot(){
@@ -5986,7 +6911,9 @@ await getBatteryData();
 return{
 
 capabilities:{
-...JARVIS_CAPABILITIES
+...JARVIS_CAPABILITIES,
+handTrackingActive:
+handTrackingActive
 },
 
 time:
@@ -6015,6 +6942,9 @@ getMemoryStatus(),
 web:
 getWebStatus(),
 
+hand:
+getHandStatus(),
+
 location:
 {
 
@@ -6033,7 +6963,7 @@ earthLongitude !== null
 
 
 /* =====================================================
-   RISPOSTE LOCALI — DATI CHE JARVIS PUÒ VERIFICARE
+   DEVICE COMMAND
 ===================================================== */
 
 async function handleDeviceCommand(text){
@@ -6042,9 +6972,7 @@ const normalized =
 normalizeCommand(text);
 
 
-/* =====================================================
-   BATTERIA
-===================================================== */
+/* BATTERIA */
 
 const asksBattery =
 normalized.includes("batteria")
@@ -6053,11 +6981,7 @@ normalized.includes("percentuale batteria")
 ||
 normalized.includes("quanta batteria")
 ||
-normalized.includes("livello batteria")
-||
-normalized.includes("carica del telefono")
-||
-normalized.includes("carica del dispositivo");
+normalized.includes("livello batteria");
 
 
 if(asksBattery){
@@ -6105,9 +7029,7 @@ return true;
 }
 
 
-/* =====================================================
-   RETE
-===================================================== */
+/* RETE */
 
 if(
 
@@ -6118,8 +7040,6 @@ normalized === "controlla la rete"
 normalized === "controlla connessione"
 ||
 normalized === "sono online"
-||
-normalized === "sono connesso"
 ||
 normalized.includes("connessione internet")
 ||
@@ -6168,26 +7088,13 @@ return true;
 }
 
 
-/* =====================================================
-   DISPOSITIVO / TELEFONO
-===================================================== */
+/* DEVICE */
 
 if(
 
-normalized ===
-"controlla il mio telefono"
+normalized === "che telefono ho"
 ||
-normalized ===
-"controlla il telefono"
-||
-normalized ===
-"che telefono ho"
-||
-normalized ===
-"che dispositivo ho"
-||
-normalized ===
-"dimmi che telefono ho"
+normalized === "che dispositivo ho"
 ||
 normalized.includes(
 "modello del telefono"
@@ -6202,25 +7109,12 @@ normalized.includes(
 const device =
 getDeviceInfo();
 
-let reply =
-"Posso leggere solo le informazioni che il browser espone. " +
-"Non posso verificare con certezza il modello commerciale del telefono.";
-
-reply +=
-" Rilevo: " +
+const reply =
+"Posso leggere solo le informazioni esposte dal browser. " +
+"Rilevo: " +
 device.deviceType +
-".";
-
-if(device.platform){
-
-reply +=
-" Piattaforma browser: " +
-device.platform +
-".";
-}
-
-reply +=
-" Risoluzione dello schermo: " +
+". " +
+"Risoluzione dello schermo: " +
 device.screenWidth +
 " × " +
 device.screenHeight +
@@ -6238,32 +7132,19 @@ return true;
 }
 
 
-/* =====================================================
-   POSIZIONE
-===================================================== */
+/* POSIZIONE */
 
 if(
 
-normalized ===
-"dove sono"
+normalized === "dove sono"
 ||
-normalized ===
-"qual è la mia posizione"
+normalized === "qual è la mia posizione"
 ||
-normalized ===
-"qual e la mia posizione"
+normalized === "qual e la mia posizione"
 ||
-normalized.includes(
-"localizza me"
-)
+normalized.includes("localizzami")
 ||
-normalized.includes(
-"localizzami"
-)
-||
-normalized.includes(
-"posizione attuale"
-)
+normalized.includes("posizione attuale")
 
 ){
 
@@ -6291,27 +7172,10 @@ return true;
 
 }
 
-if(!navigator.geolocation){
-
-const reply =
-"La geolocalizzazione non è disponibile in questo browser.";
-
-addMsg(
-reply,
-true
-);
-
-speak(reply);
-
-return true;
-
-}
-
 requestEarthLocation();
 
 const reply =
-"Posso usare la geolocalizzazione del browser, ma devo ricevere il permesso del dispositivo. " +
-"Controlla la richiesta di autorizzazione.";
+"Posso usare la geolocalizzazione del browser, ma devo ricevere il permesso del dispositivo.";
 
 addMsg(
 reply,
@@ -6325,20 +7189,15 @@ return true;
 }
 
 
-/* =====================================================
-   FULLSCREEN
-===================================================== */
+/* FULLSCREEN */
 
 if(
 
-normalized ===
-"controlla fullscreen"
+normalized === "controlla fullscreen"
 ||
-normalized ===
-"stato fullscreen"
+normalized === "stato fullscreen"
 ||
-normalized ===
-"sono in fullscreen"
+normalized === "sono in fullscreen"
 
 ){
 
@@ -6364,20 +7223,15 @@ return true;
 }
 
 
-/* =====================================================
-   MICROFONO
-===================================================== */
+/* MICROFONO */
 
 if(
 
-normalized ===
-"controlla microfono"
+normalized === "controlla microfono"
 ||
-normalized ===
-"stato microfono"
+normalized === "stato microfono"
 ||
-normalized ===
-"microfono attivo"
+normalized === "microfono attivo"
 
 ){
 
@@ -6420,27 +7274,17 @@ return true;
 }
 
 
-/* =====================================================
-   CAPACITÀ
-===================================================== */
+/* CAPACITÀ */
 
 if(
 
-normalized ===
-"cosa puoi fare"
+normalized === "cosa puoi fare"
 ||
-normalized ===
-"cosa sai fare"
+normalized === "cosa sai fare"
 ||
-normalized ===
-"quali funzioni hai"
+normalized === "quali funzioni hai"
 ||
-normalized ===
-"quali sono le tue funzioni"
-||
-normalized.includes(
-"cosa puoi controllare"
-)
+normalized.includes("cosa puoi controllare")
 
 ){
 
@@ -6468,10 +7312,7 @@ if(capabilities.capabilities.networkStatus)
 available.push("stato della connessione");
 
 if(capabilities.capabilities.battery)
-available.push("lettura batteria se supportata dal browser");
-
-if(capabilities.capabilities.deviceInfo)
-available.push("informazioni limitate del browser/dispositivo");
+available.push("lettura batteria se supportata");
 
 if(capabilities.capabilities.fullscreen)
 available.push("fullscreen");
@@ -6482,6 +7323,10 @@ available.push("mappa tattica");
 if(capabilities.capabilities.webSearchWindows)
 available.push("finestre di ricerca web");
 
+available.push(
+"controllo del Neural Core tramite mano e fotocamera"
+);
+
 const reply =
 "Le funzioni realmente disponibili in questa interfaccia sono:\n\n" +
 available
@@ -6489,67 +7334,7 @@ available
 item => "• " + item
 )
 .join("\n") +
-"\n\nNon ho collegamenti reali a telecamere di casa, serrature, luci, sistemi di sicurezza o altri telefoni.";
-
-addMsg(
-reply,
-true
-);
-
-speak(reply);
-
-return true;
-
-}
-
-
-/* =====================================================
-   RIFIUTO DI CAPACITÀ NON COLLEGATE
-===================================================== */
-
-if(
-
-normalized.includes("telecamera")
-||
-normalized.includes("telecamere")
-||
-normalized.includes("telecamera di casa")
-||
-normalized.includes("telecamere di casa")
-||
-normalized.includes("sicurezza di casa")
-||
-normalized.includes("sistema di sicurezza")
-||
-normalized.includes("serratura")
-||
-normalized.includes("serrature")
-||
-normalized.includes("luce di casa")
-||
-normalized.includes("luci di casa")
-||
-normalized.includes("lampadine")
-||
-normalized.includes("smart home")
-||
-normalized.includes("casa intelligente")
-||
-normalized.includes("controlla il mio telefono")
-||
-normalized.includes("controlla il telefono")
-||
-normalized.includes("controlla un altro telefono")
-||
-normalized.includes("controlla iphone")
-||
-normalized.includes("controlla android")
-
-){
-
-const reply =
-"Questa funzione non è collegata a J.A.R.V.I.S. in questo momento. " +
-"Non posso fingere di avere accesso a dispositivi o sistemi che non sono realmente integrati.";
+"\n\nIl controllo mano utilizza la fotocamera del dispositivo e rileva una mano alla volta.";
 
 addMsg(
 reply,
@@ -7181,33 +7966,11 @@ micBtn.style.opacity =
 
 function updateSystemPanel(){
 
-const memoryElement =
-document.getElementById(
-"homeMemory"
-);
-
-const voiceElement =
-document.getElementById(
-"homeVoice"
-);
-
-const hardwareOnline =
-navigator.onLine;
-
-
-/* =====================================================
-   MEMORIA
-===================================================== */
-
-memoryElement.innerHTML =
+homeMemory.innerHTML =
 "ENTRIES: " +
 memory.length +
 "<br>LOCAL";
 
-
-/* =====================================================
-   WEB
-===================================================== */
 
 homeWeb.innerHTML =
 "WINDOWS: " +
@@ -7219,11 +7982,7 @@ webSearchWindows
 "<br>BING ENGINE";
 
 
-/* =====================================================
-   VOCE
-===================================================== */
-
-voiceElement.innerHTML =
+homeVoice.innerHTML =
 "SPEECH: " +
 (
 "speechSynthesis" in window
@@ -7243,29 +8002,17 @@ recognition
 );
 
 
-/* =====================================================
-   RETE
-===================================================== */
-
 homeNetwork.innerHTML =
-hardwareOnline
+navigator.onLine
 ?
 "ONLINE<br>LINK ACTIVE"
 :
 "OFFLINE<br>NO LINK";
 
 
-/* =====================================================
-   AI CORE
-===================================================== */
-
 homeAI.innerHTML =
 "ONLINE<br>API: READY";
 
-
-/* =====================================================
-   MAPPA
-===================================================== */
 
 homeMap.innerHTML =
 (
@@ -7278,6 +8025,26 @@ typeof maplibregl !==
 )
 +
 "<br>MAPTILER";
+
+
+if(handTrackingActive){
+
+homeHand.innerHTML =
+"CAMERA: ON<br>" +
+(
+handFound
+?
+"HAND: LOCKED"
+:
+"HAND: SEARCHING"
+);
+
+}else{
+
+homeHand.innerHTML =
+"CAMERA: OFF<br>HAND: WAITING";
+
+}
 
 }
 
@@ -7343,6 +8110,16 @@ addMsg(
 
 async function processAi(text){
 
+/*
+   HAND TRACKING PRIMA DI TUTTO.
+*/
+
+if(
+handleHandCommand(text)
+)
+return;
+
+
 if(
 handleMapCommand(text)
 )
@@ -7354,10 +8131,6 @@ handleWebCommand(text)
 )
 return;
 
-
-/* =====================================================
-   COMANDI LOCALI REALI
-===================================================== */
 
 if(
 await handleDeviceCommand(text)
@@ -7424,17 +8197,9 @@ controller.abort();
 );
 
 
-/* =====================================================
-   SNAPSHOT CAPACITÀ REALI
-===================================================== */
-
 const capabilities =
 await getJarvisCapabilitiesSnapshot();
 
-
-/* =====================================================
-   ISTRUZIONI ANTI-INVENZIONE
-===================================================== */
 
 const capabilityInstructions =
 
@@ -7444,15 +8209,13 @@ const capabilityInstructions =
 
 "Non inventare mai percentuali di batteria, modello del telefono, posizione, stato di dispositivi o altri dati hardware. " +
 
-"Non dire di avere accesso a fotocamere, telecamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni perché NON sono integrati. " +
+"Non dire di avere accesso a fotocamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni. " +
 
-"Se una funzione è false, unavailable o non presente, devi dire chiaramente che non è disponibile. " +
+"Il controllo della mano riguarda esclusivamente la fotocamera del dispositivo che sta eseguendo questa pagina e il Neural Core visualizzato nella pagina. " +
 
-"Se un dato non è verificabile dal browser, non devi stimarlo né indovinarlo. " +
+"Se hand.active è false, il controllo mano è disattivato. " +
 
-"Il modello commerciale esatto del dispositivo non deve essere dedotto dallo user agent. " +
-
-"La geolocalizzazione è disponibile solo tramite il permesso del browser e le coordinate non devono essere inventate. " +
+"Se una funzione è false, unavailable o non presente, devi dirlo chiaramente. " +
 
 "Rispondi in italiano quando l'utente parla italiano.";
 

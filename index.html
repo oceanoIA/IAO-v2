@@ -40,7 +40,7 @@ body{
 background:
 radial-gradient(
 circle at center,
-#0a0a0a 0%,
+#a0a0a 0%,
 #030303 48%,
 #000000 100%
 );
@@ -205,7 +205,6 @@ word-break:break-word;
 
 box-shadow:
 0 0 20px rgba(255,255,255,.05);
-
 }
 
 .msg.jarvis-response{
@@ -220,7 +219,6 @@ opacity:0;
 
 animation:
 jarvisCharIn .035s ease-out forwards;
-
 }
 
 @keyframes jarvisCharIn{
@@ -1197,7 +1195,6 @@ display:flex;
 
 align-items:center;
 justify-content:center;
-
 }
 
 #closeMap:hover{
@@ -1413,7 +1410,6 @@ cursor:pointer;
 display:flex;
 
 align-items:center;
-
 justify-content:center;
 
 font-size:15px;
@@ -1457,7 +1453,6 @@ background:white;
 position:absolute;
 
 right:12px;
-
 bottom:12px;
 
 z-index:20;
@@ -1642,7 +1637,6 @@ calc(100% - 24px);
 
 max-height:
 calc(100vh - 245px);
-
 }
 
 .msg{
@@ -2453,7 +2447,6 @@ const generationWords = [
 "codice javascript",
 "codice python",
 "codice js",
-"codice java",
 "codice flutter",
 "html",
 "css",
@@ -3624,8 +3617,11 @@ false
 ===================================================== */
 
 let scene;
+
 let camera;
+
 let renderer;
+
 let particles;
 
 let neuronPositions;
@@ -3876,6 +3872,7 @@ document.createElement(
 );
 
 canvas.width = 64;
+
 canvas.height = 64;
 
 const ctx =
@@ -5399,10 +5396,12 @@ window.innerHeight - 60
 );
 
 windowElement.style.left =
-left + "px";
+left +
+"px";
 
 windowElement.style.top =
-top + "px";
+top +
+"px";
 
 }
 );
@@ -5540,1075 +5539,394 @@ Intl.DateTimeFormat()
 
 
 /* =====================================================
-   FULLSCREEN
+   CAPACITÀ REALI DI J.A.R.V.I.S.
 ===================================================== */
 
-function isFullscreen(){
+/*
+   IMPORTANTE:
 
-return !!(
-document.fullscreenElement ||
-document.webkitFullscreenElement
-);
+   Questo registro descrive esclusivamente ciò che il browser
+   può realmente verificare o controllare.
 
-}
+   FALSE / NON DISPONIBILE significa che JARVIS NON deve
+   dichiarare quella funzione come disponibile.
+*/
 
+const JARVIS_CAPABILITIES = {
 
-async function toggleFullscreen(){
+aiBackend: true,
 
-try{
+localMemory: true,
 
-if(isFullscreen()){
+clock: true,
 
-if(document.exitFullscreen){
+voiceOutput:
+("speechSynthesis" in window),
 
-await document.exitFullscreen();
+microphone:
+!!(
+navigator.mediaDevices &&
+navigator.mediaDevices.getUserMedia
+),
 
-}
-
-}else{
-
-if(
-document.documentElement
-.requestFullscreen
-){
-
-await document
-.documentElement
-.requestFullscreen();
-
-}
-
-}
-
-}catch(error){
-
-console.warn(
-"Fullscreen:",
-error
-);
-
-}
-
-}
-
-
-fullscreenBtn.addEventListener(
-"click",
-toggleFullscreen
-);
-
-
-document.addEventListener(
-"fullscreenchange",
-()=>{
-
-fullscreenBtn.classList.toggle(
-"active",
-isFullscreen()
-);
-
-fullscreenBtn.textContent =
-isFullscreen()
-?
-"⛶ ESCI FULLSCREEN"
-:
-"⛶ FULLSCREEN";
-
-if(map){
-
-setTimeout(
-()=>{
-map.resize();
-},
-100
-);
-
-}
-
-}
-);
-
-
-/* =====================================================
-   VOCI
-===================================================== */
-
-let deviceVoices = [];
-
-let selectedDeviceVoice = null;
-
-let currentAudio = null;
-
-let audioPlaying = false;
-
-
-function loadDeviceVoices(){
-
-if(
-!("speechSynthesis" in window)
-)
-return;
-
-deviceVoices =
-speechSynthesis.getVoices();
-
-voiceSelector.innerHTML = "";
-
-const automatic =
-document.createElement("option");
-
-automatic.value = "";
-
-automatic.textContent =
-"Voce dispositivo automatica";
-
-voiceSelector.appendChild(
-automatic
-);
-
-deviceVoices.forEach(
-(voice,index)=>{
-
-const option =
-document.createElement("option");
-
-option.value =
-String(index);
-
-option.textContent =
-voice.name +
-" — " +
-voice.lang;
-
-voiceSelector.appendChild(
-option
-);
-
-}
-);
-
-}
-
-
-if(
-"speechSynthesis" in window
-){
-
-loadDeviceVoices();
-
-speechSynthesis.onvoiceschanged =
-loadDeviceVoices;
-
-}
-
-
-function speakDevice(text){
-
-return new Promise(
-resolve=>{
-
-if(
-!("speechSynthesis" in window)
-){
-
-resolve(false);
-
-return;
-
-}
-
-speechSynthesis.cancel();
-
-const utterance =
-new SpeechSynthesisUtterance(
-text
-);
-
-utterance.lang =
-"it-IT";
-
-utterance.rate =
-.95;
-
-utterance.pitch =
-.9;
-
-utterance.volume =
-1;
-
-if(selectedDeviceVoice){
-
-utterance.voice =
-selectedDeviceVoice;
-
-}else{
-
-const italianVoice =
-deviceVoices.find(
-voice=>
-voice.lang
-.toLowerCase()
-.startsWith("it")
-);
-
-if(italianVoice){
-
-utterance.voice =
-italianVoice;
-
-}
-
-}
-
-utterance.onstart =
-()=>{
-
-audioPlaying = true;
-
-setState("speaking");
-
-};
-
-utterance.onend =
-()=>{
-
-audioPlaying = false;
-
-setState("idle");
-
-resolve(true);
-
-};
-
-utterance.onerror =
-()=>{
-
-audioPlaying = false;
-
-setState("idle");
-
-resolve(false);
-
-};
-
-speechSynthesis.speak(
-utterance
-);
-
-}
-
-);
-
-}
-
-
-/* =====================================================
-   ELEVENLABS
-===================================================== */
-
-async function speakElevenLabs(text){
-
-try{
-
-const response =
-await fetch(
-API,
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-
-action:"tts",
-
-text:text,
-
-voiceId:
-ELEVEN_VOICE_ID
-
-})
-
-}
-);
-
-if(!response.ok)
-return false;
-
-const type =
-response.headers
-.get("content-type")
-||"";
-
-if(
-!type.includes("audio")
-)
-return false;
-
-const blob =
-await response.blob();
-
-if(!blob.size)
-return false;
-
-const url =
-URL.createObjectURL(
-blob
-);
-
-const audio =
-new Audio(url);
-
-currentAudio =
-audio;
-
-audio.onplay =
-()=>{
-
-audioPlaying = true;
-
-setState("speaking");
-
-};
-
-audio.onended =
-()=>{
-
-audioPlaying = false;
-
-setState("idle");
-
-URL.revokeObjectURL(
-url
-);
-
-currentAudio = null;
-
-};
-
-audio.onerror =
-()=>{
-
-audioPlaying = false;
-
-setState("idle");
-
-URL.revokeObjectURL(
-url
-);
-
-currentAudio = null;
-
-};
-
-await audio.play();
-
-return true;
-
-}catch(error){
-
-console.warn(
-"ElevenLabs:",
-error
-);
-
-return false;
-
-}
-
-}
-
-
-async function speak(text){
-
-if(!text)
-return;
-
-const success =
-await speakElevenLabs(text);
-
-if(!success){
-
-await speakDevice(text);
-
-}
-
-}
-
-
-/* =====================================================
-   VOICE UI
-===================================================== */
-
-voiceBtn.addEventListener(
-"click",
-()=>{
-
-voicePanel.classList.toggle(
-"active"
-);
-
-loadDeviceVoices();
-
-}
-);
-
-
-voiceSelector.addEventListener(
-"change",
-()=>{
-
-const value =
-voiceSelector.value;
-
-if(value === ""){
-
-selectedDeviceVoice =
-null;
-
-return;
-
-}
-
-const index =
-Number(value);
-
-if(deviceVoices[index]){
-
-selectedDeviceVoice =
-deviceVoices[index];
-
-}
-
-}
-);
-
-
-voiceTest.addEventListener(
-"click",
-()=>{
-
-speakDevice(
-"J.A.R.V.I.S. operativo. Sistema vocale funzionante."
-);
-
-}
-);
-
-
-/* =====================================================
-   MICROFONO
-===================================================== */
-
-let recognition = null;
-
-let listening = false;
-
-
-const Recognition =
+speechRecognition:
+!!(
 window.SpeechRecognition ||
-window.webkitSpeechRecognition;
+window.webkitSpeechRecognition
+),
 
+geolocation:
+!!navigator.geolocation,
 
-if(Recognition){
+networkStatus:
+true,
 
-recognition =
-new Recognition();
+battery:
+("getBattery" in navigator),
 
-recognition.lang =
-"it-IT";
+deviceInfo:
+true,
 
-recognition.continuous =
-false;
+fullscreen:
+!!(
+document.documentElement.requestFullscreen
+),
 
-recognition.interimResults =
-false;
+tacticalMap:
+typeof maplibregl !== "undefined",
 
+webSearchWindows:
+true,
 
-recognition.onstart =
-async ()=>{
+webSearchBackend:
+false,
 
-listening = true;
+cameraAccess:
+false,
 
-micBtn.classList.add(
-"active"
-);
+homeCameras:
+false,
 
-setState("listening");
+homeSecurity:
+false,
 
+smartLights:
+false,
 
-await startVoiceMonitor();
+smartLocks:
+false,
 
-};
+phoneControl:
+false,
 
-
-recognition.onresult =
-event=>{
-
-const result =
-event.results[
-event.results.length - 1
-];
-
-if(!result)
-return;
-
-const text =
-result[0]
-.transcript
-.trim();
-
-if(!text)
-return;
-
-textInput.value =
-text;
-
-sendMessage();
+otherDeviceControl:
+false
 
 };
-
-
-recognition.onerror =
-error=>{
-
-console.warn(
-"Microfono:",
-error
-);
-
-listening = false;
-
-micBtn.classList.remove(
-"active"
-);
-
-stopVoiceMonitor();
-
-setState("idle");
-
-};
-
-
-recognition.onend =
-()=>{
-
-listening = false;
-
-micBtn.classList.remove(
-"active"
-);
-
-stopVoiceMonitor();
-
-if(!audioPlaying){
-
-setState("idle");
-
-}
-
-};
-
-
-micBtn.addEventListener(
-"click",
-()=>{
-
-if(listening){
-
-try{
-recognition.stop();
-}catch(e){}
-
-}else{
-
-try{
-recognition.start();
-}catch(e){
-
-console.warn(e);
-
-}
-
-}
-
-}
-);
-
-}else{
-
-micBtn.style.opacity =
-".35";
-
-}
 
 
 /* =====================================================
-   CONTROLLO SISTEMA
+   BATTERIA REALE
 ===================================================== */
 
-function updateSystemPanel(){
-
-const memoryElement =
-document.getElementById(
-"homeMemory"
-);
-
-const voiceElement =
-document.getElementById(
-"homeVoice"
-);
-
-const hardwareOnline =
-navigator.onLine;
+let batteryManager = null;
 
 
-memoryElement.innerHTML =
-"ENTRIES: " +
-memory.length +
-"<br>LOCAL";
-
-
-homeWeb.innerHTML =
-"WINDOWS: " +
-webSearchWindows
-.querySelectorAll(
-".web-window"
-)
-.length +
-"<br>BING ENGINE";
-
-
-voiceElement.innerHTML =
-"SPEECH: " +
-(
-"speechSynthesis" in window
-?
-"READY"
-:
-"OFFLINE"
-)
-+
-"<br>MIC: " +
-(
-recognition
-?
-"READY"
-:
-"OFFLINE"
-);
-
-
-homeNetwork.innerHTML =
-hardwareOnline
-?
-"ONLINE<br>SECURE LINK"
-:
-"OFFLINE<br>NO LINK";
-
-
-}
-
-
-/* =====================================================
-   MEMORIA UI
-===================================================== */
-
-function showMemory(){
-
-if(!memory.length){
-
-addMsg(
-"La memoria JARVIS è vuota."
-);
-
-return;
-
-}
-
-const preview =
-memory
-.slice(-10)
-.map(
-(item,index)=>
-(index + 1) +
-". " +
-item.role +
-": " +
-item.content
-)
-.join("\n");
-
-addMsg(preview);
-
-}
-
-
-function clearMemory(){
-
-memory = [];
-
-localStorage.removeItem(
-MEMORY_KEY
-);
-
-updateSystemPanel();
-
-notify(
-"MEMORIA CANCELLATA"
-);
-
-addMsg(
-"Memoria JARVIS cancellata."
-);
-
-}
-
-
-/* =====================================================
-   PROCESS AI
-===================================================== */
-
-async function processAi(text){
+async function getBatteryData(){
 
 if(
-handleMapCommand(text)
-)
-return;
-
-
-if(
-handleWebCommand(text)
-)
-return;
-
-
-const normalized =
-normalizeCommand(text);
-
-
-if(
-normalized === "che ore sono"
-||
-normalized === "che ora e"
+typeof navigator.getBattery !==
+"function"
 ){
 
-const data =
-getTimeData();
-
-const reply =
-"Sono le " +
-data.currentTime +
-". Oggi è " +
-data.dayOfWeek +
-" " +
-data.currentDate +
-".";
-
-addMsg(
-reply,
-true
-);
-
-speak(reply);
-
-return;
+return{
+available:false,
+reason:
+"Battery API non disponibile nel browser."
+};
 
 }
-
-
-setState("thinking");
-
-addMemory(
-"user",
-text
-);
-
 
 try{
 
-const temporal =
-getTimeData();
+if(!batteryManager){
 
-const controller =
-new AbortController();
-
-const timeout =
-setTimeout(
-()=>{
-controller.abort();
-},
-30000
-);
-
-
-const response =
-await fetch(
-API,
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-
-message:text,
-
-memory:
-memory.slice(-4),
-
-currentTime:
-temporal.currentTime,
-
-currentDate:
-temporal.currentDate,
-
-dayOfWeek:
-temporal.dayOfWeek,
-
-timezone:
-temporal.timezone
-
-}),
-
-signal:
-controller.signal
-
-}
-);
-
-
-clearTimeout(timeout);
-
-
-if(!response.ok){
-
-throw new Error(
-"HTTP " +
-response.status
-);
+batteryManager =
+await navigator.getBattery();
 
 }
 
+return{
 
-const data =
-await response.json();
+available:true,
 
+level:
+Math.round(
+batteryManager.level * 100
+),
 
-const reply =
-typeof data.response ===
-"string"
-?
-data.response.trim()
-:
-"";
+charging:
+!!batteryManager.charging,
 
+chargingTime:
+batteryManager.chargingTime,
 
-if(!reply){
+dischargingTime:
+batteryManager.dischargingTime
 
-throw new Error(
-"Risposta AI vuota"
-);
-
-}
-
-
-const copyable =
-isCopyableResponse(
-text,
-reply
-);
-
-
-addMsg(
-reply,
-true,
-copyable
-);
-
-addMemory(
-"assistant",
-reply
-);
-
-speak(reply);
-
-setState("idle");
-
+};
 
 }catch(error){
 
-console.error(
-"JARVIS ERROR:",
+console.warn(
+"Battery API:",
 error
 );
 
-addMsg(
-"ERRORE: " +
-(
-error.name ===
-"AbortError"
+return{
+
+available:false,
+
+reason:
+"Impossibile leggere la batteria dal browser."
+
+};
+
+}
+
+}
+
+
+/* =====================================================
+   RETE REALE
+===================================================== */
+
+function getNetworkData(){
+
+const connection =
+navigator.connection ||
+navigator.mozConnection ||
+navigator.webkitConnection;
+
+const data = {
+
+online:
+navigator.onLine,
+
+effectiveType:
+connection &&
+connection.effectiveType
 ?
-"server non ha risposto in tempo."
+connection.effectiveType
 :
-error.message
-)
-);
+"non disponibile",
 
-setState("error");
+downlink:
+connection &&
+typeof connection.downlink ===
+"number"
+?
+connection.downlink
+:
+null,
 
-setTimeout(
-()=>{
-setState("idle");
-},
-1200
-);
+rtt:
+connection &&
+typeof connection.rtt ===
+"number"
+?
+connection.rtt
+:
+null
 
-}
+};
+
+return data;
 
 }
 
 
 /* =====================================================
-   INVIO
+   INFORMAZIONI DISPOSITIVO REALMENTE DISPONIBILI
 ===================================================== */
 
-function sendMessage(){
+/*
+   Il browser normalmente NON permette di conoscere con
+   certezza il modello commerciale del dispositivo.
 
-const text =
-textInput.value.trim();
+   Quindi non viene mai trasformato automaticamente in
+   "iPhone 14 Pro Max", "Samsung S24", ecc.
+*/
 
-if(!text)
-return;
+function getDeviceInfo(){
 
-textInput.value = "";
+const userAgent =
+navigator.userAgent || "";
 
-addMsg(text);
+const platform =
+navigator.platform || "";
 
-processAi(text);
+const language =
+navigator.language || "";
 
-}
-
-
-sendBtn.addEventListener(
-"click",
-sendMessage
-);
-
-
-textInput.addEventListener(
-"keydown",
-event=>{
+let deviceType =
+"DESKTOP / UNKNOWN";
 
 if(
-event.key ===
-"Enter"
+/Android/i.test(userAgent)
 ){
 
-event.preventDefault();
+deviceType =
+"ANDROID / BROWSER";
 
-sendMessage();
-
-}
-
-}
-);
-
-
-/* =====================================================
-   RESIZE
-===================================================== */
-
-window.addEventListener(
-"resize",
-()=>{
-
-if(
-camera &&
-renderer
+}else if(
+/iPhone|iPad|iPod/i.test(userAgent)
 ){
 
-camera.aspect =
-window.innerWidth /
-window.innerHeight;
+deviceType =
+"APPLE MOBILE / BROWSER";
 
-camera.updateProjectionMatrix();
+}else if(
+/Windows/i.test(userAgent)
+){
 
-renderer.setSize(
-window.innerWidth,
-window.innerHeight
-);
+deviceType =
+"WINDOWS / BROWSER";
+
+}else if(
+/Macintosh|Mac OS X/i.test(userAgent)
+){
+
+deviceType =
+"MAC / BROWSER";
+
+}else if(
+/Linux/i.test(userAgent)
+){
+
+deviceType =
+"LINUX / BROWSER";
 
 }
 
-resizeEarthGlobe();
+return{
 
-if(map){
+available:true,
 
-map.resize();
+deviceType:deviceType,
+
+platform:platform,
+
+language:language,
+
+screenWidth:
+window.screen
+?
+window.screen.width
+:
+null,
+
+screenHeight:
+window.screen
+?
+window.screen.height
+:
+null,
+
+pixelRatio:
+window.devicePixelRatio || 1,
+
+userAgent:userAgent
+
+};
 
 }
-
-updateSystemPanel();
-
-}
-);
 
 
 /* =====================================================
-   ONLINE / OFFLINE
+   MICROFONO REALE
 ===================================================== */
 
-window.addEventListener(
-"online",
-()=>{
+function getMicrophoneStatus(){
 
-notify(
-"CONNESSIONE ONLINE"
-);
+return{
 
-updateSystemPanel();
+speechRecognition:
+!!recognition,
 
-}
-);
+monitor:
+voiceMonitorActive,
 
+listening:
+listening,
 
-window.addEventListener(
-"offline",
-()=>{
+permissionState:
+voiceMonitorActive
+?
+"ACTIVE"
+:
+"NOT ACTIVE"
 
-notify(
-"CONNESSIONE OFFLINE"
-);
-
-updateSystemPanel();
+};
 
 }
-);
 
 
 /* =====================================================
-   AVVIO
+   STATO FULLSCREEN REALE
 ===================================================== */
 
-setState("idle");
+function getFullscreenStatus(){
 
-updateSystemPanel();
+return{
 
-notify(
-"J.A.R.V.I.S. SYSTEM ONLINE"
-);
+supported:
+!!(
+document.documentElement.requestFullscreen
+),
 
-</script>
+active:
+isFullscreen()
 
-</body>
+};
 
-</html>
+}
+
+
+/* =====================================================
+   STATO MAPPA REALE
+===================================================== */
+
+function getMapStatus(){
+
+return{
+
+available:
+typeof maplibregl !==
+"undefined",
+
+initialized:
+!!map,
+
+active:
+tacticalMap.classList.contains(
+"active"
+),
+
+marker:
+!!currentMarker
+
+};
+
+}
+
+
+/* =====================================================
+   STATO MEMORIA REALE
+===================================================== */
+
+function getMemoryStatus(){
+
+return{
+
+available

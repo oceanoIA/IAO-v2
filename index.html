@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARK-TECH // DUAL-MODE KINETIC LAB</title>
+  <title>STARK-TECH // ULTRA-FLUID DUAL LAB</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
     }
     body {
       overflow: hidden;
-      background-color: #0b0e14;
+      background-color: #080b10;
       font-family: 'Share Tech Mono', monospace;
       color: #00f3ff;
     }
@@ -86,7 +86,7 @@
       padding: 6px 16px;
       cursor: pointer;
       clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
     }
     .tab-btn:hover, .tab-btn.active {
       background: rgba(0, 243, 255, 0.25);
@@ -136,7 +136,7 @@
       letter-spacing: 1px;
       outline: none;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
     }
     select:hover, .stark-btn:hover {
       background: rgba(0, 243, 255, 0.25);
@@ -155,14 +155,14 @@
       gap: 8px;
     }
     .hand-card {
-      border-left: 2px solid #00f3ff;
+      border-left: 2px solid #ffffff;
       padding-left: 8px;
       display: flex;
       flex-direction: column;
       gap: 3px;
     }
     .hand-card.h2 {
-      border-left-color: #ff007f;
+      border-left-color: #00f3ff;
     }
     .telemetry-row { display: flex; justify-content: space-between; color: rgba(255, 255, 255, 0.7); }
     .telemetry-val { color: #00f3ff; font-weight: bold; }
@@ -209,8 +209,8 @@
 
   <div class="stark-header">
     <div class="stark-title">
-      <span>STARK TACTICAL LAB v6.0</span>
-      <span class="security-badge">DUAL MODE ON</span>
+      <span>STARK KINETIC LAB v7.0</span>
+      <span class="security-badge">ULTRA FLUID 60FPS</span>
     </div>
     <div class="mode-tabs">
       <button id="tab-builder" class="tab-btn active" onclick="switchMode('BUILDER')">SYS 01: REALISTIC 3D GRAB</button>
@@ -229,7 +229,7 @@
       <span style="color: #00f3ff; font-weight: bold;">[ACTIVE]</span>
     </div>
     
-    <!-- Controlli per Modalità 1: Cubi 3D Solidi -->
+    <!-- Modalità 1: Cubi 3D Solidi -->
     <div id="controls-builder">
       <div class="control-group">
         <label>MANIPOLAZIONE DUAL-HAND</label>
@@ -238,14 +238,16 @@
       </div>
     </div>
 
-    <!-- Controlli per Modalità 2: Particelle Olografiche -->
+    <!-- Modalità 2: Particelle Olografiche -->
     <div id="controls-particles" style="display: none;">
       <div class="control-group">
         <label>HOLOGRAM TEMPLATE</label>
         <select id="shape-select">
+          <option value="jupiter">JUPITER & RINGS</option>
+          <option value="galaxy">GALAXY SPIRAL</option>
+          <option value="hypercube">HYPERCUBE MATRIX</option>
           <option value="heart">HEART MATRIX</option>
           <option value="flower">NEURAL FLOWER</option>
-          <option value="saturn">SATURN RINGS</option>
           <option value="buddha">BUDDHA HOLOGRAM</option>
           <option value="fireworks">ENERGY EXPLOSION</option>
         </select>
@@ -260,7 +262,7 @@
     <div class="telemetry-box">
       <div class="hand-card">
         <div class="telemetry-row">
-          <span style="color: #00f3ff; font-weight: bold;">MANO 1 (PALLINO CIANO):</span>
+          <span style="color: #ffffff; font-weight: bold;">MANO 1 (PUNTINO BIANCO):</span>
           <span id="h1-status" class="telemetry-val">CERCA...</span>
         </div>
         <div class="telemetry-row">
@@ -271,7 +273,7 @@
 
       <div class="hand-card h2">
         <div class="telemetry-row">
-          <span style="color: #ff007f; font-weight: bold;">MANO 2 (PALLINO ROSA):</span>
+          <span style="color: #00f3ff; font-weight: bold;">MANO 2 (PUNTINO BIANCO):</span>
           <span id="h2-status" class="telemetry-val">CERCA...</span>
         </div>
         <div class="telemetry-row">
@@ -287,13 +289,14 @@
     <div class="hud-corner top-right"></div>
     <div class="hud-corner bottom-left"></div>
     <div class="hud-corner bottom-right"></div>
-    <span class="preview-hud-tag">OPTICAL FEED // DUAL HAND</span>
+    <span class="preview-hud-tag">OPTICAL FEED // LOW LATENCY</span>
     <canvas id="hand-preview-canvas" width="320" height="240"></canvas>
   </div>
 
   <script>
     let currentMode = 'BUILDER';
-    const PARTICLE_COUNT = 24000;
+    // Ottimizzato a 12,000 particelle per fluidità a 60FPS garantita senza scatti
+    const PARTICLE_COUNT = 12000;
     let scene, camera, renderer;
 
     // --- VARIABILI MODALITÀ 1: BUILDER 3D ---
@@ -301,15 +304,15 @@
     let blocks = [];
     const CUBE_COLORS = [0x00aaff, 0xff0055, 0x00ff88, 0xffaa00, 0x9900ff];
 
-    // Controller separati per le 2 mani (2 pallini indipendenti)
+    // Cursori: Piccoli puntini bianchi
     const controllers = [
       {
-        id: 0, colorHex: 0x00f3ff, cursorMesh: null, laserMesh: null,
+        id: 0, cursorMesh: null, laserMesh: null,
         grabbedBlock: null, grabOffset: new THREE.Vector3(), pos: new THREE.Vector3(),
         isPinching: false, statusEl: null, grabEl: null
       },
       {
-        id: 1, colorHex: 0xff007f, cursorMesh: null, laserMesh: null,
+        id: 1, cursorMesh: null, laserMesh: null,
         grabbedBlock: null, grabOffset: new THREE.Vector3(), pos: new THREE.Vector3(),
         isPinching: false, statusEl: null, grabEl: null
       }
@@ -327,16 +330,16 @@
     function initThree() {
       const container = document.getElementById('canvas-container');
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x0b0e14);
-      scene.fog = new THREE.FogExp2(0x0b0e14, 0.012);
+      scene.background = new THREE.Color(0x080b10);
+      scene.fog = new THREE.FogExp2(0x080b10, 0.015);
 
       camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
       camera.position.set(0, 6, 28);
       camera.lookAt(0, 0, 0);
 
-      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       container.appendChild(renderer.domElement);
@@ -345,32 +348,27 @@
       builderGroup = new THREE.Group();
       scene.add(builderGroup);
 
-      // Luci per i cubi solidi e le ombre
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
       scene.add(ambientLight);
 
       const dirLight = new THREE.DirectionalLight(0xffffff, 0.85);
       dirLight.position.set(15, 30, 20);
       dirLight.castShadow = true;
-      dirLight.shadow.mapSize.width = 2048;
-      dirLight.shadow.mapSize.height = 2048;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
       dirLight.shadow.camera.near = 0.5;
-      dirLight.shadow.camera.far = 100;
-      dirLight.shadow.camera.left = -30;
-      dirLight.shadow.camera.right = 30;
-      dirLight.shadow.camera.top = 30;
-      dirLight.shadow.camera.bottom = -30;
+      dirLight.shadow.camera.far = 80;
+      dirLight.shadow.camera.left = -25;
+      dirLight.shadow.camera.right = 25;
+      dirLight.shadow.camera.top = 25;
+      dirLight.shadow.camera.bottom = -25;
       scene.add(dirLight);
 
-      const rimLight = new THREE.PointLight(0x00f3ff, 0.5, 50);
-      rimLight.position.set(-10, 10, -10);
-      scene.add(rimLight);
-
-      // PIANO GRIGIO FISICO REALE
+      // PIANO GRIGIO FISICO REALISTICO
       const planeGeo = new THREE.PlaneGeometry(80, 80);
       const planeMat = new THREE.MeshStandardMaterial({
-        color: 0x3a404a, // Grigio studio
-        roughness: 0.6,
+        color: 0x303640,
+        roughness: 0.55,
         metalness: 0.2
       });
       const floor = new THREE.Mesh(planeGeo, planeMat);
@@ -379,25 +377,22 @@
       floor.receiveShadow = true;
       builderGroup.add(floor);
 
-      const gridHelper = new THREE.GridHelper(80, 40, 0x00f3ff, 0x555c66);
+      const gridHelper = new THREE.GridHelper(80, 40, 0x00f3ff, 0x444c56);
       gridHelper.position.y = -5.95;
       builderGroup.add(gridHelper);
 
-      // Pallini e Laser per le due mani
+      // PUNTINI BIANCHI Ultra-Compatti (Radius 0.12)
       controllers.forEach((ctrl, idx) => {
-        const cursorGeo = new THREE.SphereGeometry(0.45, 32, 32);
-        const cursorMat = new THREE.MeshStandardMaterial({
-          color: ctrl.colorHex,
-          emissive: ctrl.colorHex,
-          emissiveIntensity: 0.8,
-          roughness: 0.2
+        const cursorGeo = new THREE.SphereGeometry(0.12, 16, 16);
+        const cursorMat = new THREE.MeshBasicMaterial({
+          color: 0xffffff
         });
         ctrl.cursorMesh = new THREE.Mesh(cursorGeo, cursorMat);
         ctrl.cursorMesh.visible = false;
         builderGroup.add(ctrl.cursorMesh);
 
         const laserGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-        const laserMat = new THREE.LineBasicMaterial({ color: ctrl.colorHex, linewidth: 2, transparent: true, opacity: 0.9 });
+        const laserMat = new THREE.LineBasicMaterial({ color: 0x00f3ff, linewidth: 2, transparent: true, opacity: 0.8 });
         ctrl.laserMesh = new THREE.Line(laserGeo, laserMat);
         ctrl.laserMesh.visible = false;
         builderGroup.add(ctrl.laserMesh);
@@ -406,11 +401,10 @@
         ctrl.grabEl = document.getElementById(`h${idx + 1}-grab`);
       });
 
-      // Cubi 3D Solidi Iniziali
+      // Spawn Cubi 3D Solidi Iniziali
       spawnBlock(-6, -1.5, 0, CUBE_COLORS[0]);
       spawnBlock(0, 0, 0, CUBE_COLORS[1]);
       spawnBlock(6, -1.5, 0, CUBE_COLORS[2]);
-
 
       // --- SETUP MODALITÀ 2: PARTICELLE ---
       particleGroup = new THREE.Group();
@@ -419,25 +413,25 @@
 
       particleGeometry = new THREE.BufferGeometry();
       for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
-        currentPositions[i] = (Math.random() - 0.5) * 50;
+        currentPositions[i] = (Math.random() - 0.5) * 40;
         targetPositions[i] = currentPositions[i];
       }
       particleGeometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
       const pCanvas = document.createElement('canvas');
-      pCanvas.width = 128; pCanvas.height = 128;
+      pCanvas.width = 64; pCanvas.height = 64;
       const pCtx = pCanvas.getContext('2d');
-      pCtx.fillStyle = '#ffffff'; pCtx.beginPath(); pCtx.arc(64, 64, 60, 0, Math.PI * 2); pCtx.fill();
+      pCtx.fillStyle = '#ffffff'; pCtx.beginPath(); pCtx.arc(32, 32, 28, 0, Math.PI * 2); pCtx.fill();
 
       particleMaterial = new THREE.PointsMaterial({
-        size: 0.18, color: new THREE.Color('#00f3ff'),
+        size: 0.22, color: new THREE.Color('#00f3ff'),
         map: new THREE.CanvasTexture(pCanvas), transparent: true,
-        opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false
+        opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false
       });
 
       const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
       particleGroup.add(particleSystem);
-      generateShape('heart');
+      generateShape('jupiter');
 
       previewCanvas = document.getElementById('hand-preview-canvas');
       previewCtx = previewCanvas.getContext('2d');
@@ -445,7 +439,7 @@
       window.addEventListener('resize', onWindowResize);
     }
 
-    // --- CREAZIONE CUBO SOLIDO CON VOLUME REALISTICO (NO ROTAZIONE) ---
+    // --- CREAZIONE CUBO SOLIDO (PERFETTAMENTE FERMO) ---
     function createBlockMesh(colorHex) {
       const size = 3.6;
       const boxGeo = new THREE.BoxGeometry(size, size, size);
@@ -453,7 +447,7 @@
       const boxMat = new THREE.MeshStandardMaterial({
         color: colorHex || CUBE_COLORS[Math.floor(Math.random() * CUBE_COLORS.length)],
         roughness: 0.35,
-        metalness: 0.3
+        metalness: 0.25
       });
 
       const mesh = new THREE.Mesh(boxGeo, boxMat);
@@ -461,7 +455,7 @@
       mesh.receiveShadow = true;
 
       const edges = new THREE.EdgesGeometry(boxGeo);
-      const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+      const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 });
       const wireframe = new THREE.LineSegments(edges, lineMat);
       mesh.add(wireframe);
 
@@ -491,9 +485,9 @@
     function setBlockHighlight(block, mode, colorHex) {
       if (!block) return;
       if (mode === 'grab') {
-        block.material.color.setHex(colorHex);
-        block.material.emissive.setHex(colorHex);
-        block.material.emissiveIntensity = 0.35;
+        block.material.color.setHex(colorHex || 0x00f3ff);
+        block.material.emissive.setHex(0x00f3ff);
+        block.material.emissiveIntensity = 0.3;
       } else {
         block.material.color.setHex(block.userData.originalColor);
         block.material.emissive.setHex(0x000000);
@@ -515,14 +509,58 @@
       particleGroup.visible = (mode === 'PARTICLES');
     }
 
-    // --- GENERATORE PARTICELLE ---
+    // --- NUOVE FORME PARTICELLE (GIOVE, GALASSIA, IPERCUBO, ECC.) ---
     function generateShape(type) {
       const p = targetPositions;
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const idx = i * 3;
         let x = 0, y = 0, z = 0;
 
-        if (type === 'heart') {
+        if (type === 'jupiter') {
+          // Giove Sferico con Fasce Atmosferiche e Anelli Esterni
+          if (i < PARTICLE_COUNT * 0.75) {
+            const u = Math.random(), v = Math.random();
+            const theta = u * 2.0 * Math.PI, phi = Math.acos(2.0 * v - 1.0);
+            const r = 7.5;
+            x = r * Math.sin(phi) * Math.cos(theta);
+            y = (r * Math.cos(phi)) * 0.88; // Schiacciamento ai poli
+            z = r * Math.sin(phi) * Math.sin(theta);
+          } else {
+            // Anello Sottile di Giove
+            const angle = Math.random() * Math.PI * 2, dist = 9.5 + Math.random() * 4.5;
+            x = Math.cos(angle) * dist; z = Math.sin(angle) * dist; y = (Math.random() - 0.5) * 0.3;
+          }
+        } else if (type === 'galaxy') {
+          // Galassia a 4 Bracci di Spirale
+          const arms = 4;
+          const arm = i % arms;
+          const r = Math.pow(Math.random(), 1.5) * 16;
+          const theta = r * 0.4 + (arm * (Math.PI * 2 / arms));
+          x = Math.cos(theta) * r + (Math.random() - 0.5) * 0.8;
+          z = Math.sin(theta) * r + (Math.random() - 0.5) * 0.8;
+          y = (Math.random() - 0.5) * (2.0 - r * 0.1);
+        } else if (type === 'hypercube') {
+          // Ipercubo 4D Proiettato
+          const size = 7;
+          const side = i % 12;
+          const t = Math.random() * size - size/2;
+          const inner = (i % 2 === 0) ? 0.55 : 1.0;
+
+          if (side === 0) { x = size/2; y = t; z = size/2; }
+          else if (side === 1) { x = -size/2; y = t; z = size/2; }
+          else if (side === 2) { x = t; y = size/2; z = size/2; }
+          else if (side === 3) { x = t; y = -size/2; z = size/2; }
+          else if (side === 4) { x = size/2; y = t; z = -size/2; }
+          else if (side === 5) { x = -size/2; y = t; z = -size/2; }
+          else if (side === 6) { x = t; y = size/2; z = -size/2; }
+          else if (side === 7) { x = t; y = -size/2; z = -size/2; }
+          else if (side === 8) { x = size/2; y = size/2; z = t; }
+          else if (side === 9) { x = -size/2; y = size/2; z = t; }
+          else if (side === 10) { x = size/2; y = -size/2; z = t; }
+          else { x = -size/2; y = -size/2; z = t; }
+
+          x *= inner; y *= inner; z *= inner;
+        } else if (type === 'heart') {
           const t = Math.random() * Math.PI * 2, u = (Math.random() - 0.5) * 4;
           x = 16 * Math.pow(Math.sin(t), 3);
           y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
@@ -531,16 +569,6 @@
           const u = Math.random() * Math.PI * 2, v = Math.random() * Math.PI;
           const r = 10 * Math.sin(6 * u) * Math.sin(v);
           x = r * Math.sin(v) * Math.cos(u); y = r * Math.sin(v) * Math.sin(u); z = r * Math.cos(v);
-        } else if (type === 'saturn') {
-          if (i < PARTICLE_COUNT * 0.35) {
-            const u = Math.random(), v = Math.random();
-            const theta = u * 2.0 * Math.PI, phi = Math.acos(2.0 * v - 1.0);
-            const r = 5.5 * Math.cbrt(Math.random());
-            x = r * Math.sin(phi) * Math.cos(theta); y = r * Math.sin(phi) * Math.sin(theta); z = r * Math.cos(phi);
-          } else {
-            const angle = Math.random() * Math.PI * 2, dist = 8 + Math.random() * 9;
-            x = Math.cos(angle) * dist; z = Math.sin(angle) * dist; y = (Math.random() - 0.5) * 0.4;
-          }
         } else if (type === 'buddha') {
           const rand = Math.random();
           if (rand < 0.35) {
@@ -563,7 +591,7 @@
       }
     }
 
-    // --- TRACCIAMENTO MANI MEDIAPIPE ---
+    // --- TRACCIAMENTO MANI MEDIAPIPE OTTIMIZZATO ---
     function initHandTracking() {
       const videoElement = document.getElementById('video-input');
 
@@ -574,8 +602,8 @@
       hands.setOptions({
         maxNumHands: 2,
         modelComplexity: 1,
-        minDetectionConfidence: 0.65,
-        minTrackingConfidence: 0.65
+        minDetectionConfidence: 0.6,
+        minTrackingConfidence: 0.6
       });
 
       hands.onResults((results) => {
@@ -589,7 +617,7 @@
           if (i < detectedHandsCount) {
             const landmarks = results.multiHandLandmarks[i];
 
-            drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, { color: i === 0 ? '#00f3ff' : '#ff007f', lineWidth: 2 });
+            drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, { color: '#00f3ff', lineWidth: 1.5 });
             drawLandmarks(previewCtx, landmarks, { color: '#ffffff', lineWidth: 1, radius: 2 });
 
             const thumbTip = landmarks[4];
@@ -611,9 +639,12 @@
             vector.unproject(camera);
             const dir = vector.sub(camera.position).normalize();
 
-            const targetZ = -pZ * 32;
+            const targetZ = -pZ * 30;
             const distanceToPlane = (targetZ - camera.position.z) / dir.z;
-            ctrl.pos.copy(camera.position).add(dir.multiplyScalar(distanceToPlane));
+            const targetPos = camera.position.clone().add(dir.multiplyScalar(distanceToPlane));
+
+            // Risposta reattiva ed ultra-fluida con Lerp ad alta velocità
+            ctrl.pos.lerp(targetPos, 0.5);
 
             ctrl.cursorMesh.position.copy(ctrl.pos);
             ctrl.cursorMesh.visible = (currentMode === 'BUILDER');
@@ -621,14 +652,14 @@
             ctrl.isPinching = (pinchDist < 0.08);
 
             ctrl.statusEl.innerText = "RILEVATA";
-            ctrl.statusEl.style.color = ctrl.id === 0 ? "#00f3ff" : "#ff007f";
+            ctrl.statusEl.style.color = "#00f3ff";
 
-            // LOGICA MODALITÀ 1: BUILDER
+            // LOGICA MODALITÀ 1: BUILDER 3D
             if (currentMode === 'BUILDER') {
               if (ctrl.isPinching) {
                 if (ctrl.grabbedBlock) {
-                  const targetPos = ctrl.pos.clone().sub(ctrl.grabOffset);
-                  ctrl.grabbedBlock.position.lerp(targetPos, 0.4);
+                  const blockTarget = ctrl.pos.clone().sub(ctrl.grabOffset);
+                  ctrl.grabbedBlock.position.lerp(blockTarget, 0.45);
 
                   const positions = ctrl.laserMesh.geometry.attributes.position.array;
                   positions[0] = ctrl.pos.x; positions[1] = ctrl.pos.y; positions[2] = ctrl.pos.z;
@@ -640,7 +671,7 @@
                   ctrl.grabEl.style.color = "#ff3366";
                 } else {
                   let closest = null;
-                  let minDist = 6.0;
+                  let minDist = 5.5;
 
                   for (let block of blocks) {
                     const isOtherHandGrabbing = controllers.some(other => other.id !== ctrl.id && other.grabbedBlock === block);
@@ -656,7 +687,7 @@
                   if (closest) {
                     ctrl.grabbedBlock = closest;
                     ctrl.grabOffset.copy(ctrl.pos).sub(closest.position);
-                    setBlockHighlight(closest, 'grab', ctrl.colorHex);
+                    setBlockHighlight(closest, 'grab', 0x00f3ff);
                   }
                 }
               } else {
@@ -697,7 +728,7 @@
             targetRotZ = Math.atan2(dyH, dxH);
             targetRotY = ((h1Center.x + h2Center.x) / 2 - 0.5) * Math.PI * 3.0;
             targetRotX = ((h1Center.y + h2Center.y) / 2 - 0.5) * Math.PI * 2.5;
-            targetCamZ = THREE.MathUtils.clamp(THREE.MathUtils.mapLinear(distH, 0.18, 0.75, 70, 12), 12, 75);
+            targetCamZ = THREE.MathUtils.clamp(THREE.MathUtils.mapLinear(distH, 0.18, 0.75, 65, 14), 12, 70);
           } else {
             const wrist = h1[0];
             targetRotZ = -Math.atan2(h1Center.y - wrist.y, h1Center.x - wrist.x) - Math.PI / 2;
@@ -720,26 +751,26 @@
       cameraUtils.start();
     }
 
+    // --- LOOP DI RENDERING 60FPS ---
     function animate() {
       requestAnimationFrame(animate);
 
       if (currentMode === 'PARTICLES') {
-        particleGroup.rotation.x += (targetRotX - particleGroup.rotation.x) * 0.08;
-        particleGroup.rotation.y += (targetRotY + 0.003 - particleGroup.rotation.y) * 0.08;
-        particleGroup.rotation.z += (targetRotZ - particleGroup.rotation.z) * 0.08;
+        particleGroup.rotation.x += (targetRotX - particleGroup.rotation.x) * 0.12;
+        particleGroup.rotation.y += (targetRotY + 0.004 - particleGroup.rotation.y) * 0.12;
+        particleGroup.rotation.z += (targetRotZ - particleGroup.rotation.z) * 0.12;
 
-        handExpansionScale += (targetScale - handExpansionScale) * 0.1;
-        camera.position.z += (targetCamZ - camera.position.z) * 0.08;
+        handExpansionScale += (targetScale - handExpansionScale) * 0.12;
+        camera.position.z += (targetCamZ - camera.position.z) * 0.12;
 
         const positions = particleGeometry.attributes.position.array;
         for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
           const target = targetPositions[i] * handExpansionScale;
-          positions[i] += (target - positions[i]) * 0.08;
+          positions[i] += (target - positions[i]) * 0.12;
         }
         particleGeometry.attributes.position.needsUpdate = true;
       }
 
-      // In modalità BUILDER non c'è rotazione nei cubi, restano perfettamente fermi e solidi!
       renderer.render(scene, camera);
     }
 

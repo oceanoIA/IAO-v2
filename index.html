@@ -12,7 +12,7 @@
     }
     body {
       overflow: hidden;
-      background-color: #080810;
+      background-color: #05050a;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: #ffffff;
     }
@@ -153,7 +153,6 @@
     
     let targetCamZ = 35;
     let targetRotationZ = 0;
-    let targetRotationX = 0;
 
     function initThree() {
       const container = document.getElementById('canvas-container');
@@ -176,26 +175,32 @@
 
       geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
+      // Generazione di una texture definita e nitida (64x64)
       const canvas = document.createElement('canvas');
-      canvas.width = 32;
-      canvas.height = 32;
+      canvas.width = 64;
+      canvas.height = 64;
       const ctx = canvas.getContext('2d');
-      const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+      const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      
+      // Bordo nettamente definito per eliminare l'effetto sfocato
       gradient.addColorStop(0, 'rgba(255,255,255,1)');
-      gradient.addColorStop(0.3, 'rgba(255,255,255,0.8)');
+      gradient.addColorStop(0.75, 'rgba(255,255,255,1)');
+      gradient.addColorStop(0.9, 'rgba(255,255,255,0.4)');
       gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(16, 16, 16, 0, Math.PI * 2);
+      ctx.arc(32, 32, 32, 0, Math.PI * 2);
       ctx.fill();
 
       const texture = new THREE.CanvasTexture(canvas);
 
       material = new THREE.PointsMaterial({
-        size: 0.45,
+        size: 0.3,
         color: new THREE.Color('#00f0ff'),
         map: texture,
         transparent: true,
+        opacity: 0.9,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
@@ -304,14 +309,12 @@
 
           const hand1 = results.multiHandLandmarks[0];
 
-          // Rotazione basata sull'inclinazione della prima mano (Polso a Base Medio)
           const wrist = hand1[0];
           const middleBase = hand1[9];
           const angleRad = Math.atan2(middleBase.y - wrist.y, middleBase.x - wrist.x);
           targetRotationZ = -(angleRad + Math.PI / 2) * 1.5;
 
           if (numHands >= 2) {
-            // ZOOM A DUE MANI: Distanza tra il polso della mano 1 e della mano 2
             const hand2 = results.multiHandLandmarks[1];
             const wrist2 = hand2[0];
             
@@ -319,12 +322,9 @@
             const dy = wrist.y - wrist2.y;
             const handDistance = Math.sqrt(dx * dx + dy * dy);
 
-            // Mani lontane tra loro -> Zoom in (Camera vicina)
-            // Mani vicine tra loro -> Zoom out (Camera lontana)
             targetCamZ = THREE.MathUtils.mapLinear(handDistance, 0.2, 0.75, 75, 12);
             targetCamZ = THREE.MathUtils.clamp(targetCamZ, 10, 85);
           } else {
-            // ESPANSIONE SINGOLA MANO: Apri/chiudi il pugno della singola mano
             const dx = hand1[0].x - hand1[12].x;
             const dy = hand1[0].y - hand1[12].y;
             const span = Math.sqrt(dx * dx + dy * dy);
@@ -354,7 +354,6 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Lerp per movimenti fluidi
       handExpansionScale += (targetScale - handExpansionScale) * 0.1;
       camera.position.z += (targetCamZ - camera.position.z) * 0.08;
 
@@ -366,7 +365,6 @@
 
       geometry.attributes.position.needsUpdate = true;
 
-      // Rotazione continua di fondo + controllo rotazione mano
       particleSystem.rotation.y += 0.004;
       particleSystem.rotation.z += (targetRotationZ - particleSystem.rotation.z) * 0.08;
 

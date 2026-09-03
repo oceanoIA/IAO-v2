@@ -2309,6 +2309,198 @@ function stopControlHandCamera(){
     "CONTROL HAND: OFF"
   );
 }
+   /* =====================================================
+   CONTROL HAND — RILEVAMENTO MANO
+===================================================== */
+
+function controlHandDistance(a, b){
+
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+
+  return Math.sqrt(
+    dx * dx +
+    dy * dy
+  );
+}
+
+
+function processControlHandLandmarks(landmarks){
+
+  if(
+    !landmarks ||
+    landmarks.length < 21
+  ){
+    return;
+  }
+
+
+  /* ---------------------------------------------------
+     DIMENSIONE DELLA MANO
+  --------------------------------------------------- */
+
+  let minX = 1;
+  let maxX = 0;
+
+  let minY = 1;
+  let maxY = 0;
+
+
+  for(const point of landmarks){
+
+    minX = Math.min(
+      minX,
+      point.x
+    );
+
+    maxX = Math.max(
+      maxX,
+      point.x
+    );
+
+    minY = Math.min(
+      minY,
+      point.y
+    );
+
+    maxY = Math.max(
+      maxY,
+      point.y
+    );
+  }
+
+
+  const handWidth =
+    maxX - minX;
+
+  const handHeight =
+    maxY - minY;
+
+  const handArea =
+    handWidth * handHeight;
+
+
+  controlHandTargetSize =
+    controlHandClamp(
+      (handArea - 0.015) /
+      (0.18 - 0.015),
+      0,
+      1
+    );
+
+
+  /* ---------------------------------------------------
+     POSIZIONE ORIZZONTALE
+  --------------------------------------------------- */
+
+  const palmX =
+    (
+      landmarks[0].x +
+      landmarks[5].x +
+      landmarks[9].x +
+      landmarks[17].x
+    ) / 4;
+
+
+  /*
+     La camera è specchiata.
+     1 - palmX rende il movimento
+     più naturale per l'utente.
+  */
+
+  controlHandTargetX =
+    controlHandClamp(
+      1 - palmX,
+      0,
+      1
+    );
+
+
+  /* ---------------------------------------------------
+     POLLICE + INDICE — PINCH
+  --------------------------------------------------- */
+
+  const thumbTip =
+    landmarks[4];
+
+  const indexTip =
+    landmarks[8];
+
+
+  const pinchDistance =
+    controlHandDistance(
+      thumbTip,
+      indexTip
+    );
+
+
+  controlHandTargetPinch =
+    controlHandClamp(
+      1 -
+      (
+        (pinchDistance - 0.035) /
+        (0.20 - 0.035)
+      ),
+      0,
+      1
+    );
+
+
+  /* ---------------------------------------------------
+     APERTURA DELLA MANO
+  --------------------------------------------------- */
+
+  const wrist =
+    landmarks[0];
+
+  const palmScale =
+    Math.max(
+      controlHandDistance(
+        wrist,
+        landmarks[9]
+      ),
+      0.001
+    );
+
+
+  const fingertips = [
+    8,
+    12,
+    16,
+    20
+  ];
+
+
+  let openness = 0;
+
+
+  for(const index of fingertips){
+
+    openness +=
+      controlHandDistance(
+        landmarks[index],
+        wrist
+      ) / palmScale;
+  }
+
+
+  openness /=
+    fingertips.length;
+
+
+  controlHandTargetOpen =
+    controlHandClamp(
+      (openness - 1.35) /
+      (2.4 - 1.35),
+      0,
+      1
+    );
+
+
+  updateControlHandStatus(
+    "CONTROL HAND: TRACKING"
+  );
+}
 /* =====================================================  
    ELEMENTI  
 ===================================================== */  

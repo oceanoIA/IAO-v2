@@ -3,19 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Real-Time 3D Hand-Controlled Particle System</title>
+  <title>STARK-TECH // TACTICAL 3D INTERFACE</title>
+  
+  <!-- Font Sci-Fi Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      user-select: none;
     }
     body {
       overflow: hidden;
-      background-color: #020205;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #ffffff;
+      background-color: #02060d;
+      font-family: 'Share Tech Mono', monospace;
+      color: #00f3ff;
     }
+
+    /* Effetto Scanline Olografico */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.03) 50%);
+      background-size: 100% 4px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
     #canvas-container {
       width: 100vw;
       height: 100vh;
@@ -24,107 +43,164 @@
       left: 0;
       z-index: 1;
     }
-    #video-input {
-      display: none;
+    #video-input { display: none; }
+
+    /* HUD Header Superiore */
+    .stark-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(180deg, rgba(0, 243, 255, 0.15) 0%, rgba(2, 6, 13, 0) 100%);
+      border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+    .stark-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: #00f3ff;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .security-badge {
+      font-size: 10px;
+      background: rgba(255, 51, 102, 0.2);
+      border: 1px solid #ff3366;
+      color: #ff3366;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 5px #ff3366;
     }
 
-    /* Overlay Pannello di Controllo (In alto a sinistra) */
+    /* System Mode Selector Tabs */
+    .mode-tabs {
+      display: flex;
+      gap: 10px;
+    }
+    .tab-btn {
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      color: rgba(0, 243, 255, 0.6);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      padding: 6px 16px;
+      cursor: pointer;
+      clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover, .tab-btn.active {
+      background: rgba(0, 243, 255, 0.2);
+      border-color: #00f3ff;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+      text-shadow: 0 0 8px #00f3ff;
+    }
+
+    /* Pannello Controllo HUD Sinistra */
     .ui-overlay {
       position: absolute;
-      top: 24px;
+      top: 70px;
       left: 24px;
       z-index: 10;
-      width: 260px;
+      width: 280px;
       padding: 20px;
-      background: rgba(10, 10, 18, 0.65);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+      background: rgba(2, 12, 27, 0.75);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+      box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
-    .ui-title {
-      font-size: 14px;
-      font-weight: 600;
+    .panel-header {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
       letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.85);
+      color: rgba(0, 243, 255, 0.8);
+      border-bottom: 1px dashed rgba(0, 243, 255, 0.3);
+      padding-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
     }
     .control-group {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
     label {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
+      font-size: 10px;
+      color: rgba(0, 243, 255, 0.6);
+      letter-spacing: 1px;
     }
-    select, input[type="color"] {
+    select, input[type="color"], .stark-btn {
       width: 100%;
-      height: 40px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      color: #fff;
-      padding: 0 12px;
-      font-size: 13px;
+      height: 38px;
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      color: #00f3ff;
+      padding: 0 10px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
       outline: none;
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    select:hover, input[type="color"]:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.4);
+    select:hover, .stark-btn:hover {
+      background: rgba(0, 243, 255, 0.2);
+      border-color: #00f3ff;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
     }
-    select option {
-      background: #0d0d15;
-      color: #fff;
-    }
-    input[type="color"] {
-      padding: 4px;
-      height: 40px;
-    }
-    .status-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.8);
+    select option { background: #020c1b; color: #00f3ff; }
+
+    .stark-btn {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: rgba(0, 243, 255, 0.15);
       margin-top: 4px;
     }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ff4757;
-      box-shadow: 0 0 8px #ff4757;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
-    .status-dot.active {
-      background: #2ed573;
-      box-shadow: 0 0 8px #2ed573;
-    }
 
-    /* Pannello Anteprima Tracciamento Fotocamera (In basso a destra) */
+    /* Telemetria e Dati di Sistema */
+    .telemetry-box {
+      font-size: 11px;
+      background: rgba(0, 243, 255, 0.03);
+      border: 1px solid rgba(0, 243, 255, 0.15);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .telemetry-val { color: #00f3ff; font-weight: bold; }
+
+    /* Pannello Anteprima Fotocamera Tattica (In Basso a Destra) */
     .camera-preview-container {
       position: absolute;
       bottom: 24px;
       right: 24px;
       z-index: 10;
-      width: 180px;
-      height: 135px;
-      background: rgba(10, 10, 18, 0.65);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      width: 220px;
+      height: 165px;
+      background: rgba(2, 12, 27, 0.8);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 243, 255, 0.4);
+      clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
       display: flex;
       flex-direction: column;
     }
@@ -132,25 +208,35 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scaleX(-1); /* Effetto specchio naturale */
+      transform: scaleX(-1);
     }
-    .preview-label {
+    .preview-hud-tag {
       position: absolute;
       top: 6px;
       left: 8px;
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 9px;
+      font-weight: bold;
       letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.75);
-      background: rgba(0, 0, 0, 0.5);
-      padding: 3px 6px;
-      border-radius: 4px;
-      pointer-events: none;
-      text-transform: uppercase;
+      color: #00f3ff;
+      background: rgba(2, 12, 27, 0.7);
+      padding: 2px 6px;
+      border: 1px solid rgba(0, 243, 255, 0.3);
     }
+
+    .hud-corner {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 2px solid #00f3ff;
+      pointer-events: none;
+    }
+    .top-left { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .top-right { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+    .bottom-left { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+    .bottom-right { bottom: -1px; right: -1px; border-left: none; border-top: none; }
   </style>
 
-  <!-- Librerie Three.js e MediaPipe -->
+  <!-- Librerie Three.js & MediaPipe -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
@@ -160,110 +246,232 @@
   <video id="video-input"></video>
   <div id="canvas-container"></div>
 
-  <!-- UI Pannello Principale -->
-  <div class="ui-overlay">
-    <div class="ui-title">Control Panel</div>
+  <!-- Stark Header -->
+  <div class="stark-header">
+    <div class="stark-title">
+      <span>STARK TACTICAL HUD v4.2</span>
+      <span class="security-badge">TOP SECRET // LEVEL 5</span>
+    </div>
     
-    <div class="control-group">
-      <label for="shape-select">Template</label>
-      <select id="shape-select">
-        <option value="heart">Heart</option>
-        <option value="flower">Flower</option>
-        <option value="saturn">Saturn</option>
-        <option value="buddha">Buddha Statue</option>
-        <option value="fireworks">Fireworks</option>
-      </select>
-    </div>
-
-    <div class="control-group">
-      <label for="color-picker">Particle Color</label>
-      <input type="color" id="color-picker" value="#00f0ff">
-    </div>
-
-    <div class="status-badge">
-      <div id="status-dot" class="status-dot"></div>
-      <span id="status-text">Tracking Camera...</span>
+    <div class="mode-tabs">
+      <button id="tab-particles" class="tab-btn active" onclick="switchMode('PARTICLES')">SYS 01: PARTICLE MATRIX</button>
+      <button id="tab-builder" class="tab-btn" onclick="switchMode('BUILDER')">SYS 02: 3D BLOCK BUILDER</button>
     </div>
   </div>
 
-  <!-- Mini Pannello Anteprima Fotocamera -->
+  <!-- Control Panel HUD -->
+  <div class="ui-overlay">
+    <div class="hud-corner top-left"></div>
+    <div class="hud-corner top-right"></div>
+    <div class="hud-corner bottom-left"></div>
+    <div class="hud-corner bottom-right"></div>
+
+    <div class="panel-header">
+      <span id="panel-title-text">PARTICLE CONFIG</span>
+      <span style="color: #00f3ff; font-weight: bold;">[ONLINE]</span>
+    </div>
+    
+    <!-- Controlli Modalità 1: Particelle -->
+    <div id="controls-particles">
+      <div class="control-group">
+        <label>HOLOGRAM TEMPLATE</label>
+        <select id="shape-select">
+          <option value="heart">HEART MATRIX</option>
+          <option value="flower">NEURAL FLOWER</option>
+          <option value="saturn">SATURN RINGS</option>
+          <option value="buddha">BUDDHA HOLOGRAM</option>
+          <option value="fireworks">ENERGY EXPLOSION</option>
+        </select>
+      </div>
+      <div class="control-group" style="margin-top: 10px;">
+        <label>PLASMA COLOR</label>
+        <input type="color" id="color-picker" value="#00f3ff">
+      </div>
+    </div>
+
+    <!-- Controlli Modalità 2: Costruttore 3D -->
+    <div id="controls-builder" style="display: none;">
+      <div class="control-group">
+        <label>TACTICAL MODULES</label>
+        <button class="stark-btn" onclick="spawnBlock()">+ SPAWN 3D BLOCK</button>
+        <button class="stark-btn" style="background: rgba(255, 51, 102, 0.2); border-color: #ff3366; color: #ff3366; margin-top: 6px;" onclick="clearBlocks()">CLEAR ALL MODULES</button>
+      </div>
+    </div>
+
+    <!-- Telemetria Hand Tracking -->
+    <div class="telemetry-box">
+      <div class="telemetry-row">
+        <span>TRACKING:</span>
+        <span id="telemetry-status" class="telemetry-val" style="color: #ff3366;">SEARCHING...</span>
+      </div>
+      <div class="telemetry-row">
+        <span>GESTURE:</span>
+        <span id="telemetry-gesture" class="telemetry-val">NONE</span>
+      </div>
+      <div class="telemetry-row">
+        <span>TARGET POS 3D:</span>
+        <span id="telemetry-pos" class="telemetry-val">X:0 Y:0 Z:0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mini Pannello Fotocamera Tattica -->
   <div class="camera-preview-container">
-    <span class="preview-label">Hand Tracking</span>
+    <div class="hud-corner top-left"></div>
+    <div class="hud-corner top-right"></div>
+    <div class="hud-corner bottom-left"></div>
+    <div class="hud-corner bottom-right"></div>
+    <span class="preview-hud-tag">OPTICAL FEED // TRACKING</span>
     <canvas id="hand-preview-canvas" width="320" height="240"></canvas>
   </div>
 
   <script>
+    // System Modes
+    let currentMode = 'PARTICLES'; // 'PARTICLES' | 'BUILDER'
+
+    // Scene & Three.js Globals
     const PARTICLE_COUNT = 24000;
-    let scene, camera, renderer, particleSystem, geometry, material;
+    let scene, camera, renderer;
+    
+    // Particle Mode Globals
+    let particleGroup, geometry, material;
     let targetPositions = new Float32Array(PARTICLE_COUNT * 3);
     let currentPositions = new Float32Array(PARTICLE_COUNT * 3);
-    
-    let handExpansionScale = 1.0;
-    let targetScale = 1.0;
-    
-    let targetCamZ = 35;
-    let targetRotX = 0;
-    let targetRotY = 0;
-    let targetRotZ = 0;
+    let handExpansionScale = 1.0, targetScale = 1.0;
+    let targetCamZ = 35, targetRotX = 0, targetRotY = 0, targetRotZ = 0;
 
+    // Builder Mode Globals
+    let builderGroup, gridHelper;
+    let blocks = [];
+    let handCursorMesh;
+    let grabbedBlock = null;
+    let hand3DPos = new THREE.Vector3();
+    let isPinching = false;
+
+    // Preview Canvas
     let previewCanvas, previewCtx;
 
     function initThree() {
       const container = document.getElementById('canvas-container');
       scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x02060d, 0.015);
 
       camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = targetCamZ;
+      camera.position.set(0, 0, 35);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
       container.appendChild(renderer.domElement);
 
+      // --- GRUPPO 1: PARTICLE SYSTEM ---
+      particleGroup = new THREE.Group();
+      scene.add(particleGroup);
+
       geometry = new THREE.BufferGeometry();
-      
       for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
         currentPositions[i] = (Math.random() - 0.5) * 50;
         targetPositions[i] = currentPositions[i];
       }
-
       geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-      // Texture ultra-nitida e definita
-      const canvas = document.createElement('canvas');
-      canvas.width = 128;
-      canvas.height = 128;
-      const ctx = canvas.getContext('2d');
-      
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(64, 64, 60, 0, Math.PI * 2);
-      ctx.fill();
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.generateMipmaps = true;
+      // Texture Particelle Definite
+      const pCanvas = document.createElement('canvas');
+      pCanvas.width = 128; pCanvas.height = 128;
+      const pCtx = pCanvas.getContext('2d');
+      pCtx.fillStyle = '#ffffff';
+      pCtx.beginPath();
+      pCtx.arc(64, 64, 60, 0, Math.PI * 2);
+      pCtx.fill();
 
       material = new THREE.PointsMaterial({
         size: 0.18,
-        color: new THREE.Color('#00f0ff'),
-        map: texture,
+        color: new THREE.Color('#00f3ff'),
+        map: new THREE.CanvasTexture(pCanvas),
         transparent: true,
         opacity: 1.0,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
 
-      particleSystem = new THREE.Points(geometry, material);
-      particleSystem.position.set(0, 0, 0);
-      scene.add(particleSystem);
-
+      const particleSystem = new THREE.Points(geometry, material);
+      particleGroup.add(particleSystem);
       generateShape('heart');
 
-      // Setup Canvas per Anteprima Fotocamera
+      // --- GRUPPO 2: 3D BUILDER SYSTEM ---
+      builderGroup = new THREE.Group();
+      builderGroup.visible = false;
+      scene.add(builderGroup);
+
+      // Griglia Olografica Tattica
+      gridHelper = new THREE.GridHelper(60, 30, 0x00f3ff, 0x003344);
+      gridHelper.position.y = -10;
+      builderGroup.add(gridHelper);
+
+      // Cursore Olografico per la Mano 3D
+      const cursorGeo = new THREE.SphereGeometry(0.8, 16, 16);
+      const cursorMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true, transparent: true, opacity: 0.8 });
+      handCursorMesh = new THREE.Mesh(cursorGeo, cursorMat);
+      builderGroup.add(handCursorMesh);
+
+      // Spawna 3 blocchi iniziali
+      spawnBlock(-6, 0, 0);
+      spawnBlock(0, 0, 0);
+      spawnBlock(6, 0, 0);
+
+      // Setup Preview
       previewCanvas = document.getElementById('hand-preview-canvas');
       previewCtx = previewCanvas.getContext('2d');
 
       window.addEventListener('resize', onWindowResize);
+    }
+
+    // --- LOGICA MODALITÀ BUILDER (3D BLOCKS) ---
+    function spawnBlock(customX, customY, customZ) {
+      const boxGeo = new THREE.BoxGeometry(3.5, 3.5, 3.5);
+      
+      // Materiale Olografico Stark con bordi luminosi
+      const boxMat = new THREE.MeshBasicMaterial({
+        color: 0x00f3ff,
+        transparent: true,
+        opacity: 0.35,
+        wireframe: false
+      });
+
+      const mesh = new THREE.Mesh(boxGeo, boxMat);
+      mesh.position.x = customX !== undefined ? customX : (Math.random() - 0.5) * 15;
+      mesh.position.y = customY !== undefined ? customY : (Math.random() - 0.5) * 10;
+      mesh.position.z = customZ !== undefined ? customZ : (Math.random() - 0.5) * 10;
+
+      // Aggiungi Bordi Neon
+      const edges = new THREE.EdgesGeometry(boxGeo);
+      const lineMat = new THREE.LineBasicMaterial({ color: 0x00f3ff, linewidth: 2 });
+      const wireframe = new THREE.LineSegments(edges, lineMat);
+      mesh.add(wireframe);
+
+      builderGroup.add(mesh);
+      blocks.push(mesh);
+    }
+
+    function clearBlocks() {
+      for (let b of blocks) {
+        builderGroup.remove(b);
+      }
+      blocks = [];
+      grabbedBlock = null;
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.getElementById('tab-particles').classList.toggle('active', mode === 'PARTICLES');
+      document.getElementById('tab-builder').classList.toggle('active', mode === 'BUILDER');
+      
+      document.getElementById('controls-particles').style.display = mode === 'PARTICLES' ? 'block' : 'none';
+      document.getElementById('controls-builder').style.display = mode === 'BUILDER' ? 'block' : 'none';
+      document.getElementById('panel-title-text').innerText = mode === 'PARTICLES' ? 'PARTICLE CONFIG' : 'BUILDER CONFIG';
+
+      particleGroup.visible = (mode === 'PARTICLES');
+      builderGroup.visible = (mode === 'BUILDER');
     }
 
     function generateShape(type) {
@@ -280,68 +488,47 @@
           z = u;
           x *= 0.65; y *= 0.65; z *= 0.65;
         } else if (type === 'flower') {
-          const u = Math.random() * Math.PI * 2;
-          const v = Math.random() * Math.PI;
+          const u = Math.random() * Math.PI * 2, v = Math.random() * Math.PI;
           const r = 10 * Math.sin(6 * u) * Math.sin(v);
-          x = r * Math.sin(v) * Math.cos(u);
-          y = r * Math.sin(v) * Math.sin(u);
-          z = r * Math.cos(v);
+          x = r * Math.sin(v) * Math.cos(u); y = r * Math.sin(v) * Math.sin(u); z = r * Math.cos(v);
         } else if (type === 'saturn') {
           if (i < PARTICLE_COUNT * 0.35) {
             const u = Math.random(), v = Math.random();
             const theta = u * 2.0 * Math.PI, phi = Math.acos(2.0 * v - 1.0);
             const r = 5.5 * Math.cbrt(Math.random());
-            x = r * Math.sin(phi) * Math.cos(theta);
-            y = r * Math.sin(phi) * Math.sin(theta);
-            z = r * Math.cos(phi);
+            x = r * Math.sin(phi) * Math.cos(theta); y = r * Math.sin(phi) * Math.sin(theta); z = r * Math.cos(phi);
           } else {
             const angle = Math.random() * Math.PI * 2;
             const dist = 8 + Math.random() * 9;
-            x = Math.cos(angle) * dist;
-            z = Math.sin(angle) * dist;
-            y = (Math.random() - 0.5) * 0.4;
+            x = Math.cos(angle) * dist; z = Math.sin(angle) * dist; y = (Math.random() - 0.5) * 0.4;
           }
         } else if (type === 'buddha') {
           const rand = Math.random();
           if (rand < 0.35) {
-            const a = Math.random() * Math.PI * 2;
-            const r = 2 + Math.random() * 9;
-            x = Math.cos(a) * r;
-            z = Math.sin(a) * r;
-            y = -8 + (Math.random() - 0.5) * 1.5;
+            const a = Math.random() * Math.PI * 2, r = 2 + Math.random() * 9;
+            x = Math.cos(a) * r; z = Math.sin(a) * r; y = -8 + (Math.random() - 0.5) * 1.5;
           } else if (rand < 0.75) {
-            const h = Math.random() * 10;
-            const width = (1 - h / 10) * 7.5;
-            const a = Math.random() * Math.PI * 2;
-            x = Math.cos(a) * width * Math.random();
-            z = Math.sin(a) * width * Math.random();
-            y = -7 + h;
+            const h = Math.random() * 10, width = (1 - h / 10) * 7.5, a = Math.random() * Math.PI * 2;
+            x = Math.cos(a) * width * Math.random(); z = Math.sin(a) * width * Math.random(); y = -7 + h;
           } else {
-            const a = Math.random() * Math.PI * 2;
-            const r = Math.random() * 2.8;
-            x = Math.cos(a) * r;
-            y = 5.5 + Math.sin(a) * r;
-            z = (Math.random() - 0.5) * 2;
+            const a = Math.random() * Math.PI * 2, r = Math.random() * 2.8;
+            x = Math.cos(a) * r; y = 5.5 + Math.sin(a) * r; z = (Math.random() - 0.5) * 2;
           }
         } else if (type === 'fireworks') {
-          const theta = Math.random() * Math.PI * 2;
-          const phi = Math.acos((Math.random() * 2) - 1);
+          const theta = Math.random() * Math.PI * 2, phi = Math.acos((Math.random() * 2) - 1);
           const speed = 2 + Math.random() * 14;
-          x = speed * Math.sin(phi) * Math.cos(theta);
-          y = speed * Math.sin(phi) * Math.sin(theta);
-          z = speed * Math.cos(phi);
+          x = speed * Math.sin(phi) * Math.cos(theta); y = speed * Math.sin(phi) * Math.sin(theta); z = speed * Math.cos(phi);
         }
 
-        p[idx] = x;
-        p[idx + 1] = y;
-        p[idx + 2] = z;
+        p[idx] = x; p[idx + 1] = y; p[idx + 2] = z;
       }
     }
 
     function initHandTracking() {
       const videoElement = document.getElementById('video-input');
-      const statusDot = document.getElementById('status-dot');
-      const statusText = document.getElementById('status-text');
+      const telemetryStatus = document.getElementById('telemetry-status');
+      const telemetryGesture = document.getElementById('telemetry-gesture');
+      const telemetryPos = document.getElementById('telemetry-pos');
 
       const hands = new Hands({
         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
@@ -355,76 +542,118 @@
       });
 
       hands.onResults((results) => {
-        // Disegna l'immagine video sul canvas dell'anteprima
+        // Render Fotocamera Tattica Preview
         previewCtx.save();
         previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
         previewCtx.drawImage(results.image, 0, 0, previewCanvas.width, previewCanvas.height);
 
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
           const numHands = results.multiHandLandmarks.length;
-          statusDot.classList.add('active');
-          statusText.innerText = `Controllo 3D (${numHands} Man${numHands > 1 ? 'i' : 'o'})`;
+          telemetryStatus.innerText = `LOCKED [${numHands} HANDS]`;
+          telemetryStatus.style.color = '#00f3ff';
 
-          // Disegna lo scheletro e i punti chiave delle mani nel pannello d'anteprima
+          // Disegna Connessioni Tattiche
           for (const landmarks of results.multiHandLandmarks) {
-            drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, { color: '#00f0ff', lineWidth: 2 });
-            drawLandmarks(previewCtx, landmarks, { color: '#ff4757', lineWidth: 1, radius: 3 });
+            drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, { color: '#00f3ff', lineWidth: 1.5 });
+            drawLandmarks(previewCtx, landmarks, { color: '#ff3366', lineWidth: 1, radius: 2 });
           }
 
-          const h1 = results.multiHandLandmarks[0][9];
+          const h1 = results.multiHandLandmarks[0];
+          const palmCenter = h1[9]; // Centro palmo
+          const thumbTip = h1[4];
+          const indexTip = h1[8];
 
-          if (numHands >= 2) {
-            const h2 = results.multiHandLandmarks[1][9];
+          // Calcola Coordinate 3D proiettate nello spazio del mondo Three.js
+          const normalizedX = (1 - palmCenter.x) * 2 - 1; // Mirroring
+          const normalizedY = -(palmCenter.y * 2 - 1);
+          
+          hand3DPos.set(
+            normalizedX * 22,
+            normalizedY * 16,
+            (0.5 - palmCenter.z) * 20
+          );
 
-            const dx = h2.x - h1.x;
-            const dy = h2.y - h1.y;
-            const dz = (h2.z || 0) - (h1.z || 0);
-            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+          telemetryPos.innerText = `X:${hand3DPos.x.toFixed(1)} Y:${hand3DPos.y.toFixed(1)} Z:${hand3DPos.z.toFixed(1)}`;
+          handCursorMesh.position.copy(hand3DPos);
 
-            // Rotazione 3D con due mani
-            targetRotZ = Math.atan2(dy, dx);
-            const avgX = (h1.x + h2.x) / 2 - 0.5;
-            targetRotY = avgX * Math.PI * 3.0;
-            const avgY = (h1.y + h2.y) / 2 - 0.5;
-            targetRotX = avgY * Math.PI * 2.5;
+          // Calcola GESTURE PINCH (Distanza Polpello Pollice - Indice)
+          const pinchDist = Math.hypot(thumbTip.x - indexTip.x, thumbTip.y - indexTip.y);
+          isPinching = pinchDist < 0.08;
 
-            // Zoom
-            targetCamZ = THREE.MathUtils.mapLinear(dist, 0.18, 0.75, 70, 12);
-            targetCamZ = THREE.MathUtils.clamp(targetCamZ, 12, 75);
+          if (isPinching) {
+            telemetryGesture.innerText = "PINCH / GRAB DETECTED";
+            telemetryGesture.style.color = "#ff3366";
+            handCursorMesh.material.color.setHex(0xff3366);
           } else {
-            // Rotazione 3D con una sola mano
-            const wrist = results.multiHandLandmarks[0][0];
-            const middle = results.multiHandLandmarks[0][9];
-
-            targetRotZ = -Math.atan2(middle.y - wrist.y, middle.x - wrist.x) - Math.PI / 2;
-            targetRotX = (middle.y - 0.5) * Math.PI * 2.0;
-            targetRotY = (middle.x - 0.5) * Math.PI * 3.0;
-
-            // Espansione pugno aperto/chiuso
-            const spanX = wrist.x - results.multiHandLandmarks[0][12].x;
-            const spanY = wrist.y - results.multiHandLandmarks[0][12].y;
-            const span = Math.sqrt(spanX * spanX + spanY * spanY);
-
-            targetScale = THREE.MathUtils.mapLinear(span, 0.2, 0.55, 0.4, 2.2);
-            targetScale = THREE.MathUtils.clamp(targetScale, 0.3, 2.5);
+            telemetryGesture.innerText = "OPEN HAND / TRACKING";
+            telemetryGesture.style.color = "#00f3ff";
+            handCursorMesh.material.color.setHex(0x00f3ff);
           }
+
+          // --- LOGICA INTERAZIONE 3D BUILDER (Giro/Spostamento blocchi) ---
+          if (currentMode === 'BUILDER') {
+            if (isPinching) {
+              if (!grabbedBlock) {
+                // Cerca il blocco più vicino entro un raggio di aggancio
+                let minDistance = 5.0;
+                for (let block of blocks) {
+                  const d = hand3DPos.distanceTo(block.position);
+                  if (d < minDistance) {
+                    minDistance = d;
+                    grabbedBlock = block;
+                  }
+                }
+              } else {
+                // Muovi il blocco trascinandolo nello spazio 3D
+                grabbedBlock.position.lerp(hand3DPos, 0.2);
+                grabbedBlock.material.color.setHex(0xff3366);
+              }
+            } else {
+              if (grabbedBlock) {
+                grabbedBlock.material.color.setHex(0x00f3ff);
+                grabbedBlock = null;
+              }
+            }
+          }
+
+          // --- LOGICA PARTICLE MATRIX ---
+          if (currentMode === 'PARTICLES') {
+            if (numHands >= 2) {
+              const h2 = results.multiHandLandmarks[1][9];
+              const dx = h2.x - palmCenter.x;
+              const dy = h2.y - palmCenter.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+
+              targetRotZ = Math.atan2(dy, dx);
+              targetRotY = ((palmCenter.x + h2.x) / 2 - 0.5) * Math.PI * 3.0;
+              targetRotX = ((palmCenter.y + h2.y) / 2 - 0.5) * Math.PI * 2.5;
+              targetCamZ = THREE.MathUtils.clamp(THREE.MathUtils.mapLinear(dist, 0.18, 0.75, 70, 12), 12, 75);
+            } else {
+              const wrist = h1[0];
+              targetRotZ = -Math.atan2(palmCenter.y - wrist.y, palmCenter.x - wrist.x) - Math.PI / 2;
+              targetRotX = (palmCenter.y - 0.5) * Math.PI * 2.0;
+              targetRotY = (palmCenter.x - 0.5) * Math.PI * 3.0;
+
+              const span = Math.hypot(wrist.x - h1[12].x, wrist.y - h1[12].y);
+              targetScale = THREE.MathUtils.clamp(THREE.MathUtils.mapLinear(span, 0.2, 0.55, 0.4, 2.2), 0.3, 2.5);
+            }
+          }
+
         } else {
-          statusDot.classList.remove('active');
-          statusText.innerText = "Nessuna mano rilevata";
-          targetScale = 1.0;
-          targetCamZ = 35;
-          targetRotX = 0;
-          targetRotY = 0;
-          targetRotZ = 0;
+          telemetryStatus.innerText = "SEARCHING...";
+          telemetryStatus.style.color = "#ff3366";
+          telemetryGesture.innerText = "NONE";
+          if (grabbedBlock) {
+            grabbedBlock.material.color.setHex(0x00f3ff);
+            grabbedBlock = null;
+          }
         }
 
         previewCtx.restore();
       });
 
       const cameraUtils = new Camera(videoElement, {
-        onFrame: async () => {
-          await hands.send({ image: videoElement });
-        },
+        onFrame: async () => { await hands.send({ image: videoElement }); },
         width: 640,
         height: 480
       });
@@ -434,22 +663,29 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Rotazione 3D fluida sui tre assi (X, Y, Z)
-      particleSystem.rotation.x += (targetRotX - particleSystem.rotation.x) * 0.08;
-      particleSystem.rotation.y += (targetRotY + 0.003 - particleSystem.rotation.y) * 0.08;
-      particleSystem.rotation.z += (targetRotZ - particleSystem.rotation.z) * 0.08;
+      if (currentMode === 'PARTICLES') {
+        particleGroup.rotation.x += (targetRotX - particleGroup.rotation.x) * 0.08;
+        particleGroup.rotation.y += (targetRotY + 0.003 - particleGroup.rotation.y) * 0.08;
+        particleGroup.rotation.z += (targetRotZ - particleGroup.rotation.z) * 0.08;
 
-      // Scaling e Zoom continui
-      handExpansionScale += (targetScale - handExpansionScale) * 0.1;
-      camera.position.z += (targetCamZ - camera.position.z) * 0.08;
+        handExpansionScale += (targetScale - handExpansionScale) * 0.1;
+        camera.position.z += (targetCamZ - camera.position.z) * 0.08;
 
-      const positions = geometry.attributes.position.array;
-      for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
-        const target = targetPositions[i] * handExpansionScale;
-        positions[i] += (target - positions[i]) * 0.08;
+        const positions = geometry.attributes.position.array;
+        for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
+          const target = targetPositions[i] * handExpansionScale;
+          positions[i] += (target - positions[i]) * 0.08;
+        }
+        geometry.attributes.position.needsUpdate = true;
+      } else if (currentMode === 'BUILDER') {
+        // Piccola rotazione olografica lenta per i blocchi non afferrati
+        for (let b of blocks) {
+          if (b !== grabbedBlock) {
+            b.rotation.x += 0.005;
+            b.rotation.y += 0.008;
+          }
+        }
       }
-
-      geometry.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     }
@@ -460,13 +696,8 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    document.getElementById('shape-select').addEventListener('change', (e) => {
-      generateShape(e.target.value);
-    });
-
-    document.getElementById('color-picker').addEventListener('input', (e) => {
-      material.color.set(e.target.value);
-    });
+    document.getElementById('shape-select').addEventListener('change', (e) => generateShape(e.target.value));
+    document.getElementById('color-picker').addEventListener('input', (e) => material.color.set(e.target.value));
 
     initThree();
     initHandTracking();

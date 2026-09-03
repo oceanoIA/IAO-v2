@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARK KINETIC LAB v8.6 // STACKING & EARTH GRAVITY</title>
+  <title>STARK KINETIC LAB v8.7 // MINI HANDS & STACKING</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,8 +113,8 @@
 
   <div class="stark-header">
     <div class="stark-title">
-      <span>STARK LAB v8.6</span>
-      <span class="security-badge">STACKING & EARTH GRAVITY</span>
+      <span>STARK LAB v8.7</span>
+      <span class="security-badge">MINI HANDS // STACKING</span>
     </div>
     <div class="mode-tabs">
       <button id="tab-builder" class="tab-btn active" onclick="switchMode('BUILDER')">SYS 01: 3D PHYSICS LAB</button>
@@ -396,6 +396,10 @@
 
       controllers.forEach((ctrl, idx) => {
         ctrl.skeleton = new Skeleton3D(idx === 0 ? 0x00f3ff : 0x73e600);
+        
+        // MANI PIÙ PICCOLE (Ridotte al 60% della dimensione originale)
+        ctrl.skeleton.group.scale.set(0.6, 0.6, 0.6);
+        
         builderGroup.add(ctrl.skeleton.group);
 
         ctrl.pointLight = new THREE.PointLight(0xffffff, 1.2, 15);

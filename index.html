@@ -97,15 +97,6 @@
         const targetPositions = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
 
-        // Palette basata sui toni della foto (verde acqua, blu brillante, bianco e viola/oro)
-        const colorPalette = [
-            new THREE.Color('#ffffff'), // Bianco predefinito / principale
-            new THREE.Color('#33ffcc'), // Verde acqua luminoso
-            new THREE.Color('#3399ff'), // Blu elettrico
-            new THREE.Color('#aa44ff'), // Viola sfumato
-            new THREE.Color('#ffee88')  // Dorato leggero
-        ];
-
         function generateStarCoordinates(i3) {
             const u = Math.random() * Math.PI * 2;
             const t = Math.random();
@@ -143,11 +134,9 @@
             }
         }
 
-        // Impostato su 'saturn' come predefinito all'avvio
         let currentShapeType = 'saturn';
 
         for (let i = 0; i < particleCount * 3; i += 3) {
-            // Genera direttamente le coordinate iniziali di Saturno
             const coords = generateSaturnCoordinates(i);
             positions[i] = coords.x;
             positions[i + 1] = coords.y;
@@ -157,13 +146,17 @@
             targetPositions[i + 1] = coords.y;
             targetPositions[i + 2] = coords.z;
 
-            // Dà molta più enfasi al bianco come colore iniziale/predefinito
+            // Colori precisi della foto: forte presenza di bianco, sfumature verde acqua, blu e dettagli viola
             let randomColor;
-            const randRoll = Math.random();
-            if (randRoll < 0.4) {
-                randomColor = new THREE.Color('#ffffff'); // Molto bianco
+            const rand = Math.random();
+            if (rand < 0.6) {
+                randomColor = new THREE.Color('#ffffff'); // Bianco principale
+            } else if (rand < 0.8) {
+                randomColor = new THREE.Color('#2be3bc'); // Verde acqua brillante
+            } else if (rand < 0.93) {
+                randomColor = new THREE.Color('#3388ff'); // Blu elettrico
             } else {
-                randomColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                randomColor = new THREE.Color('#9944ff'); // Viola sfumato
             }
 
             colors[i] = randomColor.r;

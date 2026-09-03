@@ -297,6 +297,7 @@
     ];
 
     let palmHUDGroup;
+    let hudRingMat;
 
     let particleGroup, particleGeometry, particleMaterial;
     let targetPositions = new Float32Array(PARTICLE_COUNT * 3);
@@ -368,7 +369,7 @@
 
       palmHUDGroup = new THREE.Group();
       const hudRingGeo = new THREE.RingGeometry(1.2, 1.35, 32);
-      const hudRingMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
+      hudRingMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
       const hudRing = new THREE.Mesh(hudRingGeo, hudRingMat);
       palmHUDGroup.add(hudRing);
       palmHUDGroup.visible = false;
@@ -612,6 +613,12 @@
               palmHUDGroup.position.lerp(pPos, 0.2);
               palmHUDGroup.lookAt(camera.position);
               palmHUDGroup.visible = true;
+
+              // Transizione fluida HUD: riduce la scala e l'opacità durante il pinch, ripristinandole in modo naturale
+              const targetScaleHUD = ctrl.isPinching ? 0.6 : 1.0;
+              const targetOpacityHUD = ctrl.isPinching ? 0.2 : 0.6;
+              palmHUDGroup.scale.lerp(new THREE.Vector3(targetScaleHUD, targetScaleHUD, targetScaleHUD), 0.15);
+              hudRingMat.opacity += (targetOpacityHUD - hudRingMat.opacity) * 0.15;
             }
 
             if (currentMode === 'BUILDER') {

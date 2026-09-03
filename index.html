@@ -2061,7 +2061,32 @@ MAPTILER_KEY;
   
 const ELEVEN_VOICE_ID =  
 "vkBFlAtUdZqNR4MqxSVr";  
-  
+  /* =====================================================
+   CONTROL HAND — VARIABILI
+===================================================== */
+
+let controlHandActive = false;
+let controlHandStream = null;
+let controlHandVideo = null;
+let controlHandLandmarker = null;
+let controlHandFrame = null;
+
+let controlHandX = 0.5;
+let controlHandTargetX = 0.5;
+
+let controlHandPinch = 0;
+let controlHandTargetPinch = 0;
+
+let controlHandSize = 0.25;
+let controlHandTargetSize = 0.25;
+
+let controlHandOpen = 0;
+let controlHandTargetOpen = 0;
+
+let controlHandLastVideoTime = -1;
+
+const CONTROL_HAND_MIN_NEURONS = 900;
+const CONTROL_HAND_MAX_SHIFT = 0.95;
   
 /* =====================================================  
    ELEMENTI  

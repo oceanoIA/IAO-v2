@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEBULA - Interactive Star Particle System</title>
+    <title>NEBULA - Interactive Particle System</title>
     <style>
         body, html {
             margin: 0;
@@ -24,18 +24,43 @@
         #webcam-video {
             display: none;
         }
-        #ui {
+        /* UI in basso per selezionare le forme come nella foto */
+        #ui-bar {
             position: absolute;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            color: white;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px 20px;
+            display: flex;
+            gap: 15px;
+            background: rgba(20, 20, 20, 0.75);
+            padding: 8px 16px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+        .ui-btn {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 14px;
-            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .ui-btn.active, .ui-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        #status-text {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
             letter-spacing: 1px;
+            pointer-events: none;
         }
     </style>
     <!-- Three.js -->
@@ -46,12 +71,17 @@
 </head>
 <body>
 
+    <div id="status-text">NEBULA // INTERACTIVE SYSTEM</div>
     <div id="canvas-container"></div>
     <video id="webcam-video" playsinline></video>
-    <div id="ui">NEBULA STAR ACTIVE - Muovi la mano per interagire</div>
+
+    <!-- Barra UI inferiore per cambiare forma al volo -->
+    <div id="ui-bar">
+        <button class="ui-btn active" onclick="setShape('star')">⭐ Star</button>
+        <button class="ui-btn" onclick="setShape('saturn')">🪐 Saturn</button>
+    </div>
 
     <script>
-        // Setup della scena Three.js
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -62,40 +92,73 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
-        // Creazione del Sistema di Particelle a forma di Stella
         const particleCount = 20000;
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(particleCount * 3);
+        const targetPositions = new Float32Array(particleCount * 3); // Per transizioni fluide
         const colors = new Float32Array(particleCount * 3);
 
         const colorPalette = [
-            new THREE.Color('#ff3399'), // Rosa fucsia
-            new THREE.Color('#33ccff'), // Azzurro neon
-            new THREE.Color('#9933ff'), // Viola
-            new THREE.Color('#ffffff'), // Bianco luminoso
-            new THREE.Color('#33ff99')  // Verde chiaro sfumato
+            new THREE.Color('#ff3399'),
+            new THREE.Color('#33ccff'),
+            new THREE.Color('#9933ff'),
+            new THREE.Color('#ffffff'),
+            new THREE.Color('#33ff99')
         ];
 
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            // Algoritmo per distribuire le particelle lungo una forma a stella a 5 punte
+        // Funzioni di generazione coordinate per le forme
+        function generateStarCoordinates(i3) {
             const u = Math.random() * Math.PI * 2;
             const t = Math.random();
-            
-            // Raggio variabile basato su un'onda a 5 punte (stella)
             const arms = 5;
             const rBase = 1.0 + 0.8 * Math.abs(Math.cos(arms * u / 2));
             const r = rBase * (0.2 + 0.8 * Math.random());
 
-            const x = r * Math.cos(u) * (1.2 - t * 0.4);
-            const y = r * Math.sin(u) * (1.2 - t * 0.4);
-            // Spessore tridimensionale della stella
-            const z = (Math.random() - 0.5) * 0.6 * (2.0 - r);
+            return {
+                x: r * Math.cos(u) * (1.2 - t * 0.4),
+                y: r * Math.sin(u) * (1.2 - t * 0.4),
+                z: (Math.random() - 0.5) * 0.6 * (2.0 - r)
+            };
+        }
 
-            positions[i] = x;
-            positions[i + 1] = y;
-            positions[i + 2] = z;
+        function generateSaturnCoordinates(i3) {
+            // 70% Pianeta centrale, 30% Anelli
+            if (i3 < particleCount * 0.7 * 3) {
+                const u = Math.random();
+                const v = Math.random();
+                const theta = u * 2.0 * Math.PI;
+                const phi = Math.acos(2.0 * v - 1.0);
+                const r = 1.2 * Math.cbrt(Math.random()); // Densità sferica
+                return {
+                    x: r * Math.sin(phi) * Math.cos(theta),
+                    y: r * Math.sin(phi) * Math.sin(theta),
+                    z: r * Math.cos(phi)
+                };
+            } else {
+                // Anelli di Saturno
+                const u = Math.random() * Math.PI * 2;
+                const r = 1.8 + Math.random() * 1.2;
+                return {
+                    x: r * Math.cos(u),
+                    y: (Math.random() - 0.5) * 0.15,
+                    z: r * Math.sin(u)
+                };
+            }
+        }
 
-            // Assegnazione colori casuali dalla palette
+        let currentShapeType = 'star';
+
+        // Inizializzazione posizioni
+        for (let i = 0; i < particleCount * 3; i += 3) {
+            const coords = generateStarCoordinates(i);
+            positions[i] = coords.x;
+            positions[i + 1] = coords.y;
+            positions[i + 2] = coords.z;
+
+            targetPositions[i] = coords.x;
+            targetPositions[i + 1] = coords.y;
+            targetPositions[i + 2] = coords.z;
+
             const randomColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
             colors[i] = randomColor.r;
             colors[i + 1] = randomColor.g;
@@ -105,7 +168,6 @@
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-        // Materiale delle particelle luminoso ed effetto dissolvenza additiva
         const material = new THREE.PointsMaterial({
             size: 0.035,
             vertexColors: true,
@@ -118,17 +180,30 @@
         const particleSystem = new THREE.Points(geometry, material);
         scene.add(particleSystem);
 
-        // Variabili per l'interazione con la mano
-        let handPosition = { x: 0, y: 0, active: false };
+        // Funzione globale chiamata dai bottoni UI inferiori
+        window.setShape = function(shape) {
+            currentShapeType = shape;
+            
+            // Aggiorna classe attiva ai bottoni
+            document.querySelectorAll('.ui-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
 
-        // Gestione MediaPipe Hands
+            // Calcola i nuovi target
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                let coords = (shape === 'star') ? generateStarCoordinates(i) : generateSaturnCoordinates(i);
+                targetPositions[i] = coords.x;
+                targetPositions[i + 1] = coords.y;
+                targetPositions[i + 2] = coords.z;
+            }
+        };
+
+        // Interazione Webcam / Mano
+        let handPosition = { x: 0, y: 0, active: false };
         const videoElement = document.getElementById('webcam-video');
 
         function onResults(results) {
             if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-                const landmarks = results.multiHandLandmarks[0];
-                const indexFinger = landmarks[8]; // Dito indice
-                
+                const indexFinger = results.multiHandLandmarks[0][8];
                 handPosition.x = (indexFinger.x - 0.5) * -4;
                 handPosition.y = (indexFinger.y - 0.5) * -4;
                 handPosition.active = true;
@@ -137,29 +212,17 @@
             }
         }
 
-        const hands = new Hands({
-            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
-        });
-
-        hands.setOptions({
-            maxNumHands: 1,
-            modelComplexity: 1,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5
-        });
-
+        const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
+        hands.setOptions({ maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
         hands.onResults(onResults);
 
         const cameraUtils = new Camera(videoElement, {
-            onFrame: async () => {
-                await hands.send({ image: videoElement });
-            },
-            width: 640,
-            height: 480
+            onFrame: async () => { await hands.send({ image: videoElement }); },
+            width: 640, height: 480
         });
         cameraUtils.start();
 
-        // Loop di Animazione
+        // Loop di Animazione con transizione fluida verso la forma scelta
         let clock = new THREE.Clock();
 
         function animate() {
@@ -168,24 +231,28 @@
             const elapsedTime = clock.getElapsedTime();
             const positionAttribute = geometry.attributes.position;
 
-            // Leggera rotazione continua della stella nello spazio
             particleSystem.rotation.z = elapsedTime * 0.05;
 
-            // Interazione con la posizione della mano rilevata dalla webcam
             for (let i = 0; i < particleCount; i++) {
+                let i3 = i * 3;
                 let px = positionAttribute.getX(i);
                 let py = positionAttribute.getY(i);
                 let pz = positionAttribute.getZ(i);
 
+                // Interpolazione fluida verso il target della forma selezionata
+                px += (targetPositions[i3] - px) * 0.08;
+                py += (targetPositions[i3 + 1] - py) * 0.08;
+                pz += (targetPositions[i3 + 2] - pz) * 0.08;
+
+                // Interazione con la mano
                 if (handPosition.active) {
                     const dx = handPosition.x - px;
                     const dy = handPosition.y - py;
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    // Attrazione magnetica verso il dito
                     if (dist < 2.5) {
-                        px += dx * 0.03;
-                        py += dy * 0.03;
+                        px += dx * 0.04;
+                        py += dy * 0.04;
                     }
                 }
 
@@ -198,7 +265,6 @@
 
         animate();
 
-        // Gestione ridimensionamento finestra
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();

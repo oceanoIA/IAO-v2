@@ -27,6 +27,8 @@
     #video-input {
       display: none;
     }
+
+    /* Overlay Pannello di Controllo (In alto a sinistra) */
     .ui-overlay {
       position: absolute;
       top: 24px;
@@ -107,16 +109,58 @@
       background: #2ed573;
       box-shadow: 0 0 8px #2ed573;
     }
+
+    /* Pannello Anteprima Tracciamento Fotocamera (In basso a destra) */
+    .camera-preview-container {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      z-index: 10;
+      width: 180px;
+      height: 135px;
+      background: rgba(10, 10, 18, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+    }
+    #hand-preview-canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1); /* Effetto specchio naturale */
+    }
+    .preview-label {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.75);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 3px 6px;
+      border-radius: 4px;
+      pointer-events: none;
+      text-transform: uppercase;
+    }
   </style>
 
+  <!-- Librerie Three.js e MediaPipe -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <video id="video-input"></video>
   <div id="canvas-container"></div>
 
+  <!-- UI Pannello Principale -->
   <div class="ui-overlay">
     <div class="ui-title">Control Panel</div>
     
@@ -142,6 +186,12 @@
     </div>
   </div>
 
+  <!-- Mini Pannello Anteprima Fotocamera -->
+  <div class="camera-preview-container">
+    <span class="preview-label">Hand Tracking</span>
+    <canvas id="hand-preview-canvas" width="320" height="240"></canvas>
+  </div>
+
   <script>
     const PARTICLE_COUNT = 24000;
     let scene, camera, renderer, particleSystem, geometry, material;
@@ -155,6 +205,8 @@
     let targetRotX = 0;
     let targetRotY = 0;
     let targetRotZ = 0;
+
+    let previewCanvas, previewCtx;
 
     function initThree() {
       const container = document.getElementById('canvas-container');
@@ -177,13 +229,12 @@
 
       geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-      // Texture ad altissima nitidezza senza gradienti sfocati
+      // Texture ultra-nitida e definita
       const canvas = document.createElement('canvas');
       canvas.width = 128;
       canvas.height = 128;
       const ctx = canvas.getContext('2d');
       
-      // Cerchio solido a bordi netti e definiti
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
       ctx.arc(64, 64, 60, 0, Math.PI * 2);
@@ -203,11 +254,14 @@
       });
 
       particleSystem = new THREE.Points(geometry, material);
-      // Mantieni l'oggetto fisso al centro dello schermo
       particleSystem.position.set(0, 0, 0);
       scene.add(particleSystem);
 
       generateShape('heart');
+
+      // Setup Canvas per Anteprima Fotocamera
+      previewCanvas = document.getElementById('hand-preview-canvas');
+      previewCtx = previewCanvas.getContext('2d');
 
       window.addEventListener('resize', onWindowResize);
     }
@@ -301,38 +355,44 @@
       });
 
       hands.onResults((results) => {
+        // Disegna l'immagine video sul canvas dell'anteprima
+        previewCtx.save();
+        previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+        previewCtx.drawImage(results.image, 0, 0, previewCanvas.width, previewCanvas.height);
+
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
           const numHands = results.multiHandLandmarks.length;
           statusDot.classList.add('active');
           statusText.innerText = `Controllo 3D (${numHands} Man${numHands > 1 ? 'i' : 'o'})`;
 
-          const h1 = results.multiHandLandmarks[0][9]; // Centro palmo 1
+          // Disegna lo scheletro e i punti chiave delle mani nel pannello d'anteprima
+          for (const landmarks of results.multiHandLandmarks) {
+            drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, { color: '#00f0ff', lineWidth: 2 });
+            drawLandmarks(previewCtx, landmarks, { color: '#ff4757', lineWidth: 1, radius: 3 });
+          }
+
+          const h1 = results.multiHandLandmarks[0][9];
 
           if (numHands >= 2) {
-            const h2 = results.multiHandLandmarks[1][9]; // Centro palmo 2
+            const h2 = results.multiHandLandmarks[1][9];
 
             const dx = h2.x - h1.x;
             const dy = h2.y - h1.y;
             const dz = (h2.z || 0) - (h1.z || 0);
             const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-            // ROTAZIONE 3D CON DUE MANI (Come orientare un volante/sfera 3D nello spazio)
-            // 1. Roll (Rotazione asse Z): Inclinazione relativa tra le due mani
+            // Rotazione 3D con due mani
             targetRotZ = Math.atan2(dy, dx);
-
-            // 2. Yaw (Rotazione asse Y): Spostamento orizzontale relativo tra le mani
             const avgX = (h1.x + h2.x) / 2 - 0.5;
             targetRotY = avgX * Math.PI * 3.0;
-
-            // 3. Pitch (Rotazione asse X): Altezza media delle mani
             const avgY = (h1.y + h2.y) / 2 - 0.5;
             targetRotX = avgY * Math.PI * 2.5;
 
-            // ZOOM A DUE MANI: Distanza tra le due mani nello spazio
+            // Zoom
             targetCamZ = THREE.MathUtils.mapLinear(dist, 0.18, 0.75, 70, 12);
             targetCamZ = THREE.MathUtils.clamp(targetCamZ, 12, 75);
           } else {
-            // ROTAZIONE 3D CON UNA MANO: Orientamento spaziale del singolo palmo
+            // Rotazione 3D con una sola mano
             const wrist = results.multiHandLandmarks[0][0];
             const middle = results.multiHandLandmarks[0][9];
 
@@ -340,7 +400,7 @@
             targetRotX = (middle.y - 0.5) * Math.PI * 2.0;
             targetRotY = (middle.x - 0.5) * Math.PI * 3.0;
 
-            // ESPANSIONE SINGOLA MANO (Pugno aperto/chiuso)
+            // Espansione pugno aperto/chiuso
             const spanX = wrist.x - results.multiHandLandmarks[0][12].x;
             const spanY = wrist.y - results.multiHandLandmarks[0][12].y;
             const span = Math.sqrt(spanX * spanX + spanY * spanY);
@@ -357,6 +417,8 @@
           targetRotY = 0;
           targetRotZ = 0;
         }
+
+        previewCtx.restore();
       });
 
       const cameraUtils = new Camera(videoElement, {

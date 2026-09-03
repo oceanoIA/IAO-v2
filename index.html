@@ -2170,6 +2170,145 @@ async function initializeControlHand(){
     return false;
   }
 }
+   /* =====================================================
+   CONTROL HAND — CAMERA
+===================================================== */
+
+async function startControlHandCamera(){
+
+  if(controlHandStream){
+    return true;
+  }
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+    updateControlHandStatus(
+      "CONTROL HAND: CAMERA NON DISPONIBILE"
+    );
+
+    return false;
+  }
+
+  try{
+
+    controlHandVideo =
+      document.getElementById(
+        "controlHandVideo"
+      );
+
+    if(!controlHandVideo){
+      throw new Error(
+        "CONTROL HAND VIDEO ELEMENT NOT FOUND"
+      );
+    }
+
+    controlHandStream =
+      await navigator.mediaDevices.getUserMedia({
+        video:{
+          facingMode:"user",
+
+          width:{
+            ideal:640
+          },
+
+          height:{
+            ideal:480
+          },
+
+          frameRate:{
+            ideal:30,
+            max:30
+          }
+        },
+
+        audio:false
+      });
+
+    controlHandVideo.srcObject =
+      controlHandStream;
+
+    await controlHandVideo.play();
+
+    updateControlHandStatus(
+      "CONTROL HAND: CAMERA ON"
+    );
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "CONTROL HAND CAMERA:",
+      error
+    );
+
+    if(controlHandStream){
+
+      controlHandStream
+        .getTracks()
+        .forEach(track => track.stop());
+
+      controlHandStream = null;
+    }
+
+    if(controlHandVideo){
+      controlHandVideo.srcObject = null;
+    }
+
+    updateControlHandStatus(
+      "CONTROL HAND: CAMERA ERROR"
+    );
+
+    return false;
+  }
+}
+
+
+function stopControlHandCamera(){
+
+  if(controlHandFrame){
+
+    cancelAnimationFrame(
+      controlHandFrame
+    );
+
+    controlHandFrame = null;
+  }
+
+  if(controlHandStream){
+
+    controlHandStream
+      .getTracks()
+      .forEach(track => track.stop());
+
+    controlHandStream = null;
+  }
+
+  if(controlHandVideo){
+
+    controlHandVideo.pause();
+
+    controlHandVideo.srcObject = null;
+  }
+
+  controlHandLastVideoTime = -1;
+
+  controlHandTargetX = 0.5;
+  controlHandTargetPinch = 0;
+  controlHandTargetSize = 0;
+  controlHandTargetOpen = 0;
+
+  controlHandX = 0.5;
+  controlHandPinch = 0;
+  controlHandSize = 0;
+  controlHandOpen = 0;
+
+  updateControlHandStatus(
+    "CONTROL HAND: OFF"
+  );
+}
 /* =====================================================  
    ELEMENTI  
 ===================================================== */  

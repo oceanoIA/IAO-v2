@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARK KINETIC LAB v9.1 // GRAVITY & FLOOR</title>
+  <title>STARK KINETIC LAB v9.2 // DUAL HANDS & MULTICOLOR</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -103,7 +103,7 @@
   <div class="stark-header">
     <div class="stark-title">
       <span>STARK LAB</span>
-      <span class="security-badge">SINGLE HAND // GRAVITY</span>
+      <span class="security-badge">DUAL HANDS // MULTICOLOR</span>
     </div>
     <div class="mode-tabs">
       <button id="tab-builder" class="tab-btn" onclick="switchMode('BUILDER')">SYS 01: 3D BUILDER</button>
@@ -158,12 +158,22 @@
     <div class="telemetry-box">
       <div class="hand-card">
         <div class="telemetry-row">
-          <span>MANO PRINCIPALE:</span>
+          <span>MANO 1:</span>
           <span id="h1-status" class="telemetry-val">CERCA...</span>
         </div>
         <div class="telemetry-row">
-          <span>STATO:</span>
+          <span>STATO 1:</span>
           <span id="h1-grab" class="telemetry-val">LIBERA</span>
+        </div>
+      </div>
+      <div class="hand-card" style="margin-top: 4px;">
+        <div class="telemetry-row">
+          <span>MANO 2:</span>
+          <span id="h2-status" class="telemetry-val">CERCA...</span>
+        </div>
+        <div class="telemetry-row">
+          <span>STATO 2:</span>
+          <span id="h2-grab" class="telemetry-val">LIBERA</span>
         </div>
       </div>
     </div>
@@ -241,12 +251,19 @@
     let builderGroup;
     let blocks = [];
 
-    // Controller per una sola mano, con pallino di precisione ultra-piccolo e bianco
-    const controller = {
-      mesh: null, pointLight: null,
-      grabbedBlock: null, grabOffset: new THREE.Vector3(), pos: new THREE.Vector3(), lastPos: new THREE.Vector3(),
-      velocity: new THREE.Vector3(), isPinching: false, statusEl: null, grabEl: null, active: false
-    };
+    // Controller per DUE mani con pallini bianchi e luminosi
+    const controllers = [
+      {
+        mesh: null, pointLight: null,
+        grabbedBlock: null, grabOffset: new THREE.Vector3(), pos: new THREE.Vector3(), lastPos: new THREE.Vector3(),
+        velocity: new THREE.Vector3(), isPinching: false, statusEl: null, grabEl: null, active: false
+      },
+      {
+        mesh: null, pointLight: null,
+        grabbedBlock: null, grabOffset: new THREE.Vector3(), pos: new THREE.Vector3(), lastPos: new THREE.Vector3(),
+        velocity: new THREE.Vector3(), isPinching: false, statusEl: null, grabEl: null, active: false
+      }
+    ];
 
     let particleGroup, particleGeometry, particleMaterial;
     let targetPositions = new Float32Array(PARTICLE_COUNT * 3);
@@ -280,7 +297,7 @@
       dirLight.position.set(10, 25, 15);
       scene.add(dirLight);
 
-      // Piano d'appoggio visibile 3D strutturato con griglia futurista
+      // Piano d'appoggio visibile con griglia futurista
       const planeGeo = new THREE.PlaneGeometry(60, 60);
       const planeMat = new THREE.MeshStandardMaterial({ color: 0x0a0f18, roughness: 0.8, metalness: 0.2 });
       const floor = new THREE.Mesh(planeGeo, planeMat);
@@ -292,20 +309,22 @@
       gridHelper.position.y = -5.98;
       builderGroup.add(gridHelper);
 
-      // Pallino tracciamento mano ultra-piccolo (0.15) e bianco luminoso
-      const dotGeo = new THREE.SphereGeometry(0.15, 16, 16);
-      const dotMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      controller.mesh = new THREE.Mesh(dotGeo, dotMat);
-      controller.mesh.visible = false;
-      builderGroup.add(controller.mesh);
+      // Inizializzazione dei due pallini per le mani (ultra-piccoli e bianchi)
+      controllers.forEach((ctrl, idx) => {
+        const dotGeo = new THREE.SphereGeometry(0.15, 16, 16);
+        const dotMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        ctrl.mesh = new THREE.Mesh(dotGeo, dotMat);
+        ctrl.mesh.visible = false;
+        builderGroup.add(ctrl.mesh);
 
-      controller.pointLight = new THREE.PointLight(0xffffff, 1.0, 10);
-      builderGroup.add(controller.pointLight);
+        ctrl.pointLight = new THREE.PointLight(0xffffff, 0.8, 10);
+        builderGroup.add(ctrl.pointLight);
 
-      controller.statusEl = document.getElementById('h1-status');
-      controller.grabEl = document.getElementById('h1-grab');
+        ctrl.statusEl = document.getElementById(`h${idx + 1}-status`);
+        ctrl.grabEl = document.getElementById(`h${idx + 1}-grab`);
+      });
 
-      spawnShape('cube', 0, 2, 0, 0x00f3ff);
+      spawnShape('cube', 0, 2, 0);
 
       particleGroup = new THREE.Group();
       particleGroup.visible = true;
@@ -353,7 +372,7 @@
       window.addEventListener('resize', onWindowResize);
     }
 
-    function spawnShape(type, x, y, z, colorHex) {
+    function spawnShape(type, x, y, z) {
       sounds.init();
       let geo;
       const size = 3.0;
@@ -365,8 +384,10 @@
       else if (type === 'icosahedron') geo = new THREE.IcosahedronGeometry(size / 1.6);
       else geo = new THREE.BoxGeometry(size, size, size);
 
+      // Colore diverso e casuale per ogni oggetto 3D creato
+      const randomColorHex = Math.floor(Math.random() * 16777215);
       const mat = new THREE.MeshStandardMaterial({
-        color: colorHex || 0x00f3ff, roughness: 0.3, metalness: 0.2
+        color: randomColorHex, roughness: 0.3, metalness: 0.2
       });
 
       const mesh = new THREE.Mesh(geo, mat);
@@ -375,7 +396,7 @@
       mesh.position.z = z !== undefined ? z : (Math.random() - 0.5) * 4;
 
       mesh.userData = {
-        originalColor: mat.color.getHex(),
+        originalColor: randomColorHex,
         velocity: new THREE.Vector3(0, 0, 0),
         isGrabbed: false,
         size: size
@@ -388,7 +409,7 @@
     function clearBlocks() {
       for (let b of blocks) builderGroup.remove(b);
       blocks = [];
-      controller.grabbedBlock = null;
+      controllers.forEach(c => { c.grabbedBlock = null; });
     }
 
     function setBlockHighlight(block, mode) {
@@ -498,9 +519,9 @@
       const videoElement = document.getElementById('video-input');
       const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
 
-      // Configurato per tracciare rigorosamente 1 sola mano principale
+      // Configurato per tracciare fino a 2 mani contemporaneamente
       hands.setOptions({
-        maxNumHands: 1, modelComplexity: 1,
+        maxNumHands: 2, modelComplexity: 1,
         minDetectionConfidence: 0.65, minTrackingConfidence: 0.65
       });
 
@@ -510,91 +531,100 @@
         previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
         previewCtx.drawImage(results.image, 0, 0, previewCanvas.width, previewCanvas.height);
 
-        const detected = results.multiHandLandmarks && results.multiHandLandmarks.length > 0;
+        const numHands = results.multiHandLandmarks ? results.multiHandLandmarks.length : 0;
 
-        if (detected) {
-          controller.active = true;
-          const landmarks = results.multiHandLandmarks[0];
+        for (let i = 0; i < 2; i++) {
+          const ctrl = controllers[i];
+          if (i < numHands) {
+            ctrl.active = true;
+            const landmarks = results.multiHandLandmarks[i];
 
-          drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, { color: '#ffffff', lineWidth: 1 });
-          drawLandmarks(previewCtx, landmarks, { color: '#00f3ff', lineWidth: 1, radius: 1.5 });
+            drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, { color: '#ffffff', lineWidth: 1 });
+            drawLandmarks(previewCtx, landmarks, { color: '#00f3ff', lineWidth: 1, radius: 1.5 });
 
-          const thumbTip = landmarks[4], indexTip = landmarks[8];
-          const pX = (thumbTip.x + indexTip.x) / 2, pY = (thumbTip.y + indexTip.y) / 2, pZ = (thumbTip.z + indexTip.z) / 2;
-          const pinchDist = Math.hypot(thumbTip.x - indexTip.x, thumbTip.y - indexTip.y);
+            const thumbTip = landmarks[4], indexTip = landmarks[8];
+            const pX = (thumbTip.x + indexTip.x) / 2, pY = (thumbTip.y + indexTip.y) / 2, pZ = (thumbTip.z + indexTip.z) / 2;
+            const pinchDist = Math.hypot(thumbTip.x - indexTip.x, thumbTip.y - indexTip.y);
 
-          const ndcX = (1 - pX) * 2 - 1, ndcY = -(pY * 2 - 1);
-          const vector = new THREE.Vector3(ndcX, ndcY, 0.5);
-          vector.unproject(camera);
-          const dir = vector.sub(camera.position).normalize();
-          const targetZ = -pZ * 20;
-          const distanceToPlane = (targetZ - camera.position.z) / dir.z;
-          const targetPos = camera.position.clone().add(dir.multiplyScalar(distanceToPlane));
+            const ndcX = (1 - pX) * 2 - 1, ndcY = -(pY * 2 - 1);
+            const vector = new THREE.Vector3(ndcX, ndcY, 0.5);
+            vector.unproject(camera);
+            const dir = vector.sub(camera.position).normalize();
+            const targetZ = -pZ * 20;
+            const distanceToPlane = (targetZ - camera.position.z) / dir.z;
+            const targetPos = camera.position.clone().add(dir.multiplyScalar(distanceToPlane));
 
-          controller.lastPos.copy(controller.pos);
-          controller.pos.copy(targetPos);
+            ctrl.lastPos.copy(ctrl.pos);
+            ctrl.pos.copy(targetPos);
+            ctrl.velocity.copy(ctrl.pos).sub(ctrl.lastPos);
 
-          controller.velocity.copy(controller.pos).sub(controller.lastPos);
-          sounds.updateHum(controller.velocity.length());
+            ctrl.mesh.visible = true;
+            ctrl.mesh.position.copy(ctrl.pos);
+            ctrl.pointLight.position.copy(ctrl.pos);
 
-          controller.mesh.visible = true;
-          controller.mesh.position.copy(controller.pos);
-          controller.pointLight.position.copy(controller.pos);
+            const wasPinching = ctrl.isPinching;
+            ctrl.isPinching = (pinchDist < 0.07);
+            if (!wasPinching && ctrl.isPinching) sounds.playPinch();
 
-          const wasPinching = controller.isPinching;
-          controller.isPinching = (pinchDist < 0.07);
-          if (!wasPinching && controller.isPinching) sounds.playPinch();
+            ctrl.statusEl.innerText = "ATTIVA"; ctrl.statusEl.style.color = "#ffffff";
 
-          controller.statusEl.innerText = "ATTIVA"; controller.statusEl.style.color = "#ffffff";
-
-          if (currentMode === 'BUILDER') {
-            if (controller.isPinching) {
-              if (controller.grabbedBlock) {
-                const blockTarget = controller.pos.clone().sub(controller.grabOffset);
-                controller.grabbedBlock.position.copy(blockTarget);
-                controller.grabbedBlock.userData.velocity.set(0, 0, 0);
-                controller.grabEl.innerText = "AGGANCIATO"; controller.grabEl.style.color = "#ffffff";
+            if (currentMode === 'BUILDER') {
+              if (ctrl.isPinching) {
+                if (ctrl.grabbedBlock) {
+                  const blockTarget = ctrl.pos.clone().sub(ctrl.grabOffset);
+                  ctrl.grabbedBlock.position.copy(blockTarget);
+                  ctrl.grabbedBlock.userData.velocity.set(0, 0, 0);
+                  ctrl.grabEl.innerText = "AGGANCIATO"; ctrl.grabEl.style.color = "#ffffff";
+                } else {
+                  let closest = null, minDist = 4.0;
+                  for (let block of blocks) {
+                    const d = ctrl.pos.distanceTo(block.position);
+                    if (d < minDist) { minDist = d; closest = block; }
+                  }
+                  if (closest) {
+                    ctrl.grabbedBlock = closest;
+                    closest.userData.isGrabbed = true;
+                    ctrl.grabOffset.copy(ctrl.pos).sub(closest.position);
+                    setBlockHighlight(closest, 'grab');
+                  }
+                }
               } else {
-                let closest = null, minDist = 4.0;
-                for (let block of blocks) {
-                  const d = controller.pos.distanceTo(block.position);
-                  if (d < minDist) { minDist = d; closest = block; }
+                if (ctrl.grabbedBlock) {
+                  setBlockHighlight(ctrl.grabbedBlock, 'normal');
+                  ctrl.grabbedBlock.userData.isGrabbed = false;
+                  ctrl.grabbedBlock = null;
                 }
-                if (closest) {
-                  controller.grabbedBlock = closest;
-                  closest.userData.isGrabbed = true;
-                  controller.grabOffset.copy(controller.pos).sub(closest.position);
-                  setBlockHighlight(closest, 'grab');
-                }
+                ctrl.grabEl.innerText = "LIBERA"; ctrl.grabEl.style.color = "#00f3ff";
               }
-            } else {
-              if (controller.grabbedBlock) {
-                setBlockHighlight(controller.grabbedBlock, 'normal');
-                controller.grabbedBlock.userData.isGrabbed = false;
-                controller.grabbedBlock = null;
-              }
-              controller.grabEl.innerText = "LIBERA"; controller.grabEl.style.color = "#00f3ff";
             }
+          } else {
+            ctrl.active = false;
+            ctrl.mesh.visible = false;
+            if (ctrl.grabbedBlock) {
+              setBlockHighlight(ctrl.grabbedBlock, 'normal');
+              ctrl.grabbedBlock.userData.isGrabbed = false;
+              ctrl.grabbedBlock = null;
+            }
+            ctrl.statusEl.innerText = "CERCA..."; ctrl.statusEl.style.color = "#ff3366"; ctrl.grabEl.innerText = "N/A";
           }
+        }
 
-          if (currentMode === 'PARTICLES') {
-            const h1Center = landmarks[9], wrist = landmarks[0];
-            targetRotZ = -Math.atan2(h1Center.y - wrist.y, h1Center.x - wrist.x) - Math.PI / 2;
-            targetRotX = (h1Center.y - 0.5) * Math.PI * 2.0;
-            targetRotY = (h1Center.x - 0.5) * Math.PI * 3.0;
-            const span = Math.hypot(wrist.x - landmarks[12].x, wrist.y - landmarks[12].y);
+        // Controllo particelle con entrambe le mani (se attive)
+        if (currentMode === 'PARTICLES' && numHands > 0) {
+          const landmarks1 = results.multiHandLandmarks[0];
+          const h1Center = landmarks1[9], wrist1 = landmarks1[0];
+          targetRotZ = -Math.atan2(h1Center.y - wrist1.y, h1Center.x - wrist1.x) - Math.PI / 2;
+          targetRotX = (h1Center.y - 0.5) * Math.PI * 2.0;
+          targetRotY = (h1Center.x - 0.5) * Math.PI * 3.0;
+
+          if (numHands === 2) {
+            const landmarks2 = results.multiHandLandmarks[1];
+            const distBetweenHands = Math.hypot(landmarks1[9].x - landmarks2[9].x, landmarks1[9].y - landmarks2[9].y);
+            targetScale = THREE.MathUtils.clamp(THREE.MathUtils.mapLinear(distBetweenHands, 0.1, 0.7, 0.5, 2.5), 0.4, 3.0);
+          } else {
+            const span = Math.hypot(wrist1.x - landmarks1[12].x, wrist1.y - landmarks1[12].y);
             targetScale = THREE.MathUtils.clamp(THREE.MathUtils.mapLinear(span, 0.2, 0.5, 0.5, 2.0), 0.4, 2.2);
           }
-
-        } else {
-          controller.active = false;
-          controller.mesh.visible = false;
-          if (controller.grabbedBlock) {
-            setBlockHighlight(controller.grabbedBlock, 'normal');
-            controller.grabbedBlock.userData.isGrabbed = false;
-            controller.grabbedBlock = null;
-          }
-          controller.statusEl.innerText = "CERCA..."; controller.statusEl.style.color = "#ff3366"; controller.grabEl.innerText = "N/A";
         }
 
         previewCtx.restore();
@@ -615,18 +645,15 @@
 
         blocks.forEach(block => {
           if (!block.userData.isGrabbed) {
-            // Applica gravità costante senza rimbalzo
             block.userData.velocity.y += gravity;
             block.position.add(block.userData.velocity);
 
-            // Blocco sul piano inferiore (-6 + metà altezza)
             const floorY = -6 + (block.userData.size / 2);
             if (block.position.y < floorY) {
               block.position.y = floorY;
-              block.userData.velocity.set(0, 0, 0); // Arresto secco senza rimbalzo
+              block.userData.velocity.set(0, 0, 0);
             }
 
-            // Impilamento stabile sugli altri oggetti
             blocks.forEach(other => {
               if (block !== other && !other.userData.isGrabbed) {
                 const dx = block.position.x - other.position.x;
@@ -638,7 +665,7 @@
                   const topOfOther = other.position.y + (other.userData.size / 2) + (block.userData.size / 2);
                   if (block.position.y <= topOfOther && block.position.y > other.position.y) {
                     block.position.y = topOfOther;
-                    block.userData.velocity.set(0, 0, 0); // Arresto secco sull'oggetto sottostante
+                    block.userData.velocity.set(0, 0, 0);
                   }
                 }
               }
@@ -655,7 +682,7 @@
         handExpansionScale += (targetScale - handExpansionScale) * 0.15;
         camera.position.z += (targetCamZ - camera.position.z) * 0.15;
 
-        const isPinching = controller.active && controller.isPinching;
+        const isPinchingAny = (controllers[0].active && controllers[0].isPinching) || (controllers[1].active && controllers[1].isPinching);
         const positions = particleGeometry.attributes.position.array;
 
         for (let i = 0; i < PARTICLE_COUNT * 3; i += 3) {
@@ -664,7 +691,7 @@
           let tz = targetPositions[i+2] * handExpansionScale;
           let lerpSpeed = 0.15;
 
-          if (isPinching && (i / 3) % 2 === 0) {
+          if (isPinchingAny && (i / 3) % 2 === 0) {
             tx *= 0.01; ty *= 0.01; tz *= 0.01;
             lerpSpeed = 0.5;
           }

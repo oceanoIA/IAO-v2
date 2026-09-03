@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Real-Time 3D Hand-Controlled Particle System</title>
+  <title>Real-Time 3D Magic Hand Particle System</title>
   <style>
     * {
       box-sizing: border-box;
@@ -12,7 +12,7 @@
     }
     body {
       overflow: hidden;
-      background-color: #05050a;
+      background-color: #020205;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: #ffffff;
     }
@@ -34,12 +34,12 @@
       z-index: 10;
       width: 260px;
       padding: 20px;
-      background: rgba(18, 18, 28, 0.45);
+      background: rgba(10, 10, 18, 0.65);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -49,7 +49,7 @@
       font-weight: 600;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.85);
     }
     .control-group {
       display: flex;
@@ -58,15 +58,15 @@
     }
     label {
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.6);
       text-transform: uppercase;
       letter-spacing: 0.8px;
     }
     select, input[type="color"] {
       width: 100%;
       height: 40px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       color: #fff;
       padding: 0 12px;
@@ -76,11 +76,11 @@
       transition: all 0.2s ease;
     }
     select:hover, input[type="color"]:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
     }
     select option {
-      background: #12121c;
+      background: #0d0d15;
       color: #fff;
     }
     input[type="color"] {
@@ -92,7 +92,7 @@
       align-items: center;
       gap: 8px;
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.8);
       margin-top: 4px;
     }
     .status-dot {
@@ -143,7 +143,7 @@
   </div>
 
   <script>
-    const PARTICLE_COUNT = 20000;
+    const PARTICLE_COUNT = 22000;
     let scene, camera, renderer, particleSystem, geometry, material;
     let targetPositions = new Float32Array(PARTICLE_COUNT * 3);
     let currentPositions = new Float32Array(PARTICLE_COUNT * 3);
@@ -152,7 +152,11 @@
     let targetScale = 1.0;
     
     let targetCamZ = 35;
-    let targetRotationZ = 0;
+    let targetObjX = 0;
+    let targetObjY = 0;
+    let targetRotX = 0;
+    let targetRotY = 0;
+    let targetRotZ = 0;
 
     function initThree() {
       const container = document.getElementById('canvas-container');
@@ -163,7 +167,7 @@
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(window.devicePixelRatio);
       container.appendChild(renderer.domElement);
 
       geometry = new THREE.BufferGeometry();
@@ -175,32 +179,27 @@
 
       geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-      // Generazione di una texture definita e nitida (64x64)
+      // Creazione di una texture ultrasfocata assente: cerchio solido e super nitido
       const canvas = document.createElement('canvas');
-      canvas.width = 64;
-      canvas.height = 64;
+      canvas.width = 128;
+      canvas.height = 128;
       const ctx = canvas.getContext('2d');
-      const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
       
-      // Bordo nettamente definito per eliminare l'effetto sfocato
-      gradient.addColorStop(0, 'rgba(255,255,255,1)');
-      gradient.addColorStop(0.75, 'rgba(255,255,255,1)');
-      gradient.addColorStop(0.9, 'rgba(255,255,255,0.4)');
-      gradient.addColorStop(1, 'rgba(255,255,255,0)');
-      
-      ctx.fillStyle = gradient;
+      ctx.fillStyle = '#ffffff';
       ctx.beginPath();
-      ctx.arc(32, 32, 32, 0, Math.PI * 2);
+      ctx.arc(64, 64, 58, 0, Math.PI * 2);
       ctx.fill();
 
       const texture = new THREE.CanvasTexture(canvas);
+      texture.generateMipmaps = true;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
 
       material = new THREE.PointsMaterial({
-        size: 0.3,
+        size: 0.22,
         color: new THREE.Color('#00f0ff'),
         map: texture,
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.95,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
@@ -305,16 +304,24 @@
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
           const numHands = results.multiHandLandmarks.length;
           statusDot.classList.add('active');
-          statusText.innerText = `Tracking (${numHands} Hand${numHands > 1 ? 's' : ''})`;
+          statusText.innerText = `Magic Control (${numHands} Hand${numHands > 1 ? 's' : ''})`;
 
           const hand1 = results.multiHandLandmarks[0];
 
+          // Posizionamento "Magico": Segue la mano nello spazio (Specchiato per naturalezza)
+          const palmCenter = hand1[9]; // Base dito medio
+          targetObjX = (0.5 - palmCenter.x) * 35;
+          targetObjY = (0.5 - palmCenter.y) * 22;
+
+          // Orientamento e Rotazione della mano
           const wrist = hand1[0];
-          const middleBase = hand1[9];
-          const angleRad = Math.atan2(middleBase.y - wrist.y, middleBase.x - wrist.x);
-          targetRotationZ = -(angleRad + Math.PI / 2) * 1.5;
+          const angleRad = Math.atan2(palmCenter.y - wrist.y, palmCenter.x - wrist.x);
+          targetRotZ = -(angleRad + Math.PI / 2) * 2.0;
+          targetRotY = (palmCenter.x - 0.5) * 3.0;
+          targetRotX = (palmCenter.y - 0.5) * 3.0;
 
           if (numHands >= 2) {
+            // Controllo Zoom a 2 mani
             const hand2 = results.multiHandLandmarks[1];
             const wrist2 = hand2[0];
             
@@ -322,9 +329,10 @@
             const dy = wrist.y - wrist2.y;
             const handDistance = Math.sqrt(dx * dx + dy * dy);
 
-            targetCamZ = THREE.MathUtils.mapLinear(handDistance, 0.2, 0.75, 75, 12);
-            targetCamZ = THREE.MathUtils.clamp(targetCamZ, 10, 85);
+            targetCamZ = THREE.MathUtils.mapLinear(handDistance, 0.18, 0.75, 70, 12);
+            targetCamZ = THREE.MathUtils.clamp(targetCamZ, 10, 80);
           } else {
+            // Espansione con pugno aperto/chiuso
             const dx = hand1[0].x - hand1[12].x;
             const dy = hand1[0].y - hand1[12].y;
             const span = Math.sqrt(dx * dx + dy * dy);
@@ -337,7 +345,11 @@
           statusText.innerText = "No Hands Detected";
           targetScale = 1.0;
           targetCamZ = 35;
-          targetRotationZ = 0;
+          targetObjX = 0;
+          targetObjY = 0;
+          targetRotX = 0;
+          targetRotY = 0;
+          targetRotZ = 0;
         }
       });
 
@@ -354,6 +366,16 @@
     function animate() {
       requestAnimationFrame(animate);
 
+      // Inseguimento fluido stile "telecinesi / magia"
+      particleSystem.position.x += (targetObjX - particleSystem.position.x) * 0.12;
+      particleSystem.position.y += (targetObjY - particleSystem.position.y) * 0.12;
+
+      // Inclinazione e rotazione controllata direttamente dalle mani
+      particleSystem.rotation.x += (targetRotX - particleSystem.rotation.x) * 0.1;
+      particleSystem.rotation.y += (targetRotY - particleSystem.rotation.y + 0.005 - particleSystem.rotation.y) * 0.1;
+      particleSystem.rotation.z += (targetRotZ - particleSystem.rotation.z) * 0.1;
+
+      // Scaling ed interpolazione posizione particelle
       handExpansionScale += (targetScale - handExpansionScale) * 0.1;
       camera.position.z += (targetCamZ - camera.position.z) * 0.08;
 
@@ -364,9 +386,6 @@
       }
 
       geometry.attributes.position.needsUpdate = true;
-
-      particleSystem.rotation.y += 0.004;
-      particleSystem.rotation.z += (targetRotationZ - particleSystem.rotation.z) * 0.08;
 
       renderer.render(scene, camera);
     }

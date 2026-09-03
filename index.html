@@ -146,17 +146,17 @@
             targetPositions[i + 1] = coords.y;
             targetPositions[i + 2] = coords.z;
 
-            // Colori precisi della foto: forte presenza di bianco, sfumature verde acqua, blu e dettagli viola
+            // Colori tarati esattamente sui toni della nuova foto (verde brillante, sfumature calde/dorate, blu/viola e bianco dominante)
             let randomColor;
             const rand = Math.random();
-            if (rand < 0.6) {
-                randomColor = new THREE.Color('#ffffff'); // Bianco principale
-            } else if (rand < 0.8) {
-                randomColor = new THREE.Color('#2be3bc'); // Verde acqua brillante
-            } else if (rand < 0.93) {
-                randomColor = new THREE.Color('#3388ff'); // Blu elettrico
+            if (rand < 0.55) {
+                randomColor = new THREE.Color('#ffffff'); // Bianco predefinito principale
+            } else if (rand < 0.78) {
+                randomColor = new THREE.Color('#2bf2b0'); // Verde brillante della sfera
+            } else if (rand < 0.88) {
+                randomColor = new THREE.Color('#ffdf73'); // Giallo/dorato caldo dei riflessi
             } else {
-                randomColor = new THREE.Color('#9944ff'); // Viola sfumato
+                randomColor = new THREE.Color('#7a53ff'); // Viola/blu profondo degli anelli esterni
             }
 
             colors[i] = randomColor.r;

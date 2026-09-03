@@ -117,8 +117,8 @@
       <span class="security-badge">GLOW DOTS // STACKING</span>
     </div>
     <div class="mode-tabs">
-      <button id="tab-builder" class="tab-btn active" onclick="switchMode('BUILDER')">SYS 01: 3D PHYSICS LAB</button>
-      <button id="tab-particles" class="tab-btn" onclick="switchMode('PARTICLES')">SYS 02: PLASMA MATRIX</button>
+      <button id="tab-builder" class="tab-btn" onclick="switchMode('BUILDER')">SYS 01: 3D PHYSICS LAB</button>
+      <button id="tab-particles" class="tab-btn active" onclick="switchMode('PARTICLES')">SYS 02: PLASMA MATRIX</button>
     </div>
   </div>
 
@@ -129,11 +129,11 @@
     <div class="hud-corner bottom-right"></div>
 
     <div class="panel-header">
-      <span id="panel-title-text">3D REALISTIC BUILDER</span>
+      <span id="panel-title-text">PARTICLE MATRIX</span>
       <span style="color: #00f3ff; font-weight: bold;">[ACTIVE]</span>
     </div>
     
-    <div id="controls-builder">
+    <div id="controls-builder" style="display: none;">
       <div class="control-group">
         <label>SPAWN OGGETTI 3D FISICI</label>
         <div class="btn-grid">
@@ -146,7 +146,7 @@
       </div>
     </div>
 
-    <div id="controls-particles" style="display: none;">
+    <div id="controls-particles" style="display: block;">
       <div class="control-group">
         <label>HOLOGRAM TEMPLATE</label>
         <select id="shape-select">
@@ -161,7 +161,7 @@
       </div>
       <div class="control-group" style="margin-top: 8px;">
         <label>PLASMA COLOR</label>
-        <input type="color" id="color-picker" value="#00f3ff">
+        <input type="color" id="color-picker" value="#ffffff">
       </div>
     </div>
 
@@ -264,7 +264,7 @@
       document.getElementById('audio-toggle-btn').innerText = sounds.enabled ? "🔊 AUDIO SCI-FI: ATTIVO" : "🔇 AUDIO SCI-FI: DISATTIVATO";
     }
 
-    let currentMode = 'BUILDER';
+    let currentMode = 'PARTICLES'; // Avvio predefinito nella sezione particelle / sfera 3D
     const PARTICLE_COUNT = 12000;
     let scene, camera, renderer;
 
@@ -295,7 +295,7 @@
     function initThree() {
       const container = document.getElementById('canvas-container');
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x9ca3af);
+      scene.background = new THREE.Color(0x05080c); // Sfondo scuro iniziale per le particelle
 
       camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
       camera.position.set(0, 4, 28);
@@ -309,6 +309,7 @@
       container.appendChild(renderer.domElement);
 
       builderGroup = new THREE.Group();
+      builderGroup.visible = false; // Nascosto all'avvio
       scene.add(builderGroup);
 
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
@@ -347,7 +348,7 @@
       spawnShape('cube', 4, 2, 0, 0xfacc15);
 
       particleGroup = new THREE.Group();
-      particleGroup.visible = false;
+      particleGroup.visible = true; // Visibile all'avvio
       scene.add(particleGroup);
 
       particleGeometry = new THREE.BufferGeometry();
@@ -357,13 +358,35 @@
       }
       particleGeometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
+      // Colori dei pallini tarati sui toni della foto (bianco predominante, verde brillante, oro/giallo e viola/blu)
+      const particleColors = new Float32Array(PARTICLE_COUNT * 3);
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const idx = i * 3;
+        let randomColor;
+        const rand = Math.random();
+        if (rand < 0.55) {
+          randomColor = new THREE.Color('#ffffff'); // Bianco predefinito principale
+        } else if (rand < 0.78) {
+          randomColor = new THREE.Color('#2bf2b0'); // Verde brillante della sfera
+        } else if (rand < 0.88) {
+          randomColor = new THREE.Color('#ffdf73'); // Giallo/dorato caldo dei riflessi
+        } else {
+          randomColor = new THREE.Color('#7a53ff'); // Viola/blu profondo degli anelli esterni
+        }
+        particleColors[idx] = randomColor.r;
+        particleColors[idx + 1] = randomColor.g;
+        particleColors[idx + 2] = randomColor.b;
+      }
+      particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
       const pCanvas = document.createElement('canvas');
       pCanvas.width = 64; pCanvas.height = 64;
       const pCtx = pCanvas.getContext('2d');
       pCtx.fillStyle = '#ffffff'; pCtx.beginPath(); pCtx.arc(32, 32, 28, 0, Math.PI * 2); pCtx.fill();
 
       particleMaterial = new THREE.PointsMaterial({
-        size: 0.22, color: new THREE.Color('#00f3ff'),
+        size: 0.22,
+        vertexColors: true,
         map: new THREE.CanvasTexture(pCanvas), transparent: true,
         opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false
       });
@@ -677,12 +700,10 @@
                 const dz = block.position.z - other.position.z;
                 const distXZ = Math.sqrt(dx * dx + dz * dz);
                 
-                // Se i cubi sono sovrapposti orizzontalmente
                 if (distXZ < cubeSize * 0.85) {
                   const topOfOther = other.position.y + cubeSize;
-                  // Se il cubo sta scendendo ed è vicino alla faccia superiore dell'altro
                   if (block.position.y - cubeSize / 2 <= topOfOther && block.position.y > other.position.y) {
-                    block.position.y = topOfOther + cubeSize / 2; // Perfettamente attaccato, zero spazi
+                    block.position.y = topOfOther + cubeSize / 2;
                     block.userData.velocity.y = 0;
                     block.userData.velocity.x *= 0.2;
                     block.userData.velocity.z *= 0.2;
@@ -750,7 +771,9 @@
     }
 
     document.getElementById('shape-select').addEventListener('change', (e) => generateShape(e.target.value));
-    document.getElementById('color-picker').addEventListener('input', (e) => particleMaterial.color.set(e.target.value));
+    document.getElementById('color-picker').addEventListener('input', (e) => {
+      particleMaterial.color.set(e.target.value);
+    });
 
     initThree();
     initHandTracking();

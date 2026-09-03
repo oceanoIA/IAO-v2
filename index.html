@@ -1822,7 +1822,28 @@ background:rgba(255,255,255,.28);
 border-radius:5px;  
 }  
   
-</style>  </head>  <body>  <!-- =====================================================  
+</style>  </head>  <body> <!-- =====================================================
+     CONTROL HAND
+===================================================== -->
+
+<button
+  id="controlHandBtn"
+  type="button"
+  aria-pressed="false"
+>
+  ✋ CONTROL HAND
+</button>
+
+<div id="controlHandStatus">
+  CONTROL HAND: OFF
+</div>
+
+<video
+  id="controlHandVideo"
+  autoplay
+  playsinline
+  muted
+></video> <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
      TITOLO  

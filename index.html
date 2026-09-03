@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -147,15 +147,20 @@
     let scene, camera, renderer, particleSystem, geometry, material;
     let targetPositions = new Float32Array(PARTICLE_COUNT * 3);
     let currentPositions = new Float32Array(PARTICLE_COUNT * 3);
+    
     let handExpansionScale = 1.0;
     let targetScale = 1.0;
+    
+    let targetCamZ = 35;
+    let targetRotationZ = 0;
+    let targetRotationX = 0;
 
     function initThree() {
       const container = document.getElementById('canvas-container');
       scene = new THREE.Scene();
 
       camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = 35;
+      camera.position.z = targetCamZ;
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -171,7 +176,6 @@
 
       geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-      // Circular particle texture
       const canvas = document.createElement('canvas');
       canvas.width = 32;
       canvas.height = 32;
@@ -226,7 +230,6 @@
           z = r * Math.cos(v);
         } else if (type === 'saturn') {
           if (i < PARTICLE_COUNT * 0.35) {
-            // Planet sphere
             const u = Math.random(), v = Math.random();
             const theta = u * 2.0 * Math.PI, phi = Math.acos(2.0 * v - 1.0);
             const r = 5.5 * Math.cbrt(Math.random());
@@ -234,7 +237,6 @@
             y = r * Math.sin(phi) * Math.sin(theta);
             z = r * Math.cos(phi);
           } else {
-            // Rings
             const angle = Math.random() * Math.PI * 2;
             const dist = 8 + Math.random() * 9;
             x = Math.cos(angle) * dist;
@@ -244,14 +246,12 @@
         } else if (type === 'buddha') {
           const rand = Math.random();
           if (rand < 0.35) {
-            // Base Lotus
             const a = Math.random() * Math.PI * 2;
             const r = 2 + Math.random() * 9;
             x = Math.cos(a) * r;
             z = Math.sin(a) * r;
             y = -8 + (Math.random() - 0.5) * 1.5;
           } else if (rand < 0.75) {
-            // Meditating body triangle
             const h = Math.random() * 10;
             const width = (1 - h / 10) * 7.5;
             const a = Math.random() * Math.PI * 2;
@@ -259,7 +259,6 @@
             z = Math.sin(a) * width * Math.random();
             y = -7 + h;
           } else {
-            // Head & Aura
             const a = Math.random() * Math.PI * 2;
             const r = Math.random() * 2.8;
             x = Math.cos(a) * r;
@@ -299,27 +298,46 @@
 
       hands.onResults((results) => {
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+          const numHands = results.multiHandLandmarks.length;
           statusDot.classList.add('active');
-          statusText.innerText = `Tracking (${results.multiHandLandmarks.length} Hand${results.multiHandLandmarks.length > 1 ? 's' : ''})`;
+          statusText.innerText = `Tracking (${numHands} Hand${numHands > 1 ? 's' : ''})`;
 
-          let totalSpan = 0;
-          results.multiHandLandmarks.forEach((landmarks) => {
-            // Calculate Euclidean distance between Wrist (0) and Middle Finger Tip (12)
-            const dx = landmarks[0].x - landmarks[12].x;
-            const dy = landmarks[0].y - landmarks[12].y;
-            const dz = landmarks[0].z - landmarks[12].z;
-            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-            totalSpan += dist;
-          });
+          const hand1 = results.multiHandLandmarks[0];
 
-          const avgSpan = totalSpan / results.multiHandLandmarks.length;
-          // Map hand open/closed states to shape scaling dynamic range
-          targetScale = THREE.MathUtils.mapLinear(avgSpan, 0.2, 0.6, 0.3, 2.8);
-          targetScale = THREE.MathUtils.clamp(targetScale, 0.2, 3.5);
+          // Rotazione basata sull'inclinazione della prima mano (Polso a Base Medio)
+          const wrist = hand1[0];
+          const middleBase = hand1[9];
+          const angleRad = Math.atan2(middleBase.y - wrist.y, middleBase.x - wrist.x);
+          targetRotationZ = -(angleRad + Math.PI / 2) * 1.5;
+
+          if (numHands >= 2) {
+            // ZOOM A DUE MANI: Distanza tra il polso della mano 1 e della mano 2
+            const hand2 = results.multiHandLandmarks[1];
+            const wrist2 = hand2[0];
+            
+            const dx = wrist.x - wrist2.x;
+            const dy = wrist.y - wrist2.y;
+            const handDistance = Math.sqrt(dx * dx + dy * dy);
+
+            // Mani lontane tra loro -> Zoom in (Camera vicina)
+            // Mani vicine tra loro -> Zoom out (Camera lontana)
+            targetCamZ = THREE.MathUtils.mapLinear(handDistance, 0.2, 0.75, 75, 12);
+            targetCamZ = THREE.MathUtils.clamp(targetCamZ, 10, 85);
+          } else {
+            // ESPANSIONE SINGOLA MANO: Apri/chiudi il pugno della singola mano
+            const dx = hand1[0].x - hand1[12].x;
+            const dy = hand1[0].y - hand1[12].y;
+            const span = Math.sqrt(dx * dx + dy * dy);
+            
+            targetScale = THREE.MathUtils.mapLinear(span, 0.2, 0.55, 0.4, 2.2);
+            targetScale = THREE.MathUtils.clamp(targetScale, 0.3, 2.5);
+          }
         } else {
           statusDot.classList.remove('active');
           statusText.innerText = "No Hands Detected";
           targetScale = 1.0;
+          targetCamZ = 35;
+          targetRotationZ = 0;
         }
       });
 
@@ -336,8 +354,9 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Smooth interpolation for hand interaction scaling
+      // Lerp per movimenti fluidi
       handExpansionScale += (targetScale - handExpansionScale) * 0.1;
+      camera.position.z += (targetCamZ - camera.position.z) * 0.08;
 
       const positions = geometry.attributes.position.array;
       for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
@@ -347,9 +366,9 @@
 
       geometry.attributes.position.needsUpdate = true;
 
-      // Gentle continuous rotation
+      // Rotazione continua di fondo + controllo rotazione mano
       particleSystem.rotation.y += 0.004;
-      particleSystem.rotation.x += 0.001;
+      particleSystem.rotation.z += (targetRotationZ - particleSystem.rotation.z) * 0.08;
 
       renderer.render(scene, camera);
     }
@@ -360,7 +379,6 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    // UI Listeners
     document.getElementById('shape-select').addEventListener('change', (e) => {
       generateShape(e.target.value);
     });
@@ -369,7 +387,6 @@
       material.color.set(e.target.value);
     });
 
-    // Start App
     initThree();
     initHandTracking();
     animate();

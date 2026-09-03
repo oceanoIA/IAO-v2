@@ -3,198 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARK KINETIC LAB v8.0 // MASTER SUPREME EDITION</title>
+  <title>STARK KINETIC LAB v8.1 // CORE MAGNETIC EDITION</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-    }
-    body {
-      overflow: hidden;
-      background-color: #05080c;
-      font-family: 'Share Tech Mono', monospace;
-      color: #00f3ff;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body { overflow: hidden; background-color: #05080c; font-family: 'Share Tech Mono', monospace; color: #00f3ff; }
     body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100vw; height: 100vh;
+      content: ""; position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
       background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.02) 50%);
-      background-size: 100% 4px;
-      z-index: 2;
-      pointer-events: none;
+      background-size: 100% 4px; z-index: 2; pointer-events: none;
     }
-
-    #canvas-container {
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      top: 0; left: 0;
-      z-index: 1;
-    }
+    #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
     #video-input { display: none; }
 
-    /* Header & Mode Tabs */
     .stark-header {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 52px;
+      position: absolute; top: 0; left: 0; width: 100%; height: 52px;
       background: linear-gradient(180deg, rgba(0, 243, 255, 0.18) 0%, rgba(1, 4, 8, 0) 100%);
-      border-bottom: 1px solid rgba(0, 243, 255, 0.35);
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
+      border-bottom: 1px solid rgba(0, 243, 255, 0.35); z-index: 10;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
     }
     .stark-title {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 900;
-      font-size: 14px;
-      letter-spacing: 2px;
-      color: #00f3ff;
-      text-shadow: 0 0 12px rgba(0, 243, 255, 0.8);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 14px;
+      letter-spacing: 2px; color: #00f3ff; text-shadow: 0 0 12px rgba(0, 243, 255, 0.8);
+      display: flex; align-items: center; gap: 12px;
     }
     .security-badge {
-      font-size: 10px;
-      background: rgba(0, 243, 255, 0.15);
-      border: 1px solid #00f3ff;
-      color: #ffffff;
-      padding: 2px 8px;
-      border-radius: 3px;
-      letter-spacing: 1px;
+      font-size: 10px; background: rgba(0, 243, 255, 0.15); border: 1px solid #00f3ff;
+      color: #ffffff; padding: 2px 8px; border-radius: 3px; letter-spacing: 1px;
     }
-
     .mode-tabs { display: flex; gap: 10px; }
     .tab-btn {
-      background: rgba(0, 243, 255, 0.05);
-      border: 1px solid rgba(0, 243, 255, 0.3);
-      color: rgba(0, 243, 255, 0.6);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 11px;
-      padding: 6px 16px;
-      cursor: pointer;
+      background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3);
+      color: rgba(0, 243, 255, 0.6); font-family: 'Orbitron', sans-serif; font-size: 11px;
+      padding: 6px 16px; cursor: pointer;
       clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
       transition: all 0.15s ease;
     }
     .tab-btn:hover, .tab-btn.active {
-      background: rgba(0, 243, 255, 0.25);
-      border-color: #00f3ff;
-      color: #ffffff;
+      background: rgba(0, 243, 255, 0.25); border-color: #00f3ff; color: #ffffff;
       box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
     }
 
-    /* Left Control HUD */
     .ui-overlay {
-      position: absolute;
-      top: 70px; left: 24px;
-      z-index: 10;
-      width: 310px;
-      padding: 20px;
-      background: rgba(8, 12, 20, 0.9);
-      backdrop-filter: blur(15px);
+      position: absolute; top: 70px; left: 24px; z-index: 10; width: 310px; padding: 20px;
+      background: rgba(8, 12, 20, 0.9); backdrop-filter: blur(15px);
       border: 1px solid rgba(0, 243, 255, 0.35);
       clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      box-shadow: 0 0 30px rgba(0, 243, 255, 0.15); display: flex; flex-direction: column; gap: 14px;
     }
     .panel-header {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      color: rgba(0, 243, 255, 0.9);
-      border-bottom: 1px dashed rgba(0, 243, 255, 0.3);
-      padding-bottom: 6px;
-      display: flex;
-      justify-content: space-between;
+      font-family: 'Orbitron', sans-serif; font-size: 12px; letter-spacing: 1.5px;
+      color: rgba(0, 243, 255, 0.9); border-bottom: 1px dashed rgba(0, 243, 255, 0.3);
+      padding-bottom: 6px; display: flex; justify-content: space-between;
     }
     .control-group { display: flex; flex-direction: column; gap: 8px; }
     label { font-size: 10px; color: rgba(0, 243, 255, 0.7); letter-spacing: 1px; }
 
     select, input[type="color"], .stark-btn {
-      width: 100%; height: 36px;
-      background: rgba(0, 243, 255, 0.08);
-      border: 1px solid rgba(0, 243, 255, 0.3);
-      color: #00f3ff;
-      padding: 0 10px;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      font-size: 11px;
-      letter-spacing: 1px;
-      outline: none;
-      cursor: pointer;
-      transition: all 0.15s ease;
+      width: 100%; height: 36px; background: rgba(0, 243, 255, 0.08);
+      border: 1px solid rgba(0, 243, 255, 0.3); color: #00f3ff; padding: 0 10px;
+      font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 11px;
+      letter-spacing: 1px; outline: none; cursor: pointer; transition: all 0.15s ease;
     }
     select:hover, .stark-btn:hover {
-      background: rgba(0, 243, 255, 0.25);
-      border-color: #00f3ff;
+      background: rgba(0, 243, 255, 0.25); border-color: #00f3ff;
       box-shadow: 0 0 12px rgba(0, 243, 255, 0.3);
     }
     select option { background: #0a101a; color: #00f3ff; }
 
-    .btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .telemetry-box {
-      font-size: 11px;
-      background: rgba(0, 243, 255, 0.03);
-      border: 1px solid rgba(0, 243, 255, 0.15);
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      font-size: 11px; background: rgba(0, 243, 255, 0.03);
+      border: 1px solid rgba(0, 243, 255, 0.15); padding: 10px;
+      display: flex; flex-direction: column; gap: 8px;
     }
-    .hand-card {
-      border-left: 2px solid #ffffff;
-      padding-left: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
+    .hand-card { border-left: 2px solid #ffffff; padding-left: 8px; display: flex; flex-direction: column; gap: 3px; }
     .hand-card.h2 { border-left-color: #00f3ff; }
     .telemetry-row { display: flex; justify-content: space-between; color: rgba(255, 255, 255, 0.7); }
     .telemetry-val { color: #00f3ff; font-weight: bold; }
 
-    /* Camera Feed Panel */
     .camera-preview-container {
-      position: absolute;
-      bottom: 24px; right: 24px;
-      z-index: 10;
-      width: 220px; height: 165px;
-      background: rgba(10, 16, 26, 0.88);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(0, 243, 255, 0.4);
+      position: absolute; bottom: 24px; right: 24px; z-index: 10;
+      width: 220px; height: 165px; background: rgba(10, 16, 26, 0.88);
+      backdrop-filter: blur(15px); border: 1px solid rgba(0, 243, 255, 0.4);
       clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
-      box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
-      display: flex; flex-direction: column;
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); display: flex; flex-direction: column;
     }
     #hand-preview-canvas { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
     .preview-hud-tag {
-      position: absolute; top: 6px; left: 8px;
-      font-size: 9px; font-weight: bold; letter-spacing: 1px;
-      color: #00f3ff; background: rgba(2, 12, 27, 0.8);
+      position: absolute; top: 6px; left: 8px; font-size: 9px; font-weight: bold;
+      letter-spacing: 1px; color: #00f3ff; background: rgba(2, 12, 27, 0.8);
       padding: 2px 6px; border: 1px solid rgba(0, 243, 255, 0.3);
     }
-
-    .hud-corner {
-      position: absolute; width: 8px; height: 8px;
-      border: 2px solid #00f3ff; pointer-events: none;
-    }
+    .hud-corner { position: absolute; width: 8px; height: 8px; border: 2px solid #00f3ff; pointer-events: none; }
     .top-left { top: -1px; left: -1px; border-right: none; border-bottom: none; }
     .top-right { top: -1px; right: -1px; border-left: none; border-bottom: none; }
     .bottom-left { bottom: -1px; left: -1px; border-right: none; border-top: none; }
@@ -212,8 +118,8 @@
 
   <div class="stark-header">
     <div class="stark-title">
-      <span>STARK LAB v8.0</span>
-      <span class="security-badge">SUPREME EDITION</span>
+      <span>STARK LAB v8.1</span>
+      <span class="security-badge">CORE MAGNET</span>
     </div>
     <div class="mode-tabs">
       <button id="tab-builder" class="tab-btn active" onclick="switchMode('BUILDER')">SYS 01: 3D PHYSICS LAB</button>
@@ -232,7 +138,6 @@
       <span style="color: #00f3ff; font-weight: bold;">[ACTIVE]</span>
     </div>
     
-    <!-- Modalità 1 Controls -->
     <div id="controls-builder">
       <div class="control-group">
         <label>SPAWN OGGETTI 3D FISICI</label>
@@ -246,7 +151,6 @@
       </div>
     </div>
 
-    <!-- Modalità 2 Controls -->
     <div id="controls-particles" style="display: none;">
       <div class="control-group">
         <label>HOLOGRAM TEMPLATE</label>
@@ -266,10 +170,8 @@
       </div>
     </div>
 
-    <!-- Audio Control Toggle -->
     <button id="audio-toggle-btn" class="stark-btn" style="background: rgba(0, 243, 255, 0.15);" onclick="toggleAudio()">🔊 AUDIO SCI-FI: ATTIVO</button>
 
-    <!-- Telemetria Mani -->
     <div class="telemetry-box">
       <div class="hand-card">
         <div class="telemetry-row">
@@ -305,7 +207,6 @@
   </div>
 
   <script>
-    // --- 1. SINTETIZZATORE AUDIO SCI-FI PROCEDURALE (Web Audio API) ---
     class SciFiSoundSystem {
       constructor() {
         this.ctx = null;
@@ -319,7 +220,6 @@
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         this.ctx = new AudioCtx();
 
-        // Ronzio Cibernetico Passivo
         this.humOsc = this.ctx.createOscillator();
         this.humGain = this.ctx.createGain();
         this.humOsc.type = 'sine';
@@ -359,20 +259,6 @@
         gain.connect(this.ctx.destination);
         osc.start(now); osc.stop(now + 0.18);
       }
-      playShockwave() {
-        if (!this.enabled || !this.initialized) return;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sawtooth';
-        const now = this.ctx.currentTime;
-        osc.frequency.setValueAtTime(160, now);
-        osc.frequency.exponentialRampToValueAtTime(30, now + 0.2);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(now); osc.stop(now + 0.2);
-      }
       updateHum(speed) {
         if (!this.enabled || !this.initialized) return;
         const targetGain = Math.min(0.02 + speed * 0.08, 0.18);
@@ -393,12 +279,10 @@
     const PARTICLE_COUNT = 12000;
     let scene, camera, renderer;
 
-    // --- VARIABILI MODALITÀ 1: BUILDER 3D ---
     let builderGroup;
     let blocks = [];
     const CUBE_COLORS = [0x00aaff, 0xff0055, 0x00ff88, 0xffaa00, 0x9900ff];
 
-    // Cursori Puntini Bianchi con LUCI DINAMICHE
     const controllers = [
       {
         id: 0, cursorMesh: null, pointLight: null, laserMesh: null,
@@ -412,10 +296,8 @@
       }
     ];
 
-    // HUD 3D Ancorato al Palmo della Mano
     let palmHUDGroup;
 
-    // --- VARIABILI MODALITÀ 2: PARTICELLE ---
     let particleGroup, particleGeometry, particleMaterial;
     let targetPositions = new Float32Array(PARTICLE_COUNT * 3);
     let currentPositions = new Float32Array(PARTICLE_COUNT * 3);
@@ -450,11 +332,8 @@
       const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
       dirLight.position.set(15, 30, 20);
       dirLight.castShadow = true;
-      dirLight.shadow.mapSize.width = 1024;
-      dirLight.shadow.mapSize.height = 1024;
       scene.add(dirLight);
 
-      // PIANO GRIGIO CON RICEZIONE OMBRE REALISTICA
       const planeGeo = new THREE.PlaneGeometry(80, 80);
       const planeMat = new THREE.MeshStandardMaterial({ color: 0x222730, roughness: 0.5, metalness: 0.2 });
       const floor = new THREE.Mesh(planeGeo, planeMat);
@@ -467,14 +346,12 @@
       gridHelper.position.y = -5.95;
       builderGroup.add(gridHelper);
 
-      // --- PUNTINI BIANCHI CON LUCE EMESSA IN TEMPO REALE ---
       controllers.forEach((ctrl, idx) => {
         const cursorGeo = new THREE.SphereGeometry(0.12, 16, 16);
         const cursorMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
         ctrl.cursorMesh = new THREE.Mesh(cursorGeo, cursorMat);
         ctrl.cursorMesh.visible = false;
 
-        // Luce Emessa dalla Punta delle Dita
         ctrl.pointLight = new THREE.PointLight(0xffffff, 2.5, 20);
         ctrl.cursorMesh.add(ctrl.pointLight);
         builderGroup.add(ctrl.cursorMesh);
@@ -489,7 +366,6 @@
         ctrl.grabEl = document.getElementById(`h${idx + 1}-grab`);
       });
 
-      // --- HUD 3D ANCORATO AL PALMO ---
       palmHUDGroup = new THREE.Group();
       const hudRingGeo = new THREE.RingGeometry(1.2, 1.35, 32);
       const hudRingMat = new THREE.MeshBasicMaterial({ color: 0x00f3ff, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
@@ -498,12 +374,10 @@
       palmHUDGroup.visible = false;
       scene.add(palmHUDGroup);
 
-      // Spawn Forme 3D Iniziali
       spawnShape('cube', -6, -1.5, 0, CUBE_COLORS[0]);
       spawnShape('sphere', 0, 0, 0, CUBE_COLORS[1]);
       spawnShape('pyramid', 6, -1.5, 0, CUBE_COLORS[2]);
 
-      // --- SETUP MODALITÀ 2: PARTICELLE ---
       particleGroup = new THREE.Group();
       particleGroup.visible = false;
       scene.add(particleGroup);
@@ -536,7 +410,6 @@
       window.addEventListener('resize', onWindowResize);
     }
 
-    // --- NUOVE FORME 3D (CUBI, SFERE, PIRAMIDI, TORUS) ---
     function spawnShape(type, x, y, z, colorHex) {
       sounds.init();
       let geo;
@@ -545,7 +418,7 @@
       if (type === 'sphere') geo = new THREE.SphereGeometry(size / 1.8, 24, 24);
       else if (type === 'pyramid') geo = new THREE.ConeGeometry(size / 1.5, size, 4);
       else if (type === 'torus') geo = new THREE.TorusGeometry(size / 2, size / 6, 16, 32);
-      else geo = new THREE.BoxGeometry(size, size, size); // default cube
+      else geo = new THREE.BoxGeometry(size, size, size);
 
       const mat = new THREE.MeshStandardMaterial({
         color: colorHex || CUBE_COLORS[Math.floor(Math.random() * CUBE_COLORS.length)],
@@ -605,7 +478,6 @@
       particleGroup.visible = (mode === 'PARTICLES');
     }
 
-    // --- GENERATORE FORME PARTICELLE ---
     function generateShape(type) {
       const p = targetPositions;
       for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -676,7 +548,6 @@
       }
     }
 
-    // --- TRACCIAMENTO MEDIAPIPE CON FISICA & MAGNETISMO ---
     function initHandTracking() {
       const videoElement = document.getElementById('video-input');
       const hands = new Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
@@ -719,7 +590,6 @@
             ctrl.lastPos.copy(ctrl.pos);
             ctrl.pos.lerp(targetPos, 0.55);
 
-            // Calcolo Velocità della Mano per Inerzia e Suono
             ctrl.velocity.copy(ctrl.pos).sub(ctrl.lastPos);
             sounds.updateHum(ctrl.velocity.length());
 
@@ -729,12 +599,10 @@
             const wasPinching = ctrl.isPinching;
             ctrl.isPinching = (pinchDist < 0.08);
 
-            // Audio Trigger Pinch
             if (!wasPinching && ctrl.isPinching) sounds.playPinch();
 
             ctrl.statusEl.innerText = "RILEVATA"; ctrl.statusEl.style.color = "#00f3ff";
 
-            // HUD 3D Ancorato al Palmo della Prima Mano
             if (i === 0) {
               const palmCenter = landmarks[9];
               const pVector = new THREE.Vector3((1 - palmCenter.x) * 2 - 1, -(palmCenter.y * 2 - 1), 0.5);
@@ -746,7 +614,6 @@
               palmHUDGroup.visible = true;
             }
 
-            // MODALITÀ BUILDER 3D: MANIPOLAZIONE FISICA
             if (currentMode === 'BUILDER') {
               if (ctrl.isPinching) {
                 if (ctrl.grabbedBlock) {
@@ -776,11 +643,9 @@
                   }
                 }
               } else {
-                // Rilascio Oggetto con INERZIA E LANCIAMENTO
                 if (ctrl.grabbedBlock) {
                   setBlockHighlight(ctrl.grabbedBlock, 'normal');
                   ctrl.grabbedBlock.userData.isGrabbed = false;
-                  // Applica velocità di lancio
                   ctrl.grabbedBlock.userData.velocity.copy(ctrl.velocity).multiplyScalar(1.2);
                   ctrl.grabbedBlock = null;
                   ctrl.laserMesh.visible = false;
@@ -804,7 +669,6 @@
           }
         });
 
-        // MODALITÀ PARTICELLE: ROTAZIONE & SCALA
         if (currentMode === 'PARTICLES' && detectedHandsCount > 0) {
           const h1 = results.multiHandLandmarks[0], h1Center = h1[9];
           if (detectedHandsCount >= 2) {
@@ -834,19 +698,15 @@
       cameraUtils.start();
     }
 
-    // --- LOOP ANIMAZIONE & FISICA 60FPS ---
     function animate() {
       requestAnimationFrame(animate);
 
-      // FISICA OGGETTI 3D: Inerzia, Rimbalzi & Snap Magnetico
       if (currentMode === 'BUILDER') {
         blocks.forEach(block => {
           if (!block.userData.isGrabbed) {
-            // Applica Inerzia
             block.position.add(block.userData.velocity);
-            block.userData.velocity.multiplyScalar(0.92); // Attrito
+            block.userData.velocity.multiplyScalar(0.92);
 
-            // Rimbalzo sul Pavimento
             const floorY = -6 + 1.6;
             if (block.position.y < floorY) {
               block.position.y = floorY;
@@ -855,7 +715,6 @@
               block.userData.velocity.z *= 0.8;
             }
 
-            // SNAP MAGNETICO PER INCASTRO/SOVRAPPOSIZIONE
             blocks.forEach(other => {
               if (other !== block && !other.userData.isGrabbed) {
                 const distXZ = Math.hypot(block.position.x - other.position.x, block.position.z - other.position.z);
@@ -872,7 +731,7 @@
         });
       }
 
-      // PARTICELLE: MAGNETISMO E ONDE D'URTO
+      // PARTICELLE: MAGNETISMO AL CENTRO & ONDE D'URTO
       if (currentMode === 'PARTICLES') {
         particleGroup.rotation.x += (targetRotX - particleGroup.rotation.x) * 0.1;
         particleGroup.rotation.y += (targetRotY + 0.004 - particleGroup.rotation.y) * 0.1;
@@ -881,32 +740,40 @@
         handExpansionScale += (targetScale - handExpansionScale) * 0.1;
         camera.position.z += (targetCamZ - camera.position.z) * 0.1;
 
+        const isPinching = controllers.some(c => c.active && c.isPinching);
+
         const positions = particleGeometry.attributes.position.array;
         for (let i = 0; i < PARTICLE_COUNT * 3; i += 3) {
           let tx = targetPositions[i] * handExpansionScale;
           let ty = targetPositions[i+1] * handExpansionScale;
           let tz = targetPositions[i+2] * handExpansionScale;
 
-          // Effetto Magnetico/Repulsore dai Puntini Bianchi
-          controllers.forEach(ctrl => {
-            if (ctrl.active) {
-              const dx = tx - ctrl.pos.x, dy = ty - ctrl.pos.y, dz = tz - ctrl.pos.z;
-              const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-              if (dist < 6.0) {
-                const force = (1.0 - dist / 6.0) * (ctrl.isPinching ? -2.5 : 2.5);
-                tx += dx * force; ty += dy * force; tz += dz * force;
+          if (isPinching) {
+            // MAGNETISMO CENTRALE: Le particelle collassano verso (0,0,0)
+            tx *= 0.1;
+            ty *= 0.1;
+            tz *= 0.1;
+          } else {
+            // MANO APERTA: I puntini spingono le particelle al passaggio
+            controllers.forEach(ctrl => {
+              if (ctrl.active) {
+                const dx = tx - ctrl.pos.x, dy = ty - ctrl.pos.y, dz = tz - ctrl.pos.z;
+                const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                if (dist < 7.0) {
+                  const force = (1.0 - dist / 7.0) * 2.0;
+                  tx += dx * force; ty += dy * force; tz += dz * force;
+                }
               }
-            }
-          });
+            });
+          }
 
-          positions[i] += (tx - positions[i]) * 0.1;
-          positions[i+1] += (ty - positions[i+1]) * 0.1;
-          positions[i+2] += (tz - positions[i+2]) * 0.1;
+          positions[i] += (tx - positions[i]) * 0.12;
+          positions[i+1] += (ty - positions[i+1]) * 0.12;
+          positions[i+2] += (tz - positions[i+2]) * 0.12;
         }
         particleGeometry.attributes.position.needsUpdate = true;
       }
 
-      // Rotazione Anello HUD Palmo
       if (palmHUDGroup.visible) palmHUDGroup.rotation.z += 0.02;
 
       renderer.render(scene, camera);

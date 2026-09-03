@@ -816,6 +816,27 @@ rgba(240,245,255,.45);
 pointer-events:none;
 }
 
+.earth-coordinates{
+
+position:absolute;
+
+bottom:8px;
+left:10px;
+
+z-index:3;
+
+font-family:monospace;
+
+font-size:6px;
+
+letter-spacing:.8px;
+
+color:
+rgba(240,245,255,.45);
+
+pointer-events:none;
+}
+
 /* =====================================================
    STATUS CARDS
 ===================================================== */
@@ -1176,6 +1197,7 @@ display:flex;
 
 align-items:center;
 justify-content:center;
+
 }
 
 #closeMap:hover{
@@ -1889,13 +1911,21 @@ ONLINE
 <div class="home-earth">
 
 <div class="earth-label">
-EARTH // TACTICAL
+EARTH // LOCATION
 </div>
 
 <div id="earthGlobe"></div>
 
-<div class="earth-status">
-GLOBAL // ONLINE
+<div
+class="earth-coordinates"
+id="earthCoordinates">
+LAT --.---- // LON --.----
+</div>
+
+<div
+class="earth-status"
+id="earthStatus">
+LOCATION // SEARCHING
 </div>
 
 </div>
@@ -2209,6 +2239,16 @@ document.getElementById(
 "earthGlobe"
 );
 
+const earthStatus =
+document.getElementById(
+"earthStatus"
+);
+
+const earthCoordinates =
+document.getElementById(
+"earthCoordinates"
+);
+
 let earthScene = null;
 
 let earthCamera = null;
@@ -2222,6 +2262,14 @@ let earthMesh = null;
 let earthWire = null;
 
 let earthRing = null;
+
+let earthLocationMarker = null;
+
+let earthLocationPulse = null;
+
+let earthLatitude = null;
+
+let earthLongitude = null;
 
 
 /* =====================================================
@@ -2995,6 +3043,293 @@ return texture;
 
 
 /* =====================================================
+   CONVERSIONE LAT/LON → SFERA
+===================================================== */
+
+function latLonToVector3(
+lat,
+lon,
+radius = 1.02
+){
+
+const phi =
+THREE.MathUtils.degToRad(
+90 - lat
+);
+
+const theta =
+THREE.MathUtils.degToRad(
+lon + 180
+);
+
+return new THREE.Vector3(
+
+-radius *
+Math.sin(phi) *
+Math.cos(theta),
+
+radius *
+Math.cos(phi),
+
+radius *
+Math.sin(phi) *
+Math.sin(theta)
+
+);
+
+}
+
+
+/* =====================================================
+   AGGIORNA MARKER POSIZIONE
+===================================================== */
+
+function updateEarthLocationMarker(
+lat,
+lon
+){
+
+if(
+!earthGroup
+)
+return;
+
+
+/* =====================================================
+   RIMUOVE EVENTUALE MARKER PRECEDENTE
+===================================================== */
+
+if(earthLocationMarker){
+
+earthGroup.remove(
+earthLocationMarker
+);
+
+earthLocationMarker.geometry.dispose();
+
+earthLocationMarker.material.dispose();
+
+earthLocationMarker = null;
+
+}
+
+if(earthLocationPulse){
+
+earthGroup.remove(
+earthLocationPulse
+);
+
+earthLocationPulse.geometry.dispose();
+
+earthLocationPulse.material.dispose();
+
+earthLocationPulse = null;
+
+}
+
+
+/* =====================================================
+   POSIZIONE
+===================================================== */
+
+const position =
+latLonToVector3(
+lat,
+lon,
+1.035
+);
+
+const surfaceNormal =
+position.clone()
+.normalize();
+
+
+/* =====================================================
+   PUNTO CENTRALE
+===================================================== */
+
+earthLocationMarker =
+new THREE.Mesh(
+
+new THREE.SphereGeometry(
+.032,
+16,
+16
+),
+
+new THREE.MeshBasicMaterial({
+
+color:
+0xffffff,
+
+transparent:true,
+
+opacity:1
+
+})
+
+);
+
+earthLocationMarker.position.copy(
+position
+);
+
+earthGroup.add(
+earthLocationMarker
+);
+
+
+/* =====================================================
+   ANELLO DI LOCALIZZAZIONE
+===================================================== */
+
+earthLocationPulse =
+new THREE.Mesh(
+
+new THREE.RingGeometry(
+.040,
+.052,
+32
+),
+
+new THREE.MeshBasicMaterial({
+
+color:
+0xffffff,
+
+transparent:true,
+
+opacity:.82,
+
+side:
+THREE.DoubleSide
+
+})
+
+);
+
+earthLocationPulse.position.copy(
+position
+);
+
+earthLocationPulse.quaternion.setFromUnitVectors(
+
+new THREE.Vector3(
+0,
+0,
+1
+),
+
+surfaceNormal
+
+);
+
+earthGroup.add(
+earthLocationPulse
+);
+
+
+/* =====================================================
+   TESTO COORDINATE
+===================================================== */
+
+earthCoordinates.textContent =
+"LAT " +
+lat.toFixed(4) +
+" // LON " +
+lon.toFixed(4);
+
+}
+
+
+/* =====================================================
+   LOCALIZZAZIONE DISPOSITIVO
+===================================================== */
+
+function requestEarthLocation(){
+
+if(
+!navigator.geolocation
+){
+
+earthStatus.textContent =
+"LOCATION // UNAVAILABLE";
+
+earthCoordinates.textContent =
+"LAT --.---- // LON --.----";
+
+return;
+
+}
+
+
+earthStatus.textContent =
+"LOCATION // SEARCHING";
+
+
+navigator.geolocation.getCurrentPosition(
+
+position=>{
+
+earthLatitude =
+position.coords.latitude;
+
+earthLongitude =
+position.coords.longitude;
+
+updateEarthLocationMarker(
+earthLatitude,
+earthLongitude
+);
+
+earthStatus.textContent =
+"LOCATION // LOCKED";
+
+},
+
+error=>{
+
+console.warn(
+"Geolocalizzazione:",
+error
+);
+
+earthCoordinates.textContent =
+"LAT --.---- // LON --.----";
+
+if(
+error.code ===
+1
+){
+
+earthStatus.textContent =
+"LOCATION // DENIED";
+
+}else{
+
+earthStatus.textContent =
+"LOCATION // UNAVAILABLE";
+
+}
+
+},
+
+{
+
+enableHighAccuracy:true,
+
+timeout:10000,
+
+maximumAge:0
+
+}
+
+);
+
+}
+
+
+/* =====================================================
    CREA GLOBO TATTICO
 ===================================================== */
 
@@ -3223,7 +3558,7 @@ earthRing
 
 
 /* =====================================================
-   POSIZIONE
+   POSIZIONE GLOBO
 ===================================================== */
 
 earthGroup.scale.set(
@@ -3234,6 +3569,13 @@ earthGroup.scale.set(
 
 earthGroup.rotation.z =
 -0.08;
+
+
+/* =====================================================
+   RICHIESTA POSIZIONE
+===================================================== */
+
+requestEarthLocation();
 
 }
 
@@ -4153,17 +4495,17 @@ const sinPhi =
 Math.sin(phi);
 
 
-positionArray[index] =
+neuronPositions[index] =
 radiusNow *
 sinPhi *
 Math.cos(theta);
 
-positionArray[index + 1] =
+neuronPositions[index + 1] =
 radiusNow *
 sinPhi *
 Math.sin(theta);
 
-positionArray[index + 2] =
+neuronPositions[index + 2] =
 radiusNow *
 Math.cos(phi);
 
@@ -4250,6 +4592,30 @@ Math.sin(
 time * .35
 ) *
 .03;
+
+
+/* =====================================================
+   PULSAZIONE MARKER
+===================================================== */
+
+if(earthLocationPulse){
+
+const pulse =
+1 +
+0.35 *
+(
+0.5 +
+0.5 *
+Math.sin(
+time * 3.0
+)
+);
+
+earthLocationPulse.scale.setScalar(
+pulse
+);
+
+}
 
 earthRenderer.render(
 earthScene,
@@ -5674,11 +6040,6 @@ micBtn.classList.add(
 
 setState("listening");
 
-/*
-   Avvia anche l'analisi del livello
-   della voce per rendere la sfera
-   reattiva in tempo reale.
-*/
 
 await startVoiceMonitor();
 

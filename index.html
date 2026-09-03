@@ -4319,6 +4319,8 @@ errorElement
 
 }
 
+} /* <<< CORREZIONE: chiude initializeNeuralCore() */
+
 
 /* =====================================================
    CONTROLLO MANO — AVVIO
@@ -4411,17 +4413,6 @@ landmarks.length < 18
 )
 return 0;
 
-
-/*
-   Landmark MediaPipe:
-   0  = polso
-   5  = indice MCP
-   17 = mignolo MCP
-
-   Il vettore tra indice e mignolo permette di
-   stimare l'inclinazione laterale del palmo.
-*/
-
 const indexMcp =
 landmarks[5];
 
@@ -4442,12 +4433,6 @@ dy,
 dx
 );
 
-
-/*
-   Normalizzazione rispetto alla posizione
-   naturale del palmo nell'immagine.
-*/
-
 angle -= Math.PI;
 
 while(angle > Math.PI)
@@ -4455,12 +4440,6 @@ angle -= Math.PI * 2;
 
 while(angle < -Math.PI)
 angle += Math.PI * 2;
-
-
-/*
-   Limitiamo l'effetto per evitare movimenti
-   troppo aggressivi.
-*/
 
 const normalized =
 THREE.MathUtils.clamp(
@@ -4507,11 +4486,6 @@ landmarks.length < 18
 )
 return;
 
-
-/* =====================================================
-   POSIZIONE DEL PALMO
-===================================================== */
-
 const wrist =
 landmarks[0];
 
@@ -4524,11 +4498,6 @@ landmarks[9];
 const pinkyMcp =
 landmarks[17];
 
-
-/*
-   Centro del palmo.
-*/
-
 const palmX =
 (
 wrist.x +
@@ -4537,22 +4506,11 @@ middleMcp.x +
 pinkyMcp.x
 ) / 4;
 
-
-/* =====================================================
-   MOVIMENTO ORIZZONTALE
-===================================================== */
-
 if(handPreviousX !== null){
 
 const deltaX =
 palmX -
 handPreviousX;
-
-
-/*
-   Il movimento relativo della mano
-   controlla la rotazione del core.
-*/
 
 handRotationTarget +=
 deltaX * 7.5;
@@ -4569,11 +4527,6 @@ handRotationTarget,
 handPreviousX =
 palmX;
 
-
-/* =====================================================
-   ROTAZIONE DEL PALMO
-===================================================== */
-
 const roll =
 getPalmRoll(
 landmarks
@@ -4581,19 +4534,6 @@ landmarks
 
 handRollTarget =
 roll;
-
-
-/* =====================================================
-   FORMA DEL CORE
-===================================================== */
-
-/*
-   La distanza media tra polso e nocche
-   viene usata come indicatore dell'apertura
-   del gesto della mano.
-
-   Mano più aperta → maggiore deformazione.
-*/
 
 const palmCenterX =
 (
@@ -4640,11 +4580,6 @@ Math.abs(roll) * .35
 ),
 .20
 );
-
-
-/* =====================================================
-   ENERGIA GESTUALE
-===================================================== */
 
 const handEnergy =
 Math.abs(roll) * .55 +
@@ -4739,11 +4674,6 @@ async function enableHandControl(){
 if(handControlActive)
 return;
 
-
-/* =====================================================
-   CONTROLLO SUPPORTO CAMERA
-===================================================== */
-
 if(
 !navigator.mediaDevices ||
 !navigator.mediaDevices.getUserMedia
@@ -4783,11 +4713,6 @@ handControlBtn.textContent =
 return;
 
 }
-
-
-/* =====================================================
-   RICHIESTA PERMESSO CAMERA
-===================================================== */
 
 handStream =
 await navigator.mediaDevices.getUserMedia({
@@ -5078,10 +5003,6 @@ performance.now() *
 0.001;
 
 
-/* =====================================================
-   AUDIO LIVE
-===================================================== */
-
 updateVoiceLevel();
 
 voiceLevel +=
@@ -5091,10 +5012,6 @@ voiceLevel
 ) *
 0.11;
 
-
-/* =====================================================
-   CONTROLLO MANO SMOOTH
-===================================================== */
 
 if(handControlActive){
 
@@ -5145,19 +5062,10 @@ handShape
 }
 
 
-/* =====================================================
-   ENERGIA
-===================================================== */
-
 const voiceEnergy =
 voiceLevel *
 1.4;
 
-
-/*
-   L'energia manuale modifica il comportamento
-   senza sostituire gli stati normali di JARVIS.
-*/
 
 const manualEnergy =
 handControlActive
@@ -5193,10 +5101,6 @@ handControlActive
 .035
 );
 
-
-/* =====================================================
-   RESPIRAZIONE GLOBALE
-===================================================== */
 
 const breathing =
 Math.sin(
@@ -5347,10 +5251,6 @@ activity - 0.5
 );
 
 
-/* =====================================================
-   ESPANSIONE VOCALE
-===================================================== */
-
 const voiceExpansion =
 voiceLevel *
 (
@@ -5362,10 +5262,6 @@ seed * .15
 )
 );
 
-
-/* =====================================================
-   EFFETTO ROTAZIONE PALMO
-===================================================== */
 
 const palmShape =
 handRoll *
@@ -5384,10 +5280,6 @@ handControlActive
 );
 
 
-/* =====================================================
-   DEFORMAZIONE GESTO MANO
-===================================================== */
-
 const handDeformation =
 handShape *
 Math.sin(
@@ -5398,10 +5290,6 @@ seed * .03
 ) *
 0.045;
 
-
-/* =====================================================
-   RAGGIO FINALE
-===================================================== */
 
 const radiusNow =
 radius +
@@ -5443,20 +5331,11 @@ particles.geometry
 .needsUpdate = true;
 
 
-/* =====================================================
-   ROTAZIONE
-===================================================== */
-
 particles.rotation.y +=
 0.00035 +
 neuralEnergy * 0.00045 +
 voiceLevel * 0.0008;
 
-
-/*
-   Il movimento orizzontale della mano
-   imposta la rotazione principale.
-*/
 
 if(handControlActive){
 
@@ -5468,11 +5347,6 @@ particles.rotation.y
 0.035;
 
 }else{
-
-/*
-   Comportamento originale quando il
-   controllo mano è spento.
-*/
 
 particles.rotation.y +=
 0;
@@ -5494,12 +5368,6 @@ voiceLevel * .015
 );
 
 
-/*
-   La rotazione del palmo modifica
-   leggermente l'inclinazione verticale
-   del core.
-*/
-
 particles.rotation.x +=
 handRoll *
 0.10;
@@ -5519,18 +5387,10 @@ voiceLevel * .010
 );
 
 
-/*
-   Effetto secondario del palmo.
-*/
-
 particles.rotation.z +=
 handRoll *
 0.035;
 
-
-/* =====================================================
-   DIMENSIONE NEURONI
-===================================================== */
 
 particles.material.size =
 0.043 +
@@ -5549,10 +5409,6 @@ voiceLevel * .025 +
 handShape * .025;
 
 
-/* =====================================================
-   TERRA
-===================================================== */
-
 if(
 earthGroup &&
 earthRenderer &&
@@ -5569,10 +5425,6 @@ time * .35
 ) *
 .03;
 
-
-/* =====================================================
-   PULSAZIONE MARKER
-===================================================== */
 
 if(earthLocationPulse){
 

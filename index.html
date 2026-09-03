@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARK KINETIC LAB v8.5 // EARTH GRAVITY & ZERO IMPULSE</title>
+  <title>STARK KINETIC LAB v8.6 // STACKING & EARTH GRAVITY</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,8 +113,8 @@
 
   <div class="stark-header">
     <div class="stark-title">
-      <span>STARK LAB v8.5</span>
-      <span class="security-badge">EARTH GRAVITY // 0 IMPULSE</span>
+      <span>STARK LAB v8.6</span>
+      <span class="security-badge">STACKING & EARTH GRAVITY</span>
     </div>
     <div class="mode-tabs">
       <button id="tab-builder" class="tab-btn active" onclick="switchMode('BUILDER')">SYS 01: 3D PHYSICS LAB</button>
@@ -714,7 +714,7 @@
       requestAnimationFrame(animate);
 
       if (currentMode === 'BUILDER') {
-        const gravity = -0.045; // Gravità terrestre simulata più realistica
+        const gravity = -0.045; // Gravità terrestre simulata
 
         blocks.forEach(block => {
           if (!block.userData.isGrabbed) {
@@ -724,13 +724,35 @@
             block.userData.velocity.x *= 0.98;
             block.userData.velocity.z *= 0.98;
 
+            // Collisione con il pavimento
             const floorY = -6 + 1.8; 
             if (block.position.y < floorY) {
               block.position.y = floorY;
-              block.userData.velocity.y *= -0.2; // Rimbalzo minimo a terra
+              block.userData.velocity.y = 0;
               block.userData.velocity.x *= 0.5;
               block.userData.velocity.z *= 0.5;
             }
+
+            // Collisione e impilamento (blocchi sopra altri blocchi)
+            blocks.forEach(other => {
+              if (block !== other && !other.userData.isGrabbed) {
+                const dx = block.position.x - other.position.x;
+                const dz = block.position.z - other.position.z;
+                const distXZ = Math.sqrt(dx * dx + dz * dz);
+                
+                // Se i blocchi sono allineati orizzontalmente
+                if (distXZ < 3.2) {
+                  const topOfOther = other.position.y + 3.6;
+                  // Se il blocco sta cadendo sopra l'altro blocco
+                  if (block.position.y - 1.8 <= topOfOther && block.position.y > other.position.y && block.userData.velocity.y <= 0) {
+                    block.position.y = topOfOther + 1.8;
+                    block.userData.velocity.y = 0;
+                    block.userData.velocity.x *= 0.2;
+                    block.userData.velocity.z *= 0.2;
+                  }
+                }
+              }
+            });
           }
         });
       }

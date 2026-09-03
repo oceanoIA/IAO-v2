@@ -2501,6 +2501,401 @@ function processControlHandLandmarks(landmarks){
     "CONTROL HAND: TRACKING"
   );
 }
+   /* =====================================================
+   CONTROL HAND — LOOP RILEVAMENTO
+===================================================== */
+
+let controlHandLastDetectionMs = 0;
+
+function controlHandDetectionLoop(){
+
+  if(!controlHandActive){
+    return;
+  }
+
+  if(
+    controlHandLandmarker &&
+    controlHandVideo &&
+    controlHandVideo.readyState >= 2
+  ){
+
+    const now =
+      performance.now();
+
+    /*
+       Limitiamo il rilevamento a circa
+       15 fotogrammi al secondo per
+       non appesantire troppo il dispositivo.
+    */
+
+    if(
+      now - controlHandLastDetectionMs >= 66 &&
+      controlHandVideo.currentTime !==
+        controlHandLastVideoTime
+    ){
+
+      controlHandLastDetectionMs = now;
+
+      controlHandLastVideoTime =
+        controlHandVideo.currentTime;
+
+      try{
+
+        const result =
+          controlHandLandmarker.detectForVideo(
+            controlHandVideo,
+            now
+          );
+
+        if(
+          result &&
+          result.landmarks &&
+          result.landmarks.length > 0
+        ){
+
+          processControlHandLandmarks(
+            result.landmarks[0]
+          );
+
+        }else{
+
+          updateControlHandStatus(
+            "CONTROL HAND: CERCA MANO..."
+          );
+        }
+
+      }catch(error){
+
+        console.error(
+          "CONTROL HAND DETECTION:",
+          error
+        );
+
+        updateControlHandStatus(
+          "CONTROL HAND: DETECTION ERROR"
+        );
+      }
+    }
+  }
+
+  controlHandFrame =
+    requestAnimationFrame(
+      controlHandDetectionLoop
+    );
+}
+   /* =====================================================
+   CONTROL HAND — PULSANTE ON / OFF
+===================================================== */
+
+async function toggleControlHand(){
+
+  const button =
+    document.getElementById(
+      "controlHandBtn"
+    );
+
+  if(!button){
+    return;
+  }
+
+
+  /* ---------------------------------------------------
+     SPEGNI CONTROL HAND
+  --------------------------------------------------- */
+
+  if(controlHandActive){
+
+    controlHandActive = false;
+
+    stopControlHandCamera();
+
+    button.classList.remove(
+      "active"
+    );
+
+    button.setAttribute(
+      "aria-pressed",
+      "false"
+    );
+
+    button.textContent =
+      "✋ CONTROL HAND";
+
+    updateControlHandStatus(
+      "CONTROL HAND: OFF"
+    );
+
+    return;
+  }
+
+
+  /* ---------------------------------------------------
+     ACCENDI CONTROL HAND
+  --------------------------------------------------- */
+
+  button.disabled = true;
+
+  button.textContent =
+    "✋ AVVIO...";
+
+  updateControlHandStatus(
+    "CONTROL HAND: INITIALIZING..."
+  );
+
+
+  const initialized =
+    await initializeControlHand();
+
+
+  if(!initialized){
+
+    button.disabled = false;
+
+    button.textContent =
+      "✋ CONTROL HAND";
+
+    return;
+  }
+
+
+  const cameraStarted =
+    await startControlHandCamera();
+
+
+  if(!cameraStarted){
+
+    button.disabled = false;
+
+    button.textContent =
+      "✋ CONTROL HAND";
+
+    return;
+  }
+
+
+  controlHandActive = true;
+
+  button.disabled = false;
+
+  button.classList.add(
+    "active"
+  );
+
+  button.setAttribute(
+    "aria-pressed",
+    "true"
+  );
+
+  button.textContent =
+    "✋ CONTROL HAND ON";
+
+  updateControlHandStatus(
+    "CONTROL HAND: CERCA MANO..."
+  );
+
+
+  controlHandDetectionLoop();
+}
+
+
+/* ---------------------------------------------------
+   COLLEGA IL PULSANTE
+--------------------------------------------------- */
+
+const controlHandButton =
+  document.getElementById(
+    "controlHandBtn"
+  );
+
+if(controlHandButton){
+
+  controlHandButton.addEventListener(
+    "click",
+    toggleControlHand
+  );
+}
+
+
+/* ---------------------------------------------------
+   SICUREZZA: FERMA LA CAMERA
+   QUANDO LA PAGINA VIENE CHIUSA
+--------------------------------------------------- */
+
+window.addEventListener(
+  "beforeunload",
+  stopControlHandCamera
+);
+   /* =====================================================
+   CONTROL HAND — CONTROLLO NEURONI
+===================================================== */
+
+function updateControlHandValues(){
+
+  if(!controlHandActive){
+    return;
+  }
+
+  controlHandX +=
+    (
+      controlHandTargetX -
+      controlHandX
+    ) * 0.14;
+
+  controlHandPinch +=
+    (
+      controlHandTargetPinch -
+      controlHandPinch
+    ) * 0.16;
+
+  controlHandSize +=
+    (
+      controlHandTargetSize -
+      controlHandSize
+    ) * 0.12;
+
+  controlHandOpen +=
+    (
+      controlHandTargetOpen -
+      controlHandOpen
+    ) * 0.14;
+}
+
+
+function updateControlHandNeurons(){
+
+  if(!particles){
+    return;
+  }
+
+
+  /* ---------------------------------------------------
+     CONTROL HAND OFF
+  --------------------------------------------------- */
+
+  if(!controlHandActive){
+
+    particles.position.x +=
+      (0 - particles.position.x) *
+      0.12;
+
+    particles.scale.x +=
+      (1 - particles.scale.x) *
+      0.12;
+
+    particles.scale.y +=
+      (1 - particles.scale.y) *
+      0.12;
+
+    particles.scale.z +=
+      (1 - particles.scale.z) *
+      0.12;
+
+    particles.geometry.setDrawRange(
+      0,
+      NEURON_COUNT
+    );
+
+    return;
+  }
+
+
+  /* ---------------------------------------------------
+     SINISTRA / DESTRA
+  --------------------------------------------------- */
+
+  const horizontalShift =
+    (
+      controlHandX - 0.5
+    ) *
+    CONTROL_HAND_MAX_SHIFT;
+
+
+  particles.position.x +=
+    (
+      horizontalShift -
+      particles.position.x
+    ) * 0.12;
+
+
+  /* ---------------------------------------------------
+     APERTURA / CHIUSURA
+  --------------------------------------------------- */
+
+  let spread =
+    0.72 +
+    (
+      controlHandOpen *
+      0.38
+    ) -
+    (
+      controlHandPinch *
+      0.28
+    );
+
+
+  spread =
+    controlHandClamp(
+      spread,
+      0.40,
+      1.10
+    );
+
+
+  particles.scale.x +=
+    (
+      spread -
+      particles.scale.x
+    ) * 0.12;
+
+  particles.scale.y +=
+    (
+      spread -
+      particles.scale.y
+    ) * 0.12;
+
+  particles.scale.z +=
+    (
+      spread -
+      particles.scale.z
+    ) * 0.12;
+
+
+  /* ---------------------------------------------------
+     DIMENSIONE MANO → NUMERO DI NEURONI
+  --------------------------------------------------- */
+
+  const visibleNeurons =
+    Math.round(
+      CONTROL_HAND_MIN_NEURONS +
+      (
+        NEURON_COUNT -
+        CONTROL_HAND_MIN_NEURONS
+      ) *
+      controlHandSize
+    );
+
+
+  particles.geometry.setDrawRange(
+    0,
+    visibleNeurons
+  );
+}
+   /* =====================================================
+   CONTROL HAND — VISUAL LOOP
+===================================================== */
+
+function controlHandVisualLoop(){
+
+  updateControlHandValues();
+
+  updateControlHandNeurons();
+
+  requestAnimationFrame(
+    controlHandVisualLoop
+  );
+}
+
+controlHandVisualLoop();
 /* =====================================================  
    ELEMENTI  
 ===================================================== */  

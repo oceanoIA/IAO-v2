@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARK KINETIC LAB v8.3 // BAREBONE 3D HANDS</title>
+  <title>STARK KINETIC LAB v8.4 // GRAVITY PHYSICS</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,8 +113,8 @@
 
   <div class="stark-header">
     <div class="stark-title">
-      <span>STARK LAB v8.3</span>
-      <span class="security-badge">SIMULATION VIEW</span>
+      <span>STARK LAB v8.4</span>
+      <span class="security-badge">GRAVITY SIM</span>
     </div>
     <div class="mode-tabs">
       <button id="tab-builder" class="tab-btn active" onclick="switchMode('BUILDER')">SYS 01: 3D PHYSICS LAB</button>
@@ -312,7 +312,7 @@
         this.group.visible = false;
       }
 
-      update(landmarks, camera, distanceToPlane) {
+      update(landmarks, camera) {
         if (!landmarks) {
           this.group.visible = false;
           return;
@@ -419,8 +419,8 @@
         ctrl.grabEl = document.getElementById(`h${idx + 1}-grab`);
       });
 
-      spawnShape('cube', -4, -1.5, 0, 0xe11d48);
-      spawnShape('cube', 4, -1.5, 0, 0xfacc15);
+      spawnShape('cube', -4, 2, 0, 0xe11d48);
+      spawnShape('cube', 4, 2, 0, 0xfacc15);
 
       particleGroup = new THREE.Group();
       particleGroup.visible = false;
@@ -472,9 +472,9 @@
       const mesh = new THREE.Mesh(geo, mat);
       mesh.castShadow = true; mesh.receiveShadow = true;
 
-      mesh.position.x = x !== undefined ? x : (Math.random() - 0.5) * 14;
-      mesh.position.y = y !== undefined ? y : (Math.random() - 0.5) * 4 + 1;
-      mesh.position.z = z !== undefined ? z : (Math.random() - 0.5) * 10;
+      mesh.position.x = x !== undefined ? x : (Math.random() - 0.5) * 10;
+      mesh.position.y = y !== undefined ? y : 8; // Inizia in alto per mostrare la gravità
+      mesh.position.z = z !== undefined ? z : (Math.random() - 0.5) * 6;
 
       mesh.userData = {
         originalColor: mat.color.getHex(),
@@ -635,7 +635,7 @@
             sounds.updateHum(ctrl.velocity.length());
 
             if (currentMode === 'BUILDER') {
-              ctrl.skeleton.update(landmarks, camera, distanceToPlane);
+              ctrl.skeleton.update(landmarks, camera);
             } else {
               ctrl.skeleton.group.visible = false;
             }
@@ -666,6 +666,7 @@
                   if (closest) {
                     ctrl.grabbedBlock = closest;
                     closest.userData.isGrabbed = true;
+                    closest.userData.velocity.set(0, 0, 0); // Azzera velocità alla presa
                     ctrl.grabOffset.copy(ctrl.pos).sub(closest.position);
                     setBlockHighlight(closest, 'grab');
                   }
@@ -674,7 +675,8 @@
                 if (ctrl.grabbedBlock) {
                   setBlockHighlight(ctrl.grabbedBlock, 'normal');
                   ctrl.grabbedBlock.userData.isGrabbed = false;
-                  ctrl.grabbedBlock.userData.velocity.copy(ctrl.velocity).multiplyScalar(1.2);
+                  // Applica velocità di rilascio + spinta iniziale
+                  ctrl.grabbedBlock.userData.velocity.copy(ctrl.velocity).multiplyScalar(1.5);
                   ctrl.grabbedBlock = null;
                   sounds.playThrow();
                 }
@@ -727,31 +729,28 @@
       requestAnimationFrame(animate);
 
       if (currentMode === 'BUILDER') {
+        const gravity = -0.015; // Forza di gravità costante verso il basso
+
         blocks.forEach(block => {
           if (!block.userData.isGrabbed) {
-            block.position.add(block.userData.velocity);
-            block.userData.velocity.multiplyScalar(0.92);
+            // Applica la gravità alla velocità verticale
+            block.userData.velocity.y += gravity;
 
-            const floorY = -6 + 1.8;
+            // Muovi l'oggetto in base alla velocità accumulata
+            block.position.add(block.userData.velocity);
+
+            // Smorzamento orizzontale dell'aria
+            block.userData.velocity.x *= 0.98;
+            block.userData.velocity.z *= 0.98;
+
+            const floorY = -6 + 1.8; // Altezza del pavimento + metà altezza del blocco
             if (block.position.y < floorY) {
               block.position.y = floorY;
-              block.userData.velocity.y *= -0.4;
+              // Rimbalzo smorzato sul pavimento
+              block.userData.velocity.y *= -0.3;
               block.userData.velocity.x *= 0.8;
               block.userData.velocity.z *= 0.8;
             }
-
-            blocks.forEach(other => {
-              if (other !== block && !other.userData.isGrabbed) {
-                const distXZ = Math.hypot(block.position.x - other.position.x, block.position.z - other.position.z);
-                const distY = Math.abs(block.position.y - (other.position.y + 3.6));
-                if (distXZ < 2.0 && distY < 1.0 && block.userData.velocity.length() < 0.08) {
-                  block.position.x = THREE.MathUtils.lerp(block.position.x, other.position.x, 0.25);
-                  block.position.z = THREE.MathUtils.lerp(block.position.z, other.position.z, 0.25);
-                  block.position.y = THREE.MathUtils.lerp(block.position.y, other.position.y + 3.6, 0.25);
-                  block.userData.velocity.set(0, 0, 0);
-                }
-              }
-            });
           }
         });
       }

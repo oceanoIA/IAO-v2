@@ -1832,6 +1832,80 @@ background:rgba(255,255,255,.28);
 border-radius:5px;  
 }  
   
+/* =====================================================
+   CONTROL HAND
+===================================================== */
+
+#controlHandBtn{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:1000;
+
+  padding:10px 16px;
+
+  background:rgba(0,0,0,.72);
+  color:#ffffff;
+
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:6px;
+
+  font-family:monospace;
+  font-size:11px;
+  letter-spacing:2px;
+
+  cursor:pointer;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+#controlHandBtn:hover{
+  border-color:#ffffff;
+}
+
+#controlHandBtn.active{
+  background:rgba(255,255,255,.12);
+  border-color:#ffffff;
+
+  box-shadow:
+    0 0 12px rgba(255,255,255,.25);
+}
+
+#controlHandStatus{
+  position:fixed;
+  right:20px;
+  bottom:62px;
+
+  z-index:1000;
+
+  color:#ffffff;
+  font-family:monospace;
+  font-size:9px;
+  letter-spacing:1.5px;
+
+  opacity:.65;
+
+  pointer-events:none;
+}
+
+#controlHandVideo{
+  position:fixed;
+  width:1px;
+  height:1px;
+
+  right:0;
+  bottom:0;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transform:scaleX(-1);
+}
+
 </style>  </head>  <body> <!-- =====================================================
      CONTROL HAND
 ===================================================== -->

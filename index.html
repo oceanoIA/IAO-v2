@@ -5929,4 +5929,1803 @@ function getMemoryStatus(){
 
 return{
 
+available:true,
+
+entries:
+memory.length,
+
+storage:
+"localStorage",
+
+maxEntries:
+MAX_MEMORY
+
+};
+
+}
+
+
+/* =====================================================
+   STATO WEB REALE
+===================================================== */
+
+function getWebStatus(){
+
+return{
+
+windows:
+webSearchWindows
+.querySelectorAll(
+".web-window"
+)
+.length,
+
+searchEngine:
+"Bing",
+
+browserSearchWindow:
+true,
+
+backendWebAccess:
+false
+
+};
+
+}
+
+
+/* =====================================================
+   SNAPSHOT CAPACITÀ REALI
+===================================================== */
+
+async function getJarvisCapabilitiesSnapshot(){
+
+const battery =
+await getBatteryData();
+
+return{
+
+capabilities:{
+...JARVIS_CAPABILITIES
+},
+
+time:
+getTimeData(),
+
+network:
+getNetworkData(),
+
+battery:battery,
+
+device:
+getDeviceInfo(),
+
+microphone:
+getMicrophoneStatus(),
+
+fullscreen:
+getFullscreenStatus(),
+
+map:
+getMapStatus(),
+
+memory:
+getMemoryStatus(),
+
+web:
+getWebStatus(),
+
+location:
+{
+
+available:
+!!navigator.geolocation,
+
+locked:
+earthLatitude !== null &&
+earthLongitude !== null
+
+}
+
+};
+
+}
+
+
+/* =====================================================
+   RISPOSTE LOCALI — DATI CHE JARVIS PUÒ VERIFICARE
+===================================================== */
+
+async function handleDeviceCommand(text){
+
+const normalized =
+normalizeCommand(text);
+
+
+/* =====================================================
+   BATTERIA
+===================================================== */
+
+const asksBattery =
+normalized.includes("batteria")
+||
+normalized.includes("percentuale batteria")
+||
+normalized.includes("quanta batteria")
+||
+normalized.includes("livello batteria")
+||
+normalized.includes("carica del telefono")
+||
+normalized.includes("carica del dispositivo");
+
+
+if(asksBattery){
+
+const battery =
+await getBatteryData();
+
+if(!battery.available){
+
+const reply =
+"Non posso leggere la batteria: la Battery API non è disponibile in questo browser.";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+const reply =
+"La batteria rilevata dal browser è al " +
+battery.level +
+"%. " +
+(
+battery.charging
+?
+"Il dispositivo è in carica."
+:
+"Il dispositivo non risulta in carica."
+);
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+
+/* =====================================================
+   RETE
+===================================================== */
+
+if(
+
+normalized === "stato della rete"
+||
+normalized === "controlla la rete"
+||
+normalized === "controlla connessione"
+||
+normalized === "sono online"
+||
+normalized === "sono connesso"
+||
+normalized.includes("connessione internet")
+||
+normalized.includes("connessione")
+
+){
+
+const network =
+getNetworkData();
+
+let reply;
+
+if(network.online){
+
+reply =
+"Il browser rileva una connessione online.";
+
+if(
+network.effectiveType !==
+"non disponibile"
+){
+
+reply +=
+" Tipo effettivo: " +
+network.effectiveType +
+".";
+
+}
+
+}else{
+
+reply =
+"Il browser rileva una connessione offline.";
+
+}
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+
+/* =====================================================
+   DISPOSITIVO / TELEFONO
+===================================================== */
+
+if(
+
+normalized ===
+"controlla il mio telefono"
+||
+normalized ===
+"controlla il telefono"
+||
+normalized ===
+"che telefono ho"
+||
+normalized ===
+"che dispositivo ho"
+||
+normalized ===
+"dimmi che telefono ho"
+||
+normalized.includes(
+"modello del telefono"
+)
+||
+normalized.includes(
+"modello del dispositivo"
+)
+
+){
+
+const device =
+getDeviceInfo();
+
+let reply =
+"Posso leggere solo le informazioni che il browser espone. " +
+"Non posso verificare con certezza il modello commerciale del telefono.";
+
+reply +=
+" Rilevo: " +
+device.deviceType +
+".";
+
+if(device.platform){
+
+reply +=
+" Piattaforma browser: " +
+device.platform +
+".";
+}
+
+reply +=
+" Risoluzione dello schermo: " +
+device.screenWidth +
+" × " +
+device.screenHeight +
+".";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+
+/* =====================================================
+   POSIZIONE
+===================================================== */
+
+if(
+
+normalized ===
+"dove sono"
+||
+normalized ===
+"qual è la mia posizione"
+||
+normalized ===
+"qual e la mia posizione"
+||
+normalized.includes(
+"localizza me"
+)
+||
+normalized.includes(
+"localizzami"
+)
+||
+normalized.includes(
+"posizione attuale"
+)
+
+){
+
+if(
+earthLatitude !== null &&
+earthLongitude !== null
+){
+
+const reply =
+"La posizione del dispositivo è stata ottenuta tramite la geolocalizzazione del browser. " +
+"Coordinate: " +
+earthLatitude.toFixed(5) +
+", " +
+earthLongitude.toFixed(5) +
+".";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+if(!navigator.geolocation){
+
+const reply =
+"La geolocalizzazione non è disponibile in questo browser.";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+requestEarthLocation();
+
+const reply =
+"Posso usare la geolocalizzazione del browser, ma devo ricevere il permesso del dispositivo. " +
+"Controlla la richiesta di autorizzazione.";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+if(
+
+normalized ===
+"controlla fullscreen"
+||
+normalized ===
+"stato fullscreen"
+||
+normalized ===
+"sono in fullscreen"
+
+){
+
+const fullscreen =
+getFullscreenStatus();
+
+const reply =
+fullscreen.active
+?
+"Fullscreen attivo."
+:
+"Fullscreen non attivo.";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
+if(
+
+normalized ===
+"controlla microfono"
+||
+normalized ===
+"stato microfono"
+||
+normalized ===
+"microfono attivo"
+
+){
+
+const mic =
+getMicrophoneStatus();
+
+let reply;
+
+if(mic.listening){
+
+reply =
+"Il riconoscimento vocale è attualmente in ascolto.";
+
+}else if(mic.monitor){
+
+reply =
+"Il monitor audio è attivo.";
+
+}else if(mic.speechRecognition){
+
+reply =
+"Il riconoscimento vocale è disponibile, ma non è attualmente in ascolto.";
+
+}else{
+
+reply =
+"Il riconoscimento vocale non è disponibile in questo browser.";
+
+}
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+
+/* =====================================================
+   CAPACITÀ
+===================================================== */
+
+if(
+
+normalized ===
+"cosa puoi fare"
+||
+normalized ===
+"cosa sai fare"
+||
+normalized ===
+"quali funzioni hai"
+||
+normalized ===
+"quali sono le tue funzioni"
+||
+normalized.includes(
+"cosa puoi controllare"
+)
+
+){
+
+const capabilities =
+await getJarvisCapabilitiesSnapshot();
+
+const available = [];
+
+if(capabilities.capabilities.localMemory)
+available.push("memoria locale");
+
+if(capabilities.capabilities.clock)
+available.push("ora e data");
+
+if(capabilities.capabilities.voiceOutput)
+available.push("sintesi vocale");
+
+if(capabilities.capabilities.speechRecognition)
+available.push("riconoscimento vocale");
+
+if(capabilities.capabilities.geolocation)
+available.push("geolocalizzazione con autorizzazione");
+
+if(capabilities.capabilities.networkStatus)
+available.push("stato della connessione");
+
+if(capabilities.capabilities.battery)
+available.push("lettura batteria se supportata dal browser");
+
+if(capabilities.capabilities.deviceInfo)
+available.push("informazioni limitate del browser/dispositivo");
+
+if(capabilities.capabilities.fullscreen)
+available.push("fullscreen");
+
+if(capabilities.capabilities.tacticalMap)
+available.push("mappa tattica");
+
+if(capabilities.capabilities.webSearchWindows)
+available.push("finestre di ricerca web");
+
+const reply =
+"Le funzioni realmente disponibili in questa interfaccia sono:\n\n" +
 available
+.map(
+item => "• " + item
+)
+.join("\n") +
+"\n\nNon ho collegamenti reali a telecamere di casa, serrature, luci, sistemi di sicurezza o altri telefoni.";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+
+/* =====================================================
+   RIFIUTO DI CAPACITÀ NON COLLEGATE
+===================================================== */
+
+if(
+
+normalized.includes("telecamera")
+||
+normalized.includes("telecamere")
+||
+normalized.includes("telecamera di casa")
+||
+normalized.includes("telecamere di casa")
+||
+normalized.includes("sicurezza di casa")
+||
+normalized.includes("sistema di sicurezza")
+||
+normalized.includes("serratura")
+||
+normalized.includes("serrature")
+||
+normalized.includes("luce di casa")
+||
+normalized.includes("luci di casa")
+||
+normalized.includes("lampadine")
+||
+normalized.includes("smart home")
+||
+normalized.includes("casa intelligente")
+||
+normalized.includes("controlla il mio telefono")
+||
+normalized.includes("controlla il telefono")
+||
+normalized.includes("controlla un altro telefono")
+||
+normalized.includes("controlla iphone")
+||
+normalized.includes("controlla android")
+
+){
+
+const reply =
+"Questa funzione non è collegata a J.A.R.V.I.S. in questo momento. " +
+"Non posso fingere di avere accesso a dispositivi o sistemi che non sono realmente integrati.";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return true;
+
+}
+
+return false;
+
+}
+
+
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+function isFullscreen(){
+
+return !!(
+document.fullscreenElement ||
+document.webkitFullscreenElement
+);
+
+}
+
+
+async function toggleFullscreen(){
+
+try{
+
+if(isFullscreen()){
+
+if(document.exitFullscreen){
+
+await document.exitFullscreen();
+
+}
+
+}else{
+
+if(
+document.documentElement
+.requestFullscreen
+){
+
+await document
+.documentElement
+.requestFullscreen();
+
+}
+
+}
+
+}catch(error){
+
+console.warn(
+"Fullscreen:",
+error
+);
+
+}
+
+}
+
+
+fullscreenBtn.addEventListener(
+"click",
+toggleFullscreen
+);
+
+
+document.addEventListener(
+"fullscreenchange",
+()=>{
+
+fullscreenBtn.classList.toggle(
+"active",
+isFullscreen()
+);
+
+fullscreenBtn.textContent =
+isFullscreen()
+?
+"⛶ ESCI FULLSCREEN"
+:
+"⛶ FULLSCREEN";
+
+if(map){
+
+setTimeout(
+()=>{
+map.resize();
+},
+100
+);
+
+}
+
+}
+);
+
+
+/* =====================================================
+   VOCI
+===================================================== */
+
+let deviceVoices = [];
+
+let selectedDeviceVoice = null;
+
+let currentAudio = null;
+
+let audioPlaying = false;
+
+
+function loadDeviceVoices(){
+
+if(
+!("speechSynthesis" in window)
+)
+return;
+
+deviceVoices =
+speechSynthesis.getVoices();
+
+voiceSelector.innerHTML = "";
+
+const automatic =
+document.createElement("option");
+
+automatic.value = "";
+
+automatic.textContent =
+"Voce dispositivo automatica";
+
+voiceSelector.appendChild(
+automatic
+);
+
+deviceVoices.forEach(
+(voice,index)=>{
+
+const option =
+document.createElement("option");
+
+option.value =
+String(index);
+
+option.textContent =
+voice.name +
+" — " +
+voice.lang;
+
+voiceSelector.appendChild(
+option
+);
+
+}
+);
+
+}
+
+
+if(
+"speechSynthesis" in window
+){
+
+loadDeviceVoices();
+
+speechSynthesis.onvoiceschanged =
+loadDeviceVoices;
+
+}
+
+
+function speakDevice(text){
+
+return new Promise(
+resolve=>{
+
+if(
+!("speechSynthesis" in window)
+){
+
+resolve(false);
+
+return;
+
+}
+
+speechSynthesis.cancel();
+
+const utterance =
+new SpeechSynthesisUtterance(
+text
+);
+
+utterance.lang =
+"it-IT";
+
+utterance.rate =
+.95;
+
+utterance.pitch =
+.9;
+
+utterance.volume =
+1;
+
+if(selectedDeviceVoice){
+
+utterance.voice =
+selectedDeviceVoice;
+
+}else{
+
+const italianVoice =
+deviceVoices.find(
+voice=>
+voice.lang
+.toLowerCase()
+.startsWith("it")
+);
+
+if(italianVoice){
+
+utterance.voice =
+italianVoice;
+
+}
+
+}
+
+utterance.onstart =
+()=>{
+
+audioPlaying = true;
+
+setState("speaking");
+
+};
+
+utterance.onend =
+()=>{
+
+audioPlaying = false;
+
+setState("idle");
+
+resolve(true);
+
+};
+
+utterance.onerror =
+()=>{
+
+audioPlaying = false;
+
+setState("idle");
+
+resolve(false);
+
+};
+
+speechSynthesis.speak(
+utterance
+);
+
+}
+
+);
+
+}
+
+
+/* =====================================================
+   ELEVENLABS
+===================================================== */
+
+async function speakElevenLabs(text){
+
+try{
+
+const response =
+await fetch(
+API,
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+action:"tts",
+
+text:text,
+
+voiceId:
+ELEVEN_VOICE_ID
+
+})
+
+}
+);
+
+if(!response.ok)
+return false;
+
+const type =
+response.headers
+.get("content-type")
+||"";
+
+if(
+!type.includes("audio")
+)
+return false;
+
+const blob =
+await response.blob();
+
+if(!blob.size)
+return false;
+
+const url =
+URL.createObjectURL(
+blob
+);
+
+const audio =
+new Audio(url);
+
+currentAudio =
+audio;
+
+audio.onplay =
+()=>{
+
+audioPlaying = true;
+
+setState("speaking");
+
+};
+
+audio.onended =
+()=>{
+
+audioPlaying = false;
+
+setState("idle");
+
+URL.revokeObjectURL(
+url
+);
+
+currentAudio = null;
+
+};
+
+audio.onerror =
+()=>{
+
+audioPlaying = false;
+
+setState("idle");
+
+URL.revokeObjectURL(
+url
+);
+
+currentAudio = null;
+
+};
+
+await audio.play();
+
+return true;
+
+}catch(error){
+
+console.warn(
+"ElevenLabs:",
+error
+);
+
+return false;
+
+}
+
+}
+
+
+async function speak(text){
+
+if(!text)
+return;
+
+const success =
+await speakElevenLabs(text);
+
+if(!success){
+
+await speakDevice(text);
+
+}
+
+}
+
+
+/* =====================================================
+   VOICE UI
+===================================================== */
+
+voiceBtn.addEventListener(
+"click",
+()=>{
+
+voicePanel.classList.toggle(
+"active"
+);
+
+loadDeviceVoices();
+
+}
+);
+
+
+voiceSelector.addEventListener(
+"change",
+()=>{
+
+const value =
+voiceSelector.value;
+
+if(value === ""){
+
+selectedDeviceVoice =
+null;
+
+return;
+
+}
+
+const index =
+Number(value);
+
+if(deviceVoices[index]){
+
+selectedDeviceVoice =
+deviceVoices[index];
+
+}
+
+}
+);
+
+
+voiceTest.addEventListener(
+"click",
+()=>{
+
+speakDevice(
+"J.A.R.V.I.S. operativo. Sistema vocale funzionante."
+);
+
+}
+);
+
+
+/* =====================================================
+   MICROFONO
+===================================================== */
+
+let recognition = null;
+
+let listening = false;
+
+
+const Recognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+
+if(Recognition){
+
+recognition =
+new Recognition();
+
+recognition.lang =
+"it-IT";
+
+recognition.continuous =
+false;
+
+recognition.interimResults =
+false;
+
+
+recognition.onstart =
+async ()=>{
+
+listening = true;
+
+micBtn.classList.add(
+"active"
+);
+
+setState("listening");
+
+
+await startVoiceMonitor();
+
+};
+
+
+recognition.onresult =
+event=>{
+
+const result =
+event.results[
+event.results.length - 1
+];
+
+if(!result)
+return;
+
+const text =
+result[0]
+.transcript
+.trim();
+
+if(!text)
+return;
+
+textInput.value =
+text;
+
+sendMessage();
+
+};
+
+
+recognition.onerror =
+error=>{
+
+console.warn(
+"Microfono:",
+error
+);
+
+listening = false;
+
+micBtn.classList.remove(
+"active"
+);
+
+stopVoiceMonitor();
+
+setState("idle");
+
+};
+
+
+recognition.onend =
+()=>{
+
+listening = false;
+
+micBtn.classList.remove(
+"active"
+);
+
+stopVoiceMonitor();
+
+if(!audioPlaying){
+
+setState("idle");
+
+}
+
+};
+
+
+micBtn.addEventListener(
+"click",
+()=>{
+
+if(listening){
+
+try{
+recognition.stop();
+}catch(e){}
+
+}else{
+
+try{
+recognition.start();
+}catch(e){
+
+console.warn(e);
+
+}
+
+}
+
+}
+);
+
+}else{
+
+micBtn.style.opacity =
+".35";
+
+}
+
+
+/* =====================================================
+   CONTROLLO SISTEMA
+===================================================== */
+
+function updateSystemPanel(){
+
+const memoryElement =
+document.getElementById(
+"homeMemory"
+);
+
+const voiceElement =
+document.getElementById(
+"homeVoice"
+);
+
+const hardwareOnline =
+navigator.onLine;
+
+
+/* =====================================================
+   MEMORIA
+===================================================== */
+
+memoryElement.innerHTML =
+"ENTRIES: " +
+memory.length +
+"<br>LOCAL";
+
+
+/* =====================================================
+   WEB
+===================================================== */
+
+homeWeb.innerHTML =
+"WINDOWS: " +
+webSearchWindows
+.querySelectorAll(
+".web-window"
+)
+.length +
+"<br>BING ENGINE";
+
+
+/* =====================================================
+   VOCE
+===================================================== */
+
+voiceElement.innerHTML =
+"SPEECH: " +
+(
+"speechSynthesis" in window
+?
+"READY"
+:
+"OFFLINE"
+)
++
+"<br>MIC: " +
+(
+recognition
+?
+"READY"
+:
+"OFFLINE"
+);
+
+
+/* =====================================================
+   RETE
+===================================================== */
+
+homeNetwork.innerHTML =
+hardwareOnline
+?
+"ONLINE<br>LINK ACTIVE"
+:
+"OFFLINE<br>NO LINK";
+
+
+/* =====================================================
+   AI CORE
+===================================================== */
+
+homeAI.innerHTML =
+"ONLINE<br>API: READY";
+
+
+/* =====================================================
+   MAPPA
+===================================================== */
+
+homeMap.innerHTML =
+(
+typeof maplibregl !==
+"undefined"
+?
+"MAP: READY"
+:
+"MAP: OFFLINE"
+)
++
+"<br>MAPTILER";
+
+}
+
+
+/* =====================================================
+   MEMORIA UI
+===================================================== */
+
+function showMemory(){
+
+if(!memory.length){
+
+addMsg(
+"La memoria JARVIS è vuota."
+);
+
+return;
+
+}
+
+const preview =
+memory
+.slice(-10)
+.map(
+(item,index)=>
+(index + 1) +
+". " +
+item.role +
+": " +
+item.content
+)
+.join("\n");
+
+addMsg(preview);
+
+}
+
+
+function clearMemory(){
+
+memory = [];
+
+localStorage.removeItem(
+MEMORY_KEY
+);
+
+updateSystemPanel();
+
+notify(
+"MEMORIA CANCELLATA"
+);
+
+addMsg(
+"Memoria JARVIS cancellata."
+);
+
+}
+
+
+/* =====================================================
+   PROCESS AI
+===================================================== */
+
+async function processAi(text){
+
+if(
+handleMapCommand(text)
+)
+return;
+
+
+if(
+handleWebCommand(text)
+)
+return;
+
+
+/* =====================================================
+   COMANDI LOCALI REALI
+===================================================== */
+
+if(
+await handleDeviceCommand(text)
+)
+return;
+
+
+const normalized =
+normalizeCommand(text);
+
+
+if(
+normalized === "che ore sono"
+||
+normalized === "che ora e"
+){
+
+const data =
+getTimeData();
+
+const reply =
+"Sono le " +
+data.currentTime +
+". Oggi è " +
+data.dayOfWeek +
+" " +
+data.currentDate +
+".";
+
+addMsg(
+reply,
+true
+);
+
+speak(reply);
+
+return;
+
+}
+
+
+setState("thinking");
+
+addMemory(
+"user",
+text
+);
+
+
+try{
+
+const temporal =
+getTimeData();
+
+const controller =
+new AbortController();
+
+const timeout =
+setTimeout(
+()=>{
+controller.abort();
+},
+30000
+);
+
+
+/* =====================================================
+   SNAPSHOT CAPACITÀ REALI
+===================================================== */
+
+const capabilities =
+await getJarvisCapabilitiesSnapshot();
+
+
+/* =====================================================
+   ISTRUZIONI ANTI-INVENZIONE
+===================================================== */
+
+const capabilityInstructions =
+
+"REGOLE OPERATIVE J.A.R.V.I.S.: " +
+
+"Devi dichiarare esclusivamente capacità e dati realmente presenti nel payload capabilities. " +
+
+"Non inventare mai percentuali di batteria, modello del telefono, posizione, stato di dispositivi o altri dati hardware. " +
+
+"Non dire di avere accesso a fotocamere, telecamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni perché NON sono integrati. " +
+
+"Se una funzione è false, unavailable o non presente, devi dire chiaramente che non è disponibile. " +
+
+"Se un dato non è verificabile dal browser, non devi stimarlo né indovinarlo. " +
+
+"Il modello commerciale esatto del dispositivo non deve essere dedotto dallo user agent. " +
+
+"La geolocalizzazione è disponibile solo tramite il permesso del browser e le coordinate non devono essere inventate. " +
+
+"Rispondi in italiano quando l'utente parla italiano.";
+
+
+const response =
+await fetch(
+API,
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+message:text,
+
+memory:
+memory.slice(-4),
+
+currentTime:
+temporal.currentTime,
+
+currentDate:
+temporal.currentDate,
+
+dayOfWeek:
+temporal.dayOfWeek,
+
+timezone:
+temporal.timezone,
+
+capabilities:
+capabilities,
+
+systemInstructions:
+capabilityInstructions
+
+}),
+
+signal:
+controller.signal
+
+}
+);
+
+
+clearTimeout(timeout);
+
+
+if(!response.ok){
+
+throw new Error(
+"HTTP " +
+response.status
+);
+
+}
+
+
+const data =
+await response.json();
+
+
+const reply =
+typeof data.response ===
+"string"
+?
+data.response.trim()
+:
+"";
+
+
+if(!reply){
+
+throw new Error(
+"Risposta AI vuota"
+);
+
+}
+
+
+const copyable =
+isCopyableResponse(
+text,
+reply
+);
+
+
+addMsg(
+reply,
+true,
+copyable
+);
+
+addMemory(
+"assistant",
+reply
+);
+
+speak(reply);
+
+setState("idle");
+
+
+}catch(error){
+
+console.error(
+"JARVIS ERROR:",
+error
+);
+
+addMsg(
+"ERRORE: " +
+(
+error.name ===
+"AbortError"
+?
+"server non ha risposto in tempo."
+:
+error.message
+)
+);
+
+setState("error");
+
+setTimeout(
+()=>{
+setState("idle");
+},
+1200
+);
+
+}
+
+}
+
+
+/* =====================================================
+   INVIO
+===================================================== */
+
+function sendMessage(){
+
+const text =
+textInput.value.trim();
+
+if(!text)
+return;
+
+textInput.value = "";
+
+addMsg(text);
+
+processAi(text);
+
+}
+
+
+sendBtn.addEventListener(
+"click",
+sendMessage
+);
+
+
+textInput.addEventListener(
+"keydown",
+event=>{
+
+if(
+event.key ===
+"Enter"
+){
+
+event.preventDefault();
+
+sendMessage();
+
+}
+
+}
+);
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+window.addEventListener(
+"resize",
+()=>{
+
+if(
+camera &&
+renderer
+){
+
+camera.aspect =
+window.innerWidth /
+window.innerHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(
+window.innerWidth,
+window.innerHeight
+);
+
+}
+
+resizeEarthGlobe();
+
+if(map){
+
+map.resize();
+
+}
+
+updateSystemPanel();
+
+}
+);
+
+
+/* =====================================================
+   ONLINE / OFFLINE
+===================================================== */
+
+window.addEventListener(
+"online",
+()=>{
+
+notify(
+"CONNESSIONE ONLINE"
+);
+
+updateSystemPanel();
+
+}
+);
+
+
+window.addEventListener(
+"offline",
+()=>{
+
+notify(
+"CONNESSIONE OFFLINE"
+);
+
+updateSystemPanel();
+
+}
+);
+
+
+/* =====================================================
+   AVVIO
+===================================================== */
+
+setState("idle");
+
+updateSystemPanel();
+
+notify(
+"J.A.R.V.I.S. SYSTEM ONLINE"
+);
+
+</script>
+
+</body>
+
+</html>

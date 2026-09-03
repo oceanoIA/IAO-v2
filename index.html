@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Real-Time 3D Magic Hand Particle System</title>
+  <title>Real-Time 3D Hand-Controlled Particle System</title>
   <style>
     * {
       box-sizing: border-box;
@@ -143,7 +143,7 @@
   </div>
 
   <script>
-    const PARTICLE_COUNT = 22000;
+    const PARTICLE_COUNT = 24000;
     let scene, camera, renderer, particleSystem, geometry, material;
     let targetPositions = new Float32Array(PARTICLE_COUNT * 3);
     let currentPositions = new Float32Array(PARTICLE_COUNT * 3);
@@ -152,8 +152,6 @@
     let targetScale = 1.0;
     
     let targetCamZ = 35;
-    let targetObjX = 0;
-    let targetObjY = 0;
     let targetRotX = 0;
     let targetRotY = 0;
     let targetRotZ = 0;
@@ -179,32 +177,34 @@
 
       geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-      // Creazione di una texture ultrasfocata assente: cerchio solido e super nitido
+      // Texture ad altissima nitidezza senza gradienti sfocati
       const canvas = document.createElement('canvas');
       canvas.width = 128;
       canvas.height = 128;
       const ctx = canvas.getContext('2d');
       
+      // Cerchio solido a bordi netti e definiti
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
-      ctx.arc(64, 64, 58, 0, Math.PI * 2);
+      ctx.arc(64, 64, 60, 0, Math.PI * 2);
       ctx.fill();
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.generateMipmaps = true;
-      texture.minFilter = THREE.LinearMipmapLinearFilter;
 
       material = new THREE.PointsMaterial({
-        size: 0.22,
+        size: 0.18,
         color: new THREE.Color('#00f0ff'),
         map: texture,
         transparent: true,
-        opacity: 0.95,
+        opacity: 1.0,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
 
       particleSystem = new THREE.Points(geometry, material);
+      // Mantieni l'oggetto fisso al centro dello schermo
+      particleSystem.position.set(0, 0, 0);
       scene.add(particleSystem);
 
       generateShape('heart');
@@ -304,49 +304,55 @@
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
           const numHands = results.multiHandLandmarks.length;
           statusDot.classList.add('active');
-          statusText.innerText = `Magic Control (${numHands} Hand${numHands > 1 ? 's' : ''})`;
+          statusText.innerText = `Controllo 3D (${numHands} Man${numHands > 1 ? 'i' : 'o'})`;
 
-          const hand1 = results.multiHandLandmarks[0];
-
-          // Posizionamento "Magico": Segue la mano nello spazio (Specchiato per naturalezza)
-          const palmCenter = hand1[9]; // Base dito medio
-          targetObjX = (0.5 - palmCenter.x) * 35;
-          targetObjY = (0.5 - palmCenter.y) * 22;
-
-          // Orientamento e Rotazione della mano
-          const wrist = hand1[0];
-          const angleRad = Math.atan2(palmCenter.y - wrist.y, palmCenter.x - wrist.x);
-          targetRotZ = -(angleRad + Math.PI / 2) * 2.0;
-          targetRotY = (palmCenter.x - 0.5) * 3.0;
-          targetRotX = (palmCenter.y - 0.5) * 3.0;
+          const h1 = results.multiHandLandmarks[0][9]; // Centro palmo 1
 
           if (numHands >= 2) {
-            // Controllo Zoom a 2 mani
-            const hand2 = results.multiHandLandmarks[1];
-            const wrist2 = hand2[0];
-            
-            const dx = wrist.x - wrist2.x;
-            const dy = wrist.y - wrist2.y;
-            const handDistance = Math.sqrt(dx * dx + dy * dy);
+            const h2 = results.multiHandLandmarks[1][9]; // Centro palmo 2
 
-            targetCamZ = THREE.MathUtils.mapLinear(handDistance, 0.18, 0.75, 70, 12);
-            targetCamZ = THREE.MathUtils.clamp(targetCamZ, 10, 80);
+            const dx = h2.x - h1.x;
+            const dy = h2.y - h1.y;
+            const dz = (h2.z || 0) - (h1.z || 0);
+            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+            // ROTAZIONE 3D CON DUE MANI (Come orientare un volante/sfera 3D nello spazio)
+            // 1. Roll (Rotazione asse Z): Inclinazione relativa tra le due mani
+            targetRotZ = Math.atan2(dy, dx);
+
+            // 2. Yaw (Rotazione asse Y): Spostamento orizzontale relativo tra le mani
+            const avgX = (h1.x + h2.x) / 2 - 0.5;
+            targetRotY = avgX * Math.PI * 3.0;
+
+            // 3. Pitch (Rotazione asse X): Altezza media delle mani
+            const avgY = (h1.y + h2.y) / 2 - 0.5;
+            targetRotX = avgY * Math.PI * 2.5;
+
+            // ZOOM A DUE MANI: Distanza tra le due mani nello spazio
+            targetCamZ = THREE.MathUtils.mapLinear(dist, 0.18, 0.75, 70, 12);
+            targetCamZ = THREE.MathUtils.clamp(targetCamZ, 12, 75);
           } else {
-            // Espansione con pugno aperto/chiuso
-            const dx = hand1[0].x - hand1[12].x;
-            const dy = hand1[0].y - hand1[12].y;
-            const span = Math.sqrt(dx * dx + dy * dy);
-            
+            // ROTAZIONE 3D CON UNA MANO: Orientamento spaziale del singolo palmo
+            const wrist = results.multiHandLandmarks[0][0];
+            const middle = results.multiHandLandmarks[0][9];
+
+            targetRotZ = -Math.atan2(middle.y - wrist.y, middle.x - wrist.x) - Math.PI / 2;
+            targetRotX = (middle.y - 0.5) * Math.PI * 2.0;
+            targetRotY = (middle.x - 0.5) * Math.PI * 3.0;
+
+            // ESPANSIONE SINGOLA MANO (Pugno aperto/chiuso)
+            const spanX = wrist.x - results.multiHandLandmarks[0][12].x;
+            const spanY = wrist.y - results.multiHandLandmarks[0][12].y;
+            const span = Math.sqrt(spanX * spanX + spanY * spanY);
+
             targetScale = THREE.MathUtils.mapLinear(span, 0.2, 0.55, 0.4, 2.2);
             targetScale = THREE.MathUtils.clamp(targetScale, 0.3, 2.5);
           }
         } else {
           statusDot.classList.remove('active');
-          statusText.innerText = "No Hands Detected";
+          statusText.innerText = "Nessuna mano rilevata";
           targetScale = 1.0;
           targetCamZ = 35;
-          targetObjX = 0;
-          targetObjY = 0;
           targetRotX = 0;
           targetRotY = 0;
           targetRotZ = 0;
@@ -366,16 +372,12 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Inseguimento fluido stile "telecinesi / magia"
-      particleSystem.position.x += (targetObjX - particleSystem.position.x) * 0.12;
-      particleSystem.position.y += (targetObjY - particleSystem.position.y) * 0.12;
+      // Rotazione 3D fluida sui tre assi (X, Y, Z)
+      particleSystem.rotation.x += (targetRotX - particleSystem.rotation.x) * 0.08;
+      particleSystem.rotation.y += (targetRotY + 0.003 - particleSystem.rotation.y) * 0.08;
+      particleSystem.rotation.z += (targetRotZ - particleSystem.rotation.z) * 0.08;
 
-      // Inclinazione e rotazione controllata direttamente dalle mani
-      particleSystem.rotation.x += (targetRotX - particleSystem.rotation.x) * 0.1;
-      particleSystem.rotation.y += (targetRotY - particleSystem.rotation.y + 0.005 - particleSystem.rotation.y) * 0.1;
-      particleSystem.rotation.z += (targetRotZ - particleSystem.rotation.z) * 0.1;
-
-      // Scaling ed interpolazione posizione particelle
+      // Scaling e Zoom continui
       handExpansionScale += (targetScale - handExpansionScale) * 0.1;
       camera.position.z += (targetCamZ - camera.position.z) * 0.08;
 

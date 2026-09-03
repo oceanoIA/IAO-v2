@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARK KINETIC LAB v8.8 // PARTICLES & STACKING</title>
+  <title>STARK KINETIC LAB v8.9 // PARTICLES & STACKING</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,7 +113,7 @@
 
   <div class="stark-header">
     <div class="stark-title">
-      <span>STARK LAB v8.8</span>
+      <span>STARK LAB v8.9</span>
       <span class="security-badge">GLOW DOTS // STACKING</span>
     </div>
     <div class="mode-tabs">
@@ -329,7 +329,6 @@
       floor.receiveShadow = true;
       builderGroup.add(floor);
 
-      // Inizializzazione dei puntini luminosi per le mani
       controllers.forEach((ctrl, idx) => {
         const dotGeo = new THREE.SphereGeometry(0.5, 16, 16);
         const dotMat = new THREE.MeshBasicMaterial({ color: ctrl.color });
@@ -654,6 +653,7 @@
 
       if (currentMode === 'BUILDER') {
         const gravity = -0.045;
+        const cubeSize = 3.6;
 
         blocks.forEach(block => {
           if (!block.userData.isGrabbed) {
@@ -663,7 +663,7 @@
             block.userData.velocity.x *= 0.98;
             block.userData.velocity.z *= 0.98;
 
-            const floorY = -6 + 1.8; 
+            const floorY = -6 + cubeSize / 2; 
             if (block.position.y < floorY) {
               block.position.y = floorY;
               block.userData.velocity.y = 0;
@@ -677,10 +677,12 @@
                 const dz = block.position.z - other.position.z;
                 const distXZ = Math.sqrt(dx * dx + dz * dz);
                 
-                if (distXZ < 3.2) {
-                  const topOfOther = other.position.y + 3.6;
-                  if (block.position.y - 1.8 <= topOfOther && block.position.y > other.position.y && block.userData.velocity.y <= 0) {
-                    block.position.y = topOfOther + 1.8;
+                // Se i cubi sono sovrapposti orizzontalmente
+                if (distXZ < cubeSize * 0.85) {
+                  const topOfOther = other.position.y + cubeSize;
+                  // Se il cubo sta scendendo ed è vicino alla faccia superiore dell'altro
+                  if (block.position.y - cubeSize / 2 <= topOfOther && block.position.y > other.position.y) {
+                    block.position.y = topOfOther + cubeSize / 2; // Perfettamente attaccato, zero spazi
                     block.userData.velocity.y = 0;
                     block.userData.velocity.x *= 0.2;
                     block.userData.velocity.z *= 0.2;

@@ -2151,8 +2151,6 @@ TESTA VOCE
 
 <!-- =====================================================
      CAMERA MANO
-     La webcam rimane spenta finché non viene premuto
-     il pulsante MANO OFF.
 ===================================================== -->
 
 <video
@@ -4319,7 +4317,7 @@ errorElement
 
 }
 
-} /* <<< CORREZIONE: chiude initializeNeuralCore() */
+}
 
 
 /* =====================================================
@@ -4341,6 +4339,13 @@ const vision =
 await FilesetResolver.forVisionTasks(
 "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
 );
+
+
+/* =====================================================
+   PROVA GPU
+===================================================== */
+
+try{
 
 handLandmarker =
 await HandLandmarker.createFromOptions(
@@ -4375,7 +4380,58 @@ minTrackingConfidence:
 }
 );
 
+}catch(gpuError){
+
+console.warn(
+"GPU hand tracking non disponibile, provo CPU:",
+gpuError
+);
+
+
+/* =====================================================
+   FALLBACK CPU
+===================================================== */
+
+handLandmarker =
+await HandLandmarker.createFromOptions(
+vision,
+{
+
+baseOptions:{
+
+modelAssetPath:
+"https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+
+delegate:
+"CPU"
+
+},
+
+runningMode:
+"VIDEO",
+
+numHands:
+1,
+
+minHandDetectionConfidence:
+0.55,
+
+minHandPresenceConfidence:
+0.55,
+
+minTrackingConfidence:
+0.55
+
+}
+);
+
+}
+
 handTrackingReady = true;
+
+notify(
+"HAND TRACKING READY"
+);
 
 return true;
 
@@ -4585,15 +4641,22 @@ const handEnergy =
 Math.abs(roll) * .55 +
 openness * .20;
 
-if(
-handControlActive &&
-targetEnergy <= .16
-){
+
+/* =====================================================
+   ENERGIA MANO
+===================================================== */
+
+if(handControlActive){
+
+const handEnergyTarget =
+.15 +
+handEnergy * 1.35;
 
 targetEnergy =
-Math.max(
-.15,
-handEnergy
+THREE.MathUtils.lerp(
+targetEnergy,
+handEnergyTarget,
+.08
 );
 
 }
@@ -7501,8 +7564,7 @@ document.documentElement
 .requestFullscreen
 ){
 
-await document
-.documentElement
+await document.documentElement
 .requestFullscreen();
 
 }

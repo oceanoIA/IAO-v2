@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARK KINETIC LAB v8.7 // MINI HANDS & STACKING</title>
+  <title>STARK KINETIC LAB v8.8 // PARTICLES & STACKING</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,8 +113,8 @@
 
   <div class="stark-header">
     <div class="stark-title">
-      <span>STARK LAB v8.7</span>
-      <span class="security-badge">MINI HANDS // STACKING</span>
+      <span>STARK LAB v8.8</span>
+      <span class="security-badge">GLOW DOTS // STACKING</span>
     </div>
     <div class="mode-tabs">
       <button id="tab-builder" class="tab-btn active" onclick="switchMode('BUILDER')">SYS 01: 3D PHYSICS LAB</button>
@@ -271,79 +271,14 @@
     let builderGroup;
     let blocks = [];
 
-    class Skeleton3D {
-      constructor(colorHex) {
-        this.group = new THREE.Group();
-        this.joints = [];
-        this.bones = [];
-        
-        const jointGeo = new THREE.SphereGeometry(0.35, 12, 12);
-        const jointMat = new THREE.MeshBasicMaterial({ color: colorHex });
-        
-        for (let i = 0; i < 21; i++) {
-          const joint = new THREE.Mesh(jointGeo, jointMat);
-          this.group.add(joint);
-          this.joints.push(joint);
-        }
-
-        const boneMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        HAND_CONNECTIONS.forEach(() => {
-          const boneGeo = new THREE.CylinderGeometry(0.12, 0.12, 1, 8);
-          boneGeo.rotateX(Math.PI / 2);
-          const bone = new THREE.Mesh(boneGeo, boneMat);
-          this.group.add(bone);
-          this.bones.push(bone);
-        });
-
-        this.group.visible = false;
-      }
-
-      update(landmarks, camera) {
-        if (!landmarks) {
-          this.group.visible = false;
-          return;
-        }
-        this.group.visible = true;
-
-        const jointPositions = [];
-        landmarks.forEach((lm, i) => {
-          const ndcX = (1 - lm.x) * 2 - 1;
-          const ndcY = -(lm.y * 2 - 1);
-          const vector = new THREE.Vector3(ndcX, ndcY, 0.5);
-          vector.unproject(camera);
-          const dir = vector.sub(camera.position).normalize();
-          const targetZ = -lm.z * 25;
-          const dist = (targetZ - camera.position.z) / dir.z;
-          const pos = camera.position.clone().add(dir.multiplyScalar(dist));
-          
-          this.joints[i].position.copy(pos);
-          jointPositions.push(pos);
-        });
-
-        HAND_CONNECTIONS.forEach((conn, i) => {
-          const p1 = jointPositions[conn[0]];
-          const p2 = jointPositions[conn[1]];
-          const bone = this.bones[i];
-
-          const start = p1.clone();
-          const end = p2.clone();
-          const distance = start.distanceTo(end);
-
-          bone.scale.set(1, 1, distance);
-          bone.position.copy(start.clone().add(end).multiplyScalar(0.5));
-          bone.lookAt(end);
-        });
-      }
-    }
-
     const controllers = [
       {
-        id: 0, skeleton: null, pointLight: null,
+        id: 0, mesh: null, pointLight: null, color: 0x00f3ff,
         grabbedBlock: null, grabOffset: new THREE.Vector3(), pos: new THREE.Vector3(), lastPos: new THREE.Vector3(),
         velocity: new THREE.Vector3(), isPinching: false, statusEl: null, grabEl: null, active: false
       },
       {
-        id: 1, skeleton: null, pointLight: null,
+        id: 1, mesh: null, pointLight: null, color: 0x73e600,
         grabbedBlock: null, grabOffset: new THREE.Vector3(), pos: new THREE.Vector3(), lastPos: new THREE.Vector3(),
         velocity: new THREE.Vector3(), isPinching: false, statusEl: null, grabEl: null, active: false
       }
@@ -394,15 +329,15 @@
       floor.receiveShadow = true;
       builderGroup.add(floor);
 
+      // Inizializzazione dei puntini luminosi per le mani
       controllers.forEach((ctrl, idx) => {
-        ctrl.skeleton = new Skeleton3D(idx === 0 ? 0x00f3ff : 0x73e600);
-        
-        // MANI PIÙ PICCOLE (Ridotte al 60% della dimensione originale)
-        ctrl.skeleton.group.scale.set(0.6, 0.6, 0.6);
-        
-        builderGroup.add(ctrl.skeleton.group);
+        const dotGeo = new THREE.SphereGeometry(0.5, 16, 16);
+        const dotMat = new THREE.MeshBasicMaterial({ color: ctrl.color });
+        ctrl.mesh = new THREE.Mesh(dotGeo, dotMat);
+        ctrl.mesh.visible = false;
+        builderGroup.add(ctrl.mesh);
 
-        ctrl.pointLight = new THREE.PointLight(0xffffff, 1.2, 15);
+        ctrl.pointLight = new THREE.PointLight(ctrl.color, 1.2, 15);
         builderGroup.add(ctrl.pointLight);
 
         ctrl.statusEl = document.getElementById(`h${idx + 1}-status`);
@@ -625,9 +560,10 @@
             sounds.updateHum(ctrl.velocity.length());
 
             if (currentMode === 'BUILDER') {
-              ctrl.skeleton.update(landmarks, camera);
+              ctrl.mesh.visible = true;
+              ctrl.mesh.position.copy(ctrl.pos);
             } else {
-              ctrl.skeleton.group.visible = false;
+              ctrl.mesh.visible = false;
             }
 
             ctrl.pointLight.position.copy(ctrl.pos);
@@ -665,7 +601,6 @@
                 if (ctrl.grabbedBlock) {
                   setBlockHighlight(ctrl.grabbedBlock, 'normal');
                   ctrl.grabbedBlock.userData.isGrabbed = false;
-                  // ZERO IMPULSI AL RILASCIO: velocità azzerata
                   ctrl.grabbedBlock.userData.velocity.set(0, 0, 0);
                   ctrl.grabbedBlock = null;
                 }
@@ -675,7 +610,7 @@
 
           } else {
             ctrl.active = false;
-            ctrl.skeleton.group.visible = false;
+            ctrl.mesh.visible = false;
             if (ctrl.grabbedBlock) {
               setBlockHighlight(ctrl.grabbedBlock, 'normal');
               ctrl.grabbedBlock.userData.isGrabbed = false;
@@ -718,7 +653,7 @@
       requestAnimationFrame(animate);
 
       if (currentMode === 'BUILDER') {
-        const gravity = -0.045; // Gravità terrestre simulata
+        const gravity = -0.045;
 
         blocks.forEach(block => {
           if (!block.userData.isGrabbed) {
@@ -728,7 +663,6 @@
             block.userData.velocity.x *= 0.98;
             block.userData.velocity.z *= 0.98;
 
-            // Collisione con il pavimento
             const floorY = -6 + 1.8; 
             if (block.position.y < floorY) {
               block.position.y = floorY;
@@ -737,17 +671,14 @@
               block.userData.velocity.z *= 0.5;
             }
 
-            // Collisione e impilamento (blocchi sopra altri blocchi)
             blocks.forEach(other => {
               if (block !== other && !other.userData.isGrabbed) {
                 const dx = block.position.x - other.position.x;
                 const dz = block.position.z - other.position.z;
                 const distXZ = Math.sqrt(dx * dx + dz * dz);
                 
-                // Se i blocchi sono allineati orizzontalmente
                 if (distXZ < 3.2) {
                   const topOfOther = other.position.y + 3.6;
-                  // Se il blocco sta cadendo sopra l'altro blocco
                   if (block.position.y - 1.8 <= topOfOther && block.position.y > other.position.y && block.userData.velocity.y <= 0) {
                     block.position.y = topOfOther + 1.8;
                     block.userData.velocity.y = 0;

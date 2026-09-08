@@ -1824,21 +1824,8 @@ border-radius:5px;
   
 
 #imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
-
-/* =====================================================
-   J.A.R.V.I.S. CORE OS — ORGANIZED CONTROL LAYER
-===================================================== */
-#jCoreTrigger{position:fixed;left:22px;top:20px;z-index:1200;padding:9px 12px;border:1px solid rgba(255,255,255,.16);border-radius:11px;background:rgba(5,5,7,.58);backdrop-filter:blur(16px);color:rgba(245,248,255,.82);font:8px/1 monospace;letter-spacing:1.8px;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.28)}
-#jCoreTrigger:hover{border-color:rgba(255,255,255,.38);color:#fff}
-#jCorePanel{position:fixed;left:18px;top:58px;width:min(430px,calc(100vw - 36px));max-height:calc(100vh - 78px);overflow:auto;z-index:1199;display:none;padding:14px;border:1px solid rgba(255,255,255,.13);border-radius:20px;background:rgba(5,5,8,.88);backdrop-filter:blur(26px);box-shadow:0 24px 90px rgba(0,0,0,.58)}
-#jCorePanel.open{display:block;animation:jCoreIn .18s ease}@keyframes jCoreIn{from{opacity:0;transform:translateY(-6px) scale(.985)}to{opacity:1;transform:none}}
-.jCoreHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.jCoreHead b{font:10px monospace;letter-spacing:2.5px;color:#fff}.jCoreHead span{font:7px monospace;letter-spacing:1px;color:rgba(255,255,255,.4)}
-.jCoreGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.jCoreBtn{min-height:54px;text-align:left;padding:10px;border:1px solid rgba(255,255,255,.11);border-radius:12px;background:rgba(255,255,255,.025);color:rgba(245,248,255,.82);cursor:pointer}.jCoreBtn:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.3)}.jCoreBtn strong{display:block;font:8px monospace;letter-spacing:1.2px;color:#fff;margin-bottom:5px}.jCoreBtn small{font:7px monospace;color:rgba(255,255,255,.4)}
-.jCoreSection{margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}.jCoreLabel{font:7px monospace;letter-spacing:1.8px;color:rgba(255,255,255,.38);margin-bottom:8px}.jCoreStatus{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.jCoreMetric{padding:8px;border-radius:9px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}.jCoreMetric b{display:block;font:8px monospace;color:#fff}.jCoreMetric span{display:block;margin-top:4px;font:7px monospace;color:rgba(255,255,255,.42)}
-#jHistoryPanel,#jIdentityPanel{position:fixed;right:18px;top:58px;width:min(390px,calc(100vw - 36px));max-height:calc(100vh - 78px);overflow:auto;z-index:1198;display:none;padding:15px;border:1px solid rgba(255,255,255,.13);border-radius:20px;background:rgba(5,5,8,.9);backdrop-filter:blur(26px);box-shadow:0 24px 90px rgba(0,0,0,.58)}#jHistoryPanel.open,#jIdentityPanel.open{display:block}.jPanelTitle{font:10px monospace;letter-spacing:2px;color:#fff;margin-bottom:12px}.jClose{float:right;border:0;background:none;color:rgba(255,255,255,.55);font-size:18px;cursor:pointer}.jHistoryItem{padding:11px;border:1px solid rgba(255,255,255,.08);border-radius:11px;margin-bottom:7px;cursor:pointer;background:rgba(255,255,255,.02)}.jHistoryItem:hover{background:rgba(255,255,255,.06)}.jHistoryItem b{display:block;font:8px monospace;color:#fff}.jHistoryItem span{display:block;margin-top:5px;font:7px monospace;color:rgba(255,255,255,.38);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jProfileRow{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font:8px monospace}.jProfileRow span{color:rgba(255,255,255,.4)}.jProfileRow b{color:#fff}
-#jSnapshot{position:fixed;left:18px;top:64px;width:138px;z-index:1300;display:none;padding:6px;border:1px solid rgba(255,255,255,.13);border-radius:13px;background:rgba(4,4,7,.8);backdrop-filter:blur(18px)}#jSnapshot.show{display:block}#jSnapshot img{width:100%;height:78px;object-fit:cover;border-radius:8px;display:block}.jSnapLabel{font:7px monospace;letter-spacing:1px;color:rgba(255,255,255,.55);margin-top:6px}
-@media(max-width:600px){#jCoreTrigger{left:10px;top:10px}.jCoreGrid{grid-template-columns:1fr 1fr}#jCorePanel{left:10px;top:50px;width:calc(100vw - 20px)}#jHistoryPanel,#jIdentityPanel{right:10px;top:50px;width:calc(100vw - 20px)}}
-
+.jarvis-word{display:inline;opacity:0;filter:blur(2px);animation:jarvisWordIn .09s ease-out forwards;}
+@keyframes jarvisWordIn{0%{opacity:0;filter:blur(2px);transform:translateY(2px)}100%{opacity:1;filter:blur(0);transform:translateY(0)}}
 </style>  </head>  <body>  <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
@@ -1918,7 +1905,7 @@ id="textInput"
 type="text"  
 autocomplete="off"  
 placeholder="Chiedi qualcosa a JARVIS...">
-<input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif" capture="environment">
+<input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
 <button id="imageBtn" type="button" title="Invia immagine">📷</button>
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
@@ -1943,28 +1930,7 @@ Voce dispositivo automatica
 TESTA VOCE  
 </button>  </div>  <!-- =====================================================  
      MAPLIBRE  
-===================================================== -->  <!-- JARVIS CORE OS UI -->
-<button id="jCoreTrigger" type="button">⌘ CORE</button>
-<div id="jCorePanel" aria-hidden="true">
-  <div class="jCoreHead"><b>J.A.R.V.I.S. CORE</b><span id="jCoreMode">SYSTEM CONTROL</span></div>
-  <div class="jCoreGrid">
-    <button class="jCoreBtn" id="jNewChat"><strong>＋ NUOVA CHAT</strong><small>Nuova sessione pulita</small></button>
-    <button class="jCoreBtn" id="jHistory"><strong>◫ CRONOLOGIA</strong><small>Sessioni salvate localmente</small></button>
-    <button class="jCoreBtn" id="jIdentity"><strong>◎ IDENTITY</strong><small>Profilo volto e voce</small></button>
-    <button class="jCoreBtn" id="jRecognize"><strong>◌ RICONOSCIMI</strong><small>Snapshot one-shot</small></button>
-    <button class="jCoreBtn" id="jVoiceProfile"><strong>◉ VOICE PROFILE</strong><small>Configura output vocale</small></button>
-    <button class="jCoreBtn" id="jDiagnostics"><strong>⌁ DIAGNOSTICA</strong><small>Controllo capacità reali</small></button>
-    <button class="jCoreBtn" id="jTactical"><strong>◎ TACTICAL</strong><small>Apri ambiente mappa</small></button>
-    <button class="jCoreBtn" id="jMemory"><strong>▣ MEMORY</strong><small>Memoria contestuale</small></button>
-  </div>
-  <div class="jCoreSection"><div class="jCoreLabel">LIVE SYSTEM</div><div class="jCoreStatus">
-    <div class="jCoreMetric"><b id="jMNet">—</b><span>NETWORK</span></div><div class="jCoreMetric"><b id="jMAI">READY</b><span>AI CORE</span></div><div class="jCoreMetric"><b id="jMMic">—</b><span>MIC</span></div>
-  </div></div>
-</div>
-<div id="jHistoryPanel"><button class="jClose" id="jHistoryClose">×</button><div class="jPanelTitle">CONVERSATION ARCHIVE</div><div id="jHistoryList"></div></div>
-<div id="jIdentityPanel"><button class="jClose" id="jIdentityClose">×</button><div class="jPanelTitle">IDENTITY CENTER</div><div class="jProfileRow"><span>PROFILE</span><b id="jProfileName">UNREGISTERED</b></div><div class="jProfileRow"><span>FACE SNAPSHOT</span><b id="jFaceState">READY</b></div><div class="jProfileRow"><span>VOICE PROFILE</span><b id="jVoiceState">SYSTEM / ELEVENLABS</b></div><div class="jProfileRow"><span>MODE</span><b>PERSONAL</b></div><div class="jProfileRow"><span>PRIVACY</span><b>LOCAL</b></div></div>
-<div id="jSnapshot"><img id="jSnapshotImg" alt="Identity snapshot"><div class="jSnapLabel">IDENTITY // SNAPSHOT</div></div>
-<script  
+===================================================== -->  <script  
 src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">  
 </script>  <!-- =====================================================  
      THREE.JS  
@@ -2356,35 +2322,34 @@ jarvisResponse
 ""  
 );  
   
-if(jarvisResponse){  
-  
-const chars =  
-Array.from(String(text));  
-  
-chars.forEach(  
-(char,index)=>{  
-  
-const span =  
-document.createElement("span");  
-  
-span.className =  
-"jarvis-char";  
-  
-span.textContent =  
-char;  
-  
-span.style.animationDelay =  
-(index * 0.035) +  
-"s";  
-  
-element.appendChild(  
-span  
-);  
-  
-}  
-  
-);  
-  
+if(jarvisResponse){
+
+const words =
+String(text).split(/(\s+)/);
+
+words.forEach(
+(word,index)=>{
+
+const span =
+document.createElement("span");
+
+span.className =
+"jarvis-word";
+
+span.textContent =
+word;
+
+span.style.animationDelay =
+(index * 0.025) +
+"s";
+
+element.appendChild(
+span
+);
+
+}
+);
+
 }else{  
   
 element.textContent =  
@@ -7479,15 +7444,6 @@ visionPreviewClose?.addEventListener("click",clearVisionSelection);
 
 function sendMessage(){
 const text=textInput.value.trim();
-if(typeof jHandleIdentityCommand === "function" && jHandleIdentityCommand(text)){return;}
-if(typeof jIdentityAwaitingName !== "undefined" && jIdentityAwaitingName && text){
-  const clean=text.replace(/[.!?]+$/g,"").trim();
-  if(clean && clean.length<=40){
-    localStorage.setItem("jarvis_identity_name",clean);
-    jIdentityAwaitingName=false;
-    setTimeout(()=>{const el=document.getElementById("jProfileName");if(el)el.textContent=clean.toUpperCase()},0);
-  }
-}
 const imageData=selectedImageData;
 if(!text&&!imageData)return;
 const displayText=text||"📷 Analizza questa immagine";
@@ -7607,44 +7563,4 @@ notify(
 "J.A.R.V.I.S. SYSTEM ONLINE"  
 );  
   
-
-/* =====================================================
-   CORE OS // SESSION, IDENTITY, COMMAND CENTER
-===================================================== */
-const J_SESSION_KEY="jarvis_sessions_v2";
-let jCurrentSession=JSON.parse(localStorage.getItem("jarvis_current_session_v2")||"null");
-if(!jCurrentSession||!jCurrentSession.id){jCurrentSession={id:Date.now(),title:"Nuova sessione",items:[],created:Date.now()};}
-let jIdentityAwaitingName=false;
-function jSaveSession(){localStorage.setItem("jarvis_current_session_v2",JSON.stringify(jCurrentSession));let all=[];try{all=JSON.parse(localStorage.getItem(J_SESSION_KEY)||"[]")}catch(e){all=[]}const idx=all.findIndex(x=>x.id===jCurrentSession.id);if(idx>=0)all[idx]=jCurrentSession;else all.unshift(jCurrentSession);all=all.slice(0,30);localStorage.setItem(J_SESSION_KEY,JSON.stringify(all));}
-function jRecordMessage(text,role){if(!text)return;if(role==="user"&&jCurrentSession.title==="Nuova sessione")jCurrentSession.title=String(text).slice(0,42);jCurrentSession.items.push({role,text:String(text),time:Date.now()});jCurrentSession.items=jCurrentSession.items.slice(-60);jSaveSession();}
-const _jOriginalAddMsg=addMsg;
-addMsg=function(text,jarvisResponse=false,copyable=false){const result=_jOriginalAddMsg(text,jarvisResponse,copyable);jRecordMessage(text,jarvisResponse?"jarvis":"user");return result;};
-function jRenderHistory(){const list=document.getElementById("jHistoryList");if(!list)return;let all=[];try{all=JSON.parse(localStorage.getItem(J_SESSION_KEY)||"[]")}catch(e){}if(!all.length){list.innerHTML='<div style="font:8px monospace;color:rgba(255,255,255,.4);padding:10px 0">NESSUNA SESSIONE ARCHIVIATA</div>';return}list.innerHTML="";all.forEach(item=>{const b=document.createElement("button");b.type="button";b.className="jHistoryItem";b.innerHTML="<b>"+String(item.title||"SESSIONE").replace(/[<>]/g,"")+"</b><span>"+new Date(item.created||Date.now()).toLocaleString("it-IT")+" · "+(item.items?.length||0)+" eventi</span>";b.addEventListener("click",()=>jLoadSession(item));list.appendChild(b)});}
-function jLoadSession(item){jCurrentSession=item;jSaveSession();chat.innerHTML="";const last=item.items.slice(-1)[0];if(last)addMsg(last.text,last.role==="jarvis",last.role==="jarvis");document.getElementById("jHistoryPanel").classList.remove("open");}
-function jNewSession(){jCurrentSession={id:Date.now(),title:"Nuova sessione",items:[],created:Date.now()};localStorage.setItem("jarvis_current_session_v2",JSON.stringify(jCurrentSession));chat.innerHTML="";clearVisionSelection();textInput.value="";notify("NUOVA SESSIONE // READY");}
-function jOpenPanel(id){document.getElementById(id)?.classList.add("open");}
-function jClosePanel(id){document.getElementById(id)?.classList.remove("open");}
-function jUpdateCore(){const n=document.getElementById("jMNet"),m=document.getElementById("jMMic");if(n)n.textContent=navigator.onLine?"ONLINE":"OFFLINE";if(m)m.textContent=(navigator.mediaDevices?.getUserMedia)?"READY":"OFF";const name=localStorage.getItem("jarvis_identity_name");if(name){const p=document.getElementById("jProfileName");if(p)p.textContent=name.toUpperCase()}}
-function jOpenIdentity(){jUpdateCore();jOpenPanel("jIdentityPanel");}
-async function jCaptureIdentity(){
- if(window.jIdentityBusy)return;window.jIdentityBusy=true;let stream=null,video=null;
- try{if(!navigator.mediaDevices?.getUserMedia)throw new Error("Camera API unavailable");stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"user"},width:{ideal:640},height:{ideal:480}},audio:false});video=document.createElement("video");video.autoplay=true;video.muted=true;video.playsInline=true;video.style.cssText="position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;opacity:0";document.body.appendChild(video);video.srcObject=stream;await video.play();await new Promise(r=>setTimeout(r,300));const c=document.createElement("canvas");c.width=video.videoWidth||640;c.height=video.videoHeight||480;c.getContext("2d").drawImage(video,0,0,c.width,c.height);const data=c.toDataURL("image/jpeg",.78);const snap=document.getElementById("jSnapshot"),img=document.getElementById("jSnapshotImg");img.src=data;snap.classList.add("show");clearTimeout(snap._t);snap._t=setTimeout(()=>snap.classList.remove("show"),3000);localStorage.setItem("jarvis_identity_snapshot_v1",data);localStorage.setItem("jarvis_face_profile_ready","1");const fs=document.getElementById("jFaceState");if(fs)fs.textContent="SNAPSHOT READY";jIdentityAwaitingName=true;setTimeout(()=>speak("Come ti chiami?"),120);notify("IDENTITY // SNAPSHOT ACQUIRED");}catch(e){console.warn(e);notify("IDENTITY // CAMERA NON DISPONIBILE");}finally{if(stream)stream.getTracks().forEach(t=>t.stop());if(video){video.srcObject=null;video.remove()}window.jIdentityBusy=false;}}
-function jHandleIdentityCommand(text){const n=normalizeCommand(text||"");if(n!=="riconoscimi"&&!n.startsWith("riconoscimi ")&&n!=="riconosci me")return false;textInput.value="";jCaptureIdentity();return true;}
-function jDiagnostics(){const c=getJarvisCapabilitiesSnapshot();const lines=["AI BACKEND: "+(c.capabilities.aiBackend?"READY":"OFF"),"MEMORY: "+(c.capabilities.localMemory?"READY":"OFF"),"MICROPHONE: "+(c.capabilities.microphone?"READY":"OFF"),"SPEECH: "+(c.capabilities.speechRecognition?"READY":"OFF"),"MAP: "+(c.capabilities.tacticalMap?"READY":"OFF"),"NETWORK: "+(navigator.onLine?"ONLINE":"OFFLINE")];addMsg("CORE DIAGNOSTICS\n\n"+lines.join("\n"));notify("CORE DIAGNOSTICS // COMPLETE");}
-function jMemory(){showMemory();}
-document.getElementById("jCoreTrigger")?.addEventListener("click",()=>document.getElementById("jCorePanel")?.classList.toggle("open"));
-document.getElementById("jNewChat")?.addEventListener("click",jNewSession);
-document.getElementById("jHistory")?.addEventListener("click",()=>{jRenderHistory();jOpenPanel("jHistoryPanel")});
-document.getElementById("jHistoryClose")?.addEventListener("click",()=>jClosePanel("jHistoryPanel"));
-document.getElementById("jIdentity")?.addEventListener("click",jOpenIdentity);
-document.getElementById("jIdentityClose")?.addEventListener("click",()=>jClosePanel("jIdentityPanel"));
-document.getElementById("jRecognize")?.addEventListener("click",jCaptureIdentity);
-document.getElementById("jVoiceProfile")?.addEventListener("click",()=>{localStorage.setItem("jarvis_voice_profile_v1","ready");voicePanel.classList.add("active");loadDeviceVoices();notify("VOICE PROFILE // READY")});
-document.getElementById("jDiagnostics")?.addEventListener("click",jDiagnostics);
-document.getElementById("jTactical")?.addEventListener("click",()=>openTacticalMap());
-document.getElementById("jMemory")?.addEventListener("click",jMemory);
-window.addEventListener("online",jUpdateCore);window.addEventListener("offline",jUpdateCore);jUpdateCore();
-/* Earth becomes a clean entry point to the tactical environment when the existing Earth card is available. */
-const jEarth=document.querySelector(".home-earth");if(jEarth){jEarth.style.cursor="pointer";jEarth.addEventListener("click",()=>openTacticalMap());}
-
 </script>  </body>  </html>

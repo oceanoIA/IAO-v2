@@ -225,22 +225,6 @@ translateX(0);
   
 }  
   
-
-/* JARVIS RESPONSE — testo pulito, senza contenitore */
-.msg.jarvis-response{
-  border:none!important;
-  border-radius:0!important;
-  background:transparent!important;
-  box-shadow:none!important;
-  backdrop-filter:none!important;
-  padding:4px 0!important;
-}
-.msg.jarvis-response .response-actions{
-  border-top:none!important;
-  padding-top:2px!important;
-  margin-top:10px!important;
-}
-
 /* =====================================================  
    PULSANTE COPIA  
 ===================================================== */  
@@ -309,52 +293,13 @@ box-shadow:
 /* =====================================================
    AZIONI RISPOSTA JARVIS
 ===================================================== */
-.response-actions{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  margin-top:10px;
-  padding-top:2px;
-  border-top:none;
-}
-.response-action-btn{
-  height:30px;
-  padding:0 9px;
-  border:none;
-  border-radius:8px;
-  background:transparent;
-  color:rgba(225,232,245,.55);
-  font-family:Arial,sans-serif;
-  font-size:9px;
-  letter-spacing:.1px;
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  transition:.18s ease;
-  backdrop-filter:none;
-}
-.response-action-btn:hover{
-  color:#ffffff;
-  background:rgba(255,255,255,.07);
-  box-shadow:none;
-}
-.response-action-btn:active{
-  transform:scale(.97);
-}
-.response-action-btn.loading{
-  opacity:.55;
-  pointer-events:none;
-}
-.response-action-btn.done{
-  color:#ffffff;
-  background:rgba(255,255,255,.07);
-}
-@media(max-width:600px){
-  .response-actions{gap:2px;margin-top:8px;padding-top:2px;}
-  .response-action-btn{height:29px;padding:0 7px;font-size:8px;}
-}.response-action-btn{height:29px;padding:0 8px;font-size:8px;}}
+.response-actions{display:flex;align-items:center;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(235,242,255,.10);}
+.response-action-btn{height:30px;padding:0 10px;border:1px solid rgba(235,242,255,.18);border-radius:9px;background:rgba(255,255,255,.035);color:rgba(225,232,245,.66);font-family:Arial,sans-serif;font-size:9px;letter-spacing:.2px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:.18s ease;backdrop-filter:blur(10px);}
+.response-action-btn:hover{color:#ffffff;border-color:rgba(255,255,255,.48);background:rgba(255,255,255,.09);box-shadow:0 0 12px rgba(255,255,255,.08);}
+.response-action-btn:active{transform:scale(.97);}
+.response-action-btn.loading{opacity:.55;pointer-events:none;}
+.response-action-btn.done{color:#ffffff;border-color:rgba(255,255,255,.48);background:rgba(255,255,255,.09);}
+@media(max-width:600px){.response-actions{gap:5px;margin-top:10px;padding-top:9px;}.response-action-btn{height:29px;padding:0 8px;font-size:8px;}}
 /* =====================================================  
    INPUT  
 ===================================================== */  
@@ -2417,21 +2362,11 @@ span
 );
 
 }
-
 );
 
-}else{
-
-element.textContent =
-String(text);
-
-}
-
 /* =====================================================
-   AZIONI RISPOSTA JARVIS
+   AZIONI: COPIA / ASCOLTA / CONDIVIDI
 ===================================================== */
-
-if(jarvisResponse){
 
 const actions =
 document.createElement("div");
@@ -2454,7 +2389,7 @@ copyButton.title =
 "Copia risposta";
 
 copyButton.innerHTML =
-"⧉ <span>Copia</span>";
+"<span>⧉</span><span>Copia</span>";
 
 copyButton.addEventListener(
 "click",
@@ -2464,33 +2399,14 @@ event.stopPropagation();
 
 try{
 
+if(navigator.clipboard &&
+navigator.clipboard.writeText){
+
 await navigator.clipboard.writeText(
 String(text)
 );
 
-copyButton.classList.add("done");
-copyButton.innerHTML =
-"✓ <span>Copiato</span>";
-
-notify(
-"TESTO COPIATO"
-);
-
-setTimeout(
-()=>{
-copyButton.classList.remove("done");
-copyButton.innerHTML =
-"⧉ <span>Copia</span>";
-},
-1800
-);
-
-}catch(error){
-
-console.warn(
-"Clipboard:",
-error
-);
+}else{
 
 const textarea =
 document.createElement("textarea");
@@ -2509,22 +2425,38 @@ textarea
 );
 
 textarea.select();
+document.execCommand("copy");
+textarea.remove();
 
-try{
+}
 
-document.execCommand(
-"copy"
-);
+copyButton.innerHTML =
+"<span>✓</span><span>Copiato</span>";
 
 copyButton.classList.add("done");
-copyButton.innerHTML =
-"✓ <span>Copiato</span>";
 
 notify(
 "TESTO COPIATO"
 );
 
-}catch(e){
+setTimeout(
+()=>{
+
+copyButton.innerHTML =
+"<span>⧉</span><span>Copia</span>";
+
+copyButton.classList.remove("done");
+
+},
+1800
+);
+
+}catch(error){
+
+console.warn(
+"Clipboard:",
+error
+);
 
 notify(
 "COPIA NON DISPONIBILE"
@@ -2532,27 +2464,10 @@ notify(
 
 }
 
-textarea.remove();
-
-setTimeout(
-()=>{
-copyButton.classList.remove("done");
-copyButton.innerHTML =
-"⧉ <span>Copia</span>";
-},
-1800
-);
-
-}
-
 }
 );
 
-actions.appendChild(
-copyButton
-);
-
-/* ASCOLTA */
+/* ASCOLTA — ELEVENLABS */
 
 const listenButton =
 document.createElement("button");
@@ -2564,10 +2479,10 @@ listenButton.type =
 "button";
 
 listenButton.title =
-"Ascolta risposta";
+"Ascolta con ElevenLabs";
 
 listenButton.innerHTML =
-"🔊 <span>Ascolta</span>";
+"<span>🔊</span><span>Ascolta</span>";
 
 listenButton.addEventListener(
 "click",
@@ -2575,85 +2490,65 @@ async event=>{
 
 event.stopPropagation();
 
-if(!String(text).trim())
-return;
-
-if(currentAudio){
+if(audioPlaying && currentAudio){
 
 try{
 currentAudio.pause();
 }catch(e){}
 
-currentAudio = null;
+try{
+currentAudio.currentTime = 0;
+}catch(e){}
 
+currentAudio = null;
+audioPlaying = false;
+
+if(
+"speechSynthesis" in window
+){
+speechSynthesis.cancel();
 }
 
-if("speechSynthesis" in window){
-speechSynthesis.cancel();
+setState("idle");
+
+return;
+
 }
 
 listenButton.classList.add("loading");
 listenButton.innerHTML =
-"◌ <span>Caricamento...</span>";
+"<span>◌</span><span>Caricamento...</span>";
 
 const success =
-await speak(String(text));
+await speakElevenLabs(
+String(text)
+);
 
-listenButton.classList.remove("loading");
+listenButton.classList.remove(
+"loading"
+);
 
 if(success){
 
-listenButton.classList.add("done");
 listenButton.innerHTML =
-"🔊 <span>In riproduzione</span>";
+"<span>■</span><span>In ascolto</span>";
 
-const reset =
-()=>{
-listenButton.classList.remove("done");
-listenButton.innerHTML =
-"🔊 <span>Ascolta</span>";
-};
-
-if(currentAudio){
-currentAudio.addEventListener(
-"ended",
-reset,
-{once:true}
+listenButton.classList.add(
+"done"
 );
-currentAudio.addEventListener(
-"error",
-reset,
-{once:true}
-);
-}else{
-
-setTimeout(
-reset,
-1200
-);
-
-}
 
 }else{
 
 listenButton.innerHTML =
-"🔊 <span>Voce non disponibile</span>";
+"<span>🔊</span><span>Ascolta</span>";
 
-setTimeout(
-()=>{
-listenButton.innerHTML =
-"🔊 <span>Ascolta</span>";
-},
-1800
+notify(
+"VOCE ELEVENLABS NON DISPONIBILE"
 );
 
 }
 
 }
-);
-
-actions.appendChild(
-listenButton
 );
 
 /* CONDIVIDI */
@@ -2671,7 +2566,7 @@ shareButton.title =
 "Condividi risposta";
 
 shareButton.innerHTML =
-"↗ <span>Condividi</span>";
+"<span>↗</span><span>Condividi</span>";
 
 shareButton.addEventListener(
 "click",
@@ -2679,51 +2574,35 @@ async event=>{
 
 event.stopPropagation();
 
-const shareData = {
-title:"J.A.R.V.I.S.",
-text:String(text)
-};
-
 try{
 
-if(
-navigator.share &&
-navigator.canShare
-&&
-navigator.canShare(shareData)
-){
+if(navigator.share){
 
-await navigator.share(
-shareData
-);
-
-}else if(
-navigator.share
-){
-
-await navigator.share(
-shareData
-);
+await navigator.share({
+title:"J.A.R.V.I.S.",
+text:String(text)
+});
 
 }else{
 
-await navigator.clipboard.writeText(
-String(text)
-);
-
 notify(
-"CONDIVISIONE NON DISPONIBILE — TESTO COPIATO"
+"CONDIVISIONE NON DISPONIBILE"
 );
 
 }
 
 }catch(error){
 
-if(error.name !== "AbortError"){
+if(error &&
+error.name !== "AbortError"){
 
 console.warn(
 "Share:",
 error
+);
+
+notify(
+"CONDIVISIONE NON DISPONIBILE"
 );
 
 }
@@ -2734,12 +2613,25 @@ error
 );
 
 actions.appendChild(
+copyButton
+);
+
+actions.appendChild(
+listenButton
+);
+
+actions.appendChild(
 shareButton
 );
 
 element.appendChild(
 actions
 );
+
+}else{
+
+element.textContent =
+String(text);
 
 }
 
@@ -6998,27 +6890,18 @@ return false;
 }  
   
   
-async function speak(text){
-
-if(!text)
-return false;
-
-const success =
-await speakElevenLabs(
-String(text)
-);
-
-if(success)
-return true;
-
-/* FALLBACK AUTOMATICO:
-   se ElevenLabs non è disponibile,
-   usa immediatamente la voce del sistema.
-*/
-return await speakDevice(
-String(text)
-);
-
+async function speak(text){  
+  
+if(!text)  
+return;  
+  
+const success =  
+await speakElevenLabs(text);  
+  
+if(!success){  
+  
+await speakDevice(text);  
+  
 }  
   
 }  

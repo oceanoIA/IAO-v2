@@ -8056,17 +8056,24 @@ sendMessage=async function(){
   return jcNativeSendMessage.apply(this,arguments);
 };
 
-/* Profile context changes JARVIS behaviour for this session only. */
-const jcIdentityFetch=window.fetch.bind(window);
-window.fetch=async function(input,init){
-  try{
-    const url=typeof input==="string"?input:(input&&input.url)||"";
-    if(init&&init.body&&String(url).startsWith(API)){
-      const b=JSON.parse(init.body);
-      if(b.action!=="tts"&&jcActiveProfile){b.systemInstructions=(b.systemInstructions||"")+" IDENTITÀ LOCALE CONFERMATA: l'utente davanti al dispositivo è "+jcActiveProfile.name+". Adatta tono, livello di dettaglio e continuità alle preferenze già note, ma non inventare dati personali.";init={...init,body:JSON.stringify(b)};
+/* Profile context is exposed for the chat layer without replacing window.fetch. */
+window.JARVIS_IDENTITY_CONTEXT = () => jcActiveProfile ? { name: jcActiveProfile.name } : null;
+
+/* Intercept only the text command; do not monkey-patch global fetch. */
+const jcOriginalSendMessage = window.sendMessage;
+if(typeof jcOriginalSendMessage === "function") {
+  window.sendMessage = async function(){
+    const text=String(textInput?.value||"").trim();
+    if(jcIdentityPending && text && !jcIsRecognizeCommand(text)){
+      if(jcCompleteIdentity(text)){ textInput.value=""; return; }
     }
-  }catch(e){console.warn("Identity context:",e)}
-  return jcIdentityFetch(input,init);
-};
+    if(jcIsRecognizeCommand(text)){
+      textInput.value="";
+      await jcCaptureIdentity();
+      return;
+    }
+    return jcOriginalSendMessage.apply(this,arguments);
+  };
+}
 
 </script>  </body>  </html>

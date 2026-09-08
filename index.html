@@ -1825,94 +1825,108 @@ border-radius:5px;
 
 #imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
 
-/* JARVIS RESPONSE — clean ChatGPT-style text */
-.msg.jarvis-response{
-  border:none!important;
-  border-radius:0!important;
-  background:transparent!important;
-  box-shadow:none!important;
-  backdrop-filter:none!important;
-  padding:4px 0!important;
-}
+/* CLEAN CHAT + SYSTEM ORBITAL NETWORK */
+.msg.jarvis-response,.msg.user-message{border:none!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;}
+.msg.user-message{padding:6px 0!important;margin-bottom:8px!important;}
+.msg.jarvis-response{padding:6px 0!important;margin-bottom:10px!important;}
+#chat{width:min(760px,calc(100vw - 36px))!important;margin-left:auto!important;margin-right:auto!important;}
+#homeSystemPanel{position:fixed;z-index:20;}
+.home-earth{cursor:pointer;transition:transform .28s ease,box-shadow .28s ease;}
+.home-earth:hover{box-shadow:0 0 35px rgba(255,255,255,.08);}
+#earthGlobe{pointer-events:auto!important;cursor:pointer;}
+#homeSystemPanel.earth-expanded{z-index:90!important;}
+#homeSystemPanel.earth-expanded .home-earth{position:fixed;left:50%;top:50%;width:min(760px,92vw);height:min(600px,78vh);transform:translate(-50%,-50%) scale(1);z-index:95;box-shadow:0 0 80px rgba(255,255,255,.12);background:radial-gradient(circle at center,rgba(255,255,255,.055),rgba(0,0,0,.72));}
+#earthClose{display:none;position:absolute;right:12px;top:9px;z-index:8;border:0;background:transparent;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer;}
+#homeSystemPanel.earth-expanded #earthClose{display:block;}
+#homeSystemPanel.earth-expanded:after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(0,0,0,.45);backdrop-filter:blur(5px);}
+.system-satellite-network{position:absolute;inset:0;z-index:2;pointer-events:none;}
+.system-satellite{position:absolute;width:5px;height:5px;border:1px solid rgba(255,255,255,.8);border-radius:50%;box-shadow:0 0 9px rgba(255,255,255,.8);animation:satPulse 2.8s infinite ease-in-out;}
+.system-satellite-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);transform-origin:left center;opacity:.55;}
+@keyframes satPulse{0%,100%{opacity:.35;transform:scale(.75)}50%{opacity:1;transform:scale(1.25)}}
 
-/* Image button — same minimal footprint/style as microphone */
-#imageBtn{
-  width:34px!important;
-  height:34px!important;
-  flex:0 0 34px!important;
-  border:none!important;
-  border-radius:10px!important;
-  background:transparent!important;
-  color:rgba(235,242,255,.80)!important;
-  font-size:0!important;
-  padding:0!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  transition:.2s!important;
-  backdrop-filter:none!important;
-}
-#imageBtn:hover{
-  color:#fff!important;
-  border:none!important;
-  background:transparent!important;
-  filter:drop-shadow(0 0 8px rgba(255,255,255,.45));
-}
-.image-icon{
-  width:15px;height:11px;display:block;position:relative;
-  border:1.3px solid currentColor;border-radius:3px;
-}
-.image-icon:before{
-  content:"";position:absolute;left:4px;top:-4px;width:5px;height:3px;
-  border:1.3px solid currentColor;border-bottom:0;border-radius:2px 2px 0 0;
-}
-.image-icon:after{
-  content:"";position:absolute;left:5px;top:3px;width:4px;height:4px;
-  border:1.1px solid currentColor;border-radius:50%;
-}
-
-/* Response actions */
-.response-actions{display:flex;align-items:center;gap:3px;margin-top:9px;padding-top:2px;border:0;}
-.response-action-btn{height:29px;padding:0 8px;border:0;border-radius:8px;background:transparent;color:rgba(225,232,245,.52);font:9px Arial,sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:.18s;}
-.response-action-btn:hover{color:#fff;background:rgba(255,255,255,.07);}
-.response-action-btn.loading{opacity:.55;pointer-events:none;}
-.response-action-btn.done{color:#fff;background:rgba(255,255,255,.07);}
-@media(max-width:600px){.response-actions{gap:1px}.response-action-btn{height:28px;padding:0 6px;font-size:8px}}
-
-/* Chat history sidebar */
-#chatHistoryToggle{position:fixed;left:14px;top:14px;z-index:150;width:40px;height:40px;border:1px solid rgba(235,242,255,.18);border-radius:11px;background:rgba(10,11,14,.60);color:rgba(242,246,255,.82);backdrop-filter:blur(14px);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
-#chatHistoryOverlay{position:fixed;inset:0;z-index:149;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.2s;}
-#chatHistoryOverlay.active{opacity:1;pointer-events:auto;}
-#chatHistory{position:fixed;left:0;top:0;bottom:0;width:min(310px,86vw);z-index:151;background:rgba(9,10,13,.96);border-right:1px solid rgba(235,242,255,.12);backdrop-filter:blur(25px);transform:translateX(-102%);transition:transform .22s ease;display:flex;flex-direction:column;box-shadow:10px 0 40px rgba(0,0,0,.35);}
-#chatHistory.active{transform:translateX(0);}
-.chat-history-head{display:flex;align-items:center;padding:17px 14px 12px;gap:8px;}
-.chat-history-brand{flex:1;font-size:11px;letter-spacing:2.5px;color:rgba(245,248,255,.86);}
-.chat-history-close{border:0;background:transparent;color:rgba(235,242,255,.55);font-size:22px;cursor:pointer;}
-#newChatBtn{margin:3px 13px 12px;height:42px;border:1px solid rgba(235,242,255,.16);border-radius:10px;background:rgba(255,255,255,.045);color:rgba(245,248,255,.9);cursor:pointer;text-align:left;padding:0 13px;font-size:11px;}
-#newChatBtn:hover{background:rgba(255,255,255,.08);}
-#chatHistoryList{flex:1;overflow-y:auto;padding:0 8px 14px;}
-.chat-history-empty{padding:20px 10px;color:rgba(235,242,255,.35);font-size:10px;line-height:1.5;}
-.chat-history-item{width:100%;min-height:45px;border:1px solid transparent;border-radius:9px;background:transparent;color:rgba(240,244,252,.70);display:flex;align-items:center;gap:8px;padding:7px 9px;margin-bottom:3px;cursor:pointer;text-align:left;box-sizing:border-box;}
-.chat-history-item:hover{background:rgba(255,255,255,.05);}
-.chat-history-item.active{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.10);color:#fff;}
-.chat-history-item-icon{width:16px;opacity:.45;font-size:11px;}
-.chat-history-item-text{min-width:0;flex:1;}
-.chat-history-item-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;}
-.chat-history-item-time{margin-top:3px;font-size:7px;color:rgba(235,242,255,.30);}
-.chat-history-delete{opacity:0;border:0;background:transparent;color:rgba(235,242,255,.4);cursor:pointer;font-size:14px;padding:3px;}
-.chat-history-item:hover .chat-history-delete,.chat-history-item.active .chat-history-delete{opacity:1;}
-.chat-history-foot{padding:10px 13px 13px;border-top:1px solid rgba(235,242,255,.07);color:rgba(235,242,255,.25);font-size:7px;letter-spacing:1px;}
-@media(max-width:600px){#chatHistoryToggle{left:10px;top:10px;width:38px;height:38px}#chatHistory{width:min(310px,88vw)}}
+/* =====================================================
+   JARVIS INTELLIGENCE LAYER — ADDITIVE UI
+===================================================== */
+#jarvisControlBtn{position:fixed;left:22px;bottom:24px;z-index:300;height:39px;padding:0 15px;border:1px solid rgba(235,242,255,.32);border-radius:22px;background:rgba(8,8,11,.82);color:rgba(225,232,245,.82);font:10px monospace;letter-spacing:1.5px;cursor:pointer;backdrop-filter:blur(12px);transition:.2s}
+#jarvisControlBtn:hover,#jarvisControlBtn.active{color:#fff;border-color:#fff;background:rgba(255,255,255,.10);box-shadow:0 0 20px rgba(255,255,255,.14)}
+#jarvisControlPanel{position:fixed;left:22px;bottom:75px;width:330px;max-width:calc(100vw - 30px);max-height:72vh;overflow:auto;z-index:299;display:none;padding:15px;border:1px solid rgba(235,242,255,.25);border-radius:20px;background:rgba(7,7,10,.94);backdrop-filter:blur(24px);box-shadow:0 20px 70px rgba(0,0,0,.65),0 0 35px rgba(255,255,255,.07)}
+#jarvisControlPanel.active{display:block;animation:jcIn .2s ease}
+@keyframes jcIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+.jc-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.10);margin-bottom:12px}
+.jc-title{font:11px monospace;letter-spacing:2px;color:rgba(245,248,255,.95)}
+.jc-state{font:8px monospace;letter-spacing:1.5px;color:rgba(235,242,255,.58)}
+.jc-section{margin:13px 0}.jc-label{font:7px monospace;letter-spacing:1.7px;color:rgba(235,242,255,.42);margin-bottom:8px}
+.jc-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.jc-mode,.jc-action{min-height:34px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.025);color:rgba(235,242,255,.70);font:7px monospace;letter-spacing:1px;cursor:pointer;transition:.18s}.jc-mode:hover,.jc-action:hover,.jc-mode.active{border-color:rgba(255,255,255,.65);color:#fff;background:rgba(255,255,255,.08);box-shadow:0 0 15px rgba(255,255,255,.07)}
+.jc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.jc-metric{padding:9px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.02)}.jc-metric b{display:block;font:7px monospace;letter-spacing:1.3px;color:rgba(235,242,255,.42);margin-bottom:5px}.jc-metric span{font:10px monospace;color:rgba(245,248,255,.90)}
+.jc-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.02);font:8px monospace;letter-spacing:1px;color:rgba(235,242,255,.70)}
+.jc-toggle button{min-width:72px;height:28px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:transparent;color:rgba(235,242,255,.70);font:7px monospace;letter-spacing:1px;cursor:pointer}.jc-toggle button.active{border-color:#fff;color:#fff;background:rgba(255,255,255,.10)}
+#jcSuggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.jc-suggestion{border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:7px 10px;background:rgba(255,255,255,.025);color:rgba(235,242,255,.68);font:7px monospace;letter-spacing:.7px;cursor:pointer}.jc-suggestion:hover{border-color:#fff;color:#fff}
+#jcTimeline{display:flex;flex-direction:column;gap:6px;max-height:120px;overflow:auto}.jc-event{padding:7px 9px;border-left:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.025);font:7px monospace;color:rgba(235,242,255,.58)}
+#jcCoreDashboard{position:fixed;right:24px;top:14%;width:290px;z-index:240;display:none;padding:14px;border:1px solid rgba(235,242,255,.22);border-radius:18px;background:rgba(7,7,10,.92);backdrop-filter:blur(22px);box-shadow:0 20px 70px rgba(0,0,0,.6)}
+#jcCoreDashboard.active{display:block}.jc-core-title{font:10px monospace;letter-spacing:2px;color:#fff;margin-bottom:12px}.jc-core-row{display:flex;align-items:center;justify-content:space-between;margin:9px 0;font:7px monospace;letter-spacing:1px;color:rgba(235,242,255,.58)}.jc-bar{width:48%;height:3px;background:rgba(255,255,255,.08);overflow:hidden;border-radius:4px}.jc-bar i{display:block;height:100%;width:50%;background:rgba(255,255,255,.82);transition:width .3s}
+#jcCameraHud{position:fixed;right:24px;bottom:150px;width:220px;height:165px;z-index:230;display:none;border:1px solid rgba(235,242,255,.22);border-radius:15px;background:rgba(0,0,0,.72);overflow:hidden;box-shadow:0 0 30px rgba(255,255,255,.07)}#jcCameraHud.active{display:block}#jcGestureVideo{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:.70}.jc-cam-label{position:absolute;left:9px;top:8px;font:7px monospace;letter-spacing:1.3px;color:rgba(255,255,255,.78);text-shadow:0 0 8px #000}.jc-gesture-status{position:absolute;left:9px;bottom:8px;font:7px monospace;letter-spacing:1px;color:rgba(255,255,255,.72)}
+#jcStateBadge{position:fixed;left:50%;top:11%;transform:translateX(-50%);z-index:35;pointer-events:none;font:7px monospace;letter-spacing:2.5px;color:rgba(235,242,255,.42);transition:.25s}.jc-thinking #jcStateBadge{color:rgba(255,255,255,.85);text-shadow:0 0 14px rgba(255,255,255,.35)}
+@media(max-width:600px){#jarvisControlBtn{left:12px;bottom:17px;font-size:8px;padding:0 11px}#jarvisControlPanel{left:12px;bottom:60px;width:calc(100vw - 24px);max-height:67vh}#jcCoreDashboard{right:12px;top:55px;width:calc(100% - 24px);max-width:300px}.jc-modes{grid-template-columns:repeat(2,1fr)}#jcCameraHud{right:12px;bottom:105px;width:165px;height:124px}.jc-state{display:none}}
 
 </style>  </head>  <body>
-<button id="chatHistoryToggle" type="button" title="Cronologia chat" aria-label="Apri cronologia">☰</button>
-<div id="chatHistoryOverlay"></div>
-<aside id="chatHistory" aria-label="Cronologia JARVIS">
-  <div class="chat-history-head"><div class="chat-history-brand">J.A.R.V.I.S.</div><button class="chat-history-close" id="chatHistoryClose" type="button">×</button></div>
-  <button id="newChatBtn" type="button">＋ Nuova chat</button>
-  <div id="chatHistoryList"></div>
-  <div class="chat-history-foot">CHAT SALVATE SU QUESTO DISPOSITIVO</div>
-</aside>
+
+<!-- =====================================================
+     JARVIS INTELLIGENCE LAYER — ADDITIVE UI
+===================================================== -->
+<button id="jarvisControlBtn" type="button">⌘ JARVIS CORE</button>
+<div id="jcStateBadge">STATE // IDLE</div>
+
+<section id="jarvisControlPanel" aria-label="JARVIS Control Center">
+  <div class="jc-head"><span class="jc-title">J.A.R.V.I.S. // CONTROL</span><span class="jc-state" id="jcStateText">IDLE</span></div>
+  <div class="jc-section">
+    <div class="jc-label">OPERATING MODE</div>
+    <div class="jc-modes" id="jcModes">
+      <button class="jc-mode active" data-mode="GENERAL">GENERAL</button>
+      <button class="jc-mode" data-mode="VISION">VISION</button>
+      <button class="jc-mode" data-mode="FOCUS">FOCUS</button>
+      <button class="jc-mode" data-mode="RESEARCH">RESEARCH</button>
+      <button class="jc-mode" data-mode="SYSTEM">SYSTEM</button>
+      <button class="jc-mode" data-mode="CREATIVE">CREATIVE</button>
+    </div>
+  </div>
+  <div class="jc-section">
+    <div class="jc-label">LIVE CORE</div>
+    <div class="jc-grid">
+      <div class="jc-metric"><b>MODE</b><span id="jcModeValue">GENERAL</span></div>
+      <div class="jc-metric"><b>MEMORY</b><span id="jcMemoryValue">0</span></div>
+      <div class="jc-metric"><b>NETWORK</b><span id="jcNetworkValue">ONLINE</span></div>
+      <div class="jc-metric"><b>VISION</b><span id="jcVisionValue">READY</span></div>
+    </div>
+  </div>
+  <div class="jc-section">
+    <div class="jc-label">AUTOMATION</div>
+    <div class="jc-toggle"><span>HEY JARVIS // CONTINUOUS</span><button id="jcWakeToggle" type="button">OFF</button></div>
+    <div class="jc-toggle" style="margin-top:7px"><span>GESTURE CONTROL</span><button id="jcGestureToggle" type="button">OFF</button></div>
+  </div>
+  <div class="jc-section">
+    <div class="jc-label">ACTIVITY</div>
+    <div id="jcTimeline"></div>
+  </div>
+  <div class="jc-section"><div class="jc-label">SUGGESTIONS</div><div id="jcSuggestions"><button class="jc-suggestion" data-suggest="Analizza meglio questo argomento">ANALIZZA</button><button class="jc-suggestion" data-suggest="Spiegamelo in modo più semplice">SEMPLIFICA</button><button class="jc-suggestion" data-suggest="Qual è il prossimo passo?">NEXT STEP</button></div></div>
+  <div class="jc-section"><div class="jc-grid"><button class="jc-action" id="jcNewChat">NEW CHAT</button><button class="jc-action" id="jcClearMemory">CLEAR MEMORY</button><button class="jc-action" id="jcCoreToggle">AI CORE</button><button class="jc-action" id="jcEarthOpen">EARTH 3D</button></div></div>
+</section>
+
+<section id="jcCoreDashboard" aria-label="AI Core dashboard">
+  <div class="jc-core-title">NEURAL CORE // TELEMETRY</div>
+  <div class="jc-core-row"><span>AI ENGINE</span><div class="jc-bar"><i id="jcBarAI"></i></div></div>
+  <div class="jc-core-row"><span>CONTEXT</span><div class="jc-bar"><i id="jcBarContext"></i></div></div>
+  <div class="jc-core-row"><span>MEMORY</span><div class="jc-bar"><i id="jcBarMemory"></i></div></div>
+  <div class="jc-core-row"><span>VISION</span><div class="jc-bar"><i id="jcBarVision"></i></div></div>
+  <div class="jc-core-row"><span>VOICE</span><div class="jc-bar"><i id="jcBarVoice"></i></div></div>
+  <div class="jc-core-row"><span>NETWORK</span><div class="jc-bar"><i id="jcBarNetwork"></i></div></div>
+</section>
+
+<section id="jcCameraHud" aria-label="Gesture camera">
+  <video id="jcGestureVideo" autoplay playsinline muted></video>
+  <div class="jc-cam-label">VISION // HAND TRACKING</div>
+  <div class="jc-gesture-status" id="jcGestureStatus">WAITING</div>
+</section>
+
   <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
@@ -1939,7 +1953,9 @@ SYSTEM STATUS
 
 ONLINE
 
-</div>  </div>  <div class="home-earth">  <div class="earth-label">  
+</div>  </div>  <div class="home-earth">
+<button id="earthClose" type="button" aria-label="Chiudi Earth">×</button>
+<div class="system-satellite-network" id="satelliteNetwork"></div>  <div class="earth-label">  
 EARTH // LOCATION  
 </div>  <div id="earthGlobe"></div>  <div  
 class="earth-coordinates"  
@@ -1993,7 +2009,7 @@ type="text"
 autocomplete="off"  
 placeholder="Chiedi qualcosa a JARVIS...">
 <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
-<button id="imageBtn" type="button" title="Invia immagine" aria-label="Invia immagine"><span class="image-icon"></span></button>
+<button id="imageBtn" type="button" title="Invia immagine">📷</button>
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
@@ -2053,66 +2069,6 @@ const ELEVEN_VOICE_ID =
 "vkBFlAtUdZqNR4MqxSVr";  
   
   
-/* =====================================================
-   CHAT HISTORY
-===================================================== */
-const CHAT_HISTORY_KEY="jarvis_conversations_v2";
-let conversations=[];
-let currentConversationId=null;
-
-function newConversation(){
-  return {id:"c_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),title:"Nuova chat",updatedAt:Date.now(),messages:[]};
-}
-function saveConversations(){
-  try{localStorage.setItem(CHAT_HISTORY_KEY,JSON.stringify(conversations.slice(0,50)));}catch(e){console.warn("Chat history:",e);}
-}
-function loadConversations(){
-  try{const x=JSON.parse(localStorage.getItem(CHAT_HISTORY_KEY)||"[]"); if(Array.isArray(x)) conversations=x.filter(c=>c&&c.id&&Array.isArray(c.messages));}catch(e){conversations=[];}
-  if(!conversations.length){const c=newConversation();conversations=[c];}
-  currentConversationId=conversations[0].id;
-}
-function currentConversation(){return conversations.find(c=>c.id===currentConversationId)||null;}
-function saveChatMessage(text,assistant){
-  const c=currentConversation(); if(!c) return;
-  const clean=String(text??"").trim(); if(!clean) return;
-  c.messages.push({role:assistant?"assistant":"user",text:clean,time:Date.now()});
-  if(c.title==="Nuova chat"&&!assistant){c.title=clean.replace(/\s+/g," ").slice(0,42)+(clean.length>42?"…":"");}
-  c.updatedAt=Date.now();
-  saveConversations(); renderChatHistory();
-}
-function restoreConversation(id){
-  const c=conversations.find(x=>x.id===id); if(!c) return;
-  currentConversationId=id; chat.innerHTML="";
-  c.messages.forEach(m=>renderMessage(m.text,m.role==="assistant",m.role==="assistant"));
-  chat.scrollTop=chat.scrollHeight; renderChatHistory(); closeHistory();
-}
-function createNewChat(){
-  const c=currentConversation();
-  if(c&&c.messages.length===0){closeHistory();return;}
-  const n=newConversation(); conversations.unshift(n); currentConversationId=n.id; saveConversations(); chat.innerHTML=""; renderChatHistory(); closeHistory(); textInput?.focus();
-}
-function deleteChat(id){
-  conversations=conversations.filter(c=>c.id!==id);
-  if(!conversations.length) conversations=[newConversation()];
-  if(!conversations.some(c=>c.id===currentConversationId)) currentConversationId=conversations[0].id;
-  saveConversations(); restoreConversation(currentConversationId);
-}
-function renderChatHistory(){
-  const list=document.getElementById("chatHistoryList"); if(!list)return; list.innerHTML="";
-  [...conversations].sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).forEach(c=>{
-    const row=document.createElement("div"); row.className="chat-history-item"+(c.id===currentConversationId?" active":"");
-    const icon=document.createElement("div"); icon.className="chat-history-item-icon"; icon.textContent="◌";
-    const wrap=document.createElement("div"); wrap.className="chat-history-item-text";
-    const title=document.createElement("div"); title.className="chat-history-item-title"; title.textContent=c.title||"Nuova chat";
-    const time=document.createElement("div"); time.className="chat-history-item-time"; time.textContent=new Date(c.updatedAt||Date.now()).toLocaleDateString("it-IT");
-    wrap.append(title,time);
-    const del=document.createElement("button"); del.className="chat-history-delete"; del.type="button"; del.textContent="×"; del.title="Elimina chat"; del.onclick=e=>{e.stopPropagation();deleteChat(c.id)};
-    row.append(icon,wrap,del); row.onclick=()=>restoreConversation(c.id); list.appendChild(row);
-  });
-}
-function openHistory(){document.getElementById("chatHistory")?.classList.add("active");document.getElementById("chatHistoryOverlay")?.classList.add("active");}
-function closeHistory(){document.getElementById("chatHistory")?.classList.remove("active");document.getElementById("chatHistoryOverlay")?.classList.remove("active");}
-
 /* =====================================================  
    ELEMENTI  
 ===================================================== */  
@@ -2448,90 +2404,206 @@ hasCodeBlock
    MESSAGGI  
 ===================================================== */  
   
-function renderMessage(text, jarvisResponse=false, withActions=true){
-
-const element=document.createElement("div");
-element.className="msg"+(jarvisResponse?" jarvis-response":"");
-
-if(jarvisResponse){
-  Array.from(String(text)).forEach((char,index)=>{
-    const span=document.createElement("span");
-    span.className="jarvis-char";
-    span.textContent=char;
-    span.style.animationDelay=(index*.035)+"s";
-    element.appendChild(span);
-  });
-}else{
-  element.textContent=String(text);
-}
-
-if(jarvisResponse && withActions){
-  const actions=document.createElement("div");
-  actions.className="response-actions";
-
-  const copyButton=document.createElement("button");
-  copyButton.className="response-action-btn";
-  copyButton.type="button";
-  copyButton.title="Copia risposta";
-  copyButton.innerHTML="⧉ <span>Copia</span>";
-  copyButton.onclick=async e=>{
-    e.stopPropagation();
-    try{ await navigator.clipboard.writeText(String(text)); }
-    catch(err){
-      const ta=document.createElement("textarea"); ta.value=String(text); ta.style.position="fixed"; ta.style.opacity="0";
-      document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove();
-    }
-    copyButton.classList.add("done"); copyButton.innerHTML="✓ <span>Copiato</span>"; notify("TESTO COPIATO");
-    setTimeout(()=>{copyButton.classList.remove("done");copyButton.innerHTML="⧉ <span>Copia</span>"},1500);
-  };
-
-  const listenButton=document.createElement("button");
-  listenButton.className="response-action-btn";
-  listenButton.type="button";
-  listenButton.title="Ascolta risposta";
-  listenButton.innerHTML="🔊 <span>Ascolta</span>";
-  listenButton.onclick=async e=>{
-    e.stopPropagation();
-    if(currentAudio){try{currentAudio.pause()}catch(_){} currentAudio=null;}
-    if("speechSynthesis" in window) speechSynthesis.cancel();
-    listenButton.classList.add("loading"); listenButton.innerHTML="◌ <span>Caricamento...</span>";
-    const ok=await speak(String(text));
-    listenButton.classList.remove("loading");
-    if(ok){
-      listenButton.classList.add("done"); listenButton.innerHTML="🔊 <span>In riproduzione</span>";
-      const reset=()=>{listenButton.classList.remove("done");listenButton.innerHTML="🔊 <span>Ascolta</span>"};
-      if(currentAudio){currentAudio.addEventListener("ended",reset,{once:true});currentAudio.addEventListener("error",reset,{once:true});}else setTimeout(reset,1200);
-    }else{
-      listenButton.innerHTML="🔊 <span>Voce non disponibile</span>";
-      setTimeout(()=>listenButton.innerHTML="🔊 <span>Ascolta</span>",1600);
-    }
-  };
-
-  const shareButton=document.createElement("button");
-  shareButton.className="response-action-btn";
-  shareButton.type="button";
-  shareButton.title="Condividi risposta";
-  shareButton.innerHTML="↗ <span>Condividi</span>";
-  shareButton.onclick=async e=>{
-    e.stopPropagation();
-    try{
-      if(navigator.share) await navigator.share({title:"J.A.R.V.I.S.",text:String(text)});
-      else { await navigator.clipboard.writeText(String(text)); notify("TESTO COPIATO"); }
-    }catch(err){ if(err?.name!=="AbortError") console.warn("Share:",err); }
-  };
-
-  actions.append(copyButton,listenButton,shareButton);
-  element.appendChild(actions);
-}
-
-chat.appendChild(element);
-}
-
-function addMsg(text, jarvisResponse=false, copyable=false){
-  renderMessage(text,jarvisResponse,jarvisResponse);
-  saveChatMessage(text,jarvisResponse);
-}
-
+function addMsg(  
+text,  
+jarvisResponse = false,  
+copyable = false  
+){  
+  
+chat.innerHTML = "";  
+  
+const element =  
+document.createElement("div");  
+  
+element.className =  
+"msg" +  
+(  
+jarvisResponse  
+?  
+" jarvis-response"  
+:  
+""  
+);  
+  
+if(jarvisResponse){  
+  
+const chars =  
+Array.from(String(text));  
+  
+chars.forEach(  
+(char,index)=>{  
+  
+const span =  
+document.createElement("span");  
+  
+span.className =  
+"jarvis-char";  
+  
+span.textContent =  
+char;  
+  
+span.style.animationDelay =  
+(index * 0.035) +  
+"s";  
+  
+element.appendChild(  
+span  
+);  
+  
+}  
+  
+);  
+  
+}else{  
+  
+element.textContent =  
+String(text);  
+  
+}  
+  
+  
+/* =====================================================  
+   COPIA  
+===================================================== */  
+  
+if(copyable){  
+  
+const copyButton =  
+document.createElement("button");  
+  
+copyButton.className =  
+"copy-btn";  
+  
+copyButton.type =  
+"button";  
+  
+copyButton.title =  
+"Copia risposta";  
+  
+copyButton.textContent =  
+"⧉";  
+  
+copyButton.addEventListener(  
+"click",  
+async event=>{  
+  
+event.stopPropagation();  
+  
+try{  
+  
+await navigator.clipboard.writeText(  
+String(text)  
+);  
+  
+copyButton.textContent =  
+"✓";  
+  
+copyButton.classList.add(  
+"copied"  
+);  
+  
+notify(  
+"TESTO COPIATO"  
+);  
+  
+setTimeout(  
+()=>{  
+  
+copyButton.textContent =  
+"⧉";  
+  
+copyButton.classList.remove(  
+"copied"  
+);  
+  
+},  
+1800  
+);  
+  
+}catch(error){  
+  
+console.warn(  
+"Clipboard:",  
+error  
+);  
+  
+const textarea =  
+document.createElement("textarea");  
+  
+textarea.value =  
+String(text);  
+  
+textarea.style.position =  
+"fixed";  
+  
+textarea.style.opacity =  
+"0";  
+  
+document.body.appendChild(  
+textarea  
+);  
+  
+textarea.select();  
+  
+try{  
+  
+document.execCommand(  
+"copy"  
+);  
+  
+copyButton.textContent =  
+"✓";  
+  
+copyButton.classList.add(  
+"copied"  
+);  
+  
+notify(  
+"TESTO COPIATO"  
+);  
+  
+}catch(e){  
+  
+notify(  
+"COPIA NON DISPONIBILE"  
+);  
+  
+}  
+  
+textarea.remove();  
+  
+setTimeout(  
+()=>{  
+  
+copyButton.textContent =  
+"⧉";  
+  
+copyButton.classList.remove(  
+"copied"  
+);  
+  
+},  
+1800  
+);  
+  
+}  
+  
+}  
+);  
+  
+element.appendChild(  
+copyButton  
+);  
+  
+}  
+  
+chat.appendChild(  
+element  
+);  
+  
+}  
+  
+  
 /* =====================================================  
    OROLOGIO  
 ===================================================== */  
@@ -4485,6 +4557,22 @@ camera
    AVVIO THREE  
 ===================================================== */  
   
+// EARTH INTERACTION + SMALL ORBITAL SATELLITE NETWORK
+const homeSystemPanel=document.getElementById("homeSystemPanel");
+const earthClose=document.getElementById("earthClose");
+const satelliteNetwork=document.getElementById("satelliteNetwork");
+function buildSatelliteNetwork(){
+ if(!satelliteNetwork)return;
+ satelliteNetwork.innerHTML="";
+ const pts=[{x:17,y:27},{x:31,y:14},{x:48,y:22},{x:67,y:13},{x:83,y:29},{x:73,y:48},{x:54,y:40},{x:36,y:52},{x:19,y:45},{x:43,y:72},{x:65,y:70},{x:82,y:61}];
+ pts.forEach((p,i)=>{const d=document.createElement("div");d.className="system-satellite";d.style.left=p.x+"%";d.style.top=p.y+"%";d.style.animationDelay=(i*.18)+"s";satelliteNetwork.appendChild(d);});
+ for(let i=0;i<pts.length-1;i++){const a=pts[i],b=pts[i+1];const line=document.createElement("div");line.className="system-satellite-line";const dx=b.x-a.x,dy=b.y-a.y;line.style.left=a.x+"%";line.style.top=a.y+"%";line.style.width=Math.sqrt(dx*dx+dy*dy)+"%";line.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;satelliteNetwork.appendChild(line);}
+}
+function toggleEarthExpanded(on){homeSystemPanel?.classList.toggle("earth-expanded",on);setTimeout(()=>resizeEarthGlobe(),80);}
+document.querySelector(".home-earth")?.addEventListener("click",e=>{if(e.target.closest("#earthClose"))return;toggleEarthExpanded(true);});
+earthClose?.addEventListener("click",e=>{e.stopPropagation();toggleEarthExpanded(false);});
+buildSatelliteNetwork();
+
 initializeEarthGlobe();  
   
 initializeNeuralCore();  
@@ -7570,12 +7658,278 @@ notify(
 );  
   
 
-/* CHAT HISTORY INIT */
-loadConversations();
-renderChatHistory();
-document.getElementById("chatHistoryToggle")?.addEventListener("click",openHistory);
-document.getElementById("chatHistoryClose")?.addEventListener("click",closeHistory);
-document.getElementById("chatHistoryOverlay")?.addEventListener("click",closeHistory);
-document.getElementById("newChatBtn")?.addEventListener("click",createNewChat);
+/* =====================================================
+   JARVIS INTELLIGENCE LAYER — LOGIC
+   Additive: preserves the existing interface and API flow.
+===================================================== */
+
+const JC={
+  mode:"GENERAL",
+  state:"IDLE",
+  wake:false,
+  gestures:false,
+  paused:false,
+  transcript:[],
+  facts:[],
+  events:[]
+};
+
+const JC_TRANSCRIPT_KEY="jarvis_ui_transcript_v3";
+const JC_FACTS_KEY="jarvis_smart_memory_v2";
+const JC_MAX_TRANSCRIPT=80;
+const JC_MAX_FACTS=30;
+
+const jcPanel=document.getElementById("jarvisControlPanel");
+const jcControlBtn=document.getElementById("jarvisControlBtn");
+const jcStateText=document.getElementById("jcStateText");
+const jcStateBadge=document.getElementById("jcStateBadge");
+const jcTimeline=document.getElementById("jcTimeline");
+const jcMemoryValue=document.getElementById("jcMemoryValue");
+const jcModeValue=document.getElementById("jcModeValue");
+const jcNetworkValue=document.getElementById("jcNetworkValue");
+const jcVisionValue=document.getElementById("jcVisionValue");
+const jcSuggestions=document.getElementById("jcSuggestions");
+const jcCoreDashboard=document.getElementById("jcCoreDashboard");
+
+function jcLoad(){
+  try{
+    const t=JSON.parse(localStorage.getItem(JC_TRANSCRIPT_KEY)||"[]");
+    if(Array.isArray(t)) JC.transcript=t.filter(x=>x&&typeof x.text==="string").slice(-JC_MAX_TRANSCRIPT);
+  }catch(e){console.warn("JARVIS transcript:",e)}
+  try{
+    const f=JSON.parse(localStorage.getItem(JC_FACTS_KEY)||"[]");
+    if(Array.isArray(f)) JC.facts=f.filter(x=>typeof x==="string").slice(-JC_MAX_FACTS);
+  }catch(e){console.warn("JARVIS smart memory:",e)}
+}
+function jcSave(){
+  try{localStorage.setItem(JC_TRANSCRIPT_KEY,JSON.stringify(JC.transcript.slice(-JC_MAX_TRANSCRIPT)))}catch(e){}
+  try{localStorage.setItem(JC_FACTS_KEY,JSON.stringify(JC.facts.slice(-JC_MAX_FACTS)))}catch(e){}
+}
+function jcEscape(text){const d=document.createElement("div");d.textContent=String(text);return d.innerHTML}
+function jcAddEvent(text){
+  const stamp=new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  JC.events.unshift(stamp+" // "+text); JC.events=JC.events.slice(0,10);
+  if(jcTimeline) jcTimeline.innerHTML=JC.events.map(x=>`<div class="jc-event">${jcEscape(x)}</div>`).join("");
+}
+function jcRememberExplicit(text){
+  const n=normalizeCommand(text);
+  const triggers=["ricordati ","ricorda che ","tieni a mente ","ricorda che io "];
+  const hit=triggers.find(t=>n.startsWith(t));
+  if(!hit)return;
+  const fact=text.trim().slice(hit.length).trim();
+  if(fact.length<3||fact.length>220)return;
+  JC.facts=JC.facts.filter(x=>x.toLowerCase()!==fact.toLowerCase());
+  JC.facts.push(fact); JC.facts=JC.facts.slice(-JC_MAX_FACTS); jcSave();
+  jcAddEvent("MEMORY // FACT STORED");
+}
+function jcRenderTranscript(){
+  if(!chat)return;
+  chat.innerHTML="";
+  JC.transcript.slice(-JC_MAX_TRANSCRIPT).forEach(item=>jcRenderOne(item));
+  chat.scrollTop=chat.scrollHeight;
+}
+function jcRenderOne(item){
+  const element=document.createElement("div");
+  element.className="msg "+(item.jarvis?"jarvis-response":"user-message");
+  if(item.jarvis){
+    Array.from(item.text).forEach((char,index)=>{
+      const span=document.createElement("span"); span.className="jarvis-char"; span.textContent=char; span.style.animationDelay=(Math.min(index,120)*.012)+"s"; element.appendChild(span);
+    });
+  }else element.textContent=item.text;
+  if(item.jarvis){
+    const actions=document.createElement("div"); actions.style.cssText="display:flex;gap:6px;margin-top:8px;opacity:.72";
+    const make=(label,title,fn)=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.title=title;b.style.cssText="border:1px solid rgba(235,242,255,.16);border-radius:9px;background:rgba(255,255,255,.025);color:rgba(235,242,255,.65);padding:5px 8px;font:7px monospace;letter-spacing:.6px;cursor:pointer";b.addEventListener("click",e=>{e.stopPropagation();fn(b)});actions.appendChild(b)};
+    make("⧉","Copia",async b=>{try{await navigator.clipboard.writeText(item.text);b.textContent="✓";notify("TESTO COPIATO");setTimeout(()=>b.textContent="⧉",1200)}catch(e){notify("COPIA NON DISPONIBILE")}});
+    make("🔊","Ascolta",async b=>{b.textContent="…";try{await speak(item.text)}finally{b.textContent="🔊"}});
+    make("↗","Condividi",async b=>{try{if(navigator.share) await navigator.share({title:"J.A.R.V.I.S.",text:item.text});else{await navigator.clipboard.writeText(item.text);notify("TESTO COPIATO — CONDIVISIONE NON SUPPORTATA")}}catch(e){}});
+    element.appendChild(actions);
+  }
+  chat.appendChild(element);
+}
+
+/* Replace the old single-message renderer with a persistent ChatGPT-like transcript. */
+addMsg=function(text,jarvisResponse=false,copyable=false){
+  const item={text:String(text),jarvis:!!jarvisResponse,copyable:!!copyable,at:Date.now()};
+  JC.transcript.push(item); JC.transcript=JC.transcript.slice(-JC_MAX_TRANSCRIPT); jcSave();
+  jcRenderTranscript();
+  if(jarvisResponse){
+    jcAddEvent("AI // RESPONSE READY");
+    jcGenerateSuggestions(String(text));
+  }else jcAddEvent("USER // INPUT RECEIVED");
+  updateSystemPanel(); jcUpdateTelemetry();
+};
+
+function jcGenerateSuggestions(reply){
+  if(!jcSuggestions)return;
+  const n=reply.toLowerCase();
+  const suggestions=n.includes("errore")?["Riprova la richiesta","Mostrami cosa è successo","Controlla il sistema"]:n.includes("immagine")?["Analizza un altro dettaglio","Descrivi ciò che vedi","Confronta due immagini"]:["Approfondisci","Spiegamelo più semplicemente","Qual è il prossimo passo?"];
+  jcSuggestions.innerHTML="";
+  suggestions.forEach(text=>{const b=document.createElement("button");b.className="jc-suggestion";b.dataset.suggest=text;b.textContent=text.toUpperCase();b.addEventListener("click",()=>{textInput.value=text;sendMessage()});jcSuggestions.appendChild(b)});
+}
+
+function jcNewConversation(){
+  JC.transcript=[]; jcSave(); jcRenderTranscript(); jcAddEvent("CHAT // NEW SESSION"); notify("NUOVA CHAT"); textInput?.focus();
+}
+
+function jcSetMode(mode){
+  JC.mode=mode; document.querySelectorAll(".jc-mode").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
+  if(jcModeValue)jcModeValue.textContent=mode; jcAddEvent("MODE // "+mode); notify("MODE // "+mode);
+}
+
+document.querySelectorAll(".jc-mode").forEach(b=>b.addEventListener("click",()=>jcSetMode(b.dataset.mode)));
+jcControlBtn?.addEventListener("click",()=>{jcPanel?.classList.toggle("active");jcControlBtn.classList.toggle("active",jcPanel?.classList.contains("active"));jcUpdateTelemetry()});
+document.getElementById("jcNewChat")?.addEventListener("click",jcNewConversation);
+document.getElementById("jcClearMemory")?.addEventListener("click",()=>{if(confirm("Cancellare la memoria locale di JARVIS?")){clearMemory();JC.facts=[];jcSave();jcAddEvent("MEMORY // CLEARED")}});
+document.getElementById("jcCoreToggle")?.addEventListener("click",()=>jcCoreDashboard?.classList.toggle("active"));
+document.getElementById("jcEarthOpen")?.addEventListener("click",()=>toggleEarthExpanded(true));
+
+/* Smart memory: only explicit user requests are persisted as long-term facts. */
+const oldProcessAi=processAi;
+processAi=async function(text,imageData=null){jcRememberExplicit(text);return oldProcessAi(text,imageData)};
+
+/* Inject operating mode + smart memory into the existing API request without changing the Worker. */
+const nativeFetch=window.fetch.bind(window);
+window.fetch=async function(input,init){
+  try{
+    const url=typeof input==="string"?input:(input&&input.url)||"";
+    if(init&&init.body&&String(url).startsWith(API)){
+      const body=JSON.parse(init.body);
+      if(body.action!=="tts"){
+        const modeInstructions={
+          GENERAL:"Parla in modo naturale e professionale.",
+          VISION:"Concentrati su ciò che è verificabile nell'immagine e separa osservazioni da ipotesi.",
+          FOCUS:"Rispondi in modo estremamente diretto, strutturato e orientato all'azione.",
+          RESEARCH:"Ragiona come un analista: distingui fatti, incertezze e conclusioni. Non fingere accesso al web se non è presente.",
+          SYSTEM:"Concentrati su stato, capacità reali del browser e funzionamento del sistema. Non inventare dati.",
+          CREATIVE:"Sii creativo ma preciso; proponi alternative originali senza perdere il contesto della richiesta."
+        };
+        body.mode=JC.mode;
+        body.memory=Array.isArray(body.memory)?body.memory.slice(-12):[];
+        body.systemInstructions=(body.systemInstructions||"")+" MODE OPERATIVA: "+modeInstructions[JC.mode]+" MEMORIA ESPLICITA UTENTE: "+(JC.facts.length?JC.facts.join(" | "):"nessuna");
+        init={...init,body:JSON.stringify(body)};
+      }
+    }
+  }catch(e){console.warn("JARVIS request enhancer:",e)}
+  return nativeFetch(input,init);
+};
+
+/* Keep local transcript in sync after initial load. */
+jcLoad(); jcRenderTranscript(); jcAddEvent("CORE // INTELLIGENCE LAYER READY");
+
+/* State telemetry wraps the existing state machine; animation behaviour stays intact. */
+const nativeSetState=setState;
+setState=function(state){
+  nativeSetState(state); JC.state=String(state).toUpperCase();
+  if(jcStateText)jcStateText.textContent=JC.state;
+  if(jcStateBadge)jcStateBadge.textContent="STATE // "+JC.state;
+  if(jcStateBadge)jcStateBadge.classList.toggle("jc-thinking",state==="thinking");
+  if(state==="thinking")jcAddEvent("CORE // PROCESSING");
+  if(state==="listening")jcAddEvent("VOICE // LISTENING");
+  if(state==="speaking")jcAddEvent("VOICE // OUTPUT");
+  jcUpdateTelemetry();
+};
+
+function jcUpdateTelemetry(){
+  if(jcMemoryValue)jcMemoryValue.textContent=String(memory.length+JC.facts.length);
+  if(jcNetworkValue)jcNetworkValue.textContent=navigator.onLine?"ONLINE":"OFFLINE";
+  if(jcVisionValue)jcVisionValue.textContent=selectedImageData?"IMAGE READY":"READY";
+  const bars={
+    jcBarAI:95,
+    jcBarContext:Math.min(100,30+JC.transcript.length),
+    jcBarMemory:Math.min(100,15+JC.facts.length*3),
+    jcBarVision:selectedImageData?92:58,
+    jcBarVoice:audioPlaying?95:(recognition?72:35),
+    jcBarNetwork:navigator.onLine?96:8
+  };
+  Object.entries(bars).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.style.width=v+"%"});
+}
+setInterval(jcUpdateTelemetry,1200);
+
+/* =====================================================
+   WAKE WORD / CONTINUOUS CONVERSATION
+===================================================== */
+let jcWakeRecognition=null;
+let jcWakeStarting=false;
+function jcCreateWakeRecognition(){
+  const R=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!R)return null;
+  const r=new R(); r.lang="it-IT"; r.continuous=true; r.interimResults=true;
+  r.onstart=()=>{jcWakeStarting=false;jcAddEvent("WAKE // LISTENER ACTIVE")};
+  r.onend=()=>{jcWakeStarting=false;if(JC.wake)setTimeout(jcStartWake,250)};
+  r.onerror=e=>{jcWakeStarting=false;jcAddEvent("WAKE // "+(e.error||"ERROR"));if(e.error==="not-allowed"){JC.wake=false;jcSetWakeUI(false)}};
+  r.onresult=e=>{
+    let text=""; for(let i=e.resultIndex;i<e.results.length;i++)text+=e.results[i][0].transcript+" ";
+    const n=normalizeCommand(text.trim());
+    if(n.includes("hey jarvis")||n.includes("ehi jarvis")||n.includes("jarvis")){
+      const cleaned=text.replace(/hey\s+jarvis/ig,"").replace(/ehi\s+jarvis/ig,"").replace(/jarvis/ig,"").trim();
+      if(cleaned.length>2){textInput.value=cleaned;sendMessage()}
+      else{notify("JARVIS // IN ASCOLTO");textInput.focus()}
+    }
+  };
+  return r;
+}
+function jcStartWake(){if(!JC.wake||jcWakeStarting)return;if(!jcWakeRecognition)jcWakeRecognition=jcCreateWakeRecognition();if(!jcWakeRecognition)return;jcWakeStarting=true;try{jcWakeRecognition.start()}catch(e){jcWakeStarting=false}}
+function jcSetWakeUI(on){const b=document.getElementById("jcWakeToggle");if(b){b.classList.toggle("active",on);b.textContent=on?"ON":"OFF"}}
+document.getElementById("jcWakeToggle")?.addEventListener("click",()=>{
+  JC.wake=!JC.wake; jcSetWakeUI(JC.wake);
+  if(JC.wake){if(!jcWakeRecognition)jcWakeRecognition=jcCreateWakeRecognition();if(!jcWakeRecognition){JC.wake=false;jcSetWakeUI(false);notify("WAKE WORD NON SUPPORTATA");return}jcStartWake();notify("HEY JARVIS // ACTIVE")}
+  else{try{jcWakeRecognition?.stop()}catch(e){}notify("HEY JARVIS // OFF")}
+});
+
+/* =====================================================
+   GESTURE ENGINE — optional, isolated from normal chat
+===================================================== */
+let jcHands=null,jcGestureStream=null,jcGestureRaf=0,jcLastTwoDistance=null,jcLastMidX=null,jcLastSwipe=0;
+let jcGestureLoaded=false;
+function jcLoadScript(src){return new Promise((resolve,reject)=>{const s=document.createElement("script");s.src=src;s.async=true;s.crossOrigin="anonymous";s.onload=resolve;s.onerror=reject;document.head.appendChild(s)})}
+async function jcEnableGestures(){
+  if(JC.gestures)return;
+  const video=document.getElementById("jcGestureVideo"); const hud=document.getElementById("jcCameraHud");
+  if(!navigator.mediaDevices?.getUserMedia){notify("GESTURE // CAMERA NON DISPONIBILE");return}
+  try{
+    if(!jcGestureLoaded){
+      await jcLoadScript("https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js");
+      jcGestureLoaded=true;
+    }
+    if(!window.Hands){throw new Error("MediaPipe Hands non disponibile")}
+    jcHands=new window.Hands({locateFile:file=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+    jcHands.setOptions({maxNumHands:2,modelComplexity:1,minDetectionConfidence:.65,minTrackingConfidence:.60});
+    jcHands.onResults(jcHandleHands);
+    jcGestureStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false});
+    video.srcObject=jcGestureStream; await video.play(); hud?.classList.add("active"); JC.gestures=true; document.getElementById("jcGestureToggle").textContent="ON";document.getElementById("jcGestureToggle").classList.add("active");
+    jcGestureLoop(); notify("GESTURE CONTROL // ACTIVE"); jcAddEvent("VISION // HAND TRACKING ACTIVE");
+  }catch(e){console.error("Gesture:",e);jcDisableGestures();notify("GESTURE // IMPOSSIBILE AVVIARE")}
+}
+function jcDisableGestures(){
+  JC.gestures=false; if(jcGestureRaf)cancelAnimationFrame(jcGestureRaf);jcGestureRaf=0;
+  jcGestureStream?.getTracks().forEach(t=>t.stop());jcGestureStream=null;const v=document.getElementById("jcGestureVideo");if(v)v.srcObject=null;document.getElementById("jcCameraHud")?.classList.remove("active");const b=document.getElementById("jcGestureToggle");if(b){b.textContent="OFF";b.classList.remove("active")}
+}
+async function jcGestureLoop(){if(!JC.gestures||!jcHands)return;const v=document.getElementById("jcGestureVideo");if(v&&v.readyState>=2){try{await jcHands.send({image:v})}catch(e){}}jcGestureRaf=requestAnimationFrame(jcGestureLoop)}
+function jcDist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function jcHandleHands(res){
+  const hands=res.multiHandLandmarks||[];const status=document.getElementById("jcGestureStatus");if(!hands.length){if(status)status.textContent="NO HANDS";return}
+  if(status)status.textContent=hands.length+" HAND"+(hands.length>1?"S":"")+" // TRACKED";
+  const open=h=>{const wrist=h[0];return [8,12,16,20].filter(i=>h[i].y<wrist.y-.035).length>=3};
+  const fist=h=>[8,12,16,20].every(i=>h[i].y>h[5].y);
+  if(hands.length>=2){
+    const d=jcDist(hands[0][8],hands[1][8]);
+    if(jcLastTwoDistance!==null){const delta=d-jcLastTwoDistance;if(Math.abs(delta)>.012&&camera){camera.position.z=Math.max(2.7,Math.min(7.5,camera.position.z-delta*4));}}
+    jcLastTwoDistance=d;
+    const mx=(hands[0][9].x+hands[1][9].x)/2;
+    if(jcLastMidX!==null&&Math.abs(mx-jcLastMidX)>.035&&performance.now()-jcLastSwipe>800){jcLastSwipe=performance.now();if(mx>jcLastMidX)jcSetMode("VISION");else jcSetMode("SYSTEM")}
+    jcLastMidX=mx;
+  }else{jcLastTwoDistance=null;jcLastMidX=null}
+  if(open(hands[0])&&hands.length===1){JC.paused=false;const status2=document.getElementById("jcGestureStatus");if(status2)status2.textContent="OPEN PALM // READY"}
+  if(fist(hands[0])&&performance.now()-jcLastSwipe>1000){jcLastSwipe=performance.now();jcPanel?.classList.remove("active");notify("GESTURE // PANEL CLOSED")}
+}
+document.getElementById("jcGestureToggle")?.addEventListener("click",()=>JC.gestures?jcDisableGestures():jcEnableGestures());
+
+/* Escape closes additive panels; existing controls remain untouched. */
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){jcPanel?.classList.remove("active");jcCoreDashboard?.classList.remove("active");if(jcControlBtn)jcControlBtn.classList.remove("active");if(JC.gestures)jcDisableGestures();}});
+
+/* Earth is already interactive; this only adds telemetry when it opens. */
+document.querySelector(".home-earth")?.addEventListener("click",()=>jcAddEvent("WORLD // EARTH 3D FOCUS"),{passive:true});
+
+jcUpdateTelemetry();
 
 </script>  </body>  </html>

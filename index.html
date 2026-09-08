@@ -1824,8 +1824,19 @@ border-radius:5px;
   
 
 #imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
-.jarvis-word{display:inline;opacity:0;filter:blur(2px);animation:jarvisWordIn .09s ease-out forwards;}
-@keyframes jarvisWordIn{0%{opacity:0;filter:blur(2px);transform:translateY(2px)}100%{opacity:1;filter:blur(0);transform:translateY(0)}}
+
+/* JARVIS ULTIMATE CORE — additive, original UI preserved */
+#juLauncher{position:fixed;top:18px;left:18px;z-index:1200;width:40px;height:40px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(5,5,8,.52);backdrop-filter:blur(18px);color:#fff;font:14px monospace;cursor:pointer;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+#juOverlay{position:fixed;inset:0;z-index:1190;display:none;background:rgba(2,2,4,.72);backdrop-filter:blur(25px)}#juOverlay.open{display:block}
+#juShell{position:absolute;inset:4vh 4vw;display:grid;grid-template-columns:185px 1fr;grid-template-rows:62px 1fr;border:1px solid rgba(255,255,255,.12);border-radius:22px;background:rgba(7,7,10,.91);box-shadow:0 30px 120px rgba(0,0,0,.7);overflow:hidden}
+#juHeader{grid-column:1/3;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid rgba(255,255,255,.07)}.juBrand{font:10px monospace;letter-spacing:3px;color:#fff}.juSubhead{font:7px monospace;letter-spacing:1.4px;color:rgba(255,255,255,.35);margin-top:4px}#juClose{border:0;background:none;color:rgba(255,255,255,.55);font-size:25px;cursor:pointer}
+#juNav{padding:12px;border-right:1px solid rgba(255,255,255,.07);overflow:auto}.juNav{width:100%;display:block;padding:11px 9px;margin:0 0 5px;border:1px solid transparent;border-radius:9px;background:transparent;color:rgba(255,255,255,.42);text-align:left;font:8px monospace;letter-spacing:1.3px;cursor:pointer}.juNav:hover,.juNav.active{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.1);color:#fff}
+#juMain{padding:20px;overflow:auto}.juView{display:none}.juView.active{display:block}.juTitle{font:11px monospace;letter-spacing:2.4px;color:#fff}.juDesc{font:7px monospace;color:rgba(255,255,255,.35);margin:5px 0 17px}.juGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.juCard{padding:13px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.022)}.juCard b{font:7px monospace;letter-spacing:1px;color:rgba(255,255,255,.5)}.juCard strong{display:block;margin-top:9px;font:15px monospace;color:#fff}.juCard small{display:block;margin-top:4px;font:7px monospace;color:rgba(255,255,255,.3)}
+.juActions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.juAction{padding:13px;border:1px solid rgba(255,255,255,.08);border-radius:11px;background:rgba(255,255,255,.025);color:#fff;text-align:left;cursor:pointer}.juAction:hover{background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.18)}.juAction b{display:block;font:8px monospace;letter-spacing:1px}.juAction small{display:block;margin-top:5px;font:7px monospace;color:rgba(255,255,255,.35)}
+.juModes{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.juMode{padding:7px 9px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.02);color:rgba(255,255,255,.45);font:7px monospace;cursor:pointer}.juMode.active{color:#fff;border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.06)}
+.juInput{width:100%;box-sizing:border-box;padding:10px;margin-bottom:8px;border:1px solid rgba(255,255,255,.09);border-radius:9px;background:rgba(0,0,0,.22);color:#fff;outline:none;font:8px monospace}.juBtn{padding:9px 11px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.045);color:#fff;font:7px monospace;cursor:pointer}.juList{display:grid;gap:6px;margin-top:10px}.juItem{padding:10px;border:1px solid rgba(255,255,255,.07);border-radius:9px;background:rgba(255,255,255,.018);font:8px monospace;color:rgba(255,255,255,.65)}.juItem b{color:#fff}.juDanger{color:rgba(255,160,160,.8)}
+#juToast{position:fixed;left:50%;bottom:22px;z-index:1500;transform:translateX(-50%);padding:8px 12px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:rgba(6,6,9,.9);color:rgba(255,255,255,.7);font:7px monospace;letter-spacing:1px;opacity:0;pointer-events:none;transition:.2s}#juToast.show{opacity:1}
+@media(max-width:720px){#juShell{inset:0;border-radius:0;grid-template-columns:1fr;grid-template-rows:58px auto 1fr}#juHeader{grid-column:1}#juNav{display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid rgba(255,255,255,.07);padding:7px}.juNav{min-width:100px;margin:0}.juGrid{grid-template-columns:1fr 1fr}.juActions{grid-template-columns:1fr 1fr}}
 </style>  </head>  <body>  <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
@@ -1930,7 +1941,26 @@ Voce dispositivo automatica
 TESTA VOCE  
 </button>  </div>  <!-- =====================================================  
      MAPLIBRE  
-===================================================== -->  <script  
+===================================================== -->  
+<!-- JARVIS ULTIMATE COMMAND CENTER -->
+<button id="juLauncher" type="button" title="JARVIS Core">◈</button>
+<div id="juOverlay" aria-hidden="true">
+ <section id="juShell">
+  <header id="juHeader"><div><div class="juBrand">J.A.R.V.I.S. // CORE OS</div><div class="juSubhead">INTELLIGENCE · MEMORY · VISION · VOICE · SYSTEM</div></div><button id="juClose" type="button">×</button></header>
+  <nav id="juNav">
+   <button class="juNav active" data-view="overview">01 · OVERVIEW</button><button class="juNav" data-view="intelligence">02 · INTELLIGENCE</button><button class="juNav" data-view="memory">03 · MEMORY</button><button class="juNav" data-view="identity">04 · IDENTITY</button><button class="juNav" data-view="projects">05 · PROJECTS</button><button class="juNav" data-view="system">06 · SYSTEM</button>
+  </nav>
+  <main id="juMain">
+   <section id="ju-overview" class="juView active"><div class="juTitle">COMMAND CENTER</div><div class="juDesc">Un livello di controllo ordinato sopra l'interfaccia originale.</div><div class="juGrid"><div class="juCard"><b>AI CORE</b><strong id="juAI">READY</strong><small>WORKER / INFERENCE</small></div><div class="juCard"><b>NETWORK</b><strong id="juNet">—</strong><small>CONNECTIVITY</small></div><div class="juCard"><b>MEMORY</b><strong id="juMem">0</strong><small>LOCAL CONTEXT</small></div><div class="juCard"><b>VISION</b><strong id="juVision">READY</strong><small>IMAGE ANALYSIS</small></div><div class="juCard"><b>VOICE</b><strong id="juVoice">READY</strong><small>ELEVENLABS / SYSTEM</small></div><div class="juCard"><b>MODE</b><strong id="juModeLive">AUTO</strong><small>INTELLIGENCE PROFILE</small></div></div><div class="juActions"><button class="juAction" data-a="new"><b>＋ NEW SESSION</b><small>Pulisce la vista e avvia un nuovo contesto</small></button><button class="juAction" data-a="diagnostics"><b>⌁ DIAGNOSTICS</b><small>Controlla capacità realmente esposte dal browser</small></button><button class="juAction" data-a="recognize"><b>◎ IDENTITY SNAPSHOT</b><small>Acquisizione temporanea e domanda vocale</small></button><button class="juAction" data-a="tactical"><b>◉ TACTICAL ENVIRONMENT</b><small>Apre la mappa già integrata</small></button></div></section>
+   <section id="ju-intelligence" class="juView"><div class="juTitle">INTELLIGENCE ENGINE</div><div class="juDesc">I profili cambiano il contesto della richiesta senza fingere strumenti che il sistema non possiede.</div><div class="juModes" id="juModes"><button class="juMode active" data-mode="AUTO">AUTO</button><button class="juMode" data-mode="ANALYSIS">ANALYSIS</button><button class="juMode" data-mode="RESEARCH">RESEARCH</button><button class="juMode" data-mode="CODING">CODING</button><button class="juMode" data-mode="STUDY">STUDY</button><button class="juMode" data-mode="PLANNER">PLANNER</button><button class="juMode" data-mode="CREATIVE">CREATIVE</button></div><div class="juCard"><b>ACTIVE PROFILE</b><strong id="juActiveMode">AUTO</strong><small>Il profilo viene usato come contesto nel prossimo invio.</small></div><div class="juActions"><button class="juAction" data-a="web"><b>⌕ WEB</b><small>Prepara una ricerca web</small></button><button class="juAction" data-a="vision"><b>▧ VISION</b><small>Apri la selezione immagine</small></button><button class="juAction" data-a="voice"><b>◉ VOICE</b><small>Apri il pannello vocale</small></button><button class="juAction" data-a="memory"><b>▣ CONTEXT</b><small>Vai alla memoria</small></button></div></section>
+   <section id="ju-memory" class="juView"><div class="juTitle">MEMORY ARCHITECTURE</div><div class="juDesc">Memoria locale già presente nel frontend.</div><input id="juMemSearch" class="juInput" placeholder="Cerca nella memoria..."><div id="juMemList" class="juList"></div><button id="juMemClear" class="juBtn" style="margin-top:10px">CLEAR LOCAL MEMORY</button></section>
+   <section id="ju-identity" class="juView"><div class="juTitle">IDENTITY CENTER</div><div class="juDesc">Profilo locale. Lo snapshot non viene trattato come identificazione biometrica certa.</div><div class="juGrid"><div class="juCard"><b>PROFILE</b><strong id="juProfile">UNREGISTERED</strong><small>LOCAL NAME</small></div><div class="juCard"><b>FACE</b><strong id="juFace">READY</strong><small>SNAPSHOT</small></div><div class="juCard"><b>VOICE</b><strong>READY</strong><small>OUTPUT STACK</small></div></div><button id="juCapture" class="juAction" style="margin-top:10px;width:100%"><b>◎ CAPTURE IDENTITY</b><small>Scatta una foto rapida, chiude la camera e pone una sola domanda.</small></button></section>
+   <section id="ju-projects" class="juView"><div class="juTitle">PROJECT CONTEXT</div><div class="juDesc">Spazi di lavoro locali per separare progetti e contesti.</div><input id="juProject" class="juInput" placeholder="Nome progetto..."><button id="juProjectAdd" class="juBtn">＋ ADD PROJECT</button><div id="juProjectList" class="juList"></div></section>
+   <section id="ju-system" class="juView"><div class="juTitle">SYSTEM TELEMETRY</div><div class="juDesc">Solo informazioni che il browser può realmente esporre.</div><div id="juSystemList" class="juList"></div></section>
+  </main>
+ </section>
+</div><div id="juToast"></div>
+<script  
 src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">  
 </script>  <!-- =====================================================  
      THREE.JS  
@@ -2322,34 +2352,35 @@ jarvisResponse
 ""  
 );  
   
-if(jarvisResponse){
-
-const words =
-String(text).split(/(\s+)/);
-
-words.forEach(
-(word,index)=>{
-
-const span =
-document.createElement("span");
-
-span.className =
-"jarvis-word";
-
-span.textContent =
-word;
-
-span.style.animationDelay =
-(index * 0.025) +
-"s";
-
-element.appendChild(
-span
-);
-
-}
-);
-
+if(jarvisResponse){  
+  
+const chars =  
+Array.from(String(text));  
+  
+chars.forEach(  
+(char,index)=>{  
+  
+const span =  
+document.createElement("span");  
+  
+span.className =  
+"jarvis-char";  
+  
+span.textContent =  
+char;  
+  
+span.style.animationDelay =  
+(index * 0.035) +  
+"s";  
+  
+element.appendChild(  
+span  
+);  
+  
+}  
+  
+);  
+  
 }else{  
   
 element.textContent =  
@@ -7563,4 +7594,32 @@ notify(
 "J.A.R.V.I.S. SYSTEM ONLINE"  
 );  
   
+
+/* JARVIS ULTIMATE OS LOGIC */
+(function(){
+ const O=document.getElementById('juOverlay'), L=document.getElementById('juLauncher'); if(!O||!L)return;
+ let mode=localStorage.getItem('jarvis_intelligence_mode')||'AUTO'; let identityBusy=false;
+ const toast=t=>{const e=document.getElementById('juToast');if(!e)return;e.textContent=t;e.classList.add('show');clearTimeout(e._x);e._x=setTimeout(()=>e.classList.remove('show'),1800)};
+ const open=()=>{O.classList.add('open');O.setAttribute('aria-hidden','false');refresh();}; const close=()=>{O.classList.remove('open');O.setAttribute('aria-hidden','true');}; L.onclick=open; document.getElementById('juClose').onclick=close; O.onclick=e=>{if(e.target===O)close()};
+ function view(v){document.querySelectorAll('.juView').forEach(x=>x.classList.remove('active'));document.getElementById('ju-'+v)?.classList.add('active');document.querySelectorAll('.juNav').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='memory')renderMemory();if(v==='projects')renderProjects();if(v==='system')renderSystem();}
+ document.querySelectorAll('.juNav').forEach(b=>b.onclick=()=>view(b.dataset.view));
+ function setMode(m){mode=m;localStorage.setItem('jarvis_intelligence_mode',m);document.querySelectorAll('.juMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===m));document.getElementById('juActiveMode').textContent=m;document.getElementById('juModeLive').textContent=m;toast('INTELLIGENCE // '+m)}
+ document.querySelectorAll('.juMode').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));setMode(mode);
+ function refresh(){document.getElementById('juNet').textContent=navigator.onLine?'ONLINE':'OFFLINE';document.getElementById('juMem').textContent=String(window.memory?.length||0);document.getElementById('juVision').textContent=window.imageInput?'READY':'OFF';document.getElementById('juVoice').textContent=('speechSynthesis' in window)?'READY':'OFF';const n=localStorage.getItem('jarvis_identity_name');document.getElementById('juProfile').textContent=n?n.toUpperCase():'UNREGISTERED';document.getElementById('juFace').textContent=localStorage.getItem('jarvis_identity_snapshot_v1')?'CAPTURED':'READY';}
+ function renderMemory(q=''){const list=document.getElementById('juMemList');if(!list)return;const a=(window.memory||[]).filter(x=>String(x.content||'').toLowerCase().includes(q.toLowerCase())).slice(-50).reverse();list.innerHTML=a.length?a.map(x=>'<div class="juItem"><b>'+String(x.role||'MEMORY').toUpperCase()+'</b> · '+String(x.content||'').replace(/[<>]/g,'')+'</div>').join(''):'<div class="juItem">MEMORY EMPTY</div>';}
+ document.getElementById('juMemSearch').oninput=e=>renderMemory(e.target.value);document.getElementById('juMemClear').onclick=()=>{if(typeof clearMemory==='function')clearMemory();renderMemory();refresh();toast('MEMORY // CLEARED')};
+ function projects(){try{return JSON.parse(localStorage.getItem('jarvis_projects_v2')||'[]')}catch(e){return[]}}
+ function renderProjects(){const list=document.getElementById('juProjectList'),a=projects();list.innerHTML=a.length?a.map(x=>'<div class="juItem"><b>'+String(x.name).replace(/[<>]/g,'')+'</b><br><small>'+new Date(x.created).toLocaleString('it-IT')+'</small></div>').join(''):'<div class="juItem">NO PROJECTS</div>';}
+ document.getElementById('juProjectAdd').onclick=()=>{const i=document.getElementById('juProject'),n=i.value.trim();if(!n)return;const a=projects();a.unshift({name:n,created:Date.now()});localStorage.setItem('jarvis_projects_v2',JSON.stringify(a.slice(0,40)));i.value='';renderProjects();toast('PROJECT // CREATED')};
+ async function capture(){if(identityBusy)return;identityBusy=true;let stream=null,v=null;try{if(!navigator.mediaDevices?.getUserMedia)throw Error('camera unavailable');stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'user'},width:{ideal:640},height:{ideal:480}},audio:false});v=document.createElement('video');v.autoplay=true;v.muted=true;v.playsInline=true;v.style.cssText='position:fixed;left:-9999px;width:1px;height:1px';document.body.appendChild(v);v.srcObject=stream;await v.play();await new Promise(r=>setTimeout(r,350));const c=document.createElement('canvas');c.width=v.videoWidth||640;c.height=v.videoHeight||480;c.getContext('2d').drawImage(v,0,0,c.width,c.height);const data=c.toDataURL('image/jpeg',.78);localStorage.setItem('jarvis_identity_snapshot_v1',data);localStorage.setItem('jarvis_face_profile_ready','1');document.getElementById('juFace').textContent='CAPTURED';toast('IDENTITY // SNAPSHOT READY');if(typeof speak==='function')setTimeout(()=>speak('Come ti chiami?'),120)}catch(e){toast('IDENTITY // CAMERA UNAVAILABLE')}finally{if(stream)stream.getTracks().forEach(t=>t.stop());if(v){v.srcObject=null;v.remove()}identityBusy=false;}}
+ document.getElementById('juCapture').onclick=capture;
+ function diagnostics(){const rows=[['NETWORK',navigator.onLine?'ONLINE':'OFFLINE'],['MIC',navigator.mediaDevices?.getUserMedia?'AVAILABLE':'UNAVAILABLE'],['SPEECH INPUT',(window.SpeechRecognition||window.webkitSpeechRecognition)?'AVAILABLE':'UNAVAILABLE'],['SPEECH OUTPUT','speechSynthesis' in window?'AVAILABLE':'UNAVAILABLE'],['GEOLOCATION',navigator.geolocation?'AVAILABLE':'UNAVAILABLE'],['MAP',typeof maplibregl!=='undefined'?'READY':'UNAVAILABLE'],['MEMORY',String(window.memory?.length||0)+' ENTRIES'],['AI','WORKER LINK']];if(typeof addMsg==='function')addMsg('CORE DIAGNOSTICS
+
+'+rows.map(x=>x[0]+' // '+x[1]).join('
+'));toast('DIAGNOSTICS // COMPLETE')}
+ function action(a){if(a==='new'){if(window.chat)chat.innerHTML='';if(window.textInput)textInput.value='';toast('NEW SESSION // READY');close();return}if(a==='diagnostics'){diagnostics();return}if(a==='recognize'){capture();return}if(a==='tactical'){if(typeof openTacticalMap==='function')openTacticalMap();close();return}if(a==='web'){if(window.textInput){textInput.value='cerca sul web ';textInput.focus()}close();return}if(a==='vision'){window.imageInput?.click();close();return}if(a==='voice'){window.voicePanel?.classList.toggle('active');if(typeof loadDeviceVoices==='function')loadDeviceVoices();return}if(a==='memory'){view('memory');return}}
+ document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>action(b.dataset.a));
+ function renderSystem(){const list=document.getElementById('juSystemList');const rows={'ONLINE':navigator.onLine?'YES':'NO','MICROPHONE':navigator.mediaDevices?.getUserMedia?'YES':'NO','SPEECH INPUT':(window.SpeechRecognition||window.webkitSpeechRecognition)?'YES':'NO','SPEECH OUTPUT':('speechSynthesis' in window)?'YES':'NO','GEOLOCATION':navigator.geolocation?'YES':'NO','MAPLIBRE':typeof maplibregl!=='undefined'?'YES':'NO','LOCAL MEMORY':String(window.memory?.length||0),'INTELLIGENCE MODE':mode};list.innerHTML=Object.entries(rows).map(([k,v])=>'<div class="juItem"><b>'+k+'</b> · '+v+'</div>').join('')}
+ window.addEventListener('online',refresh);window.addEventListener('offline',refresh);refresh();
+})();
 </script>  </body>  </html>

@@ -1825,25 +1825,95 @@ border-radius:5px;
 
 #imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
 
-/* CLEAN CHAT + SYSTEM ORBITAL NETWORK */
-.msg.jarvis-response,.msg.user-message{border:none!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;}
-.msg.user-message{padding:6px 0!important;margin-bottom:8px!important;}
-.msg.jarvis-response{padding:6px 0!important;margin-bottom:10px!important;}
-#chat{width:min(760px,calc(100vw - 36px))!important;margin-left:auto!important;margin-right:auto!important;}
-#homeSystemPanel{position:fixed;z-index:20;}
-.home-earth{cursor:pointer;transition:transform .28s ease,box-shadow .28s ease;}
-.home-earth:hover{box-shadow:0 0 35px rgba(255,255,255,.08);}
-#earthGlobe{pointer-events:auto!important;cursor:pointer;}
-#homeSystemPanel.earth-expanded{z-index:90!important;}
-#homeSystemPanel.earth-expanded .home-earth{position:fixed;left:50%;top:50%;width:min(760px,92vw);height:min(600px,78vh);transform:translate(-50%,-50%) scale(1);z-index:95;box-shadow:0 0 80px rgba(255,255,255,.12);background:radial-gradient(circle at center,rgba(255,255,255,.055),rgba(0,0,0,.72));}
-#earthClose{display:none;position:absolute;right:12px;top:9px;z-index:8;border:0;background:transparent;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer;}
-#homeSystemPanel.earth-expanded #earthClose{display:block;}
-#homeSystemPanel.earth-expanded:after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(0,0,0,.45);backdrop-filter:blur(5px);}
-.system-satellite-network{position:absolute;inset:0;z-index:2;pointer-events:none;}
-.system-satellite{position:absolute;width:5px;height:5px;border:1px solid rgba(255,255,255,.8);border-radius:50%;box-shadow:0 0 9px rgba(255,255,255,.8);animation:satPulse 2.8s infinite ease-in-out;}
-.system-satellite-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);transform-origin:left center;opacity:.55;}
-@keyframes satPulse{0%,100%{opacity:.35;transform:scale(.75)}50%{opacity:1;transform:scale(1.25)}}
-</style>  </head>  <body>  <!-- =====================================================  
+/* JARVIS RESPONSE — clean ChatGPT-style text */
+.msg.jarvis-response{
+  border:none!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  padding:4px 0!important;
+}
+
+/* Image button — same minimal footprint/style as microphone */
+#imageBtn{
+  width:34px!important;
+  height:34px!important;
+  flex:0 0 34px!important;
+  border:none!important;
+  border-radius:10px!important;
+  background:transparent!important;
+  color:rgba(235,242,255,.80)!important;
+  font-size:0!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  transition:.2s!important;
+  backdrop-filter:none!important;
+}
+#imageBtn:hover{
+  color:#fff!important;
+  border:none!important;
+  background:transparent!important;
+  filter:drop-shadow(0 0 8px rgba(255,255,255,.45));
+}
+.image-icon{
+  width:15px;height:11px;display:block;position:relative;
+  border:1.3px solid currentColor;border-radius:3px;
+}
+.image-icon:before{
+  content:"";position:absolute;left:4px;top:-4px;width:5px;height:3px;
+  border:1.3px solid currentColor;border-bottom:0;border-radius:2px 2px 0 0;
+}
+.image-icon:after{
+  content:"";position:absolute;left:5px;top:3px;width:4px;height:4px;
+  border:1.1px solid currentColor;border-radius:50%;
+}
+
+/* Response actions */
+.response-actions{display:flex;align-items:center;gap:3px;margin-top:9px;padding-top:2px;border:0;}
+.response-action-btn{height:29px;padding:0 8px;border:0;border-radius:8px;background:transparent;color:rgba(225,232,245,.52);font:9px Arial,sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:.18s;}
+.response-action-btn:hover{color:#fff;background:rgba(255,255,255,.07);}
+.response-action-btn.loading{opacity:.55;pointer-events:none;}
+.response-action-btn.done{color:#fff;background:rgba(255,255,255,.07);}
+@media(max-width:600px){.response-actions{gap:1px}.response-action-btn{height:28px;padding:0 6px;font-size:8px}}
+
+/* Chat history sidebar */
+#chatHistoryToggle{position:fixed;left:14px;top:14px;z-index:150;width:40px;height:40px;border:1px solid rgba(235,242,255,.18);border-radius:11px;background:rgba(10,11,14,.60);color:rgba(242,246,255,.82);backdrop-filter:blur(14px);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
+#chatHistoryOverlay{position:fixed;inset:0;z-index:149;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.2s;}
+#chatHistoryOverlay.active{opacity:1;pointer-events:auto;}
+#chatHistory{position:fixed;left:0;top:0;bottom:0;width:min(310px,86vw);z-index:151;background:rgba(9,10,13,.96);border-right:1px solid rgba(235,242,255,.12);backdrop-filter:blur(25px);transform:translateX(-102%);transition:transform .22s ease;display:flex;flex-direction:column;box-shadow:10px 0 40px rgba(0,0,0,.35);}
+#chatHistory.active{transform:translateX(0);}
+.chat-history-head{display:flex;align-items:center;padding:17px 14px 12px;gap:8px;}
+.chat-history-brand{flex:1;font-size:11px;letter-spacing:2.5px;color:rgba(245,248,255,.86);}
+.chat-history-close{border:0;background:transparent;color:rgba(235,242,255,.55);font-size:22px;cursor:pointer;}
+#newChatBtn{margin:3px 13px 12px;height:42px;border:1px solid rgba(235,242,255,.16);border-radius:10px;background:rgba(255,255,255,.045);color:rgba(245,248,255,.9);cursor:pointer;text-align:left;padding:0 13px;font-size:11px;}
+#newChatBtn:hover{background:rgba(255,255,255,.08);}
+#chatHistoryList{flex:1;overflow-y:auto;padding:0 8px 14px;}
+.chat-history-empty{padding:20px 10px;color:rgba(235,242,255,.35);font-size:10px;line-height:1.5;}
+.chat-history-item{width:100%;min-height:45px;border:1px solid transparent;border-radius:9px;background:transparent;color:rgba(240,244,252,.70);display:flex;align-items:center;gap:8px;padding:7px 9px;margin-bottom:3px;cursor:pointer;text-align:left;box-sizing:border-box;}
+.chat-history-item:hover{background:rgba(255,255,255,.05);}
+.chat-history-item.active{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.10);color:#fff;}
+.chat-history-item-icon{width:16px;opacity:.45;font-size:11px;}
+.chat-history-item-text{min-width:0;flex:1;}
+.chat-history-item-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;}
+.chat-history-item-time{margin-top:3px;font-size:7px;color:rgba(235,242,255,.30);}
+.chat-history-delete{opacity:0;border:0;background:transparent;color:rgba(235,242,255,.4);cursor:pointer;font-size:14px;padding:3px;}
+.chat-history-item:hover .chat-history-delete,.chat-history-item.active .chat-history-delete{opacity:1;}
+.chat-history-foot{padding:10px 13px 13px;border-top:1px solid rgba(235,242,255,.07);color:rgba(235,242,255,.25);font-size:7px;letter-spacing:1px;}
+@media(max-width:600px){#chatHistoryToggle{left:10px;top:10px;width:38px;height:38px}#chatHistory{width:min(310px,88vw)}}
+
+</style>  </head>  <body>
+<button id="chatHistoryToggle" type="button" title="Cronologia chat" aria-label="Apri cronologia">☰</button>
+<div id="chatHistoryOverlay"></div>
+<aside id="chatHistory" aria-label="Cronologia JARVIS">
+  <div class="chat-history-head"><div class="chat-history-brand">J.A.R.V.I.S.</div><button class="chat-history-close" id="chatHistoryClose" type="button">×</button></div>
+  <button id="newChatBtn" type="button">＋ Nuova chat</button>
+  <div id="chatHistoryList"></div>
+  <div class="chat-history-foot">CHAT SALVATE SU QUESTO DISPOSITIVO</div>
+</aside>
+  <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
      TITOLO  
@@ -1869,9 +1939,7 @@ SYSTEM STATUS
 
 ONLINE
 
-</div>  </div>  <div class="home-earth">
-<button id="earthClose" type="button" aria-label="Chiudi Earth">×</button>
-<div class="system-satellite-network" id="satelliteNetwork"></div>  <div class="earth-label">  
+</div>  </div>  <div class="home-earth">  <div class="earth-label">  
 EARTH // LOCATION  
 </div>  <div id="earthGlobe"></div>  <div  
 class="earth-coordinates"  
@@ -1925,7 +1993,7 @@ type="text"
 autocomplete="off"  
 placeholder="Chiedi qualcosa a JARVIS...">
 <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
-<button id="imageBtn" type="button" title="Invia immagine">📷</button>
+<button id="imageBtn" type="button" title="Invia immagine" aria-label="Invia immagine"><span class="image-icon"></span></button>
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
@@ -1985,6 +2053,66 @@ const ELEVEN_VOICE_ID =
 "vkBFlAtUdZqNR4MqxSVr";  
   
   
+/* =====================================================
+   CHAT HISTORY
+===================================================== */
+const CHAT_HISTORY_KEY="jarvis_conversations_v2";
+let conversations=[];
+let currentConversationId=null;
+
+function newConversation(){
+  return {id:"c_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),title:"Nuova chat",updatedAt:Date.now(),messages:[]};
+}
+function saveConversations(){
+  try{localStorage.setItem(CHAT_HISTORY_KEY,JSON.stringify(conversations.slice(0,50)));}catch(e){console.warn("Chat history:",e);}
+}
+function loadConversations(){
+  try{const x=JSON.parse(localStorage.getItem(CHAT_HISTORY_KEY)||"[]"); if(Array.isArray(x)) conversations=x.filter(c=>c&&c.id&&Array.isArray(c.messages));}catch(e){conversations=[];}
+  if(!conversations.length){const c=newConversation();conversations=[c];}
+  currentConversationId=conversations[0].id;
+}
+function currentConversation(){return conversations.find(c=>c.id===currentConversationId)||null;}
+function saveChatMessage(text,assistant){
+  const c=currentConversation(); if(!c) return;
+  const clean=String(text??"").trim(); if(!clean) return;
+  c.messages.push({role:assistant?"assistant":"user",text:clean,time:Date.now()});
+  if(c.title==="Nuova chat"&&!assistant){c.title=clean.replace(/\s+/g," ").slice(0,42)+(clean.length>42?"…":"");}
+  c.updatedAt=Date.now();
+  saveConversations(); renderChatHistory();
+}
+function restoreConversation(id){
+  const c=conversations.find(x=>x.id===id); if(!c) return;
+  currentConversationId=id; chat.innerHTML="";
+  c.messages.forEach(m=>renderMessage(m.text,m.role==="assistant",m.role==="assistant"));
+  chat.scrollTop=chat.scrollHeight; renderChatHistory(); closeHistory();
+}
+function createNewChat(){
+  const c=currentConversation();
+  if(c&&c.messages.length===0){closeHistory();return;}
+  const n=newConversation(); conversations.unshift(n); currentConversationId=n.id; saveConversations(); chat.innerHTML=""; renderChatHistory(); closeHistory(); textInput?.focus();
+}
+function deleteChat(id){
+  conversations=conversations.filter(c=>c.id!==id);
+  if(!conversations.length) conversations=[newConversation()];
+  if(!conversations.some(c=>c.id===currentConversationId)) currentConversationId=conversations[0].id;
+  saveConversations(); restoreConversation(currentConversationId);
+}
+function renderChatHistory(){
+  const list=document.getElementById("chatHistoryList"); if(!list)return; list.innerHTML="";
+  [...conversations].sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).forEach(c=>{
+    const row=document.createElement("div"); row.className="chat-history-item"+(c.id===currentConversationId?" active":"");
+    const icon=document.createElement("div"); icon.className="chat-history-item-icon"; icon.textContent="◌";
+    const wrap=document.createElement("div"); wrap.className="chat-history-item-text";
+    const title=document.createElement("div"); title.className="chat-history-item-title"; title.textContent=c.title||"Nuova chat";
+    const time=document.createElement("div"); time.className="chat-history-item-time"; time.textContent=new Date(c.updatedAt||Date.now()).toLocaleDateString("it-IT");
+    wrap.append(title,time);
+    const del=document.createElement("button"); del.className="chat-history-delete"; del.type="button"; del.textContent="×"; del.title="Elimina chat"; del.onclick=e=>{e.stopPropagation();deleteChat(c.id)};
+    row.append(icon,wrap,del); row.onclick=()=>restoreConversation(c.id); list.appendChild(row);
+  });
+}
+function openHistory(){document.getElementById("chatHistory")?.classList.add("active");document.getElementById("chatHistoryOverlay")?.classList.add("active");}
+function closeHistory(){document.getElementById("chatHistory")?.classList.remove("active");document.getElementById("chatHistoryOverlay")?.classList.remove("active");}
+
 /* =====================================================  
    ELEMENTI  
 ===================================================== */  
@@ -2320,206 +2448,90 @@ hasCodeBlock
    MESSAGGI  
 ===================================================== */  
   
-function addMsg(  
-text,  
-jarvisResponse = false,  
-copyable = false  
-){  
-  
-chat.innerHTML = "";  
-  
-const element =  
-document.createElement("div");  
-  
-element.className =  
-"msg" +  
-(  
-jarvisResponse  
-?  
-" jarvis-response"  
-:  
-""  
-);  
-  
-if(jarvisResponse){  
-  
-const chars =  
-Array.from(String(text));  
-  
-chars.forEach(  
-(char,index)=>{  
-  
-const span =  
-document.createElement("span");  
-  
-span.className =  
-"jarvis-char";  
-  
-span.textContent =  
-char;  
-  
-span.style.animationDelay =  
-(index * 0.035) +  
-"s";  
-  
-element.appendChild(  
-span  
-);  
-  
-}  
-  
-);  
-  
-}else{  
-  
-element.textContent =  
-String(text);  
-  
-}  
-  
-  
-/* =====================================================  
-   COPIA  
-===================================================== */  
-  
-if(copyable){  
-  
-const copyButton =  
-document.createElement("button");  
-  
-copyButton.className =  
-"copy-btn";  
-  
-copyButton.type =  
-"button";  
-  
-copyButton.title =  
-"Copia risposta";  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.addEventListener(  
-"click",  
-async event=>{  
-  
-event.stopPropagation();  
-  
-try{  
-  
-await navigator.clipboard.writeText(  
-String(text)  
-);  
-  
-copyButton.textContent =  
-"✓";  
-  
-copyButton.classList.add(  
-"copied"  
-);  
-  
-notify(  
-"TESTO COPIATO"  
-);  
-  
-setTimeout(  
-()=>{  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.classList.remove(  
-"copied"  
-);  
-  
-},  
-1800  
-);  
-  
-}catch(error){  
-  
-console.warn(  
-"Clipboard:",  
-error  
-);  
-  
-const textarea =  
-document.createElement("textarea");  
-  
-textarea.value =  
-String(text);  
-  
-textarea.style.position =  
-"fixed";  
-  
-textarea.style.opacity =  
-"0";  
-  
-document.body.appendChild(  
-textarea  
-);  
-  
-textarea.select();  
-  
-try{  
-  
-document.execCommand(  
-"copy"  
-);  
-  
-copyButton.textContent =  
-"✓";  
-  
-copyButton.classList.add(  
-"copied"  
-);  
-  
-notify(  
-"TESTO COPIATO"  
-);  
-  
-}catch(e){  
-  
-notify(  
-"COPIA NON DISPONIBILE"  
-);  
-  
-}  
-  
-textarea.remove();  
-  
-setTimeout(  
-()=>{  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.classList.remove(  
-"copied"  
-);  
-  
-},  
-1800  
-);  
-  
-}  
-  
-}  
-);  
-  
-element.appendChild(  
-copyButton  
-);  
-  
-}  
-  
-chat.appendChild(  
-element  
-);  
-  
-}  
-  
-  
+function renderMessage(text, jarvisResponse=false, withActions=true){
+
+const element=document.createElement("div");
+element.className="msg"+(jarvisResponse?" jarvis-response":"");
+
+if(jarvisResponse){
+  Array.from(String(text)).forEach((char,index)=>{
+    const span=document.createElement("span");
+    span.className="jarvis-char";
+    span.textContent=char;
+    span.style.animationDelay=(index*.035)+"s";
+    element.appendChild(span);
+  });
+}else{
+  element.textContent=String(text);
+}
+
+if(jarvisResponse && withActions){
+  const actions=document.createElement("div");
+  actions.className="response-actions";
+
+  const copyButton=document.createElement("button");
+  copyButton.className="response-action-btn";
+  copyButton.type="button";
+  copyButton.title="Copia risposta";
+  copyButton.innerHTML="⧉ <span>Copia</span>";
+  copyButton.onclick=async e=>{
+    e.stopPropagation();
+    try{ await navigator.clipboard.writeText(String(text)); }
+    catch(err){
+      const ta=document.createElement("textarea"); ta.value=String(text); ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove();
+    }
+    copyButton.classList.add("done"); copyButton.innerHTML="✓ <span>Copiato</span>"; notify("TESTO COPIATO");
+    setTimeout(()=>{copyButton.classList.remove("done");copyButton.innerHTML="⧉ <span>Copia</span>"},1500);
+  };
+
+  const listenButton=document.createElement("button");
+  listenButton.className="response-action-btn";
+  listenButton.type="button";
+  listenButton.title="Ascolta risposta";
+  listenButton.innerHTML="🔊 <span>Ascolta</span>";
+  listenButton.onclick=async e=>{
+    e.stopPropagation();
+    if(currentAudio){try{currentAudio.pause()}catch(_){} currentAudio=null;}
+    if("speechSynthesis" in window) speechSynthesis.cancel();
+    listenButton.classList.add("loading"); listenButton.innerHTML="◌ <span>Caricamento...</span>";
+    const ok=await speak(String(text));
+    listenButton.classList.remove("loading");
+    if(ok){
+      listenButton.classList.add("done"); listenButton.innerHTML="🔊 <span>In riproduzione</span>";
+      const reset=()=>{listenButton.classList.remove("done");listenButton.innerHTML="🔊 <span>Ascolta</span>"};
+      if(currentAudio){currentAudio.addEventListener("ended",reset,{once:true});currentAudio.addEventListener("error",reset,{once:true});}else setTimeout(reset,1200);
+    }else{
+      listenButton.innerHTML="🔊 <span>Voce non disponibile</span>";
+      setTimeout(()=>listenButton.innerHTML="🔊 <span>Ascolta</span>",1600);
+    }
+  };
+
+  const shareButton=document.createElement("button");
+  shareButton.className="response-action-btn";
+  shareButton.type="button";
+  shareButton.title="Condividi risposta";
+  shareButton.innerHTML="↗ <span>Condividi</span>";
+  shareButton.onclick=async e=>{
+    e.stopPropagation();
+    try{
+      if(navigator.share) await navigator.share({title:"J.A.R.V.I.S.",text:String(text)});
+      else { await navigator.clipboard.writeText(String(text)); notify("TESTO COPIATO"); }
+    }catch(err){ if(err?.name!=="AbortError") console.warn("Share:",err); }
+  };
+
+  actions.append(copyButton,listenButton,shareButton);
+  element.appendChild(actions);
+}
+
+chat.appendChild(element);
+}
+
+function addMsg(text, jarvisResponse=false, copyable=false){
+  renderMessage(text,jarvisResponse,jarvisResponse);
+  saveChatMessage(text,jarvisResponse);
+}
+
 /* =====================================================  
    OROLOGIO  
 ===================================================== */  
@@ -4473,22 +4485,6 @@ camera
    AVVIO THREE  
 ===================================================== */  
   
-// EARTH INTERACTION + SMALL ORBITAL SATELLITE NETWORK
-const homeSystemPanel=document.getElementById("homeSystemPanel");
-const earthClose=document.getElementById("earthClose");
-const satelliteNetwork=document.getElementById("satelliteNetwork");
-function buildSatelliteNetwork(){
- if(!satelliteNetwork)return;
- satelliteNetwork.innerHTML="";
- const pts=[{x:17,y:27},{x:31,y:14},{x:48,y:22},{x:67,y:13},{x:83,y:29},{x:73,y:48},{x:54,y:40},{x:36,y:52},{x:19,y:45},{x:43,y:72},{x:65,y:70},{x:82,y:61}];
- pts.forEach((p,i)=>{const d=document.createElement("div");d.className="system-satellite";d.style.left=p.x+"%";d.style.top=p.y+"%";d.style.animationDelay=(i*.18)+"s";satelliteNetwork.appendChild(d);});
- for(let i=0;i<pts.length-1;i++){const a=pts[i],b=pts[i+1];const line=document.createElement("div");line.className="system-satellite-line";const dx=b.x-a.x,dy=b.y-a.y;line.style.left=a.x+"%";line.style.top=a.y+"%";line.style.width=Math.sqrt(dx*dx+dy*dy)+"%";line.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;satelliteNetwork.appendChild(line);}
-}
-function toggleEarthExpanded(on){homeSystemPanel?.classList.toggle("earth-expanded",on);setTimeout(()=>resizeEarthGlobe(),80);}
-document.querySelector(".home-earth")?.addEventListener("click",e=>{if(e.target.closest("#earthClose"))return;toggleEarthExpanded(true);});
-earthClose?.addEventListener("click",e=>{e.stopPropagation();toggleEarthExpanded(false);});
-buildSatelliteNetwork();
-
 initializeEarthGlobe();  
   
 initializeNeuralCore();  
@@ -7573,4 +7569,13 @@ notify(
 "J.A.R.V.I.S. SYSTEM ONLINE"  
 );  
   
+
+/* CHAT HISTORY INIT */
+loadConversations();
+renderChatHistory();
+document.getElementById("chatHistoryToggle")?.addEventListener("click",openHistory);
+document.getElementById("chatHistoryClose")?.addEventListener("click",closeHistory);
+document.getElementById("chatHistoryOverlay")?.addEventListener("click",closeHistory);
+document.getElementById("newChatBtn")?.addEventListener("click",createNewChat);
+
 </script>  </body>  </html>

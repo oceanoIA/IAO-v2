@@ -1822,6 +1822,8 @@ background:rgba(255,255,255,.28);
 border-radius:5px;  
 }  
   
+
+#imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
 </style>  </head>  <body>  <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
@@ -1901,6 +1903,10 @@ id="textInput"
 type="text"  
 autocomplete="off"  
 placeholder="Chiedi qualcosa a JARVIS...">
+<input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+<button id="imageBtn" type="button" title="Invia immagine">📷</button>
+<div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
+<div id="visionStatus">VISION READY</div>
 
 <button id="micBtn">  <span class="mic-icon"></span>
 
@@ -1977,7 +1983,15 @@ const sendBtn =
 document.getElementById("sendBtn");  
   
 const micBtn =  
-document.getElementById("micBtn");  
+document.getElementById("micBtn");
+
+const imageBtn = document.getElementById("imageBtn");
+const imageInput = document.getElementById("imageInput");
+const visionPreview = document.getElementById("visionPreview");
+const visionPreviewImage = document.getElementById("visionPreviewImage");
+const visionPreviewClose = document.getElementById("visionPreviewClose");
+const visionStatus = document.getElementById("visionStatus");
+let selectedImageData = null;  
   
 const clock =  
 document.getElementById("clock");  
@@ -7145,7 +7159,7 @@ addMsg(
    PROCESS AI  
 ===================================================== */  
   
-async function processAi(text){  
+async function processAi(text, imageData = null){  
   
 if(  
 handleMapCommand(text)  
@@ -7296,7 +7310,9 @@ capabilities:
 capabilities,  
   
 systemInstructions:  
-capabilityInstructions  
+capabilityInstructions,
+
+image: imageData || null
   
 }),  
   
@@ -7402,20 +7418,38 @@ setState("idle");
    INVIO  
 ===================================================== */  
   
-function sendMessage(){  
-  
-const text =  
-textInput.value.trim();  
-  
-if(!text)  
-return;  
-  
-textInput.value = "";  
-  
-addMsg(text);  
-  
-processAi(text);  
-  
+function clearVisionSelection(){
+selectedImageData=null;
+if(imageInput) imageInput.value="";
+if(visionPreview) visionPreview.style.display="none";
+if(visionPreviewImage) visionPreviewImage.removeAttribute("src");
+if(visionStatus) visionStatus.style.display="none";
+}
+
+function prepareVisionImage(file){
+return new Promise((resolve,reject)=>{
+if(!file || !file.type.startsWith("image/")){reject(new Error("File non valido."));return;}
+const reader=new FileReader();
+reader.onload=()=>{const img=new Image();img.onload=()=>{let w=img.naturalWidth,h=img.naturalHeight,max=1600;if(w>max||h>max){const k=Math.min(max/w,max/h);w=Math.round(w*k);h=Math.round(h*k);}const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d",{alpha:false});x.drawImage(img,0,0,w,h);resolve(c.toDataURL("image/jpeg",0.82));};img.onerror=()=>reject(new Error("Immagine non leggibile."));img.src=reader.result;};reader.onerror=()=>reject(new Error("Errore lettura immagine."));reader.readAsDataURL(file);});
+}
+
+imageBtn?.addEventListener("click",()=>imageInput?.click());
+imageInput?.addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{if(visionStatus){visionStatus.textContent="PREPARAZIONE IMMAGINE...";visionStatus.style.display="block";}selectedImageData=await prepareVisionImage(file);if(visionPreviewImage)visionPreviewImage.src=selectedImageData;if(visionPreview)visionPreview.style.display="flex";if(visionStatus){visionStatus.textContent="VISION READY";visionStatus.style.display="block";}}catch(err){console.error("VISION IMAGE ERROR:",err);clearVisionSelection();addMsg("Non riesco a preparare questa immagine.");}});
+visionPreviewClose?.addEventListener("click",clearVisionSelection);
+
+/* =====================================================
+   INVIO
+===================================================== */
+
+function sendMessage(){
+const text=textInput.value.trim();
+const imageData=selectedImageData;
+if(!text&&!imageData)return;
+const displayText=text||"📷 Analizza questa immagine";
+textInput.value="";
+addMsg(displayText);
+clearVisionSelection();
+processAi(text||"Descrivi con precisione questa immagine.",imageData);
 }  
   
   

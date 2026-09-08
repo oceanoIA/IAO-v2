@@ -1825,128 +1825,14 @@ border-radius:5px;
 
 #imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
 
-/* CLEAN CHAT + SYSTEM ORBITAL NETWORK */
-.msg.jarvis-response,.msg.user-message{border:none!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;}
-.msg.user-message{padding:6px 0!important;margin-bottom:8px!important;}
-.msg.jarvis-response{padding:6px 0!important;margin-bottom:10px!important;}
-#chat{width:min(760px,calc(100vw - 36px))!important;margin-left:auto!important;margin-right:auto!important;}
-#homeSystemPanel{position:fixed;z-index:20;}
-.home-earth{cursor:pointer;transition:transform .28s ease,box-shadow .28s ease;}
-.home-earth:hover{box-shadow:0 0 35px rgba(255,255,255,.08);}
-#earthGlobe{pointer-events:auto!important;cursor:pointer;}
-#homeSystemPanel.earth-expanded{z-index:90!important;}
-#homeSystemPanel.earth-expanded .home-earth{position:fixed;left:50%;top:50%;width:min(760px,92vw);height:min(600px,78vh);transform:translate(-50%,-50%) scale(1);z-index:95;box-shadow:0 0 80px rgba(255,255,255,.12);background:radial-gradient(circle at center,rgba(255,255,255,.055),rgba(0,0,0,.72));}
-#earthClose{display:none;position:absolute;right:12px;top:9px;z-index:8;border:0;background:transparent;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer;}
-#homeSystemPanel.earth-expanded #earthClose{display:block;}
-#homeSystemPanel.earth-expanded:after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(0,0,0,.45);backdrop-filter:blur(5px);}
-.system-satellite-network{position:absolute;inset:0;z-index:2;pointer-events:none;}
-.system-satellite{position:absolute;width:5px;height:5px;border:1px solid rgba(255,255,255,.8);border-radius:50%;box-shadow:0 0 9px rgba(255,255,255,.8);animation:satPulse 2.8s infinite ease-in-out;}
-.system-satellite-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);transform-origin:left center;opacity:.55;}
-@keyframes satPulse{0%,100%{opacity:.35;transform:scale(.75)}50%{opacity:1;transform:scale(1.25)}}
-
-/* =====================================================
-   JARVIS INTELLIGENCE LAYER — ADDITIVE UI
-===================================================== */
-#jarvisControlBtn{position:fixed;left:22px;bottom:24px;z-index:300;height:39px;padding:0 15px;border:1px solid rgba(235,242,255,.32);border-radius:22px;background:rgba(8,8,11,.82);color:rgba(225,232,245,.82);font:10px monospace;letter-spacing:1.5px;cursor:pointer;backdrop-filter:blur(12px);transition:.2s}
-#jarvisControlBtn:hover,#jarvisControlBtn.active{color:#fff;border-color:#fff;background:rgba(255,255,255,.10);box-shadow:0 0 20px rgba(255,255,255,.14)}
-#jarvisControlPanel{position:fixed;left:22px;bottom:75px;width:330px;max-width:calc(100vw - 30px);max-height:72vh;overflow:auto;z-index:299;display:none;padding:15px;border:1px solid rgba(235,242,255,.25);border-radius:20px;background:rgba(7,7,10,.94);backdrop-filter:blur(24px);box-shadow:0 20px 70px rgba(0,0,0,.65),0 0 35px rgba(255,255,255,.07)}
-#jarvisControlPanel.active{display:block;animation:jcIn .2s ease}
-@keyframes jcIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
-.jc-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.10);margin-bottom:12px}
-.jc-title{font:11px monospace;letter-spacing:2px;color:rgba(245,248,255,.95)}
-.jc-state{font:8px monospace;letter-spacing:1.5px;color:rgba(235,242,255,.58)}
-.jc-section{margin:13px 0}.jc-label{font:7px monospace;letter-spacing:1.7px;color:rgba(235,242,255,.42);margin-bottom:8px}
-.jc-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.jc-mode,.jc-action{min-height:34px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.025);color:rgba(235,242,255,.70);font:7px monospace;letter-spacing:1px;cursor:pointer;transition:.18s}.jc-mode:hover,.jc-action:hover,.jc-mode.active{border-color:rgba(255,255,255,.65);color:#fff;background:rgba(255,255,255,.08);box-shadow:0 0 15px rgba(255,255,255,.07)}
-.jc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.jc-metric{padding:9px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.02)}.jc-metric b{display:block;font:7px monospace;letter-spacing:1.3px;color:rgba(235,242,255,.42);margin-bottom:5px}.jc-metric span{font:10px monospace;color:rgba(245,248,255,.90)}
-.jc-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1px solid rgba(255,255,255,.09);border-radius:10px;background:rgba(255,255,255,.02);font:8px monospace;letter-spacing:1px;color:rgba(235,242,255,.70)}
-.jc-toggle button{min-width:72px;height:28px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:transparent;color:rgba(235,242,255,.70);font:7px monospace;letter-spacing:1px;cursor:pointer}.jc-toggle button.active{border-color:#fff;color:#fff;background:rgba(255,255,255,.10)}
-#jcSuggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.jc-suggestion{border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:7px 10px;background:rgba(255,255,255,.025);color:rgba(235,242,255,.68);font:7px monospace;letter-spacing:.7px;cursor:pointer}.jc-suggestion:hover{border-color:#fff;color:#fff}
-#jcTimeline{display:flex;flex-direction:column;gap:6px;max-height:120px;overflow:auto}.jc-event{padding:7px 9px;border-left:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.025);font:7px monospace;color:rgba(235,242,255,.58)}
-#jcCoreDashboard{position:fixed;right:24px;top:14%;width:290px;z-index:240;display:none;padding:14px;border:1px solid rgba(235,242,255,.22);border-radius:18px;background:rgba(7,7,10,.92);backdrop-filter:blur(22px);box-shadow:0 20px 70px rgba(0,0,0,.6)}
-#jcCoreDashboard.active{display:block}.jc-core-title{font:10px monospace;letter-spacing:2px;color:#fff;margin-bottom:12px}.jc-core-row{display:flex;align-items:center;justify-content:space-between;margin:9px 0;font:7px monospace;letter-spacing:1px;color:rgba(235,242,255,.58)}.jc-bar{width:48%;height:3px;background:rgba(255,255,255,.08);overflow:hidden;border-radius:4px}.jc-bar i{display:block;height:100%;width:50%;background:rgba(255,255,255,.82);transition:width .3s}
-#jcCameraHud{position:fixed;right:24px;bottom:150px;width:220px;height:165px;z-index:230;display:none;border:1px solid rgba(235,242,255,.22);border-radius:15px;background:rgba(0,0,0,.72);overflow:hidden;box-shadow:0 0 30px rgba(255,255,255,.07)}#jcCameraHud.active{display:block}#jcGestureVideo{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:.70}.jc-cam-label{position:absolute;left:9px;top:8px;font:7px monospace;letter-spacing:1.3px;color:rgba(255,255,255,.78);text-shadow:0 0 8px #000}.jc-gesture-status{position:absolute;left:9px;bottom:8px;font:7px monospace;letter-spacing:1px;color:rgba(255,255,255,.72)}
-#jcStateBadge{position:fixed;left:50%;top:11%;transform:translateX(-50%);z-index:35;pointer-events:none;font:7px monospace;letter-spacing:2.5px;color:rgba(235,242,255,.42);transition:.25s}.jc-thinking #jcStateBadge{color:rgba(255,255,255,.85);text-shadow:0 0 14px rgba(255,255,255,.35)}
-@media(max-width:600px){#jarvisControlBtn{left:12px;bottom:17px;font-size:8px;padding:0 11px}#jarvisControlPanel{left:12px;bottom:60px;width:calc(100vw - 24px);max-height:67vh}#jcCoreDashboard{right:12px;top:55px;width:calc(100% - 24px);max-width:300px}.jc-modes{grid-template-columns:repeat(2,1fr)}#jcCameraHud{right:12px;bottom:105px;width:165px;height:124px}.jc-state{display:none}}
-
-
-/* =====================================================
-   JARVIS IDENTITY // OPT-IN LOCAL FACE PROFILE
-===================================================== */
-#jcIdentityCard{position:fixed;left:18px;top:18px;width:190px;z-index:260;display:none;padding:9px;border:1px solid rgba(235,242,255,.22);border-radius:15px;background:rgba(7,7,10,.90);backdrop-filter:blur(18px);box-shadow:0 12px 45px rgba(0,0,0,.55)}
-#jcIdentityCard.active{display:block;animation:jcIdentityIn .25s ease}@keyframes jcIdentityIn{from{opacity:0;transform:translateY(-7px) scale(.97)}to{opacity:1;transform:none}}
-#jcIdentityPhoto{display:block;width:100%;height:120px;object-fit:cover;border-radius:9px;background:#050507;transform:scaleX(-1)}
-.jc-id-meta{padding:7px 1px 1px}.jc-id-kicker{font:6px monospace;letter-spacing:1.6px;color:rgba(235,242,255,.40)}.jc-id-name{margin-top:3px;font:11px monospace;letter-spacing:1px;color:rgba(255,255,255,.94);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jc-id-state{margin-top:4px;font:6px monospace;letter-spacing:1px;color:rgba(235,242,255,.55)}
-#jcIdentityPrompt{position:fixed;left:18px;top:175px;width:290px;max-width:calc(100vw - 36px);z-index:259;display:none;padding:12px 14px;border-left:2px solid rgba(255,255,255,.75);border-radius:0 12px 12px 0;background:rgba(7,7,10,.88);backdrop-filter:blur(18px);box-shadow:0 12px 45px rgba(0,0,0,.45)}
-#jcIdentityPrompt.active{display:block;animation:jcIdentityIn .22s ease}.jc-id-question{font:11px monospace;letter-spacing:.4px;color:#fff}.jc-id-hint{margin-top:5px;font:6px monospace;letter-spacing:1px;color:rgba(235,242,255,.42)}
-@media(max-width:600px){#jcIdentityCard{left:10px;top:10px;width:145px}#jcIdentityPhoto{height:90px}#jcIdentityPrompt{left:10px;top:118px;width:235px}}
-
-</style>  </head>  <body>
-
-<section id="jcIdentityCard" aria-label="JARVIS identity profile">
-  <img id="jcIdentityPhoto" alt="Snapshot del volto">
-  <div class="jc-id-meta"><div class="jc-id-kicker">IDENTITY // LOCAL PROFILE</div><div class="jc-id-name" id="jcIdentityName">SCANNING</div><div class="jc-id-state" id="jcIdentityState">PROFILE MATCH</div></div>
-</section>
-<section id="jcIdentityPrompt" aria-live="polite"><div class="jc-id-question" id="jcIdentityQuestion">Come ti chiami?</div><div class="jc-id-hint">RISPONDI CON LA CHAT O CON LA VOCE</div></section>
-
-
-<!-- =====================================================
-     JARVIS INTELLIGENCE LAYER — ADDITIVE UI
-===================================================== -->
-<button id="jarvisControlBtn" type="button">⌘ JARVIS CORE</button>
-<div id="jcStateBadge">STATE // IDLE</div>
-
-<section id="jarvisControlPanel" aria-label="JARVIS Control Center">
-  <div class="jc-head"><span class="jc-title">J.A.R.V.I.S. // CONTROL</span><span class="jc-state" id="jcStateText">IDLE</span></div>
-  <div class="jc-section">
-    <div class="jc-label">OPERATING MODE</div>
-    <div class="jc-modes" id="jcModes">
-      <button class="jc-mode active" data-mode="GENERAL">GENERAL</button>
-      <button class="jc-mode" data-mode="VISION">VISION</button>
-      <button class="jc-mode" data-mode="FOCUS">FOCUS</button>
-      <button class="jc-mode" data-mode="RESEARCH">RESEARCH</button>
-      <button class="jc-mode" data-mode="SYSTEM">SYSTEM</button>
-      <button class="jc-mode" data-mode="CREATIVE">CREATIVE</button>
-    </div>
-  </div>
-  <div class="jc-section">
-    <div class="jc-label">LIVE CORE</div>
-    <div class="jc-grid">
-      <div class="jc-metric"><b>MODE</b><span id="jcModeValue">GENERAL</span></div>
-      <div class="jc-metric"><b>MEMORY</b><span id="jcMemoryValue">0</span></div>
-      <div class="jc-metric"><b>NETWORK</b><span id="jcNetworkValue">ONLINE</span></div>
-      <div class="jc-metric"><b>VISION</b><span id="jcVisionValue">READY</span></div>
-    </div>
-  </div>
-  <div class="jc-section">
-    <div class="jc-label">AUTOMATION</div>
-    <div class="jc-toggle"><span>HEY JARVIS // CONTINUOUS</span><button id="jcWakeToggle" type="button">OFF</button></div>
-    <div class="jc-toggle" style="margin-top:7px"><span>GESTURE CONTROL</span><button id="jcGestureToggle" type="button">OFF</button></div>
-  </div>
-  <div class="jc-section">
-    <div class="jc-label">ACTIVITY</div>
-    <div id="jcTimeline"></div>
-  </div>
-  <div class="jc-section"><div class="jc-label">SUGGESTIONS</div><div id="jcSuggestions"><button class="jc-suggestion" data-suggest="Analizza meglio questo argomento">ANALIZZA</button><button class="jc-suggestion" data-suggest="Spiegamelo in modo più semplice">SEMPLIFICA</button><button class="jc-suggestion" data-suggest="Qual è il prossimo passo?">NEXT STEP</button></div></div>
-  <div class="jc-section"><div class="jc-grid"><button class="jc-action" id="jcNewChat">NEW CHAT</button><button class="jc-action" id="jcClearMemory">CLEAR MEMORY</button><button class="jc-action" id="jcCoreToggle">AI CORE</button><button class="jc-action" id="jcEarthOpen">EARTH 3D</button></div></div>
-</section>
-
-<section id="jcCoreDashboard" aria-label="AI Core dashboard">
-  <div class="jc-core-title">NEURAL CORE // TELEMETRY</div>
-  <div class="jc-core-row"><span>AI ENGINE</span><div class="jc-bar"><i id="jcBarAI"></i></div></div>
-  <div class="jc-core-row"><span>CONTEXT</span><div class="jc-bar"><i id="jcBarContext"></i></div></div>
-  <div class="jc-core-row"><span>MEMORY</span><div class="jc-bar"><i id="jcBarMemory"></i></div></div>
-  <div class="jc-core-row"><span>VISION</span><div class="jc-bar"><i id="jcBarVision"></i></div></div>
-  <div class="jc-core-row"><span>VOICE</span><div class="jc-bar"><i id="jcBarVoice"></i></div></div>
-  <div class="jc-core-row"><span>NETWORK</span><div class="jc-bar"><i id="jcBarNetwork"></i></div></div>
-</section>
-
-<section id="jcCameraHud" aria-label="Gesture camera">
-  <video id="jcGestureVideo" autoplay playsinline muted></video>
-  <div class="jc-cam-label">VISION // HAND TRACKING</div>
-  <div class="jc-gesture-status" id="jcGestureStatus">WAITING</div>
-</section>
-
-  <!-- =====================================================  
+#chat{scrollbar-width:none!important}.msg{border:0!important;background:transparent!important;box-shadow:none!important;padding-left:2px!important;border-radius:0!important;animation:jcMsgIn .22s ease}.jc-ephemeral-hide{opacity:0!important;transform:translateY(-4px)!important;transition:.45s ease}@keyframes jcMsgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+#imageBtn{width:42px!important;height:42px!important;flex:0 0 42px!important;border-radius:14px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:0!important;font-size:17px!important}
+.jc-history{position:fixed;right:18px;bottom:82px;z-index:120;display:none;width:min(390px,calc(100vw - 36px));max-height:62vh;overflow:auto;padding:14px;border:1px solid rgba(235,242,255,.16);border-radius:18px;background:rgba(7,7,10,.90);backdrop-filter:blur(20px);box-shadow:0 20px 70px rgba(0,0,0,.55)}.jc-history.active{display:block}.jc-history h3,.jc-core h3{margin:0 0 10px;font:9px monospace;letter-spacing:2px;color:rgba(255,255,255,.75)}.jc-history-item{padding:9px 0;border-top:1px solid rgba(255,255,255,.07);font:8px monospace;color:rgba(235,242,255,.58);cursor:pointer}.jc-history-item strong{display:block;color:#fff;font-size:9px;margin-bottom:3px}.jc-history-item:hover{color:#fff}
+.jc-core{position:fixed;right:18px;top:72px;z-index:121;width:min(410px,calc(100vw - 36px));display:none;padding:15px;border:1px solid rgba(235,242,255,.17);border-radius:20px;background:rgba(7,7,10,.91);backdrop-filter:blur(22px);box-shadow:0 20px 80px rgba(0,0,0,.58)}.jc-core.active{display:block}.jc-core-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.jc-core-btn{border:1px solid rgba(235,242,255,.12);border-radius:12px;background:rgba(255,255,255,.035);color:rgba(255,255,255,.82);padding:11px;text-align:left;font:8px monospace;letter-spacing:.8px;cursor:pointer}.jc-core-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3)}.jc-core-sub{margin-top:10px;font:7px monospace;line-height:1.7;color:rgba(235,242,255,.42)}
+.jc-earth-modal{position:fixed;inset:6%;z-index:150;display:none;border:1px solid rgba(235,242,255,.18);border-radius:24px;background:rgba(4,5,7,.94);backdrop-filter:blur(22px);box-shadow:0 25px 100px rgba(0,0,0,.7);overflow:hidden}.jc-earth-modal.active{display:block}.jc-earth-map{position:absolute;inset:0}.jc-earth-hud{position:absolute;left:18px;top:18px;z-index:2;font:8px monospace;letter-spacing:2px;color:rgba(255,255,255,.7);pointer-events:none}.jc-earth-close{position:absolute;right:14px;top:12px;z-index:3;border:0;background:rgba(0,0,0,.35);color:#fff;font-size:22px;width:34px;height:34px;border-radius:50%;cursor:pointer}.jc-earth-footer{position:absolute;left:18px;right:18px;bottom:15px;z-index:2;display:flex;gap:8px}.jc-earth-chip{padding:7px 9px;border:1px solid rgba(255,255,255,.11);border-radius:9px;background:rgba(0,0,0,.35);font:7px monospace;color:rgba(255,255,255,.58)}
+.jc-identity-mini{position:fixed;left:16px;top:16px;z-index:130;width:150px;display:none;padding:7px;border:1px solid rgba(255,255,255,.13);border-radius:14px;background:rgba(7,7,10,.82);backdrop-filter:blur(16px)}.jc-identity-mini.active{display:block}.jc-identity-mini img{width:100%;height:86px;object-fit:cover;border-radius:8px}.jc-identity-mini div{margin-top:6px;font:7px monospace;letter-spacing:1px;color:rgba(255,255,255,.65)}
+@media(max-width:600px){.jc-core{right:10px;top:62px}.jc-history{right:10px;bottom:74px}.jc-earth-modal{inset:3%}.jc-identity-mini{left:10px;top:10px;width:125px}.jc-identity-mini img{height:70px}}
+</style>  </head>  <body>  <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
      TITOLO  
@@ -1972,9 +1858,7 @@ SYSTEM STATUS
 
 ONLINE
 
-</div>  </div>  <div class="home-earth">
-<button id="earthClose" type="button" aria-label="Chiudi Earth">×</button>
-<div class="system-satellite-network" id="satelliteNetwork"></div>  <div class="earth-label">  
+</div>  </div>  <div class="home-earth">  <div class="earth-label">  
 EARTH // LOCATION  
 </div>  <div id="earthGlobe"></div>  <div  
 class="earth-coordinates"  
@@ -2429,8 +2313,6 @@ jarvisResponse = false,
 copyable = false  
 ){  
   
-chat.innerHTML = "";  
-  
 const element =  
 document.createElement("div");  
   
@@ -2619,7 +2501,7 @@ copyButton
 chat.appendChild(  
 element  
 );  
-  
+return element;
 }  
   
   
@@ -4576,22 +4458,6 @@ camera
    AVVIO THREE  
 ===================================================== */  
   
-// EARTH INTERACTION + SMALL ORBITAL SATELLITE NETWORK
-const homeSystemPanel=document.getElementById("homeSystemPanel");
-const earthClose=document.getElementById("earthClose");
-const satelliteNetwork=document.getElementById("satelliteNetwork");
-function buildSatelliteNetwork(){
- if(!satelliteNetwork)return;
- satelliteNetwork.innerHTML="";
- const pts=[{x:17,y:27},{x:31,y:14},{x:48,y:22},{x:67,y:13},{x:83,y:29},{x:73,y:48},{x:54,y:40},{x:36,y:52},{x:19,y:45},{x:43,y:72},{x:65,y:70},{x:82,y:61}];
- pts.forEach((p,i)=>{const d=document.createElement("div");d.className="system-satellite";d.style.left=p.x+"%";d.style.top=p.y+"%";d.style.animationDelay=(i*.18)+"s";satelliteNetwork.appendChild(d);});
- for(let i=0;i<pts.length-1;i++){const a=pts[i],b=pts[i+1];const line=document.createElement("div");line.className="system-satellite-line";const dx=b.x-a.x,dy=b.y-a.y;line.style.left=a.x+"%";line.style.top=a.y+"%";line.style.width=Math.sqrt(dx*dx+dy*dy)+"%";line.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;satelliteNetwork.appendChild(line);}
-}
-function toggleEarthExpanded(on){homeSystemPanel?.classList.toggle("earth-expanded",on);setTimeout(()=>resizeEarthGlobe(),80);}
-document.querySelector(".home-earth")?.addEventListener("click",e=>{if(e.target.closest("#earthClose"))return;toggleEarthExpanded(true);});
-earthClose?.addEventListener("click",e=>{e.stopPropagation();toggleEarthExpanded(false);});
-buildSatelliteNetwork();
-
 initializeEarthGlobe();  
   
 initializeNeuralCore();  
@@ -6031,7 +5897,9 @@ const reply =
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6052,7 +5920,9 @@ battery.charging
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6113,7 +5983,9 @@ reply =
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6181,7 +6053,9 @@ device.screenHeight +
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6233,7 +6107,9 @@ earthLongitude.toFixed(5) +
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6247,7 +6123,9 @@ const reply =
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6262,7 +6140,9 @@ const reply =
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6299,7 +6179,9 @@ fullscreen.active
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6353,7 +6235,9 @@ reply =
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6434,7 +6318,9 @@ item => "• " + item
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -6492,7 +6378,9 @@ const reply =
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return true;  
   
@@ -7326,7 +7214,9 @@ data.currentDate +
 addMsg(  
 reply,  
 true  
-);    
+);  
+  
+speak(reply);  
   
 return;  
   
@@ -7490,7 +7380,9 @@ copyable
 addMemory(  
 "assistant",  
 reply  
-);    
+);  
+  
+speak(reply);  
   
 setState("idle");  
   
@@ -7551,12 +7443,38 @@ imageBtn?.addEventListener("click",()=>imageInput?.click());
 imageInput?.addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{if(visionStatus){visionStatus.textContent="PREPARAZIONE IMMAGINE...";visionStatus.style.display="block";}selectedImageData=await prepareVisionImage(file);if(visionPreviewImage)visionPreviewImage.src=selectedImageData;if(visionPreview)visionPreview.style.display="flex";if(visionStatus){visionStatus.textContent="VISION READY";visionStatus.style.display="block";}}catch(err){console.error("VISION IMAGE ERROR:",err);clearVisionSelection();addMsg("Non riesco a preparare questa immagine.");}});
 visionPreviewClose?.addEventListener("click",clearVisionSelection);
 
+
+/* =====================================================
+   IDENTITY SNAPSHOT // LOCAL, ONE-SHOT
+===================================================== */
+let jcIdentityBusy=false,jcIdentityQuestionAsked=false;
+async function jcIdentitySnapshot(){
+ if(jcIdentityBusy)return; jcIdentityBusy=true; jcIdentityQuestionAsked=false;
+ try{
+  if(!navigator.mediaDevices?.getUserMedia)throw new Error("camera unavailable");
+  const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false});
+  const v=document.createElement("video");v.autoplay=true;v.playsInline=true;v.muted=true;v.srcObject=stream;v.style.position="fixed";v.style.left="-9999px";document.body.appendChild(v);await v.play();await new Promise(r=>setTimeout(r,350));
+  const c=document.createElement("canvas");c.width=v.videoWidth||640;c.height=v.videoHeight||480;c.getContext("2d").drawImage(v,0,0,c.width,c.height);const data=c.toDataURL("image/jpeg",.78);
+  stream.getTracks().forEach(t=>t.stop());v.srcObject=null;v.remove();
+  const mini=document.getElementById("jcIdentityMini");document.getElementById("jcIdentityMiniImg").src=data;document.getElementById("jcIdentityMiniText").textContent="IDENTITY // SNAPSHOT";mini.classList.add("active");
+  setTimeout(()=>mini.classList.remove("active"),3000);
+  jcAddEvent("IDENTITY // SNAPSHOT CAPTURED");
+  const saved=localStorage.getItem("jarvis_face_profile_v1");
+  let known=false; try{known=!!saved}catch(e){}
+  const question=known?"Profilo locale rilevato. Come posso chiamarti?":"Ti vedo. Come ti chiami?";
+  if(!jcIdentityQuestionAsked){jcIdentityQuestionAsked=true;setTimeout(()=>speak(question),120);}
+ }catch(e){console.warn("Identity snapshot:",e);notify("IDENTITY // CAMERA NON DISPONIBILE");}
+ finally{jcIdentityBusy=false;}
+}
+function jcIsIdentityCommand(text){const n=normalizeCommand(text||"");return ["riconoscimi","riconosci me","riconoscimi jarvis","fammi riconoscere"].includes(n)||n.startsWith("riconoscimi ");}
+
 /* =====================================================
    INVIO
 ===================================================== */
 
 function sendMessage(){
 const text=textInput.value.trim();
+if(jcIsIdentityCommand(text)){textInput.value="";jcIdentitySnapshot();return;}
 const imageData=selectedImageData;
 if(!text&&!imageData)return;
 const displayText=text||"📷 Analizza questa immagine";
@@ -7678,402 +7596,23 @@ notify(
   
 
 /* =====================================================
-   JARVIS INTELLIGENCE LAYER — LOGIC
-   Additive: preserves the existing interface and API flow.
+   JARVIS CORE UPGRADE
 ===================================================== */
-
-const JC={
-  mode:"GENERAL",
-  state:"IDLE",
-  wake:false,
-  gestures:false,
-  paused:false,
-  transcript:[],
-  facts:[],
-  events:[]
-};
-
-const JC_TRANSCRIPT_KEY="jarvis_ui_transcript_v3";
-const JC_FACTS_KEY="jarvis_smart_memory_v2";
-const JC_MAX_TRANSCRIPT=80;
-const JC_MAX_FACTS=30;
-
-const jcPanel=document.getElementById("jarvisControlPanel");
-const jcControlBtn=document.getElementById("jarvisControlBtn");
-const jcStateText=document.getElementById("jcStateText");
-const jcStateBadge=document.getElementById("jcStateBadge");
-const jcTimeline=document.getElementById("jcTimeline");
-const jcMemoryValue=document.getElementById("jcMemoryValue");
-const jcModeValue=document.getElementById("jcModeValue");
-const jcNetworkValue=document.getElementById("jcNetworkValue");
-const jcVisionValue=document.getElementById("jcVisionValue");
-const jcSuggestions=document.getElementById("jcSuggestions");
-const jcCoreDashboard=document.getElementById("jcCoreDashboard");
-
-function jcLoad(){
-  try{
-    const t=JSON.parse(localStorage.getItem(JC_TRANSCRIPT_KEY)||"[]");
-    if(Array.isArray(t)) JC.transcript=t.filter(x=>x&&typeof x.text==="string").slice(-JC_MAX_TRANSCRIPT);
-  }catch(e){console.warn("JARVIS transcript:",e)}
-  try{
-    const f=JSON.parse(localStorage.getItem(JC_FACTS_KEY)||"[]");
-    if(Array.isArray(f)) JC.facts=f.filter(x=>typeof x==="string").slice(-JC_MAX_FACTS);
-  }catch(e){console.warn("JARVIS smart memory:",e)}
-}
-function jcSave(){
-  try{localStorage.setItem(JC_TRANSCRIPT_KEY,JSON.stringify(JC.transcript.slice(-JC_MAX_TRANSCRIPT)))}catch(e){}
-  try{localStorage.setItem(JC_FACTS_KEY,JSON.stringify(JC.facts.slice(-JC_MAX_FACTS)))}catch(e){}
-}
-function jcEscape(text){const d=document.createElement("div");d.textContent=String(text);return d.innerHTML}
-function jcAddEvent(text){
-  const stamp=new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
-  JC.events.unshift(stamp+" // "+text); JC.events=JC.events.slice(0,10);
-  if(jcTimeline) jcTimeline.innerHTML=JC.events.map(x=>`<div class="jc-event">${jcEscape(x)}</div>`).join("");
-}
-function jcRememberExplicit(text){
-  const n=normalizeCommand(text);
-  const triggers=["ricordati ","ricorda che ","tieni a mente ","ricorda che io "];
-  const hit=triggers.find(t=>n.startsWith(t));
-  if(!hit)return;
-  const fact=text.trim().slice(hit.length).trim();
-  if(fact.length<3||fact.length>220)return;
-  JC.facts=JC.facts.filter(x=>x.toLowerCase()!==fact.toLowerCase());
-  JC.facts.push(fact); JC.facts=JC.facts.slice(-JC_MAX_FACTS); jcSave();
-  jcAddEvent("MEMORY // FACT STORED");
-}
-function jcRenderTranscript(){
-  if(!chat)return;
-  chat.innerHTML="";
-  JC.transcript.slice(-JC_MAX_TRANSCRIPT).forEach(item=>jcRenderOne(item));
-  chat.scrollTop=chat.scrollHeight;
-}
-function jcRenderOne(item){
-  const element=document.createElement("div");
-  element.className="msg "+(item.jarvis?"jarvis-response":"user-message");
-  if(item.jarvis){
-    Array.from(item.text).forEach((char,index)=>{
-      const span=document.createElement("span"); span.className="jarvis-char"; span.textContent=char; span.style.animationDelay=(Math.min(index,120)*.012)+"s"; element.appendChild(span);
-    });
-  }else element.textContent=item.text;
-  if(item.jarvis){
-    const actions=document.createElement("div"); actions.style.cssText="display:flex;gap:6px;margin-top:8px;opacity:.72";
-    const make=(label,title,fn)=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.title=title;b.style.cssText="border:1px solid rgba(235,242,255,.16);border-radius:9px;background:rgba(255,255,255,.025);color:rgba(235,242,255,.65);padding:5px 8px;font:7px monospace;letter-spacing:.6px;cursor:pointer";b.addEventListener("click",e=>{e.stopPropagation();fn(b)});actions.appendChild(b)};
-    make("⧉","Copia",async b=>{try{await navigator.clipboard.writeText(item.text);b.textContent="✓";notify("TESTO COPIATO");setTimeout(()=>b.textContent="⧉",1200)}catch(e){notify("COPIA NON DISPONIBILE")}});
-    make("🔊","Ascolta",async b=>{b.textContent="…";try{await speak(item.text)}finally{b.textContent="🔊"}});
-    make("↗","Condividi",async b=>{try{if(navigator.share) await navigator.share({title:"J.A.R.V.I.S.",text:item.text});else{await navigator.clipboard.writeText(item.text);notify("TESTO COPIATO — CONDIVISIONE NON SUPPORTATA")}}catch(e){}});
-    element.appendChild(actions);
-  }
-  chat.appendChild(element);
-}
-
-/* Replace the old single-message renderer with a persistent ChatGPT-like transcript. */
-addMsg=function(text,jarvisResponse=false,copyable=false){
-  const item={text:String(text),jarvis:!!jarvisResponse,copyable:!!copyable,at:Date.now()};
-  JC.transcript.push(item); JC.transcript=JC.transcript.slice(-JC_MAX_TRANSCRIPT); jcSave();
-  jcRenderTranscript();
-  if(jarvisResponse){
-    jcAddEvent("AI // RESPONSE READY");
-    jcGenerateSuggestions(String(text));
-  }else jcAddEvent("USER // INPUT RECEIVED");
-  updateSystemPanel(); jcUpdateTelemetry();
-};
-
-function jcGenerateSuggestions(reply){
-  if(!jcSuggestions)return;
-  const n=reply.toLowerCase();
-  const suggestions=n.includes("errore")?["Riprova la richiesta","Mostrami cosa è successo","Controlla il sistema"]:n.includes("immagine")?["Analizza un altro dettaglio","Descrivi ciò che vedi","Confronta due immagini"]:["Approfondisci","Spiegamelo più semplicemente","Qual è il prossimo passo?"];
-  jcSuggestions.innerHTML="";
-  suggestions.forEach(text=>{const b=document.createElement("button");b.className="jc-suggestion";b.dataset.suggest=text;b.textContent=text.toUpperCase();b.addEventListener("click",()=>{textInput.value=text;sendMessage()});jcSuggestions.appendChild(b)});
-}
-
-function jcNewConversation(){
-  JC.transcript=[]; jcSave(); jcRenderTranscript(); jcAddEvent("CHAT // NEW SESSION"); notify("NUOVA CHAT"); textInput?.focus();
-}
-
-function jcSetMode(mode){
-  JC.mode=mode; document.querySelectorAll(".jc-mode").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
-  if(jcModeValue)jcModeValue.textContent=mode; jcAddEvent("MODE // "+mode); notify("MODE // "+mode);
-}
-
-document.querySelectorAll(".jc-mode").forEach(b=>b.addEventListener("click",()=>jcSetMode(b.dataset.mode)));
-jcControlBtn?.addEventListener("click",()=>{jcPanel?.classList.toggle("active");jcControlBtn.classList.toggle("active",jcPanel?.classList.contains("active"));jcUpdateTelemetry()});
-document.getElementById("jcNewChat")?.addEventListener("click",jcNewConversation);
-document.getElementById("jcClearMemory")?.addEventListener("click",()=>{if(confirm("Cancellare la memoria locale di JARVIS?")){clearMemory();JC.facts=[];jcSave();jcAddEvent("MEMORY // CLEARED")}});
-document.getElementById("jcCoreToggle")?.addEventListener("click",()=>jcCoreDashboard?.classList.toggle("active"));
-document.getElementById("jcEarthOpen")?.addEventListener("click",()=>toggleEarthExpanded(true));
-
-/* Smart memory: only explicit user requests are persisted as long-term facts. */
-const oldProcessAi=processAi;
-processAi=async function(text,imageData=null){jcRememberExplicit(text);return oldProcessAi(text,imageData)};
-
-/* Inject operating mode + smart memory into the existing API request without changing the Worker. */
-const nativeFetch=window.fetch.bind(window);
-window.fetch=async function(input,init){
-  try{
-    const url=typeof input==="string"?input:(input&&input.url)||"";
-    if(init&&init.body&&String(url).startsWith(API)){
-      const body=JSON.parse(init.body);
-      if(body.action!=="tts"){
-        const modeInstructions={
-          GENERAL:"Parla in modo naturale e professionale.",
-          VISION:"Concentrati su ciò che è verificabile nell'immagine e separa osservazioni da ipotesi.",
-          FOCUS:"Rispondi in modo estremamente diretto, strutturato e orientato all'azione.",
-          RESEARCH:"Ragiona come un analista: distingui fatti, incertezze e conclusioni. Non fingere accesso al web se non è presente.",
-          SYSTEM:"Concentrati su stato, capacità reali del browser e funzionamento del sistema. Non inventare dati.",
-          CREATIVE:"Sii creativo ma preciso; proponi alternative originali senza perdere il contesto della richiesta."
-        };
-        body.mode=JC.mode;
-        body.memory=Array.isArray(body.memory)?body.memory.slice(-12):[];
-        body.systemInstructions=(body.systemInstructions||"")+" MODE OPERATIVA: "+modeInstructions[JC.mode]+" MEMORIA ESPLICITA UTENTE: "+(JC.facts.length?JC.facts.join(" | "):"nessuna");
-        init={...init,body:JSON.stringify(body)};
-      }
-    }
-  }catch(e){console.warn("JARVIS request enhancer:",e)}
-  return nativeFetch(input,init);
-};
-
-/* Keep local transcript in sync after initial load. */
-jcLoad(); jcRenderTranscript(); jcAddEvent("CORE // INTELLIGENCE LAYER READY");
-
-/* State telemetry wraps the existing state machine; animation behaviour stays intact. */
-const nativeSetState=setState;
-setState=function(state){
-  nativeSetState(state); JC.state=String(state).toUpperCase();
-  if(jcStateText)jcStateText.textContent=JC.state;
-  if(jcStateBadge)jcStateBadge.textContent="STATE // "+JC.state;
-  if(jcStateBadge)jcStateBadge.classList.toggle("jc-thinking",state==="thinking");
-  if(state==="thinking")jcAddEvent("CORE // PROCESSING");
-  if(state==="listening")jcAddEvent("VOICE // LISTENING");
-  if(state==="speaking")jcAddEvent("VOICE // OUTPUT");
-  jcUpdateTelemetry();
-};
-
-function jcUpdateTelemetry(){
-  if(jcMemoryValue)jcMemoryValue.textContent=String(memory.length+JC.facts.length);
-  if(jcNetworkValue)jcNetworkValue.textContent=navigator.onLine?"ONLINE":"OFFLINE";
-  if(jcVisionValue)jcVisionValue.textContent=selectedImageData?"IMAGE READY":"READY";
-  const bars={
-    jcBarAI:95,
-    jcBarContext:Math.min(100,30+JC.transcript.length),
-    jcBarMemory:Math.min(100,15+JC.facts.length*3),
-    jcBarVision:selectedImageData?92:58,
-    jcBarVoice:audioPlaying?95:(recognition?72:35),
-    jcBarNetwork:navigator.onLine?96:8
-  };
-  Object.entries(bars).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.style.width=v+"%"});
-}
-setInterval(jcUpdateTelemetry,1200);
-
-/* =====================================================
-   WAKE WORD / CONTINUOUS CONVERSATION
-===================================================== */
-let jcWakeRecognition=null;
-let jcWakeStarting=false;
-function jcCreateWakeRecognition(){
-  const R=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!R)return null;
-  const r=new R(); r.lang="it-IT"; r.continuous=true; r.interimResults=true;
-  r.onstart=()=>{jcWakeStarting=false;jcAddEvent("WAKE // LISTENER ACTIVE")};
-  r.onend=()=>{jcWakeStarting=false;if(JC.wake)setTimeout(jcStartWake,250)};
-  r.onerror=e=>{jcWakeStarting=false;jcAddEvent("WAKE // "+(e.error||"ERROR"));if(e.error==="not-allowed"){JC.wake=false;jcSetWakeUI(false)}};
-  r.onresult=e=>{
-    let text=""; for(let i=e.resultIndex;i<e.results.length;i++)text+=e.results[i][0].transcript+" ";
-    const n=normalizeCommand(text.trim());
-    if(n.includes("hey jarvis")||n.includes("ehi jarvis")||n.includes("jarvis")){
-      const cleaned=text.replace(/hey\s+jarvis/ig,"").replace(/ehi\s+jarvis/ig,"").replace(/jarvis/ig,"").trim();
-      if(cleaned.length>2){textInput.value=cleaned;sendMessage()}
-      else{notify("JARVIS // IN ASCOLTO");textInput.focus()}
-    }
-  };
-  return r;
-}
-function jcStartWake(){if(!JC.wake||jcWakeStarting)return;if(!jcWakeRecognition)jcWakeRecognition=jcCreateWakeRecognition();if(!jcWakeRecognition)return;jcWakeStarting=true;try{jcWakeRecognition.start()}catch(e){jcWakeStarting=false}}
-function jcSetWakeUI(on){const b=document.getElementById("jcWakeToggle");if(b){b.classList.toggle("active",on);b.textContent=on?"ON":"OFF"}}
-document.getElementById("jcWakeToggle")?.addEventListener("click",()=>{
-  JC.wake=!JC.wake; jcSetWakeUI(JC.wake);
-  if(JC.wake){if(!jcWakeRecognition)jcWakeRecognition=jcCreateWakeRecognition();if(!jcWakeRecognition){JC.wake=false;jcSetWakeUI(false);notify("WAKE WORD NON SUPPORTATA");return}jcStartWake();notify("HEY JARVIS // ACTIVE")}
-  else{try{jcWakeRecognition?.stop()}catch(e){}notify("HEY JARVIS // OFF")}
-});
-
-/* =====================================================
-   GESTURE ENGINE — optional, isolated from normal chat
-===================================================== */
-let jcHands=null,jcGestureStream=null,jcGestureRaf=0,jcLastTwoDistance=null,jcLastMidX=null,jcLastSwipe=0;
-let jcGestureLoaded=false;
-function jcLoadScript(src){return new Promise((resolve,reject)=>{const s=document.createElement("script");s.src=src;s.async=true;s.crossOrigin="anonymous";s.onload=resolve;s.onerror=reject;document.head.appendChild(s)})}
-async function jcEnableGestures(){
-  if(JC.gestures)return;
-  const video=document.getElementById("jcGestureVideo"); const hud=document.getElementById("jcCameraHud");
-  if(!navigator.mediaDevices?.getUserMedia){notify("GESTURE // CAMERA NON DISPONIBILE");return}
-  try{
-    if(!jcGestureLoaded){
-      await jcLoadScript("https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js");
-      jcGestureLoaded=true;
-    }
-    if(!window.Hands){throw new Error("MediaPipe Hands non disponibile")}
-    jcHands=new window.Hands({locateFile:file=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
-    jcHands.setOptions({maxNumHands:2,modelComplexity:1,minDetectionConfidence:.65,minTrackingConfidence:.60});
-    jcHands.onResults(jcHandleHands);
-    jcGestureStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false});
-    video.srcObject=jcGestureStream; await video.play(); hud?.classList.add("active"); JC.gestures=true; document.getElementById("jcGestureToggle").textContent="ON";document.getElementById("jcGestureToggle").classList.add("active");
-    jcGestureLoop(); notify("GESTURE CONTROL // ACTIVE"); jcAddEvent("VISION // HAND TRACKING ACTIVE");
-  }catch(e){console.error("Gesture:",e);jcDisableGestures();notify("GESTURE // IMPOSSIBILE AVVIARE")}
-}
-function jcDisableGestures(){
-  JC.gestures=false; if(jcGestureRaf)cancelAnimationFrame(jcGestureRaf);jcGestureRaf=0;
-  jcGestureStream?.getTracks().forEach(t=>t.stop());jcGestureStream=null;const v=document.getElementById("jcGestureVideo");if(v)v.srcObject=null;document.getElementById("jcCameraHud")?.classList.remove("active");const b=document.getElementById("jcGestureToggle");if(b){b.textContent="OFF";b.classList.remove("active")}
-}
-async function jcGestureLoop(){if(!JC.gestures||!jcHands)return;const v=document.getElementById("jcGestureVideo");if(v&&v.readyState>=2){try{await jcHands.send({image:v})}catch(e){}}jcGestureRaf=requestAnimationFrame(jcGestureLoop)}
-function jcDist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
-function jcHandleHands(res){
-  const hands=res.multiHandLandmarks||[];const status=document.getElementById("jcGestureStatus");if(!hands.length){if(status)status.textContent="NO HANDS";return}
-  if(status)status.textContent=hands.length+" HAND"+(hands.length>1?"S":"")+" // TRACKED";
-  const open=h=>{const wrist=h[0];return [8,12,16,20].filter(i=>h[i].y<wrist.y-.035).length>=3};
-  const fist=h=>[8,12,16,20].every(i=>h[i].y>h[5].y);
-  if(hands.length>=2){
-    const d=jcDist(hands[0][8],hands[1][8]);
-    if(jcLastTwoDistance!==null){const delta=d-jcLastTwoDistance;if(Math.abs(delta)>.012&&camera){camera.position.z=Math.max(2.7,Math.min(7.5,camera.position.z-delta*4));}}
-    jcLastTwoDistance=d;
-    const mx=(hands[0][9].x+hands[1][9].x)/2;
-    if(jcLastMidX!==null&&Math.abs(mx-jcLastMidX)>.035&&performance.now()-jcLastSwipe>800){jcLastSwipe=performance.now();if(mx>jcLastMidX)jcSetMode("VISION");else jcSetMode("SYSTEM")}
-    jcLastMidX=mx;
-  }else{jcLastTwoDistance=null;jcLastMidX=null}
-  if(open(hands[0])&&hands.length===1){JC.paused=false;const status2=document.getElementById("jcGestureStatus");if(status2)status2.textContent="OPEN PALM // READY"}
-  if(fist(hands[0])&&performance.now()-jcLastSwipe>1000){jcLastSwipe=performance.now();jcPanel?.classList.remove("active");notify("GESTURE // PANEL CLOSED")}
-}
-document.getElementById("jcGestureToggle")?.addEventListener("click",()=>JC.gestures?jcDisableGestures():jcEnableGestures());
-
-/* Escape closes additive panels; existing controls remain untouched. */
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){jcPanel?.classList.remove("active");jcCoreDashboard?.classList.remove("active");if(jcControlBtn)jcControlBtn.classList.remove("active");if(JC.gestures)jcDisableGestures();}});
-
-/* Earth is already interactive; this only adds telemetry when it opens. */
-document.querySelector(".home-earth")?.addEventListener("click",()=>jcAddEvent("WORLD // EARTH 3D FOCUS"),{passive:true});
-
-jcUpdateTelemetry();
-
-
-/* =====================================================
-   IDENTITY ENGINE
-   Local, opt-in profiles. No image is uploaded by this layer.
-===================================================== */
-const JC_ID_KEY="jarvis_identity_profiles_v1";
-let jcFaceApiReady=false,jcFaceLoading=null,jcIdentityPending=null,jcIdentityBusy=false;
-let jcActiveProfile=null;
-const jcIdentityCard=document.getElementById("jcIdentityCard");
-const jcIdentityPhoto=document.getElementById("jcIdentityPhoto");
-const jcIdentityName=document.getElementById("jcIdentityName");
-const jcIdentityState=document.getElementById("jcIdentityState");
-const jcIdentityPrompt=document.getElementById("jcIdentityPrompt");
-const jcIdentityQuestion=document.getElementById("jcIdentityQuestion");
-
-function jcIdentityProfiles(){try{const x=JSON.parse(localStorage.getItem(JC_ID_KEY)||"[]");return Array.isArray(x)?x:[]}catch(e){return[]}}
-function jcSaveIdentityProfiles(x){try{localStorage.setItem(JC_ID_KEY,JSON.stringify(x.slice(-20)))}catch(e){console.warn("Identity storage:",e)}}
-function jcShowIdentityCard(name,state,dataUrl){
-  if(dataUrl)jcIdentityPhoto.src=dataUrl;
-  jcIdentityName.textContent=name||"UNKNOWN";jcIdentityState.textContent=state||"PROFILE MATCH";jcIdentityCard.classList.add("active");
-}
-function jcHideIdentityPrompt(){jcIdentityPrompt.classList.remove("active")}
-function jcAskName(){
-  jcIdentityQuestion.textContent="Come ti chiami?";jcIdentityPrompt.classList.add("active");
-  jcAddEvent("IDENTITY // NAME REQUESTED");
-  notify("IDENTITY // DIMMI IL TUO NOME");
-}
-function jcDistance(a,b){let sum=0,n=Math.min(a.length,b.length);for(let i=0;i<n;i++){const d=a[i]-b[i];sum+=d*d}return Math.sqrt(sum/n)}
-async function jcLoadFaceApi(){
-  if(jcFaceApiReady)return window.faceapi;
-  if(jcFaceLoading)return jcFaceLoading;
-  jcFaceLoading=new Promise((resolve,reject)=>{
-    if(window.faceapi){jcFaceApiReady=true;resolve(window.faceapi);return}
-    const sc=document.createElement("script");
-    sc.src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js";
-    sc.async=true;
-    sc.onload=()=>{
-      if(window.faceapi){jcFaceApiReady=true;resolve(window.faceapi);}
-      else reject(new Error("face-api loaded without global API"));
-    };
-    sc.onerror=()=>reject(new Error("face-api script load failed"));
-    document.head.appendChild(sc);
-  }).catch(err=>{jcFaceLoading=null;throw err});
-  return jcFaceLoading;
-}
-async function jcLoadFaceModels(api){
-  if(!api?.nets?.ssdMobilenetv1||!api?.nets?.faceLandmark68Net||!api?.nets?.faceRecognitionNet){
-    throw new Error("face-api networks unavailable");
-  }
-  const loaded=!!(api.nets.ssdMobilenetv1.params&&api.nets.faceLandmark68Net.params&&api.nets.faceRecognitionNet.params);
-  if(loaded)return;
-  const base="https://justadudewhohacks.github.io/face-api.js/models";
-  await Promise.all([
-    api.nets.ssdMobilenetv1.loadFromUri(base),
-    api.nets.faceLandmark68Net.loadFromUri(base),
-    api.nets.faceRecognitionNet.loadFromUri(base)
-  ]);
-}
-async function jcCaptureIdentity(){
-  if(jcIdentityBusy)return;jcIdentityBusy=true;jcIdentityPending=null;jcHideIdentityPrompt();
-  try{
-    if(!navigator.mediaDevices?.getUserMedia)throw new Error("camera unavailable");
-    const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;video.style.position="fixed";video.style.left="-99999px";document.body.appendChild(video);
-    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false});video.srcObject=stream;await video.play();
-    await new Promise(r=>setTimeout(r,450));
-    const canvas=document.createElement("canvas");canvas.width=video.videoWidth||640;canvas.height=video.videoHeight||480;canvas.getContext("2d",{willReadFrequently:true}).drawImage(video,0,0,canvas.width,canvas.height);
-    const dataUrl=canvas.toDataURL("image/jpeg",.78);
-    stream.getTracks().forEach(t=>t.stop());
-    video.srcObject=null;
-    video.remove();
-    jcShowIdentityCard("SCANNING","ANALYZING FACE",dataUrl);
-    jcAddEvent("IDENTITY // SNAPSHOT CAPTURED");
-    const api=await jcLoadFaceApi();await jcLoadFaceModels(api);
-    const detection=await api.detectSingleFace(canvas,new api.SsdMobilenetv1Options({minConfidence:.55})).withFaceLandmarks().withFaceDescriptor();
-    if(!detection){jcShowIdentityCard("UNKNOWN","NO FACE DETECTED",dataUrl);notify("IDENTITY // VOLTO NON RILEVATO");jcIdentityBusy=false;return}
-    const descriptor=Array.from(detection.descriptor);const profiles=jcIdentityProfiles();
-    let best=null,bestDistance=Infinity;
-    for(const profile of profiles){if(!Array.isArray(profile.descriptor))continue;const d=jcDistance(descriptor,profile.descriptor);if(d<bestDistance){bestDistance=d;best=profile}}
-    if(best&&bestDistance<.52){
-      jcActiveProfile={name:best.name,descriptor:best.descriptor};jcShowIdentityCard(best.name,"PROFILE ACTIVE",dataUrl);jcAddEvent("IDENTITY // "+best.name.toUpperCase()+" RECOGNIZED");notify("JARVIS // CIAO "+best.name.toUpperCase());jcIdentityBusy=false;return;
-    }
-    jcIdentityPending={descriptor,dataUrl};jcShowIdentityCard("NEW PROFILE","FIRST CONTACT",dataUrl);jcAskName();
-  }catch(e){console.error("Identity engine:",e);notify("IDENTITY // SCAN NON DISPONIBILE");jcAddEvent("IDENTITY // ENGINE ERROR")}
-  jcIdentityBusy=false;
-}
-function jcIsRecognizeCommand(text){
-  const raw=String(text||"").trim().toLowerCase();
-  const n=typeof normalizeCommand==="function"?normalizeCommand(raw):raw.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
-  return ["riconoscimi","riconoscimi jarvis","riconosci me","riconoscimi per favore","fammi riconoscere"].includes(n)||n.startsWith("riconoscimi ");
-}
-function jcCompleteIdentity(text){
-  if(!jcIdentityPending)return false;const name=String(text||"").trim().replace(/\s+/g," ");if(name.length<2||name.length>50)return false;
-  const profiles=jcIdentityProfiles();const clean=name.replace(/[<>]/g,"");profiles.push({name:clean,descriptor:jcIdentityPending.descriptor,createdAt:Date.now()});jcSaveIdentityProfiles(profiles);jcActiveProfile={name:clean,descriptor:jcIdentityPending.descriptor};jcIdentityPending=null;jcHideIdentityPrompt();jcShowIdentityCard(clean,"PROFILE CREATED // LOCAL",jcIdentityPhoto.src);jcAddEvent("IDENTITY // PROFILE CREATED");notify("PROFILO LOCALE CREATO // "+clean.toUpperCase());return true;
-}
-/* Command interception: "riconoscimi" opens the camera once, then it stops. */
-const jcNativeSendMessage=sendMessage;
-sendMessage=async function(){
-  const text=String(textInput?.value||"").trim();
-  if(jcIdentityPending&&text&&!jcIsRecognizeCommand(text)&&!text.startsWith("/")){
-    if(jcCompleteIdentity(text)){textInput.value="";return}
-  }
-  if(jcIsRecognizeCommand(text)){textInput.value="";await jcCaptureIdentity();return}
-  return jcNativeSendMessage.apply(this,arguments);
-};
-
-/* Profile context is exposed for the chat layer without replacing window.fetch. */
-window.JARVIS_IDENTITY_CONTEXT = () => jcActiveProfile ? { name: jcActiveProfile.name } : null;
-
-/* Intercept only the text command; do not monkey-patch global fetch. */
-const jcOriginalSendMessage = window.sendMessage;
-if(typeof jcOriginalSendMessage === "function") {
-  window.sendMessage = async function(){
-    const text=String(textInput?.value||"").trim();
-    if(jcIdentityPending && text && !jcIsRecognizeCommand(text)){
-      if(jcCompleteIdentity(text)){ textInput.value=""; return; }
-    }
-    if(jcIsRecognizeCommand(text)){
-      textInput.value="";
-      await jcCaptureIdentity();
-      return;
-    }
-    return jcOriginalSendMessage.apply(this,arguments);
-  };
-}
+const JC_CHAT_HISTORY_KEY="jarvis_conversation_archive_v1";
+const jcCoreOpen=document.getElementById("jcCoreOpen"),jcCore=document.getElementById("jcCore"),jcHistory=document.getElementById("jcHistory"),jcHistoryList=document.getElementById("jcHistoryList"),jcEarthModal=document.getElementById("jcEarthModal");
+let jcArchive=[];try{const a=JSON.parse(localStorage.getItem(JC_CHAT_HISTORY_KEY)||"[]");if(Array.isArray(a))jcArchive=a.slice(-30)}catch(e){}
+function jcSaveArchive(){try{localStorage.setItem(JC_CHAT_HISTORY_KEY,JSON.stringify(jcArchive.slice(-30)))}catch(e){}}
+function jcArchiveAdd(role,text){if(!text)return;jcArchive.push({role,text:String(text),time:Date.now()});jcArchive=jcArchive.slice(-30);jcSaveArchive()}
+function jcRenderHistory(){if(!jcHistoryList)return;jcHistoryList.innerHTML="";const rows=[];for(let i=0;i<jcArchive.length;i++){if(jcArchive[i].role!=="user")continue;rows.push({u:jcArchive[i].text,a:jcArchive[i+1]?.role==="assistant"?jcArchive[i+1].text:""})}if(!rows.length){jcHistoryList.innerHTML='<div class="jc-core-sub">NESSUNA CONVERSAZIONE ARCHIVIATA.</div>';return}rows.reverse().forEach(x=>{const d=document.createElement("div");d.className="jc-history-item";d.innerHTML="<strong>"+escapeHtml(x.u.slice(0,90))+"</strong>"+escapeHtml(x.a.slice(0,180));d.onclick=()=>{chat.innerHTML="";jcOriginalAddMsg(x.u,false,false);if(x.a)jcOriginalAddMsg(x.a,true,true);jcHistory.classList.remove("active")};jcHistoryList.appendChild(d)})}
+function jcHideAfter10(el){setTimeout(()=>{if(el?.isConnected){el.classList.add("jc-ephemeral-hide");setTimeout(()=>el.remove(),450)}},10000)}
+const jcOriginalAddMsg=addMsg;addMsg=function(text,jarvisResponse=false,copyable=false){const el=jcOriginalAddMsg(text,jarvisResponse,copyable);jcArchiveAdd(jarvisResponse?"assistant":"user",text);jcHideAfter10(el);return el};
+function jcNewConversation(){chat.innerHTML="";clearVisionSelection();textInput.value="";notify("NUOVA CONVERSAZIONE");}
+jcCoreOpen?.addEventListener("click",()=>jcCore.classList.toggle("active"));document.getElementById("jcHistoryBtn")?.addEventListener("click",()=>{jcRenderHistory();jcHistory.classList.toggle("active")});document.getElementById("jcNewChat")?.addEventListener("click",jcNewConversation);document.getElementById("jcCoreStatus")?.addEventListener("click",()=>notify("CORE DIAGNOSTIC // ONLINE"));
+async function jcCreateFaceProfile(){try{const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false});const v=document.createElement("video");v.autoplay=true;v.playsInline=true;v.srcObject=stream;v.style.position="fixed";v.style.left="-9999px";document.body.appendChild(v);await v.play();await new Promise(r=>setTimeout(r,350));const c=document.createElement("canvas");c.width=v.videoWidth||640;c.height=v.videoHeight||480;c.getContext("2d").drawImage(v,0,0,c.width,c.height);const img=c.toDataURL("image/jpeg",.78);stream.getTracks().forEach(t=>t.stop());v.srcObject=null;v.remove();localStorage.setItem("jarvis_face_profile_v1",JSON.stringify({image:img,createdAt:Date.now()}));document.getElementById("jcIdentityMiniImg").src=img;document.getElementById("jcIdentityMiniText").textContent="FACE PROFILE // SAVED";document.getElementById("jcIdentityMini").classList.add("active");notify("PROFILO VOLTO SALVATO LOCALMENTE")}catch(e){console.warn(e);notify("PROFILO VOLTO // CAMERA NON DISPONIBILE")}}
+function jcCreateVoiceProfile(){localStorage.setItem("jarvis_voice_profile_v1",JSON.stringify({createdAt:Date.now()}));notify("PROFILO VOCE // CONFIGURATO")}
+document.getElementById("jcFaceProfile")?.addEventListener("click",jcCreateFaceProfile);document.getElementById("jcVoiceProfile")?.addEventListener("click",jcCreateVoiceProfile);document.getElementById("jcIdentityScan")?.addEventListener("click",()=>{textInput.value="riconoscimi";sendMessage()});
+const earthCard=document.querySelector(".home-earth");earthCard?.addEventListener("click",()=>{jcEarthModal.classList.add("active");document.getElementById("jcEarthCoords").textContent=(earthLatitude!==null&&earthLongitude!==null)?("LAT "+earthLatitude.toFixed(4)+" // LON "+earthLongitude.toFixed(4)):"POSITION // NOT LOCKED";setTimeout(()=>{initializeMap();if(map)map.resize()},100)});document.getElementById("jcEarthClose")?.addEventListener("click",()=>jcEarthModal.classList.remove("active"));
+try{const cs=getComputedStyle(micBtn);imageBtn.style.height=cs.height;imageBtn.style.width=cs.height;imageBtn.style.border=cs.border;imageBtn.style.borderRadius=cs.borderRadius;imageBtn.style.background=cs.background;imageBtn.style.color=cs.color}catch(e){}
+jcRenderHistory();
 
 </script>  </body>  </html>

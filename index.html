@@ -7984,14 +7984,30 @@ async function jcLoadFaceApi(){
   if(jcFaceLoading)return jcFaceLoading;
   jcFaceLoading=new Promise((resolve,reject)=>{
     if(window.faceapi){jcFaceApiReady=true;resolve(window.faceapi);return}
-    const sc=document.createElement("script");sc.src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js";sc.async=true;sc.onload=()=>{jcFaceApiReady=true;resolve(window.faceapi)};sc.onerror=reject;document.head.appendChild(sc);
-  });
+    const sc=document.createElement("script");
+    sc.src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js";
+    sc.async=true;
+    sc.onload=()=>{
+      if(window.faceapi){jcFaceApiReady=true;resolve(window.faceapi);}
+      else reject(new Error("face-api loaded without global API"));
+    };
+    sc.onerror=()=>reject(new Error("face-api script load failed"));
+    document.head.appendChild(sc);
+  }).catch(err=>{jcFaceLoading=null;throw err});
   return jcFaceLoading;
 }
 async function jcLoadFaceModels(api){
-  if(api.nets.ssdMobilenetv1.params&&api.nets.faceRecognitionNet.params)return;
+  if(!api?.nets?.ssdMobilenetv1||!api?.nets?.faceLandmark68Net||!api?.nets?.faceRecognitionNet){
+    throw new Error("face-api networks unavailable");
+  }
+  const loaded=!!(api.nets.ssdMobilenetv1.params&&api.nets.faceLandmark68Net.params&&api.nets.faceRecognitionNet.params);
+  if(loaded)return;
   const base="https://justadudewhohacks.github.io/face-api.js/models";
-  await Promise.all([api.nets.ssdMobilenetv1.loadFromUri(base),api.nets.faceLandmark68Net.loadFromUri(base),api.nets.faceRecognitionNet.loadFromUri(base)]);
+  await Promise.all([
+    api.nets.ssdMobilenetv1.loadFromUri(base),
+    api.nets.faceLandmark68Net.loadFromUri(base),
+    api.nets.faceRecognitionNet.loadFromUri(base)
+  ]);
 }
 async function jcCaptureIdentity(){
   if(jcIdentityBusy)return;jcIdentityBusy=true;jcIdentityPending=null;jcHideIdentityPrompt();
@@ -8001,8 +8017,12 @@ async function jcCaptureIdentity(){
     const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false});video.srcObject=stream;await video.play();
     await new Promise(r=>setTimeout(r,450));
     const canvas=document.createElement("canvas");canvas.width=video.videoWidth||640;canvas.height=video.videoHeight||480;canvas.getContext("2d",{willReadFrequently:true}).drawImage(video,0,0,canvas.width,canvas.height);
-    const dataUrl=canvas.toDataURL("image/jpeg",.78);stream.getTracks().forEach(t=>t.stop());video.remove();
-    jcShowIdentityCard("SCANNING","ANALYZING FACE",dataUrl);jcAddEvent("IDENTITY // SNAPSHOT CAPTURED");
+    const dataUrl=canvas.toDataURL("image/jpeg",.78);
+    stream.getTracks().forEach(t=>t.stop());
+    video.srcObject=null;
+    video.remove();
+    jcShowIdentityCard("SCANNING","ANALYZING FACE",dataUrl);
+    jcAddEvent("IDENTITY // SNAPSHOT CAPTURED");
     const api=await jcLoadFaceApi();await jcLoadFaceModels(api);
     const detection=await api.detectSingleFace(canvas,new api.SsdMobilenetv1Options({minConfidence:.55})).withFaceLandmarks().withFaceDescriptor();
     if(!detection){jcShowIdentityCard("UNKNOWN","NO FACE DETECTED",dataUrl);notify("IDENTITY // VOLTO NON RILEVATO");jcIdentityBusy=false;return}
@@ -8010,13 +8030,17 @@ async function jcCaptureIdentity(){
     let best=null,bestDistance=Infinity;
     for(const profile of profiles){if(!Array.isArray(profile.descriptor))continue;const d=jcDistance(descriptor,profile.descriptor);if(d<bestDistance){bestDistance=d;best=profile}}
     if(best&&bestDistance<.52){
-      jcActiveProfile={name:best.name,descriptor:best.descriptor};jcShowIdentityCard(best.name,"IDENTITY MATCH // "+bestDistance.toFixed(2),dataUrl);jcAddEvent("IDENTITY // "+best.name.toUpperCase()+" RECOGNIZED");notify("JARVIS // CIAO "+best.name.toUpperCase());jcIdentityBusy=false;return;
+      jcActiveProfile={name:best.name,descriptor:best.descriptor};jcShowIdentityCard(best.name,"PROFILE ACTIVE",dataUrl);jcAddEvent("IDENTITY // "+best.name.toUpperCase()+" RECOGNIZED");notify("JARVIS // CIAO "+best.name.toUpperCase());jcIdentityBusy=false;return;
     }
     jcIdentityPending={descriptor,dataUrl};jcShowIdentityCard("NEW PROFILE","FIRST CONTACT",dataUrl);jcAskName();
   }catch(e){console.error("Identity engine:",e);notify("IDENTITY // SCAN NON DISPONIBILE");jcAddEvent("IDENTITY // ENGINE ERROR")}
   jcIdentityBusy=false;
 }
-function jcIsRecognizeCommand(text){const n=normalizeCommand(text||"");return ["riconoscimi","riconoscimi jarvis","riconosci me","riconoscimi per favore","fammi riconoscere"].includes(n)||n.startsWith("riconoscimi ")}
+function jcIsRecognizeCommand(text){
+  const raw=String(text||"").trim().toLowerCase();
+  const n=typeof normalizeCommand==="function"?normalizeCommand(raw):raw.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
+  return ["riconoscimi","riconoscimi jarvis","riconosci me","riconoscimi per favore","fammi riconoscere"].includes(n)||n.startsWith("riconoscimi ");
+}
 function jcCompleteIdentity(text){
   if(!jcIdentityPending)return false;const name=String(text||"").trim().replace(/\s+/g," ");if(name.length<2||name.length>50)return false;
   const profiles=jcIdentityProfiles();const clean=name.replace(/[<>]/g,"");profiles.push({name:clean,descriptor:jcIdentityPending.descriptor,createdAt:Date.now()});jcSaveIdentityProfiles(profiles);jcActiveProfile={name:clean,descriptor:jcIdentityPending.descriptor};jcIdentityPending=null;jcHideIdentityPrompt();jcShowIdentityCard(clean,"PROFILE CREATED // LOCAL",jcIdentityPhoto.src);jcAddEvent("IDENTITY // PROFILE CREATED");notify("PROFILO LOCALE CREATO // "+clean.toUpperCase());return true;

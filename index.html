@@ -290,6 +290,16 @@ box-shadow:
 0 0 16px rgba(255,255,255,.22);  
 }  
   
+/* =====================================================
+   AZIONI RISPOSTA JARVIS
+===================================================== */
+.response-actions{display:flex;align-items:center;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(235,242,255,.10);}
+.response-action-btn{height:30px;padding:0 10px;border:1px solid rgba(235,242,255,.18);border-radius:9px;background:rgba(255,255,255,.035);color:rgba(225,232,245,.66);font-family:Arial,sans-serif;font-size:9px;letter-spacing:.2px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:.18s ease;backdrop-filter:blur(10px);}
+.response-action-btn:hover{color:#ffffff;border-color:rgba(255,255,255,.48);background:rgba(255,255,255,.09);box-shadow:0 0 12px rgba(255,255,255,.08);}
+.response-action-btn:active{transform:scale(.97);}
+.response-action-btn.loading{opacity:.55;pointer-events:none;}
+.response-action-btn.done{color:#ffffff;border-color:rgba(255,255,255,.48);background:rgba(255,255,255,.09);}
+@media(max-width:600px){.response-actions{gap:5px;margin-top:10px;padding-top:9px;}.response-action-btn{height:29px;padding:0 8px;font-size:8px;}}
 /* =====================================================  
    INPUT  
 ===================================================== */  
@@ -1823,7 +1833,13 @@ border-radius:5px;
 }  
   
 
-#imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
+#imageInput{display:none;}
+#imageBtn{width:34px;height:34px;flex:0 0 34px;margin-right:7px;border:none;background:transparent;color:rgba(235,242,255,.80);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;}
+#imageBtn:hover{color:#ffffff;filter:drop-shadow(0 0 8px rgba(255,255,255,.55));}
+.image-icon{width:15px;height:11px;border:1.3px solid currentColor;border-radius:3px;position:relative;display:block;}
+.image-icon:before{content:"";position:absolute;left:4px;top:-4px;width:5px;height:3px;border:1.3px solid currentColor;border-bottom:none;border-radius:2px 2px 0 0;}
+.image-icon:after{content:"";position:absolute;left:5px;top:3px;width:4px;height:4px;border:1.1px solid currentColor;border-radius:50%;}
+#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
 </style>  </head>  <body>  <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
@@ -1904,7 +1920,7 @@ type="text"
 autocomplete="off"  
 placeholder="Chiedi qualcosa a JARVIS...">
 <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
-<button id="imageBtn" type="button" title="Invia immagine">📷</button>
+<button id="imageBtn" type="button" title="Invia immagine" aria-label="Invia immagine"><span class="image-icon"></span></button>
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
@@ -2299,206 +2315,333 @@ hasCodeBlock
    MESSAGGI  
 ===================================================== */  
   
-function addMsg(  
-text,  
-jarvisResponse = false,  
-copyable = false  
-){  
-  
-chat.innerHTML = "";  
-  
-const element =  
-document.createElement("div");  
-  
-element.className =  
-"msg" +  
-(  
-jarvisResponse  
-?  
-" jarvis-response"  
-:  
-""  
-);  
-  
-if(jarvisResponse){  
-  
-const chars =  
-Array.from(String(text));  
-  
-chars.forEach(  
-(char,index)=>{  
-  
-const span =  
-document.createElement("span");  
-  
-span.className =  
-"jarvis-char";  
-  
-span.textContent =  
-char;  
-  
-span.style.animationDelay =  
-(index * 0.035) +  
-"s";  
-  
-element.appendChild(  
-span  
-);  
-  
-}  
-  
-);  
-  
-}else{  
-  
-element.textContent =  
-String(text);  
-  
-}  
-  
-  
-/* =====================================================  
-   COPIA  
-===================================================== */  
-  
-if(copyable){  
-  
-const copyButton =  
-document.createElement("button");  
-  
-copyButton.className =  
-"copy-btn";  
-  
-copyButton.type =  
-"button";  
-  
-copyButton.title =  
-"Copia risposta";  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.addEventListener(  
-"click",  
-async event=>{  
-  
-event.stopPropagation();  
-  
-try{  
-  
-await navigator.clipboard.writeText(  
-String(text)  
-);  
-  
-copyButton.textContent =  
-"✓";  
-  
-copyButton.classList.add(  
-"copied"  
-);  
-  
-notify(  
-"TESTO COPIATO"  
-);  
-  
-setTimeout(  
-()=>{  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.classList.remove(  
-"copied"  
-);  
-  
-},  
-1800  
-);  
-  
-}catch(error){  
-  
-console.warn(  
-"Clipboard:",  
-error  
-);  
-  
-const textarea =  
-document.createElement("textarea");  
-  
-textarea.value =  
-String(text);  
-  
-textarea.style.position =  
-"fixed";  
-  
-textarea.style.opacity =  
-"0";  
-  
-document.body.appendChild(  
-textarea  
-);  
-  
-textarea.select();  
-  
-try{  
-  
-document.execCommand(  
-"copy"  
-);  
-  
-copyButton.textContent =  
-"✓";  
-  
-copyButton.classList.add(  
-"copied"  
-);  
-  
-notify(  
-"TESTO COPIATO"  
-);  
-  
-}catch(e){  
-  
-notify(  
-"COPIA NON DISPONIBILE"  
-);  
-  
-}  
-  
-textarea.remove();  
-  
-setTimeout(  
-()=>{  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.classList.remove(  
-"copied"  
-);  
-  
-},  
-1800  
-);  
-  
-}  
-  
-}  
-);  
-  
-element.appendChild(  
-copyButton  
-);  
-  
-}  
-  
-chat.appendChild(  
-element  
-);  
-  
-}  
-  
-  
+function addMsg(
+text,
+jarvisResponse = false,
+copyable = false
+){
+
+chat.innerHTML = "";
+
+const element =
+document.createElement("div");
+
+element.className =
+"msg" +
+(
+jarvisResponse
+?
+" jarvis-response"
+:
+""
+);
+
+if(jarvisResponse){
+
+const chars =
+Array.from(String(text));
+
+chars.forEach(
+(char,index)=>{
+
+const span =
+document.createElement("span");
+
+span.className =
+"jarvis-char";
+
+span.textContent =
+char;
+
+span.style.animationDelay =
+(index * 0.035) +
+"s";
+
+element.appendChild(
+span
+);
+
+}
+);
+
+/* =====================================================
+   AZIONI: COPIA / ASCOLTA / CONDIVIDI
+===================================================== */
+
+const actions =
+document.createElement("div");
+
+actions.className =
+"response-actions";
+
+/* COPIA */
+
+const copyButton =
+document.createElement("button");
+
+copyButton.className =
+"response-action-btn";
+
+copyButton.type =
+"button";
+
+copyButton.title =
+"Copia risposta";
+
+copyButton.innerHTML =
+"<span>⧉</span><span>Copia</span>";
+
+copyButton.addEventListener(
+"click",
+async event=>{
+
+event.stopPropagation();
+
+try{
+
+if(navigator.clipboard &&
+navigator.clipboard.writeText){
+
+await navigator.clipboard.writeText(
+String(text)
+);
+
+}else{
+
+const textarea =
+document.createElement("textarea");
+
+textarea.value =
+String(text);
+
+textarea.style.position =
+"fixed";
+
+textarea.style.opacity =
+"0";
+
+document.body.appendChild(
+textarea
+);
+
+textarea.select();
+document.execCommand("copy");
+textarea.remove();
+
+}
+
+copyButton.innerHTML =
+"<span>✓</span><span>Copiato</span>";
+
+copyButton.classList.add("done");
+
+notify(
+"TESTO COPIATO"
+);
+
+setTimeout(
+()=>{
+
+copyButton.innerHTML =
+"<span>⧉</span><span>Copia</span>";
+
+copyButton.classList.remove("done");
+
+},
+1800
+);
+
+}catch(error){
+
+console.warn(
+"Clipboard:",
+error
+);
+
+notify(
+"COPIA NON DISPONIBILE"
+);
+
+}
+
+}
+);
+
+/* ASCOLTA — ELEVENLABS */
+
+const listenButton =
+document.createElement("button");
+
+listenButton.className =
+"response-action-btn";
+
+listenButton.type =
+"button";
+
+listenButton.title =
+"Ascolta con ElevenLabs";
+
+listenButton.innerHTML =
+"<span>🔊</span><span>Ascolta</span>";
+
+listenButton.addEventListener(
+"click",
+async event=>{
+
+event.stopPropagation();
+
+if(audioPlaying && currentAudio){
+
+try{
+currentAudio.pause();
+}catch(e){}
+
+try{
+currentAudio.currentTime = 0;
+}catch(e){}
+
+currentAudio = null;
+audioPlaying = false;
+
+if(
+"speechSynthesis" in window
+){
+speechSynthesis.cancel();
+}
+
+setState("idle");
+
+return;
+
+}
+
+listenButton.classList.add("loading");
+listenButton.innerHTML =
+"<span>◌</span><span>Caricamento...</span>";
+
+const success =
+await speakElevenLabs(
+String(text)
+);
+
+listenButton.classList.remove(
+"loading"
+);
+
+if(success){
+
+listenButton.innerHTML =
+"<span>■</span><span>In ascolto</span>";
+
+listenButton.classList.add(
+"done"
+);
+
+}else{
+
+listenButton.innerHTML =
+"<span>🔊</span><span>Ascolta</span>";
+
+notify(
+"VOCE ELEVENLABS NON DISPONIBILE"
+);
+
+}
+
+}
+);
+
+/* CONDIVIDI */
+
+const shareButton =
+document.createElement("button");
+
+shareButton.className =
+"response-action-btn";
+
+shareButton.type =
+"button";
+
+shareButton.title =
+"Condividi risposta";
+
+shareButton.innerHTML =
+"<span>↗</span><span>Condividi</span>";
+
+shareButton.addEventListener(
+"click",
+async event=>{
+
+event.stopPropagation();
+
+try{
+
+if(navigator.share){
+
+await navigator.share({
+title:"J.A.R.V.I.S.",
+text:String(text)
+});
+
+}else{
+
+notify(
+"CONDIVISIONE NON DISPONIBILE"
+);
+
+}
+
+}catch(error){
+
+if(error &&
+error.name !== "AbortError"){
+
+console.warn(
+"Share:",
+error
+);
+
+notify(
+"CONDIVISIONE NON DISPONIBILE"
+);
+
+}
+
+}
+
+}
+);
+
+actions.appendChild(
+copyButton
+);
+
+actions.appendChild(
+listenButton
+);
+
+actions.appendChild(
+shareButton
+);
+
+element.appendChild(
+actions
+);
+
+}else{
+
+element.textContent =
+String(text);
+
+}
+
+chat.appendChild(
+element
+);
+
+}
+
+
 /* =====================================================  
    OROLOGIO  
 ===================================================== */  
@@ -5891,9 +6034,7 @@ const reply =
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -5914,9 +6055,7 @@ battery.charging
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -5977,9 +6116,7 @@ reply =
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -6047,9 +6184,7 @@ device.screenHeight +
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -6101,9 +6236,7 @@ earthLongitude.toFixed(5) +
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -6117,9 +6250,7 @@ const reply =
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -6134,9 +6265,7 @@ const reply =
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -6173,9 +6302,7 @@ fullscreen.active
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -6229,9 +6356,7 @@ reply =
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -6312,9 +6437,7 @@ item => "• " + item
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -6372,9 +6495,7 @@ const reply =
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return true;  
   
@@ -7208,9 +7329,7 @@ data.currentDate +
 addMsg(  
 reply,  
 true  
-);  
-  
-speak(reply);  
+);    
   
 return;  
   
@@ -7374,9 +7493,7 @@ copyable
 addMemory(  
 "assistant",  
 reply  
-);  
-  
-speak(reply);  
+);    
   
 setState("idle");  
   

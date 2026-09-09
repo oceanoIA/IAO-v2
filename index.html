@@ -28,7 +28,7 @@ body{
 background:  
 radial-gradient(  
 circle at center,  
-#a0a0a 0%,  
+#a0a0a0 0%,  
 #030303 48%,  
 #000000 100%  
 );  
@@ -1824,17 +1824,196 @@ border-radius:5px;
   
 
 #imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
+</style>  
+<style id="jarvis-advanced-addons">
+/* =====================================================
+   JARVIS ADVANCED ADDONS — aggiunte, non redesign
+===================================================== */
+#jarvisStateHUD{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:60;font:7px/1 monospace;letter-spacing:2px;color:rgba(240,245,255,.52);pointer-events:none;text-transform:uppercase;opacity:.78;transition:.25s}
+#jarvisStateHUD span{display:inline-block;width:5px;height:5px;border:1px solid rgba(255,255,255,.65);border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:0 0 9px rgba(255,255,255,.45)}
+#jarvisAdvancedBar{position:fixed;left:18px;top:50%;transform:translateY(-50%);z-index:65;display:flex;flex-direction:column;gap:6px;opacity:.55;transition:.25s}
+#jarvisAdvancedBar:hover{opacity:1}
+.jarvis-adv-btn{width:30px;height:30px;border:1px solid rgba(235,242,255,.12);border-radius:9px;background:rgba(8,8,11,.42);backdrop-filter:blur(12px);color:rgba(245,248,255,.72);font:7px monospace;letter-spacing:.5px;cursor:pointer;transition:.2s}
+.jarvis-adv-btn:hover,.jarvis-adv-btn.active{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.07);color:#fff}
+#jarvisCommandCenter{position:fixed;left:58px;top:50%;transform:translateY(-50%) translateX(-10px);z-index:64;width:230px;padding:13px;border:1px solid rgba(235,242,255,.14);border-radius:14px;background:rgba(7,8,11,.82);backdrop-filter:blur(22px);box-shadow:0 18px 60px rgba(0,0,0,.35);display:none;color:rgba(245,248,255,.82);font-family:monospace}
+#jarvisCommandCenter.active{display:block}
+.jcc-head{font-size:8px;letter-spacing:2px;margin-bottom:11px;color:rgba(255,255,255,.72)}
+.jcc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.jcc-mode{padding:9px 7px;border:1px solid rgba(255,255,255,.09);border-radius:9px;background:rgba(255,255,255,.025);color:rgba(255,255,255,.65);font:7px monospace;cursor:pointer;text-align:left}
+.jcc-mode:hover,.jcc-mode.active{border-color:rgba(255,255,255,.32);color:#fff;background:rgba(255,255,255,.055)}
+.jcc-readout{margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.08);font-size:6px;line-height:1.8;letter-spacing:1px;color:rgba(255,255,255,.42)}
+#jarvisActivity{position:fixed;right:18px;top:50%;transform:translateY(-50%) translateX(10px);z-index:64;width:220px;padding:12px;border:1px solid rgba(235,242,255,.12);border-radius:13px;background:rgba(7,8,11,.76);backdrop-filter:blur(20px);display:none;font:6px/1.8 monospace;color:rgba(245,248,255,.56)}
+#jarvisActivity.active{display:block}
+.jarvis-act-head{font-size:7px;letter-spacing:1.8px;color:rgba(255,255,255,.72);margin-bottom:6px}
+.jarvis-act-line{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jarvis-act-line b{color:rgba(255,255,255,.82);font-weight:400}
+#jarvisPredictive{position:fixed;left:50%;bottom:83px;transform:translateX(-50%);z-index:59;display:flex;gap:6px;max-width:90vw;overflow:auto;scrollbar-width:none;pointer-events:auto}
+#jarvisPredictive::-webkit-scrollbar{display:none}
+.jarvis-suggestion{border:1px solid rgba(255,255,255,.11);border-radius:10px;padding:7px 10px;background:rgba(7,8,11,.52);backdrop-filter:blur(12px);color:rgba(255,255,255,.55);font:6px monospace;letter-spacing:.8px;white-space:nowrap;cursor:pointer}
+.jarvis-suggestion:hover{border-color:rgba(255,255,255,.3);color:#fff}
+#jarvisVoiceMode{position:fixed;right:18px;bottom:18px;z-index:70;border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:7px 9px;background:rgba(7,8,11,.48);backdrop-filter:blur(12px);color:rgba(255,255,255,.55);font:6px monospace;letter-spacing:1px;cursor:pointer}
+#jarvisVoiceMode.active{border-color:rgba(255,255,255,.4);color:#fff}
+/* Earth expansion + orbital network */
+#homeSystemPanel.earth-expanded{z-index:120}
+#homeSystemPanel.earth-expanded:before{content:"";position:fixed;inset:0;background:rgba(0,0,0,.46);backdrop-filter:blur(5px);z-index:-1}
+#homeSystemPanel.earth-expanded .home-earth{position:fixed;left:50%;top:50%;width:min(760px,88vw);height:min(610px,78vh);margin:0;transform:translate(-50%,-50%);z-index:121;background:radial-gradient(circle at center,rgba(255,255,255,.045),rgba(0,0,0,.82));box-shadow:0 0 100px rgba(0,0,0,.65),0 0 40px rgba(255,255,255,.05)}
+#earthExpandClose{display:none;position:absolute;right:12px;top:9px;z-index:10;border:0;background:transparent;color:rgba(255,255,255,.68);font-size:20px;cursor:pointer}
+#homeSystemPanel.earth-expanded #earthExpandClose{display:block}
+#earthOrbitalNetwork{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.earth-sat{position:absolute;width:4px;height:4px;border:1px solid rgba(255,255,255,.8);border-radius:50%;box-shadow:0 0 9px rgba(255,255,255,.65);animation:earthSatPulse 2.8s ease-in-out infinite}
+.earth-link{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);transform-origin:0 50%;opacity:.48}
+@keyframes earthSatPulse{0%,100%{opacity:.3;transform:scale(.7)}50%{opacity:1;transform:scale(1.3)}}
+@media(max-width:700px){#jarvisAdvancedBar{left:8px}#jarvisCommandCenter{left:45px;width:205px}#jarvisActivity{right:8px;width:190px}.home-status-card{min-height:62px}}
 
-/* RESPONSE VISIBILITY FIX */
-#chat{width:min(34vw,500px);max-height:calc(100vh - 285px);padding-right:4px;overflow-y:auto;overflow-x:hidden;}
-.msg{max-width:100%;padding:10px 12px;margin-bottom:8px;border:0!important;border-radius:0!important;background:transparent!important;backdrop-filter:none!important;box-shadow:none!important;font-size:11px;line-height:1.45;overflow-wrap:anywhere;position:relative;}
-.msg.jarvis-response{max-width:92%;margin-left:0;background:rgba(5,5,8,.52)!important;border-radius:8px!important;padding:8px 10px;backdrop-filter:blur(7px)!important;text-shadow:0 1px 5px rgba(0,0,0,.95);}
-.jarvis-char{position:relative;z-index:2;}
-#webgl-container{z-index:1!important;}
-#chat{z-index:45!important;}
-@media(max-width:900px){#chat{width:min(58vw,430px);left:2.5%;top:14%;max-height:calc(100vh - 250px);}.msg{font-size:10px}.msg.jarvis-response{max-width:95%;}}
-@media(max-width:600px){#chat{width:66vw;left:10px;top:12%;max-height:calc(100vh - 230px);}.msg{font-size:10px;line-height:1.4}.msg.jarvis-response{padding:7px 8px;}}
-</style>  </head>  <body>  <!-- =====================================================  
+/* =====================================================
+   JARVIS V3 — PRECISION HUD / RESPONSE CONTROLS
+===================================================== */
+:root{
+  --hud-white:rgba(245,248,255,.94);
+  --hud-soft:rgba(220,228,240,.58);
+  --hud-line:rgba(235,242,255,.16);
+  --hud-panel:rgba(7,8,11,.72);
+}
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  opacity:.16;
+  background:
+    repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(255,255,255,.018) 4px),
+    linear-gradient(90deg,transparent 0 49.8%,rgba(255,255,255,.025) 50%,transparent 50.2%);
+}
+#webgl-container{filter:contrast(1.08) brightness(1.08);}
+.jarvis-title{
+  font-family:Arial,sans-serif;
+  font-weight:200;
+  text-shadow:0 0 10px rgba(255,255,255,.45),0 0 38px rgba(210,225,255,.18);
+}
+#chat{
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.25) transparent;
+  mask-image:linear-gradient(to bottom,transparent 0,#000 3%,#000 97%,transparent 100%);
+}
+.msg{
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(18,19,23,.70),rgba(5,6,9,.54));
+  border-color:rgba(235,242,255,.18);
+  box-shadow:0 12px 35px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.045);
+  transition:border-color .2s,transform .2s,background .2s;
+}
+.msg:hover{border-color:rgba(255,255,255,.32);transform:translateX(2px);}
+.msg.jarvis-response{padding-bottom:46px;}
+.response-actions{
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:9px;
+  display:flex;
+  gap:6px;
+  opacity:.62;
+  transition:.2s;
+}
+.msg:hover .response-actions{opacity:1;}
+.response-action{
+  height:27px;
+  padding:0 9px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;
+  background:rgba(255,255,255,.035);
+  color:rgba(235,242,255,.66);
+  font:7px monospace;
+  letter-spacing:.7px;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+}
+.response-action:hover,.response-action.active{
+  color:#fff;
+  border-color:rgba(255,255,255,.36);
+  background:rgba(255,255,255,.08);
+}
+.command-wrapper{
+  border-color:rgba(235,242,255,.25);
+  background:rgba(7,8,11,.68);
+  box-shadow:0 0 0 1px rgba(255,255,255,.015),0 14px 50px rgba(0,0,0,.35),0 0 35px rgba(220,230,255,.06);
+}
+.command-wrapper:before{
+  content:"";
+  position:absolute;
+  left:18px;right:18px;top:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+  opacity:.55;
+}
+#imageBtn{
+  width:34px;height:34px;flex:0 0 34px;
+  border:0;border-radius:50%;
+  background:transparent;
+  color:rgba(235,242,255,.78);
+  font-size:16px;
+  box-shadow:none;
+}
+#imageBtn:hover{background:rgba(255,255,255,.07);border:0;box-shadow:0 0 15px rgba(255,255,255,.08);}
+#micBtn{width:34px;height:34px;border-radius:50%;margin-right:4px;}
+#sendBtn{
+  min-width:72px;
+  height:36px;
+  border-radius:18px;
+  font-size:9px;
+  letter-spacing:1.7px;
+}
+#jarvisAdvancedBar{
+  opacity:.38;
+  transition:opacity .25s,transform .25s;
+}
+#jarvisAdvancedBar:hover{opacity:1;}
+.jarvis-adv-btn{border-color:rgba(255,255,255,.10);}
+#homeSystemPanel{
+  background:linear-gradient(145deg,rgba(12,13,17,.90),rgba(3,4,7,.78));
+  box-shadow:0 18px 70px rgba(0,0,0,.58),0 0 35px rgba(255,255,255,.045);
+}
+.home-earth{
+  box-shadow:inset 0 0 35px rgba(255,255,255,.025);
+}
+@media(max-width:600px){
+  #chat{top:12%;max-height:calc(100vh - 230px);}
+  .msg{font-size:11px;}
+  .response-actions{left:12px;right:12px;}
+  .response-action{font-size:6px;padding:0 8px;}
+  #jarvisPredictive{bottom:76px;}
+  #jarvisVoiceMode{display:none;}
+}
+
+</style>
+</head>  <body>
+<!-- =====================================================
+     JARVIS ADVANCED ADDONS
+===================================================== -->
+<div id="jarvisStateHUD"><span></span><b id="jarvisStateText">READY</b></div>
+<div id="jarvisAdvancedBar">
+  <button class="jarvis-adv-btn" id="jccBtn" title="Command Center">CORE</button>
+  <button class="jarvis-adv-btn" id="activityBtn" title="Activity">LOG</button>
+  <button class="jarvis-adv-btn" id="memoryBtn" title="Memory">MEM</button>
+</div>
+<div id="jarvisCommandCenter">
+  <div class="jcc-head">JARVIS // COMMAND CENTER</div>
+  <div class="jcc-grid">
+    <button class="jcc-mode active" data-mode="GENERAL">GENERAL<br><small>CONVERSATION</small></button>
+    <button class="jcc-mode" data-mode="VISION">VISION<br><small>ANALYSIS</small></button>
+    <button class="jcc-mode" data-mode="FOCUS">FOCUS<br><small>DIRECT</small></button>
+    <button class="jcc-mode" data-mode="RESEARCH">RESEARCH<br><small>DEEP</small></button>
+    <button class="jcc-mode" data-mode="SYSTEM">SYSTEM<br><small>STATUS</small></button>
+    <button class="jcc-mode" data-mode="CREATIVE">CREATIVE<br><small>IDEAS</small></button>
+  </div>
+  <div class="jcc-readout" id="jccReadout">MODE // GENERAL<br>CORE // ONLINE<br>MEMORY // LOCAL</div>
+</div>
+<div id="jarvisActivity">
+  <div class="jarvis-act-head">ACTIVITY // TIMELINE</div>
+  <div id="jarvisActivityList"></div>
+</div>
+<div id="jarvisPredictive"></div>
+<button id="jarvisVoiceMode" type="button">VOICE MODE // OFF</button>
+  <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
      TITOLO  
@@ -1860,7 +2039,7 @@ SYSTEM STATUS
 
 ONLINE
 
-</div>  </div>  <div class="home-earth">  <div class="earth-label">  
+</div>  </div>  <div class="home-earth"><button id="earthExpandClose" type="button" aria-label="Chiudi Earth">×</button><div id="earthOrbitalNetwork"></div>  <div class="earth-label">  
 EARTH // LOCATION  
 </div>  <div id="earthGlobe"></div>  <div  
 class="earth-coordinates"  
@@ -2315,7 +2494,7 @@ jarvisResponse = false,
 copyable = false  
 ){  
   
-chat.innerHTML = "";  
+  
   
 const element =  
 document.createElement("div");  
@@ -2371,7 +2550,64 @@ String(text);
    COPIA  
 ===================================================== */  
   
-if(copyable){  
+
+/* =====================================================
+   AZIONI RISPOSTA — COPIA / ASCOLTA
+===================================================== */
+if(jarvisResponse){
+  const actions=document.createElement("div");
+  actions.className="response-actions";
+
+  const copyAction=document.createElement("button");
+  copyAction.className="response-action";
+  copyAction.type="button";
+  copyAction.textContent="⧉ COPIA";
+  copyAction.onclick=async(e)=>{
+    e.stopPropagation();
+    try{
+      await navigator.clipboard.writeText(String(text));
+      copyAction.textContent="✓ COPIATO";
+      copyAction.classList.add("active");
+    }catch(err){
+      const ta=document.createElement("textarea");
+      ta.value=String(text); document.body.appendChild(ta); ta.select();
+      try{document.execCommand("copy");copyAction.textContent="✓ COPIATO";copyAction.classList.add("active");}
+      catch(_){copyAction.textContent="COPIA NON DISPONIBILE";}
+      ta.remove();
+    }
+    setTimeout(()=>{copyAction.textContent="⧉ COPIA";copyAction.classList.remove("active");},1600);
+  };
+
+  const listenAction=document.createElement("button");
+  listenAction.className="response-action";
+  listenAction.type="button";
+  listenAction.textContent="🔊 ASCOLTA";
+  listenAction.onclick=async(e)=>{
+    e.stopPropagation();
+    try{
+      if(typeof currentAudio!=="undefined" && currentAudio){
+        try{currentAudio.pause();}catch(_){}
+        currentAudio=null;
+      }
+      if("speechSynthesis" in window) speechSynthesis.cancel();
+      listenAction.textContent="◼ STOP";
+      listenAction.classList.add("active");
+      if(typeof speakElevenLabs==="function"){
+        const ok=await speakElevenLabs(String(text));
+        if(!ok && typeof speakDevice==="function") await speakDevice(String(text));
+      }else if(typeof speakDevice==="function"){
+        await speakDevice(String(text));
+      }
+    }finally{
+      setTimeout(()=>{listenAction.textContent="🔊 ASCOLTA";listenAction.classList.remove("active");},500);
+    }
+  };
+
+  actions.append(copyAction,listenAction);
+  element.appendChild(actions);
+}
+
+if(copyable && !jarvisResponse){  
   
 const copyButton =  
 document.createElement("button");  
@@ -2504,7 +2740,10 @@ copyButton
   
 chat.appendChild(  
 element  
-);  
+);
+
+  /* Keep only the latest 24 rendered messages for smooth mobile performance. */
+  while(chat.children.length>24) chat.removeChild(chat.firstElementChild);  
   
 }  
   
@@ -5903,7 +6142,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -5926,7 +6165,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -5989,7 +6228,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -6059,7 +6298,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -6113,7 +6352,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -6129,7 +6368,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -6146,7 +6385,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -6185,7 +6424,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -6241,7 +6480,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -6324,7 +6563,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -6384,7 +6623,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return true;  
   
@@ -7220,7 +7459,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 return;  
   
@@ -7320,7 +7559,8 @@ capabilities:
 capabilities,  
   
 systemInstructions:  
-capabilityInstructions,
+capabilityInstructions + "
+MODALITÀ JARVIS: " + (window.jarvisCurrentMode || "GENERAL"),
 
 image: imageData || null
   
@@ -7386,7 +7626,7 @@ addMemory(
 reply  
 );  
   
-speak(reply);  
+// SPEECH MANUALE: nessuna riproduzione automatica  
   
 setState("idle");  
   
@@ -7488,6 +7728,235 @@ sendMessage();
 );  
   
   
+
+/* =====================================================
+   ADVANCED JARVIS SYSTEMS
+===================================================== */
+(function initJarvisAdvanced(){
+  const stateHUD=document.getElementById("jarvisStateText");
+  const jcc=document.getElementById("jarvisCommandCenter");
+  const activity=document.getElementById("jarvisActivity");
+  const activityList=document.getElementById("jarvisActivityList");
+  const predictive=document.getElementById("jarvisPredictive");
+  const voiceModeBtn=document.getElementById("jarvisVoiceMode");
+  const earthPanel=document.getElementById("homeSystemPanel");
+  const earthClose=document.getElementById("earthExpandClose");
+  const orbital=document.getElementById("earthOrbitalNetwork");
+  const jccReadout=document.getElementById("jccReadout");
+  const activityLog=[];
+  let currentMode="GENERAL";
+  window.jarvisCurrentMode=currentMode;
+  let voiceMode=false;
+  let wakeArmed=false;
+
+  function stamp(){
+    return new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  }
+  function logActivity(label,detail=""){
+    activityLog.unshift({time:stamp(),label,detail});
+    activityLog.splice(8);
+    if(activityList){
+      activityList.innerHTML=activityLog.map(x=>`<div class="jarvis-act-line"><b>${x.time}</b>  ${x.label}${x.detail?" // "+x.detail:""}</div>`).join("");
+    }
+  }
+  window.jarvisActivityLog=logActivity;
+
+  function setAdvancedState(state){
+    const clean=String(state||"READY").toUpperCase();
+    if(stateHUD) stateHUD.textContent=clean;
+    logActivity(clean);
+  }
+  window.jarvisAdvancedState=setAdvancedState;
+
+  function renderSuggestions(){
+    if(!predictive)return;
+    const suggestions={
+      GENERAL:["Continua conversazione","Spiegami meglio","Fammi un riepilogo"],
+      VISION:["Analizza immagine","Leggi il testo","Descrivi la scena"],
+      FOCUS:["Risposta breve","Punti principali","Azione successiva"],
+      RESEARCH:["Confronta informazioni","Trova le differenze","Crea una sintesi"],
+      SYSTEM:["Stato sistema","Stato memoria","Stato voce"],
+      CREATIVE:["Genera idee","Sviluppa il progetto","Crea una variante"]
+    }[currentMode]||[];
+    predictive.innerHTML="";
+    suggestions.forEach(label=>{
+      const b=document.createElement("button");
+      b.className="jarvis-suggestion";
+      b.type="button";
+      b.textContent=label;
+      b.onclick=()=>{if(textInput){textInput.value=label;textInput.focus();}};
+      predictive.appendChild(b);
+    });
+  }
+
+  document.getElementById("jccBtn")?.addEventListener("click",()=>{
+    jcc?.classList.toggle("active");
+    logActivity(jcc?.classList.contains("active")?"COMMAND CENTER OPEN":"COMMAND CENTER CLOSED");
+  });
+  document.getElementById("activityBtn")?.addEventListener("click",()=>{
+    activity?.classList.toggle("active");
+  });
+  document.getElementById("memoryBtn")?.addEventListener("click",()=>{
+    if(typeof updateSystemPanel==="function")updateSystemPanel();
+    notify?.("MEMORY CORE // "+(typeof memory!=="undefined"?memory.length:0)+" ENTRIES");
+  });
+
+  document.querySelectorAll(".jcc-mode").forEach(btn=>btn.addEventListener("click",()=>{
+    currentMode=btn.dataset.mode||"GENERAL";
+    window.jarvisCurrentMode=currentMode;
+    document.querySelectorAll(".jcc-mode").forEach(x=>x.classList.toggle("active",x===btn));
+    if(jccReadout)jccReadout.innerHTML=`MODE // ${currentMode}<br>CORE // ONLINE<br>MEMORY // LOCAL`;
+    renderSuggestions();
+    logActivity("MODE",currentMode);
+    notify?.("MODE // "+currentMode);
+  }));
+
+  /* Voice mode: continuous listening after the user explicitly activates it.
+     The wake phrase gates commands; normal microphone mode remains unchanged. */
+  if(typeof recognition!=="undefined" && recognition){
+    const baseResult=recognition.onresult;
+    const baseEnd=recognition.onend;
+    recognition.onresult=(event)=>{
+      if(!voiceMode){
+        if(typeof baseResult==="function")baseResult(event);
+        return;
+      }
+      const last=event.results?.[event.results.length-1];
+      const transcript=last?.[0]?.transcript?.trim()||"";
+      if(!transcript)return;
+      const normalized=transcript.toLowerCase().replace(/[’']/g,"'");
+      const wake=normalized.includes("hey jarvis")||normalized.includes("ehi jarvis")||normalized.includes("hei jarvis");
+      if(wake){
+        wakeArmed=false;
+        const command=transcript.replace(/^(.*?)(hey|ehi|hei)\s+jarvis[,:]?\s*/i,"").trim();
+        if(command){
+          textInput.value=command;
+          sendMessage();
+          wakeArmed=true;
+        }else{
+          notify?.("JARVIS // IN ASCOLTO");
+        }
+      }
+    };
+    recognition.onend=()=>{
+      if(voiceMode){
+        listening=false;
+        micBtn?.classList.remove("active");
+        setTimeout(()=>{
+          if(!voiceMode)return;
+          try{recognition.start();}catch(e){}
+        },180);
+      }else if(typeof baseEnd==="function"){
+        baseEnd();
+      }
+    };
+  }
+
+  voiceModeBtn?.addEventListener("click",()=>{
+    voiceMode=!voiceMode;
+    voiceModeBtn.classList.toggle("active",voiceMode);
+    voiceModeBtn.textContent=voiceMode?"VOICE MODE // ON":"VOICE MODE // OFF";
+    wakeArmed=voiceMode;
+    if(typeof recognition!=="undefined" && recognition){
+      recognition.continuous=voiceMode;
+      recognition.interimResults=false;
+    }
+    logActivity("VOICE MODE",voiceMode?"ARMED":"OFF");
+    if(voiceMode){
+      notify?.("VOICE MODE ATTIVO // DÌ 'HEY JARVIS'");
+      try{recognition?.start();}catch(e){}
+    }else{
+      try{recognition?.stop();}catch(e){}
+    }
+  });
+
+  /* Earth: expand on touch/click without replacing the existing globe. */
+  document.querySelector(".home-earth")?.addEventListener("click",e=>{
+    if(e.target.closest("#earthExpandClose"))return;
+    if(earthPanel){earthPanel.classList.add("earth-expanded");}
+    logActivity("EARTH","EXPANDED");
+    setTimeout(()=>{if(typeof resizeEarthGlobe==="function")resizeEarthGlobe();},100);
+  });
+  earthClose?.addEventListener("click",e=>{
+    e.stopPropagation();
+    earthPanel?.classList.remove("earth-expanded");
+    logActivity("EARTH","CLOSED");
+    setTimeout(()=>{if(typeof resizeEarthGlobe==="function")resizeEarthGlobe();},100);
+  });
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")earthPanel?.classList.remove("earth-expanded");});
+
+  /* Small satellite mesh connected by thin lines. */
+  function buildOrbitalNetwork(){
+    if(!orbital)return;
+    orbital.innerHTML="";
+    const pts=[
+      [14,28],[27,15],[44,20],[61,12],[80,27],[73,45],
+      [55,37],[35,48],[18,48],[40,68],[63,70],[83,61]
+    ];
+    pts.forEach((p,i)=>{
+      const n=document.createElement("i");
+      n.className="earth-sat";
+      n.style.left=p[0]+"%"; n.style.top=p[1]+"%"; n.style.animationDelay=(i*.17)+"s";
+      orbital.appendChild(n);
+    });
+    pts.slice(0,-1).forEach((a,i)=>{
+      const b=pts[i+1], dx=b[0]-a[0], dy=b[1]-a[1];
+      const l=document.createElement("i"); l.className="earth-link";
+      l.style.left=a[0]+"%"; l.style.top=a[1]+"%";
+      l.style.width=Math.hypot(dx,dy)+"%";
+      l.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;
+      orbital.appendChild(l);
+    });
+  }
+  buildOrbitalNetwork();
+
+  /* Lightweight intelligent memory: stores only explicit self-statements.
+     It supplements, rather than replaces, the existing conversation memory. */
+  function learnExplicitFact(text){
+    if(typeof memory==="undefined"||!Array.isArray(memory))return;
+    const t=String(text||"").trim();
+    const patterns=[
+      /^mi chiamo (.+)$/i,
+      /^il mio nome è (.+)$/i,
+      /^sto lavorando a (.+)$/i,
+      /^il mio progetto è (.+)$/i,
+      /^mi piace (.+)$/i,
+      /^non mi piace (.+)$/i
+    ];
+    for(const re of patterns){
+      const m=t.match(re);
+      if(m){
+        const fact="USER FACT: "+t;
+        if(!memory.some(x=>x&&x.content===fact)){
+          memory.push({role:"system",content:fact});
+          memory=memory.slice(-30);
+          if(typeof saveMemory==="function")saveMemory();
+          logActivity("MEMORY","FACT STORED");
+        }
+        break;
+      }
+    }
+  }
+  window.jarvisLearnFact=learnExplicitFact;
+
+  /* Patch processAi after the original function exists: state/log only.
+     No speech is triggered here. */
+  if(typeof processAi==="function"){
+    const originalProcessAi=processAi;
+    window.processAi=async function(text,imageData=null){
+      setAdvancedState(imageData?"VISION":"THINKING");
+      learnExplicitFact(text);
+      const result=await originalProcessAi(text,imageData);
+      setAdvancedState("READY");
+      return result;
+    };
+  }
+
+  renderSuggestions();
+  setAdvancedState("READY");
+  logActivity("CORE","ONLINE");
+})();
+
 /* =====================================================  
    RESIZE  
 ===================================================== */  

@@ -1823,13 +1823,21 @@ border-radius:5px;
 }  
   
 
-#imageInput{display:none;}#imageBtn{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(235,242,255,.22);border-radius:14px;background:rgba(8,8,11,.78);color:rgba(245,248,255,.88);cursor:pointer;font-size:18px;transition:.2s;backdrop-filter:blur(12px);}#imageBtn:hover{color:#fff;border-color:rgba(255,255,255,.65);background:rgba(255,255,255,.08);}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
+#imageInput{display:none;}
+#imageBtn{width:34px;height:34px;margin-right:7px;border:none;background:transparent;color:rgba(235,242,255,.80);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex:0 0 34px;transition:.2s;}
+.camera-icon{width:16px;height:11px;border:1.3px solid currentColor;border-radius:3px;position:relative;display:block;}
+.camera-icon:after{content:"";position:absolute;width:5px;height:5px;left:50%;top:50%;transform:translate(-50%,-50%);border:1.2px solid currentColor;border-radius:50%;}
+.camera-icon:before{content:"";position:absolute;width:5px;height:2.5px;left:2px;top:-4px;border:1.2px solid currentColor;border-bottom:none;border-radius:2px 2px 0 0;}
+#imageBtn:hover{color:#ffffff;filter:drop-shadow(0 0 6px rgba(255,255,255,.45));}
+#imageBtn.active{color:#ffffff;filter:drop-shadow(0 0 8px rgba(255,255,255,.9)) drop-shadow(0 0 18px rgba(220,230,255,.5));}#visionPreview{position:fixed;right:24px;bottom:88px;z-index:80;display:none;align-items:center;gap:9px;padding:7px;border:1px solid rgba(235,242,255,.20);border-radius:14px;background:rgba(8,8,11,.88);backdrop-filter:blur(18px);}#visionPreview img{width:58px;height:58px;object-fit:cover;border-radius:9px;display:block;}#visionPreviewClose{width:25px;height:25px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:16px;}#visionStatus{position:fixed;right:24px;bottom:158px;z-index:79;display:none;padding:7px 11px;border:1px solid rgba(235,242,255,.14);border-radius:12px;background:rgba(8,8,11,.78);color:rgba(235,242,255,.72);font:8px monospace;letter-spacing:1.4px;}
 
 /* RESPONSE VISIBILITY FIX */
 #chat{width:min(34vw,500px);max-height:calc(100vh - 285px);padding-right:4px;overflow-y:auto;overflow-x:hidden;}
 .msg{max-width:100%;padding:10px 12px;margin-bottom:8px;border:0!important;border-radius:0!important;background:transparent!important;backdrop-filter:none!important;box-shadow:none!important;font-size:11px;line-height:1.45;overflow-wrap:anywhere;position:relative;}
 .msg.jarvis-response{max-width:92%;margin-left:0;background:rgba(5,5,8,.52)!important;border-radius:8px!important;padding:8px 10px;backdrop-filter:blur(7px)!important;text-shadow:0 1px 5px rgba(0,0,0,.95);}
-.jarvis-char{position:relative;z-index:2;}
+.msg.user-question{max-width:92%;margin-left:auto;margin-right:0;text-align:right;color:rgba(235,242,255,.72);padding:7px 10px;border-right:1px solid rgba(235,242,255,.18)!important;}
+.jarvis-word{display:inline;opacity:0;animation:jarvisWordIn .075s ease-out forwards;}
+@keyframes jarvisWordIn{from{opacity:0;transform:translateY(2px);filter:blur(1px);}to{opacity:1;transform:translateY(0);filter:blur(0);}}
 #webgl-container{z-index:1!important;}
 #chat{z-index:45!important;}
 @media(max-width:900px){#chat{width:min(58vw,430px);left:2.5%;top:14%;max-height:calc(100vh - 250px);}.msg{font-size:10px}.msg.jarvis-response{max-width:95%;}}
@@ -1914,7 +1922,7 @@ type="text"
 autocomplete="off"  
 placeholder="Chiedi qualcosa a JARVIS...">
 <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
-<button id="imageBtn" type="button" title="Invia immagine">📷</button>
+<button id="imageBtn" type="button" title="Invia immagine"><span class="camera-icon"></span></button>
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
@@ -2327,38 +2335,30 @@ jarvisResponse
 ?  
 " jarvis-response"  
 :  
-""  
+" user-question"  
 );  
   
-if(jarvisResponse){  
-  
-const chars =  
-Array.from(String(text));  
-  
-chars.forEach(  
-(char,index)=>{  
-  
-const span =  
-document.createElement("span");  
-  
-span.className =  
-"jarvis-char";  
-  
-span.textContent =  
-char;  
-  
-span.style.animationDelay =  
-(index * 0.035) +  
-"s";  
-  
-element.appendChild(  
-span  
-);  
-  
-}  
-  
-);  
-  
+if(jarvisResponse){
+
+const words = String(text).split(/(\s+)/);
+let wordIndex = 0;
+
+words.forEach(part=>{
+
+if(/^\s+$/.test(part)){
+    element.appendChild(document.createTextNode(part));
+    return;
+}
+
+const span = document.createElement("span");
+span.className = "jarvis-word";
+span.textContent = part;
+span.style.animationDelay = (wordIndex * 0.025) + "s";
+wordIndex++;
+element.appendChild(span);
+
+});
+
 }else{  
   
 element.textContent =  
@@ -7455,8 +7455,12 @@ function sendMessage(){
 const text=textInput.value.trim();
 const imageData=selectedImageData;
 if(!text&&!imageData)return;
-const displayText=text||"📷 Analizza questa immagine";
+const displayText=text||"Analizza questa immagine";
 textInput.value="";
+
+/* Mantiene visibili domanda e risposta nella stessa conversazione. */
+chat.dataset.historyMode="on";
+chat.innerHTML="";
 addMsg(displayText);
 clearVisionSelection();
 processAi(text||"Descrivi con precisione questa immagine.",imageData);

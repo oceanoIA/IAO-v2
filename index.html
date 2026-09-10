@@ -1842,7 +1842,327 @@ border-radius:5px;
 #chat{z-index:45!important;}
 @media(max-width:900px){#chat{width:min(58vw,430px);left:2.5%;top:14%;max-height:calc(100vh - 250px);}.msg{font-size:10px}.msg.jarvis-response{max-width:95%;}}
 @media(max-width:600px){#chat{width:66vw;left:10px;top:12%;max-height:calc(100vh - 230px);}.msg{font-size:10px;line-height:1.4}.msg.jarvis-response{padding:7px 8px;}}
-</style>  </head>  <body>  <!-- =====================================================  
+
+
+/* =====================================================
+   RISPOSTE J.A.R.V.I.S. — TESTO + COPIA + ASCOLTO
+===================================================== */
+.jarvis-response{
+    padding-bottom:42px!important;
+}
+
+.jarvis-response-controls{
+    position:absolute;
+    left:10px;
+    bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    z-index:3;
+}
+
+.response-action{
+    width:28px;
+    height:28px;
+    padding:0;
+    border:1px solid rgba(235,242,255,.20);
+    border-radius:7px;
+    background:rgba(8,8,11,.55);
+    color:rgba(235,242,255,.68);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.18s ease;
+    backdrop-filter:blur(8px);
+}
+
+.response-action:hover{
+    color:#fff;
+    border-color:rgba(255,255,255,.55);
+    background:rgba(255,255,255,.08);
+}
+
+.response-action.copied,
+.response-action.playing{
+    color:#fff;
+    border-color:rgba(255,255,255,.72);
+    filter:drop-shadow(0 0 7px rgba(255,255,255,.45));
+}
+
+.copy-response-icon{
+    width:10px;
+    height:12px;
+    border:1.1px solid currentColor;
+    border-radius:2px;
+    position:relative;
+    display:block;
+}
+
+.copy-response-icon:before{
+    content:"";
+    position:absolute;
+    width:7px;
+    height:9px;
+    left:-4px;
+    top:-4px;
+    border:1.1px solid currentColor;
+    border-radius:2px;
+}
+
+.listen-response-icon{
+    width:8px;
+    height:11px;
+    border:1.1px solid currentColor;
+    border-radius:5px;
+    position:relative;
+    display:block;
+}
+
+.listen-response-icon:after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-5px;
+    width:10px;
+    height:6px;
+    transform:translateX(-50%);
+    border:1.1px solid currentColor;
+    border-top:none;
+    border-radius:0 0 7px 7px;
+}
+
+.listen-response-icon:before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-8px;
+    width:1px;
+    height:3px;
+    transform:translateX(-50%);
+    background:currentColor;
+}
+
+
+/* =====================================================
+   ACCESSO J.A.R.V.I.S. — LOGIN / CREAZIONE ACCOUNT
+===================================================== */
+#jarvisAuth{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.94);
+    backdrop-filter:blur(18px);
+}
+#jarvisAuth.hidden{display:none;}
+.auth-shell{
+    width:min(390px,calc(100vw - 36px));
+    border:1px solid rgba(235,242,255,.18);
+    background:rgba(5,6,9,.82);
+    box-shadow:0 0 50px rgba(0,0,0,.65), inset 0 0 30px rgba(255,255,255,.015);
+    padding:28px;
+    position:relative;
+}
+.auth-kicker{
+    font:9px monospace;
+    letter-spacing:3px;
+    color:rgba(235,242,255,.48);
+    margin-bottom:9px;
+}
+.auth-title{
+    font:300 25px Arial,sans-serif;
+    letter-spacing:5px;
+    color:rgba(245,248,255,.95);
+    margin-bottom:5px;
+}
+.auth-subtitle{
+    font:9px monospace;
+    letter-spacing:1.4px;
+    color:rgba(235,242,255,.42);
+    margin-bottom:24px;
+}
+.auth-form{display:flex;flex-direction:column;gap:9px;}
+.auth-input{
+    width:100%;
+    height:40px;
+    border:1px solid rgba(235,242,255,.14);
+    outline:none;
+    background:rgba(255,255,255,.025);
+    color:#fff;
+    padding:0 12px;
+    font:11px monospace;
+    letter-spacing:.6px;
+}
+.auth-input:focus{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.045);}
+.auth-input::placeholder{color:rgba(235,242,255,.28);}
+.auth-main-btn,.auth-switch-btn{
+    height:38px;
+    border:1px solid rgba(235,242,255,.20);
+    background:rgba(255,255,255,.045);
+    color:rgba(245,248,255,.88);
+    cursor:pointer;
+    font:9px monospace;
+    letter-spacing:2px;
+    transition:.18s ease;
+}
+.auth-main-btn:hover,.auth-switch-btn:hover{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.08);color:#fff;}
+.auth-switch-btn{background:transparent;border-color:transparent;color:rgba(235,242,255,.45);margin-top:3px;}
+.auth-switch-btn:hover{border-color:rgba(235,242,255,.18);}
+.auth-status{min-height:16px;margin-top:10px;font:9px monospace;letter-spacing:.7px;color:rgba(235,242,255,.52);}
+.auth-status.error{color:rgba(255,170,120,.92);}
+.auth-status.ok{color:rgba(180,245,255,.90);}
+.auth-note{margin-top:18px;padding-top:13px;border-top:1px solid rgba(235,242,255,.08);font:8px/1.5 monospace;letter-spacing:.5px;color:rgba(235,242,255,.28);}
+.auth-userbar{position:fixed;top:18px;left:24px;z-index:90;display:none;align-items:center;gap:8px;font:8px monospace;letter-spacing:1.4px;color:rgba(235,242,255,.42);}
+.auth-userbar.visible{display:flex;}
+.auth-user-dot{width:5px;height:5px;border:1px solid rgba(235,242,255,.55);border-radius:50%;}
+.auth-logout{border:0;background:transparent;color:rgba(235,242,255,.34);font:8px monospace;cursor:pointer;letter-spacing:1px;padding:0 0 0 5px;}
+.auth-logout:hover{color:#fff;}
+
+
+/* =====================================================
+   FEEDBACK / CREATOR CONTROL CENTER
+===================================================== */
+.feedback-launch,.admin-launch{
+ position:fixed;z-index:92;bottom:18px;border:1px solid rgba(235,242,255,.16);background:rgba(5,6,9,.58);color:rgba(235,242,255,.48);backdrop-filter:blur(10px);font:8px monospace;letter-spacing:1.5px;cursor:pointer;transition:.18s ease;
+}
+.feedback-launch{right:18px;padding:9px 11px;}
+.admin-launch{top:18px;right:18px;width:30px;height:26px;padding:0;}
+.feedback-launch:hover,.admin-launch:hover{color:#fff;border-color:rgba(255,255,255,.52);background:rgba(255,255,255,.06);}
+.feedback-prompt,.feedback-modal,.admin-modal{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.72);backdrop-filter:blur(12px);}
+.feedback-prompt.visible,.feedback-modal.visible,.admin-modal.visible{display:flex;}
+.feedback-card{width:min(410px,calc(100vw - 32px));border:1px solid rgba(235,242,255,.18);background:rgba(5,6,9,.92);box-shadow:0 20px 60px rgba(0,0,0,.55);padding:22px;}
+.feedback-kicker{font:8px monospace;letter-spacing:2px;color:rgba(235,242,255,.40);margin-bottom:10px;}
+.feedback-title{font:300 18px Arial,sans-serif;letter-spacing:2px;color:rgba(245,248,255,.92);margin-bottom:18px;}
+.feedback-actions{display:flex;gap:7px;margin-top:12px;}
+.feedback-actions button{flex:1;height:34px;border:1px solid rgba(235,242,255,.18);background:rgba(255,255,255,.035);color:rgba(245,248,255,.75);font:8px monospace;letter-spacing:1.5px;cursor:pointer;}
+.feedback-actions button:hover{border-color:rgba(255,255,255,.52);color:#fff;background:rgba(255,255,255,.07);}
+.feedback-input{width:100%;box-sizing:border-box;border:1px solid rgba(235,242,255,.14);background:rgba(255,255,255,.025);color:#fff;padding:10px;font:10px monospace;outline:none;margin-bottom:8px;}
+.feedback-textarea{min-height:130px;resize:vertical;line-height:1.5;}
+.feedback-input:focus{border-color:rgba(255,255,255,.42);}
+.feedback-status{min-height:15px;margin-top:9px;font:8px monospace;letter-spacing:.7px;color:rgba(180,245,255,.82);}
+.admin-modal{z-index:9999;align-items:stretch;justify-content:flex-end;background:rgba(0,0,0,.56);}
+.admin-shell{width:min(680px,94vw);height:100%;box-sizing:border-box;padding:26px;border-left:1px solid rgba(235,242,255,.15);background:rgba(5,6,9,.94);backdrop-filter:blur(18px);overflow:auto;}
+.admin-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;}
+.admin-title{font:300 25px Arial,sans-serif;letter-spacing:4px;color:#fff;}
+.admin-close{border:0;background:transparent;color:rgba(235,242,255,.45);font-size:24px;cursor:pointer;}
+.admin-refresh{height:28px;padding:0 10px;border:1px solid rgba(235,242,255,.14);background:rgba(255,255,255,.03);color:rgba(235,242,255,.55);font:8px monospace;letter-spacing:1px;cursor:pointer;margin-right:8px;}
+.admin-refresh:hover{color:#fff;border-color:rgba(255,255,255,.45);}
+.admin-online-badge.is-online{color:rgba(180,245,255,.95);}
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px;}
+.admin-stats>div{border:1px solid rgba(235,242,255,.10);padding:12px;background:rgba(255,255,255,.018);}
+.admin-stats span{display:block;font:7px monospace;letter-spacing:1px;color:rgba(235,242,255,.36);margin-bottom:7px;}
+.admin-stats strong{font:16px monospace;font-weight:400;color:rgba(245,248,255,.88);}
+.admin-section{margin-top:18px;}
+.admin-section-title{font:8px monospace;letter-spacing:2px;color:rgba(235,242,255,.46);padding-bottom:8px;border-bottom:1px solid rgba(235,242,255,.08);}
+.admin-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.admin-row{border:1px solid rgba(235,242,255,.08);padding:10px;background:rgba(255,255,255,.018);font:9px/1.45 monospace;color:rgba(235,242,255,.70);}
+.admin-row strong{color:#fff;font-weight:400;}
+.admin-online-badge{float:right;font:7px monospace;letter-spacing:1px;color:rgba(255,255,255,.42);}
+.admin-row[data-nickname] .admin-online-badge{color:rgba(255,255,255,.42);}
+.admin-row small{display:block;color:rgba(235,242,255,.34);margin-top:4px;}
+.admin-empty{padding:12px 0;font:8px monospace;color:rgba(235,242,255,.32);}
+.admin-note{margin-top:24px;padding-top:12px;border-top:1px solid rgba(235,242,255,.08);font:8px/1.5 monospace;color:rgba(235,242,255,.30);}
+@media(max-width:600px){.admin-shell{width:100%;padding:18px}.admin-stats{grid-template-columns:1fr}.feedback-launch{right:12px;bottom:12px}.admin-launch{right:12px;top:12px}}
+
+/* SYS 03 // ROUND CONTROL BUTTONS */
+button,
+input[type="button"],
+input[type="submit"],
+select {
+  border-radius: 999px;
+}
+
+.feedback-launch,
+.admin-launch {
+  position: fixed;
+  z-index: 9996;
+  border-radius: 999px !important;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.feedback-launch {
+  left: 18px !important;
+  right: auto !important;
+  bottom: 18px;
+  padding: 0 15px !important;
+}
+
+.admin-launch {
+  left: 18px !important;
+  right: auto !important;
+  top: 18px;
+  width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 !important;
+}
+
+.feedback-actions button {
+  border-radius: 999px !important;
+}
+
+.feedback-input,
+.feedback-card select,
+.feedback-card textarea {
+  border-radius: 16px;
+}
+
+@media(max-width:600px){
+  .feedback-launch {
+    left: 12px !important;
+    right: auto !important;
+    bottom: 12px;
+  }
+  .admin-launch {
+    left: 12px !important;
+    right: auto !important;
+    top: 12px;
+  }
+}
+</style>  </head>  <body>
+
+<!-- =====================================================
+     ACCESSO UTENTE
+===================================================== -->
+<div id="jarvisAuth" aria-modal="true" role="dialog">
+  <div class="auth-shell">
+    <div class="auth-kicker">J.A.R.V.I.S. // ACCESS CONTROL</div>
+    <div class="auth-title">SYSTEM LOGIN</div>
+    <div class="auth-subtitle" id="authSubtitle">AUTENTICAZIONE RICHIESTA</div>
+
+    <form id="loginForm" class="auth-form" autocomplete="on">
+      <input id="loginNickname" class="auth-input" type="text" maxlength="32" autocomplete="username" placeholder="NICKNAME" required>
+      <input id="loginPassword" class="auth-input" type="password" minlength="4" maxlength="128" autocomplete="current-password" placeholder="PASSWORD" required>
+      <button class="auth-main-btn" type="submit">ACCEDI</button>
+    </form>
+
+    <form id="registerForm" class="auth-form" autocomplete="on" style="display:none;">
+      <input id="registerNickname" class="auth-input" type="text" maxlength="32" autocomplete="username" placeholder="SCEGLI NICKNAME" required>
+      <input id="registerEmail" class="auth-input" type="email" maxlength="160" autocomplete="email" placeholder="EMAIL PER RECUPERO PASSWORD" required>
+      <input id="registerPassword" class="auth-input" type="password" minlength="4" maxlength="128" autocomplete="new-password" placeholder="SCEGLI PASSWORD" required>
+      <input id="registerPasswordConfirm" class="auth-input" type="password" minlength="4" maxlength="128" autocomplete="new-password" placeholder="CONFERMA PASSWORD" required>
+      <button class="auth-main-btn" type="submit">CREA ACCOUNT</button>
+    </form>
+
+    <button id="authForgot" class="auth-switch-btn" type="button">PASSWORD DIMENTICATA?</button>
+    <button id="authSwitch" class="auth-switch-btn" type="button">CREA UN ACCOUNT</button>
+    <div id="authStatus" class="auth-status" aria-live="polite"></div>
+    <div class="auth-note">ACCOUNT E PRESENZA SONO GESTITI DAL WORKER + DATABASE D1. Il Control Center del creatore legge i dati condivisi tra tutti i dispositivi.</div>
+  </div>
+</div>
+<div id="authUserbar" class="auth-userbar">
+  <span class="auth-user-dot"></span>
+  <span id="authCurrentUser">USER</span>
+  <button id="authLogout" class="auth-logout" type="button">LOGOUT</button>
+</div>
+  <!-- =====================================================  
      NEURAL CORE  
 ===================================================== -->  <div id="webgl-container"></div>  <div class="vignette"></div>  <!-- =====================================================  
      TITOLO  
@@ -2317,198 +2637,105 @@ hasCodeBlock
    MESSAGGI  
 ===================================================== */  
   
-function addMsg(  
-text,  
-jarvisResponse = false,  
-copyable = false  
-){  
-  
-chat.innerHTML = "";  
-  
-const element =  
-document.createElement("div");  
-  
-element.className =  
-"msg" +  
-(  
-jarvisResponse  
-?  
-" jarvis-response"  
-:  
-" user-question"  
-);  
-  
+function addMsg(
+text,
+jarvisResponse = false,
+copyable = false
+){
+
+const element = document.createElement("div");
+
+element.className =
+"msg" +
+(jarvisResponse ? " jarvis-response" : " user-question");
+
 if(jarvisResponse){
 
-const words = String(text).split(/(\s+)/);
-let wordIndex = 0;
+    const words = String(text).split(/(\s+)/);
+    let wordIndex = 0;
 
-words.forEach(part=>{
+    words.forEach(part=>{
+        if(/^\s+$/.test(part)){
+            element.appendChild(document.createTextNode(part));
+            return;
+        }
 
-if(/^\s+$/.test(part)){
-    element.appendChild(document.createTextNode(part));
-    return;
+        const span = document.createElement("span");
+        span.className = "jarvis-word";
+        span.textContent = part;
+        span.style.animationDelay = (wordIndex * 0.025) + "s";
+        wordIndex++;
+        element.appendChild(span);
+    });
+
+    const controls = document.createElement("div");
+    controls.className = "jarvis-response-controls";
+
+    const copyButton = document.createElement("button");
+    copyButton.className = "response-action copy-response-btn";
+    copyButton.type = "button";
+    copyButton.title = "Copia risposta";
+    copyButton.setAttribute("aria-label", "Copia risposta");
+    copyButton.innerHTML = '<span class="copy-response-icon"></span>';
+
+    copyButton.addEventListener("click", async event=>{
+        event.stopPropagation();
+        try{
+            if(navigator.clipboard && window.isSecureContext){
+                await navigator.clipboard.writeText(String(text));
+            }else{
+                const textarea = document.createElement("textarea");
+                textarea.value = String(text);
+                textarea.style.position = "fixed";
+                textarea.style.opacity = "0";
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                textarea.remove();
+            }
+            copyButton.classList.add("copied");
+            notify("TESTO COPIATO");
+            setTimeout(()=>copyButton.classList.remove("copied"),1800);
+        }catch(error){
+            console.warn("Clipboard:",error);
+            notify("COPIA NON DISPONIBILE");
+        }
+    });
+
+    const listenButton = document.createElement("button");
+    listenButton.className = "response-action listen-response-btn";
+    listenButton.type = "button";
+    listenButton.title = "Ascolta risposta";
+    listenButton.setAttribute("aria-label", "Ascolta risposta");
+    listenButton.innerHTML = '<span class="listen-response-icon"></span>';
+
+    listenButton.addEventListener("click", async event=>{
+        event.stopPropagation();
+        try{
+            listenButton.classList.add("playing");
+            await speak(String(text));
+        }catch(error){
+            console.warn("Voice:",error);
+            notify("VOCE NON DISPONIBILE");
+        }finally{
+            setTimeout(()=>listenButton.classList.remove("playing"),300);
+        }
+    });
+
+    controls.appendChild(copyButton);
+    controls.appendChild(listenButton);
+    element.appendChild(controls);
+
+}else{
+    element.textContent = String(text);
 }
 
-const span = document.createElement("span");
-span.className = "jarvis-word";
-span.textContent = part;
-span.style.animationDelay = (wordIndex * 0.025) + "s";
-wordIndex++;
-element.appendChild(span);
+chat.appendChild(element);
+requestAnimationFrame(()=>{ chat.scrollTop = chat.scrollHeight; });
 
-});
+}
 
-}else{  
-  
-element.textContent =  
-String(text);  
-  
-}  
-  
-  
-/* =====================================================  
-   COPIA  
-===================================================== */  
-  
-if(copyable){  
-  
-const copyButton =  
-document.createElement("button");  
-  
-copyButton.className =  
-"copy-btn";  
-  
-copyButton.type =  
-"button";  
-  
-copyButton.title =  
-"Copia risposta";  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.addEventListener(  
-"click",  
-async event=>{  
-  
-event.stopPropagation();  
-  
-try{  
-  
-await navigator.clipboard.writeText(  
-String(text)  
-);  
-  
-copyButton.textContent =  
-"✓";  
-  
-copyButton.classList.add(  
-"copied"  
-);  
-  
-notify(  
-"TESTO COPIATO"  
-);  
-  
-setTimeout(  
-()=>{  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.classList.remove(  
-"copied"  
-);  
-  
-},  
-1800  
-);  
-  
-}catch(error){  
-  
-console.warn(  
-"Clipboard:",  
-error  
-);  
-  
-const textarea =  
-document.createElement("textarea");  
-  
-textarea.value =  
-String(text);  
-  
-textarea.style.position =  
-"fixed";  
-  
-textarea.style.opacity =  
-"0";  
-  
-document.body.appendChild(  
-textarea  
-);  
-  
-textarea.select();  
-  
-try{  
-  
-document.execCommand(  
-"copy"  
-);  
-  
-copyButton.textContent =  
-"✓";  
-  
-copyButton.classList.add(  
-"copied"  
-);  
-  
-notify(  
-"TESTO COPIATO"  
-);  
-  
-}catch(e){  
-  
-notify(  
-"COPIA NON DISPONIBILE"  
-);  
-  
-}  
-  
-textarea.remove();  
-  
-setTimeout(  
-()=>{  
-  
-copyButton.textContent =  
-"⧉";  
-  
-copyButton.classList.remove(  
-"copied"  
-);  
-  
-},  
-1800  
-);  
-  
-}  
-  
-}  
-);  
-  
-element.appendChild(  
-copyButton  
-);  
-  
-}  
-  
-chat.appendChild(  
-element  
-);  
-  
-}  
-  
-  
+
 /* =====================================================  
    OROLOGIO  
 ===================================================== */  
@@ -5903,7 +6130,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -5926,7 +6153,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -5989,7 +6216,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -6059,7 +6286,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -6113,7 +6340,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -6129,7 +6356,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -6146,7 +6373,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -6185,7 +6412,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -6241,7 +6468,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -6324,7 +6551,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -6384,7 +6611,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return true;  
   
@@ -7220,7 +7447,7 @@ reply,
 true  
 );  
   
-speak(reply);  
+  
   
 return;  
   
@@ -7386,7 +7613,7 @@ addMemory(
 reply  
 );  
   
-speak(reply);  
+  
   
 setState("idle");  
   
@@ -7460,10 +7687,13 @@ textInput.value="";
 
 /* Mantiene visibili domanda e risposta nella stessa conversazione. */
 chat.dataset.historyMode="on";
-chat.innerHTML="";
+
 addMsg(displayText);
+remoteMessageCount++;
+recordRemoteMessage();
 clearVisionSelection();
 processAi(text||"Descrivi con precisione questa immagine.",imageData);
+if(remoteMessageCount>=5) setTimeout(updateFeedbackPromptState,450);
 }  
   
   
@@ -7576,4 +7806,417 @@ notify(
 "J.A.R.V.I.S. SYSTEM ONLINE"  
 );  
   
-</script>  </body>  </html>
+
+
+/* =====================================================
+   AUTENTICAZIONE REMOTA — CLOUDFLARE WORKER + D1
+===================================================== */
+const AUTH_SESSION_KEY = "jarvis_remote_session_v2";
+const OWNER_NICKNAME = "creatore";
+const jarvisAuth = document.getElementById("jarvisAuth");
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const authSwitch = document.getElementById("authSwitch");
+const authStatus = document.getElementById("authStatus");
+const authSubtitle = document.getElementById("authSubtitle");
+const authUserbar = document.getElementById("authUserbar");
+const authCurrentUser = document.getElementById("authCurrentUser");
+const authLogout = document.getElementById("authLogout");
+const authForgot = document.getElementById("authForgot");
+const feedbackBtn = document.getElementById("feedbackBtn");
+const feedbackPrompt = document.getElementById("feedbackPrompt");
+const feedbackModal = document.getElementById("feedbackModal");
+const feedbackYes = document.getElementById("feedbackYes");
+const feedbackNo = document.getElementById("feedbackNo");
+const feedbackSend = document.getElementById("feedbackSend");
+const feedbackClose = document.getElementById("feedbackClose");
+const feedbackText = document.getElementById("feedbackText");
+const feedbackType = document.getElementById("feedbackType");
+const feedbackStatus = document.getElementById("feedbackStatus");
+const adminBtn = document.getElementById("adminBtn");
+const adminModal = document.getElementById("adminModal");
+const adminClose = document.getElementById("adminClose");
+const adminRefresh = document.getElementById("adminRefresh");
+const resetModal = document.getElementById("resetModal");
+const resetSend = document.getElementById("resetSend");
+const resetClose = document.getElementById("resetClose");
+const resetStatus = document.getElementById("resetStatus");
+
+let remoteAuthUser = null;
+let feedbackPromptShown = false;
+let remoteMessageCount = 0;
+
+function getAuthToken(){
+    return sessionStorage.getItem(AUTH_SESSION_KEY) || "";
+}
+function saveAuthSession(token,user){
+    sessionStorage.setItem(AUTH_SESSION_KEY,token);
+    remoteAuthUser=user || null;
+}
+function clearAuthSession(){
+    sessionStorage.removeItem(AUTH_SESSION_KEY);
+    remoteAuthUser=null;
+}
+function currentJarvisUser(){
+    return remoteAuthUser?.nickname || sessionStorage.getItem("jarvis_user_nickname_v2") || "";
+}
+function isOwnerNickname(nickname){
+    return String(nickname||"").trim().toLowerCase() === OWNER_NICKNAME;
+}
+function setAuthStatus(message,type=""){
+    authStatus.textContent=message;
+    authStatus.className="auth-status"+(type?" "+type:"");
+}
+function showLogin(){
+    loginForm.style.display="flex";
+    registerForm.style.display="none";
+    authSwitch.textContent="CREA UN ACCOUNT";
+    authForgot.style.display="block";
+    authSubtitle.textContent="AUTENTICAZIONE RICHIESTA";
+    setAuthStatus("");
+}
+function showRegister(){
+    loginForm.style.display="none";
+    registerForm.style.display="flex";
+    authSwitch.textContent="TORNA AL LOGIN";
+    authForgot.style.display="none";
+    authSubtitle.textContent="NUOVO ACCOUNT // NICKNAME + PASSWORD + EMAIL";
+    setAuthStatus("");
+    setTimeout(()=>document.getElementById("registerNickname")?.focus(),50);
+}
+async function authRequest(action,payload={}){
+    const response=await fetch(API,{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            ...(getAuthToken()?{"Authorization":"Bearer "+getAuthToken()}: {})
+        },
+        body:JSON.stringify({action,...payload})
+    });
+    let data={};
+    try{ data=await response.json(); }catch(error){ data={}; }
+    if(!response.ok) throw new Error(data.error || "ERRORE DEL SERVER.");
+    return data;
+}
+async function enterRemoteSession(data){
+    if(!data?.token || !data?.user) throw new Error("SESSIONE SERVER NON VALIDA.");
+    saveAuthSession(data.token,data.user);
+    sessionStorage.setItem("jarvis_user_nickname_v2",data.user.nickname);
+    jarvisAuth.classList.add("hidden");
+    authCurrentUser.textContent=String(data.user.nickname).toUpperCase();
+    authUserbar.classList.add("visible");
+    adminBtn.style.display=data.user.owner || data.user.role==="owner" ? "block" : "none";
+    feedbackPromptShown=false;
+    await sendHeartbeat();
+}
+async function sendHeartbeat(){
+    const token=getAuthToken();
+    if(!token) return false;
+    try{
+        const data=await authRequest("heartbeat");
+        if(data.user) remoteAuthUser={...(remoteAuthUser||{}),...data.user};
+        return true;
+    }catch(error){
+        if(/SESSIONE|SCADUTA|NON VALIDA/i.test(String(error.message||""))){
+            clearAuthSession();
+            sessionStorage.removeItem("jarvis_user_nickname_v2");
+        }
+        return false;
+    }
+}
+async function recordRemoteMessage(){
+    if(!getAuthToken()) return;
+    try{
+        const data=await authRequest("message_event");
+        if(data?.ok) remoteMessageCount++;
+    }catch(error){ console.warn("MESSAGE EVENT:",error); }
+}
+
+loginForm?.addEventListener("submit",async event=>{
+    event.preventDefault();
+    const nickname=String(document.getElementById("loginNickname")?.value||"").trim();
+    const password=document.getElementById("loginPassword")?.value||"";
+    if(!nickname||!password){ setAuthStatus("INSERISCI NICKNAME E PASSWORD","error"); return; }
+    setAuthStatus("AUTENTICAZIONE...","");
+    try{
+        const data=await authRequest("login",{nickname,password});
+        loginForm.reset();
+        await enterRemoteSession(data);
+        setAuthStatus("");
+        updateFeedbackPromptState();
+    }catch(error){ setAuthStatus(String(error.message||"LOGIN FALLITO.").toUpperCase(),"error"); }
+});
+
+registerForm?.addEventListener("submit",async event=>{
+    event.preventDefault();
+    const nickname=String(document.getElementById("registerNickname")?.value||"").trim();
+    const email=String(document.getElementById("registerEmail")?.value||"").trim().toLowerCase();
+    const password=document.getElementById("registerPassword")?.value||"";
+    const confirm=document.getElementById("registerPasswordConfirm")?.value||"";
+    if(nickname.length<2){ setAuthStatus("IL NICKNAME DEVE AVERE ALMENO 2 CARATTERI","error"); return; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ setAuthStatus("INSERISCI UN'EMAIL VALIDA","error"); return; }
+    if(password.length<4){ setAuthStatus("LA PASSWORD DEVE AVERE ALMENO 4 CARATTERI","error"); return; }
+    if(password!==confirm){ setAuthStatus("LE PASSWORD NON COINCIDONO","error"); return; }
+    setAuthStatus("CREAZIONE ACCOUNT...","");
+    try{
+        const data=await authRequest("register",{nickname,email,password});
+        registerForm.reset();
+        await enterRemoteSession(data);
+        setAuthStatus("");
+    }catch(error){ setAuthStatus(String(error.message||"REGISTRAZIONE FALLITA.").toUpperCase(),"error"); }
+});
+
+authSwitch?.addEventListener("click",()=>registerForm.style.display==="none"?showRegister():showLogin());
+
+authLogout?.addEventListener("click",async()=>{
+    try{ if(getAuthToken()) await authRequest("logout"); }catch(error){}
+    clearAuthSession();
+    sessionStorage.removeItem("jarvis_user_nickname_v2");
+    authUserbar.classList.remove("visible");
+    adminBtn.style.display="none";
+    closeAllOverlays();
+    showLogin();
+    jarvisAuth.classList.remove("hidden");
+    setTimeout(()=>document.getElementById("loginNickname")?.focus(),50);
+});
+
+function showOverlay(el){ if(!el)return; el.classList.add("visible"); el.setAttribute("aria-hidden","false"); }
+function hideOverlay(el){ if(!el)return; el.classList.remove("visible"); el.setAttribute("aria-hidden","true"); }
+function closeAllOverlays(){ [feedbackPrompt,feedbackModal,adminModal,resetModal].forEach(hideOverlay); }
+function openFeedbackForm(){ hideOverlay(feedbackPrompt); feedbackStatus.textContent=""; feedbackText.value=""; showOverlay(feedbackModal); setTimeout(()=>feedbackText.focus(),40); }
+function updateFeedbackPromptState(){
+    const user=currentJarvisUser();
+    if(!user||isOwnerNickname(user)||feedbackPromptShown) return;
+    if(remoteMessageCount>=5){ feedbackPromptShown=true; showOverlay(feedbackPrompt); }
+}
+async function saveUserFeedback(){
+    const text=String(feedbackText.value||"").trim();
+    if(!currentJarvisUser()||!text){ feedbackStatus.textContent="SCRIVI UN FEEDBACK PRIMA DI INVIARE."; return; }
+    try{
+        await authRequest("feedback",{type:feedbackType.value,text});
+        feedbackPromptShown=true;
+        hideOverlay(feedbackModal);
+        notify("FEEDBACK RICEVUTO");
+    }catch(error){ feedbackStatus.textContent=String(error.message||"ERRORE INVIO FEEDBACK.").toUpperCase(); }
+}
+feedbackBtn?.addEventListener("click",openFeedbackForm);
+feedbackYes?.addEventListener("click",openFeedbackForm);
+feedbackNo?.addEventListener("click",()=>{ feedbackPromptShown=true; hideOverlay(feedbackPrompt); });
+feedbackSend?.addEventListener("click",saveUserFeedback);
+feedbackClose?.addEventListener("click",()=>hideOverlay(feedbackModal));
+
+let adminRefreshInFlight=false;
+
+async function loadAdminSnapshot(){
+    if(adminRefreshInFlight) return;
+    if(!getAuthToken() || !isOwnerNickname(currentJarvisUser())) return;
+
+    adminRefreshInFlight=true;
+    try{
+        const response=await authRequest("admin_snapshot");
+        /* The D1 Worker returns the admin snapshot directly, not inside response.data. */
+        const data=response?.data && typeof response.data === "object"
+            ? response.data
+            : (response || {});
+        const stats=data.stats||{};
+    document.getElementById("adminUserCount").textContent=String(stats.users??0);
+    document.getElementById("adminLoginCount").textContent=String(stats.logins??0);
+    document.getElementById("adminOnlineCount").textContent=String(stats.online??0);
+    document.getElementById("adminFeedbackCount").textContent=String(stats.feedbacks??0);
+    document.getElementById("adminMessageCount").textContent=String(stats.messages??0);
+    document.getElementById("adminSessionUser").textContent=(currentJarvisUser()||"—").toUpperCase();
+    const liveNow=new Date();
+    const liveTime=liveNow.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+    document.getElementById("adminDataStatus").textContent="LIVE // D1 // "+liveTime;
+
+    const usersEl=document.getElementById("adminUsers");
+    usersEl.innerHTML="";
+    if(!data.users?.length) usersEl.innerHTML='<div class="admin-empty">NESSUN ACCOUNT</div>';
+    (data.users||[]).forEach(account=>{
+        const row=document.createElement("div"); row.className="admin-row"; row.dataset.nickname=account.nickname;
+        const status=Number(account.online)===1?"ONLINE":"OFFLINE";
+        row.innerHTML='<strong>'+escapeAdminText(account.nickname)+'</strong><span class="admin-online-badge '+(status==="ONLINE"?"is-online":"")+'">'+status+'</span>'+(account.role==="owner"?' <small>CREATORE</small>':'')+
+          '<small>'+escapeAdminText(account.email||"EMAIL NON PRESENTE")+' // REGISTRATO '+formatAdminDate(account.created_at)+'</small>'+
+          '<small>LOGIN: '+Number(account.login_count||0)+' // MESSAGGI: '+Number(account.message_count||0)+' // ULTIMO ACCESSO: '+formatAdminDate(account.last_seen)+'</small>';
+        usersEl.appendChild(row);
+    });
+
+    const logEl=document.getElementById("adminLogins"); logEl.innerHTML="";
+    if(!data.logins?.length) logEl.innerHTML='<div class="admin-empty">NESSUN LOGIN REGISTRATO</div>';
+    (data.logins||[]).forEach(item=>{
+        const row=document.createElement("div"); row.className="admin-row";
+        row.innerHTML='<strong>'+escapeAdminText(item.nickname)+'</strong><small>'+formatAdminDate(item.created_at)+'</small>';
+        logEl.appendChild(row);
+    });
+
+    const fbEl=document.getElementById("adminFeedbacks"); fbEl.innerHTML="";
+    if(!data.feedbacks?.length) fbEl.innerHTML='<div class="admin-empty">NESSUN FEEDBACK</div>';
+    (data.feedbacks||[]).forEach(item=>{
+        const row=document.createElement("div"); row.className="admin-row";
+        row.innerHTML='<strong>'+escapeAdminText(item.nickname)+'</strong> // '+escapeAdminText(item.type||"feedback")+'<small>'+escapeAdminText(item.text)+'</small><small>'+formatAdminDate(item.created_at)+'</small>';
+        fbEl.appendChild(row);
+    });
+
+    const msgEl=document.getElementById("adminMessages");
+    if(msgEl){ msgEl.innerHTML=""; if(!data.recentMessages?.length) msgEl.innerHTML='<div class="admin-empty">NESSUN MESSAGGIO REGISTRATO</div>'; (data.recentMessages||[]).forEach(item=>{ const row=document.createElement("div"); row.className="admin-row"; row.innerHTML='<strong>'+escapeAdminText(item.nickname)+'</strong><small>'+formatAdminDate(item.created_at)+'</small>'; msgEl.appendChild(row); }); }
+
+    } finally {
+        adminRefreshInFlight=false;
+    }
+}
+function formatAdminDate(value){
+    if(!value) return "—";
+    const date=new Date(value); return Number.isNaN(date.getTime())?"—":date.toLocaleString("it-IT");
+}
+function escapeAdminText(value){ const div=document.createElement("div"); div.textContent=String(value??""); return div.innerHTML; }
+async function openAdmin(){
+    const user=currentJarvisUser();
+    if(!isOwnerNickname(user)){ notify("ACCESSO CREATORE NEGATO"); return; }
+    showOverlay(adminModal);
+    document.getElementById("adminDataStatus").textContent="CARICAMENTO...";
+    try{ await loadAdminSnapshot(); }catch(error){ document.getElementById("adminDataStatus").textContent="ERRORE"; notify(String(error.message||"CONTROL CENTER NON DISPONIBILE")); }
+}
+adminBtn?.addEventListener("click",openAdmin);
+adminClose?.addEventListener("click",()=>hideOverlay(adminModal));
+adminRefresh?.addEventListener("click",async()=>{ try{ await loadAdminSnapshot(); }catch(error){ notify("ERRORE AGGIORNAMENTO CONTROL CENTER"); } });
+
+function openReset(){ hideOverlay(resetModal); resetStatus.textContent=""; showOverlay(resetModal); }
+async function requestPasswordReset(){
+    resetStatus.textContent="Il recupero automatico richiede un servizio email collegato al Worker. Questa build registra l'account nel D1 ma non invia ancora email.";
+}
+authForgot?.addEventListener("click",openReset);
+resetSend?.addEventListener("click",requestPasswordReset);
+resetClose?.addEventListener("click",()=>hideOverlay(resetModal));
+[feedbackPrompt,feedbackModal,adminModal,resetModal].forEach(overlay=>overlay?.addEventListener("click",e=>{if(e.target===overlay)hideOverlay(overlay);}));
+
+/* Presence heartbeat: writes to D1 every 15 seconds. */
+setInterval(async()=>{
+    if(!getAuthToken()) return;
+    await sendHeartbeat();
+},15000);
+
+/* Creator Control Center: read D1 frequently while the panel is open.
+   This makes users/login/feedback/messages appear automatically without
+   requiring the AGGIORNA button. The request is protected against overlap. */
+setInterval(async()=>{
+    if(!getAuthToken()) return;
+    if(!adminModal?.classList.contains("visible")) return;
+    if(!isOwnerNickname(currentJarvisUser())) return;
+    try{ await loadAdminSnapshot(); }catch(error){ console.warn("CONTROL CENTER:",error); }
+},2000);
+
+(async function initJarvisAuth(){
+    const token=getAuthToken();
+    if(token){
+        try{
+            const data=await authRequest("heartbeat");
+            remoteAuthUser=data.user||null;
+            sessionStorage.setItem("jarvis_user_nickname_v2",remoteAuthUser?.nickname||"");
+            jarvisAuth.classList.add("hidden");
+            authCurrentUser.textContent=String(remoteAuthUser?.nickname||"").toUpperCase();
+            authUserbar.classList.add("visible");
+            adminBtn.style.display=isOwnerNickname(remoteAuthUser?.nickname)?"block":"none";
+            return;
+        }catch(error){ clearAuthSession(); }
+    }
+    jarvisAuth.classList.remove("hidden");
+    showLogin();
+    setTimeout(()=>document.getElementById("loginNickname")?.focus(),50);
+})();
+
+
+</script>
+
+<!-- =====================================================
+     FEEDBACK UTENTE
+===================================================== -->
+<button id="feedbackBtn" class="feedback-launch" type="button" title="Lascia un feedback">FEEDBACK</button>
+<div id="feedbackPrompt" class="feedback-prompt" aria-hidden="true">
+  <div class="feedback-card">
+    <div class="feedback-kicker">J.A.R.V.I.S. // USER FEEDBACK</div>
+    <div class="feedback-title">Vuoi lasciare un feedback?</div>
+    <div class="feedback-actions">
+      <button id="feedbackYes" type="button">SI</button>
+      <button id="feedbackNo" type="button">NO</button>
+    </div>
+  </div>
+</div>
+<div id="feedbackModal" class="feedback-modal" aria-hidden="true">
+  <div class="feedback-card feedback-form-card">
+    <div class="feedback-kicker">J.A.R.V.I.S. // FEEDBACK</div>
+    <div class="feedback-title">AIUTA A MIGLIORARE JARVIS</div>
+    <select id="feedbackType" class="feedback-input">
+      <option value="idea">IDEA DI MODIFICA</option>
+      <option value="nota">NOTA</option>
+      <option value="recensione">RECENSIONE</option>
+      <option value="problema">PROBLEMA</option>
+    </select>
+    <textarea id="feedbackText" class="feedback-input feedback-textarea" maxlength="2000" placeholder="Scrivi qui il tuo feedback..."></textarea>
+    <div class="feedback-actions">
+      <button id="feedbackSend" type="button">INVIA</button>
+      <button id="feedbackClose" type="button">CHIUDI</button>
+    </div>
+    <div id="feedbackStatus" class="feedback-status"></div>
+  </div>
+</div>
+
+<!-- =====================================================
+     CONTROL CENTER DEL CREATORE
+===================================================== -->
+<button id="adminBtn" class="admin-launch" type="button" title="JARVIS Control Center">SYS</button>
+<div id="adminModal" class="admin-modal" aria-hidden="true">
+  <div class="admin-shell">
+    <div class="admin-head">
+      <div>
+        <div class="feedback-kicker">J.A.R.V.I.S. // CREATOR MODE</div>
+        <div class="admin-title">CONTROL CENTER</div>
+      </div>
+      <div><button id="adminRefresh" class="admin-refresh" type="button">AGGIORNA</button><button id="adminClose" class="admin-close" type="button">×</button></div>
+    </div>
+    <div class="admin-stats">
+      <div><span>UTENTI REGISTRATI</span><strong id="adminUserCount">0</strong></div>
+      <div><span>LOGIN REGISTRATI</span><strong id="adminLoginCount">0</strong></div>
+      <div><span>ONLINE ADESSO</span><strong id="adminOnlineCount">0</strong></div>
+      <div><span>FEEDBACK</span><strong id="adminFeedbackCount">0</strong></div>
+      <div><span>MESSAGGI TOTALI</span><strong id="adminMessageCount">0</strong></div>
+      <div><span>SESSIONE</span><strong id="adminSessionUser">—</strong></div>
+      <div><span>STATO DATI</span><strong id="adminDataStatus">LOCALE</strong></div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">UTENTI</div>
+      <div id="adminUsers" class="admin-list"></div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">ULTIMI LOGIN</div>
+      <div id="adminLogins" class="admin-list"></div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">FEEDBACK UTENTI</div>
+      <div id="adminFeedbacks" class="admin-list"></div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">ATTIVITÀ RECENTE</div>
+      <div id="adminMessages" class="admin-list"></div>
+    </div>
+    <div class="admin-note">CONTROL CENTER REMOTO ATTIVO. Utenti, login, presenza, messaggi e feedback vengono salvati nel database D1 del Worker e sono visibili da dispositivi diversi. ONLINE indica le sessioni che hanno inviato un heartbeat nell’ultimo minuto.</div>
+  </div>
+</div>
+
+<!-- =====================================================
+     RESET PASSWORD
+===================================================== -->
+<div id="resetModal" class="feedback-modal" aria-hidden="true">
+  <div class="feedback-card feedback-form-card">
+    <div class="feedback-kicker">J.A.R.V.I.S. // ACCOUNT RECOVERY</div>
+    <div class="feedback-title">RECUPERO PASSWORD</div>
+    <input id="resetNickname" class="auth-input" type="text" maxlength="32" placeholder="NICKNAME">
+    <input id="resetEmail" class="auth-input" type="email" maxlength="160" placeholder="EMAIL ACCOUNT">
+    <div class="feedback-actions">
+      <button id="resetSend" type="button">INVIA RESET</button>
+      <button id="resetClose" type="button">CHIUDI</button>
+    </div>
+    <div id="resetStatus" class="feedback-status"></div>
+  </div>
+</div>
+
+</body>  </html>

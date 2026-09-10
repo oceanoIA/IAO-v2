@@ -8042,7 +8042,7 @@ function updateFeedbackPromptState(){
         if(feedbackPromptTimer) clearTimeout(feedbackPromptTimer);
         feedbackPromptTimer=setTimeout(()=>{
             hideFeedbackPrompt();
-        },4000);
+        },10000);
     }
 }
 async function saveUserFeedback(){

@@ -2291,7 +2291,24 @@ TESTA VOCE
 src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js">  
 </script>  <!-- =====================================================  
      THREE.JS  
-===================================================== -->  <script type="module">  
+===================================================== -->  <!-- =====================================================
+     RESET PASSWORD
+===================================================== -->
+<div id="resetModal" class="feedback-modal" aria-hidden="true">
+  <div class="feedback-card feedback-form-card">
+    <div class="feedback-kicker">J.A.R.V.I.S. // ACCOUNT RECOVERY</div>
+    <div class="feedback-title">RECUPERO PASSWORD</div>
+    <input id="resetNickname" class="auth-input" type="text" maxlength="32" placeholder="NICKNAME">
+    <input id="resetEmail" class="auth-input" type="email" maxlength="160" placeholder="EMAIL ACCOUNT">
+    <div class="feedback-actions">
+      <button id="resetSend" type="button">INVIA RESET</button>
+      <button id="resetClose" type="button">CHIUDI</button>
+    </div>
+    <div id="resetStatus" class="feedback-status"></div>
+  </div>
+</div>
+
+<script type="module">  
   
 import * as THREE from  
 "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js";  
@@ -7858,10 +7875,10 @@ const adminBtn = document.getElementById("adminBtn");
 const adminModal = document.getElementById("adminModal");
 const adminClose = document.getElementById("adminClose");
 const adminRefresh = document.getElementById("adminRefresh");
-const resetModal = document.getElementById("resetModal");
-const resetSend = document.getElementById("resetSend");
-const resetClose = document.getElementById("resetClose");
-const resetStatus = document.getElementById("resetStatus");
+let resetModal = null;
+let resetSend = null;
+let resetClose = null;
+let resetStatus = null;
 
 let remoteAuthUser = null;
 let feedbackPromptShown = false;
@@ -8042,7 +8059,7 @@ function updateFeedbackPromptState(){
         if(feedbackPromptTimer) clearTimeout(feedbackPromptTimer);
         feedbackPromptTimer=setTimeout(()=>{
             hideFeedbackPrompt();
-        },10000);
+        },4000);
     }
 }
 async function saveUserFeedback(){
@@ -8136,14 +8153,47 @@ adminBtn?.addEventListener("click",openAdmin);
 adminClose?.addEventListener("click",()=>hideOverlay(adminModal));
 adminRefresh?.addEventListener("click",async()=>{ try{ await loadAdminSnapshot(); }catch(error){ notify("ERRORE AGGIORNAMENTO CONTROL CENTER"); } });
 
-function openReset(){ hideOverlay(resetModal); resetStatus.textContent=""; showOverlay(resetModal); }
+function initPasswordReset(){
+    resetModal=document.getElementById("resetModal");
+    resetSend=document.getElementById("resetSend");
+    resetClose=document.getElementById("resetClose");
+    resetStatus=document.getElementById("resetStatus");
+    resetSend?.addEventListener("click",requestPasswordReset);
+    resetClose?.addEventListener("click",()=>hideOverlay(resetModal));
+    resetModal?.addEventListener("click",e=>{
+        if(e.target===resetModal) hideOverlay(resetModal);
+    });
+}
+function openReset(){
+    if(!resetModal) initPasswordReset();
+    if(!resetModal){
+        setAuthStatus("MODULO RECUPERO PASSWORD NON DISPONIBILE.","error");
+        return;
+    }
+    if(resetStatus) resetStatus.textContent="";
+    showOverlay(resetModal);
+    setTimeout(()=>document.getElementById("resetNickname")?.focus(),50);
+}
 async function requestPasswordReset(){
-    resetStatus.textContent="Il recupero automatico richiede un servizio email collegato al Worker. Questa build registra l'account nel D1 ma non invia ancora email.";
+    if(!resetStatus) resetStatus=document.getElementById("resetStatus");
+    const nickname=String(document.getElementById("resetNickname")?.value||"").trim();
+    const email=String(document.getElementById("resetEmail")?.value||"").trim();
+    if(!nickname || !email){
+        resetStatus.textContent="INSERISCI NICKNAME ED EMAIL.";
+        return;
+    }
+    resetStatus.textContent="INVIO RICHIESTA...";
+    try{
+        const data=await authRequest("password_reset_request",{nickname,email});
+        resetStatus.textContent=String(data?.message||"SE L'ACCOUNT ESISTE, RICEVERAI LE ISTRUZIONI VIA EMAIL.").toUpperCase();
+    }catch(error){
+        resetStatus.textContent=String(error?.message||"IMPOSSIBILE INVIARE LA RICHIESTA.").toUpperCase();
+    }
 }
 authForgot?.addEventListener("click",openReset);
-resetSend?.addEventListener("click",requestPasswordReset);
-resetClose?.addEventListener("click",()=>hideOverlay(resetModal));
-[feedbackPrompt,feedbackModal,adminModal,resetModal].forEach(overlay=>overlay?.addEventListener("click",e=>{if(e.target===overlay)hideOverlay(overlay);}));
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",initPasswordReset,{once:true});
+else initPasswordReset();
+[feedbackPrompt,feedbackModal,adminModal].forEach(overlay=>overlay?.addEventListener("click",e=>{if(e.target===overlay)hideOverlay(overlay);}));
 
 /* Presence heartbeat: writes to D1 every 15 seconds. */
 setInterval(async()=>{
@@ -8255,23 +8305,6 @@ setInterval(async()=>{
       <div id="adminMessages" class="admin-list"></div>
     </div>
     <div class="admin-note">CONTROL CENTER REMOTO ATTIVO. Utenti, login, presenza, messaggi e feedback vengono salvati nel database D1 del Worker e sono visibili da dispositivi diversi. ONLINE indica le sessioni che hanno inviato un heartbeat nell’ultimo minuto.</div>
-  </div>
-</div>
-
-<!-- =====================================================
-     RESET PASSWORD
-===================================================== -->
-<div id="resetModal" class="feedback-modal" aria-hidden="true">
-  <div class="feedback-card feedback-form-card">
-    <div class="feedback-kicker">J.A.R.V.I.S. // ACCOUNT RECOVERY</div>
-    <div class="feedback-title">RECUPERO PASSWORD</div>
-    <input id="resetNickname" class="auth-input" type="text" maxlength="32" placeholder="NICKNAME">
-    <input id="resetEmail" class="auth-input" type="email" maxlength="160" placeholder="EMAIL ACCOUNT">
-    <div class="feedback-actions">
-      <button id="resetSend" type="button">INVIA RESET</button>
-      <button id="resetClose" type="button">CHIUDI</button>
-    </div>
-    <div id="resetStatus" class="feedback-status"></div>
   </div>
 </div>
 

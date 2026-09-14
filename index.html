@@ -9,6 +9,15 @@ href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">  <style>
    BASE  
 ===================================================== */  
   
+:root{
+  --jarvis-accent:#00b4ff;
+  --jarvis-accent-rgb:0,180,255;
+  --jarvis-accent-soft:rgba(0,180,255,.28);
+  --jarvis-accent-mid:rgba(0,180,255,.55);
+  --jarvis-accent-strong:rgba(0,180,255,.85);
+  --jarvis-accent-glow:rgba(0,160,255,.22);
+}
+
 *{  
 box-sizing:border-box;  
 margin:0;  
@@ -100,15 +109,15 @@ z-index:30;
 font-family:monospace;
 font-size:10px;
 letter-spacing:4px;
-color:rgba(0,180,255,.72);
-text-shadow:0 0 10px rgba(0,180,255,.45);
+color:var(--jarvis-accent-mid);
+text-shadow:0 0 10px var(--jarvis-accent-glow);
 pointer-events:none;
 transition:color .35s ease, text-shadow .35s ease, opacity .3s ease;
 }
-.jarvis-state-label.state-idle{color:rgba(120,160,200,.55);text-shadow:none;}
-.jarvis-state-label.state-listening{color:#00ccff;text-shadow:0 0 14px rgba(0,204,255,.7);}
-.jarvis-state-label.state-thinking{color:#4488ff;text-shadow:0 0 14px rgba(68,136,255,.75);}
-.jarvis-state-label.state-speaking{color:#00ffcc;text-shadow:0 0 16px rgba(0,255,204,.8);}
+.jarvis-state-label.state-idle{color:rgba(160,170,180,.55);text-shadow:none;}
+.jarvis-state-label.state-listening{color:var(--jarvis-accent);text-shadow:0 0 14px var(--jarvis-accent-glow);}
+.jarvis-state-label.state-thinking{color:var(--jarvis-accent);filter:brightness(1.15);text-shadow:0 0 14px var(--jarvis-accent-glow);}
+.jarvis-state-label.state-speaking{color:var(--jarvis-accent);filter:brightness(1.35);text-shadow:0 0 16px var(--jarvis-accent-glow);}
 .jarvis-state-label.state-error{color:#ff6688;text-shadow:0 0 12px rgba(255,100,130,.6);}  
   
 /* =====================================================  
@@ -343,10 +352,10 @@ box-shadow:
 .command-wrapper:focus-within{  
   
 border-color:  
-rgba(0,180,255,.70);  
+var(--jarvis-accent-strong);  
   
 box-shadow:  
-0 0 20px rgba(0,160,255,.18);  
+0 0 20px var(--jarvis-accent-glow);  
 }  
   
 #textInput{  
@@ -439,14 +448,14 @@ border-radius:
   
 #micBtn.active{  
   
-color:#00ccff;  
+color:var(--jarvis-accent);  
   
 filter:  
 drop-shadow(  
-0 0 8px rgba(0,200,255,.95)  
+0 0 8px var(--jarvis-accent)  
 )  
 drop-shadow(  
-0 0 18px rgba(0,160,255,.55)  
+0 0 18px var(--jarvis-accent-glow)  
 );  
 }  
   
@@ -484,13 +493,13 @@ transition:.2s;
   
 color:white;  
   
-border-color:rgba(0,180,255,.85);  
+border-color:var(--jarvis-accent-strong);  
   
 background:  
-rgba(0,140,255,.16);  
+rgba(var(--jarvis-accent-rgb),.16);  
   
 box-shadow:  
-0 0 15px rgba(0,160,255,.22);  
+0 0 15px var(--jarvis-accent-glow);  
 }  
   
 /* =====================================================  
@@ -512,7 +521,7 @@ height:39px;
 padding:0 15px;  
   
 border:  
-1px solid rgba(0,180,255,.28);  
+1px solid var(--jarvis-accent-soft);  
   
 border-radius:22px;  
   
@@ -520,7 +529,7 @@ background:
 rgba(8,8,11,.82);  
   
 color:  
-rgba(180,220,255,.82);  
+rgba(220,230,245,.82);  
   
 font-size:10px;  
   
@@ -566,21 +575,21 @@ bottom:224px;
   
 color:#fff;  
   
-border-color:rgba(0,180,255,.85);  
+border-color:var(--jarvis-accent-strong);  
   
 background:  
-rgba(0,140,255,.14);  
+rgba(var(--jarvis-accent-rgb),.14);  
   
 box-shadow:  
-0 0 18px rgba(0,160,255,.22);  
+0 0 18px var(--jarvis-accent-glow);  
 }
 
 #focusBtn.active,
 #listenModeBtn.active{
-color:#00ccff;
-border-color:rgba(0,200,255,.75);
-background:rgba(0,160,255,.16);
-box-shadow:0 0 16px rgba(0,180,255,.28);
+color:var(--jarvis-accent);
+border-color:var(--jarvis-accent-strong);
+background:rgba(var(--jarvis-accent-rgb),.16);
+box-shadow:0 0 16px var(--jarvis-accent-glow);
 }
 
 /* FOCUS MODE: nasconde pannelli laterali */
@@ -595,6 +604,105 @@ body.focus-mode .admin-launch{
 }
 body.focus-mode .jarvis-title{
   opacity:.55;
+}
+
+/* =====================================================
+   COLOR THEME PICKER
+===================================================== */
+#colorThemePanel{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(.96);
+  z-index:9000;
+  width:min(420px,calc(100vw - 32px));
+  padding:22px;
+  display:none;
+  border:1px solid var(--jarvis-accent-soft);
+  border-radius:18px;
+  background:rgba(5,6,9,.96);
+  backdrop-filter:blur(20px);
+  box-shadow:0 20px 60px rgba(0,0,0,.65),0 0 30px var(--jarvis-accent-glow);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease, transform .22s ease;
+}
+#colorThemePanel.visible{
+  display:block;
+  opacity:1;
+  pointer-events:auto;
+  transform:translate(-50%,-50%) scale(1);
+}
+.color-theme-title{
+  font:300 16px Arial,sans-serif;
+  letter-spacing:3px;
+  color:rgba(245,248,255,.92);
+  margin-bottom:6px;
+}
+.color-theme-sub{
+  font:8px monospace;
+  letter-spacing:1.5px;
+  color:rgba(220,230,245,.45);
+  margin-bottom:16px;
+}
+.color-theme-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.color-swatch{
+  position:relative;
+  height:54px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.color-swatch:hover{
+  transform:scale(1.05);
+  border-color:rgba(255,255,255,.55);
+  box-shadow:0 0 18px rgba(255,255,255,.18);
+}
+.color-swatch.active{
+  border-color:#fff;
+  box-shadow:0 0 16px rgba(255,255,255,.35);
+}
+.color-swatch span{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  padding:4px 0;
+  font:7px monospace;
+  letter-spacing:1px;
+  text-align:center;
+  color:#fff;
+  background:rgba(0,0,0,.55);
+  text-shadow:0 1px 2px #000;
+}
+.color-theme-actions{
+  margin-top:14px;
+  display:flex;
+  gap:8px;
+}
+.color-theme-actions button{
+  flex:1;
+  height:36px;
+  border:1px solid var(--jarvis-accent-soft);
+  border-radius:10px;
+  background:rgba(255,255,255,.04);
+  color:rgba(235,242,255,.8);
+  font:8px monospace;
+  letter-spacing:1.5px;
+  cursor:pointer;
+}
+.color-theme-actions button:hover{
+  border-color:var(--jarvis-accent-strong);
+  color:#fff;
+  background:rgba(var(--jarvis-accent-rgb),.12);
+}
+@media(max-width:600px){
+  .color-theme-grid{grid-template-columns:repeat(3,1fr);}
+  .color-swatch{height:48px;}
 }  
   
 #fullscreenBtn.active{  
@@ -746,11 +854,11 @@ height:6px;
   
 border-radius:50%;  
   
-background:#00b4ff;  
+background:var(--jarvis-accent);  
   
 box-shadow:  
-0 0 8px rgba(0,180,255,.95),  
-0 0 16px rgba(0,140,255,.45);  
+0 0 8px var(--jarvis-accent),  
+0 0 16px var(--jarvis-accent-glow);  
   
 animation:  
 statusPulse 1.4s infinite ease-in-out;  
@@ -1614,13 +1722,13 @@ pointer-events:none;
 padding:9px 13px;  
   
 border-left:  
-2px solid #00b4ff;  
+2px solid var(--jarvis-accent);  
   
 background:  
 rgba(5,10,18,.90);  
   
 color:  
-rgba(200,230,255,.88);  
+rgba(220,230,245,.88);  
   
 font-family:monospace;  
   
@@ -1629,7 +1737,7 @@ font-size:9px;
 letter-spacing:1px;  
   
 box-shadow:  
-0 0 20px rgba(0,160,255,.18);  
+0 0 20px var(--jarvis-accent-glow);  
   
 animation:  
 notificationIn .25s ease;  
@@ -2360,6 +2468,17 @@ placeholder="Chiedi qualcosa a JARVIS...">
 <button id="focusBtn" type="button" title="Nasconde i pannelli laterali">FOCUS</button>
 <button id="listenModeBtn" type="button" title="Ascolto continuo">LISTEN ∞</button>
 <button id="clearChatBtn" type="button" title="Pulisce la chat">CLEAR</button>
+
+<div id="colorThemePanel" aria-hidden="true">
+  <div class="color-theme-title">CAMBIA COLORE</div>
+  <div class="color-theme-sub">SCEGLI IL TEMA DELL'INTERFACCIA // BOTTONI · NEURONI · STATUS</div>
+  <div class="color-theme-grid" id="colorThemeGrid"></div>
+  <div class="color-theme-actions">
+    <button type="button" id="colorThemeClose">CHIUDI</button>
+    <button type="button" id="colorThemeReset">RESET BLU</button>
+  </div>
+</div>
+
   <!-- =====================================================  
      VOCE  
 ===================================================== -->  <div id="voicePanel">  <div class="voice-title">  
@@ -7559,7 +7678,10 @@ return;
 if(  
 await handleDeviceCommand(text)  
 )  
-return;  
+return;
+
+if(handleColorCommand(text))
+  return;
   
   
 const normalized =  
@@ -7942,6 +8064,181 @@ updateSystemPanel();
   
   
 /* =====================================================  
+   TEMA COLORE — CAMBIA COLORE  
+===================================================== */
+
+const THEME_COLORS = [
+  {name:"BLU", hex:"#00b4ff"},
+  {name:"CIANO", hex:"#00e5ff"},
+  {name:"ROSSO", hex:"#ff3355"},
+  {name:"VERDE", hex:"#00ff88"},
+  {name:"VIOLA", hex:"#a855ff"},
+  {name:"ARANCIO", hex:"#ff8800"},
+  {name:"ROSA", hex:"#ff55aa"},
+  {name:"ORO", hex:"#ffcc33"},
+  {name:"GIALLO", hex:"#ffe066"},
+  {name:"MAGENTA", hex:"#ff00aa"},
+  {name:"LIME", hex:"#aaff00"},
+  {name:"BIANCO", hex:"#e8f0ff"}
+];
+
+let currentThemeHex = "#00b4ff";
+let currentThemeName = "BLU";
+
+function hexToRgb(hex){
+  const h = String(hex).replace("#","");
+  const full = h.length === 3 ? h.split("").map(c=>c+c).join("") : h;
+  const n = parseInt(full, 16);
+  return {
+    r: (n >> 16) & 255,
+    g: (n >> 8) & 255,
+    b: n & 255
+  };
+}
+
+function hexToNumber(hex){
+  return parseInt(String(hex).replace("#",""), 16);
+}
+
+function shiftHex(hex, factor){
+  const {r,g,b} = hexToRgb(hex);
+  const clamp = v => Math.max(0, Math.min(255, Math.round(v)));
+  const nr = clamp(r * factor);
+  const ng = clamp(g * factor);
+  const nb = clamp(b * factor);
+  return (nr << 16) | (ng << 8) | nb;
+}
+
+function applyTheme(hex, name){
+  currentThemeHex = hex;
+  currentThemeName = name || hex;
+  const rgb = hexToRgb(hex);
+  const root = document.documentElement;
+  root.style.setProperty("--jarvis-accent", hex);
+  root.style.setProperty("--jarvis-accent-rgb", rgb.r + "," + rgb.g + "," + rgb.b);
+  root.style.setProperty("--jarvis-accent-soft", "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",.28)");
+  root.style.setProperty("--jarvis-accent-mid", "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",.55)");
+  root.style.setProperty("--jarvis-accent-strong", "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",.85)");
+  root.style.setProperty("--jarvis-accent-glow", "rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",.28)");
+
+  /* Neuroni: palette per stato derivata dal colore scelto */
+  if(typeof STATE_COLORS !== "undefined"){
+    STATE_COLORS.idle = shiftHex(hex, 0.72);
+    STATE_COLORS.listening = hexToNumber(hex);
+    STATE_COLORS.thinking = shiftHex(hex, 0.85);
+    STATE_COLORS.speaking = shiftHex(hex, 1.15);
+    STATE_COLORS.error = 0xff6688;
+    if(typeof setState === "function"){
+      setState(currentNeuralState || "idle");
+    }
+  }
+
+  document.querySelectorAll(".color-swatch").forEach(el=>{
+    el.classList.toggle("active", el.dataset.hex === hex);
+  });
+
+  try{
+    localStorage.setItem("jarvis_theme_v1", JSON.stringify({hex, name: currentThemeName}));
+  }catch(e){}
+}
+
+function openColorThemePanel(){
+  const panel = document.getElementById("colorThemePanel");
+  const grid = document.getElementById("colorThemeGrid");
+  if(!panel || !grid) return;
+
+  if(!grid.dataset.ready){
+    grid.innerHTML = "";
+    THEME_COLORS.forEach(c=>{
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "color-swatch" + (c.hex === currentThemeHex ? " active" : "");
+      btn.dataset.hex = c.hex;
+      btn.dataset.name = c.name;
+      btn.style.background = "linear-gradient(145deg," + c.hex + "," + c.hex + "99)";
+      btn.innerHTML = "<span>" + c.name + "</span>";
+      btn.addEventListener("click", ()=>{
+        applyTheme(c.hex, c.name);
+        notify("TEMA " + c.name + " ATTIVO");
+        addMsg("Interfaccia aggiornata: tema " + c.name.toLowerCase() + ".", true);
+        closeColorThemePanel();
+      });
+      grid.appendChild(btn);
+    });
+    grid.dataset.ready = "1";
+  }else{
+    document.querySelectorAll(".color-swatch").forEach(el=>{
+      el.classList.toggle("active", el.dataset.hex === currentThemeHex);
+    });
+  }
+
+  panel.classList.add("visible");
+  panel.setAttribute("aria-hidden", "false");
+}
+
+function closeColorThemePanel(){
+  const panel = document.getElementById("colorThemePanel");
+  if(!panel) return;
+  panel.classList.remove("visible");
+  panel.setAttribute("aria-hidden", "true");
+}
+
+function handleColorCommand(text){
+  const normalized = normalizeCommand(text);
+  const openPalette =
+    normalized === "cambia colore" ||
+    normalized === "cambia colori" ||
+    normalized === "cambia tema" ||
+    normalized === "colori" ||
+    normalized === "tema colore" ||
+    normalized.includes("cambia colore") ||
+    normalized.includes("apri colori") ||
+    normalized.includes("seleziona colore");
+
+  if(openPalette){
+    openColorThemePanel();
+    addMsg("Palette colori aperta. Scegli un colore per cambiare bottoni, neuroni e system status.", true);
+    return true;
+  }
+
+  /* Comandi diretti: "colore rosso", "tema verde" */
+  for(const c of THEME_COLORS){
+    const n = normalizeCommand(c.name);
+    if(
+      normalized === "colore " + n ||
+      normalized === "tema " + n ||
+      normalized === "metti " + n ||
+      normalized === n
+    ){
+      /* avoid matching too short generic words unless explicit */
+      if(normalized === n && n.length < 4) continue;
+      applyTheme(c.hex, c.name);
+      addMsg("Tema " + c.name.toLowerCase() + " applicato.", true);
+      notify("TEMA " + c.name);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+document.getElementById("colorThemeClose")?.addEventListener("click", closeColorThemePanel);
+document.getElementById("colorThemeReset")?.addEventListener("click", ()=>{
+  applyTheme("#00b4ff", "BLU");
+  notify("TEMA BLU RIPRISTINATO");
+  closeColorThemePanel();
+});
+document.getElementById("colorThemePanel")?.addEventListener("click", e=>{
+  if(e.target.id === "colorThemePanel") closeColorThemePanel();
+});
+
+try{
+  const saved = JSON.parse(localStorage.getItem("jarvis_theme_v1") || "null");
+  if(saved?.hex) applyTheme(saved.hex, saved.name || "CUSTOM");
+}catch(e){}
+
+
+/* =====================================================  
    NUOVE FUNZIONI — FOCUS / LISTEN ∞ / CLEAR / SHORTCUTS  
 ===================================================== */
 
@@ -7981,6 +8278,7 @@ window.addEventListener("keydown", e=>{
   const typing = tag === "INPUT" || tag === "TEXTAREA" || e.target?.isContentEditable;
 
   if(e.key === "Escape"){
+    closeColorThemePanel();
     if(focusMode) toggleFocusMode();
     if(continuousListen) toggleContinuousListen();
     return;

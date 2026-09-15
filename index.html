@@ -133,7 +133,7 @@ letter-spacing:1px;
 }  
   
 /* =====================================================  
-   CHAT â€” RISPOSTA LATERALE  
+   CHAT — RISPOSTA LATERALE  
 ===================================================== */  
   
 #chat{  
@@ -714,7 +714,7 @@ transform:scale(1.25);
 }  
   
 /* =====================================================  
-   EARTH â€” TACTICAL GLOBE  
+   EARTH — TACTICAL GLOBE  
 ===================================================== */  
   
 .home-earth{  
@@ -1845,7 +1845,7 @@ border-radius:5px;
 
 
 /* =====================================================
-   RISPOSTE J.A.R.V.I.S. â€” TESTO + COPIA + ASCOLTO
+   RISPOSTE J.A.R.V.I.S. — TESTO + COPIA + ASCOLTO
 ===================================================== */
 .jarvis-response{
     padding-bottom:42px!important;
@@ -1945,7 +1945,7 @@ border-radius:5px;
 
 
 /* =====================================================
-   ACCESSO J.A.R.V.I.S. â€” LOGIN / CREAZIONE ACCOUNT
+   ACCESSO J.A.R.V.I.S. — LOGIN / CREAZIONE ACCOUNT
 ===================================================== */
 #jarvisAuth{
     position:fixed;
@@ -2147,7 +2147,11 @@ select {
     top: 12px;
   }
 }
-</style>  </head>  <body>
+
+.face-auth-btn{width:100%;height:36px;margin-top:9px;border:1px solid rgba(0,220,255,.28);background:rgba(0,220,255,.035);color:rgba(190,245,255,.82);font:9px monospace;letter-spacing:1.5px;cursor:pointer}.face-auth-btn:hover{border-color:rgba(0,220,255,.75);background:rgba(0,220,255,.08)}
+#faceAuthModal{position:fixed;inset:0;z-index:10020;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.78);backdrop-filter:blur(12px)}#faceAuthModal.visible{display:flex}.face-auth-panel{width:min(430px,calc(100vw - 30px));padding:20px;border:1px solid rgba(0,220,255,.28);background:rgba(3,8,12,.96)}#faceAuthVideo{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#000;transform:scaleX(-1);border:1px solid rgba(255,255,255,.12)}.face-auth-actions{display:flex;gap:8px;margin-top:10px}.face-auth-actions button{flex:1;height:34px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#dffaff;font:9px monospace;letter-spacing:1px;cursor:pointer}.face-auth-label{font:9px monospace;letter-spacing:1.5px;color:rgba(210,245,255,.65);margin-bottom:10px}.face-auth-status{min-height:18px;margin-top:10px;font:9px monospace;letter-spacing:.6px;color:rgba(210,245,255,.7)}
+</style>  <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+</head>  <body>
 
 <!-- =====================================================
      ACCESSO UTENTE
@@ -2163,6 +2167,7 @@ select {
       <input id="loginPassword" class="auth-input" type="password" minlength="4" maxlength="128" autocomplete="current-password" placeholder="PASSWORD" required>
       <button class="auth-main-btn" type="submit">ACCEDI</button>
     </form>
+    <button id="faceLoginBtn" class="face-auth-btn" type="button">RICONOSCIMENTO FACCIALE</button>
 
     <form id="registerForm" class="auth-form" autocomplete="on" style="display:none;">
       <input id="registerNickname" class="auth-input" type="text" maxlength="32" autocomplete="username" placeholder="SCEGLI NICKNAME" required>
@@ -2176,6 +2181,14 @@ select {
     <button id="authSwitch" class="auth-switch-btn" type="button">CREA UN ACCOUNT</button>
     <div id="authStatus" class="auth-status" aria-live="polite"></div>
     <div class="auth-note">ACCOUNT E PRESENZA SONO GESTITI DAL WORKER + DATABASE D1. Il Control Center del creatore legge i dati condivisi tra tutti i dispositivi.</div>
+  </div>
+</div>
+<div id="faceAuthModal" aria-hidden="true">
+  <div class="face-auth-panel">
+    <div class="face-auth-label">J.A.R.V.I.S. // FACE IDENTIFICATION</div>
+    <video id="faceAuthVideo" autoplay muted playsinline></video>
+    <div class="face-auth-actions"><button id="faceScanBtn" type="button">AVVIA SCANSIONE</button><button id="faceEnrollBtn" type="button">REGISTRA VOLTO</button><button id="faceCloseBtn" type="button">CHIUDI</button></div>
+    <div id="faceAuthStatus" class="face-auth-status"></div>
   </div>
 </div>
 <div id="authUserbar" class="auth-userbar">
@@ -2246,7 +2259,7 @@ BING ENGINE
 ===================================================== -->  <div id="tacticalMap">  <div id="map"></div>  <div class="map-overlay"></div>  <div class="map-header">  
 TACTICAL MAP  
 </div>  <button id="closeMap">  
-Ã—  
+×  
 </button>  </div>  <!-- =====================================================  
      WEB  
 ===================================================== -->  <div id="webSearchWindows"></div>  <div id="webSearchIndicator">  
@@ -2264,7 +2277,7 @@ autocomplete="off"
 placeholder="Chiedi qualcosa a JARVIS...">
 <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
 <button id="imageBtn" type="button" title="Invia immagine"><span class="camera-icon"></span></button>
-<div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">Ã—</button></div>
+<div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
 <button id="micBtn">  <span class="mic-icon"></span>
@@ -2274,9 +2287,9 @@ placeholder="Chiedi qualcosa a JARVIS...">
 </button>  </div>  <!-- =====================================================  
      PULSANTI  
 ===================================================== -->  <button id="fullscreenBtn">  
-â›¶ FULLSCREEN  
+⛶ FULLSCREEN  
 </button>  <button id="voiceBtn">  
-âš™ VOCE  
+⚙ VOCE  
 </button>  <!-- =====================================================  
      VOCE  
 ===================================================== -->  <div id="voicePanel">  <div class="voice-title">  
@@ -2402,7 +2415,7 @@ document.getElementById(
   
   
 /* =====================================================  
-   EARTH â€” TACTICAL GLOBE  
+   EARTH — TACTICAL GLOBE  
 ===================================================== */  
   
 const earthContainer =  
@@ -3112,7 +3125,7 @@ return texture;
   
   
 /* =====================================================  
-   CONVERSIONE LAT/LON â†’ SFERA  
+   CONVERSIONE LAT/LON → SFERA  
 ===================================================== */  
   
 function latLonToVector3(  
@@ -3689,7 +3702,7 @@ false
   
   
 /* =====================================================  
-   THREE.JS â€” NEURONI  
+   THREE.JS — NEURONI  
 ===================================================== */  
   
 let scene;  
@@ -3718,7 +3731,7 @@ let targetEnergy = 0.15;
   
   
 /* =====================================================  
-   VOCE â€” ANALISI IN TEMPO REALE  
+   VOCE — ANALISI IN TEMPO REALE  
 ===================================================== */  
   
 let audioContext = null;  
@@ -3937,7 +3950,7 @@ amplified,
   
   
 /* =====================================================  
-   TEXTURE NEURONE â€” BIANCO FUTURISTICO  
+   TEXTURE NEURONE — BIANCO FUTURISTICO  
 ===================================================== */  
   
 function createNeuronTexture(){  
@@ -4230,7 +4243,7 @@ particles
   
   
 notify(  
-"NEURAL CORE ONLINE â€” 5500 NEURONS"  
+"NEURAL CORE ONLINE — 5500 NEURONS"  
 );  
   
 animateNeuralCore();  
@@ -4323,7 +4336,7 @@ targetEnergy = 0.15;
   
   
 /* =====================================================  
-   ANIMAZIONE â€” SFERA REATTIVA  
+   ANIMAZIONE — SFERA REATTIVA  
 ===================================================== */  
   
 function animateNeuralCore(){  
@@ -5270,11 +5283,11 @@ ${safeTitle}
 <div class="web-window-controls">  
   
 <button class="web-window-btn minimize-web">  
-âˆ’  
+−  
 </button>  
   
 <button class="web-window-btn close-web">  
-Ã—  
+×  
 </button>  
   
 </div>  
@@ -5289,7 +5302,7 @@ loading="eager">
 </iframe>  
   
 <button class="web-window-open">  
-â†— APRI SITO  
+↗ APRI SITO  
 </button>  
   
 </div>  
@@ -5615,14 +5628,14 @@ Intl.DateTimeFormat()
   
   
 /* =====================================================  
-   CAPACITÃ€ REALI DI J.A.R.V.I.S.  
+   CAPACITÀ REALI DI J.A.R.V.I.S.  
 ===================================================== */  
   
 /*  
    IMPORTANTE:  
   
-   Questo registro descrive esclusivamente ciÃ² che il browser  
-   puÃ² realmente verificare o controllare.  
+   Questo registro descrive esclusivamente ciò che il browser  
+   può realmente verificare o controllare.  
   
    FALSE / NON DISPONIBILE significa che JARVIS NON deve  
    dichiarare quella funzione come disponibile.  
@@ -6051,7 +6064,7 @@ false
   
   
 /* =====================================================  
-   SNAPSHOT CAPACITÃ€ REALI  
+   SNAPSHOT CAPACITÀ REALI  
 ===================================================== */  
   
 async function getJarvisCapabilitiesSnapshot(){  
@@ -6109,7 +6122,7 @@ earthLongitude !== null
   
   
 /* =====================================================  
-   RISPOSTE LOCALI â€” DATI CHE JARVIS PUÃ’ VERIFICARE  
+   RISPOSTE LOCALI — DATI CHE JARVIS PUÒ VERIFICARE  
 ===================================================== */  
   
 async function handleDeviceCommand(text){  
@@ -6144,7 +6157,7 @@ await getBatteryData();
 if(!battery.available){  
   
 const reply =  
-"Non posso leggere la batteria: la Battery API non Ã¨ disponibile in questo browser.";  
+"Non posso leggere la batteria: la Battery API non è disponibile in questo browser.";  
   
 addMsg(  
 reply,  
@@ -6158,13 +6171,13 @@ return true;
 }  
   
 const reply =  
-"La batteria rilevata dal browser Ã¨ al " +  
+"La batteria rilevata dal browser è al " +  
 battery.level +  
 "%. " +  
 (  
 battery.charging  
 ?  
-"Il dispositivo Ã¨ in carica."  
+"Il dispositivo è in carica."  
 :  
 "Il dispositivo non risulta in carica."  
 );  
@@ -6298,7 +6311,7 @@ device.platform +
 reply +=  
 " Risoluzione dello schermo: " +  
 device.screenWidth +  
-" Ã— " +  
+" × " +  
 device.screenHeight +  
 ".";  
   
@@ -6324,7 +6337,7 @@ normalized ===
 "dove sono"  
 ||  
 normalized ===  
-"qual Ã¨ la mia posizione"  
+"qual è la mia posizione"  
 ||  
 normalized ===  
 "qual e la mia posizione"  
@@ -6349,7 +6362,7 @@ earthLongitude !== null
 ){  
   
 const reply =  
-"La posizione del dispositivo Ã¨ stata ottenuta tramite la geolocalizzazione del browser. " +  
+"La posizione del dispositivo è stata ottenuta tramite la geolocalizzazione del browser. " +  
 "Coordinate: " +  
 earthLatitude.toFixed(5) +  
 ", " +  
@@ -6370,7 +6383,7 @@ return true;
 if(!navigator.geolocation){  
   
 const reply =  
-"La geolocalizzazione non Ã¨ disponibile in questo browser.";  
+"La geolocalizzazione non è disponibile in questo browser.";  
   
 addMsg(  
 reply,  
@@ -6465,22 +6478,22 @@ let reply;
 if(mic.listening){  
   
 reply =  
-"Il riconoscimento vocale Ã¨ attualmente in ascolto.";  
+"Il riconoscimento vocale è attualmente in ascolto.";  
   
 }else if(mic.monitor){  
   
 reply =  
-"Il monitor audio Ã¨ attivo.";  
+"Il monitor audio è attivo.";  
   
 }else if(mic.speechRecognition){  
   
 reply =  
-"Il riconoscimento vocale Ã¨ disponibile, ma non Ã¨ attualmente in ascolto.";  
+"Il riconoscimento vocale è disponibile, ma non è attualmente in ascolto.";  
   
 }else{  
   
 reply =  
-"Il riconoscimento vocale non Ã¨ disponibile in questo browser.";  
+"Il riconoscimento vocale non è disponibile in questo browser.";  
   
 }  
   
@@ -6497,7 +6510,7 @@ return true;
   
   
 /* =====================================================  
-   CAPACITÃ€  
+   CAPACITÀ  
 ===================================================== */  
   
 if(  
@@ -6562,7 +6575,7 @@ const reply =
 "Le funzioni realmente disponibili in questa interfaccia sono:\n\n" +  
 available  
 .map(  
-item => "â€¢ " + item  
+item => "• " + item  
 )  
 .join("\n") +  
 "\n\nNon ho collegamenti reali a telecamere di casa, serrature, luci, sistemi di sicurezza o altri telefoni.";  
@@ -6580,7 +6593,7 @@ return true;
   
   
 /* =====================================================  
-   RIFIUTO DI CAPACITÃ€ NON COLLEGATE  
+   RIFIUTO DI CAPACITÀ NON COLLEGATE  
 ===================================================== */  
   
 if(  
@@ -6624,7 +6637,7 @@ normalized.includes("controlla android")
 ){  
   
 const reply =  
-"Questa funzione non Ã¨ collegata a J.A.R.V.I.S. in questo momento. " +  
+"Questa funzione non è collegata a J.A.R.V.I.S. in questo momento. " +  
 "Non posso fingere di avere accesso a dispositivi o sistemi che non sono realmente integrati.";  
   
 addMsg(  
@@ -6714,9 +6727,9 @@ isFullscreen()
 fullscreenBtn.textContent =  
 isFullscreen()  
 ?  
-"â›¶ ESCI FULLSCREEN"  
+"⛶ ESCI FULLSCREEN"  
 :  
-"â›¶ FULLSCREEN";  
+"⛶ FULLSCREEN";  
   
 if(map){  
   
@@ -6781,7 +6794,7 @@ String(index);
   
 option.textContent =  
 voice.name +  
-" â€” " +  
+" — " +  
 voice.lang;  
   
 voiceSelector.appendChild(  
@@ -7367,7 +7380,7 @@ function showMemory(){
 if(!memory.length){  
   
 addMsg(  
-"La memoria JARVIS Ã¨ vuota."  
+"La memoria JARVIS è vuota."  
 );  
   
 return;  
@@ -7457,7 +7470,7 @@ getTimeData();
 const reply =  
 "Sono le " +  
 data.currentTime +  
-". Oggi Ã¨ " +  
+". Oggi è " +  
 data.dayOfWeek +  
 " " +  
 data.currentDate +  
@@ -7501,7 +7514,7 @@ controller.abort();
   
   
 /* =====================================================  
-   SNAPSHOT CAPACITÃ€ REALI  
+   SNAPSHOT CAPACITÀ REALI  
 ===================================================== */  
   
 const capabilities =  
@@ -7516,19 +7529,19 @@ const capabilityInstructions =
   
 "REGOLE OPERATIVE J.A.R.V.I.S.: " +  
   
-"Devi dichiarare esclusivamente capacitÃ  e dati realmente presenti nel payload capabilities. " +  
+"Devi dichiarare esclusivamente capacità e dati realmente presenti nel payload capabilities. " +  
   
 "Non inventare mai percentuali di batteria, modello del telefono, posizione, stato di dispositivi o altri dati hardware. " +  
   
-"Non dire di avere accesso a fotocamere, telecamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni perchÃ© NON sono integrati. " +  
+"Non dire di avere accesso a fotocamere, telecamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni perché NON sono integrati. " +  
   
-"Se una funzione Ã¨ false, unavailable o non presente, devi dire chiaramente che non Ã¨ disponibile. " +  
+"Se una funzione è false, unavailable o non presente, devi dire chiaramente che non è disponibile. " +  
   
-"Se un dato non Ã¨ verificabile dal browser, non devi stimarlo nÃ© indovinarlo. " +  
+"Se un dato non è verificabile dal browser, non devi stimarlo né indovinarlo. " +  
   
 "Il modello commerciale esatto del dispositivo non deve essere dedotto dallo user agent. " +  
   
-"La geolocalizzazione Ã¨ disponibile solo tramite il permesso del browser e le coordinate non devono essere inventate. " +  
+"La geolocalizzazione è disponibile solo tramite il permesso del browser e le coordinate non devono essere inventate. " +  
   
 "Rispondi in italiano quando l'utente parla italiano.";  
   
@@ -7830,7 +7843,7 @@ notify(
 
 
 /* =====================================================
-   AUTENTICAZIONE REMOTA â€” CLOUDFLARE WORKER + D1
+   AUTENTICAZIONE REMOTA — CLOUDFLARE WORKER + D1
 ===================================================== */
 const AUTH_SESSION_KEY = "jarvis_remote_session_v2";
 const OWNER_NICKNAME = "creatore";
@@ -7862,6 +7875,47 @@ let resetModal = null;
 let resetSend = null;
 let resetClose = null;
 let resetStatus = null;
+
+/* =====================================================
+   RICONOSCIMENTO FACCIALE LOCALE
+   Il volto non viene inviato al server: viene salvato nel browser
+   come descrittore numerico. Il login remoto richiede comunque la password.
+===================================================== */
+const faceLoginBtn=document.getElementById("faceLoginBtn");
+const faceAuthModal=document.getElementById("faceAuthModal");
+const faceAuthVideo=document.getElementById("faceAuthVideo");
+const faceScanBtn=document.getElementById("faceScanBtn");
+const faceEnrollBtn=document.getElementById("faceEnrollBtn");
+const faceCloseBtn=document.getElementById("faceCloseBtn");
+const faceAuthStatus=document.getElementById("faceAuthStatus");
+const FACE_KEY="jarvis_face_profiles_v1";
+let faceStream=null, faceModelsReady=false;
+function faceProfiles(){try{return JSON.parse(localStorage.getItem(FACE_KEY)||"[]")}catch(e){return []}}
+function setFaceStatus(t){if(faceAuthStatus)faceAuthStatus.textContent=t}
+async function loadFaceModels(){
+ if(faceModelsReady)return;
+ const base="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model";
+ setFaceStatus("CARICAMENTO MODELLI LOCALI...");
+ await faceapi.nets.tinyFaceDetector.loadFromUri(base);
+ await faceapi.nets.faceLandmark68Net.loadFromUri(base);
+ await faceapi.nets.faceRecognitionNet.loadFromUri(base);
+ faceModelsReady=true;
+}
+async function openFaceModal(){
+ faceAuthModal.classList.add("visible"); faceAuthModal.setAttribute("aria-hidden","false");
+ try{await loadFaceModels(); faceStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false}); faceAuthVideo.srcObject=faceStream; setFaceStatus("CAMERA PRONTA. AVVIA LA SCANSIONE.");}
+ catch(e){setFaceStatus("IMPOSSIBILE ACCEDERE ALLA CAMERA: "+e.message.toUpperCase())}
+}
+function closeFaceModal(){if(faceStream)faceStream.getTracks().forEach(t=>t.stop());faceStream=null;faceAuthVideo.srcObject=null;faceAuthModal.classList.remove("visible");faceAuthModal.setAttribute("aria-hidden","true")}
+async function getFaceDescriptor(){
+ const result=await faceapi.detectSingleFace(faceAuthVideo,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:.55})).withFaceLandmarks().withFaceDescriptor();
+ return result?.descriptor||null;
+}
+function distance(a,b){let x=0;for(let i=0;i<a.length;i++){let d=a[i]-b[i];x+=d*d}return Math.sqrt(x)}
+faceLoginBtn?.addEventListener("click",openFaceModal); faceCloseBtn?.addEventListener("click",closeFaceModal);
+faceScanBtn?.addEventListener("click",async()=>{try{setFaceStatus("ANALISI DEL VOLTO...");const d=await getFaceDescriptor();if(!d){setFaceStatus("NESSUN VOLTO RILEVATO. GUARDA LA CAMERA.");return}const profiles=faceProfiles();if(!profiles.length){setFaceStatus("NESSUN VOLTO REGISTRATO. ACCEDI E POI USA REGISTRA VOLTO.");return}let best=profiles.map(p=>({...p,dist:distance(d,p.descriptor)})).sort((a,b)=>a.dist-b.dist)[0];if(best.dist>.52){setFaceStatus("VOLTO NON RICONOSCIUTO.");return}document.getElementById("loginNickname").value=best.nickname;document.getElementById("loginPassword").focus();setFaceStatus("IDENTITÀ RICONOSCIUTA: "+best.nickname.toUpperCase()+". INSERISCI LA PASSWORD PER COMPLETARE L'ACCESSO.")}catch(e){setFaceStatus("ERRORE SCANSIONE: "+e.message.toUpperCase())}});
+faceEnrollBtn?.addEventListener("click",async()=>{try{const nickname=String(document.getElementById("loginNickname")?.value||"").trim();if(!nickname){setFaceStatus("INSERISCI PRIMA IL NICKNAME NEL LOGIN.");return}setFaceStatus("ACQUISIZIONE VOLTO...");const d=await getFaceDescriptor();if(!d){setFaceStatus("NESSUN VOLTO RILEVATO.");return}const profiles=faceProfiles().filter(p=>p.nickname.toLowerCase()!==nickname.toLowerCase());profiles.push({nickname,descriptor:Array.from(d),createdAt:Date.now()});localStorage.setItem(FACE_KEY,JSON.stringify(profiles));setFaceStatus("VOLTO REGISTRATO LOCALMENTE PER "+nickname.toUpperCase()+".")}catch(e){setFaceStatus("ERRORE REGISTRAZIONE: "+e.message.toUpperCase())}});
+
 
 let remoteAuthUser = null;
 let feedbackPromptShown = false;
@@ -8080,7 +8134,7 @@ async function loadAdminSnapshot(){
     document.getElementById("adminOnlineCount").textContent=String(stats.online??0);
     document.getElementById("adminFeedbackCount").textContent=String(stats.feedbacks??0);
     document.getElementById("adminMessageCount").textContent=String(stats.messages??0);
-    document.getElementById("adminSessionUser").textContent=(currentJarvisUser()||"â€”").toUpperCase();
+    document.getElementById("adminSessionUser").textContent=(currentJarvisUser()||"—").toUpperCase();
     const liveNow=new Date();
     const liveTime=liveNow.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
     document.getElementById("adminDataStatus").textContent="LIVE // D1 // "+liveTime;
@@ -8121,8 +8175,8 @@ async function loadAdminSnapshot(){
     }
 }
 function formatAdminDate(value){
-    if(!value) return "â€”";
-    const date=new Date(value); return Number.isNaN(date.getTime())?"â€”":date.toLocaleString("it-IT");
+    if(!value) return "—";
+    const date=new Date(value); return Number.isNaN(date.getTime())?"—":date.toLocaleString("it-IT");
 }
 function escapeAdminText(value){ const div=document.createElement("div"); div.textContent=String(value??""); return div.innerHTML; }
 async function openAdmin(){
@@ -8157,7 +8211,7 @@ function openReset(){
 }
 async function requestPasswordReset(){
     if(!resetStatus) resetStatus=document.getElementById("resetStatus");
-    if(resetStatus) resetStatus.textContent="IL RECUPERO PASSWORD VIA EMAIL Ãˆ DISATTIVATO IN QUESTA VERSIONE.";
+    if(resetStatus) resetStatus.textContent="IL RECUPERO PASSWORD VIA EMAIL È DISATTIVATO IN QUESTA VERSIONE.";
 }
 authForgot?.addEventListener("click",openReset);
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",initPasswordReset,{once:true});
@@ -8246,7 +8300,7 @@ setInterval(async()=>{
         <div class="feedback-kicker">J.A.R.V.I.S. // CREATOR MODE</div>
         <div class="admin-title">CONTROL CENTER</div>
       </div>
-      <div><button id="adminRefresh" class="admin-refresh" type="button">AGGIORNA</button><button id="adminClose" class="admin-close" type="button">Ã—</button></div>
+      <div><button id="adminRefresh" class="admin-refresh" type="button">AGGIORNA</button><button id="adminClose" class="admin-close" type="button">×</button></div>
     </div>
     <div class="admin-stats">
       <div><span>UTENTI REGISTRATI</span><strong id="adminUserCount">0</strong></div>
@@ -8254,7 +8308,7 @@ setInterval(async()=>{
       <div><span>ONLINE ADESSO</span><strong id="adminOnlineCount">0</strong></div>
       <div><span>FEEDBACK</span><strong id="adminFeedbackCount">0</strong></div>
       <div><span>MESSAGGI TOTALI</span><strong id="adminMessageCount">0</strong></div>
-      <div><span>SESSIONE</span><strong id="adminSessionUser">â€”</strong></div>
+      <div><span>SESSIONE</span><strong id="adminSessionUser">—</strong></div>
       <div><span>STATO DATI</span><strong id="adminDataStatus">LOCALE</strong></div>
     </div>
     <div class="admin-section">
@@ -8270,10 +8324,10 @@ setInterval(async()=>{
       <div id="adminFeedbacks" class="admin-list"></div>
     </div>
     <div class="admin-section">
-      <div class="admin-section-title">ATTIVITÃ€ RECENTE</div>
+      <div class="admin-section-title">ATTIVITÀ RECENTE</div>
       <div id="adminMessages" class="admin-list"></div>
     </div>
-    <div class="admin-note">CONTROL CENTER REMOTO ATTIVO. Utenti, login, presenza, messaggi e feedback vengono salvati nel database D1 del Worker e sono visibili da dispositivi diversi. ONLINE indica le sessioni che hanno inviato un heartbeat nellâ€™ultimo minuto.</div>
+    <div class="admin-note">CONTROL CENTER REMOTO ATTIVO. Utenti, login, presenza, messaggi e feedback vengono salvati nel database D1 del Worker e sono visibili da dispositivi diversi. ONLINE indica le sessioni che hanno inviato un heartbeat nell’ultimo minuto.</div>
   </div>
 </div>
 

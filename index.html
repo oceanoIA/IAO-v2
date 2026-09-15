@@ -8081,7 +8081,7 @@ function drawFaceMesh(result){
  if(box){ctx.strokeStyle="rgba(255,255,255,.55)";ctx.lineWidth=1;ctx.setLineDash([5,5]);ctx.strokeRect(box.x,box.y,box.width,box.height);ctx.setLineDash([]);}
  ctx.restore();
 }
-function closeFaceModal(){faceLiveRunning=false;if(faceOverlay)faceOverlay.getContext("2d")?.clearRect(0,0,faceOverlay.width,faceOverlay.height);if(faceStream)faceStream.getTracks().forEach(t=>t.stop());faceStream=null;faceAuthVideo.srcObject=null;faceAuthModal.classList.remove("visible","face-auth-modal-open");faceAuthModal.setAttribute("aria-hidden","true")}
+function closeFaceModal(){faceLiveRunning=false;faceProcessing=false;faceLastStatus="";if(faceOverlay)faceOverlay.getContext("2d")?.clearRect(0,0,faceOverlay.width,faceOverlay.height);if(faceStream)faceStream.getTracks().forEach(t=>t.stop());faceStream=null;faceAuthVideo.srcObject=null;faceAuthModal.classList.remove("visible","face-auth-modal-open");faceAuthModal.setAttribute("aria-hidden","true")}
 async function getFaceDescriptor(){
  const api=await ensureFaceApi();
  if(!faceAuthVideo.srcObject)throw new Error("VIDEOCAMERA NON ATTIVA");
@@ -8091,23 +8091,31 @@ async function getFaceDescriptor(){
  return result?.descriptor||null;
 }
 let faceLiveRunning=false;
+let faceProcessing=false;
+let faceLastStatus="";
 async function startFaceLive(){
  if(faceLiveRunning)return;
  faceLiveRunning=true;
  const api=await ensureFaceApi();
+ const detector=new api.TinyFaceDetectorOptions({inputSize:160,scoreThreshold:.35});
  const loop=async()=>{
   if(!faceLiveRunning||!faceAuthVideo.srcObject){return;}
-  if(faceAuthVideo.readyState>=2&&faceAuthVideo.videoWidth){
+  // Il tracking deve essere leggero: niente descriptor ad ogni frame e mai
+  // più rilevamenti contemporaneamente. La camera resta fluida mentre il
+  // mesh viene aggiornato circa 10 volte al secondo.
+  if(!faceProcessing && faceAuthVideo.readyState>=2 && faceAuthVideo.videoWidth){
+   faceProcessing=true;
    try{
-    const result=await api.detectSingleFace(faceAuthVideo,new api.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:.30})).withFaceLandmarks().withFaceDescriptor();
+    const result=await api.detectSingleFace(faceAuthVideo,detector).withFaceLandmarks();
     drawFaceMesh(result);
-    if(result) setFaceStatus("FACE TRACKING // IDENTITÀ IN ANALISI");
-    else setFaceStatus("FACE TRACKING // RICERCA VOLTO");
+    const status=result ? "FACE TRACKING // VOLTO AGGANCIATO" : "FACE TRACKING // RICERCA VOLTO";
+    if(status!==faceLastStatus){faceLastStatus=status;setFaceStatus(status);}
    }catch(e){}
+   faceProcessing=false;
   }
-  requestAnimationFrame(loop);
+  if(faceLiveRunning) setTimeout(loop,90);
  };
- requestAnimationFrame(loop);
+ loop();
 }
 function distance(a,b){let x=0;for(let i=0;i<a.length;i++){let d=a[i]-b[i];x+=d*d}return Math.sqrt(x)}
 faceLoginBtn?.addEventListener("click",openFaceModal); faceHomeBtn?.addEventListener("click",openFaceModal); faceCloseBtn?.addEventListener("click",closeFaceModal); faceCloseTop?.addEventListener("click",closeFaceModal);

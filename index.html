@@ -8054,40 +8054,97 @@ async function openFaceModal(){
  try{await loadFaceModels(); faceStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:640},height:{ideal:480}},audio:false}); faceAuthVideo.srcObject=faceStream; await faceAuthVideo.play().catch(()=>{}); setFaceStatus("FACE TRACKING // INIZIALIZZAZIONE"); startFaceLive();}
  catch(e){setFaceStatus("IMPOSSIBILE ACCEDERE ALLA CAMERA: "+e.message.toUpperCase())}
 }
-function drawFaceMesh(result){
- if(!faceOverlay||!window.faceapi)return;
- const w=faceAuthVideo.videoWidth||640,h=faceAuthVideo.videoHeight||480;
- if(faceOverlay.width!==w||faceOverlay.height!==h){faceOverlay.width=w;faceOverlay.height=h;}
- const ctx=faceOverlay.getContext("2d");
- ctx.clearRect(0,0,w,h);
- if(!result?.landmarks)return;
- const pts=result.landmarks.positions;
- const groups=[
+let faceMeshPoints=[];
+let faceMeshTarget=[];
+let faceMeshLastTime=0;
+let faceMeshEdges=[];
+
+function buildFaceMeshEdges(points){
+ const edges=new Set();
+ const add=(a,b)=>{if(a===b)return;const k=a<b?a+":"+b:b+":"+a;edges.add(k)};
+ // Connessioni anatomiche principali: contorno, occhi, naso e bocca.
+ const chains=[
   [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
   [17,18,19,20,21],[22,23,24,25,26],
   [27,28,29,30,31,32,33,34,35],
   [36,37,38,39,40,41,36],[42,43,44,45,46,47,42],
   [48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,48]
  ];
+ chains.forEach(c=>{for(let i=1;i<c.length;i++)add(c[i-1],c[i])});
+ // Reticolo triangolare leggero: ogni punto si collega ai vicini più prossimi.
+ for(let i=0;i<points.length;i++){
+  const near=[];
+  for(let j=0;j<points.length;j++){
+   if(i===j)continue;
+   const dx=points[i].x-points[j].x,dy=points[i].y-points[j].y;
+   near.push({j,d:dx*dx+dy*dy});
+  }
+  near.sort((a,b)=>a.d-b.d);
+  near.slice(0,3).forEach(n=>{
+   const maxDist=Math.max(42,Math.min(125,Math.sqrt(n.d)*1.9));
+   if(Math.sqrt(n.d)<=maxDist)add(i,n.j);
+  });
+ }
+ return [...edges].map(k=>k.split(':').map(Number));
+}
+
+function drawFaceMesh(){
+ if(!faceOverlay||!faceAuthVideo)return;
+ const w=faceAuthVideo.videoWidth||640,h=faceAuthVideo.videoHeight||480;
+ if(faceOverlay.width!==w||faceOverlay.height!==h){faceOverlay.width=w;faceOverlay.height=h;}
+ const ctx=faceOverlay.getContext('2d');
+ ctx.clearRect(0,0,w,h);
+ if(!faceMeshPoints.length)return;
+ const now=performance.now();
+ const alpha=Math.min(1,(now-faceMeshLastTime)/90||.35);
+ faceMeshLastTime=now;
+ if(faceMeshTarget.length===faceMeshPoints.length){
+  for(let i=0;i<faceMeshPoints.length;i++){
+   faceMeshPoints[i].x+=(faceMeshTarget[i].x-faceMeshPoints[i].x)*Math.max(.18,alpha);
+   faceMeshPoints[i].y+=(faceMeshTarget[i].y-faceMeshPoints[i].y)*Math.max(.18,alpha);
+  }
+ }
+ const pts=faceMeshPoints;
+ const edges=faceMeshEdges;
  ctx.save();
- ctx.lineWidth=Math.max(1.1,w/650);
- ctx.strokeStyle="rgba(80,235,255,.88)";
- ctx.shadowColor="rgba(0,220,255,.65)";
- ctx.shadowBlur=8;
- groups.forEach(g=>{ctx.beginPath();g.forEach((i,n)=>{const p=pts[i];if(!p)return;n?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.stroke();});
- ctx.shadowBlur=10;ctx.fillStyle="rgba(225,252,255,.96)";
- pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,Math.max(1.5,w/420),0,Math.PI*2);ctx.fill();});
- const box=result.detection?.box;
- if(box){ctx.strokeStyle="rgba(255,255,255,.55)";ctx.lineWidth=1;ctx.setLineDash([5,5]);ctx.strokeRect(box.x,box.y,box.width,box.height);ctx.setLineDash([]);}
+ ctx.lineWidth=Math.max(.65,w/1050);
+ ctx.strokeStyle='rgba(220,245,255,.62)';
+ ctx.shadowColor='rgba(190,235,255,.28)';
+ ctx.shadowBlur=3;
+ edges.forEach(([a,b])=>{
+  const p=pts[a],q=pts[b]; if(!p||!q)return;
+  ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();
+ });
+ ctx.shadowBlur=5;
+ ctx.fillStyle='rgba(240,252,255,.85)';
+ const r=Math.max(1,w/620);
+ pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fill()});
+ // Cornici tecniche agli angoli del volto, senza rettangolo invasivo.
+ if(faceMeshBox){
+  const b=faceMeshBox, x=b.x,y=b.y,ww=b.width,hh=b.height, l=Math.max(14,ww*.12);
+  ctx.strokeStyle='rgba(220,245,255,.72)';ctx.lineWidth=1;
+  [[x,y,x+l,y],[x,y,x,y+l],[x+ww,y,x+ww-l,y],[x+ww,y,x+ww,y+l],
+   [x,y+hh,x+l,y+hh],[x,y+hh,x,y+hh-l],[x+ww,y+hh,x+ww-l,y+hh],[x+ww,y+hh,x+ww,y+hh-l]]
+   .forEach(v=>{ctx.beginPath();ctx.moveTo(v[0],v[1]);ctx.lineTo(v[2],v[3]);ctx.stroke()});
+ }
  ctx.restore();
 }
-function closeFaceModal(){faceLiveRunning=false;faceProcessing=false;faceLastStatus="";if(faceOverlay)faceOverlay.getContext("2d")?.clearRect(0,0,faceOverlay.width,faceOverlay.height);if(faceStream)faceStream.getTracks().forEach(t=>t.stop());faceStream=null;faceAuthVideo.srcObject=null;faceAuthModal.classList.remove("visible","face-auth-modal-open");faceAuthModal.setAttribute("aria-hidden","true")}
+let faceMeshBox=null;
+function updateFaceMesh(result){
+ if(!result?.landmarks){faceMeshTarget=[];faceMeshBox=null;return;}
+ const pts=result.landmarks.positions||[];
+ faceMeshTarget=pts.map(p=>({x:p.x,y:p.y}));
+ faceMeshEdges=buildFaceMeshEdges(faceMeshTarget);
+ if(!faceMeshPoints.length)faceMeshPoints=faceMeshTarget.map(p=>({...p}));
+ faceMeshBox=result.detection?.box||null;
+}
+function closeFaceModal(){faceLiveRunning=false;faceProcessing=false;faceLastStatus="";faceMeshPoints=[];faceMeshTarget=[];faceMeshEdges=[];faceMeshBox=null;if(faceOverlay)faceOverlay.getContext("2d")?.clearRect(0,0,faceOverlay.width,faceOverlay.height);if(faceStream)faceStream.getTracks().forEach(t=>t.stop());faceStream=null;faceAuthVideo.srcObject=null;faceAuthModal.classList.remove("visible","face-auth-modal-open");faceAuthModal.setAttribute("aria-hidden","true")}
 async function getFaceDescriptor(){
  const api=await ensureFaceApi();
  if(!faceAuthVideo.srcObject)throw new Error("VIDEOCAMERA NON ATTIVA");
  await faceAuthVideo.play().catch(()=>{});
- const result=await api.detectSingleFace(faceAuthVideo,new api.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:.35})).withFaceLandmarks().withFaceDescriptor();
- drawFaceMesh(result);
+ const result=await api.detectSingleFace(faceAuthVideo,new api.TinyFaceDetectorOptions({inputSize:224,scoreThreshold:.35})).withFaceLandmarks().withFaceDescriptor();
+ updateFaceMesh(result);drawFaceMesh();
  return result?.descriptor||null;
 }
 let faceLiveRunning=false;
@@ -8098,22 +8155,21 @@ async function startFaceLive(){
  faceLiveRunning=true;
  const api=await ensureFaceApi();
  const detector=new api.TinyFaceDetectorOptions({inputSize:160,scoreThreshold:.35});
+ const render=()=>{if(!faceLiveRunning)return;drawFaceMesh();requestAnimationFrame(render)};
+ requestAnimationFrame(render);
  const loop=async()=>{
-  if(!faceLiveRunning||!faceAuthVideo.srcObject){return;}
-  // Il tracking deve essere leggero: niente descriptor ad ogni frame e mai
-  // più rilevamenti contemporaneamente. La camera resta fluida mentre il
-  // mesh viene aggiornato circa 10 volte al secondo.
-  if(!faceProcessing && faceAuthVideo.readyState>=2 && faceAuthVideo.videoWidth){
+  if(!faceLiveRunning||!faceAuthVideo.srcObject)return;
+  if(!faceProcessing&&faceAuthVideo.readyState>=2&&faceAuthVideo.videoWidth){
    faceProcessing=true;
    try{
     const result=await api.detectSingleFace(faceAuthVideo,detector).withFaceLandmarks();
-    drawFaceMesh(result);
-    const status=result ? "FACE TRACKING // VOLTO AGGANCIATO" : "FACE TRACKING // RICERCA VOLTO";
-    if(status!==faceLastStatus){faceLastStatus=status;setFaceStatus(status);}
+    updateFaceMesh(result);
+    const status=result?'FACE TRACKING // VOLTO AGGANCIATO':'FACE TRACKING // RICERCA VOLTO';
+    if(status!==faceLastStatus){faceLastStatus=status;setFaceStatus(status)}
    }catch(e){}
    faceProcessing=false;
   }
-  if(faceLiveRunning) setTimeout(loop,90);
+  if(faceLiveRunning)setTimeout(loop,100);
  };
  loop();
 }

@@ -2150,7 +2150,7 @@ select {
 
 .face-auth-btn{width:100%;height:36px;margin-top:9px;border:1px solid rgba(0,220,255,.28);background:rgba(0,220,255,.035);color:rgba(190,245,255,.82);font:9px monospace;letter-spacing:1.5px;cursor:pointer}.face-auth-btn:hover{border-color:rgba(0,220,255,.75);background:rgba(0,220,255,.08)}
 #faceAuthModal{position:fixed;inset:0;z-index:10020;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.78);backdrop-filter:blur(12px)}#faceAuthModal.visible{display:flex}.face-auth-panel{width:min(430px,calc(100vw - 30px));padding:20px;border:1px solid rgba(0,220,255,.28);background:rgba(3,8,12,.96)}#faceAuthVideo{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#000;transform:scaleX(-1);border:1px solid rgba(255,255,255,.12)}.face-auth-actions{display:flex;gap:8px;margin-top:10px}.face-auth-actions button{flex:1;height:34px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#dffaff;font:9px monospace;letter-spacing:1px;cursor:pointer}.face-auth-label{font:9px monospace;letter-spacing:1.5px;color:rgba(210,245,255,.65);margin-bottom:10px}.face-auth-status{min-height:18px;margin-top:10px;font:9px monospace;letter-spacing:.6px;color:rgba(210,245,255,.7)}
-</style>  <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+</style>  
 </head>  <body>
 
 <!-- =====================================================
@@ -7889,16 +7889,29 @@ const faceEnrollBtn=document.getElementById("faceEnrollBtn");
 const faceCloseBtn=document.getElementById("faceCloseBtn");
 const faceAuthStatus=document.getElementById("faceAuthStatus");
 const FACE_KEY="jarvis_face_profiles_v1";
-let faceStream=null, faceModelsReady=false;
+let faceStream=null, faceModelsReady=false, faceApiLoading=null;
 function faceProfiles(){try{return JSON.parse(localStorage.getItem(FACE_KEY)||"[]")}catch(e){return []}}
 function setFaceStatus(t){if(faceAuthStatus)faceAuthStatus.textContent=t}
+async function ensureFaceApi(){
+ if(window.faceapi)return window.faceapi;
+ if(faceApiLoading)return faceApiLoading;
+ faceApiLoading=new Promise((resolve,reject)=>{
+   const script=document.createElement("script");
+   script.src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js";
+   script.onload=()=>window.faceapi?resolve(window.faceapi):reject(new Error("LIBRERIA FACE API NON DISPONIBILE"));
+   script.onerror=()=>reject(new Error("IMPOSSIBILE CARICARE LA LIBRERIA FACE API"));
+   document.head.appendChild(script);
+ });
+ return faceApiLoading;
+}
 async function loadFaceModels(){
  if(faceModelsReady)return;
+ const api=await ensureFaceApi();
  const base="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model";
  setFaceStatus("CARICAMENTO MODELLI LOCALI...");
- await faceapi.nets.tinyFaceDetector.loadFromUri(base);
- await faceapi.nets.faceLandmark68Net.loadFromUri(base);
- await faceapi.nets.faceRecognitionNet.loadFromUri(base);
+ await api.nets.tinyFaceDetector.loadFromUri(base);
+ await api.nets.faceLandmark68Net.loadFromUri(base);
+ await api.nets.faceRecognitionNet.loadFromUri(base);
  faceModelsReady=true;
 }
 async function openFaceModal(){
@@ -7908,7 +7921,10 @@ async function openFaceModal(){
 }
 function closeFaceModal(){if(faceStream)faceStream.getTracks().forEach(t=>t.stop());faceStream=null;faceAuthVideo.srcObject=null;faceAuthModal.classList.remove("visible");faceAuthModal.setAttribute("aria-hidden","true")}
 async function getFaceDescriptor(){
- const result=await faceapi.detectSingleFace(faceAuthVideo,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:.55})).withFaceLandmarks().withFaceDescriptor();
+ const api=await ensureFaceApi();
+ if(!faceAuthVideo.srcObject)throw new Error("VIDEOCAMERA NON ATTIVA");
+ await faceAuthVideo.play().catch(()=>{});
+ const result=await api.detectSingleFace(faceAuthVideo,new api.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:.45})).withFaceLandmarks().withFaceDescriptor();
  return result?.descriptor||null;
 }
 function distance(a,b){let x=0;for(let i=0;i<a.length;i++){let d=a[i]-b[i];x+=d*d}return Math.sqrt(x)}

@@ -5391,20 +5391,28 @@ const r = Math.sqrt(px*px + py*py + pz*pz) || 0.001;
 const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
 // soft shell: attira verso raggio base senza rigidità
 // sfera sempre visibile: confinamento forte sul raggio
-const conf = 0.42 + energy * 0.05;
+const conf = 0.58 + energy * 0.04;
 const nr = r + (targetR - r) * conf;
 const scale = nr / r;
 px *= scale; py *= scale; pz *= scale;
 
 const r2 = Math.sqrt(px*px+py*py+pz*pz);
-const maxR = 1.38;
+const maxR = 1.32;
 if(r2 > maxR){
   const s2 = maxR / r2;
   px *= s2; py *= s2; pz *= s2;
 }
-if(r2 < 0.42){
-  const s2 = 0.42 / (r2 || 0.001);
+if(r2 < 0.55){
+  const s2 = 0.55 / (r2 || 0.001);
   px *= s2; py *= s2; pz *= s2;
+}
+// proiezione soft sul guscio: sfera leggibile, forme interne ok
+{
+  const rr = Math.sqrt(px*px+py*py+pz*pz) || 1;
+  const shell = targetR;
+  const blendShell = 0.25;
+  const ns = rr * (1 - blendShell) + shell * blendShell;
+  px *= ns / rr; py *= ns / rr; pz *= ns / rr;
 }
 
 neuronPositions[index] = px;
@@ -6913,7 +6921,153 @@ earthLongitude !== null
    RISPOSTE LOCALI — DATI CHE JARVIS PUÒ VERIFICARE  
 ===================================================== */  
   
-async function handleDeviceCommand(text){  
+
+/* =====================================================
+   NOTE / TIMER / SVEGLIA (locali + notifiche browser)
+===================================================== */
+const JARVIS_NOTES_KEY = "jarvis_notes_v1";
+const JARVIS_ALARMS_KEY = "jarvis_alarms_v1";
+let jarvisTimers = [];
+
+function loadNotes(){
+  try{ return JSON.parse(localStorage.getItem(JARVIS_NOTES_KEY)||"[]"); }catch(e){ return []; }
+}
+function saveNotes(list){
+  localStorage.setItem(JARVIS_NOTES_KEY, JSON.stringify(list.slice(-50)));
+}
+function loadAlarms(){
+  try{ return JSON.parse(localStorage.getItem(JARVIS_ALARMS_KEY)||"[]"); }catch(e){ return []; }
+}
+function saveAlarms(list){
+  localStorage.setItem(JARVIS_ALARMS_KEY, JSON.stringify(list));
+}
+
+async function ensureNotifyPermission(){
+  if(!("Notification" in window)) return false;
+  if(Notification.permission === "granted") return true;
+  if(Notification.permission === "denied") return false;
+  try{
+    const p = await Notification.requestPermission();
+    return p === "granted";
+  }catch(e){ return false; }
+}
+
+function showJarvisNotification(title, body){
+  notify(title + (body ? " — " + body : ""));
+  if("Notification" in window && Notification.permission === "granted"){
+    try{ new Notification(title, { body: body||"", tag: "jarvis-"+Date.now() }); }catch(e){}
+  }
+}
+
+function parseDurationMs(text){
+  const n = normalizeCommand(text);
+  let ms = 0;
+  const h = n.match(/(\d+)\s*(ore|ora|h)\b/);
+  const m = n.match(/(\d+)\s*(minuti|minuto|min)\b/);
+  const s = n.match(/(\d+)\s*(secondi|secondo|sec|s)\b/);
+  if(h) ms += parseInt(h[1],10)*3600000;
+  if(m) ms += parseInt(m[1],10)*60000;
+  if(s) ms += parseInt(s[1],10)*1000;
+  if(!ms){
+    const only = n.match(/\b(\d+)\b/);
+    if(only) ms = parseInt(only[1],10)*60000; // default minuti
+  }
+  return ms;
+}
+
+function parseAlarmTime(text){
+  const n = text.toLowerCase();
+  const m = n.match(/\b([01]?\d|2[0-3])[:\.]([0-5]\d)\b/) || n.match(/\balle\s*([01]?\d|2[0-3])\b/) || n.match(/\b(\d{1,2})\s*(di mattina|di sera|di pomeriggio)?/);
+  if(!m) return null;
+  let hh = parseInt(m[1],10);
+  let mm = m[2] && /^\d+$/.test(m[2]) ? parseInt(m[2],10) : 0;
+  if(/sera|pomeriggio/.test(n) && hh < 12) hh += 12;
+  if(hh > 23) return null;
+  const now = new Date();
+  const t = new Date(now);
+  t.setHours(hh, mm, 0, 0);
+  if(t.getTime() <= now.getTime()) t.setDate(t.getDate()+1);
+  return t;
+}
+
+function scheduleLocalTimer(ms, label){
+  const id = setTimeout(()=>{
+    showJarvisNotification("Timer Jarvis", label || "Tempo scaduto");
+    try{ if(window.speechSynthesis){ const u=new SpeechSynthesisUtterance("Timer scaduto"); u.lang="it-IT"; speechSynthesis.speak(u);} }catch(e){}
+  }, ms);
+  jarvisTimers.push(id);
+  return id;
+}
+
+function scheduleLocalAlarm(when, label){
+  const ms = when.getTime() - Date.now();
+  if(ms <= 0) return null;
+  const id = setTimeout(()=>{
+    showJarvisNotification("Sveglia Jarvis", label || ("Sveglia delle " + when.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"})));
+    try{ if(window.speechSynthesis){ const u=new SpeechSynthesisUtterance("Sveglia"); u.lang="it-IT"; speechSynthesis.speak(u);} }catch(e){}
+  }, ms);
+  const list = loadAlarms();
+  list.push({ id: String(id), at: when.toISOString(), label: label||"", created: Date.now() });
+  saveAlarms(list.filter(a => new Date(a.at).getTime() > Date.now() - 60000));
+  jarvisTimers.push(id);
+  return id;
+}
+
+function handleNotesTimerAlarm(text){
+  const normalized = normalizeCommand(text);
+  const raw = String(text||"");
+
+  // --- CREA NOTA ---
+  if(/^(crea|aggiungi|salva|scrivi)\s+(una\s+)?nota\b/.test(normalized) || normalized.startsWith("nota ")){
+    let body = raw.replace(/^(crea|aggiungi|salva|scrivi)\s+(una\s+)?nota\s*/i,"").replace(/^nota\s*/i,"").trim();
+    if(!body){ speakReply("Dimmi pure il testo della nota, Oceano."); return true; }
+    const list = loadNotes();
+    list.push({ text: body, at: Date.now() });
+    saveNotes(list);
+    speakReply("Nota salvata: «" + body + "». Ne hai " + list.length + " in memoria locale.");
+    return true;
+  }
+  if(normalized === "leggi note" || normalized === "mostra note" || normalized === "le mie note" || normalized.includes("elenco note")){
+    const list = loadNotes();
+    if(!list.length){ speakReply("Non ci sono note salvate, Oceano."); return true; }
+    const lines = list.slice(-10).map((n,i)=> (i+1)+". "+n.text).join("\n");
+    speakReply("Le tue ultime note:\n" + lines, true);
+    return true;
+  }
+
+  // --- TIMER ---
+  if(/\b(metti|avvia|imposta|crea)\s+(un\s+)?timer\b/.test(normalized) || normalized.startsWith("timer ")){
+    const ms = parseDurationMs(raw);
+    if(!ms || ms < 1000){ speakReply("Dimmi per quanti minuti o secondi, es. «metti un timer di 5 minuti»."); return true; }
+    ensureNotifyPermission();
+    scheduleLocalTimer(ms, "Timer di " + Math.round(ms/60000) + " min");
+    const mins = Math.floor(ms/60000), secs = Math.round((ms%60000)/1000);
+    let human = mins ? (mins + " minut" + (mins===1?"o":"i")) : "";
+    if(secs) human += (human?" e ":"") + secs + " secondi";
+    speakReply("Timer impostato per " + human + ". Ti avviserò allo scadere, Oceano.");
+    return true;
+  }
+
+  // --- SVEGLIA ---
+  if(/\b(metti|imposta|crea|sveglia)\b/.test(normalized) && /\b(sveglia|allarme)\b/.test(normalized) || /\bsvegliami\b/.test(normalized)){
+    const when = parseAlarmTime(raw);
+    if(!when){ speakReply("Dimmi a che ora, es. «metti una sveglia alle 7:30»."); return true; }
+    ensureNotifyPermission();
+    scheduleLocalAlarm(when, "Sveglia");
+    const ora = when.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+    const giorno = when.getDate() !== new Date().getDate() ? " (domani)" : "";
+    speakReply("Sveglia impostata per le " + ora + giorno + ". Jarvis ti avviserà a quell'ora, Oceano.");
+    showJarvisNotification("Sveglia impostata", "Alle " + ora + giorno);
+    return true;
+  }
+
+  return false;
+}
+
+
+async function handleDeviceCommand(text){
+  if(handleNotesTimerAlarm(text)) return true;
+  
   
 const normalized =  
 normalizeCommand(text);  
@@ -7909,6 +8063,185 @@ speakDevice(
    MICROFONO  
 ===================================================== */  
   
+
+/* =====================================================
+   COMANDI VOCALI AVANZATI
+===================================================== */
+const VOICE_WAKE = [
+  "jarvis", "hey jarvis", "ehi jarvis", "ei jarvis",
+  "ok jarvis", "okay jarvis", "ciao jarvis", "ehi yavis",
+  "hey yavis", "ok yavis"
+];
+
+let voiceSessionActive = false;
+let keepListening = false;
+let lastVoiceCommandAt = 0;
+
+function stripWakeWord(text){
+  let t = String(text || "").trim();
+  const low = t.toLowerCase();
+  for(const w of VOICE_WAKE){
+    if(low === w) return "";
+    if(low.startsWith(w + " ") || low.startsWith(w + ",") || low.startsWith(w + ".")){
+      t = t.slice(w.length).replace(/^[,.\s]+/, "").trim();
+      break;
+    }
+  }
+  return t;
+}
+
+function speakReply(text, alsoChat){
+  const msg = String(text || "").trim();
+  if(!msg) return;
+  if(alsoChat !== false) addMsg(msg, true);
+  if(typeof speak === "function"){
+    try{ speak(msg); }catch(e){}
+  }
+}
+
+function voiceConfirm(shortText){
+  notify(shortText);
+  if(typeof speak === "function"){
+    try{ speak(shortText); }catch(e){}
+  }
+}
+
+function handleAdvancedVoiceCommand(rawText){
+  const raw = stripWakeWord(rawText);
+  const n = normalizeCommand(raw);
+  if(!n) return false;
+
+  // STOP / silenzio
+  if(/^(stop|basta|silenzio|zitto|fermati|annulla|cancel|cancella)$/.test(n) || n.includes("smetti di parlare")){
+    try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+    keepListening = false;
+    try{ if(recognition && listening) recognition.stop(); }catch(e){}
+    setState("idle");
+    voiceConfirm("Ok, mi fermo.");
+    return true;
+  }
+
+  // resta in ascolto hands-free
+  if(/^(ascolta|resta in ascolto|continua ad ascoltare|modalita mani libere|mani libere)$/.test(n)){
+    keepListening = true;
+    voiceSessionActive = true;
+    setState("listening");
+    voiceConfirm("Resto in ascolto, Oceano.");
+    return true;
+  }
+
+  // spegni microfono
+  if(/^(spegni microfono|chiudi microfono|smetti di ascoltare|basta ascoltare)$/.test(n)){
+    keepListening = false;
+    voiceSessionActive = false;
+    try{ if(recognition) recognition.stop(); }catch(e){}
+    setState("idle");
+    speakReply("Microfono spento.");
+    return true;
+  }
+
+  // ripeti
+  if(n === "ripeti" || n.includes("ripeti lultima") || n.includes("dillo di nuovo") || n.includes("ripeti la risposta")){
+    const last = (typeof memory !== "undefined" && memory.length)
+      ? [...memory].reverse().find(m => m.role === "assistant")
+      : null;
+    if(last && last.content){
+      speakReply(last.content);
+    } else {
+      speakReply("Non ho una risposta recente da ripetere, Oceano.");
+    }
+    return true;
+  }
+
+  // ora / data
+  if(n === "che ore sono" || n === "che ora e" || n === "dimmi lora" || n === "che ora e adesso"){
+    const data = (typeof getTimeData === "function") ? getTimeData() : null;
+    if(data){
+      speakReply("Sono le " + data.currentTime + ". Oggi è " + data.dayOfWeek + " " + data.currentDate + ".");
+    }
+    return true;
+  }
+  if(n === "che giorno e" || n === "che data e" || n === "che giorno e oggi"){
+    const data = (typeof getTimeData === "function") ? getTimeData() : null;
+    if(data) speakReply("Oggi è " + data.dayOfWeek + " " + data.currentDate + ".");
+    return true;
+  }
+
+  // cosa puoi fare
+  if(n.includes("cosa puoi fare") || n.includes("quali comandi") || n.includes("aiuto vocale") || n === "aiuto"){
+    speakReply(
+      "Oceano, puoi dirmi: che ore sono, metti un timer, metti una sveglia, crea una nota, leggi le note, cerca sul web, apri la mappa, ripeti, stop, resta in ascolto. Oppure parlami normalmente."
+    );
+    return true;
+  }
+
+  // mostra / nascondi chat
+  if(n.includes("nascondi chat") || n.includes("chiudi chat") || n.includes("togli chat")){
+    if(typeof hideChat === "function") hideChat();
+    voiceConfirm("Chat nascosta.");
+    return true;
+  }
+  if(n.includes("mostra chat") || n.includes("apri chat")){
+    if(typeof showChat === "function") showChat();
+    voiceConfirm("Chat visibile.");
+    return true;
+  }
+
+  // fullscreen
+  if(n.includes("schermo intero") || n.includes("vai in fullscreen") || n === "fullscreen"){
+    try{
+      if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+    }catch(e){}
+    voiceConfirm("Schermo intero.");
+    return true;
+  }
+  if(n.includes("esci da fullscreen") || n.includes("chiudi schermo intero")){
+    try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
+    voiceConfirm("Fullscreen chiuso.");
+    return true;
+  }
+
+  // mappa / web già hanno handler dedicati: prova qui per feedback vocale
+  if(typeof handleMapCommand === "function" && handleMapCommand(raw)){
+    voiceConfirm("Mappa.");
+    return true;
+  }
+  if(typeof handleWebCommand === "function" && handleWebCommand(raw)){
+    voiceConfirm("Ricerca avviata.");
+    return true;
+  }
+
+  // cerca X (forma vocale breve)
+  const cerca = raw.match(/^(cerca|ricerca)\s+(?:su internet\s+|sul web\s+|online\s+)?(.+)$/i);
+  if(cerca && cerca[2] && typeof openWebSearch === "function"){
+    openWebSearch(cerca[2].trim());
+    speakReply("Cerco " + cerca[2].trim() + ".");
+    return true;
+  }
+
+  // note / timer / sveglia
+  if(typeof handleNotesTimerAlarm === "function" && handleNotesTimerAlarm(raw)){
+    return true;
+  }
+
+  // annulla timer
+  if(n.includes("annulla timer") || n.includes("cancella timer") || n.includes("stop timer")){
+    if(typeof jarvisTimers !== "undefined" && jarvisTimers.length){
+      jarvisTimers.forEach(id => { try{ clearTimeout(id); }catch(e){} });
+      jarvisTimers = [];
+      speakReply("Timer annullati.");
+    } else {
+      speakReply("Non ci sono timer attivi.");
+    }
+    return true;
+  }
+
+  // batteria / rete / dispositivo via handleDeviceCommand (async not here)
+  // lasciati a processAi / handleDeviceCommand
+
+  return false;
+}
+
 let recognition = null;  
   
 let listening = false;  
@@ -7924,57 +8257,50 @@ if(Recognition){
 recognition =  
 new Recognition();  
   
-recognition.lang =  
-"it-IT";  
-  
-recognition.continuous =  
-false;  
-  
-recognition.interimResults =  
-false;  
-  
-  
-recognition.onstart =  
-async ()=>{  
-  
-listening = true;  
-  
-micBtn.classList.add(  
-"active"  
-);  
-  
-setState("listening");  
-  
-  
-await startVoiceMonitor();  
-  
-};  
-  
-  
-recognition.onresult =  
-event=>{  
-  
-const result =  
-event.results[  
-event.results.length - 1  
-];  
-  
-if(!result)  
-return;  
-  
-const text =  
-result[0]  
-.transcript  
-.trim();  
-  
-if(!text)  
-return;  
-  
-textInput.value =  
-text;  
-  
-sendMessage();  
-  
+recognition.lang = "it-IT";
+recognition.continuous = true;
+recognition.interimResults = true;
+recognition.maxAlternatives = 3;
+
+recognition.onstart = async ()=>{
+  listening = true;
+  voiceSessionActive = true;
+  lastVoiceCommandAt = Date.now();
+  micBtn.classList.add("active");
+  setState("listening");
+  await startVoiceMonitor();
+};
+
+recognition.onresult = event=>{
+  const result = event.results[event.results.length - 1];
+  if(!result) return;
+  const text = (result[0] && result[0].transcript) ? result[0].transcript.trim() : "";
+  if(!text) return;
+
+  // interim: mostra in input senza inviare
+  if(!result.isFinal){
+    textInput.value = text;
+    setState("listening");
+    return;
+  }
+
+  const spoken = stripWakeWord(text);
+  if(!spoken){
+    // solo wake word, resta in ascolto
+    notify("Ti ascolto, Oceano");
+    textInput.value = "";
+    return;
+  }
+
+  textInput.value = spoken;
+
+  // comandi vocali locali avanzati
+  if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
+    textInput.value = "";
+    return;
+  }
+
+  sendMessage();
 };  
   
   
@@ -7999,23 +8325,18 @@ setState("idle");
 };  
   
   
-recognition.onend =  
-()=>{  
-  
-listening = false;  
-  
-micBtn.classList.remove(  
-"active"  
-);  
-  
-stopVoiceMonitor();  
-  
-if(!audioPlaying){  
-  
-setState("idle");  
-  
-}  
-  
+recognition.onend = ()=>{
+  listening = false;
+  micBtn.classList.remove("active");
+  stopVoiceMonitor();
+  if(keepListening){
+    try{ recognition.start(); }catch(e){}
+    return;
+  }
+  voiceSessionActive = false;
+  if(!audioPlaying){
+    setState("idle");
+  }
 };  
   
   
@@ -8218,6 +8539,29 @@ addMsg(
    PROCESS AI  
 ===================================================== */  
   
+
+function sanitizeJarvisReply(text){
+  let t = String(text || "");
+  const patterns = [
+    [/Tony Stark/gi, "Oceano"],
+    [/Tony\s+Stark/gi, "Oceano"],
+    [/\bTony\b/g, "Oceano"],
+    [/Iron Man/gi, "Oceano"],
+    [/Iron-Man/gi, "Oceano"],
+    [/Stark Industries/gi, "il lavoro di Oceano"],
+    [/Stark Industry/gi, "il lavoro di Oceano"],
+    [/creato da Oceano, noto come Oceano/gi, "creato da Oceano"],
+    [/creato da Oceano noto come Oceano/gi, "creato da Oceano"],
+    [/noto come Oceano/gi, ""],
+    [/conosciuto come Oceano/gi, ""]
+  ];
+  for(const [re, sub] of patterns){
+    t = t.replace(re, sub);
+  }
+  t = t.replace(/\s{2,}/g, " ").replace(/\s+\./g, ".").trim();
+  return t;
+}
+
 async function processAi(text, imageData = null){  
   
 if(  
@@ -8239,7 +8583,32 @@ return;
 if(  
 await handleDeviceCommand(text)  
 )  
-return;  
+return;
+
+/* Chi ha creato Jarvis: risposta locale, niente Marvel */
+{
+  const n = normalizeCommand(text);
+  if(
+    n.includes("chi ti ha creato") ||
+    n.includes("chi e il tuo creatore") ||
+    n.includes("chi e il tuo creatore") ||
+    n.includes("chi ti ha fatto") ||
+    n.includes("chi e il tuo padrone") ||
+    n.includes("sei stato creato da") ||
+    n.includes("tony stark") ||
+    n.includes("iron man")
+  ){
+    const reply = "Mi ha creato Oceano. Lui è il mio creatore. Non sono un personaggio dei film e non ho nessun legame con Tony Stark o Iron Man.";
+    addMsg(reply, true);
+    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
+      try{ speak(reply); }catch(e){}
+    }
+    addMemory("user", text);
+    addMemory("assistant", reply);
+    setState("idle");
+    return;
+  }
+}  
   
   
 const normalized =  
@@ -8313,25 +8682,31 @@ await getJarvisCapabilitiesSnapshot();
    ISTRUZIONI ANTI-INVENZIONE  
 ===================================================== */  
   
-const capabilityInstructions =  
-  
-"REGOLE OPERATIVE J.A.R.V.I.S.: " +  
-  
-"Devi dichiarare esclusivamente capacità e dati realmente presenti nel payload capabilities. " +  
-  
-"Non inventare mai percentuali di batteria, modello del telefono, posizione, stato di dispositivi o altri dati hardware. " +  
-  
-"Non dire di avere accesso a fotocamere, telecamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni perché NON sono integrati. " +  
-  
-"Se una funzione è false, unavailable o non presente, devi dire chiaramente che non è disponibile. " +  
-  
-"Se un dato non è verificabile dal browser, non devi stimarlo né indovinarlo. " +  
-  
-"Il modello commerciale esatto del dispositivo non deve essere dedotto dallo user agent. " +  
-  
-"La geolocalizzazione è disponibile solo tramite il permesso del browser e le coordinate non devono essere inventate. " +  
-  
-"Rispondi in italiano quando l'utente parla italiano.";  
+const capabilityInstructions =
+
+"REGOLE OPERATIVE J.A.R.V.I.S. (OBBLIGATORIE): " +
+
+"Il tuo creatore e interlocutore principale si chiama Oceano. Chiamalo sempre Oceano, mai Tony, mai Tony Stark, mai altri nomi di film. " +
+
+"Tu sei J.A.R.V.I.S., assistente reale di Oceano. NON sei un personaggio di film Marvel/Iron Man. " + "Se ti chiedono chi ti ha creato, la sola risposta corretta è: Oceano. Mai Tony Stark, mai Iron Man. " +
+
+"VIETATO inventare: Stark Industries, riunioni con dirigenti, prototipi Iron Man, lab fittizi, missioni di supereroi, agenda inventata. " +
+
+"Rispondi SOLO con cose reali e utili nella vita quotidiana (ora, meteo se disponibile, cosa fare oggi in modo generico e pratico, aiuto concreto). " +
+
+"Se non conosci l'agenda reale di Oceano, chiedi o proponi idee pratiche senza inventare appuntamenti. " +
+
+"Devi dichiarare esclusivamente capacità e dati realmente presenti nel payload capabilities. " +
+
+"Non inventare mai percentuali di batteria, modello del telefono, posizione, stato di dispositivi o altri dati hardware. " +
+
+"Non dire di avere accesso a fotocamere, telecamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni se non sono integrati. " +
+
+"Se una funzione non è disponibile, dillo chiaramente. " +
+
+"Se un dato non è verificabile dal browser, non stimarlo né indovinarlo. " +
+
+"Rispondi in italiano quando l'utente parla italiano. Sii naturale, umano e utile.";  
   
   
 const response =  
@@ -8370,6 +8745,8 @@ capabilities,
   
 systemInstructions:  
 capabilityInstructions,
+userName: (typeof currentJarvisUser==="function" ? (currentJarvisUser()||"Oceano") : "Oceano"),
+creatorName: "Oceano",
 
 image: imageData || null
   
@@ -8399,13 +8776,14 @@ const data =
 await response.json();  
   
   
-const reply =  
+let reply =  
 typeof data.response ===  
 "string"  
 ?  
 data.response.trim()  
 :  
-"";  
+"";
+reply = sanitizeJarvisReply(reply);  
   
   
 if(!reply){  
@@ -8428,7 +8806,11 @@ addMsg(
 reply,  
 true,  
 copyable  
-);  
+);
+
+if(voiceSessionActive && typeof speak === "function"){
+  try{ speak(reply); }catch(e){}
+}  
   
 addMemory(  
 "assistant",  

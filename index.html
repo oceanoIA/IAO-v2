@@ -8549,7 +8549,7 @@ recognition =
 new Recognition();  
   
 recognition.lang = "it-IT";
-recognition.continuous = !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "");
+recognition.continuous = false;
 recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
@@ -8558,6 +8558,10 @@ let lastHeard = "";
 let voiceSendTimer = null;
 let restartTimer = null;
 let micStartRequested = false;
+let listenRetries = 0;
+let listenWatchdog = null;
+const MAX_LISTEN_RETRIES = 5;
+const LISTEN_MAX_MS = 16000;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
@@ -8613,9 +8617,15 @@ function setListeningHint(on){
 }
 
 let voiceBusy = false;
+function clearListenWatchdog(){
+  if(listenWatchdog){ clearTimeout(listenWatchdog); listenWatchdog = null; }
+}
 function stopListeningSession(){
   micStartRequested = false;
   voiceSessionActive = false;
+  listenRetries = 0;
+  clearListenWatchdog();
+  if(restartTimer){ clearTimeout(restartTimer); restartTimer = null; }
   try{ if(recognition && listening) recognition.stop(); }catch(e){}
 }
 
@@ -8671,20 +8681,43 @@ function restartRecognitionSoon(){
     try{ stopVoiceMonitor(); }catch(e){}
     try{
       recognition.start();
-    }catch(e){}
-  }, 320);
+    }catch(e){
+      setTimeout(()=>{
+        if(!micStartRequested || listening || voiceBusy) return;
+        try{ recognition.start(); }catch(err){}
+      }, 400);
+    }
+  }, 280);
+}
+
+function finishListenWithoutSpeech(){
+  micStartRequested = false;
+  voiceSessionActive = false;
+  listenRetries = 0;
+  clearListenWatchdog();
+  if(micBtn) micBtn.classList.remove("active");
+  setListeningHint(false);
+  setState("idle");
 }
 
 async function beginListening(){
   lastInputWasVoice = false;
   micStartRequested = true;
   voiceSessionActive = true;
+  listenRetries = 0;
   resetVoiceBuffer();
   setListeningHint(true);
   setState("listening");
   if(micBtn) micBtn.classList.add("active");
   try{ stopVoiceMonitor(); }catch(e){}
-  await new Promise(resolve => setTimeout(resolve, 120));
+  clearListenWatchdog();
+  listenWatchdog = setTimeout(()=>{
+    if(!micStartRequested || voiceBusy) return;
+    const ready = currentVoiceText();
+    if(ready.length >= 2) commitVoiceUtterance();
+    else finishListenWithoutSpeech();
+  }, LISTEN_MAX_MS);
+  await new Promise(resolve => setTimeout(resolve, 80));
   try{
     recognition.start();
   }catch(e){
@@ -8706,7 +8739,7 @@ recognition.onspeechend = ()=>{
   const ready = currentVoiceText();
   if(ready.length >= 2){
     if(voiceSendTimer) clearTimeout(voiceSendTimer);
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 450);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 400);
   }
 };
 
@@ -8727,8 +8760,10 @@ recognition.onresult = event=>{
     const chunk = finals.join(" ").trim();
     voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
     lastHeard = voiceBuffer;
+    listenRetries = 0;
   } else if(interim){
     lastHeard = mergeVoiceChunk(voiceBuffer, interim);
+    listenRetries = 0;
   }
 
   const preview = currentVoiceText() || cleanVoiceText(interim);
@@ -8738,7 +8773,7 @@ recognition.onresult = event=>{
   if(voiceSendTimer) clearTimeout(voiceSendTimer);
   const ready = currentVoiceText();
   if(ready.length >= 2){
-    voiceSendTimer = setTimeout(commitVoiceUtterance, finals.length ? 550 : 1400);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, finals.length ? 450 : 1200);
   }
 };
 
@@ -8746,38 +8781,48 @@ recognition.onerror = error=>{
   const err = (error && error.error) ? error.error : "";
   console.warn("Microfono:", err || error);
   if(err === "aborted") return;
+  if(err === "not-allowed" || err === "service-not-allowed"){
+    stopListeningSession();
+    if(micBtn) micBtn.classList.remove("active");
+    setListeningHint(false);
+    setState("idle");
+    try{ addMsg("Microfono non autorizzato. Consenti l'accesso al microfono e riprova.", true); }catch(e){}
+    return;
+  }
+  if(err === "network"){
+    if(micStartRequested && listenRetries < MAX_LISTEN_RETRIES){
+      listenRetries++;
+    }
+    return;
+  }
   if(err === "no-speech" || err === "audio-capture"){
     const ready = currentVoiceText();
     if(ready.length >= 2 && !voiceBusy) commitVoiceUtterance();
-    return;
-  }
-  if(err === "not-allowed" || err === "service-not-allowed"){
-    micStartRequested = false;
-    listening = false;
-    voiceSessionActive = false;
-    if(micBtn) micBtn.classList.remove("active");
-    try{ stopVoiceMonitor(); }catch(e){}
-    setState("idle");
-    try{ addMsg("Microfono non autorizzato. Consenti l'accesso al microfono e riprova.", true); }catch(e){}
   }
 };
 
 recognition.onend = ()=>{
   listening = false;
-  voiceSessionActive = false;
-  if(micBtn) micBtn.classList.remove("active");
   try{ stopVoiceMonitor(); }catch(e){}
 
   const pending = currentVoiceText();
   if(pending.length >= 2 && !voiceBusy){
     commitVoiceUtterance();
-  } else {
-    setListeningHint(false);
+    return;
   }
 
-  if(!audioPlaying){
-    setState("idle");
+  if(micStartRequested && !voiceBusy && listenRetries < MAX_LISTEN_RETRIES){
+    listenRetries++;
+    voiceSessionActive = true;
+    if(micBtn) micBtn.classList.add("active");
+    setListeningHint(true);
+    setState("listening");
+    restartRecognitionSoon();
+    return;
   }
+
+  finishListenWithoutSpeech();
+  if(!audioPlaying) setState("idle");
 };
 
 if(micBtn){

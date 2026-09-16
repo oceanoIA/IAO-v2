@@ -127,6 +127,39 @@ text-shadow:
 pointer-events:none;  
 }  
   
+
+.net-badge{
+  position:fixed;
+  top:14px;
+  right:16px;
+  z-index:60;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  pointer-events:none;
+  font-family:ui-sans-serif,system-ui,sans-serif;
+  font-size:10px;
+  letter-spacing:0.14em;
+  color:rgba(210,230,255,.82);
+  text-transform:uppercase;
+}
+.net-mark{
+  font-size:11px;
+  line-height:1;
+  color:#22c55e;
+  text-shadow:0 0 8px #22c55e;
+}
+.net-badge.is-off .net-mark{
+  color:#ef4444;
+  text-shadow:0 0 8px #ef4444;
+}
+.net-badge.is-off{
+  color:rgba(255,180,180,.82);
+}
+@media (max-width:700px){
+  .net-badge{ top:10px; right:10px; font-size:9px; }
+}
+
 /* =====================================================  
    DATA / ORA  
 ===================================================== */  
@@ -2821,6 +2854,10 @@ html, body {
 class="jarvis-title"  
 id="jarvisTitle">  J.A.R.V.I.S.
 
+</div>
+<div class="net-badge" id="netBadge" aria-live="polite">
+  <span class="net-mark" id="netDot">✓</span>
+  <span class="net-text" id="netText">CONNECTED</span>
 </div>  <!-- =====================================================  
      DATA  
 ===================================================== -->  <div class="datetime">  <div  
@@ -8324,10 +8361,10 @@ function handleAdvancedVoiceCommand(rawText){
 
   // resta in ascolto hands-free
   if(/^(ascolta|resta in ascolto|continua ad ascoltare|modalita mani libere|mani libere)$/.test(n)){
-    keepListening = true;
+    keepListening = false;
     voiceSessionActive = true;
     setState("listening");
-    voiceConfirm("Resto in ascolto, Oceano.");
+    voiceConfirm("Ascolto solo questa frase, Oceano.");
     return true;
   }
 
@@ -8442,6 +8479,21 @@ function handleAdvancedVoiceCommand(rawText){
 
   return false;
 }
+
+
+function updateNetBadge(){
+  const badge = document.getElementById("netBadge");
+  const text = document.getElementById("netText");
+  if(!badge || !text) return;
+  const on = navigator.onLine;
+  badge.classList.toggle("is-off", !on);
+  const mark = document.getElementById("netDot");
+  if(mark) mark.textContent = on ? "✓" : "✕";
+  text.textContent = on ? "CONNECTED" : "DISCONNECTED";
+}
+window.addEventListener("online", updateNetBadge);
+window.addEventListener("offline", updateNetBadge);
+updateNetBadge();
 
 let recognition = null;  
   
@@ -8629,10 +8681,8 @@ recognition.onend = ()=>{
     commitVoiceUtterance();
   }
 
-  if(keepListening){
-    setTimeout(()=> restartRecognitionSoon(), voiceBusy ? 1200 : 280);
-    return;
-  }
+  keepListening = false;
+  if(false){ return; }
   voiceSessionActive = false;
   if(!audioPlaying){
     setState("idle");
@@ -8649,7 +8699,7 @@ if(micBtn){
       try{ recognition.stop(); }catch(e){}
       setState("idle");
     } else {
-      keepListening = true;
+      keepListening = false;
       voiceSessionActive = true;
       resetVoiceBuffer();
       setState("listening");

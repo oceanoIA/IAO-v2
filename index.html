@@ -6990,28 +6990,111 @@ function parseAlarmTime(text){
   return t;
 }
 
+
+function playAlarmSound(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    for(let i=0;i<6;i++){
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "square";
+      o.frequency.value = i % 2 ? 880 : 660;
+      g.gain.setValueAtTime(0.0001, now + i * 0.35);
+      g.gain.exponentialRampToValueAtTime(0.18, now + i * 0.35 + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.35 + 0.28);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(now + i * 0.35);
+      o.stop(now + i * 0.35 + 0.3);
+    }
+  }catch(e){}
+}
+
+function showAlarmOverlay(title, body){
+  let box = document.getElementById("jarvisAlarmOverlay");
+  if(!box){
+    box = document.createElement("div");
+    box.id = "jarvisAlarmOverlay";
+    box.style.cssText = "position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.72);";
+    document.body.appendChild(box);
+  }
+  box.innerHTML = '<div style="background:#05060a;border:1px solid rgba(140,200,255,.45);color:#d8ecff;padding:22px 26px;border-radius:18px;max-width:90%;text-align:center;font-family:sans-serif;box-shadow:0 0 40px rgba(80,160,255,.25)"><div style="font-size:11px;letter-spacing:2px;opacity:.7;margin-bottom:8px">J.A.R.V.I.S.</div><div style="font-size:22px;margin-bottom:8px">'+title+'</div><div style="opacity:.85;margin-bottom:16px">'+body+'</div><button id="jarvisAlarmOk" style="background:#1a2a44;color:#fff;border:1px solid rgba(160,200,255,.4);border-radius:12px;padding:10px 18px;cursor:pointer">OK</button></div>';
+  box.style.display = "flex";
+  document.getElementById("jarvisAlarmOk")?.addEventListener("click", ()=>{ box.style.display = "none"; try{ speechSynthesis.cancel(); }catch(e){} });
+}
+
+function fireJarvisAlert(kind, title, body){
+  showJarvisNotification(title, body);
+  showAlarmOverlay(title, body);
+  playAlarmSound();
+  try{
+    if(window.speechSynthesis){
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(body || title);
+      u.lang = "it-IT";
+      speechSynthesis.speak(u);
+    }
+  }catch(e){}
+  if("vibrate" in navigator){ try{ navigator.vibrate([300,120,300,120,400]); }catch(e){} }
+}
+
 function scheduleLocalTimer(ms, label){
-  const id = setTimeout(()=>{
-    showJarvisNotification("Timer Jarvis", label || "Tempo scaduto");
-    try{ if(window.speechSynthesis){ const u=new SpeechSynthesisUtterance("Timer scaduto"); u.lang="it-IT"; speechSynthesis.speak(u);} }catch(e){}
-  }, ms);
-  jarvisTimers.push(id);
-  return id;
+  const item = {
+    id: "t-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),
+    type: "timer",
+    at: Date.now() + ms,
+    label: label || "Timer scaduto",
+    fired: false
+  };
+  const list = loadAlarms();
+  list.push(item);
+  saveAlarms(list);
+  // backup timeout (funziona se la pagina resta aperta)
+  const tid = setTimeout(()=>checkJarvisAlarms(true), Math.max(400, ms));
+  jarvisTimers.push(tid);
+  return item.id;
 }
 
 function scheduleLocalAlarm(when, label){
-  const ms = when.getTime() - Date.now();
-  if(ms <= 0) return null;
-  const id = setTimeout(()=>{
-    showJarvisNotification("Sveglia Jarvis", label || ("Sveglia delle " + when.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"})));
-    try{ if(window.speechSynthesis){ const u=new SpeechSynthesisUtterance("Sveglia"); u.lang="it-IT"; speechSynthesis.speak(u);} }catch(e){}
-  }, ms);
+  const item = {
+    id: "a-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),
+    type: "alarm",
+    at: when.getTime(),
+    label: label || ("Sveglia delle " + when.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"})),
+    fired: false
+  };
   const list = loadAlarms();
-  list.push({ id: String(id), at: when.toISOString(), label: label||"", created: Date.now() });
-  saveAlarms(list.filter(a => new Date(a.at).getTime() > Date.now() - 60000));
-  jarvisTimers.push(id);
-  return id;
+  list.push(item);
+  saveAlarms(list);
+  const ms = when.getTime() - Date.now();
+  if(ms > 0){
+    const tid = setTimeout(()=>checkJarvisAlarms(true), Math.max(400, ms));
+    jarvisTimers.push(tid);
+  }
+  return item.id;
 }
+
+function checkJarvisAlarms(force){
+  const now = Date.now();
+  const list = loadAlarms();
+  let changed = false;
+  list.forEach(item=>{
+    if(item.fired) return;
+    if(item.at <= now + 400){
+      item.fired = true;
+      changed = true;
+      const title = item.type === "timer" ? "Timer Jarvis" : "Sveglia Jarvis";
+      fireJarvisAlert(item.type, title, item.label || title);
+    }
+  });
+  if(changed) saveAlarms(list.filter(a => !a.fired || (now - a.at) < 86400000));
+}
+
+// controllo continuo: anche se il timeout viene ucciso dal telefono
+setInterval(checkJarvisAlarms, 5000);
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden) checkJarvisAlarms(true); });
+window.addEventListener("focus", ()=>checkJarvisAlarms(true));
+window.addEventListener("load", ()=>checkJarvisAlarms(true));
 
 function handleNotesTimerAlarm(text){
   const normalized = normalizeCommand(text);
@@ -7039,12 +7122,13 @@ function handleNotesTimerAlarm(text){
   if(/\b(metti|avvia|imposta|crea)\s+(un\s+)?timer\b/.test(normalized) || normalized.startsWith("timer ")){
     const ms = parseDurationMs(raw);
     if(!ms || ms < 1000){ speakReply("Dimmi per quanti minuti o secondi, es. «metti un timer di 5 minuti»."); return true; }
-    ensureNotifyPermission();
+    if(!("Notification" in window)) { speakReply("Questo browser non supporta le notifiche. Ti avviserò comunque a schermo e con il suono se lasci Jarvis aperto."); }
+    else if(Notification.permission !== "granted"){ ensureNotifyPermission(); }
     scheduleLocalTimer(ms, "Timer di " + Math.round(ms/60000) + " min");
     const mins = Math.floor(ms/60000), secs = Math.round((ms%60000)/1000);
     let human = mins ? (mins + " minut" + (mins===1?"o":"i")) : "";
     if(secs) human += (human?" e ":"") + secs + " secondi";
-    speakReply("Timer impostato per " + human + ". Ti avviserò allo scadere, Oceano.");
+    speakReply("Timer impostato per " + human + ". Lascia Jarvis aperto: ti avviserò con suono e notifica allo scadere, Oceano.");
     return true;
   }
 
@@ -7056,7 +7140,7 @@ function handleNotesTimerAlarm(text){
     scheduleLocalAlarm(when, "Sveglia");
     const ora = when.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
     const giorno = when.getDate() !== new Date().getDate() ? " (domani)" : "";
-    speakReply("Sveglia impostata per le " + ora + giorno + ". Jarvis ti avviserà a quell'ora, Oceano.");
+    speakReply("Sveglia impostata per le " + ora + giorno + ". Lascia Jarvis aperto in background: arriveranno suono, schermata e notifica. Se chiudi la pagina il browser può bloccare la sveglia.");
     showJarvisNotification("Sveglia impostata", "Alle " + ora + giorno);
     return true;
   }
@@ -8262,6 +8346,50 @@ recognition.continuous = true;
 recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
+let voiceBuffer = "";
+let voiceSendTimer = null;
+
+function resetVoiceBuffer(){
+  voiceBuffer = "";
+  if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
+}
+
+function commitVoiceUtterance(){
+  const raw = String(voiceBuffer || "").replace(/\s+/g, " ").trim();
+  voiceBuffer = "";
+  voiceSendTimer = null;
+  if(!raw) return;
+
+  const spoken = stripWakeWord(raw);
+  if(!spoken){
+    notify("Ti ascolto, Oceano");
+    textInput.value = "";
+    return;
+  }
+
+  const low = spoken.toLowerCase().trim();
+  // ignora saluti isolati / frammenti troppo corti
+  if(/^(ciao|hey|ehi|ok|okay|jarvis|yavis)$/.test(low)){
+    notify("Ti ascolto, Oceano");
+    textInput.value = "";
+    return;
+  }
+  if(spoken.length < 4){
+    textInput.value = spoken;
+    return;
+  }
+
+  textInput.value = spoken;
+  lastVoiceCommandAt = Date.now();
+
+  if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
+    textInput.value = "";
+    return;
+  }
+
+  sendMessage();
+}
+
 recognition.onstart = async ()=>{
   listening = true;
   voiceSessionActive = true;
@@ -8272,35 +8400,30 @@ recognition.onstart = async ()=>{
 };
 
 recognition.onresult = event=>{
-  const result = event.results[event.results.length - 1];
-  if(!result) return;
-  const text = (result[0] && result[0].transcript) ? result[0].transcript.trim() : "";
-  if(!text) return;
-
-  // interim: mostra in input senza inviare
-  if(!result.isFinal){
-    textInput.value = text;
-    setState("listening");
-    return;
+  let interim = "";
+  let finals = [];
+  for(let i = event.resultIndex; i < event.results.length; i++){
+    const res = event.results[i];
+    const piece = (res[0] && res[0].transcript) ? res[0].transcript.trim() : "";
+    if(!piece) continue;
+    if(res.isFinal) finals.push(piece);
+    else interim = piece;
   }
 
-  const spoken = stripWakeWord(text);
-  if(!spoken){
-    // solo wake word, resta in ascolto
-    notify("Ti ascolto, Oceano");
-    textInput.value = "";
-    return;
+  if(finals.length){
+    const chunk = finals.join(" ").trim();
+    voiceBuffer = (voiceBuffer + " " + chunk).replace(/\s+/g, " ").trim();
   }
 
-  textInput.value = spoken;
+  const preview = (voiceBuffer + (interim ? " " + interim : "")).replace(/\s+/g, " ").trim();
+  if(preview) textInput.value = preview;
+  setState("listening");
 
-  // comandi vocali locali avanzati
-  if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
-    textInput.value = "";
-    return;
+  if(voiceSendTimer) clearTimeout(voiceSendTimer);
+  // aspetta ~1.3s di silenzio prima di inviare la frase intera
+  if(voiceBuffer.length >= 4){
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 1300);
   }
-
-  sendMessage();
 };  
   
   
@@ -8329,6 +8452,11 @@ recognition.onend = ()=>{
   listening = false;
   micBtn.classList.remove("active");
   stopVoiceMonitor();
+  if(voiceBuffer && voiceBuffer.length >= 4){
+    commitVoiceUtterance();
+  } else {
+    resetVoiceBuffer();
+  }
   if(keepListening){
     try{ recognition.start(); }catch(e){}
     return;

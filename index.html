@@ -4735,8 +4735,8 @@ Math.acos(
 2 * Math.random() - 1  
 );  
   
-const radius =  
-0.82 + Math.random() * 0.62;  
+const radius =
+  0.55 + Math.random() * 0.90;  
   
 const sinPhi =  
 Math.sin(phi);  
@@ -5390,29 +5390,22 @@ pz += ovz * dt * (2.6 + energy * 0.9);
 const r = Math.sqrt(px*px + py*py + pz*pz) || 0.001;
 const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
 // soft shell: attira verso raggio base senza rigidità
-// sfera sempre visibile: confinamento forte sul raggio
-const conf = 0.58 + energy * 0.04;
-const nr = r + (targetR - r) * conf;
-const scale = nr / r;
+// volume sferico: ogni particella resta sul SUO raggio (tante forme, silhouette a sfera)
+const ownR = radius; // raggio individuale
+const conf = 0.16;
+const nr = r + (ownR - r) * conf;
+const scale = nr / (r || 0.001);
 px *= scale; py *= scale; pz *= scale;
 
 const r2 = Math.sqrt(px*px+py*py+pz*pz);
-const maxR = 1.32;
+const maxR = 1.48;
 if(r2 > maxR){
   const s2 = maxR / r2;
   px *= s2; py *= s2; pz *= s2;
 }
-if(r2 < 0.55){
-  const s2 = 0.55 / (r2 || 0.001);
+if(r2 < 0.38){
+  const s2 = 0.38 / (r2 || 0.001);
   px *= s2; py *= s2; pz *= s2;
-}
-// proiezione soft sul guscio: sfera leggibile, forme interne ok
-{
-  const rr = Math.sqrt(px*px+py*py+pz*pz) || 1;
-  const shell = targetR;
-  const blendShell = 0.25;
-  const ns = rr * (1 - blendShell) + shell * blendShell;
-  px *= ns / rr; py *= ns / rr; pz *= ns / rr;
 }
 
 neuronPositions[index] = px;
@@ -7089,6 +7082,48 @@ function fireJarvisAlert(kind, title, body){
   if("vibrate" in navigator){ try{ navigator.vibrate([300,120,300,120,400]); }catch(e){} }
 }
 
+
+function isAndroidDevice(){
+  return /Android/i.test(navigator.userAgent || "");
+}
+
+function openAndroidSystemTimer(seconds, message){
+  if(!isAndroidDevice() || !seconds || seconds < 1) return false;
+  const msg = encodeURIComponent(message || "Timer Jarvis");
+  const intent =
+    "intent:#Intent;action=android.intent.action.SET_TIMER" +
+    ";i.android.intent.extra.alarm.LENGTH=" + Math.round(seconds) +
+    ";S.android.intent.extra.alarm.MESSAGE=" + msg +
+    ";B.android.intent.extra.alarm.SKIP_UI=true" +
+    ";end";
+  try{
+    window.location.href = intent;
+    return true;
+  }catch(e){
+    try{ window.open(intent, "_blank"); return true; }catch(err){ return false; }
+  }
+}
+
+function openAndroidSystemAlarm(dateObj, message){
+  if(!isAndroidDevice() || !dateObj) return false;
+  const h = dateObj.getHours();
+  const m = dateObj.getMinutes();
+  const msg = encodeURIComponent(message || "Sveglia Jarvis");
+  const intent =
+    "intent:#Intent;action=android.intent.action.SET_ALARM" +
+    ";i.android.intent.extra.alarm.HOUR=" + h +
+    ";i.android.intent.extra.alarm.MINUTES=" + m +
+    ";S.android.intent.extra.alarm.MESSAGE=" + msg +
+    ";B.android.intent.extra.alarm.SKIP_UI=true" +
+    ";end";
+  try{
+    window.location.href = intent;
+    return true;
+  }catch(e){
+    try{ window.open(intent, "_blank"); return true; }catch(err){ return false; }
+  }
+}
+
 function scheduleLocalTimer(ms, label){
   const item = {
     id: "t-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),
@@ -7192,13 +7227,17 @@ async function handleNotesTimerAlarm(text){
   if(/\b(metti|avvia|imposta|crea)\s+(un\s+)?timer\b/.test(normalized) || normalized.startsWith("timer ")){
     const ms = parseDurationMs(raw);
     if(!ms || ms < 1000){ speakReply("Dimmi per quanti minuti o secondi, es. «metti un timer di 5 minuti»."); return true; }
-    if(!("Notification" in window)) { speakReply("Questo browser non supporta le notifiche. Ti avviserò comunque a schermo e con il suono se lasci Jarvis aperto."); }
-    else if(Notification.permission !== "granted"){ ensureNotifyPermission(); }
+    ensureNotifyPermission();
     scheduleLocalTimer(ms, "Timer di " + Math.round(ms/60000) + " min");
     const mins = Math.floor(ms/60000), secs = Math.round((ms%60000)/1000);
     let human = mins ? (mins + " minut" + (mins===1?"o":"i")) : "";
     if(secs) human += (human?" e ":"") + secs + " secondi";
-    speakReply("Timer impostato per " + human + ". Lascia Jarvis aperto: ti avviserò con suono e notifica allo scadere, Oceano.");
+    const opened = openAndroidSystemTimer(Math.max(1, Math.round(ms/1000)), "Timer Jarvis " + human);
+    if(opened){
+      speakReply("Apro l'orologio del telefono per impostare il timer di " + human + ". Conferma se Android te lo chiede, Oceano.");
+    } else {
+      speakReply("Timer di " + human + " impostato in Jarvis. Su questo dispositivo non posso scrivere nell'orologio di sistema: arriverà una notifica del browser se hai dato il permesso.");
+    }
     return true;
   }
 
@@ -7210,8 +7249,13 @@ async function handleNotesTimerAlarm(text){
     scheduleLocalAlarm(when, "Sveglia");
     const ora = when.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
     const giorno = when.getDate() !== new Date().getDate() ? " (domani)" : "";
-    speakReply("Sveglia impostata per le " + ora + giorno + ". Ti arriverà una notifica sul dispositivo se hai dato il permesso. Per sicurezza lascia Jarvis aperto finché Android non mette la pagina in stop.");
-    showJarvisNotification("Sveglia impostata", "Alle " + ora + giorno);
+    const opened = openAndroidSystemAlarm(when, "Sveglia Jarvis " + ora);
+    if(opened){
+      speakReply("Apro l'orologio del telefono per la sveglia delle " + ora + giorno + ". Conferma se Android te lo chiede, Oceano.");
+    } else {
+      speakReply("Sveglia per le " + ora + giorno + " salvata in Jarvis. Su questo dispositivo non posso scrivere nell'orologio di sistema.");
+    }
+    showSystemNotification("Sveglia Jarvis", "Alle " + ora + giorno);
     return true;
   }
 
@@ -8776,10 +8820,14 @@ function sanitizeJarvisReply(text){
     [/Tony Stark/gi, "Oceano"],
     [/Tony\s+Stark/gi, "Oceano"],
     [/\bTony\b/g, "Oceano"],
-    [/Iron Man/gi, "Oceano"],
-    [/Iron-Man/gi, "Oceano"],
-    [/Stark Industries/gi, "il lavoro di Oceano"],
-    [/Stark Industry/gi, "il lavoro di Oceano"],
+    [/Iron[\s-]?Man/gi, "Oceano"],
+    [/Stark Industries/gi, "il tuo lavoro"],
+    [/Stark Industry/gi, "il tuo lavoro"],
+    [/Stark\b/gi, "Oceano"],
+    [/riunion[ei] con i dirigenti[^.]{0,80}/gi, "impegni reali che non ho in agenda"],
+    [/nuovo prototipo[^.]{0,60}/gi, "progetti su cui stai lavorando"],
+    [/Avengers/gi, ""],
+    [/Pepper Potts/gi, ""],
     [/creato da Oceano, noto come Oceano/gi, "creato da Oceano"],
     [/creato da Oceano noto come Oceano/gi, "creato da Oceano"],
     [/noto come Oceano/gi, ""],
@@ -8875,7 +8923,47 @@ return;
 }  
   
   
-setState("thinking");  
+
+/* Risposte locali reali — niente Marvel */
+{
+  const n = normalizeCommand(text);
+  const greet = /^(ciao|ehi|hey|salve|buongiorno|buonasera|buonanotte)(\s+jarvis)?[!?.]*$/i.test(text.trim());
+  if(greet || n === "ciao" || n === "ciao jarvis"){
+    const h = new Date().getHours();
+    const when = h < 12 ? "Buongiorno" : (h < 18 ? "Ciao" : "Buonasera");
+    const reply = when + " Oceano. Dimmi pure come posso aiutarti.";
+    addMsg(reply, true);
+    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
+      try{ speak(reply); }catch(e){}
+    }
+    addMemory("user", text);
+    addMemory("assistant", reply);
+    setState("idle");
+    return;
+  }
+  if(
+    n.includes("cosa facciamo oggi") ||
+    n.includes("che facciamo oggi") ||
+    n.includes("cosa faccio oggi") ||
+    n.includes("piani per oggi") ||
+    n.includes("programma di oggi")
+  ){
+    const data = (typeof getTimeData === "function") ? getTimeData() : null;
+    const day = data && data.dayOfWeek ? data.dayOfWeek : "";
+    const reply = "Oceano, non ho la tua agenda reale. Dimmi cosa hai in programma o cosa vuoi fare oggi e ti aiuto a organizzarlo" + (day ? " — oggi è " + day + "." : ".");
+    addMsg(reply, true);
+    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
+      try{ speak(reply); }catch(e){}
+    }
+    addMemory("user", text);
+    addMemory("assistant", reply);
+    setState("idle");
+    return;
+  }
+}
+
+setState("thinking");
+  
   
 addMemory(  
 "user",  
@@ -8916,7 +9004,7 @@ const capabilityInstructions =
 
 "REGOLE OPERATIVE J.A.R.V.I.S. (OBBLIGATORIE): " +
 
-"Il tuo creatore e interlocutore principale si chiama Oceano. Chiamalo sempre Oceano, mai Tony, mai Tony Stark, mai altri nomi di film. " +
+"Il tuo creatore e interlocutore principale si chiama Oceano. Il suo nome è Oceano, non Tony. Chiamalo sempre Oceano, mai Tony, mai Tony Stark, mai altri nomi di film. " +
 
 "Tu sei J.A.R.V.I.S., assistente reale di Oceano. NON sei un personaggio di film Marvel/Iron Man. " + "Se ti chiedono chi ti ha creato, la sola risposta corretta è: Oceano. Mai Tony Stark, mai Iron Man. " +
 
@@ -8955,8 +9043,8 @@ body:JSON.stringify({
   
 message:text,  
   
-memory:  
-memory.slice(-4),  
+memory:
+  memory.slice(-12),  
   
 currentTime:  
 temporal.currentTime,  
@@ -9875,4 +9963,4 @@ setInterval(async()=>{
   </div>
 </div>
 
-</body>  </html>ok
+</body>  </html>

@@ -4735,8 +4735,10 @@ Math.acos(
 2 * Math.random() - 1  
 );  
   
-const radius =
-  0.55 + Math.random() * 0.90;  
+const isShell = (i % 2 === 0);
+const radius = isShell
+  ? (1.18 + Math.random() * 0.08)
+  : (0.42 + Math.random() * 0.62);  
   
 const sinPhi =  
 Math.sin(phi);  
@@ -5390,22 +5392,23 @@ pz += ovz * dt * (2.6 + energy * 0.9);
 const r = Math.sqrt(px*px + py*py + pz*pz) || 0.001;
 const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
 // soft shell: attira verso raggio base senza rigidità
-// volume sferico: ogni particella resta sul SUO raggio (tante forme, silhouette a sfera)
-const ownR = radius; // raggio individuale
-const conf = 0.16;
-const nr = r + (ownR - r) * conf;
-const scale = nr / (r || 0.001);
-px *= scale; py *= scale; pz *= scale;
-
-const r2 = Math.sqrt(px*px+py*py+pz*pz);
-const maxR = 1.48;
-if(r2 > maxR){
-  const s2 = maxR / r2;
-  px *= s2; py *= s2; pz *= s2;
-}
-if(r2 < 0.38){
-  const s2 = 0.38 / (r2 || 0.001);
-  px *= s2; py *= s2; pz *= s2;
+// contorno sfera SEMPRE visibile + nucleo che si muove
+const isShell = (i % 2 === 0);
+const r2pre = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
+if(isShell){
+  const ripple = 1 + Math.sin(time * 0.9 + seed * 0.01) * 0.035;
+  const shellR = radius * ripple;
+  const s = shellR / r2pre;
+  px *= s; py *= s; pz *= s;
+} else {
+  const ownR = radius;
+  const conf = 0.22;
+  const nr = r + (ownR - r) * conf;
+  const scale = nr / (r || 0.001);
+  px *= scale; py *= scale; pz *= scale;
+  const r2 = Math.sqrt(px*px+py*py+pz*pz);
+  if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
+  if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
 }
 
 neuronPositions[index] = px;
@@ -8498,41 +8501,46 @@ function mergeVoiceChunk(prev, chunk){
   return cleanVoiceText(a + " " + b);
 }
 
+let voiceBusy = false;
 function commitVoiceUtterance(){
+  if(voiceBusy) return;
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
   const raw = cleanVoiceText(voiceBuffer || lastHeard);
+  if(!raw || raw.length < 2) return;
+
+  voiceBusy = true;
   voiceBuffer = "";
   lastHeard = "";
-  if(!raw) return;
+  lastVoiceCommandAt = Date.now();
 
-  // mostra sempre la frase in chat input
   if(textInput) textInput.value = raw;
 
   let spoken = raw;
   try{ spoken = stripWakeWord(raw) || raw; }catch(e){ spoken = raw; }
-  spoken = cleanVoiceText(spoken);
-  if(!spoken) spoken = raw;
+  spoken = cleanVoiceText(spoken) || raw;
 
-  const low = spoken.toLowerCase().trim();
-
-  lastVoiceCommandAt = Date.now();
-
-  // comandi locali (stop, ora, ecc.)
+  // comandi locali
   try{
     if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
       if(textInput) textInput.value = "";
+      setTimeout(()=>{ voiceBusy = false; }, 600);
       return;
     }
   }catch(e){ console.warn("voice cmd", e); }
 
-  // invia sempre alla AI (anche "ciao jarvis")
-  if(textInput) textInput.value = spoken;
+  // invio diretto: non dipendere dal valore dell'input (su mobile si perde)
   try{
-    sendMessage();
+    if(chat) chat.dataset.historyMode = "on";
+    addMsg(raw);
+    if(typeof remoteMessageCount === "number") remoteMessageCount++;
+    if(typeof recordRemoteMessage === "function") recordRemoteMessage();
+    if(textInput) textInput.value = "";
+    processAi(spoken);
   }catch(e){
-    console.warn("sendMessage voice", e);
+    console.warn("voice send", e);
     try{ processAi(spoken); }catch(err){ console.warn(err); }
   }
+  setTimeout(()=>{ voiceBusy = false; }, 900);
 }
 
 function restartRecognitionSoon(){
@@ -8617,12 +8625,12 @@ recognition.onend = ()=>{
   try{ stopVoiceMonitor(); }catch(e){}
 
   const pending = cleanVoiceText(voiceBuffer || lastHeard);
-  if(pending.length >= 2){
+  if(pending.length >= 2 && !voiceBusy){
     commitVoiceUtterance();
   }
 
   if(keepListening){
-    restartRecognitionSoon();
+    setTimeout(()=> restartRecognitionSoon(), voiceBusy ? 1200 : 280);
     return;
   }
   voiceSessionActive = false;

@@ -8354,8 +8354,41 @@ function resetVoiceBuffer(){
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
 }
 
+function cleanVoiceText(s){
+  let t = String(s || "").toLowerCase().replace(/[^\wàèéìòù\s']/gi, " ").replace(/\s+/g, " ").trim();
+  if(!t) return "";
+  const words = t.split(" ");
+  const out = [];
+  for(const w of words){
+    if(!w) continue;
+    if(out.length && out[out.length-1] === w) continue; // ciao ciao ciao
+    out.push(w);
+  }
+  t = out.join(" ");
+  // togli ripetizioni di "ciao jarvis" / "ciao"
+  t = t.replace(/(\bciao(?:\s+jarvis)?\s+){2,}/g, "ciao jarvis ");
+  t = t.replace(/(\bciao jarvis come stai\s*){2,}/g, "ciao jarvis come stai ");
+  t = t.replace(/\s+/g, " ").trim();
+  return t;
+}
+
+function mergeVoiceChunk(prev, chunk){
+  const a = cleanVoiceText(prev);
+  const b = cleanVoiceText(chunk);
+  if(!b) return a;
+  if(!a) return b;
+  if(a === b) return a;
+  if(b.startsWith(a) || b.includes(a)) return b; // nuova frase più completa
+  if(a.startsWith(b) || a.includes(b)) return a; // già contenuto
+  // se è quasi uguale, tieni il più lungo
+  if(a.length > 12 && b.length > 12 && (a.includes(b.slice(0, Math.min(12,b.length))) || b.includes(a.slice(0, Math.min(12,a.length))))){
+    return a.length >= b.length ? a : b;
+  }
+  return cleanVoiceText(a + " " + b);
+}
+
 function commitVoiceUtterance(){
-  const raw = String(voiceBuffer || "").replace(/\s+/g, " ").trim();
+  const raw = cleanVoiceText(voiceBuffer);
   voiceBuffer = "";
   voiceSendTimer = null;
   if(!raw) return;
@@ -8368,8 +8401,7 @@ function commitVoiceUtterance(){
   }
 
   const low = spoken.toLowerCase().trim();
-  // ignora saluti isolati / frammenti troppo corti
-  if(/^(ciao|hey|ehi|ok|okay|jarvis|yavis)$/.test(low)){
+  if(/^(ciao|hey|ehi|ok|okay|jarvis|yavis|ciao jarvis)$/.test(low)){
     notify("Ti ascolto, Oceano");
     textInput.value = "";
     return;
@@ -8412,7 +8444,7 @@ recognition.onresult = event=>{
 
   if(finals.length){
     const chunk = finals.join(" ").trim();
-    voiceBuffer = (voiceBuffer + " " + chunk).replace(/\s+/g, " ").trim();
+    voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
   }
 
   const preview = (voiceBuffer + (interim ? " " + interim : "")).replace(/\s+/g, " ").trim();

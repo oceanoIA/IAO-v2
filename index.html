@@ -8549,7 +8549,7 @@ recognition =
 new Recognition();  
   
 recognition.lang = "it-IT";
-recognition.continuous = true;
+recognition.continuous = !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "");
 recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
@@ -8593,11 +8593,23 @@ function mergeVoiceChunk(prev, chunk){
 }
 
 function currentVoiceText(){
+  const typed = textInput ? String(textInput.value || "") : "";
+  const fromField = /in ascolto/i.test(typed) ? "" : typed;
   return cleanVoiceText(
     voiceBuffer ||
     lastHeard ||
-    (textInput ? textInput.value : "")
+    fromField
   );
+}
+
+function setListeningHint(on){
+  if(!textInput) return;
+  if(on){
+    textInput.value = "";
+    textInput.placeholder = "In ascolto… parla ora";
+  } else {
+    textInput.placeholder = "Chiedi qualcosa a JARVIS...";
+  }
 }
 
 let voiceBusy = false;
@@ -8624,6 +8636,7 @@ function commitVoiceUtterance(){
   stopListeningSession();
 
   if(textInput) textInput.value = "";
+  setListeningHint(false);
   if(typeof showChat === "function") showChat();
 
   let spoken = raw;
@@ -8655,19 +8668,38 @@ function restartRecognitionSoon(){
   if(restartTimer) clearTimeout(restartTimer);
   restartTimer = setTimeout(()=>{
     if(!micStartRequested || !recognition || listening || voiceBusy) return;
+    try{ stopVoiceMonitor(); }catch(e){}
     try{
       recognition.start();
     }catch(e){}
-  }, 280);
+  }, 320);
 }
 
-recognition.onstart = async ()=>{
+async function beginListening(){
+  lastInputWasVoice = false;
+  micStartRequested = true;
+  voiceSessionActive = true;
+  resetVoiceBuffer();
+  setListeningHint(true);
+  setState("listening");
+  if(micBtn) micBtn.classList.add("active");
+  try{ stopVoiceMonitor(); }catch(e){}
+  await new Promise(resolve => setTimeout(resolve, 120));
+  try{
+    recognition.start();
+  }catch(e){
+    console.warn(e);
+    restartRecognitionSoon();
+  }
+}
+
+recognition.onstart = ()=>{
   listening = true;
   voiceSessionActive = true;
   lastVoiceCommandAt = Date.now();
   if(micBtn) micBtn.classList.add("active");
+  setListeningHint(true);
   setState("listening");
-  try{ await startVoiceMonitor(); }catch(e){}
 };
 
 recognition.onspeechend = ()=>{
@@ -8739,6 +8771,8 @@ recognition.onend = ()=>{
   const pending = currentVoiceText();
   if(pending.length >= 2 && !voiceBusy){
     commitVoiceUtterance();
+  } else {
+    setListeningHint(false);
   }
 
   if(!audioPlaying){
@@ -8756,20 +8790,11 @@ if(micBtn){
       } else {
         resetVoiceBuffer();
         stopListeningSession();
+        setListeningHint(false);
         setState("idle");
       }
     } else {
-      lastInputWasVoice = false;
-      micStartRequested = true;
-      voiceSessionActive = true;
-      resetVoiceBuffer();
-      setState("listening");
-      try{
-        recognition.start();
-      }catch(e){
-        console.warn(e);
-        restartRecognitionSoon();
-      }
+      beginListening();
     }
   });
 }

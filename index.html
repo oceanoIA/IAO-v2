@@ -2807,6 +2807,7 @@ html, body {
   inset: 0 !important;
 }
 
+#homeSystemPanel,#homeSystemPanel *{display:none !important;}
 </style>  
 </head>  <body>
 
@@ -2976,7 +2977,7 @@ const MEMORY_KEY =
   
 const MAX_MEMORY = 30;  
   
-const NEURON_COUNT = 12000;  
+const NEURON_COUNT = 18000;  
   
 const MAPTILER_KEY =  
 "NmSlgtsAdQyEWy7t0OJf";  
@@ -4246,9 +4247,7 @@ opacity:.045
   
 );  
   
-earthGroup.add(  
-earthWire  
-);  
+/* no earth wire */  
   
   
 /* =====================================================  
@@ -4365,7 +4364,7 @@ let camera;
   
 let renderer;  
   
-let particles;  
+let particles;
   
 let neuronPositions;  
   
@@ -4772,10 +4771,8 @@ Math.acos(
 2 * Math.random() - 1  
 );  
   
-const isShell = (i % 2 === 0);
-const radius = isShell
-  ? (1.18 + Math.random() * 0.08)
-  : (0.42 + Math.random() * 0.62);  
+const isShell = (i % 5 !== 0); // 80% contorno puntini, 20% interno liquido
+const radius = isShell ? 1.22 : (0.35 + Math.random() * 0.70);  
   
 const sinPhi =  
 Math.sin(phi);  
@@ -4870,14 +4867,16 @@ material
   
 scene.add(  
 particles  
-);  
+);
+
+  
   
   
 // reset fluid velocities
 if(neuronVel) neuronVel.fill(0);
 
 notify(  
-"NEURAL CORE ONLINE — 12000 NEURONS"  
+"NEURAL CORE ONLINE — 18000 NEURONS"  
 );  
   
 animateNeuralCore();
@@ -4938,63 +4937,14 @@ errorElement
 
 /* Scala sfera: grande su tablet/PC, più piccola solo su telefono */
 
-/* =====================================================
-   GIROSCOPIO / MOTION — muove particelle in idle
-===================================================== */
-let gyroEnabled = false;
-let gyroBeta = 0, gyroGamma = 0, gyroAlpha = 0;
-let gyroTargetBeta = 0, gyroTargetGamma = 0;
 let lastUserActivity = Date.now();
-let isIdleForGyro = true;
 
 function markUserActivity(){
   lastUserActivity = Date.now();
-  isIdleForGyro = false;
 }
 
-function updateIdleFlag(){
-  // idle se nessuna interazione da 8s e energia bassa
-  isIdleForGyro = (Date.now() - lastUserActivity > 8000) && (typeof neuralEnergy === "number" ? neuralEnergy < 0.5 : true);
-}
-
-function handleOrientation(e){
-  if(e.beta != null) gyroTargetBeta = e.beta;   // -180..180 front-back
-  if(e.gamma != null) gyroTargetGamma = e.gamma; // -90..90 left-right
-  if(e.alpha != null) gyroAlpha = e.alpha;
-}
-
-function handleMotion(e){
-  const a = e.accelerationIncludingGravity;
-  if(!a) return;
-  // fallback se orientation non disponibile
-  if(a.x != null) gyroTargetGamma = (a.x || 0) * 6;
-  if(a.y != null) gyroTargetBeta = (a.y || 0) * 6;
-}
-
-async function enableGyro(){
-  if(gyroEnabled) return;
-  try{
-    if(typeof DeviceOrientationEvent !== "undefined" &&
-       typeof DeviceOrientationEvent.requestPermission === "function"){
-      const p = await DeviceOrientationEvent.requestPermission();
-      if(p !== "granted") return;
-    }
-  }catch(err){ console.warn("Gyro permission:", err); }
-  window.addEventListener("deviceorientation", handleOrientation, true);
-  window.addEventListener("devicemotion", handleMotion, true);
-  gyroEnabled = true;
-}
-
-// smooth gyro values ogni frame (chiamato in animate)
-function updateGyroSmooth(){
-  gyroBeta += (gyroTargetBeta - gyroBeta) * 0.08;
-  gyroGamma += (gyroTargetGamma - gyroGamma) * 0.08;
-  updateIdleFlag();
-}
-
-// abilita al primo tocco (iOS richiede gesture)
 ["touchstart","click"].forEach(ev => {
-  window.addEventListener(ev, () => { enableGyro(); markUserActivity(); }, { once: false, passive: true });
+  window.addEventListener(ev, () => { markUserActivity(); }, { once: false, passive: true });
 });
 document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById("textInput");
@@ -5007,7 +4957,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if(chat){
     chat.addEventListener("pointerdown", markUserActivity, { passive: true });
   }
-  enableGyro();
 });
 
 function updateNeuralScale(){
@@ -5023,7 +4972,9 @@ function updateNeuralScale(){
 window.addEventListener("resize", updateNeuralScale);
 window.addEventListener("orientationchange", () => setTimeout(updateNeuralScale, 150));
 
+let jarvisMind = "idle";
 function setState(state){
+  jarvisMind = state || "idle";
   if(state === "thinking"){
     targetEnergy = 2.8;
     if(typeof markUserActivity === "function") markUserActivity();
@@ -5100,7 +5051,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function animateNeuralCore(){
-  if(typeof updateGyroSmooth === "function") updateGyroSmooth();  
   
 animationFrame =  
 requestAnimationFrame(  
@@ -5334,15 +5284,19 @@ seed * .15
    FLUIDODINAMICA SEMPLIFICATA (dentro la sfera)
    Campo di flusso + viscosità + inerzia + confinamento
 ===================================================== */
+const mind = (typeof jarvisMind === "string") ? jarvisMind : "idle";
+const isThinking = mind === "thinking" || neuralEnergy > 2.2;
+const isTalking = mind === "speaking" || (voiceLevel > 0.04 && neuralEnergy > 0.8);
+const isListening = mind === "listening";
 const life = Math.max(0.12, neuralEnergy);
-const isThinking = neuralEnergy > 2.2;
-const isTalking = voiceLevel > 0.04 && neuralEnergy > 0.8;
-const energy = isThinking ? 0.28 : (life * 0.75 + voiceLevel * 1.0);
+let energy = isThinking ? 0.32 : (life * 0.75 + voiceLevel * 1.0);
+if(isListening) energy = Math.max(energy, 0.95);
+if(isTalking) energy = Math.max(energy, 0.70);
 // thinking: niente turbolenza extra, solo respiro
 
 // viscosità: alta = movimento più liscio; bassa in thinking = più turbolento
-const viscosity = isTalking ? 0.92 : 0.945;
-const dt = 0.060;
+const viscosity = isTalking ? 0.91 : (isListening ? 0.90 : 0.945);
+const dt = isListening ? 0.085 : (isThinking ? 0.050 : (isTalking ? 0.070 : 0.060));
 
 // posizione corrente (da buffer, o da base sferica al primo frame)
 let px = neuronPositions[index];
@@ -5372,41 +5326,34 @@ vx += (n4 - n5) * (0.022 + energy * 0.030);
 vy += (n5 * 0.8) * (0.022 + energy * 0.030);
 vz += (n4 * 0.7) * (0.018 + energy * 0.028);
 
-// listening: flusso lento e ampio
-if(!isThinking && !isTalking){
-  vx *= 0.72; vy *= 0.72; vz *= 0.72;
-  vx += Math.sin(time * 0.65 + s) * 0.016;
-  vy += Math.cos(time * 0.55 + s) * 0.016;
-}
+const len0 = Math.sqrt(px*px + py*py + pz*pz) || 1;
+const nx = px / len0, ny = py / len0, nz = pz / len0;
 
-// talking: impulsi dalla voce
-if(isTalking){
-  const pulse = voiceLevel * (0.128 + 0.096 * Math.sin(time * 5 + s));
-  const len = Math.sqrt(px*px+py*py+pz*pz) || 1;
-  vx += (px / len) * pulse * 0.5;
-  vy += (py / len) * pulse * 0.5;
-  vz += (pz / len) * pulse * 0.5;
-  vx *= 1.05; vy *= 1.05; vz *= 1.05;
-}
-
-// GIROSCOPIO: in idle, muovere il telefono muove le particelle
-if(typeof isIdleForGyro !== "undefined" && isIdleForGyro && typeof gyroGamma === "number"){
-  const gStrength = 0.072;
-  // gamma = tilt sx/dx → sposta su X; beta = avanti/indietro → Y
-  vx += (gyroGamma / 45) * gStrength;
-  vy += -(gyroBeta / 45) * gStrength * 0.85;
-  vz += (gyroGamma / 90) * gStrength * 0.3;
-}
-
-
-// thinking: niente vortici — solo respiro + continua a girare
-if(isThinking){
-  // solo respiro lento radiale, nessuna danza
-  const len = Math.sqrt(px*px + py*py + pz*pz) || 1;
-  const breath = Math.sin(time * 0.9) * 0.018;
-  vx = (px / len) * breath * 0.35;
-  vy = (py / len) * breath * 0.35;
-  vz = (pz / len) * breath * 0.35;
+if(isListening){
+  // ascolto: correnti vive che girano sulla sfera
+  const swirl = 0.085 + 0.04 * Math.sin(time * 2.1 + s);
+  vx += (-ny * nz) * swirl + Math.sin(time * 2.4 + s) * 0.04;
+  vy += (nx * 0.6) * swirl + Math.cos(time * 1.8 + s) * 0.035;
+  vz += (nx * ny) * swirl * 0.7;
+  vx *= 1.35; vy *= 1.35; vz *= 1.35;
+} else if(isThinking){
+  // pensiero: pompa lenta tipo cervello + micro-scorrimento
+  const breath = Math.sin(time * 1.35) * 0.055;
+  vx = nx * breath + (-nz) * 0.012;
+  vy = ny * breath + Math.sin(time * 0.8 + s) * 0.008;
+  vz = nz * breath + nx * 0.012;
+} else if(isTalking){
+  // parlato: impulsi a ritmo voce, meno caos
+  const pulse = (0.04 + voiceLevel * 0.16) * (1 + 0.35 * Math.sin(time * 5.2 + s));
+  vx = vx * 0.55 + nx * pulse;
+  vy = vy * 0.55 + ny * pulse;
+  vz = vz * 0.55 + nz * pulse;
+  vx += Math.sin(time * 3.2 + s) * 0.018;
+} else {
+  // riposo: deriva lenta
+  vx *= 0.62; vy *= 0.62; vz *= 0.62;
+  vx += Math.sin(time * 0.55 + s) * 0.012;
+  vy += Math.cos(time * 0.48 + s) * 0.012;
 }
 
 
@@ -5433,10 +5380,11 @@ const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
 const isShell = (i % 2 === 0);
 const r2pre = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
 if(isShell){
-  const ripple = 1 + Math.sin(time * 0.9 + seed * 0.01) * 0.035;
-  const shellR = radius * ripple;
-  const s = shellR / r2pre;
-  px *= s; py *= s; pz *= s;
+  // scorre con gli altri ma resta SEMPRE sul guscio sferico
+  const rr = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
+  const shellR = 1.22 * (1 + Math.sin(time * (isThinking ? 1.35 : isListening ? 1.6 : 0.8)) * (isThinking ? 0.04 : isListening ? 0.02 : 0.012));
+  const k = shellR / rr;
+  px *= k; py *= k; pz *= k;
 } else {
   const ownR = radius;
   const conf = 0.22;

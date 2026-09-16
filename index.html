@@ -144,14 +144,21 @@ pointer-events:none;
   text-transform:uppercase;
 }
 .net-mark{
-  font-size:11px;
-  line-height:1;
-  color:#22c55e;
-  text-shadow:0 0 8px #22c55e;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 8px #22c55e;
+  font-size:0;
+  line-height:0;
+  color:transparent;
+  display:inline-block;
+  flex-shrink:0;
 }
 .net-badge.is-off .net-mark{
-  color:#ef4444;
-  text-shadow:0 0 8px #ef4444;
+  background:#ef4444;
+  box-shadow:0 0 8px #ef4444;
+  color:transparent;
 }
 .net-badge.is-off{
   color:rgba(255,180,180,.82);
@@ -2375,6 +2382,7 @@ html, body {
 #webSearchIndicator,
 .utility-actions,
 #adminBtn,
+#jarvisAuth,
 #authUserbar,
 #hudNotifications,
 #faceHomeBtn,
@@ -2808,6 +2816,115 @@ html, body {
 }
 
 #homeSystemPanel,#homeSystemPanel *{display:none !important;}
+#jarvisAuth,#authUserbar,#adminBtn,.admin-launch,.feedback-launch,.feedback-prompt,.feedback-modal,.admin-modal,#resetModal{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+
+/* =====================================================
+   DOCK INPUT + MICROFONO CIRCOLARE A SINISTRA
+===================================================== */
+.command-dock{
+  position:fixed !important;
+  left:50% !important;
+  bottom:16px !important;
+  transform:translateX(-50%) !important;
+  z-index:50 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  width:min(620px, 92%) !important;
+  max-width:calc(100vw - 24px) !important;
+  pointer-events:none;
+}
+.command-dock .command-wrapper,
+.command-dock #micBtn{
+  pointer-events:auto;
+}
+.command-dock .command-wrapper{
+  position:relative !important;
+  left:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  top:auto !important;
+  transform:none !important;
+  flex:1 1 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+.command-dock #micBtn{
+  flex:0 0 52px !important;
+  width:52px !important;
+  height:52px !important;
+  min-width:52px !important;
+  min-height:52px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:50% !important;
+  border:1px solid rgba(90,130,190,0.40) !important;
+  background:rgba(6,6,10,0.88) !important;
+  color:rgba(210,230,255,0.88) !important;
+  box-shadow:0 0 18px rgba(0,0,0,0.45) !important;
+  backdrop-filter:blur(18px);
+}
+.command-dock #micBtn:hover{
+  color:#fff !important;
+  border-color:rgba(255,255,255,0.55) !important;
+  background:rgba(18,22,30,0.94) !important;
+}
+.command-dock #micBtn.active{
+  color:#fff !important;
+  border-color:rgba(180,230,255,0.85) !important;
+  background:rgba(20,36,58,0.95) !important;
+  box-shadow:0 0 16px rgba(120,200,255,0.35), 0 0 28px rgba(80,160,255,0.18) !important;
+  filter:none !important;
+}
+.command-dock .mic-icon{
+  width:10px !important;
+  height:16px !important;
+}
+@supports (padding: max(0px)) {
+  .command-dock{
+    bottom:max(12px, env(safe-area-inset-bottom)) !important;
+  }
+}
+@media (max-width:700px), (orientation:portrait) and (max-width:900px){
+  .command-dock{
+    width:min(96%, 560px) !important;
+    bottom:12px !important;
+    gap:8px !important;
+  }
+  .command-dock #micBtn{
+    flex-basis:46px !important;
+    width:46px !important;
+    height:46px !important;
+    min-width:46px !important;
+    min-height:46px !important;
+  }
+}
+@media (max-width:400px){
+  .command-dock{
+    width:calc(100vw - 16px) !important;
+  }
+  .command-dock #micBtn{
+    flex-basis:44px !important;
+    width:44px !important;
+    height:44px !important;
+    min-width:44px !important;
+    min-height:44px !important;
+  }
+}
+@media (min-width:701px) and (max-width:1100px){
+  .command-dock{ width:min(700px, 92%) !important; }
+}
+@media (min-width:1101px){
+  .command-dock{ width:min(620px, 78%) !important; }
+}
+@media (orientation:landscape) and (max-height:500px){
+  .command-dock{ bottom:8px !important; }
+}
 </style>  
 </head>  <body>
 
@@ -2857,7 +2974,7 @@ id="jarvisTitle">  J.A.R.V.I.S.
 
 </div>
 <div class="net-badge" id="netBadge" aria-live="polite">
-  <span class="net-mark" id="netDot">✓</span>
+  <span class="net-mark" id="netDot" aria-hidden="true"></span>
   <span class="net-text" id="netText">CONNECTED</span>
 </div>  <!-- =====================================================  
      DATA  
@@ -2925,7 +3042,11 @@ WEB WINDOWS: 0
      CHAT  
 ===================================================== -->  <div id="chat"></div>  <!-- =====================================================  
      INPUT  
-===================================================== -->  <div class="command-wrapper">  <input  
+===================================================== -->  <div class="command-dock">
+<button id="micBtn" type="button" title="Parla" aria-label="Parla">
+  <span class="mic-icon"></span>
+</button>
+<div class="command-wrapper">  <input  
 id="textInput"  
 type="text"  
 autocomplete="off"  
@@ -2935,11 +3056,10 @@ placeholder="Chiedi qualcosa a JARVIS...">
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
-<button id="micBtn">  <span class="mic-icon"></span>
+<button id="sendBtn">  INVIA
 
-</button>  <button id="sendBtn">  INVIA
-
-</button>  </div>  <!-- =====================================================  
+</button>  </div>
+</div>  <!-- =====================================================  
      PULSANTI  
 ===================================================== -->  <button id="fullscreenBtn">  
 ⛶ FULLSCREEN  
@@ -5041,7 +5161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   // anche interazione generale con input/area comandi
-  const wrap = document.querySelector(".command-wrapper");
+  const wrap = document.querySelector(".command-dock") || document.querySelector(".command-wrapper");
   if(wrap){
     ["pointerdown", "touchstart", "focusin"].forEach(ev => {
       wrap.addEventListener(ev, showChat, { passive: true });
@@ -8260,7 +8380,7 @@ const VOICE_WAKE = [
 ];
 
 let voiceSessionActive = false;
-let keepListening = false;
+let lastInputWasVoice = false;
 let lastVoiceCommandAt = 0;
 
 function stripWakeWord(text){
@@ -8300,25 +8420,22 @@ function handleAdvancedVoiceCommand(rawText){
   // STOP / silenzio
   if(/^(stop|basta|silenzio|zitto|fermati|annulla|cancel|cancella)$/.test(n) || n.includes("smetti di parlare")){
     try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
-    keepListening = false;
+    try{ if(currentAudio){ currentAudio.pause(); currentAudio = null; } }catch(e){}
+    audioPlaying = false;
     try{ if(recognition && listening) recognition.stop(); }catch(e){}
+    voiceSessionActive = false;
     setState("idle");
     voiceConfirm("Ok, mi fermo.");
     return true;
   }
 
-  // resta in ascolto hands-free
   if(/^(ascolta|resta in ascolto|continua ad ascoltare|modalita mani libere|mani libere)$/.test(n)){
-    keepListening = false;
-    voiceSessionActive = true;
-    setState("listening");
-    voiceConfirm("Ascolto solo questa frase, Oceano.");
+    speakReply("L'ascolto continuo è disattivato. Tocca il microfono quando vuoi parlarmi.");
     return true;
   }
 
   // spegni microfono
   if(/^(spegni microfono|chiudi microfono|smetti di ascoltare|basta ascoltare)$/.test(n)){
-    keepListening = false;
     voiceSessionActive = false;
     try{ if(recognition) recognition.stop(); }catch(e){}
     setState("idle");
@@ -8356,7 +8473,7 @@ function handleAdvancedVoiceCommand(rawText){
   // cosa puoi fare
   if(n.includes("cosa puoi fare") || n.includes("quali comandi") || n.includes("aiuto vocale") || n === "aiuto"){
     speakReply(
-      "Oceano, puoi dirmi: che ore sono, metti un timer, metti una sveglia, crea una nota, leggi le note, cerca sul web, apri la mappa, ripeti, stop, resta in ascolto. Oppure parlami normalmente."
+      "Oceano, puoi dirmi: che ore sono, metti un timer, metti una sveglia, crea una nota, leggi le note, cerca sul web, apri la mappa, ripeti, stop. Per parlarmi tocca il microfono: ascolto una frase e poi mi fermo."
     );
     return true;
   }
@@ -8436,7 +8553,7 @@ function updateNetBadge(){
   const on = navigator.onLine;
   badge.classList.toggle("is-off", !on);
   const mark = document.getElementById("netDot");
-  if(mark) mark.textContent = on ? "✓" : "✕";
+  if(mark) mark.textContent = "";
   text.textContent = on ? "CONNECTED" : "DISCONNECTED";
 }
 window.addEventListener("online", updateNetBadge);
@@ -8459,7 +8576,7 @@ recognition =
 new Recognition();  
   
 recognition.lang = "it-IT";
-recognition.continuous = true;
+recognition.continuous = false;
 recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
@@ -8502,6 +8619,11 @@ function mergeVoiceChunk(prev, chunk){
 }
 
 let voiceBusy = false;
+function stopListeningSession(){
+  voiceSessionActive = false;
+  try{ if(recognition && listening) recognition.stop(); }catch(e){}
+}
+
 function commitVoiceUtterance(){
   if(voiceBusy) return;
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
@@ -8509,9 +8631,11 @@ function commitVoiceUtterance(){
   if(!raw || raw.length < 2) return;
 
   voiceBusy = true;
+  lastInputWasVoice = true;
   voiceBuffer = "";
   lastHeard = "";
   lastVoiceCommandAt = Date.now();
+  stopListeningSession();
 
   if(textInput) textInput.value = raw;
 
@@ -8546,7 +8670,7 @@ function commitVoiceUtterance(){
 function restartRecognitionSoon(){
   if(restartTimer) clearTimeout(restartTimer);
   restartTimer = setTimeout(()=>{
-    if(!keepListening || !recognition) return;
+    if(!recognition || listening || voiceBusy) return;
     try{
       recognition.start();
     }catch(e){
@@ -8565,7 +8689,11 @@ recognition.onstart = async ()=>{
 };
 
 recognition.onspeechend = ()=>{
-  // non stoppare qui: aspettiamo onresult + timer
+  const ready = cleanVoiceText(voiceBuffer || lastHeard);
+  if(ready.length >= 2){
+    if(voiceSendTimer) clearTimeout(voiceSendTimer);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 350);
+  }
 };
 
 recognition.onresult = event=>{
@@ -8603,14 +8731,12 @@ recognition.onresult = event=>{
 recognition.onerror = error=>{
   const err = (error && error.error) ? error.error : "";
   console.warn("Microfono:", err || error);
-  // errori recuperabili: resta in ascolto
   if(err === "no-speech" || err === "aborted" || err === "audio-capture"){
-    if(keepListening) restartRecognitionSoon();
     return;
   }
   if(err === "not-allowed" || err === "service-not-allowed"){
-    keepListening = false;
     listening = false;
+    voiceSessionActive = false;
     if(micBtn) micBtn.classList.remove("active");
     try{ stopVoiceMonitor(); }catch(e){}
     setState("idle");
@@ -8621,6 +8747,7 @@ recognition.onerror = error=>{
 
 recognition.onend = ()=>{
   listening = false;
+  voiceSessionActive = false;
   if(micBtn) micBtn.classList.remove("active");
   try{ stopVoiceMonitor(); }catch(e){}
 
@@ -8629,9 +8756,6 @@ recognition.onend = ()=>{
     commitVoiceUtterance();
   }
 
-  keepListening = false;
-  if(false){ return; }
-  voiceSessionActive = false;
   if(!audioPlaying){
     setState("idle");
   }
@@ -8640,14 +8764,13 @@ recognition.onend = ()=>{
 if(micBtn){
   micBtn.addEventListener("click", ()=>{
     if(!recognition) return;
-    if(listening || keepListening){
-      keepListening = false;
+    if(listening){
       voiceSessionActive = false;
       resetVoiceBuffer();
       try{ recognition.stop(); }catch(e){}
       setState("idle");
     } else {
-      keepListening = false;
+      lastInputWasVoice = false;
       voiceSessionActive = true;
       resetVoiceBuffer();
       setState("listening");
@@ -8900,7 +9023,7 @@ return;
   ){
     const reply = "Mi ha creato Oceano. Lui è il mio creatore. Non sono un personaggio dei film e non ho nessun legame con Tony Stark o Iron Man.";
     addMsg(reply, true);
-    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
+    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
       try{ speak(reply); }catch(e){}
     }
     addMemory("user", text);
@@ -8955,7 +9078,7 @@ return;
     const when = h < 12 ? "Buongiorno" : (h < 18 ? "Ciao" : "Buonasera");
     const reply = when + " Oceano. Dimmi pure come posso aiutarti.";
     addMsg(reply, true);
-    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
+    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
       try{ speak(reply); }catch(e){}
     }
     addMemory("user", text);
@@ -8974,7 +9097,7 @@ return;
     const day = data && data.dayOfWeek ? data.dayOfWeek : "";
     const reply = "Oceano, non ho la tua agenda reale. Dimmi cosa hai in programma o cosa vuoi fare oggi e ti aiuto a organizzarlo" + (day ? " — oggi è " + day + "." : ".");
     addMsg(reply, true);
-    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
+    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
       try{ speak(reply); }catch(e){}
     }
     addMemory("user", text);
@@ -9148,7 +9271,7 @@ true,
 copyable  
 );
 
-if(voiceSessionActive && typeof speak === "function"){
+if(lastInputWasVoice && typeof speak === "function"){
   try{ speak(reply); }catch(e){}
 }  
   
@@ -9226,6 +9349,7 @@ function sendMessage(){
 const text=textInput.value.trim();
 const imageData=selectedImageData;
 if(!text&&!imageData)return;
+lastInputWasVoice = false;
 const displayText=text||"Analizza questa immagine";
 textInput.value="";
 
@@ -9685,9 +9809,7 @@ authLogout?.addEventListener("click",async()=>{
     if(faceHomeBtn) faceHomeBtn.style.display="none";
     adminBtn.style.display="none";
     closeAllOverlays();
-    showLogin();
-    jarvisAuth.classList.remove("hidden");
-    setTimeout(()=>document.getElementById("loginNickname")?.focus(),50);
+    jarvisAuth?.classList.add("hidden");
 });
 
 function showOverlay(el){
@@ -9869,22 +9991,9 @@ setInterval(async()=>{
 },2000);
 
 (async function initJarvisAuth(){
-    const token=getAuthToken();
-    if(token){
-        try{
-            const data=await authRequest("heartbeat");
-            remoteAuthUser=data.user||null;
-            sessionStorage.setItem("jarvis_user_nickname_v2",remoteAuthUser?.nickname||"");
-            jarvisAuth.classList.add("hidden");
-            authCurrentUser.textContent=String(remoteAuthUser?.nickname||"").toUpperCase();
-            authUserbar.classList.add("visible");
-            adminBtn.style.display=isOwnerNickname(remoteAuthUser?.nickname)?"block":"none";
-            return;
-        }catch(error){ clearAuthSession(); }
-    }
-    jarvisAuth.classList.remove("hidden");
-    showLogin();
-    setTimeout(()=>document.getElementById("loginNickname")?.focus(),50);
+    jarvisAuth?.classList.add("hidden");
+    authUserbar?.classList.remove("visible");
+    if(adminBtn) adminBtn.style.display="none";
 })();
 
 

@@ -1,5 +1,4 @@
-<!DOCTYPE html>  <html lang="it">  <head>  <meta charset="UTF-8">  <meta name="viewport"  
-content="width=device-width,initial-scale=1.0">
+<!DOCTYPE html>  <html lang="it">  <head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <title>J.A.R.V.I.S.</title>  <link  
 rel="stylesheet"  
@@ -20,7 +19,7 @@ body{
 width:100%;  
 height:100%;  
 overflow:hidden;  
-background:#000000;  
+background:#000000 !important;  
 font-family:Arial,sans-serif;  
 }  
   
@@ -48,7 +47,39 @@ z-index:1;
 display:block;  
 width:100%;  
 height:100%;  
-}  
+}
+
+/* Chat più a sinistra e più compatta */
+#chat {
+  left: 1.2% !important;
+  top: 10% !important;
+  width: min(32vw, 380px) !important;
+  max-height: calc(100vh - 160px) !important;
+  z-index: 40 !important;
+  transition: opacity 0.8s ease, transform 0.8s ease !important;
+}
+
+#chat.chat-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateX(-20px) !important;
+}
+
+.msg {
+  font-size: 11px !important;
+  padding: 10px 40px 10px 14px !important;
+  margin-bottom: 8px !important;
+  border-radius: 14px !important;
+}
+
+/* Nascondi completamente il bottone foto / vision */
+#imageBtn,
+#imageInput,
+#visionPreview,
+#visionStatus {
+  display: none !important;
+}
+  
   
 .vignette{  
 position:fixed;  
@@ -166,7 +197,7 @@ position:relative;
   
 max-width:100%;  
   
-padding:14px 52px 14px 18px;  
+padding: 12px 14px 12px 14px;  
   
 margin-bottom:12px;  
   
@@ -2286,6 +2317,463 @@ input {
 /* FACE ID QUICK LOGIN — nessuna finestra della fotocamera. */
 #faceAuthModal{position:fixed!important;width:1px!important;height:1px!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important;visibility:hidden!important;}
 #faceAuthVideo,#faceOverlay{position:fixed!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;}
+
+
+/* =====================================================
+   PULIZIA TOTALE — SOLO NERO + NEURONI + CHAT
+===================================================== */
+html, body {
+  background: #000000 !important;
+  overflow: hidden !important;
+}
+
+#webgl-container,
+#webgl-container canvas {
+  background: #000000 !important;
+}
+
+/* NASCONDI TUTTO IL SUPERFLUO */
+.jarvis-title,
+.datetime,
+#homeSystemPanel,
+#fullscreenBtn,
+#voiceBtn,
+#voicePanel,
+#webSearchIndicator,
+.utility-actions,
+#adminBtn,
+#authUserbar,
+#hudNotifications,
+#faceHomeBtn,
+.vignette,
+#tacticalMap,
+#webSearchWindows,
+.map-header,
+#closeMap,
+.connection-status,
+.neural-status,
+#imageBtn,
+#imageInput,
+#visionPreview,
+#visionStatus,
+.admin-launch,
+.feedback-launch,
+.feedback-prompt,
+.feedback-modal,
+.admin-modal,
+#resetModal,
+.auth-userbar {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Chat — unica UI oltre ai neuroni */
+#chat {
+  left: 1.5% !important;
+  top: 8% !important;
+  width: min(30vw, 360px) !important;
+  max-height: calc(100vh - 140px) !important;
+  z-index: 40 !important;
+  transition: opacity 0.8s ease, transform 0.8s ease !important;
+}
+
+#chat.chat-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateX(-24px) !important;
+}
+
+.msg {
+  font-size: 11px !important;
+  padding: 10px 36px 10px 12px !important;
+  margin-bottom: 8px !important;
+  background: rgba(10,10,14,0.75) !important;
+  border: 1px solid rgba(100,140,200,0.22) !important;
+}
+
+/* Input in basso — minimale */
+.command-wrapper {
+  bottom: 16px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: min(520px, 88%) !important;
+  z-index: 50 !important;
+  background: rgba(6,6,10,0.82) !important;
+  border: 1px solid rgba(90,130,190,0.28) !important;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5) !important;
+}
+
+#sendBtn {
+  background: rgba(255,255,255,0.06) !important;
+}
+
+#micBtn {
+  color: rgba(180,210,255,0.75) !important;
+}
+
+
+#faceHomeBtn,
+.face-id,
+[title="Gestione Face ID"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+
+/* Messaggi: solo testo, niente box pesante */
+.msg {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding: 6px 8px !important;
+  margin-bottom: 6px !important;
+  font-size: 12px !important;
+  color: rgba(220, 235, 255, 0.92) !important;
+  border-radius: 16px !important;
+}
+
+.msg.jarvis-response {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Se proprio serve un minimo di leggibilità, alone molto soft */
+.msg:hover {
+  background: rgba(255,255,255,0.03) !important;
+  border-radius: 16px !important;
+}
+
+.copy-btn {
+  opacity: 0.4 !important;
+  border: none !important;
+  background: transparent !important;
+}
+.copy-btn:hover {
+  opacity: 1 !important;
+}
+
+
+/* Riconoscimento facciale completamente disabilitato */
+#faceLoginBtn,
+#faceAuthModal,
+#faceHomeBtn,
+#faceAuthVideo,
+#faceOverlay,
+.face-auth-btn,
+.face-auth-panel,
+.face-auth-actions,
+.face-video-wrap {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+
+
+/* =====================================================
+   PULSANTI RISPOSTA — piccoli, sotto il testo, non sopra
+===================================================== */
+.msg {
+  position: relative !important;
+  padding: 8px 10px 8px 10px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.msg.jarvis-response,
+.jarvis-response {
+  padding-bottom: 8px !important;
+  padding-right: 10px !important;
+}
+
+/* Controlli SOTTO il messaggio, non sopra */
+.jarvis-response-controls {
+  position: relative !important;
+  left: auto !important;
+  bottom: auto !important;
+  top: auto !important;
+  right: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  margin-top: 6px !important;
+  margin-bottom: 2px !important;
+  z-index: 2 !important;
+}
+
+.response-action {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(180, 200, 230, 0.25) !important;
+  border-radius: 5px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: rgba(200, 215, 235, 0.55) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.response-action:hover {
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Vecchio copy-btn assoluto: spostalo via / riduci */
+.copy-btn {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  width: 18px !important;
+  height: 18px !important;
+  opacity: 0.45 !important;
+  margin-top: 4px !important;
+}
+
+.listen-response-icon {
+  width: 6px !important;
+  height: 8px !important;
+  transform: scale(0.75);
+}
+
+.copy-response-icon {
+  width: 7px !important;
+  height: 8px !important;
+  transform: scale(0.75);
+}
+
+
+
+/* =====================================================
+   CONTROLLI RISPOSTA — piccoli, SOTTO il testo, non coprono
+===================================================== */
+.msg {
+  position: relative !important;
+  padding-right: 12px !important;
+  padding-bottom: 8px !important;
+}
+
+.msg.jarvis-response {
+  padding-bottom: 10px !important;
+}
+
+.jarvis-response-controls {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+  padding-top: 4px !important;
+  clear: both !important;
+  float: none !important;
+  z-index: 2 !important;
+}
+
+.response-action {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(160, 190, 230, 0.28) !important;
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgba(200, 220, 245, 0.75) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  font-size: 10px !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.response-action:hover {
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Vecchio copy-btn assoluto: non deve coprire il testo */
+.copy-btn {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  width: 22px !important;
+  height: 22px !important;
+  margin-left: 6px !important;
+  display: inline-flex !important;
+}
+
+.copy-response-icon,
+.listen-response-icon {
+  width: 11px !important;
+  height: 11px !important;
+  display: block !important;
+}
+
+
+
+/* =====================================================
+   RESPONSIVE — ORIZZONTALE ↔ VERTICALE (auto)
+===================================================== */
+
+/* Base già fluid: viewport units */
+
+/* --- TELEFONO / VERTICALE stretto --- */
+@media (max-width: 700px), (orientation: portrait) and (max-width: 900px) {
+  #chat {
+    left: 2% !important;
+    right: 2% !important;
+    top: 6% !important;
+    width: auto !important;
+    max-width: 96% !important;
+    max-height: calc(100vh - 160px) !important;
+  }
+
+  .msg {
+    font-size: 12px !important;
+    max-width: 100% !important;
+  }
+
+  .command-wrapper {
+    width: min(96%, 520px) !important;
+    bottom: 12px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    padding: 5px 6px 5px 14px !important;
+  }
+
+  #textInput {
+    font-size: 15px !important;
+    padding: 10px 4px !important;
+  }
+
+  #sendBtn {
+    padding: 0 12px !important;
+    height: 36px !important;
+    font-size: 9px !important;
+  }
+
+  #micBtn {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .jarvis-response-controls {
+    margin-top: 8px !important;
+  }
+
+  .response-action {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+  }
+}
+
+/* --- TELEFONO molto stretto --- */
+@media (max-width: 400px) {
+  #chat {
+    top: 4% !important;
+    max-height: calc(100vh - 140px) !important;
+  }
+
+  .command-wrapper {
+    width: 96% !important;
+    border-radius: 28px !important;
+  }
+
+  .msg {
+    font-size: 11px !important;
+    padding: 8px 10px !important;
+  }
+}
+
+/* --- TABLET / LANDSCAPE --- */
+@media (min-width: 701px) and (max-width: 1100px) {
+  #chat {
+    left: 1.5% !important;
+    width: min(38vw, 400px) !important;
+    max-height: calc(100vh - 150px) !important;
+  }
+
+  .command-wrapper {
+    width: min(640px, 90%) !important;
+  }
+}
+
+/* --- DESKTOP / ORIZZONTALE largo --- */
+@media (min-width: 1101px) {
+  #chat {
+    left: 1.5% !important;
+    width: min(30vw, 380px) !important;
+    max-height: calc(100vh - 140px) !important;
+  }
+
+  .command-wrapper {
+    width: min(560px, 70%) !important;
+  }
+}
+
+/* Landscape basso (tablet in orizzontale) */
+@media (orientation: landscape) and (max-height: 500px) {
+  #chat {
+    top: 4% !important;
+    max-height: calc(100vh - 100px) !important;
+  }
+
+  .command-wrapper {
+    bottom: 8px !important;
+  }
+
+  .msg {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+}
+
+/* Safe area iPhone / notch */
+@supports (padding: max(0px)) {
+  .command-wrapper {
+    bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  }
+
+  #chat {
+    top: max(6%, env(safe-area-inset-top)) !important;
+    left: max(1.5%, env(safe-area-inset-left)) !important;
+  }
+}
+
+/* Canvas full in ogni orientamento */
+#webgl-container,
+#webgl-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  inset: 0 !important;
+}
+
 </style>  
 </head>  <body>
 
@@ -2303,7 +2791,7 @@ input {
       <input id="loginPassword" class="auth-input" type="password" minlength="4" maxlength="128" autocomplete="current-password" placeholder="PASSWORD" required>
       <button class="auth-main-btn" type="submit">ACCEDI</button>
     </form>
-    <button id="faceLoginBtn" class="face-auth-btn" type="button">RICONOSCIMENTO FACCIALE</button>
+    <!-- riconoscimento facciale rimosso -->
 
     <form id="registerForm" class="auth-form" autocomplete="on" style="display:none;">
       <input id="registerNickname" class="auth-input" type="text" maxlength="32" autocomplete="username" placeholder="SCEGLI NICKNAME" required>
@@ -2319,14 +2807,7 @@ input {
     <div class="auth-note">ACCOUNT E PRESENZA SONO GESTITI DAL WORKER + DATABASE D1. Il Control Center del creatore legge i dati condivisi tra tutti i dispositivi.</div>
   </div>
 </div>
-<div id="faceAuthModal" aria-hidden="true">
-  <div class="face-auth-panel">
-    <div class="face-auth-modal-title"><div class="face-auth-label">J.A.R.V.I.S. // FACE IDENTIFICATION</div><button id="faceCloseTop" type="button">×</button></div>
-    <div class="face-video-wrap"><video id="faceAuthVideo" autoplay muted playsinline></video><canvas id="faceOverlay"></canvas></div>
-    <div class="face-auth-actions"><button id="faceScanBtn" type="button">AVVIA SCANSIONE</button><button id="faceEnrollBtn" type="button">REGISTRA VOLTO</button><button id="faceCloseBtn" type="button">CHIUDI</button></div>
-    <div id="faceAuthStatus" class="face-auth-status"></div>
-  </div>
-</div>
+<!-- faceAuthModal rimosso -->
 <div id="authUserbar" class="auth-userbar">
   <span class="auth-user-dot"></span>
   <span id="authCurrentUser">USER</span>
@@ -2458,7 +2939,7 @@ const MEMORY_KEY =
   
 const MAX_MEMORY = 30;  
   
-const NEURON_COUNT = 5500;  
+const NEURON_COUNT = 12000;  
   
 const MAPTILER_KEY =  
 "NmSlgtsAdQyEWy7t0OJf";  
@@ -3857,13 +4338,14 @@ let neuronBaseRadius;
   
 let neuronTheta;  
   
-let neuronPhi;  
+let neuronPhi;
+let neuronVel;
   
 let animationFrame = null;  
   
 let neuralEnergy = 0.15;  
   
-let targetEnergy = 0.15;  
+let targetEnergy = 0.08;  
   
   
 /* =====================================================  
@@ -4113,35 +4595,12 @@ ctx.createRadialGradient(
 32  
 );  
   
-gradient.addColorStop(  
-0,  
-"rgba(255,255,255,1)"  
-);  
-  
-gradient.addColorStop(  
-0.12,  
-"rgba(255,255,255,1)"  
-);  
-  
-gradient.addColorStop(  
-0.28,  
-"rgba(248,251,255,1)"  
-);  
-  
-gradient.addColorStop(  
-0.48,  
-"rgba(235,242,255,.95)"  
-);  
-  
-gradient.addColorStop(  
-0.70,  
-"rgba(210,225,245,.38)"  
-);  
-  
-gradient.addColorStop(  
-1,  
-"rgba(0,0,0,0)"  
-);  
+gradient.addColorStop(0, "rgba(255,255,255,1)");
+gradient.addColorStop(0.15, "rgba(180,240,255,1)");
+gradient.addColorStop(0.35, "rgba(120,210,255,1)");
+gradient.addColorStop(0.55, "rgba(50,130,230,0.5)");
+gradient.addColorStop(0.75, "rgba(20,80,180,0.15)");
+gradient.addColorStop(1, "rgba(0,0,0,0)");  
   
 ctx.fillStyle =  
 gradient;  
@@ -4214,10 +4673,7 @@ window.innerWidth,
 window.innerHeight  
 );  
   
-renderer.setClearColor(  
-0x000000,  
-0  
-);  
+renderer.setClearColor(0x000000, 1);  
   
   
 container.innerHTML = "";  
@@ -4254,7 +4710,10 @@ NEURON_COUNT
 neuronPhi =  
 new Float32Array(  
 NEURON_COUNT  
-);  
+);
+
+neuronVel = new Float32Array(NEURON_COUNT * 3); // fluid velocity xyz
+  
   
   
 /* =====================================================  
@@ -4277,8 +4736,7 @@ Math.acos(
 );  
   
 const radius =  
-0.82 +  
-Math.random() * 0.62;  
+0.82 + Math.random() * 0.62;  
   
 const sinPhi =  
 Math.sin(phi);  
@@ -4339,12 +4797,10 @@ const material =
 new THREE.PointsMaterial({  
   
 color:  
-new THREE.Color(  
-0xffffff  
-),  
+new THREE.Color(0xb8e8ff),  
   
 size:  
-0.050,  
+0.046,  
   
 map:  
 createNeuronTexture(),  
@@ -4378,11 +4834,15 @@ particles
 );  
   
   
+// reset fluid velocities
+if(neuronVel) neuronVel.fill(0);
+
 notify(  
-"NEURAL CORE ONLINE — 5500 NEURONS"  
+"NEURAL CORE ONLINE — 12000 NEURONS"  
 );  
   
-animateNeuralCore();  
+animateNeuralCore();
+    updateNeuralScale();  
   
 }catch(error){  
   
@@ -4436,46 +4896,172 @@ errorElement
    STATO NEURONALE  
 ===================================================== */  
   
-function setState(state){  
-  
-if(state === "thinking"){  
-  
-targetEnergy = 2.8;  
-  
-}  
-  
-else if(state === "speaking"){  
-  
-targetEnergy = 1.25;  
-  
-}  
-  
-else if(state === "listening"){  
-  
-targetEnergy = 1.45;  
-  
-}  
-  
-else if(state === "error"){  
-  
-targetEnergy = 2.0;  
-  
-}  
-  
-else{  
-  
-targetEnergy = 0.15;  
-  
-}  
-  
-}  
-  
-  
-/* =====================================================  
-   ANIMAZIONE — SFERA REATTIVA  
-===================================================== */  
-  
-function animateNeuralCore(){  
+
+/* Scala sfera: grande su tablet/PC, più piccola solo su telefono */
+
+/* =====================================================
+   GIROSCOPIO / MOTION — muove particelle in idle
+===================================================== */
+let gyroEnabled = false;
+let gyroBeta = 0, gyroGamma = 0, gyroAlpha = 0;
+let gyroTargetBeta = 0, gyroTargetGamma = 0;
+let lastUserActivity = Date.now();
+let isIdleForGyro = true;
+
+function markUserActivity(){
+  lastUserActivity = Date.now();
+  isIdleForGyro = false;
+}
+
+function updateIdleFlag(){
+  // idle se nessuna interazione da 8s e energia bassa
+  isIdleForGyro = (Date.now() - lastUserActivity > 8000) && (typeof neuralEnergy === "number" ? neuralEnergy < 0.5 : true);
+}
+
+function handleOrientation(e){
+  if(e.beta != null) gyroTargetBeta = e.beta;   // -180..180 front-back
+  if(e.gamma != null) gyroTargetGamma = e.gamma; // -90..90 left-right
+  if(e.alpha != null) gyroAlpha = e.alpha;
+}
+
+function handleMotion(e){
+  const a = e.accelerationIncludingGravity;
+  if(!a) return;
+  // fallback se orientation non disponibile
+  if(a.x != null) gyroTargetGamma = (a.x || 0) * 6;
+  if(a.y != null) gyroTargetBeta = (a.y || 0) * 6;
+}
+
+async function enableGyro(){
+  if(gyroEnabled) return;
+  try{
+    if(typeof DeviceOrientationEvent !== "undefined" &&
+       typeof DeviceOrientationEvent.requestPermission === "function"){
+      const p = await DeviceOrientationEvent.requestPermission();
+      if(p !== "granted") return;
+    }
+  }catch(err){ console.warn("Gyro permission:", err); }
+  window.addEventListener("deviceorientation", handleOrientation, true);
+  window.addEventListener("devicemotion", handleMotion, true);
+  gyroEnabled = true;
+}
+
+// smooth gyro values ogni frame (chiamato in animate)
+function updateGyroSmooth(){
+  gyroBeta += (gyroTargetBeta - gyroBeta) * 0.08;
+  gyroGamma += (gyroTargetGamma - gyroGamma) * 0.08;
+  updateIdleFlag();
+}
+
+// abilita al primo tocco (iOS richiede gesture)
+["touchstart","click"].forEach(ev => {
+  window.addEventListener(ev, () => { enableGyro(); markUserActivity(); }, { once: false, passive: true });
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("textInput");
+  if(input){
+    input.addEventListener("focus", markUserActivity);
+    input.addEventListener("input", markUserActivity);
+    input.addEventListener("keydown", markUserActivity);
+  }
+  const chat = document.getElementById("chat");
+  if(chat){
+    chat.addEventListener("pointerdown", markUserActivity, { passive: true });
+  }
+  enableGyro();
+});
+
+function updateNeuralScale(){
+  if(!camera || !renderer) return;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const isPhone = w <= 600 || (w <= 900 && h > w);
+  camera.position.z = isPhone ? 7.2 : 5;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+window.addEventListener("resize", updateNeuralScale);
+window.addEventListener("orientationchange", () => setTimeout(updateNeuralScale, 150));
+
+function setState(state){
+  if(state === "thinking"){
+    targetEnergy = 2.8;
+    if(typeof markUserActivity === "function") markUserActivity();
+  } else if(state === "speaking"){
+    targetEnergy = 1.35;
+    if(typeof markUserActivity === "function") markUserActivity();
+  } else if(state === "listening"){
+    targetEnergy = 1.45;
+    if(typeof markUserActivity === "function") markUserActivity();
+  } else if(state === "error"){
+    targetEnergy = 2.0;
+  } else {
+    targetEnergy = 0.15;
+  }
+}
+
+/* =====================================================
+   CHAT AUTO-HIDE (dopo 10 secondi)
+===================================================== */
+let chatHideTimer = null;
+const CHAT_HIDE_DELAY = 20000;
+
+function showChat(){
+  const chat = document.getElementById("chat");
+  if(!chat) return;
+  chat.classList.remove("chat-hidden");
+  resetChatHideTimer();
+}
+
+function hideChat(){
+  const chat = document.getElementById("chat");
+  if(!chat) return;
+  const input = document.getElementById("textInput");
+  if(input && document.activeElement === input) return;
+  // non scompare se l'utente sta ancora interagendo con la chat
+  if(chat.matches(":hover")) return;
+  if(chat.contains(document.activeElement)) return;
+  chat.classList.add("chat-hidden");
+}
+
+function resetChatHideTimer(){
+  if(chatHideTimer) clearTimeout(chatHideTimer);
+  chatHideTimer = setTimeout(hideChat, CHAT_HIDE_DELAY);
+}
+
+function onChatActivity(){
+  showChat();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("textInput");
+  const chat = document.getElementById("chat");
+  if(input){
+    input.addEventListener("focus", showChat);
+    input.addEventListener("input", showChat);
+    input.addEventListener("keydown", showChat);
+  }
+  if(chat){
+    const observer = new MutationObserver(() => showChat());
+    observer.observe(chat, { childList: true, subtree: true });
+    // non scompare se toccata, letta o mossa
+    ["pointerdown", "pointermove", "touchstart", "touchmove", "wheel", "scroll", "mouseenter", "mousemove"].forEach(ev => {
+      chat.addEventListener(ev, showChat, { passive: true });
+    });
+  }
+  // anche interazione generale con input/area comandi
+  const wrap = document.querySelector(".command-wrapper");
+  if(wrap){
+    ["pointerdown", "touchstart", "focusin"].forEach(ev => {
+      wrap.addEventListener(ev, showChat, { passive: true });
+    });
+  }
+  resetChatHideTimer();
+});
+
+function animateNeuralCore(){
+  if(typeof updateGyroSmooth === "function") updateGyroSmooth();  
   
 animationFrame =  
 requestAnimationFrame(  
@@ -4702,34 +5288,129 @@ seed * .15
    RAGGIO FINALE  
 ===================================================== */  
   
-const radiusNow =  
-radius +  
-pulse +  
-individual +  
-wave1 +  
-wave2 +  
-wave3 +  
-activePulse +  
-voiceExpansion;  
+/* Effetto VENOM / liquido quando pensa:
+   non comprime tutta la sfera, ma crea 2-3 "bocche" di gravità
+   che si muovono e attirano i neuroni in modo organico */
+/* =====================================================
+   FLUIDODINAMICA SEMPLIFICATA (dentro la sfera)
+   Campo di flusso + viscosità + inerzia + confinamento
+===================================================== */
+const life = Math.max(0.12, neuralEnergy);
+const isThinking = neuralEnergy > 2.2;
+const isTalking = voiceLevel > 0.04 && neuralEnergy > 0.8;
+const energy = isThinking ? 0.28 : (life * 0.75 + voiceLevel * 1.0);
+// thinking: niente turbolenza extra, solo respiro
+
+// viscosità: alta = movimento più liscio; bassa in thinking = più turbolento
+const viscosity = isTalking ? 0.92 : 0.945;
+const dt = 0.060;
+
+// posizione corrente (da buffer, o da base sferica al primo frame)
+let px = neuronPositions[index];
+let py = neuronPositions[index + 1];
+let pz = neuronPositions[index + 2];
+const r0 = Math.sqrt(px*px + py*py + pz*pz) || radius;
+
+// --- campo di velocità tipo fluido (curl noise approssimato) ---
+const fx = px * 0.85 + time * 0.15;
+const fy = py * 0.85 + time * 0.12;
+const fz = pz * 0.85 + time * 0.1;
+const s = seed * 0.001;
+
+// pseudo-curl 3D: flusso incomprimibile stilizzato
+const n1 = Math.sin(fy * 1.7 + fz * 1.1 + time * (0.48 + energy * 0.38) + s);
+const n2 = Math.cos(fz * 1.5 + fx * 1.3 + time * (0.40 + energy * 0.32) + s * 1.3);
+const n3 = Math.sin(fx * 1.4 + fy * 1.6 + time * (0.55 + energy * 0.35) + s * 0.7);
+const n4 = Math.cos(fy * 2.1 - fx * 0.9 + time * (0.9 + energy * 0.7) + s);
+const n5 = Math.sin(fz * 1.9 + time * (1.1 + energy * 0.9) + s * 2.0);
+
+let vx = (n2 * 1.1 - n3 * 0.9) * (0.062 + energy * 0.078);
+let vy = (n3 * 1.0 - n1 * 1.0) * (0.062 + energy * 0.078);
+let vz = (n1 * 0.95 - n2 * 0.95) * (0.062 + energy * 0.078);
+
+// strato secondario più fine (piccole turbolenze)
+vx += (n4 - n5) * (0.022 + energy * 0.030);
+vy += (n5 * 0.8) * (0.022 + energy * 0.030);
+vz += (n4 * 0.7) * (0.018 + energy * 0.028);
+
+// listening: flusso lento e ampio
+if(!isThinking && !isTalking){
+  vx *= 0.72; vy *= 0.72; vz *= 0.72;
+  vx += Math.sin(time * 0.65 + s) * 0.016;
+  vy += Math.cos(time * 0.55 + s) * 0.016;
+}
+
+// talking: impulsi dalla voce
+if(isTalking){
+  const pulse = voiceLevel * (0.128 + 0.096 * Math.sin(time * 5 + s));
+  const len = Math.sqrt(px*px+py*py+pz*pz) || 1;
+  vx += (px / len) * pulse * 0.5;
+  vy += (py / len) * pulse * 0.5;
+  vz += (pz / len) * pulse * 0.5;
+  vx *= 1.05; vy *= 1.05; vz *= 1.05;
+}
+
+// GIROSCOPIO: in idle, muovere il telefono muove le particelle
+if(typeof isIdleForGyro !== "undefined" && isIdleForGyro && typeof gyroGamma === "number"){
+  const gStrength = 0.072;
+  // gamma = tilt sx/dx → sposta su X; beta = avanti/indietro → Y
+  vx += (gyroGamma / 45) * gStrength;
+  vy += -(gyroBeta / 45) * gStrength * 0.85;
+  vz += (gyroGamma / 90) * gStrength * 0.3;
+}
+
+
+// thinking: niente vortici — solo respiro + continua a girare
+if(isThinking){
+  // solo respiro lento radiale, nessuna danza
+  const len = Math.sqrt(px*px + py*py + pz*pz) || 1;
+  const breath = Math.sin(time * 0.9) * 0.018;
+  vx = (px / len) * breath * 0.35;
+  vy = (py / len) * breath * 0.35;
+  vz = (pz / len) * breath * 0.35;
+}
+
+
+// integra velocità con viscosità (inerzia del fluido)
+if(!neuronVel){ neuronVel = new Float32Array(NEURON_COUNT * 3); }
+const iv = index * 3;
+let ovx = neuronVel[iv] * viscosity + vx * (1 - viscosity);
+let ovy = neuronVel[iv + 1] * viscosity + vy * (1 - viscosity);
+let ovz = neuronVel[iv + 2] * viscosity + vz * (1 - viscosity);
+
+neuronVel[iv] = ovx;
+neuronVel[iv + 1] = ovy;
+neuronVel[iv + 2] = ovz;
+
+px += ovx * dt * (2.6 + energy * 0.9);
+py += ovy * dt * (2.6 + energy * 0.9);
+pz += ovz * dt * (2.6 + energy * 0.9);
+
+// confinamento morbido nella sfera (pressione / boundary)
+const r = Math.sqrt(px*px + py*py + pz*pz) || 0.001;
+const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
+// soft shell: attira verso raggio base senza rigidità
+// sfera sempre visibile: confinamento forte sul raggio
+const conf = 0.42 + energy * 0.05;
+const nr = r + (targetR - r) * conf;
+const scale = nr / r;
+px *= scale; py *= scale; pz *= scale;
+
+const r2 = Math.sqrt(px*px+py*py+pz*pz);
+const maxR = 1.38;
+if(r2 > maxR){
+  const s2 = maxR / r2;
+  px *= s2; py *= s2; pz *= s2;
+}
+if(r2 < 0.42){
+  const s2 = 0.42 / (r2 || 0.001);
+  px *= s2; py *= s2; pz *= s2;
+}
+
+neuronPositions[index] = px;
+neuronPositions[index + 1] = py;
+neuronPositions[index + 2] = pz;
   
-  
-const sinPhi =  
-Math.sin(phi);  
-  
-  
-neuronPositions[index] =  
-radiusNow *  
-sinPhi *  
-Math.cos(theta);  
-  
-neuronPositions[index + 1] =  
-radiusNow *  
-sinPhi *  
-Math.sin(theta);  
-  
-neuronPositions[index + 2] =  
-radiusNow *  
-Math.cos(phi);  
   
 }  
   
@@ -4744,46 +5425,17 @@ particles.geometry
    ROTAZIONE  
 ===================================================== */  
   
-particles.rotation.y +=  
-0.00035 +  
-neuralEnergy * 0.00045 +  
-voiceLevel * 0.0008;  
-  
-particles.rotation.x =  
-Math.sin(  
-time * (  
-0.28 +  
-voiceLevel * .25  
-)  
-) *  
-(  
-0.018 +  
-neuralEnergy * 0.012 +  
-voiceLevel * .015  
-);  
-  
-particles.rotation.z =  
-Math.cos(  
-time * (  
-0.20 +  
-voiceLevel * .20  
-)  
-) *  
-(  
-0.008 +  
-neuralEnergy * 0.009 +  
-voiceLevel * .010  
-);  
+// niente dondolo: solo una rotazione Y lentissima
+particles.rotation.y += 0.00018 + (typeof neuralEnergy === 'number' && neuralEnergy > 2.0 ? 0.00035 : 0);
+particles.rotation.x = 0;
+particles.rotation.z = 0;  
   
   
 /* =====================================================  
    DIMENSIONE NEURONI  
 ===================================================== */  
   
-particles.material.size =  
-0.043 +  
-neuralEnergy * 0.0085 +  
-voiceLevel * 0.012;  
+particles.material.size = 0.040 + neuralEnergy * 0.006 + voiceLevel * 0.008;  
   
   
 particles.material.opacity =  
@@ -8520,7 +9172,7 @@ setInterval(async()=>{
      FEEDBACK UTENTE
 ===================================================== -->
 <div class="utility-actions" aria-label="Azioni J.A.R.V.I.S.">
-  <button id="faceHomeBtn" class="feedback-launch" type="button" title="Gestione Face ID">FACE ID</button>
+  
   <button id="feedbackBtn" class="feedback-launch" type="button" title="Lascia un feedback">FEEDBACK</button>
 </div>
 <div id="feedbackPrompt" class="feedback-prompt" aria-hidden="true">

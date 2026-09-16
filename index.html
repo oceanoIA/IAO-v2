@@ -5193,228 +5193,41 @@ neuralEnergy
 );  
   
   
-for(  
-let i=0;  
-i<NEURON_COUNT;  
-i++  
-){  
-  
-const index =  
-i * 3;  
-  
-const theta =  
-neuronTheta[i];  
-  
-const phi =  
-neuronPhi[i];  
-  
-const radius =  
-neuronBaseRadius[i];  
-  
-const seed =  
-neuronSeeds[i];  
-  
-  
-const individual =  
-Math.sin(  
-time * 1.35 +  
-seed  
-) *  
-(  
-0.018 +  
-voiceLevel * 0.010  
-);  
-  
-  
-const wave1 =  
-Math.sin(  
-theta * 7 +  
-phi * 4 +  
-time * (  
-2.0 +  
-voiceLevel * 2.0  
-) +  
-seed  
-) *  
-(  
-0.045 +  
-voiceLevel * 0.025  
-) *  
-activity;  
-  
-  
-const wave2 =  
-Math.sin(  
-phi * 10 -  
-time * (  
-1.55 +  
-voiceLevel * 1.7  
-) +  
-seed * 0.55  
-) *  
-(  
-0.032 +  
-voiceLevel * 0.020  
-) *  
-activity;  
-  
-  
-const wave3 =  
-Math.sin(  
-theta * 13 +  
-time * (  
-3.0 +  
-voiceLevel * 2.5  
-) +  
-seed * 0.25  
-) *  
-(  
-0.018 +  
-voiceLevel * 0.014  
-) *  
-activity;  
-  
-  
-const pulse =  
-(  
-breathing +  
-slowBreathing  
-) *  
-(  
-0.75 +  
-activity * 0.22  
-);  
-  
-  
-const activePulse =  
-Math.sin(  
-time * (  
-3.2 +  
-voiceLevel * 3.0  
-) +  
-seed * 0.4  
-) *  
-(  
-0.018 +  
-voiceLevel * 0.015  
-) *  
-Math.max(  
-0,  
-activity - 0.5  
-);  
-  
-  
-/* =====================================================  
-   ESPANSIONE VOCALE  
-===================================================== */  
-  
-const voiceExpansion =  
-voiceLevel *  
-(  
-0.018 +  
-0.022 *  
-Math.sin(  
-time * 7 +  
-seed * .15  
-)  
-);  
-  
-  
-/* =====================================================  
-   RAGGIO FINALE  
-===================================================== */  
-  
-/* Effetto VENOM / liquido quando pensa:
-   non comprime tutta la sfera, ma crea 2-3 "bocche" di gravità
-   che si muovono e attirano i neuroni in modo organico */
-/* =====================================================
-   SFERA VINCOLATA
-   Movimento tangenziale sulla superficie — niente collasso
-===================================================== */
-const life = Math.max(0.12, neuralEnergy);
-const isThinking = neuralEnergy > 2.2;
-const isTalking = voiceLevel > 0.04 && neuralEnergy > 0.8;
-const energy = isThinking ? 0.20 : (life * 0.45 + voiceLevel * 0.7);
-const viscosity = 0.93;
-const dt = 0.05;
-const s = seed * 0.001;
+for(let i=0; i<NEURON_COUNT; i++){
+  const index = i * 3;
+  const radius = neuronBaseRadius[i];
+  const seed = neuronSeeds[i];
+  const layer = (i % 3); // 3 gusci concentrici = sfera piena, contorno netto
 
-let px = neuronPositions[index];
-let py = neuronPositions[index + 1];
-let pz = neuronPositions[index + 2];
+  // corrente sulla superficie (viva) — MAI fuori dalla sfera
+  const flow = 0.0044 + layer * 0.0011;
+  neuronTheta[i] += flow
+    + Math.sin(time * 0.55 + seed * 0.001 + layer) * 0.0024
+    + Math.sin(time * 1.15 + seed * 0.002) * 0.0011;
+  neuronPhi[i] += Math.cos(time * 0.48 + seed * 0.0013) * 0.0018
+    + Math.sin(time * 0.9 + seed * 0.0008) * 0.0008;
 
-// flusso solo TANGENTE alla sfera (non la deforma)
-const n1 = Math.sin(py * 1.2 + time * 0.35 + s);
-const n2 = Math.cos(pz * 1.1 + time * 0.28 + s * 1.2);
-const n3 = Math.sin(px * 1.15 + time * 0.32 + s * 0.7);
-let vx = (n2 - n3) * (0.034 + energy * 0.028);
-let vy = (n3 - n1) * (0.034 + energy * 0.028);
-let vz = (n1 - n2) * (0.034 + energy * 0.028);
+  if(neuronPhi[i] < 0.10) neuronPhi[i] = 0.10;
+  if(neuronPhi[i] > Math.PI - 0.10) neuronPhi[i] = Math.PI - 0.10;
 
-if(isTalking){
-  vx *= 1.25; vy *= 1.25; vz *= 1.25;
-}
-if(isThinking){
-  vx *= 0.45; vy *= 0.45; vz *= 0.45;
+  const phi = neuronPhi[i];
+  const theta = neuronTheta[i];
+  // respiro piccolo: il CONTORNO resta sfera
+  const breath = 1 + Math.sin(time * 0.7 + seed * 0.001) * 0.016
+               + (voiceLevel > 0.04 ? voiceLevel * 0.025 : 0);
+  const r = radius * breath;
+  const sinPhi = Math.sin(phi);
+
+  neuronPositions[index]     = r * sinPhi * Math.cos(theta);
+  neuronPositions[index + 1] = r * sinPhi * Math.sin(theta);
+  neuronPositions[index + 2] = r * Math.cos(phi);
 }
 
-if(typeof isIdleForGyro !== "undefined" && isIdleForGyro && typeof gyroGamma === "number"){
-  vx += (gyroGamma / 45) * 0.03;
-  vy += -(gyroBeta / 45) * 0.025;
-}
+particles.geometry.attributes.position.needsUpdate = true;
 
-if(!neuronVel){ neuronVel = new Float32Array(NEURON_COUNT * 3); }
-const iv = index * 3;
-let ovx = neuronVel[iv] * viscosity + vx * (1 - viscosity);
-let ovy = neuronVel[iv + 1] * viscosity + vy * (1 - viscosity);
-let ovz = neuronVel[iv + 2] * viscosity + vz * (1 - viscosity);
-
-// togli la componente radiale → scorre sulla sfera
-let rr = Math.sqrt(px*px + py*py + pz*pz) || 1;
-const nx = px / rr, ny = py / rr, nz = pz / rr;
-const dot = ovx*nx + ovy*ny + ovz*nz;
-ovx -= dot * nx;
-ovy -= dot * ny;
-ovz -= dot * nz;
-
-neuronVel[iv] = ovx;
-neuronVel[iv + 1] = ovy;
-neuronVel[iv + 2] = ovz;
-
-px += ovx * dt * 2.1;
-py += ovy * dt * 2.1;
-pz += ovz * dt * 2.1;
-
-// ricolloca SEMPRE sul raggio della sfera (+ respiro minimo)
-rr = Math.sqrt(px*px + py*py + pz*pz) || 1;
-const breath = 1 + Math.sin(time * 0.7 + s) * 0.018;
-const targetR = radius * breath;
-px *= targetR / rr;
-py *= targetR / rr;
-pz *= targetR / rr;
-
-neuronPositions[index] = px;
-neuronPositions[index + 1] = py;
-neuronPositions[index + 2] = pz;
-
-
-}
-
-particles.geometry
-  
-.attributes  
-.position  
-.needsUpdate = true;  
-  
-  
-/* =====================================================  
-   ROTAZIONE  
-===================================================== */  
-  
-// niente dondolo: solo una rotazione Y lentissima
-particles.rotation.y += 0.00018 + (typeof neuralEnergy === 'number' && neuralEnergy > 2.0 ? 0.00035 : 0);
-particles.rotation.x = 0;
-particles.rotation.z = 0;  
+particles.rotation.y += 0.0026;
+particles.rotation.x += 0.0014;
+particles.rotation.z += 0.0009;  
   
   
 /* =====================================================  

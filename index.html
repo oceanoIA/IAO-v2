@@ -8461,27 +8461,28 @@ recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
 let voiceBuffer = "";
+let lastHeard = "";
 let voiceSendTimer = null;
+let restartTimer = null;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
+  lastHeard = "";
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
 }
 
 function cleanVoiceText(s){
-  let t = String(s || "").toLowerCase().replace(/[^\wàèéìòù\s']/gi, " ").replace(/\s+/g, " ").trim();
+  let t = String(s || "").replace(/\s+/g, " ").trim();
   if(!t) return "";
   const words = t.split(" ");
   const out = [];
   for(const w of words){
     if(!w) continue;
-    if(out.length && out[out.length-1] === w) continue; // ciao ciao ciao
+    if(out.length && out[out.length-1].toLowerCase() === w.toLowerCase()) continue;
     out.push(w);
   }
   t = out.join(" ");
-  // togli ripetizioni di "ciao jarvis" / "ciao"
-  t = t.replace(/(\bciao(?:\s+jarvis)?\s+){2,}/g, "ciao jarvis ");
-  t = t.replace(/(\bciao jarvis come stai\s*){2,}/g, "ciao jarvis come stai ");
+  t = t.replace(/(\bciao(?:\s+jarvis)?\s+){2,}/gi, "ciao jarvis ");
   t = t.replace(/\s+/g, " ").trim();
   return t;
 }
@@ -8491,154 +8492,169 @@ function mergeVoiceChunk(prev, chunk){
   const b = cleanVoiceText(chunk);
   if(!b) return a;
   if(!a) return b;
-  if(a === b) return a;
-  if(b.startsWith(a) || b.includes(a)) return b; // nuova frase più completa
-  if(a.startsWith(b) || a.includes(b)) return a; // già contenuto
-  // se è quasi uguale, tieni il più lungo
-  if(a.length > 12 && b.length > 12 && (a.includes(b.slice(0, Math.min(12,b.length))) || b.includes(a.slice(0, Math.min(12,a.length))))){
-    return a.length >= b.length ? a : b;
-  }
+  if(a.toLowerCase() === b.toLowerCase()) return b;
+  if(b.toLowerCase().startsWith(a.toLowerCase()) || b.toLowerCase().includes(a.toLowerCase())) return b;
+  if(a.toLowerCase().startsWith(b.toLowerCase()) || a.toLowerCase().includes(b.toLowerCase())) return a;
   return cleanVoiceText(a + " " + b);
 }
 
 function commitVoiceUtterance(){
-  const raw = cleanVoiceText(voiceBuffer);
+  if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
+  const raw = cleanVoiceText(voiceBuffer || lastHeard);
   voiceBuffer = "";
-  voiceSendTimer = null;
+  lastHeard = "";
   if(!raw) return;
 
-  const spoken = stripWakeWord(raw);
-  if(!spoken){
-    notify("Ti ascolto, Oceano");
-    textInput.value = "";
-    return;
-  }
+  // mostra sempre la frase in chat input
+  if(textInput) textInput.value = raw;
+
+  let spoken = raw;
+  try{ spoken = stripWakeWord(raw) || raw; }catch(e){ spoken = raw; }
+  spoken = cleanVoiceText(spoken);
+  if(!spoken) spoken = raw;
 
   const low = spoken.toLowerCase().trim();
-  if(/^(ciao|hey|ehi|ok|okay|jarvis|yavis|ciao jarvis)$/.test(low)){
-    notify("Ti ascolto, Oceano");
-    textInput.value = "";
-    return;
-  }
-  if(spoken.length < 4){
-    textInput.value = spoken;
-    return;
-  }
 
-  textInput.value = spoken;
   lastVoiceCommandAt = Date.now();
 
-  if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
-    textInput.value = "";
-    return;
-  }
+  // comandi locali (stop, ora, ecc.)
+  try{
+    if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
+      if(textInput) textInput.value = "";
+      return;
+    }
+  }catch(e){ console.warn("voice cmd", e); }
 
-  sendMessage();
+  // invia sempre alla AI (anche "ciao jarvis")
+  if(textInput) textInput.value = spoken;
+  try{
+    sendMessage();
+  }catch(e){
+    console.warn("sendMessage voice", e);
+    try{ processAi(spoken); }catch(err){ console.warn(err); }
+  }
+}
+
+function restartRecognitionSoon(){
+  if(restartTimer) clearTimeout(restartTimer);
+  restartTimer = setTimeout(()=>{
+    if(!keepListening || !recognition) return;
+    try{
+      recognition.start();
+    }catch(e){
+      // InvalidStateError: già avviato
+    }
+  }, 280);
 }
 
 recognition.onstart = async ()=>{
   listening = true;
   voiceSessionActive = true;
   lastVoiceCommandAt = Date.now();
-  micBtn.classList.add("active");
+  if(micBtn) micBtn.classList.add("active");
   setState("listening");
-  await startVoiceMonitor();
+  try{ await startVoiceMonitor(); }catch(e){}
+};
+
+recognition.onspeechend = ()=>{
+  // non stoppare qui: aspettiamo onresult + timer
 };
 
 recognition.onresult = event=>{
   let interim = "";
   let finals = [];
-  for(let i = event.resultIndex; i < event.results.length; i++){
-    const res = event.results[i];
-    const piece = (res[0] && res[0].transcript) ? res[0].transcript.trim() : "";
-    if(!piece) continue;
-    if(res.isFinal) finals.push(piece);
-    else interim = piece;
-  }
+  try{
+    for(let i = event.resultIndex; i < event.results.length; i++){
+      const res = event.results[i];
+      const piece = (res[0] && res[0].transcript) ? res[0].transcript.trim() : "";
+      if(!piece) continue;
+      if(res.isFinal) finals.push(piece);
+      else interim = piece;
+    }
+  }catch(e){ console.warn("onresult", e); }
 
   if(finals.length){
     const chunk = finals.join(" ").trim();
     voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
+    lastHeard = voiceBuffer;
+  } else if(interim){
+    lastHeard = mergeVoiceChunk(voiceBuffer, interim);
   }
 
-  const preview = (voiceBuffer + (interim ? " " + interim : "")).replace(/\s+/g, " ").trim();
-  if(preview) textInput.value = preview;
+  const preview = cleanVoiceText(voiceBuffer || lastHeard || interim);
+  if(preview && textInput) textInput.value = preview;
   setState("listening");
 
   if(voiceSendTimer) clearTimeout(voiceSendTimer);
-  // aspetta ~1.3s di silenzio prima di inviare la frase intera
-  if(voiceBuffer.length >= 4){
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 1300);
+  const ready = cleanVoiceText(voiceBuffer || lastHeard);
+  if(ready.length >= 2){
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 1100);
   }
-};  
-  
-  
-recognition.onerror =  
-error=>{  
-  
-console.warn(  
-"Microfono:",  
-error  
-);  
-  
-listening = false;  
-  
-micBtn.classList.remove(  
-"active"  
-);  
-  
-stopVoiceMonitor();  
-  
-setState("idle");  
-  
-};  
-  
-  
+};
+
+recognition.onerror = error=>{
+  const err = (error && error.error) ? error.error : "";
+  console.warn("Microfono:", err || error);
+  // errori recuperabili: resta in ascolto
+  if(err === "no-speech" || err === "aborted" || err === "audio-capture"){
+    if(keepListening) restartRecognitionSoon();
+    return;
+  }
+  if(err === "not-allowed" || err === "service-not-allowed"){
+    keepListening = false;
+    listening = false;
+    if(micBtn) micBtn.classList.remove("active");
+    try{ stopVoiceMonitor(); }catch(e){}
+    setState("idle");
+    try{ addMsg("Microfono non autorizzato. Consenti l'accesso al microfono e riprova.", true); }catch(e){}
+    return;
+  }
+};
+
 recognition.onend = ()=>{
   listening = false;
-  micBtn.classList.remove("active");
-  stopVoiceMonitor();
-  if(voiceBuffer && voiceBuffer.length >= 4){
+  if(micBtn) micBtn.classList.remove("active");
+  try{ stopVoiceMonitor(); }catch(e){}
+
+  const pending = cleanVoiceText(voiceBuffer || lastHeard);
+  if(pending.length >= 2){
     commitVoiceUtterance();
-  } else {
-    resetVoiceBuffer();
   }
+
   if(keepListening){
-    try{ recognition.start(); }catch(e){}
+    restartRecognitionSoon();
     return;
   }
   voiceSessionActive = false;
   if(!audioPlaying){
     setState("idle");
   }
-};  
-  
-  
-micBtn.addEventListener(  
-"click",  
-()=>{  
-  
-if(listening){  
-  
-try{  
-recognition.stop();  
-}catch(e){}  
-  
-}else{  
-  
-try{  
-recognition.start();  
-}catch(e){  
-  
-console.warn(e);  
-  
-}  
-  
-}  
-  
-}  
-);  
-  
+};
+
+if(micBtn){
+  micBtn.addEventListener("click", ()=>{
+    if(!recognition) return;
+    if(listening || keepListening){
+      keepListening = false;
+      voiceSessionActive = false;
+      resetVoiceBuffer();
+      try{ recognition.stop(); }catch(e){}
+      setState("idle");
+    } else {
+      keepListening = true;
+      voiceSessionActive = true;
+      resetVoiceBuffer();
+      setState("listening");
+      try{
+        recognition.start();
+      }catch(e){
+        console.warn(e);
+        restartRecognitionSoon();
+      }
+    }
+  });
+}
+
 }else{  
   
 micBtn.style.opacity =  

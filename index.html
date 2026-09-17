@@ -8724,6 +8724,22 @@ recognition.onresult = event=>{
     const chunk = finals.join(" ").trim();
     voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
     lastHeard = voiceBuffer;
+
+    /*
+     * INVIO VOCALE IMMEDIATO:
+     * quando il browser restituisce una frase definitiva,
+     * JARVIS la invia subito invece di lasciarla nel campo.
+     * voiceBusy impedisce eventuali doppi invii da onend/onspeechend.
+     */
+    if(voiceBuffer.length >= 2 && !voiceBusy){
+      if(voiceSendTimer){
+        clearTimeout(voiceSendTimer);
+        voiceSendTimer = null;
+      }
+      commitVoiceUtterance();
+      return;
+    }
+
   } else if(interim){
     lastHeard = mergeVoiceChunk(voiceBuffer, interim);
   }

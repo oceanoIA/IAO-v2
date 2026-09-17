@@ -8563,7 +8563,7 @@ recognition =
 new Recognition();  
   
 recognition.lang = "it-IT";
-recognition.continuous = true;
+recognition.continuous = false;
 recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
@@ -8572,7 +8572,6 @@ let lastHeard = "";
 let voiceSendTimer = null;
 let restartTimer = null;
 let micStartRequested = false;
-let wakeContinueUsed = false;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
@@ -8620,37 +8619,17 @@ function currentVoiceText(){
 function setListeningHint(on){
   if(!textInput) return;
   if(on){
-    if(!currentVoiceText()) textInput.value = "";
+    textInput.value = "";
     textInput.placeholder = "In ascolto… parla ora";
   } else {
     textInput.placeholder = "Chiedi qualcosa a JARVIS...";
   }
 }
 
-function isOnlyWakeOrGreet(s){
-  const raw = cleanVoiceText(s);
-  if(!raw) return true;
-  const low = raw.toLowerCase().replace(/[!?.,]+$/g, "").trim();
-  if(VOICE_WAKE.some(w => w === low)) return true;
-  if(/^(ciao|ehi|hey|ei|salve|buongiorno|buonasera|buonanotte|ok|okay)(\s+jarvis)?$/.test(low)) return true;
-  let rest = raw;
-  try{ rest = stripWakeWord(raw); }catch(e){}
-  return !cleanVoiceText(rest);
-}
-
-function scheduleVoiceCommit(){
-  if(voiceSendTimer) clearTimeout(voiceSendTimer);
-  const ready = currentVoiceText();
-  if(ready.length < 2) return;
-  const delay = isOnlyWakeOrGreet(ready) ? 1700 : 700;
-  voiceSendTimer = setTimeout(commitVoiceUtterance, delay);
-}
-
 let voiceBusy = false;
 function stopListeningSession(){
   micStartRequested = false;
   voiceSessionActive = false;
-  wakeContinueUsed = false;
   if(restartTimer){ clearTimeout(restartTimer); restartTimer = null; }
   try{ if(recognition && listening) recognition.stop(); }catch(e){}
 }
@@ -8712,7 +8691,6 @@ async function beginListening(){
   lastInputWasVoice = false;
   micStartRequested = true;
   voiceSessionActive = true;
-  wakeContinueUsed = false;
   resetVoiceBuffer();
   setListeningHint(true);
   setState("listening");
@@ -8737,7 +8715,11 @@ recognition.onstart = ()=>{
 };
 
 recognition.onspeechend = ()=>{
-  scheduleVoiceCommit();
+  const ready = currentVoiceText();
+  if(ready.length >= 2){
+    if(voiceSendTimer) clearTimeout(voiceSendTimer);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 400);
+  }
 };
 
 recognition.onresult = event=>{
@@ -8764,7 +8746,12 @@ recognition.onresult = event=>{
   const preview = currentVoiceText() || cleanVoiceText(interim);
   if(preview && textInput) textInput.value = preview;
   setState("listening");
-  scheduleVoiceCommit();
+
+  if(voiceSendTimer) clearTimeout(voiceSendTimer);
+  const ready = currentVoiceText();
+  if(ready.length >= 2){
+    voiceSendTimer = setTimeout(commitVoiceUtterance, finals.length ? 450 : 1200);
+  }
 };
 
 recognition.onerror = error=>{
@@ -8781,38 +8768,23 @@ recognition.onerror = error=>{
   }
   if(err === "no-speech" || err === "audio-capture" || err === "network"){
     const ready = currentVoiceText();
-    if(ready.length >= 2 && !isOnlyWakeOrGreet(ready) && !voiceBusy){
-      commitVoiceUtterance();
-    }
+    if(ready.length >= 2 && !voiceBusy) commitVoiceUtterance();
   }
 };
 
 recognition.onend = ()=>{
   listening = false;
-  try{ stopVoiceMonitor(); }catch(e){}
-
-  const pending = currentVoiceText();
-  if(pending.length >= 2 && !isOnlyWakeOrGreet(pending) && !voiceBusy){
-    commitVoiceUtterance();
-    return;
-  }
-
-  if(micStartRequested && !wakeContinueUsed && pending.length >= 2 && isOnlyWakeOrGreet(pending) && !voiceBusy){
-    wakeContinueUsed = true;
-    if(micBtn) micBtn.classList.add("active");
-    setListeningHint(true);
-    setState("listening");
-    restartRecognitionSoon();
-    return;
-  }
-
   micStartRequested = false;
   voiceSessionActive = false;
   if(micBtn) micBtn.classList.remove("active");
+  try{ stopVoiceMonitor(); }catch(e){}
+
+  const pending = currentVoiceText();
   if(pending.length >= 2 && !voiceBusy){
     commitVoiceUtterance();
     return;
   }
+
   setListeningHint(false);
   if(!audioPlaying) setState("idle");
 };

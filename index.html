@@ -4873,7 +4873,7 @@ NEURON_COUNT
 neuronVel = new Float32Array(NEURON_COUNT * 3);
 neuronIsShell = new Uint8Array(NEURON_COUNT);
 
-const SHELL_COUNT = Math.floor(NEURON_COUNT * 0.84);
+const SHELL_COUNT = Math.floor(NEURON_COUNT * 0.72);
 
 for(let i=0; i<NEURON_COUNT; i++){
   const isShell = i < SHELL_COUNT;
@@ -5392,17 +5392,43 @@ if(isTalking) energy = Math.max(energy, 0.70);
 const viscosity = isTalking ? 0.91 : (isListening ? 0.90 : 0.945);
 const dt = isListening ? 0.085 : (isThinking ? 0.050 : (isTalking ? 0.070 : 0.060));
 
+const isShell = !!(neuronIsShell && neuronIsShell[i]);
+const s = seed * 0.001;
+let px, py, pz;
+
+if(isShell){
+  const speed = isListening ? 1.15 : (isTalking ? 0.95 : (isThinking ? 0.72 : 0.48));
+  const n1 = Math.sin(phi * 5 + time * (1.1 + energy * 0.8) + s);
+  const n2 = Math.cos(theta * 4 + time * (0.85 + energy * 0.6) + s * 1.4);
+  const n3 = Math.sin(theta * 2 + phi * 3 + time * 1.6 + seed);
+  const th = theta
+    + time * speed
+    + n1 * (0.55 + energy * 0.35)
+    + n2 * 0.28
+    + n3 * 0.18;
+  let ph = phi
+    + n2 * (0.32 + energy * 0.22)
+    + Math.sin(time * 1.05 + seed) * 0.20;
+  if(ph < 0.08) ph = 0.08 + (0.08 - ph) * 0.25;
+  if(ph > Math.PI - 0.08) ph = Math.PI - 0.08 - (ph - (Math.PI - 0.08)) * 0.25;
+  const ripple = Math.sin(th * 6 + time * 2.2 + s) * (0.012 + energy * 0.012);
+  const breath = Math.sin(time * (isListening ? 1.8 : 1.1) + s) * (0.012 + energy * 0.010);
+  const shellR = 1.22 * (1 + breath + ripple);
+  const sinPh = Math.sin(ph);
+  px = shellR * sinPh * Math.cos(th);
+  py = shellR * sinPh * Math.sin(th);
+  pz = shellR * Math.cos(ph);
+} else {
 // posizione corrente (da buffer, o da base sferica al primo frame)
-let px = neuronPositions[index];
-let py = neuronPositions[index + 1];
-let pz = neuronPositions[index + 2];
+px = neuronPositions[index];
+py = neuronPositions[index + 1];
+pz = neuronPositions[index + 2];
 const r0 = Math.sqrt(px*px + py*py + pz*pz) || radius;
 
 // --- campo di velocità tipo fluido (curl noise approssimato) ---
 const fx = px * 0.85 + time * 0.15;
 const fy = py * 0.85 + time * 0.12;
 const fz = pz * 0.85 + time * 0.1;
-const s = seed * 0.001;
 
 // pseudo-curl 3D: flusso incomprimibile stilizzato
 const n1 = Math.sin(fy * 1.7 + fz * 1.1 + time * (0.48 + energy * 0.38) + s);
@@ -5466,27 +5492,15 @@ px += ovx * dt * (2.6 + energy * 0.9);
 py += ovy * dt * (2.6 + energy * 0.9);
 pz += ovz * dt * (2.6 + energy * 0.9);
 
-// confinamento morbido nella sfera (pressione / boundary)
 const r = Math.sqrt(px*px + py*py + pz*pz) || 0.001;
-const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
-// soft shell: attira verso raggio base senza rigidità
-// contorno sfera SEMPRE visibile + nucleo che si muove
-const isShell = !!(neuronIsShell && neuronIsShell[i]);
-const r2pre = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
-if(isShell){
-  const rr = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
-  const shellR = 1.22 * (1 + Math.sin(time * (isThinking ? 1.2 : isListening ? 1.4 : 0.7)) * (isThinking ? 0.018 : isListening ? 0.012 : 0.008));
-  const k = shellR / rr;
-  px *= k; py *= k; pz *= k;
-} else {
-  const ownR = radius;
-  const conf = 0.22;
-  const nr = r + (ownR - r) * conf;
-  const scale = nr / (r || 0.001);
-  px *= scale; py *= scale; pz *= scale;
-  const r2 = Math.sqrt(px*px+py*py+pz*pz);
-  if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
-  if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
+const ownR = radius;
+const conf = 0.22;
+const nr = r + (ownR - r) * conf;
+const scale = nr / (r || 0.001);
+px *= scale; py *= scale; pz *= scale;
+const r2 = Math.sqrt(px*px+py*py+pz*pz);
+if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
+if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
 }
 
 neuronPositions[index] = px;
@@ -8217,7 +8231,6 @@ audio.onended =
 ()=>{  
   
 audioPlaying = false;  
-  voiceAudioCooldownUntil = Date.now() + 1200;
   
 setState("idle");  
   
@@ -8231,8 +8244,8 @@ currentAudio = null;
   
 audio.onerror =  
 ()=>{  
-  audioPlaying = false;  
-  voiceAudioCooldownUntil = Date.now() + 1200;
+  
+audioPlaying = false;  
   
 setState("idle");  
   
@@ -8550,7 +8563,7 @@ recognition =
 new Recognition();  
   
 recognition.lang = "it-IT";
-recognition.continuous = false;
+recognition.continuous = true;
 recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
@@ -8559,6 +8572,7 @@ let lastHeard = "";
 let voiceSendTimer = null;
 let restartTimer = null;
 let micStartRequested = false;
+let wakeContinueUsed = false;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
@@ -8606,60 +8620,37 @@ function currentVoiceText(){
 function setListeningHint(on){
   if(!textInput) return;
   if(on){
-    textInput.value = "";
+    if(!currentVoiceText()) textInput.value = "";
     textInput.placeholder = "In ascolto… parla ora";
   } else {
     textInput.placeholder = "Chiedi qualcosa a JARVIS...";
   }
 }
 
+function isOnlyWakeOrGreet(s){
+  const raw = cleanVoiceText(s);
+  if(!raw) return true;
+  const low = raw.toLowerCase().replace(/[!?.,]+$/g, "").trim();
+  if(VOICE_WAKE.some(w => w === low)) return true;
+  if(/^(ciao|ehi|hey|ei|salve|buongiorno|buonasera|buonanotte|ok|okay)(\s+jarvis)?$/.test(low)) return true;
+  let rest = raw;
+  try{ rest = stripWakeWord(raw); }catch(e){}
+  return !cleanVoiceText(rest);
+}
+
+function scheduleVoiceCommit(){
+  if(voiceSendTimer) clearTimeout(voiceSendTimer);
+  const ready = currentVoiceText();
+  if(ready.length < 2) return;
+  const delay = isOnlyWakeOrGreet(ready) ? 1700 : 700;
+  voiceSendTimer = setTimeout(commitVoiceUtterance, delay);
+}
+
 let voiceBusy = false;
-let voiceAudioCooldownUntil = 0;
-let micPrimeInProgress = false;
-
-function stopJarvisAudioForMic(){
-  try{
-    if(window.speechSynthesis){
-      speechSynthesis.cancel();
-    }
-  }catch(e){}
-
-  try{
-    if(currentAudio){
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-      currentAudio.removeAttribute("src");
-      try{ currentAudio.load(); }catch(e){}
-      currentAudio = null;
-    }
-  }catch(e){}
-
-  audioPlaying = false;
-}
-
-function primeMicrophone(){
-  if(micPrimeInProgress) return;
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-
-  micPrimeInProgress = true;
-
-  navigator.mediaDevices.getUserMedia({audio:true})
-    .then(stream=>{
-      try{
-        stream.getTracks().forEach(track=>track.stop());
-      }catch(e){}
-    })
-    .catch(err=>{
-      console.warn("Microfono prime:", err);
-    })
-    .finally(()=>{
-      micPrimeInProgress = false;
-    });
-}
-
 function stopListeningSession(){
   micStartRequested = false;
   voiceSessionActive = false;
+  wakeContinueUsed = false;
   if(restartTimer){ clearTimeout(restartTimer); restartTimer = null; }
   try{ if(recognition && listening) recognition.stop(); }catch(e){}
 }
@@ -8717,36 +8708,21 @@ function restartRecognitionSoon(){
   }, 280);
 }
 
-function beginListening(){
-  if(!recognition || voiceBusy) return;
-
-  /*
-   * Su iOS Safari il riconoscimento vocale può rimanere bloccato
-   * dopo che un elemento <audio> ha riprodotto la risposta di JARVIS.
-   * Prima di ogni nuova sessione fermiamo completamente l'audio.
-   */
-  stopJarvisAudioForMic();
-
+async function beginListening(){
   lastInputWasVoice = false;
   micStartRequested = true;
   voiceSessionActive = true;
+  wakeContinueUsed = false;
   resetVoiceBuffer();
   setListeningHint(true);
   setState("listening");
   if(micBtn) micBtn.classList.add("active");
   try{ stopVoiceMonitor(); }catch(e){}
-
-  /*
-   * Prime del microfono senza aspettarlo: recognition.start() resta
-   * direttamente dentro il click dell'utente, così non perdiamo il
-   * gesto richiesto da Safari.
-   */
-  primeMicrophone();
-
+  await new Promise(resolve => setTimeout(resolve, 80));
   try{
     recognition.start();
   }catch(e){
-    console.warn("SpeechRecognition.start:", e);
+    console.warn(e);
     restartRecognitionSoon();
   }
 }
@@ -8761,11 +8737,7 @@ recognition.onstart = ()=>{
 };
 
 recognition.onspeechend = ()=>{
-  const ready = currentVoiceText();
-  if(ready.length >= 2){
-    if(voiceSendTimer) clearTimeout(voiceSendTimer);
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 400);
-  }
+  scheduleVoiceCommit();
 };
 
 recognition.onresult = event=>{
@@ -8785,22 +8757,6 @@ recognition.onresult = event=>{
     const chunk = finals.join(" ").trim();
     voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
     lastHeard = voiceBuffer;
-
-    /*
-     * INVIO VOCALE IMMEDIATO:
-     * quando il browser restituisce una frase definitiva,
-     * JARVIS la invia subito invece di lasciarla nel campo.
-     * voiceBusy impedisce eventuali doppi invii da onend/onspeechend.
-     */
-    if(voiceBuffer.length >= 2 && !voiceBusy){
-      if(voiceSendTimer){
-        clearTimeout(voiceSendTimer);
-        voiceSendTimer = null;
-      }
-      commitVoiceUtterance();
-      return;
-    }
-
   } else if(interim){
     lastHeard = mergeVoiceChunk(voiceBuffer, interim);
   }
@@ -8808,12 +8764,7 @@ recognition.onresult = event=>{
   const preview = currentVoiceText() || cleanVoiceText(interim);
   if(preview && textInput) textInput.value = preview;
   setState("listening");
-
-  if(voiceSendTimer) clearTimeout(voiceSendTimer);
-  const ready = currentVoiceText();
-  if(ready.length >= 2){
-    voiceSendTimer = setTimeout(commitVoiceUtterance, finals.length ? 450 : 1200);
-  }
+  scheduleVoiceCommit();
 };
 
 recognition.onerror = error=>{
@@ -8830,23 +8781,38 @@ recognition.onerror = error=>{
   }
   if(err === "no-speech" || err === "audio-capture" || err === "network"){
     const ready = currentVoiceText();
-    if(ready.length >= 2 && !voiceBusy) commitVoiceUtterance();
+    if(ready.length >= 2 && !isOnlyWakeOrGreet(ready) && !voiceBusy){
+      commitVoiceUtterance();
+    }
   }
 };
 
 recognition.onend = ()=>{
   listening = false;
-  micStartRequested = false;
-  voiceSessionActive = false;
-  if(micBtn) micBtn.classList.remove("active");
   try{ stopVoiceMonitor(); }catch(e){}
 
   const pending = currentVoiceText();
-  if(pending.length >= 2 && !voiceBusy){
+  if(pending.length >= 2 && !isOnlyWakeOrGreet(pending) && !voiceBusy){
     commitVoiceUtterance();
     return;
   }
 
+  if(micStartRequested && !wakeContinueUsed && pending.length >= 2 && isOnlyWakeOrGreet(pending) && !voiceBusy){
+    wakeContinueUsed = true;
+    if(micBtn) micBtn.classList.add("active");
+    setListeningHint(true);
+    setState("listening");
+    restartRecognitionSoon();
+    return;
+  }
+
+  micStartRequested = false;
+  voiceSessionActive = false;
+  if(micBtn) micBtn.classList.remove("active");
+  if(pending.length >= 2 && !voiceBusy){
+    commitVoiceUtterance();
+    return;
+  }
   setListeningHint(false);
   if(!audioPlaying) setState("idle");
 };

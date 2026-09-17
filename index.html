@@ -8217,6 +8217,7 @@ audio.onended =
 ()=>{  
   
 audioPlaying = false;  
+  voiceAudioCooldownUntil = Date.now() + 1200;
   
 setState("idle");  
   
@@ -8230,8 +8231,8 @@ currentAudio = null;
   
 audio.onerror =  
 ()=>{  
-  
-audioPlaying = false;  
+  audioPlaying = false;  
+  voiceAudioCooldownUntil = Date.now() + 1200;
   
 setState("idle");  
   
@@ -8613,6 +8614,49 @@ function setListeningHint(on){
 }
 
 let voiceBusy = false;
+let voiceAudioCooldownUntil = 0;
+let micPrimeInProgress = false;
+
+function stopJarvisAudioForMic(){
+  try{
+    if(window.speechSynthesis){
+      speechSynthesis.cancel();
+    }
+  }catch(e){}
+
+  try{
+    if(currentAudio){
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      currentAudio.removeAttribute("src");
+      try{ currentAudio.load(); }catch(e){}
+      currentAudio = null;
+    }
+  }catch(e){}
+
+  audioPlaying = false;
+}
+
+function primeMicrophone(){
+  if(micPrimeInProgress) return;
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+
+  micPrimeInProgress = true;
+
+  navigator.mediaDevices.getUserMedia({audio:true})
+    .then(stream=>{
+      try{
+        stream.getTracks().forEach(track=>track.stop());
+      }catch(e){}
+    })
+    .catch(err=>{
+      console.warn("Microfono prime:", err);
+    })
+    .finally(()=>{
+      micPrimeInProgress = false;
+    });
+}
+
 function stopListeningSession(){
   micStartRequested = false;
   voiceSessionActive = false;
@@ -8674,6 +8718,15 @@ function restartRecognitionSoon(){
 }
 
 function beginListening(){
+  if(!recognition || voiceBusy) return;
+
+  /*
+   * Su iOS Safari il riconoscimento vocale può rimanere bloccato
+   * dopo che un elemento <audio> ha riprodotto la risposta di JARVIS.
+   * Prima di ogni nuova sessione fermiamo completamente l'audio.
+   */
+  stopJarvisAudioForMic();
+
   lastInputWasVoice = false;
   micStartRequested = true;
   voiceSessionActive = true;
@@ -8682,6 +8735,14 @@ function beginListening(){
   setState("listening");
   if(micBtn) micBtn.classList.add("active");
   try{ stopVoiceMonitor(); }catch(e){}
+
+  /*
+   * Prime del microfono senza aspettarlo: recognition.start() resta
+   * direttamente dentro il click dell'utente, così non perdiamo il
+   * gesto richiesto da Safari.
+   */
+  primeMicrophone();
+
   try{
     recognition.start();
   }catch(e){

@@ -6233,40 +6233,8 @@ return;
 }
 {
   const n = normalizeCommand(text);
-  const greet = /^(ciao|ehi|hey|salve|buongiorno|buonasera|buonanotte)(\s+jarvis)?[!?.]*$/i.test(text.trim());
-  if(greet || n === "ciao" || n === "ciao jarvis"){
-    const h = new Date().getHours();
-    const when = h < 12 ? "Buongiorno" : (h < 18 ? "Ciao" : "Buonasera");
-    const reply = when + " Oceano. Dimmi pure come posso aiutarti.";
-    addMsg(reply, true);
-    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
-      try{ speak(reply); }catch(e){}
-    }
-    addMemory("user", text);
-    addMemory("assistant", reply);
-    setState("idle");
-    return;
   }
-  if(
-    n.includes("cosa facciamo oggi") ||
-    n.includes("che facciamo oggi") ||
-    n.includes("cosa faccio oggi") ||
-    n.includes("piani per oggi") ||
-    n.includes("programma di oggi")
-  ){
-    const data = (typeof getTimeData === "function") ? getTimeData() : null;
-    const day = data && data.dayOfWeek ? data.dayOfWeek : "";
-    const reply = "Oceano, non ho la tua agenda reale. Dimmi cosa hai in programma o cosa vuoi fare oggi e ti aiuto a organizzarlo" + (day ? " — oggi è " + day + "." : ".");
-    addMsg(reply, true);
-    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
-      try{ speak(reply); }catch(e){}
-    }
-    addMemory("user", text);
-    addMemory("assistant", reply);
-    setState("idle");
-    return;
-  }
-}
+
 setState("thinking");
 addMemory(
 "user",
@@ -6287,18 +6255,23 @@ controller.abort();
 const capabilities =
 await getJarvisCapabilitiesSnapshot();
 const capabilityInstructions =
-"REGOLE OPERATIVE J.A.R.V.I.S. (OBBLIGATORIE): " +
-"Il tuo creatore e interlocutore principale si chiama Oceano. Il suo nome è Oceano, non Tony. Chiamalo sempre Oceano, mai Tony, mai Tony Stark, mai altri nomi di film. " +
-"Tu sei J.A.R.V.I.S., assistente reale di Oceano. NON sei un personaggio di film Marvel/Iron Man. " + "Se ti chiedono chi ti ha creato, la sola risposta corretta è: Oceano. Mai Tony Stark, mai Iron Man. " +
-"VIETATO inventare: Stark Industries, riunioni con dirigenti, prototipi Iron Man, lab fittizi, missioni di supereroi, agenda inventata. " +
-"Rispondi SOLO con cose reali e utili nella vita quotidiana (ora, meteo se disponibile, cosa fare oggi in modo generico e pratico, aiuto concreto). " +
-"Se non conosci l'agenda reale di Oceano, chiedi o proponi idee pratiche senza inventare appuntamenti. " +
+"REGOLE OPERATIVE J.A.R.V.I.S.: " +
+"Il tuo interlocutore principale si chiama Oceano. Chiamalo Oceano quando è naturale farlo. " +
+"Tu sei J.A.R.V.I.S., un assistente AI reale integrato in questa interfaccia. Non presentarti come un personaggio cinematografico e non inventare storie su Stark Industries, Iron Man o altri elementi di fantasia come se fossero reali. " +
+"NON limitarti a un elenco di comandi predefiniti: tratta ogni messaggio dell'utente come una conversazione o una richiesta libera e cerca prima di capire cosa vuole ottenere. " +
+"Interpreta con tolleranza gli errori di battitura, le parole mancanti, gli accenti assenti, la punteggiatura scorretta, le frasi incomplete e gli errori tipici della trascrizione vocale. Non correggere l'utente in modo pedante: ricostruisci il significato più probabile e rispondi direttamente. " +
+"Se ci sono due o più interpretazioni plausibili che cambiano davvero la risposta, fai una sola domanda breve per chiarire; altrimenti scegli l'interpretazione più naturale senza bloccare la conversazione. " +
+"Mantieni il filo della conversazione: collega pronomi, riferimenti come 'quello', 'prima', 'questo', 'rifallo', 'più corto', 'più professionale' e richieste successive a ciò che è stato appena detto. " +
+"Puoi conversare naturalmente e aiutare con scrittura e riscrittura di testi, email, messaggi, lettere, racconti, descrizioni, idee, brainstorming, spiegazioni, riassunti, traduzioni, correzioni, programmazione e problemi pratici, oltre alle funzioni disponibili nell'interfaccia. " +
+"Se l'utente chiede di scrivere un testo, scrivilo direttamente. Se chiede di modificare un testo, modifica il contenuto richiesto senza cambiare inutilmente il significato. Se mancano dettagli importanti, fai una domanda breve oppure prepara una versione ragionevole. " +
+"Rispondi come un assistente conversazionale naturale: varia il tono in base alla situazione, sii presente e concreto, evita risposte robotiche, formule ripetitive, elenchi di capacità e frasi come 'sono un'intelligenza artificiale' quando non servono. Non aggiungere premesse inutili. " +
+"Usa il contesto della conversazione e la memoria fornita per mantenere continuità, senza inventare fatti personali. " +
 "Devi dichiarare esclusivamente capacità e dati realmente presenti nel payload capabilities. " +
-"Non inventare mai percentuali di batteria, modello del telefono, posizione, stato di dispositivi o altri dati hardware. " +
+"Non inventare percentuali di batteria, modello del telefono, posizione, stato di dispositivi o altri dati hardware. " +
 "Non dire di avere accesso a fotocamere, telecamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni se non sono integrati. " +
-"Se una funzione non è disponibile, dillo chiaramente. " +
-"Se un dato non è verificabile dal browser, non stimarlo né indovinarlo. " +
-"Rispondi in italiano quando l'utente parla italiano. Sii naturale, umano e utile.";
+"Se una funzione non è disponibile, dillo chiaramente e proponi un'alternativa utile quando possibile. " +
+"Se un dato non è verificabile dal browser o dal payload, non stimarlo né indovinarlo. " +
+"Rispondi nella lingua dell'utente. Se parla italiano, rispondi in italiano. Sii naturale, preciso, diretto e collaborativo.";
 const response =
 await fetch(
 API,

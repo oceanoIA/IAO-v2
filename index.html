@@ -128,6 +128,52 @@ pointer-events:none;
 @media (max-width:700px){
   .net-badge{ top:10px; right:10px; font-size:9px; }
 }
+
+.neural-state{
+  position:fixed;
+  top:48px;
+  right:16px;
+  z-index:60;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  pointer-events:none;
+  font:9px monospace;
+  letter-spacing:2px;
+  color:rgba(190,225,240,.68);
+  text-transform:uppercase;
+  transition:opacity .2s ease,color .2s ease;
+}
+.neural-state-mark{
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#b8e8ff;
+  box-shadow:0 0 9px rgba(184,232,255,.9);
+  transition:background .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+.neural-state[data-state="listening"] .neural-state-mark{
+  background:#22d3ee;
+  box-shadow:0 0 12px rgba(34,211,238,.95);
+  transform:scale(1.35);
+}
+.neural-state[data-state="thinking"] .neural-state-mark{
+  background:#dff8ff;
+  box-shadow:0 0 13px rgba(223,248,255,.95);
+  transform:scale(1.15);
+}
+.neural-state[data-state="speaking"] .neural-state-mark{
+  background:#67e8f9;
+  box-shadow:0 0 15px rgba(103,232,249,.95);
+  transform:scale(1.55);
+}
+.neural-state[data-state="error"] .neural-state-mark{
+  background:#ff9b66;
+  box-shadow:0 0 10px rgba(255,155,102,.9);
+}
+@media(max-width:700px){
+  .neural-state{top:38px;right:10px;font-size:8px;letter-spacing:1.6px;}
+}
 .datetime{
 position:fixed;
 top:18px;
@@ -2094,6 +2140,10 @@ id="jarvisTitle">  J.A.R.V.I.S.
 <div class="net-badge" id="netBadge" aria-live="polite">
   <span class="net-mark" id="netDot" aria-hidden="true"></span>
   <span class="net-text" id="netText">CONNECTED</span>
+</div>
+<div class="neural-state" id="neuralState" data-state="idle" aria-live="polite">
+  <span class="neural-state-mark" aria-hidden="true"></span>
+  <span id="neuralStateText">STANDBY</span>
 </div>  <!-- =====================================================
      DATA
 ===================================================== -->  <div class="datetime">  <div
@@ -3436,8 +3486,22 @@ function updateNeuralScale(){
 window.addEventListener("resize", updateNeuralScale);
 window.addEventListener("orientationchange", () => setTimeout(updateNeuralScale, 150));
 let jarvisMind = "idle";
+const neuralState = document.getElementById("neuralState");
+const neuralStateText = document.getElementById("neuralStateText");
 function setState(state){
   jarvisMind = state || "idle";
+  const labels = {
+    idle:"STANDBY",
+    listening:"ASCOLTO",
+    thinking:"ELABORAZIONE",
+    speaking:"PARLO",
+    error:"ERRORE"
+  };
+  if(neuralState){
+    neuralState.dataset.state = jarvisMind;
+    neuralState.setAttribute("aria-label", labels[jarvisMind] || "STANDBY");
+  }
+  if(neuralStateText) neuralStateText.textContent = labels[jarvisMind] || "STANDBY";
   if(state === "thinking"){
     targetEnergy = 2.8;
     if(typeof markUserActivity === "function") markUserActivity();
@@ -3760,7 +3824,10 @@ particles.geometry
 particles.rotation.y += 0.00018 + (typeof neuralEnergy === 'number' && neuralEnergy > 2.0 ? 0.00035 : 0);
 particles.rotation.x = 0;
 particles.rotation.z = 0;
-particles.material.size = 0.048 + neuralEnergy * 0.005 + voiceLevel * 0.007;
+const neuralMind = (typeof jarvisMind === "string") ? jarvisMind : "idle";
+const stateColor = neuralMind === "listening" ? 0x22d3ee : (neuralMind === "speaking" ? 0x67e8f9 : 0xb8e8ff);
+particles.material.color.setHex(stateColor);
+particles.material.size = 0.048 + neuralEnergy * 0.005 + voiceLevel * 0.007 + (neuralMind === "speaking" ? 0.008 : neuralMind === "listening" ? 0.004 : 0);
 particles.material.opacity =
 0.82 +
 Math.min(

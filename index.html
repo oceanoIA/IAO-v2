@@ -144,21 +144,14 @@ pointer-events:none;
   text-transform:uppercase;
 }
 .net-mark{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#22c55e;
-  box-shadow:0 0 8px #22c55e;
-  font-size:0;
-  line-height:0;
-  color:transparent;
-  display:inline-block;
-  flex-shrink:0;
+  font-size:11px;
+  line-height:1;
+  color:#22c55e;
+  text-shadow:0 0 8px #22c55e;
 }
 .net-badge.is-off .net-mark{
-  background:#ef4444;
-  box-shadow:0 0 8px #ef4444;
-  color:transparent;
+  color:#ef4444;
+  text-shadow:0 0 8px #ef4444;
 }
 .net-badge.is-off{
   color:rgba(255,180,180,.82);
@@ -2382,7 +2375,6 @@ html, body {
 #webSearchIndicator,
 .utility-actions,
 #adminBtn,
-#jarvisAuth,
 #authUserbar,
 #hudNotifications,
 #faceHomeBtn,
@@ -2816,115 +2808,6 @@ html, body {
 }
 
 #homeSystemPanel,#homeSystemPanel *{display:none !important;}
-#jarvisAuth,#authUserbar,#adminBtn,.admin-launch,.feedback-launch,.feedback-prompt,.feedback-modal,.admin-modal,#resetModal{
-  display:none !important;
-  visibility:hidden !important;
-  pointer-events:none !important;
-}
-
-/* =====================================================
-   DOCK INPUT + MICROFONO CIRCOLARE A SINISTRA
-===================================================== */
-.command-dock{
-  position:fixed !important;
-  left:50% !important;
-  bottom:16px !important;
-  transform:translateX(-50%) !important;
-  z-index:50 !important;
-  display:flex !important;
-  align-items:center !important;
-  gap:10px !important;
-  width:min(620px, 92%) !important;
-  max-width:calc(100vw - 24px) !important;
-  pointer-events:none;
-}
-.command-dock .command-wrapper,
-.command-dock #micBtn{
-  pointer-events:auto;
-}
-.command-dock .command-wrapper{
-  position:relative !important;
-  left:auto !important;
-  right:auto !important;
-  bottom:auto !important;
-  top:auto !important;
-  transform:none !important;
-  flex:1 1 auto !important;
-  width:auto !important;
-  min-width:0 !important;
-  margin:0 !important;
-}
-.command-dock #micBtn{
-  flex:0 0 52px !important;
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  margin:0 !important;
-  padding:0 !important;
-  border-radius:50% !important;
-  border:1px solid rgba(90,130,190,0.40) !important;
-  background:rgba(6,6,10,0.88) !important;
-  color:rgba(210,230,255,0.88) !important;
-  box-shadow:0 0 18px rgba(0,0,0,0.45) !important;
-  backdrop-filter:blur(18px);
-}
-.command-dock #micBtn:hover{
-  color:#fff !important;
-  border-color:rgba(255,255,255,0.55) !important;
-  background:rgba(18,22,30,0.94) !important;
-}
-.command-dock #micBtn.active{
-  color:#fff !important;
-  border-color:rgba(180,230,255,0.85) !important;
-  background:rgba(20,36,58,0.95) !important;
-  box-shadow:0 0 16px rgba(120,200,255,0.35), 0 0 28px rgba(80,160,255,0.18) !important;
-  filter:none !important;
-}
-.command-dock .mic-icon{
-  width:10px !important;
-  height:16px !important;
-}
-@supports (padding: max(0px)) {
-  .command-dock{
-    bottom:max(12px, env(safe-area-inset-bottom)) !important;
-  }
-}
-@media (max-width:700px), (orientation:portrait) and (max-width:900px){
-  .command-dock{
-    width:min(96%, 560px) !important;
-    bottom:12px !important;
-    gap:8px !important;
-  }
-  .command-dock #micBtn{
-    flex-basis:46px !important;
-    width:46px !important;
-    height:46px !important;
-    min-width:46px !important;
-    min-height:46px !important;
-  }
-}
-@media (max-width:400px){
-  .command-dock{
-    width:calc(100vw - 16px) !important;
-  }
-  .command-dock #micBtn{
-    flex-basis:44px !important;
-    width:44px !important;
-    height:44px !important;
-    min-width:44px !important;
-    min-height:44px !important;
-  }
-}
-@media (min-width:701px) and (max-width:1100px){
-  .command-dock{ width:min(700px, 92%) !important; }
-}
-@media (min-width:1101px){
-  .command-dock{ width:min(620px, 78%) !important; }
-}
-@media (orientation:landscape) and (max-height:500px){
-  .command-dock{ bottom:8px !important; }
-}
 </style>  
 </head>  <body>
 
@@ -2974,7 +2857,7 @@ id="jarvisTitle">  J.A.R.V.I.S.
 
 </div>
 <div class="net-badge" id="netBadge" aria-live="polite">
-  <span class="net-mark" id="netDot" aria-hidden="true"></span>
+  <span class="net-mark" id="netDot">✓</span>
   <span class="net-text" id="netText">CONNECTED</span>
 </div>  <!-- =====================================================  
      DATA  
@@ -3042,11 +2925,7 @@ WEB WINDOWS: 0
      CHAT  
 ===================================================== -->  <div id="chat"></div>  <!-- =====================================================  
      INPUT  
-===================================================== -->  <div class="command-dock">
-<button id="micBtn" type="button" title="Parla" aria-label="Parla">
-  <span class="mic-icon"></span>
-</button>
-<div class="command-wrapper">  <input  
+===================================================== -->  <div class="command-wrapper">  <input  
 id="textInput"  
 type="text"  
 autocomplete="off"  
@@ -3056,10 +2935,11 @@ placeholder="Chiedi qualcosa a JARVIS...">
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
-<button id="sendBtn">  INVIA
+<button id="micBtn">  <span class="mic-icon"></span>
 
-</button>  </div>
-</div>  <!-- =====================================================  
+</button>  <button id="sendBtn">  INVIA
+
+</button>  </div>  <!-- =====================================================  
      PULSANTI  
 ===================================================== -->  <button id="fullscreenBtn">  
 ⛶ FULLSCREEN  
@@ -3541,7 +3421,6 @@ if(jarvisResponse){
 
 chat.appendChild(element);
 requestAnimationFrame(()=>{ chat.scrollTop = chat.scrollHeight; });
-if(typeof showChat === "function") showChat();
 
 }
 
@@ -4497,7 +4376,6 @@ let neuronTheta;
   
 let neuronPhi;
 let neuronVel;
-let neuronIsShell;
   
 let animationFrame = null;  
   
@@ -4870,36 +4748,64 @@ new Float32Array(
 NEURON_COUNT  
 );
 
-neuronVel = new Float32Array(NEURON_COUNT * 3);
-neuronIsShell = new Uint8Array(NEURON_COUNT);
-
-const SHELL_COUNT = Math.floor(NEURON_COUNT * 0.72);
-
-for(let i=0; i<NEURON_COUNT; i++){
-  const isShell = i < SHELL_COUNT;
-  neuronIsShell[i] = isShell ? 1 : 0;
-
-  let theta, phi, radius;
-  if(isShell){
-    const k = i + 0.5;
-    phi = Math.acos(1 - 2 * k / SHELL_COUNT);
-    theta = Math.PI * (1 + Math.sqrt(5)) * k;
-    radius = 1.22;
-  }else{
-    theta = Math.random() * Math.PI * 2;
-    phi = Math.acos(2 * Math.random() - 1);
-    radius = 0.30 + Math.random() * 0.68;
-  }
-
-  const sinPhi = Math.sin(phi);
-  const index = i * 3;
-  neuronTheta[i] = theta;
-  neuronPhi[i] = phi;
-  neuronBaseRadius[i] = radius;
-  neuronSeeds[i] = Math.random() * 10000;
-  neuronPositions[index]     = radius * sinPhi * Math.cos(theta);
-  neuronPositions[index + 1] = radius * sinPhi * Math.sin(theta);
-  neuronPositions[index + 2] = radius * Math.cos(phi);
+neuronVel = new Float32Array(NEURON_COUNT * 3); // fluid velocity xyz
+  
+  
+  
+/* =====================================================  
+   DISTRIBUZIONE SFERICA  
+===================================================== */  
+  
+for(  
+let i=0;  
+i<NEURON_COUNT;  
+i++  
+){  
+  
+const theta =  
+Math.random() *  
+Math.PI * 2;  
+  
+const phi =  
+Math.acos(  
+2 * Math.random() - 1  
+);  
+  
+const isShell = (i % 5 !== 0); // 80% contorno puntini, 20% interno liquido
+const radius = isShell ? 1.22 : (0.35 + Math.random() * 0.70);  
+  
+const sinPhi =  
+Math.sin(phi);  
+  
+const index =  
+i * 3;  
+  
+neuronTheta[i] =  
+theta;  
+  
+neuronPhi[i] =  
+phi;  
+  
+neuronBaseRadius[i] =  
+radius;  
+  
+neuronSeeds[i] =  
+Math.random() * 10000;  
+  
+neuronPositions[index] =  
+radius *  
+sinPhi *  
+Math.cos(theta);  
+  
+neuronPositions[index + 1] =  
+radius *  
+sinPhi *  
+Math.sin(theta);  
+  
+neuronPositions[index + 2] =  
+radius *  
+Math.cos(phi);  
+  
 }  
   
   
@@ -5135,7 +5041,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   // anche interazione generale con input/area comandi
-  const wrap = document.querySelector(".command-dock") || document.querySelector(".command-wrapper");
+  const wrap = document.querySelector(".command-wrapper");
   if(wrap){
     ["pointerdown", "touchstart", "focusin"].forEach(ev => {
       wrap.addEventListener(ev, showChat, { passive: true });
@@ -5392,43 +5298,17 @@ if(isTalking) energy = Math.max(energy, 0.70);
 const viscosity = isTalking ? 0.91 : (isListening ? 0.90 : 0.945);
 const dt = isListening ? 0.085 : (isThinking ? 0.050 : (isTalking ? 0.070 : 0.060));
 
-const isShell = !!(neuronIsShell && neuronIsShell[i]);
-const s = seed * 0.001;
-let px, py, pz;
-
-if(isShell){
-  const speed = isListening ? 1.15 : (isTalking ? 0.95 : (isThinking ? 0.72 : 0.48));
-  const n1 = Math.sin(phi * 5 + time * (1.1 + energy * 0.8) + s);
-  const n2 = Math.cos(theta * 4 + time * (0.85 + energy * 0.6) + s * 1.4);
-  const n3 = Math.sin(theta * 2 + phi * 3 + time * 1.6 + seed);
-  const th = theta
-    + time * speed
-    + n1 * (0.55 + energy * 0.35)
-    + n2 * 0.28
-    + n3 * 0.18;
-  let ph = phi
-    + n2 * (0.32 + energy * 0.22)
-    + Math.sin(time * 1.05 + seed) * 0.20;
-  if(ph < 0.08) ph = 0.08 + (0.08 - ph) * 0.25;
-  if(ph > Math.PI - 0.08) ph = Math.PI - 0.08 - (ph - (Math.PI - 0.08)) * 0.25;
-  const ripple = Math.sin(th * 6 + time * 2.2 + s) * (0.012 + energy * 0.012);
-  const breath = Math.sin(time * (isListening ? 1.8 : 1.1) + s) * (0.012 + energy * 0.010);
-  const shellR = 1.22 * (1 + breath + ripple);
-  const sinPh = Math.sin(ph);
-  px = shellR * sinPh * Math.cos(th);
-  py = shellR * sinPh * Math.sin(th);
-  pz = shellR * Math.cos(ph);
-} else {
 // posizione corrente (da buffer, o da base sferica al primo frame)
-px = neuronPositions[index];
-py = neuronPositions[index + 1];
-pz = neuronPositions[index + 2];
+let px = neuronPositions[index];
+let py = neuronPositions[index + 1];
+let pz = neuronPositions[index + 2];
 const r0 = Math.sqrt(px*px + py*py + pz*pz) || radius;
 
 // --- campo di velocità tipo fluido (curl noise approssimato) ---
 const fx = px * 0.85 + time * 0.15;
 const fy = py * 0.85 + time * 0.12;
 const fz = pz * 0.85 + time * 0.1;
+const s = seed * 0.001;
 
 // pseudo-curl 3D: flusso incomprimibile stilizzato
 const n1 = Math.sin(fy * 1.7 + fz * 1.1 + time * (0.48 + energy * 0.38) + s);
@@ -5479,7 +5359,7 @@ if(isListening){
 
 // integra velocità con viscosità (inerzia del fluido)
 if(!neuronVel){ neuronVel = new Float32Array(NEURON_COUNT * 3); }
-const iv = index;
+const iv = index * 3;
 let ovx = neuronVel[iv] * viscosity + vx * (1 - viscosity);
 let ovy = neuronVel[iv + 1] * viscosity + vy * (1 - viscosity);
 let ovz = neuronVel[iv + 2] * viscosity + vz * (1 - viscosity);
@@ -5492,15 +5372,28 @@ px += ovx * dt * (2.6 + energy * 0.9);
 py += ovy * dt * (2.6 + energy * 0.9);
 pz += ovz * dt * (2.6 + energy * 0.9);
 
+// confinamento morbido nella sfera (pressione / boundary)
 const r = Math.sqrt(px*px + py*py + pz*pz) || 0.001;
-const ownR = radius;
-const conf = 0.22;
-const nr = r + (ownR - r) * conf;
-const scale = nr / (r || 0.001);
-px *= scale; py *= scale; pz *= scale;
-const r2 = Math.sqrt(px*px+py*py+pz*pz);
-if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
-if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
+const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
+// soft shell: attira verso raggio base senza rigidità
+// contorno sfera SEMPRE visibile + nucleo che si muove
+const isShell = (i % 2 === 0);
+const r2pre = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
+if(isShell){
+  // scorre con gli altri ma resta SEMPRE sul guscio sferico
+  const rr = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
+  const shellR = 1.22 * (1 + Math.sin(time * (isThinking ? 1.35 : isListening ? 1.6 : 0.8)) * (isThinking ? 0.04 : isListening ? 0.02 : 0.012));
+  const k = shellR / rr;
+  px *= k; py *= k; pz *= k;
+} else {
+  const ownR = radius;
+  const conf = 0.22;
+  const nr = r + (ownR - r) * conf;
+  const scale = nr / (r || 0.001);
+  px *= scale; py *= scale; pz *= scale;
+  const r2 = Math.sqrt(px*px+py*py+pz*pz);
+  if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
+  if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
 }
 
 neuronPositions[index] = px;
@@ -5531,7 +5424,7 @@ particles.rotation.z = 0;
    DIMENSIONE NEURONI  
 ===================================================== */  
   
-particles.material.size = 0.048 + neuralEnergy * 0.005 + voiceLevel * 0.007;  
+particles.material.size = 0.040 + neuralEnergy * 0.006 + voiceLevel * 0.008;  
   
   
 particles.material.opacity =  
@@ -8367,7 +8260,7 @@ const VOICE_WAKE = [
 ];
 
 let voiceSessionActive = false;
-let lastInputWasVoice = false;
+let keepListening = false;
 let lastVoiceCommandAt = 0;
 
 function stripWakeWord(text){
@@ -8407,22 +8300,25 @@ function handleAdvancedVoiceCommand(rawText){
   // STOP / silenzio
   if(/^(stop|basta|silenzio|zitto|fermati|annulla|cancel|cancella)$/.test(n) || n.includes("smetti di parlare")){
     try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
-    try{ if(currentAudio){ currentAudio.pause(); currentAudio = null; } }catch(e){}
-    audioPlaying = false;
+    keepListening = false;
     try{ if(recognition && listening) recognition.stop(); }catch(e){}
-    voiceSessionActive = false;
     setState("idle");
     voiceConfirm("Ok, mi fermo.");
     return true;
   }
 
+  // resta in ascolto hands-free
   if(/^(ascolta|resta in ascolto|continua ad ascoltare|modalita mani libere|mani libere)$/.test(n)){
-    speakReply("L'ascolto continuo è disattivato. Tocca il microfono quando vuoi parlarmi.");
+    keepListening = false;
+    voiceSessionActive = true;
+    setState("listening");
+    voiceConfirm("Ascolto solo questa frase, Oceano.");
     return true;
   }
 
   // spegni microfono
   if(/^(spegni microfono|chiudi microfono|smetti di ascoltare|basta ascoltare)$/.test(n)){
+    keepListening = false;
     voiceSessionActive = false;
     try{ if(recognition) recognition.stop(); }catch(e){}
     setState("idle");
@@ -8460,7 +8356,7 @@ function handleAdvancedVoiceCommand(rawText){
   // cosa puoi fare
   if(n.includes("cosa puoi fare") || n.includes("quali comandi") || n.includes("aiuto vocale") || n === "aiuto"){
     speakReply(
-      "Oceano, puoi dirmi: che ore sono, metti un timer, metti una sveglia, crea una nota, leggi le note, cerca sul web, apri la mappa, ripeti, stop. Per parlarmi tocca il microfono: ascolto una frase e poi mi fermo."
+      "Oceano, puoi dirmi: che ore sono, metti un timer, metti una sveglia, crea una nota, leggi le note, cerca sul web, apri la mappa, ripeti, stop, resta in ascolto. Oppure parlami normalmente."
     );
     return true;
   }
@@ -8540,7 +8436,7 @@ function updateNetBadge(){
   const on = navigator.onLine;
   badge.classList.toggle("is-off", !on);
   const mark = document.getElementById("netDot");
-  if(mark) mark.textContent = "";
+  if(mark) mark.textContent = on ? "✓" : "✕";
   text.textContent = on ? "CONNECTED" : "DISCONNECTED";
 }
 window.addEventListener("online", updateNetBadge);
@@ -8563,7 +8459,7 @@ recognition =
 new Recognition();  
   
 recognition.lang = "it-IT";
-recognition.continuous = false;
+recognition.continuous = true;
 recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
@@ -8571,7 +8467,6 @@ let voiceBuffer = "";
 let lastHeard = "";
 let voiceSendTimer = null;
 let restartTimer = null;
-let micStartRequested = false;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
@@ -8606,74 +8501,43 @@ function mergeVoiceChunk(prev, chunk){
   return cleanVoiceText(a + " " + b);
 }
 
-function currentVoiceText(){
-  const typed = textInput ? String(textInput.value || "") : "";
-  const fromField = /in ascolto/i.test(typed) ? "" : typed;
-  return cleanVoiceText(
-    voiceBuffer ||
-    lastHeard ||
-    fromField
-  );
-}
-
-function setListeningHint(on){
-  if(!textInput) return;
-  if(on){
-    textInput.value = "";
-    textInput.placeholder = "In ascolto… parla ora";
-  } else {
-    textInput.placeholder = "Chiedi qualcosa a JARVIS...";
-  }
-}
-
 let voiceBusy = false;
-function stopListeningSession(){
-  micStartRequested = false;
-  voiceSessionActive = false;
-  if(restartTimer){ clearTimeout(restartTimer); restartTimer = null; }
-  try{ if(recognition && listening) recognition.stop(); }catch(e){}
-}
-
 function commitVoiceUtterance(){
   if(voiceBusy) return;
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
-  const raw = currentVoiceText();
-  if(!raw || raw.length < 2){
-    stopListeningSession();
-    return;
-  }
+  const raw = cleanVoiceText(voiceBuffer || lastHeard);
+  if(!raw || raw.length < 2) return;
 
   voiceBusy = true;
-  lastInputWasVoice = true;
-  lastVoiceCommandAt = Date.now();
   voiceBuffer = "";
   lastHeard = "";
-  stopListeningSession();
+  lastVoiceCommandAt = Date.now();
 
-  if(textInput) textInput.value = "";
-  setListeningHint(false);
-  if(typeof showChat === "function") showChat();
+  if(textInput) textInput.value = raw;
 
   let spoken = raw;
   try{ spoken = stripWakeWord(raw) || raw; }catch(e){ spoken = raw; }
   spoken = cleanVoiceText(spoken) || raw;
 
+  // comandi locali
   try{
     if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
+      if(textInput) textInput.value = "";
       setTimeout(()=>{ voiceBusy = false; }, 600);
       return;
     }
   }catch(e){ console.warn("voice cmd", e); }
 
+  // invio diretto: non dipendere dal valore dell'input (su mobile si perde)
   try{
     if(chat) chat.dataset.historyMode = "on";
     addMsg(raw);
     if(typeof remoteMessageCount === "number") remoteMessageCount++;
     if(typeof recordRemoteMessage === "function") recordRemoteMessage();
+    if(textInput) textInput.value = "";
     processAi(spoken);
   }catch(e){
     console.warn("voice send", e);
-    try{ addMsg(raw); }catch(err){}
     try{ processAi(spoken); }catch(err){ console.warn(err); }
   }
   setTimeout(()=>{ voiceBusy = false; }, 900);
@@ -8682,44 +8546,26 @@ function commitVoiceUtterance(){
 function restartRecognitionSoon(){
   if(restartTimer) clearTimeout(restartTimer);
   restartTimer = setTimeout(()=>{
-    if(!micStartRequested || !recognition || listening || voiceBusy) return;
-    try{ recognition.start(); }catch(e){}
+    if(!keepListening || !recognition) return;
+    try{
+      recognition.start();
+    }catch(e){
+      // InvalidStateError: già avviato
+    }
   }, 280);
 }
 
-async function beginListening(){
-  lastInputWasVoice = false;
-  micStartRequested = true;
-  voiceSessionActive = true;
-  resetVoiceBuffer();
-  setListeningHint(true);
-  setState("listening");
-  if(micBtn) micBtn.classList.add("active");
-  try{ stopVoiceMonitor(); }catch(e){}
-  await new Promise(resolve => setTimeout(resolve, 80));
-  try{
-    recognition.start();
-  }catch(e){
-    console.warn(e);
-    restartRecognitionSoon();
-  }
-}
-
-recognition.onstart = ()=>{
+recognition.onstart = async ()=>{
   listening = true;
   voiceSessionActive = true;
   lastVoiceCommandAt = Date.now();
   if(micBtn) micBtn.classList.add("active");
-  setListeningHint(true);
   setState("listening");
+  try{ await startVoiceMonitor(); }catch(e){}
 };
 
 recognition.onspeechend = ()=>{
-  const ready = currentVoiceText();
-  if(ready.length >= 2){
-    if(voiceSendTimer) clearTimeout(voiceSendTimer);
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 400);
-  }
+  // non stoppare qui: aspettiamo onresult + timer
 };
 
 recognition.onresult = event=>{
@@ -8743,67 +8589,74 @@ recognition.onresult = event=>{
     lastHeard = mergeVoiceChunk(voiceBuffer, interim);
   }
 
-  const preview = currentVoiceText() || cleanVoiceText(interim);
+  const preview = cleanVoiceText(voiceBuffer || lastHeard || interim);
   if(preview && textInput) textInput.value = preview;
   setState("listening");
 
   if(voiceSendTimer) clearTimeout(voiceSendTimer);
-  const ready = currentVoiceText();
+  const ready = cleanVoiceText(voiceBuffer || lastHeard);
   if(ready.length >= 2){
-    voiceSendTimer = setTimeout(commitVoiceUtterance, finals.length ? 450 : 1200);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 1100);
   }
 };
 
 recognition.onerror = error=>{
   const err = (error && error.error) ? error.error : "";
   console.warn("Microfono:", err || error);
-  if(err === "aborted") return;
+  // errori recuperabili: resta in ascolto
+  if(err === "no-speech" || err === "aborted" || err === "audio-capture"){
+    if(keepListening) restartRecognitionSoon();
+    return;
+  }
   if(err === "not-allowed" || err === "service-not-allowed"){
-    stopListeningSession();
+    keepListening = false;
+    listening = false;
     if(micBtn) micBtn.classList.remove("active");
-    setListeningHint(false);
+    try{ stopVoiceMonitor(); }catch(e){}
     setState("idle");
     try{ addMsg("Microfono non autorizzato. Consenti l'accesso al microfono e riprova.", true); }catch(e){}
     return;
-  }
-  if(err === "no-speech" || err === "audio-capture" || err === "network"){
-    const ready = currentVoiceText();
-    if(ready.length >= 2 && !voiceBusy) commitVoiceUtterance();
   }
 };
 
 recognition.onend = ()=>{
   listening = false;
-  micStartRequested = false;
-  voiceSessionActive = false;
   if(micBtn) micBtn.classList.remove("active");
   try{ stopVoiceMonitor(); }catch(e){}
 
-  const pending = currentVoiceText();
+  const pending = cleanVoiceText(voiceBuffer || lastHeard);
   if(pending.length >= 2 && !voiceBusy){
     commitVoiceUtterance();
-    return;
   }
 
-  setListeningHint(false);
-  if(!audioPlaying) setState("idle");
+  keepListening = false;
+  if(false){ return; }
+  voiceSessionActive = false;
+  if(!audioPlaying){
+    setState("idle");
+  }
 };
 
 if(micBtn){
   micBtn.addEventListener("click", ()=>{
     if(!recognition) return;
-    if(listening || voiceSessionActive){
-      const ready = currentVoiceText();
-      if(ready.length >= 2 && !voiceBusy){
-        commitVoiceUtterance();
-      } else {
-        resetVoiceBuffer();
-        stopListeningSession();
-        setListeningHint(false);
-        setState("idle");
-      }
+    if(listening || keepListening){
+      keepListening = false;
+      voiceSessionActive = false;
+      resetVoiceBuffer();
+      try{ recognition.stop(); }catch(e){}
+      setState("idle");
     } else {
-      beginListening();
+      keepListening = false;
+      voiceSessionActive = true;
+      resetVoiceBuffer();
+      setState("listening");
+      try{
+        recognition.start();
+      }catch(e){
+        console.warn(e);
+        restartRecognitionSoon();
+      }
     }
   });
 }
@@ -9047,7 +8900,7 @@ return;
   ){
     const reply = "Mi ha creato Oceano. Lui è il mio creatore. Non sono un personaggio dei film e non ho nessun legame con Tony Stark o Iron Man.";
     addMsg(reply, true);
-    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
+    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
       try{ speak(reply); }catch(e){}
     }
     addMemory("user", text);
@@ -9102,7 +8955,7 @@ return;
     const when = h < 12 ? "Buongiorno" : (h < 18 ? "Ciao" : "Buonasera");
     const reply = when + " Oceano. Dimmi pure come posso aiutarti.";
     addMsg(reply, true);
-    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
+    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
       try{ speak(reply); }catch(e){}
     }
     addMemory("user", text);
@@ -9121,7 +8974,7 @@ return;
     const day = data && data.dayOfWeek ? data.dayOfWeek : "";
     const reply = "Oceano, non ho la tua agenda reale. Dimmi cosa hai in programma o cosa vuoi fare oggi e ti aiuto a organizzarlo" + (day ? " — oggi è " + day + "." : ".");
     addMsg(reply, true);
-    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
+    if(typeof voiceSessionActive !== "undefined" && voiceSessionActive && typeof speak === "function"){
       try{ speak(reply); }catch(e){}
     }
     addMemory("user", text);
@@ -9295,7 +9148,7 @@ true,
 copyable  
 );
 
-if(lastInputWasVoice && typeof speak === "function"){
+if(voiceSessionActive && typeof speak === "function"){
   try{ speak(reply); }catch(e){}
 }  
   
@@ -9373,7 +9226,6 @@ function sendMessage(){
 const text=textInput.value.trim();
 const imageData=selectedImageData;
 if(!text&&!imageData)return;
-lastInputWasVoice = false;
 const displayText=text||"Analizza questa immagine";
 textInput.value="";
 
@@ -9833,7 +9685,9 @@ authLogout?.addEventListener("click",async()=>{
     if(faceHomeBtn) faceHomeBtn.style.display="none";
     adminBtn.style.display="none";
     closeAllOverlays();
-    jarvisAuth?.classList.add("hidden");
+    showLogin();
+    jarvisAuth.classList.remove("hidden");
+    setTimeout(()=>document.getElementById("loginNickname")?.focus(),50);
 });
 
 function showOverlay(el){
@@ -10015,9 +9869,22 @@ setInterval(async()=>{
 },2000);
 
 (async function initJarvisAuth(){
-    jarvisAuth?.classList.add("hidden");
-    authUserbar?.classList.remove("visible");
-    if(adminBtn) adminBtn.style.display="none";
+    const token=getAuthToken();
+    if(token){
+        try{
+            const data=await authRequest("heartbeat");
+            remoteAuthUser=data.user||null;
+            sessionStorage.setItem("jarvis_user_nickname_v2",remoteAuthUser?.nickname||"");
+            jarvisAuth.classList.add("hidden");
+            authCurrentUser.textContent=String(remoteAuthUser?.nickname||"").toUpperCase();
+            authUserbar.classList.add("visible");
+            adminBtn.style.display=isOwnerNickname(remoteAuthUser?.nickname)?"block":"none";
+            return;
+        }catch(error){ clearAuthSession(); }
+    }
+    jarvisAuth.classList.remove("hidden");
+    showLogin();
+    setTimeout(()=>document.getElementById("loginNickname")?.focus(),50);
 })();
 
 

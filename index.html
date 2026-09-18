@@ -8973,6 +8973,32 @@ function isRefusalReply(text){
   );
 }
 
+function isReadyDocumentRequest(text){
+  const n = normalizeCommand(text);
+  if(!n) return false;
+  return (
+    /\b(mail|email|e-mail|lettera|curriculum|cv|messaggio|whatsapp|cover letter|candidatura)\b/.test(n) &&
+    /\b(scrivi|scrivere|prepara|fammi|genera|redigi|fai)\b/.test(n)
+  );
+}
+
+function hasTemplatePlaceholders(text){
+  return /\[[^\]]{2,40}\]/.test(String(text || ""));
+}
+
+function prepareOutgoing(text){
+  const raw = String(text || "").trim();
+  if(isReadyDocumentRequest(raw)){
+    return (
+      raw +
+      "\n\nScrivi il testo FINALE, pronto da inviare. Mittente: Oceano. " +
+      "Niente quadre, niente [Nome], [Posizione], [Azienda], [Il tuo nome]. " +
+      "Se manca un dettaglio usa valori plausibili e naturali, non un modulo vuoto."
+    );
+  }
+  return writingOverride(raw);
+}
+
 function writingOverride(text){
   const raw = String(text || "").trim();
   if(!isLongWritingRequest(raw)) return raw;
@@ -9160,6 +9186,8 @@ const capabilityInstructions =
 
 "SCRITTURA E COMPITI LUNGHI: se chiede un testo, un saggio, una tesina, una storia o un documento, SCRIVILO SUBITO. Vietato: «non posso», «è troppo lungo», «posso fare solo un testo breve», «come preferisci?». Parti dal titolo e riempi capitoli. Se lo spazio non basta, chiudi il blocco in modo naturale: l'interfaccia ti chiederà di continuare. " +
 
+"MAIL E DOCUMENTI: se chiede una mail, una lettera o un messaggio, consegna il testo completo e usabile. Firma Oceano. Vietato lasciare campi tra quadre tipo [Nome], [Posizione], [Azienda]. " +
+
 "Dati del dispositivo (batteria, GPS, modello, smart home): solo se presenti in capabilities. Non inventare hardware. Se manca l'agenda reale di Oceano, chiedi invece di inventare appuntamenti. " +
 
 "Lingua: italiano se l'utente parla italiano. Tono: naturale, concreto, da assistente vero.";  
@@ -9190,11 +9218,17 @@ async function askWorker(message, extraMemory){
 }
 
 const longWrite = isLongWritingRequest(text);
-let outgoing = writingOverride(text);
+const wantDoc = isReadyDocumentRequest(text);
+let outgoing = prepareOutgoing(text);
 let reply = await askWorker(outgoing);
 
 if((!reply || isRefusalReply(reply)) && longWrite){
   reply = await askWorker(writingOverride(text) + " Scrivi solo il saggio. Zero scuse.");
+}
+if(wantDoc && reply && hasTemplatePlaceholders(reply)){
+  reply = await askWorker(
+    "Riscrivi questa mail o documento in versione finale, senza nessuna parentesi quadra e senza campi da compilare. Mittente Oceano.\n\n" + reply
+  );
 }
 
 if(longWrite && reply && !isRefusalReply(reply)){

@@ -2822,6 +2822,59 @@ html, body {
   pointer-events:none !important;
 }
 
+.command-dock{
+  position:fixed !important;
+  left:50% !important;
+  bottom:16px !important;
+  transform:translateX(-50%) !important;
+  z-index:50 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  width:min(620px, 92%) !important;
+  max-width:calc(100vw - 24px) !important;
+  pointer-events:none;
+}
+.command-dock .command-wrapper,
+.command-dock #micBtn{
+  pointer-events:auto;
+}
+.command-dock .command-wrapper{
+  position:relative !important;
+  left:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  top:auto !important;
+  transform:none !important;
+  flex:1 1 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+.command-dock #micBtn{
+  flex:0 0 52px !important;
+  width:52px !important;
+  height:52px !important;
+  min-width:52px !important;
+  min-height:52px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:50% !important;
+  border:1px solid rgba(90,130,190,0.40) !important;
+  background:rgba(6,6,10,0.88) !important;
+  color:rgba(210,230,255,0.88) !important;
+  box-shadow:0 0 18px rgba(0,0,0,0.45) !important;
+}
+.command-dock #micBtn.active{
+  color:#fff !important;
+  border-color:rgba(180,230,255,0.85) !important;
+  background:rgba(20,36,58,0.95) !important;
+}
+@media (max-width:700px){
+  .command-dock{ width:min(96%, 560px) !important; bottom:12px !important; }
+  .command-dock #micBtn{ width:46px !important; height:46px !important; min-width:46px !important; min-height:46px !important; flex-basis:46px !important; }
+}
+
 </style>  
 </head>  <body>
 
@@ -2939,7 +2992,11 @@ WEB WINDOWS: 0
      CHAT  
 ===================================================== -->  <div id="chat"></div>  <!-- =====================================================  
      INPUT  
-===================================================== -->  <div class="command-wrapper">  <input
+===================================================== -->  <div class="command-dock">
+<button id="micBtn" type="button" title="Parla" aria-label="Parla">
+  <span class="mic-icon"></span>
+</button>
+<div class="command-wrapper">  <input
 id="textInput"
 type="text"
 autocomplete="off"
@@ -2949,12 +3006,10 @@ placeholder="Chiedi qualcosa a JARVIS...">
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
-<button id="micBtn" type="button" title="Parla" aria-label="Parla">
-  <span class="mic-icon"></span>
-</button>
 <button id="sendBtn">  INVIA
 
-</button>  </div>  <!-- =====================================================  
+</button>  </div>
+</div>  <!-- =====================================================  
      PULSANTI  
 ===================================================== -->  <button id="fullscreenBtn">  
 ⛶ FULLSCREEN  
@@ -5056,7 +5111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   // anche interazione generale con input/area comandi
-  const wrap = document.querySelector(".command-wrapper");
+  const wrap = document.querySelector(".command-dock") || document.querySelector(".command-wrapper");
   if(wrap){
     ["pointerdown", "touchstart", "focusin"].forEach(ev => {
       wrap.addEventListener(ev, showChat, { passive: true });

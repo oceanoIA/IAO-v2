@@ -8479,6 +8479,7 @@ let voiceBuffer = "";
 let lastHeard = "";
 let voiceSendTimer = null;
 let restartTimer = null;
+let voiceBusy = false;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
@@ -8496,10 +8497,7 @@ function cleanVoiceText(s){
     if(out.length && out[out.length-1].toLowerCase() === w.toLowerCase()) continue;
     out.push(w);
   }
-  t = out.join(" ");
-  t = t.replace(/(\bciao(?:\s+jarvis)?\s+){2,}/gi, "ciao jarvis ");
-  t = t.replace(/\s+/g, " ").trim();
-  return t;
+  return out.join(" ").replace(/(\bciao(?:\s+jarvis)?\s+){2,}/gi, "ciao jarvis ").replace(/\s+/g, " ").trim();
 }
 
 function mergeVoiceChunk(prev, chunk){
@@ -8513,7 +8511,17 @@ function mergeVoiceChunk(prev, chunk){
   return cleanVoiceText(a + " " + b);
 }
 
-let voiceBusy = false;
+function currentVoiceText(){
+  const typed = textInput ? String(textInput.value || "") : "";
+  const fromField = /in ascolto/i.test(typed) ? "" : typed;
+  return cleanVoiceText(voiceBuffer || lastHeard || fromField);
+}
+
+function setListeningHint(on){
+  if(!textInput) return;
+  textInput.placeholder = on ? "In ascolto… parla ora" : "Chiedi qualcosa a JARVIS...";
+}
+
 function stopListeningSession(){
   voiceSessionActive = false;
   try{ if(recognition && listening) recognition.stop(); }catch(e){}
@@ -8522,80 +8530,98 @@ function stopListeningSession(){
 function commitVoiceUtterance(){
   if(voiceBusy) return;
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
-  const raw = cleanVoiceText(voiceBuffer || lastHeard);
-  if(!raw || raw.length < 2) return;
+  const raw = currentVoiceText();
+  if(!raw || raw.length < 2){
+    stopListeningSession();
+    if(micBtn) micBtn.classList.remove("active");
+    setListeningHint(false);
+    if(!audioPlaying) setState("idle");
+    return;
+  }
 
   voiceBusy = true;
   lastInputWasVoice = true;
+  lastVoiceCommandAt = Date.now();
   voiceBuffer = "";
   lastHeard = "";
-  lastVoiceCommandAt = Date.now();
   stopListeningSession();
 
-  if(textInput) textInput.value = raw;
+  if(textInput) textInput.value = "";
+  setListeningHint(false);
+  if(micBtn) micBtn.classList.remove("active");
+  if(typeof showChat === "function") showChat();
+  if(chat) chat.dataset.historyMode = "on";
 
   let spoken = raw;
   try{ spoken = stripWakeWord(raw) || raw; }catch(e){ spoken = raw; }
   spoken = cleanVoiceText(spoken) || raw;
 
-  // comandi locali
+  try{ addMsg(raw); }catch(e){ console.warn("voice addMsg", e); }
+  try{ if(typeof remoteMessageCount === "number") remoteMessageCount++; }catch(e){}
+  try{ if(typeof recordRemoteMessage === "function") recordRemoteMessage(); }catch(e){}
+
   try{
     if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
-      if(textInput) textInput.value = "";
       setTimeout(()=>{ voiceBusy = false; }, 600);
       return;
     }
   }catch(e){ console.warn("voice cmd", e); }
 
-  // invio diretto: non dipendere dal valore dell'input (su mobile si perde)
   try{
-    if(chat) chat.dataset.historyMode = "on";
-    addMsg(raw);
-    if(typeof remoteMessageCount === "number") remoteMessageCount++;
-    if(typeof recordRemoteMessage === "function") recordRemoteMessage();
-    if(textInput) textInput.value = "";
     processAi(spoken);
   }catch(e){
     console.warn("voice send", e);
-    try{ processAi(spoken); }catch(err){ console.warn(err); }
+    try{ addMsg("Non sono riuscito a elaborare il comando vocale.", true); }catch(err){}
   }
   setTimeout(()=>{ voiceBusy = false; }, 900);
 }
 
-function restartRecognitionSoon(){
-  if(restartTimer) clearTimeout(restartTimer);
-  restartTimer = setTimeout(()=>{
-    if(!recognition || listening || voiceBusy) return;
-    try{
-      recognition.start();
-    }catch(e){
-      // InvalidStateError: già avviato
-    }
-  }, 280);
+async function beginListening(){
+  if(voiceBusy || !recognition) return;
+  lastInputWasVoice = false;
+  voiceSessionActive = true;
+  resetVoiceBuffer();
+  if(textInput) textInput.value = "";
+  setListeningHint(true);
+  setState("listening");
+  if(micBtn) micBtn.classList.add("active");
+  try{ stopVoiceMonitor(); }catch(e){}
+  await new Promise(resolve => setTimeout(resolve, 80));
+  try{
+    recognition.start();
+  }catch(e){
+    console.warn(e);
+    if(restartTimer) clearTimeout(restartTimer);
+    restartTimer = setTimeout(()=>{
+      if(!listening && voiceSessionActive && !voiceBusy){
+        try{ recognition.start(); }catch(err){ console.warn(err); }
+      }
+    }, 280);
+  }
 }
 
-recognition.onstart = async ()=>{
+recognition.onstart = ()=>{
   listening = true;
   voiceSessionActive = true;
   lastVoiceCommandAt = Date.now();
   if(micBtn) micBtn.classList.add("active");
+  setListeningHint(true);
   setState("listening");
-  try{ await startVoiceMonitor(); }catch(e){}
 };
 
 recognition.onspeechend = ()=>{
-  const ready = cleanVoiceText(voiceBuffer || lastHeard);
-  if(ready.length >= 2){
+  if(currentVoiceText().length >= 2){
     if(voiceSendTimer) clearTimeout(voiceSendTimer);
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 350);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 280);
   }
+  try{ if(recognition && listening) recognition.stop(); }catch(e){}
 };
 
 recognition.onresult = event=>{
   let interim = "";
-  let finals = [];
+  const finals = [];
   try{
-    for(let i = event.resultIndex; i < event.results.length; i++){
+    for(let i = 0; i < event.results.length; i++){
       const res = event.results[i];
       const piece = (res[0] && res[0].transcript) ? res[0].transcript.trim() : "";
       if(!piece) continue;
@@ -8605,76 +8631,62 @@ recognition.onresult = event=>{
   }catch(e){ console.warn("onresult", e); }
 
   if(finals.length){
-    const chunk = finals.join(" ").trim();
-    voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
+    voiceBuffer = cleanVoiceText(finals.join(" "));
     lastHeard = voiceBuffer;
   } else if(interim){
     lastHeard = mergeVoiceChunk(voiceBuffer, interim);
   }
 
-  const preview = cleanVoiceText(voiceBuffer || lastHeard || interim);
+  const preview = currentVoiceText() || cleanVoiceText(interim);
   if(preview && textInput) textInput.value = preview;
   setState("listening");
-
-  if(voiceSendTimer) clearTimeout(voiceSendTimer);
-  const ready = cleanVoiceText(voiceBuffer || lastHeard);
-  if(ready.length >= 2){
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 1100);
+  if(voiceBuffer.length >= 2){
+    if(voiceSendTimer) clearTimeout(voiceSendTimer);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 450);
   }
 };
 
 recognition.onerror = error=>{
   const err = (error && error.error) ? error.error : "";
   console.warn("Microfono:", err || error);
-  if(err === "no-speech" || err === "aborted" || err === "audio-capture"){
-    return;
-  }
+  if(err === "aborted") return;
   if(err === "not-allowed" || err === "service-not-allowed"){
-    listening = false;
-    voiceSessionActive = false;
+    stopListeningSession();
     if(micBtn) micBtn.classList.remove("active");
-    try{ stopVoiceMonitor(); }catch(e){}
+    setListeningHint(false);
     setState("idle");
     try{ addMsg("Microfono non autorizzato. Consenti l'accesso al microfono e riprova.", true); }catch(e){}
     return;
+  }
+  if((err === "no-speech" || err === "network" || err === "audio-capture") && currentVoiceText().length >= 2 && !voiceBusy){
+    commitVoiceUtterance();
   }
 };
 
 recognition.onend = ()=>{
   listening = false;
+  try{ stopVoiceMonitor(); }catch(e){}
+  if(currentVoiceText().length >= 2 && !voiceBusy){
+    commitVoiceUtterance();
+    return;
+  }
   voiceSessionActive = false;
   if(micBtn) micBtn.classList.remove("active");
-  try{ stopVoiceMonitor(); }catch(e){}
-
-  const pending = cleanVoiceText(voiceBuffer || lastHeard);
-  if(pending.length >= 2 && !voiceBusy){
-    commitVoiceUtterance();
-  }
-
-  if(!audioPlaying){
-    setState("idle");
-  }
+  setListeningHint(false);
+  if(!audioPlaying) setState("idle");
 };
 
 if(micBtn){
   micBtn.addEventListener("click", ()=>{
     if(!recognition) return;
-    if(listening){
-      voiceSessionActive = false;
-      resetVoiceBuffer();
-      try{ recognition.stop(); }catch(e){}
-      setState("idle");
-    } else {
-      lastInputWasVoice = false;
-      voiceSessionActive = true;
-      resetVoiceBuffer();
-      setState("listening");
-      try{
-        recognition.start();
-      }catch(e){
-        console.warn(e);
-        restartRecognitionSoon();
+    if(listening || voiceSessionActive){
+      if(currentVoiceText().length >= 2 && !voiceBusy){
+        commitVoiceUtterance();
+      } else {
+        try{ if(recognition && listening) recognition.stop(); }catch(e){}
       }
+    } else {
+      beginListening();
     }
   });
 }

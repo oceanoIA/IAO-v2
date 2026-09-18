@@ -2822,109 +2822,6 @@ html, body {
   pointer-events:none !important;
 }
 
-/* =====================================================
-   DOCK INPUT + MICROFONO CIRCOLARE A SINISTRA
-===================================================== */
-.command-dock{
-  position:fixed !important;
-  left:50% !important;
-  bottom:16px !important;
-  transform:translateX(-50%) !important;
-  z-index:50 !important;
-  display:flex !important;
-  align-items:center !important;
-  gap:10px !important;
-  width:min(620px, 92%) !important;
-  max-width:calc(100vw - 24px) !important;
-  pointer-events:none;
-}
-.command-dock .command-wrapper,
-.command-dock #micBtn{
-  pointer-events:auto;
-}
-.command-dock .command-wrapper{
-  position:relative !important;
-  left:auto !important;
-  right:auto !important;
-  bottom:auto !important;
-  top:auto !important;
-  transform:none !important;
-  flex:1 1 auto !important;
-  width:auto !important;
-  min-width:0 !important;
-  margin:0 !important;
-}
-.command-dock #micBtn{
-  flex:0 0 52px !important;
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  margin:0 !important;
-  padding:0 !important;
-  border-radius:50% !important;
-  border:1px solid rgba(90,130,190,0.40) !important;
-  background:rgba(6,6,10,0.88) !important;
-  color:rgba(210,230,255,0.88) !important;
-  box-shadow:0 0 18px rgba(0,0,0,0.45) !important;
-  backdrop-filter:blur(18px);
-}
-.command-dock #micBtn:hover{
-  color:#fff !important;
-  border-color:rgba(255,255,255,0.55) !important;
-  background:rgba(18,22,30,0.94) !important;
-}
-.command-dock #micBtn.active{
-  color:#fff !important;
-  border-color:rgba(180,230,255,0.85) !important;
-  background:rgba(20,36,58,0.95) !important;
-  box-shadow:0 0 16px rgba(120,200,255,0.35), 0 0 28px rgba(80,160,255,0.18) !important;
-  filter:none !important;
-}
-.command-dock .mic-icon{
-  width:10px !important;
-  height:16px !important;
-}
-@supports (padding: max(0px)) {
-  .command-dock{
-    bottom:max(12px, env(safe-area-inset-bottom)) !important;
-  }
-}
-@media (max-width:700px), (orientation:portrait) and (max-width:900px){
-  .command-dock{
-    width:min(96%, 560px) !important;
-    bottom:12px !important;
-    gap:8px !important;
-  }
-  .command-dock #micBtn{
-    flex-basis:46px !important;
-    width:46px !important;
-    height:46px !important;
-    min-width:46px !important;
-    min-height:46px !important;
-  }
-}
-@media (max-width:400px){
-  .command-dock{
-    width:calc(100vw - 16px) !important;
-  }
-  .command-dock #micBtn{
-    flex-basis:44px !important;
-    width:44px !important;
-    height:44px !important;
-    min-width:44px !important;
-    min-height:44px !important;
-  }
-}
-@media (min-width:701px) and (max-width:1100px){
-  .command-dock{ width:min(700px, 92%) !important; }
-}
-@media (min-width:1101px){
-  .command-dock{ width:min(620px, 78%) !important; }
-}
-@media (orientation:landscape) and (max-height:500px){
-  .command-dock{ bottom:8px !important; }
-}
 </style>  
 </head>  <body>
 
@@ -3042,24 +2939,22 @@ WEB WINDOWS: 0
      CHAT  
 ===================================================== -->  <div id="chat"></div>  <!-- =====================================================  
      INPUT  
-===================================================== -->  <div class="command-dock">
-<button id="micBtn" type="button" title="Parla" aria-label="Parla">
-  <span class="mic-icon"></span>
-</button>
-<div class="command-wrapper">  <input  
-id="textInput"  
-type="text"  
-autocomplete="off"  
+===================================================== -->  <div class="command-wrapper">  <input
+id="textInput"
+type="text"
+autocomplete="off"
 placeholder="Chiedi qualcosa a JARVIS...">
 <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
 <button id="imageBtn" type="button" title="Invia immagine"><span class="camera-icon"></span></button>
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
 <div id="visionStatus">VISION READY</div>
 
+<button id="micBtn" type="button" title="Parla" aria-label="Parla">
+  <span class="mic-icon"></span>
+</button>
 <button id="sendBtn">  INVIA
 
-</button>  </div>
-</div>  <!-- =====================================================  
+</button>  </div>  <!-- =====================================================  
      PULSANTI  
 ===================================================== -->  <button id="fullscreenBtn">  
 ⛶ FULLSCREEN  
@@ -3541,6 +3436,7 @@ if(jarvisResponse){
 
 chat.appendChild(element);
 requestAnimationFrame(()=>{ chat.scrollTop = chat.scrollHeight; });
+if(typeof showChat === "function") showChat();
 
 }
 
@@ -4496,6 +4392,7 @@ let neuronTheta;
   
 let neuronPhi;
 let neuronVel;
+let neuronIsShell;
   
 let animationFrame = null;  
   
@@ -4868,64 +4765,45 @@ new Float32Array(
 NEURON_COUNT  
 );
 
-neuronVel = new Float32Array(NEURON_COUNT * 3); // fluid velocity xyz
-  
-  
-  
-/* =====================================================  
-   DISTRIBUZIONE SFERICA  
-===================================================== */  
-  
-for(  
-let i=0;  
-i<NEURON_COUNT;  
-i++  
-){  
-  
-const theta =  
-Math.random() *  
-Math.PI * 2;  
-  
-const phi =  
-Math.acos(  
-2 * Math.random() - 1  
-);  
-  
-const isShell = (i % 5 !== 0); // 80% contorno puntini, 20% interno liquido
-const radius = isShell ? 1.22 : (0.35 + Math.random() * 0.70);  
-  
-const sinPhi =  
-Math.sin(phi);  
-  
-const index =  
-i * 3;  
-  
-neuronTheta[i] =  
-theta;  
-  
-neuronPhi[i] =  
-phi;  
-  
-neuronBaseRadius[i] =  
-radius;  
-  
-neuronSeeds[i] =  
-Math.random() * 10000;  
-  
-neuronPositions[index] =  
-radius *  
-sinPhi *  
-Math.cos(theta);  
-  
-neuronPositions[index + 1] =  
-radius *  
-sinPhi *  
-Math.sin(theta);  
-  
-neuronPositions[index + 2] =  
-radius *  
-Math.cos(phi);  
-  
+neuronVel = new Float32Array(NEURON_COUNT * 3);
+neuronIsShell = new Uint8Array(NEURON_COUNT);
+
+const RING_COUNT = 480;
+const RING_BANDS = 3;
+const RING_PER_BAND = Math.floor(RING_COUNT / RING_BANDS);
+const SHELL_COUNT = Math.floor((NEURON_COUNT - RING_COUNT) * 0.74);
+
+for(let i=0; i<NEURON_COUNT; i++){
+  let theta, phi, radius;
+  if(i < RING_COUNT){
+    neuronIsShell[i] = 2;
+    const band = Math.floor(i / RING_PER_BAND);
+    const k = i - band * RING_PER_BAND;
+    theta = (k / RING_PER_BAND) * Math.PI * 2;
+    phi = Math.PI / 2 + (band - 1) * 0.16;
+    radius = 1.24;
+  } else if(i < RING_COUNT + SHELL_COUNT){
+    neuronIsShell[i] = 1;
+    const k = (i - RING_COUNT) + 0.5;
+    phi = Math.acos(1 - 2 * k / SHELL_COUNT);
+    theta = Math.PI * (1 + Math.sqrt(5)) * k;
+    radius = 1.22;
+  } else {
+    neuronIsShell[i] = 0;
+    theta = Math.random() * Math.PI * 2;
+    phi = Math.acos(2 * Math.random() - 1);
+    radius = 0.30 + Math.random() * 0.68;
+  }
+
+  const sinPhi = Math.sin(phi);
+  const index = i * 3;
+  neuronTheta[i] = theta;
+  neuronPhi[i] = phi;
+  neuronBaseRadius[i] = radius;
+  neuronSeeds[i] = Math.random() * 10000;
+  neuronPositions[index]     = radius * sinPhi * Math.cos(theta);
+  neuronPositions[index + 1] = radius * sinPhi * Math.sin(theta);
+  neuronPositions[index + 2] = radius * Math.cos(phi);
 }  
   
   
@@ -5161,7 +5039,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   // anche interazione generale con input/area comandi
-  const wrap = document.querySelector(".command-dock") || document.querySelector(".command-wrapper");
+  const wrap = document.querySelector(".command-wrapper");
   if(wrap){
     ["pointerdown", "touchstart", "focusin"].forEach(ev => {
       wrap.addEventListener(ev, showChat, { passive: true });
@@ -5418,17 +5296,45 @@ if(isTalking) energy = Math.max(energy, 0.70);
 const viscosity = isTalking ? 0.91 : (isListening ? 0.90 : 0.945);
 const dt = isListening ? 0.085 : (isThinking ? 0.050 : (isTalking ? 0.070 : 0.060));
 
+const isShell = !!(neuronIsShell && neuronIsShell[i]);
+const s = seed * 0.001;
+let px, py, pz;
+
+if(neuronIsShell && neuronIsShell[i] === 2){
+  const th = theta + time * 0.12;
+  const ph = phi + Math.sin(time * 0.7 + s) * 0.012;
+  const breath = Math.sin(time * 1.05 + s) * 0.008;
+  const shellR = 1.24 * (1 + breath);
+  const sinPh = Math.sin(ph);
+  px = shellR * sinPh * Math.cos(th);
+  py = shellR * sinPh * Math.sin(th);
+  pz = shellR * Math.cos(ph);
+} else if(isShell){
+  const speed = isListening ? 0.28 : (isTalking ? 0.22 : (isThinking ? 0.16 : 0.10));
+  const n1 = Math.sin(phi * 5 + time * (0.7 + energy * 0.35) + s);
+  const n2 = Math.cos(theta * 4 + time * (0.55 + energy * 0.25) + s * 1.4);
+  const th = theta + time * speed + n1 * 0.06 + n2 * 0.04;
+  let ph = phi + n2 * 0.045 + Math.sin(time * 0.8 + seed) * 0.03;
+  if(ph < 0.08) ph = 0.08 + (0.08 - ph) * 0.25;
+  if(ph > Math.PI - 0.08) ph = Math.PI - 0.08 - (ph - (Math.PI - 0.08)) * 0.25;
+  const ripple = Math.sin(th * 6 + time * 1.6 + s) * (0.008 + energy * 0.006);
+  const breath = Math.sin(time * (isListening ? 1.4 : 0.9) + s) * (0.010 + energy * 0.006);
+  const shellR = 1.22 * (1 + breath + ripple);
+  const sinPh = Math.sin(ph);
+  px = shellR * sinPh * Math.cos(th);
+  py = shellR * sinPh * Math.sin(th);
+  pz = shellR * Math.cos(ph);
+} else {
 // posizione corrente (da buffer, o da base sferica al primo frame)
-let px = neuronPositions[index];
-let py = neuronPositions[index + 1];
-let pz = neuronPositions[index + 2];
+px = neuronPositions[index];
+py = neuronPositions[index + 1];
+pz = neuronPositions[index + 2];
 const r0 = Math.sqrt(px*px + py*py + pz*pz) || radius;
 
 // --- campo di velocità tipo fluido (curl noise approssimato) ---
 const fx = px * 0.85 + time * 0.15;
 const fy = py * 0.85 + time * 0.12;
 const fz = pz * 0.85 + time * 0.1;
-const s = seed * 0.001;
 
 // pseudo-curl 3D: flusso incomprimibile stilizzato
 const n1 = Math.sin(fy * 1.7 + fz * 1.1 + time * (0.48 + energy * 0.38) + s);
@@ -5479,7 +5385,7 @@ if(isListening){
 
 // integra velocità con viscosità (inerzia del fluido)
 if(!neuronVel){ neuronVel = new Float32Array(NEURON_COUNT * 3); }
-const iv = index * 3;
+const iv = index;
 let ovx = neuronVel[iv] * viscosity + vx * (1 - viscosity);
 let ovy = neuronVel[iv + 1] * viscosity + vy * (1 - viscosity);
 let ovz = neuronVel[iv + 2] * viscosity + vz * (1 - viscosity);
@@ -5492,28 +5398,15 @@ px += ovx * dt * (2.6 + energy * 0.9);
 py += ovy * dt * (2.6 + energy * 0.9);
 pz += ovz * dt * (2.6 + energy * 0.9);
 
-// confinamento morbido nella sfera (pressione / boundary)
 const r = Math.sqrt(px*px + py*py + pz*pz) || 0.001;
-const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
-// soft shell: attira verso raggio base senza rigidità
-// contorno sfera SEMPRE visibile + nucleo che si muove
-const isShell = (i % 2 === 0);
-const r2pre = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
-if(isShell){
-  // scorre con gli altri ma resta SEMPRE sul guscio sferico
-  const rr = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
-  const shellR = 1.22 * (1 + Math.sin(time * (isThinking ? 1.35 : isListening ? 1.6 : 0.8)) * (isThinking ? 0.04 : isListening ? 0.02 : 0.012));
-  const k = shellR / rr;
-  px *= k; py *= k; pz *= k;
-} else {
-  const ownR = radius;
-  const conf = 0.22;
-  const nr = r + (ownR - r) * conf;
-  const scale = nr / (r || 0.001);
-  px *= scale; py *= scale; pz *= scale;
-  const r2 = Math.sqrt(px*px+py*py+pz*pz);
-  if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
-  if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
+const ownR = radius;
+const conf = 0.22;
+const nr = r + (ownR - r) * conf;
+const scale = nr / (r || 0.001);
+px *= scale; py *= scale; pz *= scale;
+const r2 = Math.sqrt(px*px+py*py+pz*pz);
+if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
+if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
 }
 
 neuronPositions[index] = px;
@@ -5544,7 +5437,7 @@ particles.rotation.z = 0;
    DIMENSIONE NEURONI  
 ===================================================== */  
   
-particles.material.size = 0.040 + neuralEnergy * 0.006 + voiceLevel * 0.008;  
+particles.material.size = 0.048 + neuralEnergy * 0.005 + voiceLevel * 0.007;  
   
   
 particles.material.opacity =  
@@ -8371,26 +8264,39 @@ speakDevice(
   
 
 /* =====================================================
-   COMANDI VOCALI AVANZATI
+   WAKE WORD
+   Il microfono si attiva col tap.
+   "Jarvis" (e varianti) è solo un prefisso opzionale:
+   "fammi un testo" e "Jarvis fammi un testo" sono uguali.
 ===================================================== */
-const VOICE_WAKE = [
-  "jarvis", "hey jarvis", "ehi jarvis", "ei jarvis",
-  "ok jarvis", "okay jarvis", "ciao jarvis", "ehi yavis",
-  "hey yavis", "ok yavis"
-];
+const WAKE_CONFIG = {
+  primary: "jarvis",
+  required: false,
+  prefixes: ["ehi", "hey", "ei", "ok", "okay", "ciao", "salve", "buongiorno", "buonasera"],
+  names: ["jarvis", "yavis", "jarvi", "giarvis", "jarvies"]
+};
+
+const VOICE_WAKE = (() => {
+  const out = new Set();
+  for(const name of WAKE_CONFIG.names){
+    out.add(name);
+    for(const p of WAKE_CONFIG.prefixes) out.add(p + " " + name);
+  }
+  return [...out].sort((a, b) => b.length - a.length);
+})();
 
 let voiceSessionActive = false;
 let lastInputWasVoice = false;
 let lastVoiceCommandAt = 0;
 
 function stripWakeWord(text){
-  let t = String(text || "").trim();
+  let t = String(text || "").trim().replace(/^[,.\s!?]+/, "");
+  if(!t) return "";
   const low = t.toLowerCase();
   for(const w of VOICE_WAKE){
     if(low === w) return "";
-    if(low.startsWith(w + " ") || low.startsWith(w + ",") || low.startsWith(w + ".")){
-      t = t.slice(w.length).replace(/^[,.\s]+/, "").trim();
-      break;
+    if(low.startsWith(w + " ") || low.startsWith(w + ",") || low.startsWith(w + ".") || low.startsWith(w + "!")){
+      return t.slice(w.length).replace(/^[,.\s!?]+/, "").trim();
     }
   }
   return t;
@@ -8584,6 +8490,7 @@ let voiceBuffer = "";
 let lastHeard = "";
 let voiceSendTimer = null;
 let restartTimer = null;
+let micStartRequested = false;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
@@ -8618,89 +8525,129 @@ function mergeVoiceChunk(prev, chunk){
   return cleanVoiceText(a + " " + b);
 }
 
+function currentVoiceText(){
+  const typed = textInput ? String(textInput.value || "") : "";
+  const fromField = /in ascolto/i.test(typed) ? "" : typed;
+  return cleanVoiceText(voiceBuffer || lastHeard || fromField);
+}
+
+function setListeningHint(on){
+  if(!textInput) return;
+  if(on){
+    textInput.placeholder = "In ascolto… parla ora";
+  } else {
+    textInput.placeholder = "Chiedi qualcosa a JARVIS...";
+  }
+}
+
+function scheduleVoiceCommit(delay){
+  if(voiceSendTimer) clearTimeout(voiceSendTimer);
+  const ready = currentVoiceText();
+  if(ready.length < 2) return;
+  voiceSendTimer = setTimeout(commitVoiceUtterance, delay == null ? 450 : delay);
+}
+
 let voiceBusy = false;
 function stopListeningSession(){
+  micStartRequested = false;
   voiceSessionActive = false;
+  if(restartTimer){ clearTimeout(restartTimer); restartTimer = null; }
   try{ if(recognition && listening) recognition.stop(); }catch(e){}
 }
 
 function commitVoiceUtterance(){
   if(voiceBusy) return;
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
-  const raw = cleanVoiceText(voiceBuffer || lastHeard);
-  if(!raw || raw.length < 2) return;
+  const raw = currentVoiceText();
+  if(!raw || raw.length < 2){
+    stopListeningSession();
+    if(micBtn) micBtn.classList.remove("active");
+    setListeningHint(false);
+    if(!audioPlaying) setState("idle");
+    return;
+  }
 
   voiceBusy = true;
   lastInputWasVoice = true;
+  lastVoiceCommandAt = Date.now();
   voiceBuffer = "";
   lastHeard = "";
-  lastVoiceCommandAt = Date.now();
   stopListeningSession();
 
-  if(textInput) textInput.value = raw;
+  if(textInput) textInput.value = "";
+  setListeningHint(false);
+  if(micBtn) micBtn.classList.remove("active");
+  if(typeof showChat === "function") showChat();
+  if(chat) chat.dataset.historyMode = "on";
 
   let spoken = raw;
   try{ spoken = stripWakeWord(raw) || raw; }catch(e){ spoken = raw; }
   spoken = cleanVoiceText(spoken) || raw;
 
-  // comandi locali
+  try{ addMsg(raw); }catch(e){ console.warn("voice addMsg", e); }
+  try{ if(typeof remoteMessageCount === "number") remoteMessageCount++; }catch(e){}
+  try{ if(typeof recordRemoteMessage === "function") recordRemoteMessage(); }catch(e){}
+
   try{
     if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
-      if(textInput) textInput.value = "";
       setTimeout(()=>{ voiceBusy = false; }, 600);
       return;
     }
   }catch(e){ console.warn("voice cmd", e); }
 
-  // invio diretto: non dipendere dal valore dell'input (su mobile si perde)
   try{
-    if(chat) chat.dataset.historyMode = "on";
-    addMsg(raw);
-    if(typeof remoteMessageCount === "number") remoteMessageCount++;
-    if(typeof recordRemoteMessage === "function") recordRemoteMessage();
-    if(textInput) textInput.value = "";
     processAi(spoken);
   }catch(e){
     console.warn("voice send", e);
-    try{ processAi(spoken); }catch(err){ console.warn(err); }
+    try{ addMsg("Non sono riuscito a elaborare il comando vocale.", true); }catch(err){}
   }
   setTimeout(()=>{ voiceBusy = false; }, 900);
 }
 
-function restartRecognitionSoon(){
-  if(restartTimer) clearTimeout(restartTimer);
-  restartTimer = setTimeout(()=>{
-    if(!recognition || listening || voiceBusy) return;
-    try{
-      recognition.start();
-    }catch(e){
-      // InvalidStateError: già avviato
-    }
-  }, 280);
+async function beginListening(){
+  if(voiceBusy) return;
+  lastInputWasVoice = false;
+  micStartRequested = true;
+  voiceSessionActive = true;
+  resetVoiceBuffer();
+  if(textInput) textInput.value = "";
+  setListeningHint(true);
+  setState("listening");
+  if(micBtn) micBtn.classList.add("active");
+  try{ stopVoiceMonitor(); }catch(e){}
+  await new Promise(resolve => setTimeout(resolve, 60));
+  try{
+    recognition.start();
+  }catch(e){
+    console.warn(e);
+    try{ recognition.stop(); }catch(err){}
+    setTimeout(()=>{
+      if(!listening && micStartRequested && !voiceBusy){
+        try{ recognition.start(); }catch(err){ console.warn(err); }
+      }
+    }, 280);
+  }
 }
 
-recognition.onstart = async ()=>{
+recognition.onstart = ()=>{
   listening = true;
   voiceSessionActive = true;
   lastVoiceCommandAt = Date.now();
   if(micBtn) micBtn.classList.add("active");
+  setListeningHint(true);
   setState("listening");
-  try{ await startVoiceMonitor(); }catch(e){}
 };
 
 recognition.onspeechend = ()=>{
-  const ready = cleanVoiceText(voiceBuffer || lastHeard);
-  if(ready.length >= 2){
-    if(voiceSendTimer) clearTimeout(voiceSendTimer);
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 350);
-  }
+  scheduleVoiceCommit(380);
+  try{ if(recognition && listening) recognition.stop(); }catch(e){}
 };
 
 recognition.onresult = event=>{
   let interim = "";
   let finals = [];
   try{
-    for(let i = event.resultIndex; i < event.results.length; i++){
+    for(let i = 0; i < event.results.length; i++){
       const res = event.results[i];
       const piece = (res[0] && res[0].transcript) ? res[0].transcript.trim() : "";
       if(!piece) continue;
@@ -8710,76 +8657,65 @@ recognition.onresult = event=>{
   }catch(e){ console.warn("onresult", e); }
 
   if(finals.length){
-    const chunk = finals.join(" ").trim();
-    voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
+    voiceBuffer = cleanVoiceText(finals.join(" "));
     lastHeard = voiceBuffer;
   } else if(interim){
     lastHeard = mergeVoiceChunk(voiceBuffer, interim);
   }
 
-  const preview = cleanVoiceText(voiceBuffer || lastHeard || interim);
+  const preview = currentVoiceText() || cleanVoiceText(interim);
   if(preview && textInput) textInput.value = preview;
   setState("listening");
-
-  if(voiceSendTimer) clearTimeout(voiceSendTimer);
-  const ready = cleanVoiceText(voiceBuffer || lastHeard);
-  if(ready.length >= 2){
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 1100);
-  }
+  if(voiceBuffer.length >= 2) scheduleVoiceCommit(500);
 };
 
 recognition.onerror = error=>{
   const err = (error && error.error) ? error.error : "";
   console.warn("Microfono:", err || error);
-  if(err === "no-speech" || err === "aborted" || err === "audio-capture"){
-    return;
-  }
+  if(err === "aborted") return;
   if(err === "not-allowed" || err === "service-not-allowed"){
-    listening = false;
-    voiceSessionActive = false;
+    stopListeningSession();
     if(micBtn) micBtn.classList.remove("active");
-    try{ stopVoiceMonitor(); }catch(e){}
+    setListeningHint(false);
     setState("idle");
     try{ addMsg("Microfono non autorizzato. Consenti l'accesso al microfono e riprova.", true); }catch(e){}
     return;
+  }
+  if(err === "no-speech"){
+    if(currentVoiceText().length >= 2 && !voiceBusy) commitVoiceUtterance();
+    return;
+  }
+  if((err === "audio-capture" || err === "network") && currentVoiceText().length >= 2 && !voiceBusy){
+    commitVoiceUtterance();
   }
 };
 
 recognition.onend = ()=>{
   listening = false;
-  voiceSessionActive = false;
-  if(micBtn) micBtn.classList.remove("active");
   try{ stopVoiceMonitor(); }catch(e){}
-
-  const pending = cleanVoiceText(voiceBuffer || lastHeard);
+  const pending = currentVoiceText();
   if(pending.length >= 2 && !voiceBusy){
     commitVoiceUtterance();
+    return;
   }
-
-  if(!audioPlaying){
-    setState("idle");
-  }
+  micStartRequested = false;
+  voiceSessionActive = false;
+  if(micBtn) micBtn.classList.remove("active");
+  setListeningHint(false);
+  if(!audioPlaying) setState("idle");
 };
 
 if(micBtn){
   micBtn.addEventListener("click", ()=>{
     if(!recognition) return;
-    if(listening){
-      voiceSessionActive = false;
-      resetVoiceBuffer();
-      try{ recognition.stop(); }catch(e){}
-      setState("idle");
-    } else {
-      lastInputWasVoice = false;
-      voiceSessionActive = true;
-      resetVoiceBuffer();
-      setState("listening");
-      try{
-        recognition.start();
-      }catch(e){
-        console.warn(e);
-        restartRecognitionSoon();
+    if(listening || voiceSessionActive){
+      if(currentVoiceText().length >= 2 && !voiceBusy){
+        commitVoiceUtterance();
+      } else {
+        try{ if(recognition && listening) recognition.stop(); }catch(e){}
       }
+    } else {
+      beginListening();
     }
   });
 }

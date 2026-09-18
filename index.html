@@ -3436,7 +3436,6 @@ if(jarvisResponse){
 
 chat.appendChild(element);
 requestAnimationFrame(()=>{ chat.scrollTop = chat.scrollHeight; });
-if(typeof showChat === "function") showChat();
 
 }
 
@@ -4392,7 +4391,6 @@ let neuronTheta;
   
 let neuronPhi;
 let neuronVel;
-let neuronIsShell;
   
 let animationFrame = null;  
   
@@ -4765,45 +4763,64 @@ new Float32Array(
 NEURON_COUNT  
 );
 
-neuronVel = new Float32Array(NEURON_COUNT * 3);
-neuronIsShell = new Uint8Array(NEURON_COUNT);
-
-const RING_COUNT = 480;
-const RING_BANDS = 3;
-const RING_PER_BAND = Math.floor(RING_COUNT / RING_BANDS);
-const SHELL_COUNT = Math.floor((NEURON_COUNT - RING_COUNT) * 0.74);
-
-for(let i=0; i<NEURON_COUNT; i++){
-  let theta, phi, radius;
-  if(i < RING_COUNT){
-    neuronIsShell[i] = 2;
-    const band = Math.floor(i / RING_PER_BAND);
-    const k = i - band * RING_PER_BAND;
-    theta = (k / RING_PER_BAND) * Math.PI * 2;
-    phi = Math.PI / 2 + (band - 1) * 0.16;
-    radius = 1.24;
-  } else if(i < RING_COUNT + SHELL_COUNT){
-    neuronIsShell[i] = 1;
-    const k = (i - RING_COUNT) + 0.5;
-    phi = Math.acos(1 - 2 * k / SHELL_COUNT);
-    theta = Math.PI * (1 + Math.sqrt(5)) * k;
-    radius = 1.22;
-  } else {
-    neuronIsShell[i] = 0;
-    theta = Math.random() * Math.PI * 2;
-    phi = Math.acos(2 * Math.random() - 1);
-    radius = 0.30 + Math.random() * 0.68;
-  }
-
-  const sinPhi = Math.sin(phi);
-  const index = i * 3;
-  neuronTheta[i] = theta;
-  neuronPhi[i] = phi;
-  neuronBaseRadius[i] = radius;
-  neuronSeeds[i] = Math.random() * 10000;
-  neuronPositions[index]     = radius * sinPhi * Math.cos(theta);
-  neuronPositions[index + 1] = radius * sinPhi * Math.sin(theta);
-  neuronPositions[index + 2] = radius * Math.cos(phi);
+neuronVel = new Float32Array(NEURON_COUNT * 3); // fluid velocity xyz
+  
+  
+  
+/* =====================================================  
+   DISTRIBUZIONE SFERICA  
+===================================================== */  
+  
+for(  
+let i=0;  
+i<NEURON_COUNT;  
+i++  
+){  
+  
+const theta =  
+Math.random() *  
+Math.PI * 2;  
+  
+const phi =  
+Math.acos(  
+2 * Math.random() - 1  
+);  
+  
+const isShell = (i % 5 !== 0); // 80% contorno puntini, 20% interno liquido
+const radius = isShell ? 1.22 : (0.35 + Math.random() * 0.70);  
+  
+const sinPhi =  
+Math.sin(phi);  
+  
+const index =  
+i * 3;  
+  
+neuronTheta[i] =  
+theta;  
+  
+neuronPhi[i] =  
+phi;  
+  
+neuronBaseRadius[i] =  
+radius;  
+  
+neuronSeeds[i] =  
+Math.random() * 10000;  
+  
+neuronPositions[index] =  
+radius *  
+sinPhi *  
+Math.cos(theta);  
+  
+neuronPositions[index + 1] =  
+radius *  
+sinPhi *  
+Math.sin(theta);  
+  
+neuronPositions[index + 2] =  
+radius *  
+Math.cos(phi);  
+  
 }  
   
   
@@ -5296,45 +5313,17 @@ if(isTalking) energy = Math.max(energy, 0.70);
 const viscosity = isTalking ? 0.91 : (isListening ? 0.90 : 0.945);
 const dt = isListening ? 0.085 : (isThinking ? 0.050 : (isTalking ? 0.070 : 0.060));
 
-const isShell = !!(neuronIsShell && neuronIsShell[i]);
-const s = seed * 0.001;
-let px, py, pz;
-
-if(neuronIsShell && neuronIsShell[i] === 2){
-  const th = theta + time * 0.12;
-  const ph = phi + Math.sin(time * 0.7 + s) * 0.012;
-  const breath = Math.sin(time * 1.05 + s) * 0.008;
-  const shellR = 1.24 * (1 + breath);
-  const sinPh = Math.sin(ph);
-  px = shellR * sinPh * Math.cos(th);
-  py = shellR * sinPh * Math.sin(th);
-  pz = shellR * Math.cos(ph);
-} else if(isShell){
-  const speed = isListening ? 0.28 : (isTalking ? 0.22 : (isThinking ? 0.16 : 0.10));
-  const n1 = Math.sin(phi * 5 + time * (0.7 + energy * 0.35) + s);
-  const n2 = Math.cos(theta * 4 + time * (0.55 + energy * 0.25) + s * 1.4);
-  const th = theta + time * speed + n1 * 0.06 + n2 * 0.04;
-  let ph = phi + n2 * 0.045 + Math.sin(time * 0.8 + seed) * 0.03;
-  if(ph < 0.08) ph = 0.08 + (0.08 - ph) * 0.25;
-  if(ph > Math.PI - 0.08) ph = Math.PI - 0.08 - (ph - (Math.PI - 0.08)) * 0.25;
-  const ripple = Math.sin(th * 6 + time * 1.6 + s) * (0.008 + energy * 0.006);
-  const breath = Math.sin(time * (isListening ? 1.4 : 0.9) + s) * (0.010 + energy * 0.006);
-  const shellR = 1.22 * (1 + breath + ripple);
-  const sinPh = Math.sin(ph);
-  px = shellR * sinPh * Math.cos(th);
-  py = shellR * sinPh * Math.sin(th);
-  pz = shellR * Math.cos(ph);
-} else {
 // posizione corrente (da buffer, o da base sferica al primo frame)
-px = neuronPositions[index];
-py = neuronPositions[index + 1];
-pz = neuronPositions[index + 2];
+let px = neuronPositions[index];
+let py = neuronPositions[index + 1];
+let pz = neuronPositions[index + 2];
 const r0 = Math.sqrt(px*px + py*py + pz*pz) || radius;
 
 // --- campo di velocità tipo fluido (curl noise approssimato) ---
 const fx = px * 0.85 + time * 0.15;
 const fy = py * 0.85 + time * 0.12;
 const fz = pz * 0.85 + time * 0.1;
+const s = seed * 0.001;
 
 // pseudo-curl 3D: flusso incomprimibile stilizzato
 const n1 = Math.sin(fy * 1.7 + fz * 1.1 + time * (0.48 + energy * 0.38) + s);
@@ -5385,7 +5374,7 @@ if(isListening){
 
 // integra velocità con viscosità (inerzia del fluido)
 if(!neuronVel){ neuronVel = new Float32Array(NEURON_COUNT * 3); }
-const iv = index;
+const iv = index * 3;
 let ovx = neuronVel[iv] * viscosity + vx * (1 - viscosity);
 let ovy = neuronVel[iv + 1] * viscosity + vy * (1 - viscosity);
 let ovz = neuronVel[iv + 2] * viscosity + vz * (1 - viscosity);
@@ -5398,15 +5387,28 @@ px += ovx * dt * (2.6 + energy * 0.9);
 py += ovy * dt * (2.6 + energy * 0.9);
 pz += ovz * dt * (2.6 + energy * 0.9);
 
+// confinamento morbido nella sfera (pressione / boundary)
 const r = Math.sqrt(px*px + py*py + pz*pz) || 0.001;
-const ownR = radius;
-const conf = 0.22;
-const nr = r + (ownR - r) * conf;
-const scale = nr / (r || 0.001);
-px *= scale; py *= scale; pz *= scale;
-const r2 = Math.sqrt(px*px+py*py+pz*pz);
-if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
-if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
+const targetR = radius * (0.96 + 0.03 * Math.sin(time * 0.9 + s));
+// soft shell: attira verso raggio base senza rigidità
+// contorno sfera SEMPRE visibile + nucleo che si muove
+const isShell = (i % 2 === 0);
+const r2pre = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
+if(isShell){
+  // scorre con gli altri ma resta SEMPRE sul guscio sferico
+  const rr = Math.sqrt(px*px+py*py+pz*pz) || 0.001;
+  const shellR = 1.22 * (1 + Math.sin(time * (isThinking ? 1.35 : isListening ? 1.6 : 0.8)) * (isThinking ? 0.04 : isListening ? 0.02 : 0.012));
+  const k = shellR / rr;
+  px *= k; py *= k; pz *= k;
+} else {
+  const ownR = radius;
+  const conf = 0.22;
+  const nr = r + (ownR - r) * conf;
+  const scale = nr / (r || 0.001);
+  px *= scale; py *= scale; pz *= scale;
+  const r2 = Math.sqrt(px*px+py*py+pz*pz);
+  if(r2 > 1.12){ const s2 = 1.12 / r2; px *= s2; py *= s2; pz *= s2; }
+  if(r2 < 0.28){ const s2 = 0.28 / (r2 || 0.001); px *= s2; py *= s2; pz *= s2; }
 }
 
 neuronPositions[index] = px;
@@ -5437,7 +5439,7 @@ particles.rotation.z = 0;
    DIMENSIONE NEURONI  
 ===================================================== */  
   
-particles.material.size = 0.048 + neuralEnergy * 0.005 + voiceLevel * 0.007;  
+particles.material.size = 0.040 + neuralEnergy * 0.006 + voiceLevel * 0.008;  
   
   
 particles.material.opacity =  
@@ -8264,39 +8266,26 @@ speakDevice(
   
 
 /* =====================================================
-   WAKE WORD
-   Il microfono si attiva col tap.
-   "Jarvis" (e varianti) è solo un prefisso opzionale:
-   "fammi un testo" e "Jarvis fammi un testo" sono uguali.
+   COMANDI VOCALI AVANZATI
 ===================================================== */
-const WAKE_CONFIG = {
-  primary: "jarvis",
-  required: false,
-  prefixes: ["ehi", "hey", "ei", "ok", "okay", "ciao", "salve", "buongiorno", "buonasera"],
-  names: ["jarvis", "yavis", "jarvi", "giarvis", "jarvies"]
-};
-
-const VOICE_WAKE = (() => {
-  const out = new Set();
-  for(const name of WAKE_CONFIG.names){
-    out.add(name);
-    for(const p of WAKE_CONFIG.prefixes) out.add(p + " " + name);
-  }
-  return [...out].sort((a, b) => b.length - a.length);
-})();
+const VOICE_WAKE = [
+  "jarvis", "hey jarvis", "ehi jarvis", "ei jarvis",
+  "ok jarvis", "okay jarvis", "ciao jarvis", "ehi yavis",
+  "hey yavis", "ok yavis"
+];
 
 let voiceSessionActive = false;
 let lastInputWasVoice = false;
 let lastVoiceCommandAt = 0;
 
 function stripWakeWord(text){
-  let t = String(text || "").trim().replace(/^[,.\s!?]+/, "");
-  if(!t) return "";
+  let t = String(text || "").trim();
   const low = t.toLowerCase();
   for(const w of VOICE_WAKE){
     if(low === w) return "";
-    if(low.startsWith(w + " ") || low.startsWith(w + ",") || low.startsWith(w + ".") || low.startsWith(w + "!")){
-      return t.slice(w.length).replace(/^[,.\s!?]+/, "").trim();
+    if(low.startsWith(w + " ") || low.startsWith(w + ",") || low.startsWith(w + ".")){
+      t = t.slice(w.length).replace(/^[,.\s]+/, "").trim();
+      break;
     }
   }
   return t;
@@ -8490,7 +8479,6 @@ let voiceBuffer = "";
 let lastHeard = "";
 let voiceSendTimer = null;
 let restartTimer = null;
-let micStartRequested = false;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
@@ -8525,129 +8513,89 @@ function mergeVoiceChunk(prev, chunk){
   return cleanVoiceText(a + " " + b);
 }
 
-function currentVoiceText(){
-  const typed = textInput ? String(textInput.value || "") : "";
-  const fromField = /in ascolto/i.test(typed) ? "" : typed;
-  return cleanVoiceText(voiceBuffer || lastHeard || fromField);
-}
-
-function setListeningHint(on){
-  if(!textInput) return;
-  if(on){
-    textInput.placeholder = "In ascolto… parla ora";
-  } else {
-    textInput.placeholder = "Chiedi qualcosa a JARVIS...";
-  }
-}
-
-function scheduleVoiceCommit(delay){
-  if(voiceSendTimer) clearTimeout(voiceSendTimer);
-  const ready = currentVoiceText();
-  if(ready.length < 2) return;
-  voiceSendTimer = setTimeout(commitVoiceUtterance, delay == null ? 450 : delay);
-}
-
 let voiceBusy = false;
 function stopListeningSession(){
-  micStartRequested = false;
   voiceSessionActive = false;
-  if(restartTimer){ clearTimeout(restartTimer); restartTimer = null; }
   try{ if(recognition && listening) recognition.stop(); }catch(e){}
 }
 
 function commitVoiceUtterance(){
   if(voiceBusy) return;
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
-  const raw = currentVoiceText();
-  if(!raw || raw.length < 2){
-    stopListeningSession();
-    if(micBtn) micBtn.classList.remove("active");
-    setListeningHint(false);
-    if(!audioPlaying) setState("idle");
-    return;
-  }
+  const raw = cleanVoiceText(voiceBuffer || lastHeard);
+  if(!raw || raw.length < 2) return;
 
   voiceBusy = true;
   lastInputWasVoice = true;
-  lastVoiceCommandAt = Date.now();
   voiceBuffer = "";
   lastHeard = "";
+  lastVoiceCommandAt = Date.now();
   stopListeningSession();
 
-  if(textInput) textInput.value = "";
-  setListeningHint(false);
-  if(micBtn) micBtn.classList.remove("active");
-  if(typeof showChat === "function") showChat();
-  if(chat) chat.dataset.historyMode = "on";
+  if(textInput) textInput.value = raw;
 
   let spoken = raw;
   try{ spoken = stripWakeWord(raw) || raw; }catch(e){ spoken = raw; }
   spoken = cleanVoiceText(spoken) || raw;
 
-  try{ addMsg(raw); }catch(e){ console.warn("voice addMsg", e); }
-  try{ if(typeof remoteMessageCount === "number") remoteMessageCount++; }catch(e){}
-  try{ if(typeof recordRemoteMessage === "function") recordRemoteMessage(); }catch(e){}
-
+  // comandi locali
   try{
     if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
+      if(textInput) textInput.value = "";
       setTimeout(()=>{ voiceBusy = false; }, 600);
       return;
     }
   }catch(e){ console.warn("voice cmd", e); }
 
+  // invio diretto: non dipendere dal valore dell'input (su mobile si perde)
   try{
+    if(chat) chat.dataset.historyMode = "on";
+    addMsg(raw);
+    if(typeof remoteMessageCount === "number") remoteMessageCount++;
+    if(typeof recordRemoteMessage === "function") recordRemoteMessage();
+    if(textInput) textInput.value = "";
     processAi(spoken);
   }catch(e){
     console.warn("voice send", e);
-    try{ addMsg("Non sono riuscito a elaborare il comando vocale.", true); }catch(err){}
+    try{ processAi(spoken); }catch(err){ console.warn(err); }
   }
   setTimeout(()=>{ voiceBusy = false; }, 900);
 }
 
-async function beginListening(){
-  if(voiceBusy) return;
-  lastInputWasVoice = false;
-  micStartRequested = true;
-  voiceSessionActive = true;
-  resetVoiceBuffer();
-  if(textInput) textInput.value = "";
-  setListeningHint(true);
-  setState("listening");
-  if(micBtn) micBtn.classList.add("active");
-  try{ stopVoiceMonitor(); }catch(e){}
-  await new Promise(resolve => setTimeout(resolve, 60));
-  try{
-    recognition.start();
-  }catch(e){
-    console.warn(e);
-    try{ recognition.stop(); }catch(err){}
-    setTimeout(()=>{
-      if(!listening && micStartRequested && !voiceBusy){
-        try{ recognition.start(); }catch(err){ console.warn(err); }
-      }
-    }, 280);
-  }
+function restartRecognitionSoon(){
+  if(restartTimer) clearTimeout(restartTimer);
+  restartTimer = setTimeout(()=>{
+    if(!recognition || listening || voiceBusy) return;
+    try{
+      recognition.start();
+    }catch(e){
+      // InvalidStateError: già avviato
+    }
+  }, 280);
 }
 
-recognition.onstart = ()=>{
+recognition.onstart = async ()=>{
   listening = true;
   voiceSessionActive = true;
   lastVoiceCommandAt = Date.now();
   if(micBtn) micBtn.classList.add("active");
-  setListeningHint(true);
   setState("listening");
+  try{ await startVoiceMonitor(); }catch(e){}
 };
 
 recognition.onspeechend = ()=>{
-  scheduleVoiceCommit(380);
-  try{ if(recognition && listening) recognition.stop(); }catch(e){}
+  const ready = cleanVoiceText(voiceBuffer || lastHeard);
+  if(ready.length >= 2){
+    if(voiceSendTimer) clearTimeout(voiceSendTimer);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 350);
+  }
 };
 
 recognition.onresult = event=>{
   let interim = "";
   let finals = [];
   try{
-    for(let i = 0; i < event.results.length; i++){
+    for(let i = event.resultIndex; i < event.results.length; i++){
       const res = event.results[i];
       const piece = (res[0] && res[0].transcript) ? res[0].transcript.trim() : "";
       if(!piece) continue;
@@ -8657,65 +8605,76 @@ recognition.onresult = event=>{
   }catch(e){ console.warn("onresult", e); }
 
   if(finals.length){
-    voiceBuffer = cleanVoiceText(finals.join(" "));
+    const chunk = finals.join(" ").trim();
+    voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
     lastHeard = voiceBuffer;
   } else if(interim){
     lastHeard = mergeVoiceChunk(voiceBuffer, interim);
   }
 
-  const preview = currentVoiceText() || cleanVoiceText(interim);
+  const preview = cleanVoiceText(voiceBuffer || lastHeard || interim);
   if(preview && textInput) textInput.value = preview;
   setState("listening");
-  if(voiceBuffer.length >= 2) scheduleVoiceCommit(500);
+
+  if(voiceSendTimer) clearTimeout(voiceSendTimer);
+  const ready = cleanVoiceText(voiceBuffer || lastHeard);
+  if(ready.length >= 2){
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 1100);
+  }
 };
 
 recognition.onerror = error=>{
   const err = (error && error.error) ? error.error : "";
   console.warn("Microfono:", err || error);
-  if(err === "aborted") return;
+  if(err === "no-speech" || err === "aborted" || err === "audio-capture"){
+    return;
+  }
   if(err === "not-allowed" || err === "service-not-allowed"){
-    stopListeningSession();
+    listening = false;
+    voiceSessionActive = false;
     if(micBtn) micBtn.classList.remove("active");
-    setListeningHint(false);
+    try{ stopVoiceMonitor(); }catch(e){}
     setState("idle");
     try{ addMsg("Microfono non autorizzato. Consenti l'accesso al microfono e riprova.", true); }catch(e){}
     return;
-  }
-  if(err === "no-speech"){
-    if(currentVoiceText().length >= 2 && !voiceBusy) commitVoiceUtterance();
-    return;
-  }
-  if((err === "audio-capture" || err === "network") && currentVoiceText().length >= 2 && !voiceBusy){
-    commitVoiceUtterance();
   }
 };
 
 recognition.onend = ()=>{
   listening = false;
-  try{ stopVoiceMonitor(); }catch(e){}
-  const pending = currentVoiceText();
-  if(pending.length >= 2 && !voiceBusy){
-    commitVoiceUtterance();
-    return;
-  }
-  micStartRequested = false;
   voiceSessionActive = false;
   if(micBtn) micBtn.classList.remove("active");
-  setListeningHint(false);
-  if(!audioPlaying) setState("idle");
+  try{ stopVoiceMonitor(); }catch(e){}
+
+  const pending = cleanVoiceText(voiceBuffer || lastHeard);
+  if(pending.length >= 2 && !voiceBusy){
+    commitVoiceUtterance();
+  }
+
+  if(!audioPlaying){
+    setState("idle");
+  }
 };
 
 if(micBtn){
   micBtn.addEventListener("click", ()=>{
     if(!recognition) return;
-    if(listening || voiceSessionActive){
-      if(currentVoiceText().length >= 2 && !voiceBusy){
-        commitVoiceUtterance();
-      } else {
-        try{ if(recognition && listening) recognition.stop(); }catch(e){}
-      }
+    if(listening){
+      voiceSessionActive = false;
+      resetVoiceBuffer();
+      try{ recognition.stop(); }catch(e){}
+      setState("idle");
     } else {
-      beginListening();
+      lastInputWasVoice = false;
+      voiceSessionActive = true;
+      resetVoiceBuffer();
+      setState("listening");
+      try{
+        recognition.start();
+      }catch(e){
+        console.warn(e);
+        restartRecognitionSoon();
+      }
     }
   });
 }

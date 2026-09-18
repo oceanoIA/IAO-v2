@@ -8417,10 +8417,9 @@ function handleAdvancedVoiceCommand(rawText){
     return true;
   }
 
-  // note / timer / sveglia
-  if(typeof handleNotesTimerAlarm === "function" && handleNotesTimerAlarm(raw)){
-    return true;
-  }
+  // note / timer / sveglia: NON chiamare qui la funzione async.
+  // Un Promise è sempre truthy e bloccava processAi.
+  // Li gestisce processAi -> handleDeviceCommand.
 
   // annulla timer
   if(n.includes("annulla timer") || n.includes("cancella timer") || n.includes("stop timer")){
@@ -8567,13 +8566,15 @@ function commitVoiceUtterance(){
     }
   }catch(e){ console.warn("voice cmd", e); }
 
-  try{
-    processAi(spoken);
-  }catch(e){
-    console.warn("voice send", e);
-    try{ addMsg("Non sono riuscito a elaborare il comando vocale.", true); }catch(err){}
-  }
-  setTimeout(()=>{ voiceBusy = false; }, 900);
+  Promise.resolve()
+    .then(()=>processAi(spoken))
+    .catch(e=>{
+      console.warn("voice send", e);
+      try{ addMsg("Non sono riuscito a elaborare il comando vocale.", true); }catch(err){}
+    })
+    .finally(()=>{
+      setTimeout(()=>{ voiceBusy = false; }, 400);
+    });
 }
 
 async function beginListening(){

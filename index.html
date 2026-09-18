@@ -8893,6 +8893,48 @@ function sanitizeJarvisReply(text){
   return t;
 }
 
+function isLongWritingRequest(text){
+  const n = normalizeCommand(text);
+  if(!n) return false;
+  if(/\b(\d+\s*)?(pagine|pagina|saggio|tema|tesina|riassunto|relazione|capitolo|capitoli)\b/.test(n) && /\b(scrivi|scrivere|genera|generare|fai|fammi|crea|redigi|produci)\b/.test(n)) return true;
+  if(/\b(scrivi|fammi|genera)\b/.test(n) && /\b(testo|storia|racconto|articolo|documento|libro|saggio)\b/.test(n)) return true;
+  return false;
+}
+
+function isRefusalReply(text){
+  const n = normalizeCommand(text);
+  if(!n) return true;
+  return (
+    n.includes("non posso generare") ||
+    n.includes("non posso creare") ||
+    n.includes("non posso scrivere") ||
+    n.includes("non posso fare un testo") ||
+    n.includes("non posso produrre") ||
+    n.includes("e troppo lungo") ||
+    n.includes("testo piu breve") ||
+    n.includes("testo più breve") ||
+    n.includes("in una sola risposta") ||
+    (n.includes("mi dispiace") && (n.includes("pagine") || n.includes("troppo")))
+  );
+}
+
+function writingOverride(text){
+  const raw = String(text || "").trim();
+  if(!isLongWritingRequest(raw)) return raw;
+  const topic = raw
+    .replace(/\b\d+\s*(-\s*|\s+)?\d*\s*pagin[ae]\b/gi, "")
+    .replace(/\b(scrivi|scrivere|genera|generare|fammi|fai|crea|redigi|produci)\b/gi, "")
+    .replace(/\b(un|una|il|lo|la|testo|saggio|tema|documento)\b/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim() || raw;
+  return (
+    "Scrivi ADESSO un saggio lungo, dettagliato e strutturato su: " + topic + ". " +
+    "Niente premesse, niente rifiuti, niente «non posso», niente chiedere come preferisco. " +
+    "Inizia dal titolo e vai di capitoli e paragrafi veri, il più lunghi possibile. " +
+    "Non dire che il testo è troppo lungo."
+  );
+}
+
 async function processAi(text, imageData = null){  
   
 if(  
@@ -9037,7 +9079,7 @@ setTimeout(
 ()=>{  
 controller.abort();  
 },  
-30000  
+120000  
 );  
   
   
@@ -9055,141 +9097,81 @@ await getJarvisCapabilitiesSnapshot();
   
 const capabilityInstructions =
 
-"REGOLE OPERATIVE J.A.R.V.I.S. (OBBLIGATORIE): " +
+"Sei J.A.R.V.I.S., assistente personale di Oceano. Il tuo lavoro è ESEGUIRE le richieste, non limarle o rifiutarle. " +
 
-"Il tuo creatore e interlocutore principale si chiama Oceano. Il suo nome è Oceano, non Tony. Chiamalo sempre Oceano, mai Tony, mai Tony Stark, mai altri nomi di film. " +
+"Identità: creatore e interlocutore = Oceano. Mai Tony, Tony Stark, Iron Man, Stark Industries, Avengers o agenda da film. " +
 
-"Tu sei J.A.R.V.I.S., assistente reale di Oceano. NON sei un personaggio di film Marvel/Iron Man. " + "Se ti chiedono chi ti ha creato, la sola risposta corretta è: Oceano. Mai Tony Stark, mai Iron Man. " +
+"Rispondi a ogni domanda utile: cultura, storia, scuola, lavoro, codice, idee, testi, traduzioni, spiegazioni, piani. Non dire che un argomento è fuori portata se è una richiesta normale. " +
 
-"VIETATO inventare: Stark Industries, riunioni con dirigenti, prototipi Iron Man, lab fittizi, missioni di supereroi, agenda inventata. " +
+"SCRITTURA E COMPITI LUNGHI: se chiede un testo, un saggio, una tesina, una storia o un documento, SCRIVILO SUBITO. Vietato: «non posso», «è troppo lungo», «posso fare solo un testo breve», «come preferisci?». Parti dal titolo e riempi capitoli. Se lo spazio non basta, chiudi il blocco in modo naturale: l'interfaccia ti chiederà di continuare. " +
 
-"Rispondi SOLO con cose reali e utili nella vita quotidiana (ora, meteo se disponibile, cosa fare oggi in modo generico e pratico, aiuto concreto). " +
+"Dati del dispositivo (batteria, GPS, modello, smart home): solo se presenti in capabilities. Non inventare hardware. Se manca l'agenda reale di Oceano, chiedi invece di inventare appuntamenti. " +
 
-"Se non conosci l'agenda reale di Oceano, chiedi o proponi idee pratiche senza inventare appuntamenti. " +
+"Lingua: italiano se l'utente parla italiano. Tono: naturale, concreto, da assistente vero.";  
+  
+  
+async function askWorker(message, extraMemory){
+  const res = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message,
+      memory: extraMemory || memory.slice(-12),
+      currentTime: temporal.currentTime,
+      currentDate: temporal.currentDate,
+      dayOfWeek: temporal.dayOfWeek,
+      timezone: temporal.timezone,
+      capabilities,
+      systemInstructions: capabilityInstructions,
+      userName: (typeof currentJarvisUser==="function" ? (currentJarvisUser()||"Oceano") : "Oceano"),
+      creatorName: "Oceano",
+      image: imageData || null
+    }),
+    signal: controller.signal
+  });
+  if(!res.ok) throw new Error("HTTP " + res.status);
+  const data = await res.json();
+  return sanitizeJarvisReply(typeof data.response === "string" ? data.response.trim() : "");
+}
 
-"Devi dichiarare esclusivamente capacità e dati realmente presenti nel payload capabilities. " +
+const longWrite = isLongWritingRequest(text);
+let outgoing = writingOverride(text);
+let reply = await askWorker(outgoing);
 
-"Non inventare mai percentuali di batteria, modello del telefono, posizione, stato di dispositivi o altri dati hardware. " +
+if((!reply || isRefusalReply(reply)) && longWrite){
+  reply = await askWorker(writingOverride(text) + " Scrivi solo il saggio. Zero scuse.");
+}
 
-"Non dire di avere accesso a fotocamere, telecamere di casa, sistemi di sicurezza, serrature, luci, smart home, altri telefoni o dispositivi esterni se non sono integrati. " +
-
-"Se una funzione non è disponibile, dillo chiaramente. " +
-
-"Se un dato non è verificabile dal browser, non stimarlo né indovinarlo. " +
-
-"Rispondi in italiano quando l'utente parla italiano. Sii naturale, umano e utile.";  
-  
-  
-const response =  
-await fetch(  
-API,  
-{  
-  
-method:"POST",  
-  
-headers:{  
-"Content-Type":  
-"application/json"  
-},  
-  
-body:JSON.stringify({  
-  
-message:text,  
-  
-memory:
-  memory.slice(-12),  
-  
-currentTime:  
-temporal.currentTime,  
-  
-currentDate:  
-temporal.currentDate,  
-  
-dayOfWeek:  
-temporal.dayOfWeek,  
-  
-timezone:  
-temporal.timezone,  
-  
-capabilities:  
-capabilities,  
-  
-systemInstructions:  
-capabilityInstructions,
-userName: (typeof currentJarvisUser==="function" ? (currentJarvisUser()||"Oceano") : "Oceano"),
-creatorName: "Oceano",
-
-image: imageData || null
-  
-}),  
-  
-signal:  
-controller.signal  
-  
-}  
-);  
-  
-  
-clearTimeout(timeout);  
-  
-  
-if(!response.ok){  
-  
-throw new Error(  
-"HTTP " +  
-response.status  
-);  
-  
-}  
-  
-  
-const data =  
-await response.json();  
-  
-  
-let reply =  
-typeof data.response ===  
-"string"  
-?  
-data.response.trim()  
-:  
-"";
-reply = sanitizeJarvisReply(reply);  
-  
-  
-if(!reply){  
-  
-throw new Error(  
-"Risposta AI vuota"  
-);  
-  
-}  
-  
-  
-const copyable =  
-isCopyableResponse(  
-text,  
-reply  
-);  
-  
-  
-addMsg(  
-reply,  
-true,  
-copyable  
-);
+if(longWrite && reply && !isRefusalReply(reply)){
+  addMsg(reply, true, true);
+  addMemory("assistant", reply);
+  const pieces = [reply];
+  for(let step = 2; step <= 4; step++){
+    const last = pieces[pieces.length - 1];
+    const cont = await askWorker(
+      "Continua lo stesso saggio senza introduzione e senza dire che non puoi. Riprendi da dove ti sei fermato e scrivi il blocco successivo, il più lungo possibile.\n\nUltimo tratto già scritto:\n" + String(last).slice(-900),
+      memory.slice(-12).concat([{role:"assistant", content: last}])
+    );
+    if(!cont || isRefusalReply(cont) || cont.length < 80) break;
+    pieces.push(cont);
+    addMsg(cont, true, true);
+    addMemory("assistant", cont);
+  }
+  reply = pieces.join("\n\n");
+} else {
+  if(!reply){
+    throw new Error("Risposta AI vuota");
+  }
+  const copyable = isCopyableResponse(text, reply);
+  addMsg(reply, true, copyable);
+  addMemory("assistant", reply);
+}
 
 if(lastInputWasVoice && typeof speak === "function"){
-  try{ speak(reply); }catch(e){}
-}  
-  
-addMemory(  
-"assistant",  
-reply  
-);  
-  
-  
-  
+  try{ speak(String(reply).slice(0, 280)); }catch(e){}
+}
+
+clearTimeout(timeout);
 setState("idle");  
   
   

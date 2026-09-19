@@ -3089,6 +3089,12 @@ import * as THREE from
    CONFIGURAZIONE  
 ===================================================== */  
   
+
+const ULTRON_TTS_URL = (function(){
+  try{ return String(localStorage.getItem("ultron_tts_url") || "").trim(); }
+  catch(e){ return ""; }
+})();
+
 const API =  
 "https://iao-ai-v3.oceano-masoud.workers.dev/";  
   
@@ -8318,20 +8324,161 @@ return false;
 }  
   
   
-async function speak(text){  
-  
-if(!text)  
-return;  
-  
-const success =  
-await speakElevenLabs(text);  
-  
-if(!success){  
-  
-await speakDevice(text);  
-  
-}  
-  
+
+const ULTRON_VOICE_ID = "im_nicola";
+const ULTRON_TTS_KEY = "ultron_voice_engine_v1";
+let ultronTtsModel = null;
+let ultronTtsLoading = null;
+
+function playPcmAsAudio(samples, rate){
+  return new Promise((resolve) => {
+    try{
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const data = samples instanceof Float32Array ? samples : new Float32Array(samples);
+      const buf = ctx.createBuffer(1, data.length, rate || 24000);
+      buf.copyToChannel(data, 0);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 3200;
+      const gain = ctx.createGain();
+      gain.gain.value = 1;
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      src.onended = () => {
+        audioPlaying = false;
+        setState("idle");
+        try{ ctx.close(); }catch(e){}
+        resolve(true);
+      };
+      audioPlaying = true;
+      setState("speaking");
+      src.start();
+    }catch(e){
+      console.warn("ultron pcm", e);
+      resolve(false);
+    }
+  });
+}
+
+async function loadUltronVoice(){
+  if(ultronTtsModel) return ultronTtsModel;
+  if(ultronTtsLoading) return ultronTtsLoading;
+  ultronTtsLoading = (async () => {
+    try{
+      if(typeof notify === "function") notify("CARICO VOCE ULTRON…");
+      const mod = await import("https://cdn.jsdelivr.net/npm/kokoro-js@1.2.1/+esm");
+      const KokoroTTS = mod.KokoroTTS || mod.default;
+      const device = (navigator.gpu ? "webgpu" : "wasm");
+      const model = await KokoroTTS.from_pretrained("onnx-community/Kokoro-82M-v1.0-ONNX", {
+        dtype: "q8",
+        device
+      });
+      ultronTtsModel = model;
+      try{ localStorage.setItem(ULTRON_TTS_KEY, "kokoro-im_nicola"); }catch(e){}
+      if(typeof notify === "function") notify("VOCE ULTRON PRONTA");
+      return model;
+    }catch(e){
+      console.warn("Ultron TTS model", e);
+      ultronTtsLoading = null;
+      return null;
+    }
+  })();
+  return ultronTtsLoading;
+}
+
+async function speakUltronCore(text){
+  const model = await loadUltronVoice();
+  if(!model || typeof model.generate !== "function") return false;
+  const out = await model.generate(String(text), { voice: ULTRON_VOICE_ID, speed: 0.92 });
+  if(!out) return false;
+  if(typeof out.play === "function"){
+    audioPlaying = true;
+    setState("speaking");
+    try{
+      const p = out.play();
+      if(p && typeof p.then === "function") await p;
+    }catch(e){}
+    audioPlaying = false;
+    setState("idle");
+    return true;
+  }
+  const samples = out.audio || out.samples || (out.data && out.data.audio);
+  const rate = out.sampling_rate || out.sample_rate || 24000;
+  if(samples) return await playPcmAsAudio(samples, rate);
+  if(typeof out.toWav === "function"){
+    const wav = await out.toWav();
+    const url = URL.createObjectURL(wav instanceof Blob ? wav : new Blob([wav]));
+    return await new Promise((resolve) => {
+      const a = new Audio(url);
+      a.onended = () => { audioPlaying = false; setState("idle"); URL.revokeObjectURL(url); resolve(true); };
+      a.onerror = () => { audioPlaying = false; setState("idle"); resolve(false); };
+      audioPlaying = true;
+      setState("speaking");
+      a.play().catch(()=>resolve(false));
+    });
+  }
+  return false;
+}
+
+
+async function speakUltronServer(text){
+  const url = ULTRON_TTS_URL;
+  if(!url) return false;
+  const ctrl = new AbortController();
+  const t = setTimeout(()=>ctrl.abort(), 45000);
+  try{
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: String(text) }),
+      signal: ctrl.signal
+    });
+    clearTimeout(t);
+    if(!res.ok) return false;
+    const type = (res.headers.get("content-type") || "").toLowerCase();
+    if(!type.includes("audio") && !type.includes("octet-stream") && !type.includes("wav")){
+      const blobGuess = await res.blob();
+      if(!blobGuess || blobGuess.size < 200) return false;
+      return await playBlobAudio(blobGuess);
+    }
+    const blob = await res.blob();
+    if(!blob || blob.size < 200) return false;
+    return await playBlobAudio(blob);
+  }catch(e){
+    clearTimeout(t);
+    console.warn("ultron server tts", e);
+    return false;
+  }
+}
+
+function playBlobAudio(blob){
+  return new Promise((resolve) => {
+    const src = URL.createObjectURL(blob);
+    const a = new Audio(src);
+    a.onended = () => { audioPlaying = false; setState("idle"); URL.revokeObjectURL(src); resolve(true); };
+    a.onerror = () => { audioPlaying = false; setState("idle"); URL.revokeObjectURL(src); resolve(false); };
+    audioPlaying = true;
+    setState("speaking");
+    a.play().then(()=>{}).catch(()=>{ audioPlaying = false; setState("idle"); resolve(false); });
+  });
+}
+
+async function speak(text){
+if(!text) return;
+try{
+  if(ULTRON_TTS_URL){
+    const serverOk = await speakUltronServer(text);
+    if(serverOk) return;
+  }
+}catch(e){ console.warn("ultron server voice", e); }
+try{
+  const ok = await speakUltronCore(text);
+  if(ok) return;
+}catch(e){ console.warn("ultron core voice", e); }
+await speakDevice(text);
 }  
   
   

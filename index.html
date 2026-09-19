@@ -3107,8 +3107,8 @@ const MAPTILER_STYLE =
 +  
 MAPTILER_KEY;  
   
-const ELEVEN_VOICE_ID =  
-"vkBFlAtUdZqNR4MqxSVr";  
+const ELEVEN_VOICE_ID =
+"pNInz6obpgDQGcFmaJgB";  
   
   
 /* =====================================================  
@@ -8082,6 +8082,36 @@ loadDeviceVoices;
 }  
   
   
+
+function pickMaleDeviceVoice(){
+  const list = Array.isArray(deviceVoices) ? deviceVoices.slice() : [];
+  if(!list.length && "speechSynthesis" in window){
+    try{ deviceVoices = speechSynthesis.getVoices() || []; }catch(e){}
+  }
+  const voices = Array.isArray(deviceVoices) ? deviceVoices : [];
+  if(!voices.length) return null;
+  const male = /male|uomo|man\b|maschi|giorgio|cosimo|diego|luca|francesco|matteo|paolo|marco|roberto|giovanni|alessandro|adam|daniel|david|mark|george|ryan|brian|josh|bill|antoni|arnold|benigno|rinaldo|calimero|cataldo|lisandro|dario|fabio|raffaele|marcello|wavenet-d|wavenet-c/i;
+  const female = /female|donna|woman|femmin|elsa|elza|alice|paola|sara|zira|samantha|susan|fiona|lisa|helena|federica|bianca|clara|elena|jenny|aria|rachel|domi|bella|giulia|sofia/i;
+  const score = (v)=>{
+    const name = String(v && v.name || "");
+    const lang = String(v && v.lang || "").toLowerCase();
+    let s = 0;
+    if(lang.startsWith("it")) s += 8;
+    if(male.test(name)) s += 10;
+    if(female.test(name)) s -= 20;
+    if(/neural|natural|premium|wavenet/i.test(name)) s += 2;
+    return s;
+  };
+  let best = null, bestS = -99;
+  for(const v of voices){
+    const s = score(v);
+    if(s > bestS){ bestS = s; best = v; }
+  }
+  if(best && !female.test(String(best.name||""))) return best;
+  const anyMale = voices.find(v => male.test(String(v.name||"")) && !female.test(String(v.name||"")));
+  return anyMale || null;
+}
+
 function speakDevice(text){  
   
 return new Promise(  
@@ -8104,16 +8134,16 @@ new SpeechSynthesisUtterance(
 text  
 );  
   
-utterance.lang =  
-"it-IT";  
-  
-utterance.rate =  
-.95;  
-  
-utterance.pitch =  
-.9;  
-  
-utterance.volume =  
+utterance.lang =
+"it-IT";
+
+utterance.rate =
+.88;
+
+utterance.pitch =
+.72;
+
+utterance.volume =
 1;  
   
 if(selectedDeviceVoice){  
@@ -8121,24 +8151,12 @@ if(selectedDeviceVoice){
 utterance.voice =  
 selectedDeviceVoice;  
   
-}else{  
+}else{
+  const picked = pickMaleDeviceVoice();
+  if(picked) utterance.voice = picked;
+}
+
   
-const italianVoice =  
-deviceVoices.find(  
-voice=>  
-voice.lang  
-.toLowerCase()  
-.startsWith("it")  
-);  
-  
-if(italianVoice){  
-  
-utterance.voice =  
-italianVoice;  
-  
-}  
-  
-}  
   
 utterance.onstart =  
 ()=>{  
@@ -8202,15 +8220,12 @@ headers:{
 "application/json"  
 },  
   
-body:JSON.stringify({  
-  
-action:"tts",  
-  
-text:text,  
-  
-voiceId:  
-ELEVEN_VOICE_ID  
-  
+body:JSON.stringify({
+action:"tts",
+text:text,
+voiceId: ELEVEN_VOICE_ID,
+gender: "male",
+voiceGender: "male"
 })  
   
 }  

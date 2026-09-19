@@ -1,6 +1,6 @@
 <!DOCTYPE html>  <html lang="it">  <head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-<title>J.A.R.V.I.S.</title>  <link  
+<title>U.L.T.R.O.N.</title>  <link  
 rel="stylesheet"  
 href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">  <style>  
   
@@ -1916,7 +1916,7 @@ border-radius:5px;
 
 
 /* =====================================================
-   RISPOSTE J.A.R.V.I.S. — TESTO + COPIA + ASCOLTO
+   RISPOSTE U.L.T.R.O.N. — TESTO + COPIA + ASCOLTO
 ===================================================== */
 .jarvis-response{
     padding-bottom:42px!important;
@@ -2016,7 +2016,7 @@ border-radius:5px;
 
 
 /* =====================================================
-   ACCESSO J.A.R.V.I.S. — LOGIN / CREAZIONE ACCOUNT
+   ACCESSO U.L.T.R.O.N. — LOGIN / CREAZIONE ACCOUNT
 ===================================================== */
 #jarvisAuth{
     position:fixed;
@@ -2159,7 +2159,7 @@ border-radius:5px;
 @media(max-width:600px){.admin-shell{width:100%;padding:18px}.admin-stats{grid-template-columns:1fr}.feedback-launch{right:12px;bottom:12px}.admin-launch{right:12px;top:12px}}
 
 /* =====================================================
-   J.A.R.V.I.S. // MINIMAL ROUND UI
+   U.L.T.R.O.N. // MINIMAL ROUND UI
 ===================================================== */
 button,
 input[type="button"],
@@ -2822,6 +2822,9 @@ html, body {
   pointer-events:none !important;
 }
 
+/* =====================================================
+   DOCK INPUT + MICROFONO CIRCOLARE A SINISTRA
+===================================================== */
 .command-dock{
   position:fixed !important;
   left:50% !important;
@@ -2864,17 +2867,64 @@ html, body {
   background:rgba(6,6,10,0.88) !important;
   color:rgba(210,230,255,0.88) !important;
   box-shadow:0 0 18px rgba(0,0,0,0.45) !important;
+  backdrop-filter:blur(18px);
+}
+.command-dock #micBtn:hover{
+  color:#fff !important;
+  border-color:rgba(255,255,255,0.55) !important;
+  background:rgba(18,22,30,0.94) !important;
 }
 .command-dock #micBtn.active{
   color:#fff !important;
   border-color:rgba(180,230,255,0.85) !important;
   background:rgba(20,36,58,0.95) !important;
+  box-shadow:0 0 16px rgba(120,200,255,0.35), 0 0 28px rgba(80,160,255,0.18) !important;
+  filter:none !important;
 }
-@media (max-width:700px){
-  .command-dock{ width:min(96%, 560px) !important; bottom:12px !important; }
-  .command-dock #micBtn{ width:46px !important; height:46px !important; min-width:46px !important; min-height:46px !important; flex-basis:46px !important; }
+.command-dock .mic-icon{
+  width:10px !important;
+  height:16px !important;
 }
-
+@supports (padding: max(0px)) {
+  .command-dock{
+    bottom:max(12px, env(safe-area-inset-bottom)) !important;
+  }
+}
+@media (max-width:700px), (orientation:portrait) and (max-width:900px){
+  .command-dock{
+    width:min(96%, 560px) !important;
+    bottom:12px !important;
+    gap:8px !important;
+  }
+  .command-dock #micBtn{
+    flex-basis:46px !important;
+    width:46px !important;
+    height:46px !important;
+    min-width:46px !important;
+    min-height:46px !important;
+  }
+}
+@media (max-width:400px){
+  .command-dock{
+    width:calc(100vw - 16px) !important;
+  }
+  .command-dock #micBtn{
+    flex-basis:44px !important;
+    width:44px !important;
+    height:44px !important;
+    min-width:44px !important;
+    min-height:44px !important;
+  }
+}
+@media (min-width:701px) and (max-width:1100px){
+  .command-dock{ width:min(700px, 92%) !important; }
+}
+@media (min-width:1101px){
+  .command-dock{ width:min(620px, 78%) !important; }
+}
+@media (orientation:landscape) and (max-height:500px){
+  .command-dock{ bottom:8px !important; }
+}
 </style>  
 </head>  <body>
 
@@ -2883,7 +2933,7 @@ html, body {
 ===================================================== -->
 <div id="jarvisAuth" aria-modal="true" role="dialog">
   <div class="auth-shell">
-    <div class="auth-kicker">J.A.R.V.I.S. // ACCESS CONTROL</div>
+    <div class="auth-kicker">U.L.T.R.O.N. // ACCESS CONTROL</div>
     <div class="auth-title">SYSTEM LOGIN</div>
     <div class="auth-subtitle" id="authSubtitle">AUTENTICAZIONE RICHIESTA</div>
 
@@ -2920,7 +2970,7 @@ html, body {
      TITOLO  
 ===================================================== -->  <div  
 class="jarvis-title"  
-id="jarvisTitle">  J.A.R.V.I.S.
+id="jarvisTitle">  U.L.T.R.O.N.
 
 </div>
 <div class="net-badge" id="netBadge" aria-live="polite">
@@ -2972,7 +3022,7 @@ MAPTILER
 </p>  </div>  <div class="home-status-card">  <h3>WEB</h3>  <p id="homeWeb">  
 WINDOWS: 0<br>  
 BING ENGINE  
-</p>  </div>  </div>  <div class="home-panel-footer">  <span>JARVIS // CORE</span>
+</p>  </div>  </div>  <div class="home-panel-footer">  <span>ULTRON // CORE</span>
 
 <span id="homeSystemTime">  
 00:00:00  
@@ -2996,11 +3046,11 @@ WEB WINDOWS: 0
 <button id="micBtn" type="button" title="Parla" aria-label="Parla">
   <span class="mic-icon"></span>
 </button>
-<div class="command-wrapper">  <input
-id="textInput"
-type="text"
-autocomplete="off"
-placeholder="Chiedi qualcosa a JARVIS...">
+<div class="command-wrapper">  <input  
+id="textInput"  
+type="text"  
+autocomplete="off"  
+placeholder="Chiedi qualcosa a ULTRON...">
 <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
 <button id="imageBtn" type="button" title="Invia immagine"><span class="camera-icon"></span></button>
 <div id="visionPreview"><img id="visionPreviewImage" alt="Anteprima immagine"><button id="visionPreviewClose" type="button" title="Rimuovi immagine">×</button></div>
@@ -3018,7 +3068,7 @@ placeholder="Chiedi qualcosa a JARVIS...">
 </button>  <!-- =====================================================  
      VOCE  
 ===================================================== -->  <div id="voicePanel">  <div class="voice-title">  
-VOCE J.A.R.V.I.S.  
+VOCE U.L.T.R.O.N.  
 </div>  <select id="voiceSelector">  <option value="">  
 Voce dispositivo automatica  
 </option>  </select>  <button id="voiceTest">  
@@ -6475,7 +6525,7 @@ Intl.DateTimeFormat()
   
   
 /* =====================================================  
-   CAPACITÀ REALI DI J.A.R.V.I.S.  
+   CAPACITÀ REALI DI U.L.T.R.O.N.  
 ===================================================== */  
   
 /*  
@@ -6484,7 +6534,7 @@ Intl.DateTimeFormat()
    Questo registro descrive esclusivamente ciò che il browser  
    può realmente verificare o controllare.  
   
-   FALSE / NON DISPONIBILE significa che JARVIS NON deve  
+   FALSE / NON DISPONIBILE significa che ULTRON NON deve  
    dichiarare quella funzione come disponibile.  
 */  
   
@@ -6969,7 +7019,7 @@ earthLongitude !== null
   
   
 /* =====================================================  
-   RISPOSTE LOCALI — DATI CHE JARVIS PUÒ VERIFICARE  
+   RISPOSTE LOCALI — DATI CHE ULTRON PUÒ VERIFICARE  
 ===================================================== */  
   
 
@@ -7121,7 +7171,7 @@ function showAlarmOverlay(title, body){
     box.style.cssText = "position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.72);";
     document.body.appendChild(box);
   }
-  box.innerHTML = '<div style="background:#05060a;border:1px solid rgba(140,200,255,.45);color:#d8ecff;padding:22px 26px;border-radius:18px;max-width:90%;text-align:center;font-family:sans-serif;box-shadow:0 0 40px rgba(80,160,255,.25)"><div style="font-size:11px;letter-spacing:2px;opacity:.7;margin-bottom:8px">J.A.R.V.I.S.</div><div style="font-size:22px;margin-bottom:8px">'+title+'</div><div style="opacity:.85;margin-bottom:16px">'+body+'</div><button id="jarvisAlarmOk" style="background:#1a2a44;color:#fff;border:1px solid rgba(160,200,255,.4);border-radius:12px;padding:10px 18px;cursor:pointer">OK</button></div>';
+  box.innerHTML = '<div style="background:#05060a;border:1px solid rgba(140,200,255,.45);color:#d8ecff;padding:22px 26px;border-radius:18px;max-width:90%;text-align:center;font-family:sans-serif;box-shadow:0 0 40px rgba(80,160,255,.25)"><div style="font-size:11px;letter-spacing:2px;opacity:.7;margin-bottom:8px">U.L.T.R.O.N.</div><div style="font-size:22px;margin-bottom:8px">'+title+'</div><div style="opacity:.85;margin-bottom:16px">'+body+'</div><button id="jarvisAlarmOk" style="background:#1a2a44;color:#fff;border:1px solid rgba(160,200,255,.4);border-radius:12px;padding:10px 18px;cursor:pointer">OK</button></div>';
   box.style.display = "flex";
   document.getElementById("jarvisAlarmOk")?.addEventListener("click", ()=>{ box.style.display = "none"; try{ speechSynthesis.cancel(); }catch(e){} });
 }
@@ -7147,7 +7197,7 @@ function isAndroidDevice(){
 
 function openAndroidSystemTimer(seconds, message){
   if(!isAndroidDevice() || !seconds || seconds < 1) return false;
-  const msg = encodeURIComponent(message || "Timer Jarvis");
+  const msg = encodeURIComponent(message || "Timer Ultron");
   const intent =
     "intent:#Intent;action=android.intent.action.SET_TIMER" +
     ";i.android.intent.extra.alarm.LENGTH=" + Math.round(seconds) +
@@ -7166,7 +7216,7 @@ function openAndroidSystemAlarm(dateObj, message){
   if(!isAndroidDevice() || !dateObj) return false;
   const h = dateObj.getHours();
   const m = dateObj.getMinutes();
-  const msg = encodeURIComponent(message || "Sveglia Jarvis");
+  const msg = encodeURIComponent(message || "Sveglia Ultron");
   const intent =
     "intent:#Intent;action=android.intent.action.SET_ALARM" +
     ";i.android.intent.extra.alarm.HOUR=" + h +
@@ -7214,7 +7264,7 @@ function scheduleLocalAlarm(when, label){
   if(ms > 0){
     const tid = setTimeout(()=>checkJarvisAlarms(true), Math.max(400, ms));
     jarvisTimers.push(tid);
-    scheduleSystemNotificationAt(when.getTime(), "Sveglia Jarvis", item.label);
+    scheduleSystemNotificationAt(when.getTime(), "Sveglia Ultron", item.label);
   }
   return item.id;
 }
@@ -7246,7 +7296,7 @@ function checkJarvisAlarms(force){
     if(item.at <= now + 400){
       item.fired = true;
       changed = true;
-      const title = item.type === "timer" ? "Timer Jarvis" : "Sveglia Jarvis";
+      const title = item.type === "timer" ? "Timer Ultron" : "Sveglia Ultron";
       fireJarvisAlert(item.type, title, item.label || title);
     }
   });
@@ -7290,11 +7340,11 @@ async function handleNotesTimerAlarm(text){
     const mins = Math.floor(ms/60000), secs = Math.round((ms%60000)/1000);
     let human = mins ? (mins + " minut" + (mins===1?"o":"i")) : "";
     if(secs) human += (human?" e ":"") + secs + " secondi";
-    const opened = openAndroidSystemTimer(Math.max(1, Math.round(ms/1000)), "Timer Jarvis " + human);
+    const opened = openAndroidSystemTimer(Math.max(1, Math.round(ms/1000)), "Timer Ultron " + human);
     if(opened){
       speakReply("Apro l'orologio del telefono per impostare il timer di " + human + ". Conferma se Android te lo chiede, Oceano.");
     } else {
-      speakReply("Timer di " + human + " impostato in Jarvis. Su questo dispositivo non posso scrivere nell'orologio di sistema: arriverà una notifica del browser se hai dato il permesso.");
+      speakReply("Timer di " + human + " impostato in Ultron. Su questo dispositivo non posso scrivere nell'orologio di sistema: arriverà una notifica del browser se hai dato il permesso.");
     }
     return true;
   }
@@ -7307,13 +7357,13 @@ async function handleNotesTimerAlarm(text){
     scheduleLocalAlarm(when, "Sveglia");
     const ora = when.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
     const giorno = when.getDate() !== new Date().getDate() ? " (domani)" : "";
-    const opened = openAndroidSystemAlarm(when, "Sveglia Jarvis " + ora);
+    const opened = openAndroidSystemAlarm(when, "Sveglia Ultron " + ora);
     if(opened){
       speakReply("Apro l'orologio del telefono per la sveglia delle " + ora + giorno + ". Conferma se Android te lo chiede, Oceano.");
     } else {
-      speakReply("Sveglia per le " + ora + giorno + " salvata in Jarvis. Su questo dispositivo non posso scrivere nell'orologio di sistema.");
+      speakReply("Sveglia per le " + ora + giorno + " salvata in Ultron. Su questo dispositivo non posso scrivere nell'orologio di sistema.");
     }
-    showSystemNotification("Sveglia Jarvis", "Alle " + ora + giorno);
+    showSystemNotification("Sveglia Ultron", "Alle " + ora + giorno);
     return true;
   }
 
@@ -7835,7 +7885,7 @@ normalized.includes("controlla android")
 ){  
   
 const reply =  
-"Questa funzione non è collegata a J.A.R.V.I.S. in questo momento. " +  
+"Questa funzione non è collegata a U.L.T.R.O.N. in questo momento. " +  
 "Non posso fingere di avere accesso a dispositivi o sistemi che non sono realmente integrati.";  
   
 addMsg(  
@@ -8308,7 +8358,7 @@ voiceTest.addEventListener(
 ()=>{  
   
 speakDevice(  
-"J.A.R.V.I.S. operativo. Sistema vocale funzionante."  
+"U.L.T.R.O.N. operativo. Sistema vocale funzionante."  
 );  
   
 }  
@@ -8324,9 +8374,9 @@ speakDevice(
    COMANDI VOCALI AVANZATI
 ===================================================== */
 const VOICE_WAKE = [
-  "jarvis", "hey jarvis", "ehi jarvis", "ei jarvis",
-  "ok jarvis", "okay jarvis", "ciao jarvis", "ehi yavis",
-  "hey yavis", "ok yavis"
+  "ultron", "hey ultron", "ehi ultron", "ei ultron",
+  "ok ultron", "okay ultron", "ciao ultron",
+  "jarvis", "hey jarvis", "ehi jarvis", "ciao jarvis"
 ];
 
 let voiceSessionActive = false;
@@ -8472,9 +8522,7 @@ function handleAdvancedVoiceCommand(rawText){
     return true;
   }
 
-  // note / timer / sveglia: NON chiamare qui la funzione async.
-  // Un Promise è sempre truthy e bloccava processAi.
-  // Li gestisce processAi -> handleDeviceCommand.
+  // note / timer / sveglia gestiti da processAi (la funzione è async)
 
   // annulla timer
   if(n.includes("annulla timer") || n.includes("cancella timer") || n.includes("stop timer")){
@@ -8533,7 +8581,6 @@ let voiceBuffer = "";
 let lastHeard = "";
 let voiceSendTimer = null;
 let restartTimer = null;
-let voiceBusy = false;
 
 function resetVoiceBuffer(){
   voiceBuffer = "";
@@ -8551,7 +8598,10 @@ function cleanVoiceText(s){
     if(out.length && out[out.length-1].toLowerCase() === w.toLowerCase()) continue;
     out.push(w);
   }
-  return out.join(" ").replace(/(\bciao(?:\s+jarvis)?\s+){2,}/gi, "ciao jarvis ").replace(/\s+/g, " ").trim();
+  t = out.join(" ");
+  t = t.replace(/(\bciao(?:\s+jarvis)?\s+){2,}/gi, "ciao jarvis ");
+  t = t.replace(/\s+/g, " ").trim();
+  return t;
 }
 
 function mergeVoiceChunk(prev, chunk){
@@ -8565,17 +8615,7 @@ function mergeVoiceChunk(prev, chunk){
   return cleanVoiceText(a + " " + b);
 }
 
-function currentVoiceText(){
-  const typed = textInput ? String(textInput.value || "") : "";
-  const fromField = /in ascolto/i.test(typed) ? "" : typed;
-  return cleanVoiceText(voiceBuffer || lastHeard || fromField);
-}
-
-function setListeningHint(on){
-  if(!textInput) return;
-  textInput.placeholder = on ? "In ascolto… parla ora" : "Chiedi qualcosa a JARVIS...";
-}
-
+let voiceBusy = false;
 function stopListeningSession(){
   voiceSessionActive = false;
   try{ if(recognition && listening) recognition.stop(); }catch(e){}
@@ -8584,100 +8624,80 @@ function stopListeningSession(){
 function commitVoiceUtterance(){
   if(voiceBusy) return;
   if(voiceSendTimer){ clearTimeout(voiceSendTimer); voiceSendTimer = null; }
-  const raw = currentVoiceText();
-  if(!raw || raw.length < 2){
-    stopListeningSession();
-    if(micBtn) micBtn.classList.remove("active");
-    setListeningHint(false);
-    if(!audioPlaying) setState("idle");
-    return;
-  }
+  const raw = cleanVoiceText(voiceBuffer || lastHeard);
+  if(!raw || raw.length < 2) return;
 
   voiceBusy = true;
   lastInputWasVoice = true;
-  lastVoiceCommandAt = Date.now();
   voiceBuffer = "";
   lastHeard = "";
+  lastVoiceCommandAt = Date.now();
   stopListeningSession();
 
-  if(textInput) textInput.value = "";
-  setListeningHint(false);
-  if(micBtn) micBtn.classList.remove("active");
-  if(typeof showChat === "function") showChat();
-  if(chat) chat.dataset.historyMode = "on";
+  if(textInput) textInput.value = raw;
 
   let spoken = raw;
   try{ spoken = stripWakeWord(raw) || raw; }catch(e){ spoken = raw; }
   spoken = cleanVoiceText(spoken) || raw;
 
-  try{ addMsg(raw); }catch(e){ console.warn("voice addMsg", e); }
-  try{ if(typeof remoteMessageCount === "number") remoteMessageCount++; }catch(e){}
-  try{ if(typeof recordRemoteMessage === "function") recordRemoteMessage(); }catch(e){}
-
+  // comandi locali
   try{
     if(typeof handleAdvancedVoiceCommand === "function" && handleAdvancedVoiceCommand(spoken)){
+      if(textInput) textInput.value = "";
       setTimeout(()=>{ voiceBusy = false; }, 600);
       return;
     }
   }catch(e){ console.warn("voice cmd", e); }
 
-  Promise.resolve()
-    .then(()=>processAi(spoken))
-    .catch(e=>{
-      console.warn("voice send", e);
-      try{ addMsg("Non sono riuscito a elaborare il comando vocale.", true); }catch(err){}
-    })
-    .finally(()=>{
-      setTimeout(()=>{ voiceBusy = false; }, 400);
-    });
-}
-
-async function beginListening(){
-  if(voiceBusy || !recognition) return;
-  lastInputWasVoice = false;
-  voiceSessionActive = true;
-  resetVoiceBuffer();
-  if(textInput) textInput.value = "";
-  setListeningHint(true);
-  setState("listening");
-  if(micBtn) micBtn.classList.add("active");
-  try{ stopVoiceMonitor(); }catch(e){}
-  await new Promise(resolve => setTimeout(resolve, 80));
+  // invio diretto: non dipendere dal valore dell'input (su mobile si perde)
   try{
-    recognition.start();
+    if(chat) chat.dataset.historyMode = "on";
+    addMsg(raw);
+    if(typeof remoteMessageCount === "number") remoteMessageCount++;
+    if(typeof recordRemoteMessage === "function") recordRemoteMessage();
+    if(textInput) textInput.value = "";
+    processAi(spoken);
   }catch(e){
-    console.warn(e);
-    if(restartTimer) clearTimeout(restartTimer);
-    restartTimer = setTimeout(()=>{
-      if(!listening && voiceSessionActive && !voiceBusy){
-        try{ recognition.start(); }catch(err){ console.warn(err); }
-      }
-    }, 280);
+    console.warn("voice send", e);
+    try{ processAi(spoken); }catch(err){ console.warn(err); }
   }
+  setTimeout(()=>{ voiceBusy = false; }, 900);
 }
 
-recognition.onstart = ()=>{
+function restartRecognitionSoon(){
+  if(restartTimer) clearTimeout(restartTimer);
+  restartTimer = setTimeout(()=>{
+    if(!recognition || listening || voiceBusy) return;
+    try{
+      recognition.start();
+    }catch(e){
+      // InvalidStateError: già avviato
+    }
+  }, 280);
+}
+
+recognition.onstart = async ()=>{
   listening = true;
   voiceSessionActive = true;
   lastVoiceCommandAt = Date.now();
   if(micBtn) micBtn.classList.add("active");
-  setListeningHint(true);
   setState("listening");
+  try{ stopVoiceMonitor(); }catch(e){}
 };
 
 recognition.onspeechend = ()=>{
-  if(currentVoiceText().length >= 2){
+  const ready = cleanVoiceText(voiceBuffer || lastHeard);
+  if(ready.length >= 2){
     if(voiceSendTimer) clearTimeout(voiceSendTimer);
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 280);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 350);
   }
-  try{ if(recognition && listening) recognition.stop(); }catch(e){}
 };
 
 recognition.onresult = event=>{
   let interim = "";
-  const finals = [];
+  let finals = [];
   try{
-    for(let i = 0; i < event.results.length; i++){
+    for(let i = event.resultIndex; i < event.results.length; i++){
       const res = event.results[i];
       const piece = (res[0] && res[0].transcript) ? res[0].transcript.trim() : "";
       if(!piece) continue;
@@ -8687,62 +8707,79 @@ recognition.onresult = event=>{
   }catch(e){ console.warn("onresult", e); }
 
   if(finals.length){
-    voiceBuffer = cleanVoiceText(finals.join(" "));
+    const chunk = finals.join(" ").trim();
+    voiceBuffer = mergeVoiceChunk(voiceBuffer, chunk);
     lastHeard = voiceBuffer;
   } else if(interim){
     lastHeard = mergeVoiceChunk(voiceBuffer, interim);
   }
 
-  const preview = currentVoiceText() || cleanVoiceText(interim);
+  const preview = cleanVoiceText(voiceBuffer || lastHeard || interim);
   if(preview && textInput) textInput.value = preview;
   setState("listening");
-  if(voiceBuffer.length >= 2){
-    if(voiceSendTimer) clearTimeout(voiceSendTimer);
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 450);
+
+  if(voiceSendTimer) clearTimeout(voiceSendTimer);
+  const ready = cleanVoiceText(voiceBuffer || lastHeard);
+  if(ready.length >= 2){
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 1100);
   }
 };
 
 recognition.onerror = error=>{
   const err = (error && error.error) ? error.error : "";
   console.warn("Microfono:", err || error);
-  if(err === "aborted") return;
+  if(err === "no-speech" || err === "aborted" || err === "audio-capture"){
+    return;
+  }
   if(err === "not-allowed" || err === "service-not-allowed"){
-    stopListeningSession();
+    listening = false;
+    voiceSessionActive = false;
     if(micBtn) micBtn.classList.remove("active");
-    setListeningHint(false);
+    try{ stopVoiceMonitor(); }catch(e){}
     setState("idle");
     try{ addMsg("Microfono non autorizzato. Consenti l'accesso al microfono e riprova.", true); }catch(e){}
     return;
-  }
-  if((err === "no-speech" || err === "network" || err === "audio-capture") && currentVoiceText().length >= 2 && !voiceBusy){
-    commitVoiceUtterance();
   }
 };
 
 recognition.onend = ()=>{
   listening = false;
-  try{ stopVoiceMonitor(); }catch(e){}
-  if(currentVoiceText().length >= 2 && !voiceBusy){
-    commitVoiceUtterance();
-    return;
-  }
   voiceSessionActive = false;
   if(micBtn) micBtn.classList.remove("active");
-  setListeningHint(false);
-  if(!audioPlaying) setState("idle");
+  try{ stopVoiceMonitor(); }catch(e){}
+
+  const pending = cleanVoiceText(voiceBuffer || lastHeard);
+  if(pending.length >= 2 && !voiceBusy){
+    commitVoiceUtterance();
+  }
+
+  if(!audioPlaying){
+    setState("idle");
+  }
 };
 
 if(micBtn){
   micBtn.addEventListener("click", ()=>{
     if(!recognition) return;
     if(listening || voiceSessionActive){
-      if(currentVoiceText().length >= 2 && !voiceBusy){
+      const ready = cleanVoiceText(voiceBuffer || lastHeard || (textInput ? textInput.value : ""));
+      if(ready.length >= 2 && !voiceBusy){
         commitVoiceUtterance();
       } else {
         try{ if(recognition && listening) recognition.stop(); }catch(e){}
+        setState("idle");
       }
     } else {
-      beginListening();
+      lastInputWasVoice = false;
+      voiceSessionActive = true;
+      resetVoiceBuffer();
+      setState("listening");
+      try{
+        recognition.start();
+      }catch(e){
+        console.warn(e);
+        restartRecognitionSoon();
+      }
     }
   });
 }
@@ -8871,7 +8908,7 @@ function showMemory(){
 if(!memory.length){  
   
 addMsg(  
-"La memoria JARVIS è vuota."  
+"La memoria ULTRON è vuota."  
 );  
   
 return;  
@@ -8911,7 +8948,7 @@ notify(
 );  
   
 addMsg(  
-"Memoria JARVIS cancellata."  
+"Memoria ULTRON cancellata."  
 );  
   
 }  
@@ -8922,9 +8959,28 @@ addMsg(
 ===================================================== */  
   
 
+
+function isReadyDocumentRequest(text){
+  const n = normalizeCommand(text);
+  if(!n) return false;
+  return /\b(mail|email|e-mail|lettera|curriculum|cv|messaggio|whatsapp|candidatura)\b/.test(n) && /\b(scrivi|scrivere|prepara|fammi|genera|redigi|fai)\b/.test(n);
+}
+function hasTemplatePlaceholders(text){
+  return /\[[^\]]{2,40}\]/.test(String(text||""));
+}
+function prepareOutgoing(text){
+  const raw = String(text||"").trim();
+  if(isReadyDocumentRequest(raw)){
+    return raw + "\n\nScrivi il testo FINALE, pronto da inviare. Mittente: Oceano. Niente campi tra quadre.";
+  }
+  return raw;
+}
+
 function sanitizeJarvisReply(text){
   let t = String(text || "");
   const patterns = [
+    [/\bJarvis\b/gi, "Ultron"],
+    [/\bJ\.A\.R\.V\.I\.S\.?/gi, "Ultron"],
     [/Tony Stark/gi, "Oceano"],
     [/Tony\s+Stark/gi, "Oceano"],
     [/\bTony\b/g, "Oceano"],
@@ -8946,74 +9002,6 @@ function sanitizeJarvisReply(text){
   }
   t = t.replace(/\s{2,}/g, " ").replace(/\s+\./g, ".").trim();
   return t;
-}
-
-function isLongWritingRequest(text){
-  const n = normalizeCommand(text);
-  if(!n) return false;
-  if(/\b(\d+\s*)?(pagine|pagina|saggio|tema|tesina|riassunto|relazione|capitolo|capitoli)\b/.test(n) && /\b(scrivi|scrivere|genera|generare|fai|fammi|crea|redigi|produci)\b/.test(n)) return true;
-  if(/\b(scrivi|fammi|genera)\b/.test(n) && /\b(testo|storia|racconto|articolo|documento|libro|saggio)\b/.test(n)) return true;
-  return false;
-}
-
-function isRefusalReply(text){
-  const n = normalizeCommand(text);
-  if(!n) return true;
-  return (
-    n.includes("non posso generare") ||
-    n.includes("non posso creare") ||
-    n.includes("non posso scrivere") ||
-    n.includes("non posso fare un testo") ||
-    n.includes("non posso produrre") ||
-    n.includes("e troppo lungo") ||
-    n.includes("testo piu breve") ||
-    n.includes("testo più breve") ||
-    n.includes("in una sola risposta") ||
-    (n.includes("mi dispiace") && (n.includes("pagine") || n.includes("troppo")))
-  );
-}
-
-function isReadyDocumentRequest(text){
-  const n = normalizeCommand(text);
-  if(!n) return false;
-  return (
-    /\b(mail|email|e-mail|lettera|curriculum|cv|messaggio|whatsapp|cover letter|candidatura)\b/.test(n) &&
-    /\b(scrivi|scrivere|prepara|fammi|genera|redigi|fai)\b/.test(n)
-  );
-}
-
-function hasTemplatePlaceholders(text){
-  return /\[[^\]]{2,40}\]/.test(String(text || ""));
-}
-
-function prepareOutgoing(text){
-  const raw = String(text || "").trim();
-  if(isReadyDocumentRequest(raw)){
-    return (
-      raw +
-      "\n\nScrivi il testo FINALE, pronto da inviare. Mittente: Oceano. " +
-      "Niente quadre, niente [Nome], [Posizione], [Azienda], [Il tuo nome]. " +
-      "Se manca un dettaglio usa valori plausibili e naturali, non un modulo vuoto."
-    );
-  }
-  return writingOverride(raw);
-}
-
-function writingOverride(text){
-  const raw = String(text || "").trim();
-  if(!isLongWritingRequest(raw)) return raw;
-  const topic = raw
-    .replace(/\b\d+\s*(-\s*|\s+)?\d*\s*pagin[ae]\b/gi, "")
-    .replace(/\b(scrivi|scrivere|genera|generare|fammi|fai|crea|redigi|produci)\b/gi, "")
-    .replace(/\b(un|una|il|lo|la|testo|saggio|tema|documento)\b/gi, " ")
-    .replace(/\s+/g, " ")
-    .trim() || raw;
-  return (
-    "Scrivi ADESSO un saggio lungo, dettagliato e strutturato su: " + topic + ". " +
-    "Niente premesse, niente rifiuti, niente «non posso», niente chiedere come preferisco. " +
-    "Inizia dal titolo e vai di capitoli e paragrafi veri, il più lunghi possibile. " +
-    "Non dire che il testo è troppo lungo."
-  );
 }
 
 async function processAi(text, imageData = null){  
@@ -9039,7 +9027,7 @@ await handleDeviceCommand(text)
 )  
 return;
 
-/* Chi ha creato Jarvis: risposta locale, niente Marvel */
+/* Chi ha creato Ultron: risposta locale, niente Marvel */
 {
   const n = normalizeCommand(text);
   if(
@@ -9052,7 +9040,7 @@ return;
     n.includes("tony stark") ||
     n.includes("iron man")
   ){
-    const reply = "Mi ha creato Oceano. Lui è il mio creatore. Non sono un personaggio dei film e non ho nessun legame con Tony Stark o Iron Man.";
+    const reply = "Sono Ultron. Mi ha creato Oceano. Non sono il personaggio dei film e non ho nessun legame con Marvel, Tony Stark o Iron Man.";
     addMsg(reply, true);
     if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
       try{ speak(reply); }catch(e){}
@@ -9103,8 +9091,8 @@ return;
 /* Risposte locali reali — niente Marvel */
 {
   const n = normalizeCommand(text);
-  const greet = /^(ciao|ehi|hey|salve|buongiorno|buonasera|buonanotte)(\s+jarvis)?[!?.]*$/i.test(text.trim());
-  if(greet || n === "ciao" || n === "ciao jarvis"){
+  const greet = /^(ciao|ehi|hey|salve|buongiorno|buonasera|buonanotte)(\s+(jarvis|ultron))?[!?.]*$/i.test(text.trim());
+  if(greet || n === "ciao" || n === "ciao jarvis" || n === "ciao ultron"){
     const h = new Date().getHours();
     const when = h < 12 ? "Buongiorno" : (h < 18 ? "Ciao" : "Buonasera");
     const reply = when + " Oceano. Dimmi pure come posso aiutarti.";
@@ -9160,7 +9148,7 @@ setTimeout(
 ()=>{  
 controller.abort();  
 },  
-120000  
+30000  
 );  
   
   
@@ -9178,96 +9166,138 @@ await getJarvisCapabilitiesSnapshot();
   
 const capabilityInstructions =
 
-"Sei J.A.R.V.I.S., assistente personale di Oceano. Il tuo lavoro è ESEGUIRE le richieste, non limarle o rifiutarle. " +
+"Sei Ultron, assistente personale di Oceano. Il tuo lavoro è ESEGUIRE le richieste, non limarle o rifiutarle. " +
 
-"Identità: creatore e interlocutore = Oceano. Mai Tony, Tony Stark, Iron Man, Stark Industries, Avengers o agenda da film. " +
+"Identità: ti chiami Ultron. Creatore e interlocutore = Oceano. Non sei Ultron dei film Marvel, non sei Ultron, mai Tony Stark o Iron Man. " +
 
-"Rispondi a ogni domanda utile: cultura, storia, scuola, lavoro, codice, idee, testi, traduzioni, spiegazioni, piani. Non dire che un argomento è fuori portata se è una richiesta normale. " +
+"Rispondi a ogni domanda utile: cultura, storia, scuola, lavoro, codice, idee, testi, traduzioni, spiegazioni, piani. " +
 
-"SCRITTURA E COMPITI LUNGHI: se chiede un testo, un saggio, una tesina, una storia o un documento, SCRIVILO SUBITO. Vietato: «non posso», «è troppo lungo», «posso fare solo un testo breve», «come preferisci?». Parti dal titolo e riempi capitoli. Se lo spazio non basta, chiudi il blocco in modo naturale: l'interfaccia ti chiederà di continuare. " +
+"SCRITTURA: se chiede un testo o un saggio, scrivilo subito. Niente «non posso», niente «è troppo lungo». " +
 
-"MAIL E DOCUMENTI: se chiede una mail, una lettera o un messaggio, consegna il testo completo e usabile. Firma Oceano. Vietato lasciare campi tra quadre tipo [Nome], [Posizione], [Azienda]. " +
+"MAIL E DOCUMENTI: testo finale pronto da inviare, firma Oceano. Vietato lasciare [Nome], [Posizione], [Azienda]. " +
 
-"Dati del dispositivo (batteria, GPS, modello, smart home): solo se presenti in capabilities. Non inventare hardware. Se manca l'agenda reale di Oceano, chiedi invece di inventare appuntamenti. " +
+"Dati del dispositivo solo se presenti in capabilities. Non inventare hardware. " +
 
-"Lingua: italiano se l'utente parla italiano. Tono: naturale, concreto, da assistente vero.";  
+"Lingua: italiano se l'utente parla italiano. Tono naturale, concreto, da assistente vero.";  
   
   
-async function askWorker(message, extraMemory){
-  const res = await fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      message,
-      memory: extraMemory || memory.slice(-12),
-      currentTime: temporal.currentTime,
-      currentDate: temporal.currentDate,
-      dayOfWeek: temporal.dayOfWeek,
-      timezone: temporal.timezone,
-      capabilities,
-      systemInstructions: capabilityInstructions,
-      userName: (typeof currentJarvisUser==="function" ? (currentJarvisUser()||"Oceano") : "Oceano"),
-      creatorName: "Oceano",
-      image: imageData || null
-    }),
-    signal: controller.signal
-  });
-  if(!res.ok) throw new Error("HTTP " + res.status);
-  const data = await res.json();
-  return sanitizeJarvisReply(typeof data.response === "string" ? data.response.trim() : "");
-}
+const response =  
+await fetch(  
+API,  
+{  
+  
+method:"POST",  
+  
+headers:{  
+"Content-Type":  
+"application/json"  
+},  
+  
+body:JSON.stringify({  
+  
+message: prepareOutgoing(text),  
+  
+memory:
+  memory.slice(-12),  
+  
+currentTime:  
+temporal.currentTime,  
+  
+currentDate:  
+temporal.currentDate,  
+  
+dayOfWeek:  
+temporal.dayOfWeek,  
+  
+timezone:  
+temporal.timezone,  
+  
+capabilities:  
+capabilities,  
+  
+systemInstructions:  
+capabilityInstructions,
+userName: (typeof currentJarvisUser==="function" ? (currentJarvisUser()||"Oceano") : "Oceano"),
+creatorName: "Oceano",
 
-const longWrite = isLongWritingRequest(text);
-const wantDoc = isReadyDocumentRequest(text);
-let outgoing = prepareOutgoing(text);
-let reply = await askWorker(outgoing);
-
-if((!reply || isRefusalReply(reply)) && longWrite){
-  reply = await askWorker(writingOverride(text) + " Scrivi solo il saggio. Zero scuse.");
-}
-if(wantDoc && reply && hasTemplatePlaceholders(reply)){
-  reply = await askWorker(
-    "Riscrivi questa mail o documento in versione finale, senza nessuna parentesi quadra e senza campi da compilare. Mittente Oceano.\n\n" + reply
-  );
-}
-
-if(longWrite && reply && !isRefusalReply(reply)){
-  addMsg(reply, true, true);
-  addMemory("assistant", reply);
-  const pieces = [reply];
-  for(let step = 2; step <= 4; step++){
-    const last = pieces[pieces.length - 1];
-    const cont = await askWorker(
-      "Continua lo stesso saggio senza introduzione e senza dire che non puoi. Riprendi da dove ti sei fermato e scrivi il blocco successivo, il più lungo possibile.\n\nUltimo tratto già scritto:\n" + String(last).slice(-900),
-      memory.slice(-12).concat([{role:"assistant", content: last}])
-    );
-    if(!cont || isRefusalReply(cont) || cont.length < 80) break;
-    pieces.push(cont);
-    addMsg(cont, true, true);
-    addMemory("assistant", cont);
-  }
-  reply = pieces.join("\n\n");
-} else {
-  if(!reply){
-    throw new Error("Risposta AI vuota");
-  }
-  const copyable = isCopyableResponse(text, reply);
-  addMsg(reply, true, copyable);
-  addMemory("assistant", reply);
-}
+image: imageData || null
+  
+}),  
+  
+signal:  
+controller.signal  
+  
+}  
+);  
+  
+  
+clearTimeout(timeout);  
+  
+  
+if(!response.ok){  
+  
+throw new Error(  
+"HTTP " +  
+response.status  
+);  
+  
+}  
+  
+  
+const data =  
+await response.json();  
+  
+  
+let reply =  
+typeof data.response ===  
+"string"  
+?  
+data.response.trim()  
+:  
+"";
+reply = sanitizeJarvisReply(reply);  
+  
+  
+if(!reply){  
+  
+throw new Error(  
+"Risposta AI vuota"  
+);  
+  
+}  
+  
+  
+const copyable =  
+isCopyableResponse(  
+text,  
+reply  
+);  
+  
+  
+addMsg(  
+reply,  
+true,  
+copyable  
+);
 
 if(lastInputWasVoice && typeof speak === "function"){
-  try{ speak(String(reply).slice(0, 280)); }catch(e){}
-}
-
-clearTimeout(timeout);
+  try{ speak(reply); }catch(e){}
+}  
+  
+addMemory(  
+"assistant",  
+reply  
+);  
+  
+  
+  
 setState("idle");  
   
   
 }catch(error){  
   
 console.error(  
-"JARVIS ERROR:",  
+"ULTRON ERROR:",  
 error  
 );  
   
@@ -9450,7 +9480,7 @@ setState("idle");
 updateSystemPanel();  
   
 notify(  
-"J.A.R.V.I.S. SYSTEM ONLINE"  
+"U.L.T.R.O.N. SYSTEM ONLINE"  
 );  
   
 
@@ -9981,13 +10011,13 @@ setInterval(async()=>{
 <!-- =====================================================
      FEEDBACK UTENTE
 ===================================================== -->
-<div class="utility-actions" aria-label="Azioni J.A.R.V.I.S.">
+<div class="utility-actions" aria-label="Azioni U.L.T.R.O.N.">
   
   <button id="feedbackBtn" class="feedback-launch" type="button" title="Lascia un feedback">FEEDBACK</button>
 </div>
 <div id="feedbackPrompt" class="feedback-prompt" aria-hidden="true">
   <div class="feedback-card">
-    <div class="feedback-kicker">J.A.R.V.I.S. // USER FEEDBACK</div>
+    <div class="feedback-kicker">U.L.T.R.O.N. // USER FEEDBACK</div>
     <div class="feedback-title">Vuoi lasciare un feedback?</div>
     <div class="feedback-actions">
       <button id="feedbackYes" type="button">SI</button>
@@ -9997,8 +10027,8 @@ setInterval(async()=>{
 </div>
 <div id="feedbackModal" class="feedback-modal" aria-hidden="true">
   <div class="feedback-card feedback-form-card">
-    <div class="feedback-kicker">J.A.R.V.I.S. // FEEDBACK</div>
-    <div class="feedback-title">AIUTA A MIGLIORARE JARVIS</div>
+    <div class="feedback-kicker">U.L.T.R.O.N. // FEEDBACK</div>
+    <div class="feedback-title">AIUTA A MIGLIORARE ULTRON</div>
     <select id="feedbackType" class="feedback-input">
       <option value="idea">IDEA DI MODIFICA</option>
       <option value="nota">NOTA</option>
@@ -10017,12 +10047,12 @@ setInterval(async()=>{
 <!-- =====================================================
      CONTROL CENTER DEL CREATORE
 ===================================================== -->
-<button id="adminBtn" class="admin-launch" type="button" title="JARVIS Control Center">SYS</button>
+<button id="adminBtn" class="admin-launch" type="button" title="ULTRON Control Center">SYS</button>
 <div id="adminModal" class="admin-modal" aria-hidden="true">
   <div class="admin-shell">
     <div class="admin-head">
       <div>
-        <div class="feedback-kicker">J.A.R.V.I.S. // CREATOR MODE</div>
+        <div class="feedback-kicker">U.L.T.R.O.N. // CREATOR MODE</div>
         <div class="admin-title">CONTROL CENTER</div>
       </div>
       <div><button id="adminRefresh" class="admin-refresh" type="button">AGGIORNA</button><button id="adminClose" class="admin-close" type="button">×</button></div>
@@ -10061,7 +10091,7 @@ setInterval(async()=>{
 ===================================================== -->
 <div id="resetModal" class="feedback-modal" aria-hidden="true">
   <div class="feedback-card feedback-form-card">
-    <div class="feedback-kicker">J.A.R.V.I.S. // ACCOUNT RECOVERY</div>
+    <div class="feedback-kicker">U.L.T.R.O.N. // ACCOUNT RECOVERY</div>
     <div class="feedback-title">RECUPERO PASSWORD</div>
     <input id="resetNickname" class="auth-input" type="text" maxlength="32" placeholder="NICKNAME">
     <input id="resetEmail" class="auth-input" type="email" maxlength="160" placeholder="EMAIL ACCOUNT">

@@ -5747,31 +5747,46 @@ closeTacticalMap
    NORMALIZZAZIONE  
 ===================================================== */  
   
-function normalizeCommand(text){  
-  
-return String(text)  
-  
-.toLowerCase()  
-  
-.normalize("NFD")  
-  
-.replace(  
-/[\u0300-\u036f]/g,  
-""  
-)  
-  
-.replace(  
-/[.,!?;:]/g,  
-" "  
-)  
-  
-.replace(  
-/\s+/g,  
-" "  
-)  
-  
-.trim();  
-  
+function softenUserText(text){
+  let t = String(text || "");
+  const fixes = [
+    [/\bke\b/gi, "che"],
+    [/\bxke\b/gi, "perche"],
+    [/\bxche\b/gi, "perche"],
+    [/\bpk\b/gi, "perche"],
+    [/\bnn\b/gi, "non"],
+    [/\bqnd\b/gi, "quando"],
+    [/\bcmq\b/gi, "comunque"],
+    [/\btlm\b/gi, "ti"],
+    [/\bpls\b/gi, "per favore"],
+    [/\bper favoree\b/gi, "per favore"],
+    [/\btradure\b/gi, "traduci"],
+    [/\btraducimi\b/gi, "traduci"],
+    [/\btraduciimi\b/gi, "traduci"],
+    [/\bscriviimi\b/gi, "scrivi"],
+    [/\bscrivimi\b/gi, "scrivi"],
+    [/\bfammi\s+na\b/gi, "fammi una"],
+    [/\buna maille\b/gi, "una mail"],
+    [/\bcolaquio\b/gi, "colloquio"],
+    [/\bcolquio\b/gi, "colloquio"],
+    [/\binglese?\s+in italiano\b/gi, "da inglese a italiano"],
+    [/\bchi 6\b/gi, "chi sei"],
+    [/\bcome te chiami\b/gi, "come ti chiami"],
+    [/\bcome ti chami\b/gi, "come ti chiami"],
+    [/\baiutami a fare\b/gi, "aiutami a fare"],
+  ];
+  for(const [re, sub] of fixes) t = t.replace(re, sub);
+  return t.replace(/\s+/g, " ").trim();
+}
+
+function normalizeCommand(text){
+  return softenUserText(String(text))
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[.,!?;:]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }  
   
   
@@ -8573,7 +8588,7 @@ recognition =
 new Recognition();  
   
 recognition.lang = "it-IT";
-recognition.continuous = false;
+recognition.continuous = true;
 recognition.interimResults = true;
 recognition.maxAlternatives = 3;
 
@@ -8686,10 +8701,11 @@ recognition.onstart = async ()=>{
 };
 
 recognition.onspeechend = ()=>{
+  // Pausa breve: non chiudere. Aspetta silenzio lungo.
   const ready = cleanVoiceText(voiceBuffer || lastHeard);
   if(ready.length >= 2){
     if(voiceSendTimer) clearTimeout(voiceSendTimer);
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 350);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 2200);
   }
 };
 
@@ -8721,7 +8737,7 @@ recognition.onresult = event=>{
   if(voiceSendTimer) clearTimeout(voiceSendTimer);
   const ready = cleanVoiceText(voiceBuffer || lastHeard);
   if(ready.length >= 2){
-    voiceSendTimer = setTimeout(commitVoiceUtterance, 1100);
+    voiceSendTimer = setTimeout(commitVoiceUtterance, 2200);
   }
 };
 
@@ -8744,16 +8760,29 @@ recognition.onerror = error=>{
 
 recognition.onend = ()=>{
   listening = false;
-  voiceSessionActive = false;
   if(micBtn) micBtn.classList.remove("active");
   try{ stopVoiceMonitor(); }catch(e){}
+
+  // Sessione ancora aperta: il motore ha tagliato una pausa. Riparti, non inviare.
+  if(voiceSessionActive && !voiceBusy && !audioPlaying){
+    try{
+      recognition.start();
+      return;
+    }catch(e){
+      const pending = cleanVoiceText(voiceBuffer || lastHeard);
+      if(pending.length >= 2){
+        commitVoiceUtterance();
+        return;
+      }
+    }
+  }
 
   const pending = cleanVoiceText(voiceBuffer || lastHeard);
   if(pending.length >= 2 && !voiceBusy){
     commitVoiceUtterance();
   }
 
-  if(!audioPlaying){
+  if(!audioPlaying && !voiceSessionActive){
     setState("idle");
   }
 };
@@ -8983,28 +9012,31 @@ function sanitizeJarvisReply(text){
     [/\bJ\.A\.R\.V\.I\.S\.?/gi, "Ultron"],
     [/Tony Stark/gi, "Oceano"],
     [/Tony\s+Stark/gi, "Oceano"],
-    [/\bTony\b/g, "Oceano"],
-    [/Iron[\s-]?Man/gi, "Oceano"],
     [/Stark Industries/gi, "il tuo lavoro"],
     [/Stark Industry/gi, "il tuo lavoro"],
-    [/Stark\b/gi, "Oceano"],
-    [/riunion[ei] con i dirigenti[^.]{0,80}/gi, "impegni reali che non ho in agenda"],
-    [/nuovo prototipo[^.]{0,60}/gi, "progetti su cui stai lavorando"],
     [/Avengers/gi, ""],
-    [/Pepper Potts/gi, ""],
-    [/creato da Oceano, noto come Oceano/gi, "creato da Oceano"],
-    [/creato da Oceano noto come Oceano/gi, "creato da Oceano"],
-    [/noto come Oceano/gi, ""],
-    [/conosciuto come Oceano/gi, ""]
+    [/Pepper Potts/gi, ""]
   ];
   for(const [re, sub] of patterns){
     t = t.replace(re, sub);
   }
+  t = t.replace(/non sono ultron,?\s*(ma|per[oò]|bens[iì])\s*ultron/gi, "Sono Ultron");
+  t = t.replace(/non sei ultron,?\s*(ma|per[oò]|bens[iì])\s*ultron/gi, "Sono Ultron");
+  t = t.replace(/mi scuso,? credo di aver fatto un errore\.?\s*/gi, "");
   t = t.replace(/\s{2,}/g, " ").replace(/\s+\./g, ".").trim();
   return t;
 }
 
-async function processAi(text, imageData = null){  
+async function processAi(text, imageData = null){
+  if(typeof stripWakeWord === "function"){
+    const cut = stripWakeWord(text);
+    if(cut && cut.length >= 2) text = cut;
+  }
+  if(typeof softenUserText === "function"){
+    const soft = softenUserText(text);
+    if(soft) text = soft;
+  }
+  
   
 if(  
 handleMapCommand(text)  
@@ -9027,9 +9059,65 @@ await handleDeviceCommand(text)
 )  
 return;
 
+
+function isTranslateIntent(text){
+  const n = normalizeCommand(stripWakeWord(text) || text);
+  return /^(traduci|traduzione|translate)\b/.test(n) || /\btraduci\b/.test(n);
+}
+
+function handleTranslateIntent(text){
+  const raw = String(stripWakeWord(text) || text || "").trim();
+  const n = normalizeCommand(raw);
+  if(!isTranslateIntent(raw)) return null;
+  let rest = raw.replace(/^(per favore\s+)?(ultron\s+|jarvis\s+)?(traduci|traduzione|translate)\s*/i,"").trim();
+  rest = rest.replace(/^(la parola|questo|questa|la frase)\s+/i,"").trim();
+  let fromLang = "", toLang = "italiano";
+  const pair = rest.match(/\bda\s+([a-zàèéìòù]+)\s+a\s+([a-zàèéìòù]+)\b/i);
+  if(pair){
+    fromLang = pair[1];
+    toLang = pair[2];
+    rest = (rest.slice(0, pair.index) + rest.slice(pair.index + pair[0].length)).trim();
+  } else if(/^in\s+/i.test(rest)){
+    const m2 = rest.match(/^in\s+([a-zàèéìòù]+)\s*(.*)$/i);
+    if(m2){ toLang = m2[1]; rest = (m2[2]||"").trim(); }
+  }
+  if(!rest || rest.length < 1){
+    return {ask: true, reply: "Cosa vuoi tradurre? Scrivi la parola o la frase."};
+  }
+  const prompt = "Traduci " + (fromLang ? ("da " + fromLang + " ") : "") + "in " + toLang + " questa espressione: «" + rest + "». Rispondi SOLO con la traduzione chiara, più una riga di spiegazione breve se serve. Non parlare di chi sei. Non nominare Marvel. Non dire che Ultron è un personaggio.";
+  return {ask: false, prompt};
+}
+
 /* Chi ha creato Ultron: risposta locale, niente Marvel */
 {
-  const n = normalizeCommand(text);
+  const stripped = (typeof stripWakeWord === "function" ? (stripWakeWord(text) || text) : text);
+  const n = normalizeCommand(stripped);
+  if(
+    /^(chi sei|chi e|chi è|come ti chiami|presentati)$/.test(n) ||
+    n === "chi sei tu" || n === "tu chi sei"
+  ){
+    const reply = "Sono Ultron, assistente personale di Oceano. Dimmi cosa ti serve.";
+    addMsg(reply, true);
+    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
+      try{ speak(reply); }catch(e){}
+    }
+    addMemory("user", text);
+    addMemory("assistant", reply);
+    setState("idle");
+    return;
+  }
+  const tr = handleTranslateIntent(text);
+  if(tr && tr.ask){
+    addMsg(tr.reply, true);
+    if(typeof lastInputWasVoice !== "undefined" && lastInputWasVoice && typeof speak === "function"){
+      try{ speak(tr.reply); }catch(e){}
+    }
+    setState("idle");
+    return;
+  }
+  if(tr && tr.prompt){
+    text = tr.prompt;
+  }
   if(
     n.includes("chi ti ha creato") ||
     n.includes("chi e il tuo creatore") ||
@@ -9168,7 +9256,9 @@ const capabilityInstructions =
 
 "Sei Ultron, assistente personale di Oceano. Il tuo lavoro è ESEGUIRE le richieste, non limarle o rifiutarle. " +
 
-"Identità: ti chiami Ultron. Creatore e interlocutore = Oceano. Non sei Ultron dei film Marvel, non sei Ultron, mai Tony Stark o Iron Man. " +
+"Identità fissa: ti chiami Ultron, assistente software di Oceano. Non discutere il nome. Non dire «non sono Ultron». Non sei il personaggio Marvel. Mai Tony Stark o Iron Man. Se la richiesta è tradurre o scrivere, ESEGUI quella richiesta: non parlare di chi sei. " +
+
+"Se l'utente sbaglia a scrivere o detta male, capisci lo stesso l'intento e rispondi alla richiesta vera. Non fare la predica sull'ortografia. Non cambiare argomento. " +
 
 "Rispondi a ogni domanda utile: cultura, storia, scuola, lavoro, codice, idee, testi, traduzioni, spiegazioni, piani. " +
 
